@@ -11,8 +11,9 @@ class NewsController extends Controller
     public function index(NewsRepository $news): View
     {
         return view('front.news.index', [
-            'title' => 'Новости',
-            'news' => $news->latest(),
+            'title' => 'Мои новости',
+            'news' => $news->feed(),
+            'newNewsCount' => 0,
         ]);
     }
 }

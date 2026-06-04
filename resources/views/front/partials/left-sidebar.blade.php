@@ -6,7 +6,7 @@
             <a href="#">Рекомендуем</a>
         </li>
         <li class="ads">
-            <a href="{{ route('front.events.index') }}">События<span>{{ $frontLayout['eventCount'] }}</span></a>
+            <a href="{{ route('front.events.index') }}">Мероприятия<span>{{ $frontLayout['eventCount'] }}</span></a>
             <ul class="sub-menu">
                 <li>
                     <div class="sub-content">

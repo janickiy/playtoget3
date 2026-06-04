@@ -51,7 +51,7 @@
                             </div>
                             <div class="search">
                                 <form autocomplete="off" action="{{ route('front.news.index') }}" method="GET">
-                                    <input type="text" name="search" id="main_search" value="{{ request('search') }}" placeholder="Поиск">
+                                    <input type="text" name="search" id="main_search" value="{{ request('search') }}" placeholder="Найти">
                                 </form>
                             </div>
                         </div>
@@ -112,8 +112,8 @@
                             <span class="for-submenu">
                                 <a>Поделиться</a>
                                 <ul class="top-mnu-submenu">
-                                    <li><a href="{{ route('front.photoalbums.index') }}">Фотоальбомы</a></li>
-                                    <li><a href="{{ route('front.videoalbums.index') }}">Видеоальбомы</a></li>
+                                    <li><a href="{{ route('front.photoalbums.index') }}">Фотографии</a></li>
+                                    <li><a href="{{ route('front.videoalbums.index') }}">Видео</a></li>
                                 </ul>
                             </span>
                         </li>
@@ -129,7 +129,7 @@
                                 </ul>
                             </span>
                         </li>
-                        <li><a href="{{ route('front.events.index') }}"><img src="{{ asset('templates/images/Events.png') }}" alt=""></a><span class="for-submenu"><a title="События" href="{{ route('front.events.index') }}">События</a></span></li>
+                        <li><a href="{{ route('front.events.index') }}"><img src="{{ asset('templates/images/Events.png') }}" alt=""></a><span class="for-submenu"><a title="Мероприятия" href="{{ route('front.events.index') }}">Мероприятия</a></span></li>
                         <li><a href="{{ route('front.calendar.index') }}"><img src="{{ asset('templates/images/Calendar.png') }}" alt=""></a><span class="for-submenu"><a title="Календарь" href="{{ route('front.calendar.index') }}">Календарь</a></span></li>
                     </ul>
                 </div>
