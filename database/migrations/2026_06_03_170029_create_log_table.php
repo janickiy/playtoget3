@@ -14,7 +14,6 @@ return new class extends Migration
             $table->string('ip')->nullable();
             $table->string('user_agent')->nullable();
             $table->dateTime('last_sign_in_at')->nullable();
-            $table->timestamps();
 
             $table->index(['user_id', 'last_sign_in_at']);
         });

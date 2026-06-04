@@ -12,11 +12,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('shareable_type')->nullable();
+            $table->dateTime('time')->nullable();
             $table->unsignedBigInteger('content_id')->nullable();
-            $table->timestamps();
 
             $table->index(['content_id', 'shareable_type', 'user_id']);
-            $table->index(['user_id', 'created_at']);
+            $table->index(['user_id', 'time'], 'idx_share_user_time');
         });
     }
 

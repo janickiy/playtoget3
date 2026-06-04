@@ -13,7 +13,6 @@ return new class extends Migration
             $table->string('type', 50)->nullable();
             $table->unsignedBigInteger('content_id');
             $table->unsignedBigInteger('photo_id');
-            $table->timestamps();
 
             $table->index(['type', 'content_id']);
             $table->index('content_id');

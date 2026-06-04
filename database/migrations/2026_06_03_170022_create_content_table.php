@@ -13,7 +13,6 @@ return new class extends Migration
             $table->string('title');
             $table->text('text')->nullable();
             $table->enum('hide', ['show', 'hide'])->default('show');
-            $table->timestamps();
 
             $table->index('hide');
         });

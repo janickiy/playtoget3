@@ -14,7 +14,6 @@ return new class extends Migration
             $table->string('subject_en');
             $table->text('content_ru');
             $table->text('content_en');
-            $table->timestamps();
         });
     }
 

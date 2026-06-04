@@ -99,11 +99,18 @@ return new class extends Migration
 
     private function indexExists(string $index): bool
     {
-        return DB::table('information_schema.statistics')
-            ->where('table_schema', DB::getDatabaseName())
-            ->where('table_name', 'users')
-            ->where('index_name', $index)
-            ->exists();
+        $result = DB::selectOne(
+            'SELECT EXISTS (
+                SELECT 1
+                FROM information_schema.statistics
+                WHERE table_schema = ?
+                    AND table_name = ?
+                    AND index_name = ?
+            ) AS index_exists',
+            [DB::getDatabaseName(), 'users', $index]
+        );
+
+        return (bool) $result->index_exists;
     }
 
     private function withRelaxedSqlMode(callable $callback): void

@@ -28,7 +28,6 @@ return new class extends Migration
             $table->enum('notification_events', ['yes', 'no'])->default('yes');
             $table->enum('notification_birthdays', ['yes', 'no'])->default('yes');
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->timestamps();
         });
     }
 

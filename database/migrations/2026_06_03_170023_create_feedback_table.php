@@ -14,9 +14,9 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->text('message')->nullable();
-            $table->timestamps();
+            $table->dateTime('time')->nullable();
 
-            $table->index('created_at');
+            $table->index('time', 'idx_feedback_time');
         });
     }
 

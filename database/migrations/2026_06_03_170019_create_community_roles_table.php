@@ -14,7 +14,6 @@ return new class extends Migration
             $table->foreignId('community_id')->nullable()->constrained('communities')->nullOnDelete();
             $table->unsignedTinyInteger('role')->nullable();
             $table->string('role_description')->nullable();
-            $table->timestamps();
 
             $table->index(['community_id', 'user_id', 'role']);
             $table->index(['user_id', 'role']);

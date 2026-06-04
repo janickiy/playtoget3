@@ -2,10 +2,15 @@
 
 namespace App\Repositories;
 
+use App\Models\Attachment;
+use App\Models\Comment;
+use App\Models\Like;
 use App\Models\NewsRssSport;
+use App\Models\Photo;
+use App\Models\Share;
+use App\Models\Video;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 
 class NewsRepository extends BaseRepository
 {
@@ -41,7 +46,8 @@ class NewsRepository extends BaseRepository
 
     private function photoItems(int $limit, int $offset = 0): Collection
     {
-        return DB::table('photos as p')
+        return Photo::query()
+            ->from('photos as p')
             ->leftJoin('photoalbums as pa', 'pa.id', '=', 'p.photoalbum_id')
             ->join('users as u', 'u.id', '=', 'p.owner_id')
             ->select([
@@ -89,7 +95,8 @@ class NewsRepository extends BaseRepository
 
     private function videoItems(int $limit, int $offset = 0): Collection
     {
-        return DB::table('videos as v')
+        return Video::query()
+            ->from('videos as v')
             ->leftJoin('videoalbums as va', 'va.id', '=', 'v.videoalbum_id')
             ->join('users as u', 'u.id', '=', 'v.owner_id')
             ->select([
@@ -129,7 +136,8 @@ class NewsRepository extends BaseRepository
 
     private function commentItems(int $limit, int $offset = 0): Collection
     {
-        return DB::table('comments as c')
+        return Comment::query()
+            ->from('comments as c')
             ->join('users as u', 'u.id', '=', 'c.user_id')
             ->select([
                 'c.id',
@@ -172,7 +180,8 @@ class NewsRepository extends BaseRepository
 
     private function photoCommentItems(int $limit, int $offset = 0): Collection
     {
-        return DB::table('comments as c')
+        return Comment::query()
+            ->from('comments as c')
             ->join('users as u', 'u.id', '=', 'c.user_id')
             ->join('photos as p', 'p.id', '=', 'c.content_id')
             ->leftJoin('photoalbums as pa', 'pa.id', '=', 'p.photoalbum_id')
@@ -231,7 +240,8 @@ class NewsRepository extends BaseRepository
 
     private function videoCommentItems(int $limit, int $offset = 0): Collection
     {
-        return DB::table('comments as c')
+        return Comment::query()
+            ->from('comments as c')
             ->join('users as u', 'u.id', '=', 'c.user_id')
             ->join('videos as v', 'v.id', '=', 'c.content_id')
             ->join('users as owner', 'owner.id', '=', 'v.owner_id')
@@ -314,8 +324,8 @@ class NewsRepository extends BaseRepository
             ->groupBy('likeable_type')
             ->map(fn (Collection $group) => $group->pluck('content_id')->unique()->values()->all());
 
-        $likes = $this->countsByType('likes', 'likeable_type', $keys);
-        $shares = $this->countsByType('share', 'shareable_type', $keys);
+        $likes = $this->countsByType(Like::class, 'likeable_type', $keys);
+        $shares = $this->countsByType(Share::class, 'shareable_type', $keys);
 
         return $items->map(function (array $item) use ($likes, $shares) {
             $key = $item['likeable_type'] . ':' . $item['content_id'];
@@ -327,14 +337,14 @@ class NewsRepository extends BaseRepository
         });
     }
 
-    private function countsByType(string $table, string $typeColumn, Collection $keys): Collection
+    private function countsByType(string $modelClass, string $typeColumn, Collection $keys): Collection
     {
         if ($keys->isEmpty()) {
             return collect();
         }
 
-        return DB::table($table)
-            ->select($typeColumn . ' as type', 'content_id', DB::raw('COUNT(*) as total'))
+        return $modelClass::query()
+            ->selectRaw($typeColumn . ' as type, content_id, COUNT(*) as total')
             ->where(function ($query) use ($keys, $typeColumn) {
                 foreach ($keys as $type => $ids) {
                     $query->orWhere(function ($query) use ($typeColumn, $type, $ids) {
@@ -395,7 +405,8 @@ class NewsRepository extends BaseRepository
 
     private function commentAttachmentsHtml(int $commentId): string
     {
-        $photos = DB::table('attachment as a')
+        $photos = Attachment::query()
+            ->from('attachment as a')
             ->join('photos as p', 'p.id', '=', 'a.photo_id')
             ->leftJoin('photoalbums as pa', 'pa.id', '=', 'p.photoalbum_id')
             ->select(['p.id', 'p.small_photo', 'p.photo', 'pa.photoalbumable_type'])

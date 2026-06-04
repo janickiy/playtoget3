@@ -13,10 +13,10 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('likeable_type')->nullable();
             $table->unsignedBigInteger('content_id')->nullable();
-            $table->timestamps();
+            $table->dateTime('time')->nullable();
 
             $table->index(['content_id', 'likeable_type', 'user_id']);
-            $table->index(['user_id', 'created_at']);
+            $table->index(['user_id', 'time'], 'idx_likes_user_time');
         });
     }
 

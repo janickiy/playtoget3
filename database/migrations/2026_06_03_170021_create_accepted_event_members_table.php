@@ -14,7 +14,6 @@ return new class extends Migration
             $table->unsignedBigInteger('member_id')->nullable();
             $table->unsignedTinyInteger('role')->nullable();
             $table->foreignId('event_id')->nullable()->constrained('events')->nullOnDelete();
-            $table->timestamps();
 
             $table->index(['event_id', 'member_id', 'eventable_type', 'role'], 'idx_aem_event_member_type_role');
             $table->index(['member_id', 'role']);

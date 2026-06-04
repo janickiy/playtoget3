@@ -15,7 +15,6 @@ return new class extends Migration
             $table->foreignId('country_id')->nullable()->constrained('geo_country')->nullOnDelete();
             $table->foreignId('region_id')->nullable()->constrained('geo_region')->nullOnDelete();
             $table->foreignId('city_id')->nullable()->constrained('geo_city')->nullOnDelete();
-            $table->timestamps();
 
             $table->unique(['target_type', 'target_id']);
         });

@@ -13,7 +13,6 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->unsignedBigInteger('role_id');
             $table->text('descr')->nullable();
-            $table->timestamps();
 
             $table->index(['user_id', 'role_id']);
         });

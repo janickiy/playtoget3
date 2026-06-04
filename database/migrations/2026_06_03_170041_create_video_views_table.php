@@ -11,10 +11,10 @@ return new class extends Migration
         Schema::create('video_views', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->unsignedBigInteger('video_id')->nullable();
-            $table->timestamps();
+            $table->string('video_id')->nullable();
+            $table->dateTime('time')->nullable();
 
-            $table->index(['video_id', 'user_id', 'created_at']);
+            $table->index(['video_id', 'user_id', 'time'], 'idx_video_views_video_user_time');
         });
     }
 

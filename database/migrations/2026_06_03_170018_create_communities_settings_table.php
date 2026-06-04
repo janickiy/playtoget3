@@ -15,7 +15,6 @@ return new class extends Migration
             $table->boolean('permission_video')->default(false);
             $table->boolean('type')->default(false);
             $table->foreignId('community_id')->nullable()->constrained('communities')->nullOnDelete();
-            $table->timestamps();
         });
     }
 

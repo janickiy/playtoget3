@@ -19,7 +19,6 @@ return new class extends Migration
             $table->unsignedTinyInteger('month_finish')->nullable();
             $table->unsignedSmallInteger('year_finish')->nullable();
             $table->string('city', 100)->nullable();
-            $table->timestamps();
 
             $table->index(['user_id', 'kind']);
         });

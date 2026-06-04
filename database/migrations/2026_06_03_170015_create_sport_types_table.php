@@ -12,7 +12,6 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->foreignId('parent_id')->nullable()->constrained('sport_types')->nullOnDelete();
-            $table->timestamps();
 
             $table->index(['parent_id', 'name']);
         });

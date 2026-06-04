@@ -15,7 +15,6 @@ return new class extends Migration
             $table->string('name_ru', 80);
             $table->string('name_en', 80);
             $table->unsignedInteger('sort')->default(0);
-            $table->timestamps();
 
             $table->index('sort');
             $table->index('name_ru');

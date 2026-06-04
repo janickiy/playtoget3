@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('friend_id')->nullable()->constrained('users')->nullOnDelete();
             $table->unsignedTinyInteger('status')->nullable();
-            $table->timestamps();
+            $table->dateTime('added');
 
             $table->index(['user_id', 'status', 'friend_id']);
             $table->index(['friend_id', 'status', 'user_id']);

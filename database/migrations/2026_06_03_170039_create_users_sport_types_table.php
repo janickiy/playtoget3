@@ -14,7 +14,6 @@ return new class extends Migration
             $table->string('sport_type', 100);
             $table->foreignId('sport_level_id')->nullable()->constrained('sport_level')->nullOnDelete();
             $table->boolean('search_team')->nullable();
-            $table->timestamps();
 
             $table->index(['user_id', 'sport_level_id']);
         });
