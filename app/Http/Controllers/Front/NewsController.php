@@ -10,9 +10,15 @@ class NewsController extends Controller
 {
     public function index(NewsRepository $news): View
     {
+        $pageSize = 5;
+        $items = $news->feedPage($pageSize);
+
         return view('front.news.index', [
             'title' => 'Мои новости',
-            'news' => $news->feed(),
+            'news' => $items,
+            'newsPageSize' => $pageSize,
+            'newsOffset' => $pageSize,
+            'hasMore' => $news->feedPage($pageSize, $pageSize)->isNotEmpty(),
             'newNewsCount' => 0,
         ]);
     }

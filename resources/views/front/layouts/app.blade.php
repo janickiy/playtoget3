@@ -167,6 +167,7 @@
     </section>
 
     @include('front.partials.footer')
+    @stack('scripts')
 </div>
 </body>
 </html>

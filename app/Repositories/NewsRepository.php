@@ -21,20 +21,24 @@ class NewsRepository extends BaseRepository
 
     public function feed(int $limit = 25): Collection
     {
+        return $this->feedPage($limit);
+    }
+
+    public function feedPage(int $limit = 5, int $offset = 0): Collection
+    {
         $items = collect()
-            ->merge($this->photoItems($limit))
-            ->merge($this->videoItems($limit))
-            ->merge($this->commentItems($limit))
-            ->merge($this->photoCommentItems($limit))
-            ->merge($this->videoCommentItems($limit))
+            ->merge($this->photoItems($limit, $offset))
+            ->merge($this->videoItems($limit, $offset))
+            ->merge($this->commentItems($limit, $offset))
+            ->merge($this->photoCommentItems($limit, $offset))
+            ->merge($this->videoCommentItems($limit, $offset))
             ->sortByDesc('time')
-            ->take($limit)
             ->values();
 
         return $this->withActionCounts($items);
     }
 
-    private function photoItems(int $limit): Collection
+    private function photoItems(int $limit, int $offset = 0): Collection
     {
         return DB::table('photos as p')
             ->leftJoin('photoalbums as pa', 'pa.id', '=', 'p.photoalbum_id')
@@ -66,6 +70,8 @@ class NewsRepository extends BaseRepository
                     ->orWhereNotNull('p.photo');
             })
             ->orderByDesc('p.created_at')
+            ->orderByDesc('p.id')
+            ->offset($offset)
             ->limit($limit)
             ->get()
             ->map(fn ($row) => $this->makeUserItem($row, [
@@ -79,7 +85,7 @@ class NewsRepository extends BaseRepository
             ]));
     }
 
-    private function videoItems(int $limit): Collection
+    private function videoItems(int $limit, int $offset = 0): Collection
     {
         return DB::table('videos as v')
             ->leftJoin('videoalbums as va', 'va.id', '=', 'v.videoalbum_id')
@@ -103,6 +109,8 @@ class NewsRepository extends BaseRepository
             ->whereNotNull('v.owner_id')
             ->whereNotNull('v.video')
             ->orderByDesc('v.created_at')
+            ->orderByDesc('v.id')
+            ->offset($offset)
             ->limit($limit)
             ->get()
             ->map(fn ($row) => $this->makeUserItem($row, [
@@ -116,7 +124,7 @@ class NewsRepository extends BaseRepository
             ]));
     }
 
-    private function commentItems(int $limit): Collection
+    private function commentItems(int $limit, int $offset = 0): Collection
     {
         return DB::table('comments as c')
             ->join('users as u', 'u.id', '=', 'c.user_id')
@@ -145,6 +153,8 @@ class NewsRepository extends BaseRepository
                     });
             })
             ->orderByDesc('c.created_at')
+            ->orderByDesc('c.id')
+            ->offset($offset)
             ->limit($limit)
             ->get()
             ->map(fn ($row) => $this->makeUserItem($row, [
@@ -156,7 +166,7 @@ class NewsRepository extends BaseRepository
             ]));
     }
 
-    private function photoCommentItems(int $limit): Collection
+    private function photoCommentItems(int $limit, int $offset = 0): Collection
     {
         return DB::table('comments as c')
             ->join('users as u', 'u.id', '=', 'c.user_id')
@@ -194,6 +204,8 @@ class NewsRepository extends BaseRepository
             ->whereNotNull('c.user_id')
             ->where('c.content', '<>', '')
             ->orderByDesc('c.created_at')
+            ->orderByDesc('c.id')
+            ->offset($offset)
             ->limit($limit)
             ->get()
             ->map(fn ($row) => $this->makeUserItem($row, [
@@ -212,7 +224,7 @@ class NewsRepository extends BaseRepository
             ]));
     }
 
-    private function videoCommentItems(int $limit): Collection
+    private function videoCommentItems(int $limit, int $offset = 0): Collection
     {
         return DB::table('comments as c')
             ->join('users as u', 'u.id', '=', 'c.user_id')
@@ -248,6 +260,8 @@ class NewsRepository extends BaseRepository
             ->whereNotNull('c.user_id')
             ->where('c.content', '<>', '')
             ->orderByDesc('c.created_at')
+            ->orderByDesc('c.id')
+            ->offset($offset)
             ->limit($limit)
             ->get()
             ->map(fn ($row) => $this->makeUserItem($row, [
@@ -412,12 +426,42 @@ class NewsRepository extends BaseRepository
         ];
 
         foreach ($paths as $path) {
-            if (file_exists(public_path($path))) {
-                return asset($path);
+            if ($this->uploadedImageExists($path)) {
+                return url('legacy-uploads/images/' . $this->relativeUploadImagePath($path));
             }
         }
 
         return asset('templates/images/noimage.png');
+    }
+
+    private function uploadedImageExists(string $path): bool
+    {
+        if (file_exists(public_path($path))) {
+            return true;
+        }
+
+        $relativePath = $this->relativeUploadImagePath($path);
+
+        foreach ($this->legacyImageRoots() as $root) {
+            if (file_exists($root . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $relativePath))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function relativeUploadImagePath(string $path): string
+    {
+        return preg_replace('#^uploads/images/#', '', $path);
+    }
+
+    private function legacyImageRoots(): array
+    {
+        return array_values(array_filter(array_unique([
+            realpath((string) env('LEGACY_UPLOADS_IMAGES_PATH')) ?: null,
+            realpath(base_path('../../site5.local/www/uploads/images')) ?: null,
+        ])));
     }
 
     private function videoThumbUrl(?string $provider, ?string $video): string
