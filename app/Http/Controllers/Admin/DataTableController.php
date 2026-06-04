@@ -1,0 +1,55 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Models\Admin;
+use App\Models\Catalog;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Yajra\DataTables\Facades\DataTables;
+
+class DataTableController extends Controller
+{
+    /**
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function admin(): JsonResponse
+    {
+        $row = Admin::query();
+
+        return Datatables::of($row)
+            ->addColumn('action', function ($row) {
+                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . route('admin.admin.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
+
+                if ((int) $row->id !== (int) Auth::id())
+                    $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.admin.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
+                else
+                    $deleteBtn = '';
+
+                return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
+            })
+            ->editColumn('role', function ($row) {
+                return Admin::$role_name[$row->role];
+            })
+            ->rawColumns(['action', 'id'])->make(true);
+    }
+
+    /**
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function catalogs(): JsonResponse
+    {
+        $row = Catalog::query();
+        return Datatables::of($row)
+            ->addColumn('actions', function ($row) {
+                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . route('admin.catalog.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.catalog.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
+
+                return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
+            })
+            ->rawColumns(['actions'])->make(true);
+    }
+
+}

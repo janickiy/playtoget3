@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta property="og:image" content="{{ asset('templates/images/left-sitebar-img-2.png') }}">
+    <meta name="description" content="Мы первый спортивный интернет-ресурс, объединивший: приверженцев здорового образа жизни, любителей спорта и профессиональных спортсменов.">
+    <title>{{ $title ?? 'PlayToGet' }}</title>
+    <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
+    <link rel="stylesheet" href="{{ asset('templates/css/bootstrap-theme.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('templates/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('templates/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('templates/css/owl.carousel.css') }}">
+    <link rel="stylesheet" href="{{ asset('templates/css/owl.theme.css') }}">
+    <link rel="stylesheet" href="{{ asset('templates/css/owl.transitions.css') }}">
+    <link rel="stylesheet" href="{{ asset('templates/css/lightbox.css') }}">
+    <link rel="stylesheet" href="{{ asset('templates/css/responsive.css') }}">
+    <link rel="stylesheet" href="{{ asset('templates/css/max-width-1440.css') }}" media="(max-width: 1440px)">
+    <link rel="stylesheet" href="{{ asset('templates/css/max-width-1190.css') }}" media="(max-width: 1190px)">
+    <link rel="stylesheet" href="{{ asset('templates/css/max-width-960.css') }}" media="(max-width: 960px)">
+    <link rel="stylesheet" href="{{ asset('templates/css/max-width-768.css') }}" media="(max-width: 768px)">
+    <link rel="stylesheet" href="{{ asset('templates/css/max-width-640.css') }}" media="(max-width: 640px)">
+    <link rel="stylesheet" href="{{ asset('templates/css/max-width-480.css') }}" media="(max-width: 480px)">
+    <link rel="stylesheet" href="{{ asset('templates/css/max-width-390.css') }}" media="(max-width: 390px)">
+    <link rel="stylesheet" href="{{ asset('templates/css/emotions.css') }}">
+    <link rel="stylesheet" href="{{ asset('templates/css/jquery.emotions.fb.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800&subset=latin,cyrillic" rel="stylesheet" type="text/css">
+    <script src="{{ asset('templates/js/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('templates/js/jquery-migrate-3.5.2.min.js') }}"></script>
+    <script src="{{ asset('templates/js/header.js') }}"></script>
+    <script src="{{ asset('templates/js/show-hidden.js') }}"></script>
+    <script>
+        window.user = '{{ $frontLayout['user']?->id ?? '' }}';
+        window.avatar = '{{ $frontLayout['avatar'] }}';
+        window.user_id = '{{ $frontLayout['user']?->id ?? '' }}';
+    </script>
+</head>
+<body>
+<div id="tooltip"></div>
+<div class="window-message"></div>
+<div class="main">
+    <section class="wrapper header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="top-header">
+                    <div class="col-xs-12">
+                        <div class="left-top-header">
+                            <div class="logo">
+                                <a href="{{ route('front.news.index') }}"><img src="{{ asset('templates/images/top-logo.png') }}" alt=""></a>
+                            </div>
+                            <div class="search">
+                                <form autocomplete="off" action="{{ route('front.news.index') }}" method="GET">
+                                    <input type="text" name="search" id="main_search" value="{{ request('search') }}" placeholder="Поиск">
+                                </form>
+                            </div>
+                        </div>
+                        <div class="profile-user">
+                            <a href="{{ $frontLayout['user'] ? route('front.profile.show', ['user' => $frontLayout['user']->id]) : route('front.home') }}">
+                                <div class="mini_thumb_avatar"><img width="50" height="50" border="0" src="{{ $frontLayout['avatar'] }}" alt=""></div>
+                            </a>
+                            <a href="{{ $frontLayout['user'] ? route('front.profile.show', ['user' => $frontLayout['user']->id]) : route('front.home') }}">
+                                {{ $frontLayout['firstname'] }}<br>{{ $frontLayout['lastname'] }}
+                            </a>
+                        </div>
+                        <a class="menu-icon" href="#go-nav"></a>
+                        <div class="top-header-menu">
+                            <ul>
+                                <li>
+                                    <a href="{{ $frontLayout['user'] ? route('front.profile.show', ['user' => $frontLayout['user']->id]) : route('front.home') }}">
+                                        <div class="mini_thumb_avatar"><img width="50" height="50" border="0" src="{{ $frontLayout['avatar'] }}" alt=""></div>
+                                    </a>
+                                    <a href="{{ $frontLayout['user'] ? route('front.profile.show', ['user' => $frontLayout['user']->id]) : route('front.home') }}">{{ $frontLayout['firstname'] }}<span></span>{{ $frontLayout['lastname'] }}<span></span></a>
+                                </li>
+                                <li><a href="{{ route('front.news.index') }}"><img src="{{ asset('templates/images/menu-home.png') }}" alt=""></a></li>
+                                <li><a href="{{ route('front.profile.show', ['user' => $frontLayout['user']?->id ?? 1]) }}"><img src="{{ asset('templates/images/message.png') }}" alt=""></a><span id="message_count" class="displayNone">0</span></li>
+                                <li><a href="{{ route('front.friends.index') }}"><img src="{{ asset('templates/images/man.png') }}" alt=""></a></li>
+                                <li><a href="{{ route('front.profile.edit') }}"><img src="{{ asset('templates/images/settings.png') }}" alt=""></a></li>
+                                <li>
+                                    <form method="POST" action="{{ route('front.logout') }}">
+                                        @csrf
+                                        <button type="submit"><b>X</b> Выйти</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="wrapper mnu">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <ul class="menu">
+                        <li>
+                            <a><img src="{{ asset('templates/images/Profile.png') }}" alt=""></a>
+                            <span class="for-submenu">
+                                <a>Профиль</a>
+                                <ul class="top-mnu-submenu">
+                                    <li><a href="{{ route('front.profile.show', ['user' => $frontLayout['user']?->id ?? 1]) }}">Профиль</a></li>
+                                    <li><a href="{{ route('front.profile.edit') }}">Редактировать</a></li>
+                                </ul>
+                            </span>
+                        </li>
+                        <li><a href="{{ route('front.news.index') }}"><img src="{{ asset('templates/images/news.png') }}" alt=""></a><span class="for-submenu"><a title="Новости" href="{{ route('front.news.index') }}">Новости</a></span></li>
+                        <li><a href="{{ route('front.friends.index') }}"><img src="{{ asset('templates/images/friends.png') }}" alt=""></a><span class="for-submenu"><a title="Друзья" href="{{ route('front.friends.index') }}">Друзья</a></span></li>
+                        <li>
+                            <a><img src="{{ asset('templates/images/Share.png') }}" alt=""></a>
+                            <span class="for-submenu">
+                                <a>Поделиться</a>
+                                <ul class="top-mnu-submenu">
+                                    <li><a href="{{ route('front.photoalbums.index') }}">Фотоальбомы</a></li>
+                                    <li><a href="{{ route('front.videoalbums.index') }}">Видеоальбомы</a></li>
+                                </ul>
+                            </span>
+                        </li>
+                        <li><a href="{{ route('front.teams.show', ['community' => 3]) }}"><img src="{{ asset('templates/images/command.png') }}" alt=""></a><span class="for-submenu"><a title="Команды" href="{{ route('front.teams.show', ['community' => 3]) }}">Команды</a></span></li>
+                        <li class="menu_groups">
+                            <a><img src="{{ asset('templates/images/Group.png') }}" alt=""></a>
+                            <span class="for-submenu">
+                                <a title="Группы" href="{{ route('front.playgrounds.index') }}">Группы</a>
+                                <ul class="top-mnu-submenu">
+                                    <li><a href="{{ route('front.playgrounds.index') }}">Площадки</a></li>
+                                    <li><a href="{{ route('front.shops.index') }}">Магазины</a></li>
+                                    <li><a href="{{ route('front.fitness.index') }}">Фитнес</a></li>
+                                </ul>
+                            </span>
+                        </li>
+                        <li><a href="{{ route('front.events.index') }}"><img src="{{ asset('templates/images/Events.png') }}" alt=""></a><span class="for-submenu"><a title="События" href="{{ route('front.events.index') }}">События</a></span></li>
+                        <li><a href="{{ route('front.calendar.index') }}"><img src="{{ asset('templates/images/Calendar.png') }}" alt=""></a><span class="for-submenu"><a title="Календарь" href="{{ route('front.calendar.index') }}">Календарь</a></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="baner"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="{{ asset('templates/js/script_all.js') }}"></script>
+    @include('front.partials.video-window')
+    @include('front.partials.photo-window')
+
+    <section class="wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 bg">
+                    @include('front.partials.left-sidebar')
+                    <div class="content">
+                        @include('front.partials.top-profile')
+                        @yield('content')
+                    </div>
+                    @include('front.partials.right-sidebar')
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @include('front.partials.footer')
+</div>
+</body>
+</html>
