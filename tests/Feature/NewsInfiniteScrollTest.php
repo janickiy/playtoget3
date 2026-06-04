@@ -17,6 +17,7 @@ class NewsInfiniteScrollTest extends TestCase
             ->assertStatus(200)
             ->assertSee('id="comment-list"', false)
             ->assertSee('/ajax/get_usernews_list', false)
+            ->assertSee('data-news-key="test-news:1"', false)
             ->assertSee('data-number="5"', false)
             ->assertSee('data-offset="5"', false);
     }
@@ -60,6 +61,7 @@ class NewsInfiniteScrollTest extends TestCase
             'author_name' => 'User ' . $id,
             'online' => false,
             'date' => '05.06.2026',
+            'event_key' => 'test-news:' . $id,
             'message' => 'News item ' . $id,
             'likeable_type' => null,
             'content_id' => $id,

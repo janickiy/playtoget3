@@ -11,10 +11,20 @@ class Feedback extends Model
 
     protected $table = 'feedback';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'subject',
         'name',
         'email',
         'message',
+        'time',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'time' => 'datetime',
+        ];
+    }
 }

@@ -22,6 +22,8 @@ class SportBlock extends Model
         'owner_id',
         'active',
         'banned',
+        'created_at',
+        'updated_at',
     ];
 
     protected function casts(): array
@@ -30,5 +32,20 @@ class SportBlock extends Model
             'active' => 'boolean',
             'banned' => 'boolean',
         ];
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    public function photoalbums()
+    {
+        return $this->hasMany(Photoalbum::class, 'owner_id')->where('photoalbumable_type', $this->type);
+    }
+
+    public function geoTargets()
+    {
+        return $this->hasMany(GeoTarget::class, 'target_id')->where('target_type', $this->type);
     }
 }

@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Http\Traits\StaticTableName;
 use Illuminate\Database\Eloquent\Model;
 
-
 class Catalog extends Model
 {
     use StaticTableName;
@@ -14,5 +13,7 @@ class Catalog extends Model
 
     protected $fillable = [
         'name',
+        'created_at',
+        'updated_at',
     ];
 }

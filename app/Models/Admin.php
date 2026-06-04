@@ -20,19 +20,21 @@ class Admin extends Authenticatable
     public static array $role_name = [
         self::ROLE_ADMIN => 'Админ',
         self::ROLE_MODERATOR => 'Модератор',
-        self::ROLE_EDITOR => 'Редактор'
+        self::ROLE_EDITOR => 'Редактор',
     ];
 
     protected $fillable = [
-        'name', 'role', 'login', 'password',
+        'login',
+        'password',
+        'name',
+        'role',
+        'remember_token',
+        'created_at',
+        'updated_at',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 }

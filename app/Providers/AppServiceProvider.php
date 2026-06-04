@@ -5,8 +5,16 @@ namespace App\Providers;
 
 use App\Helpers\FrontAssets;
 use App\Helpers\PermissionsHelper;
+use App\Models\Comment;
+use App\Models\Community;
 use App\Models\Event;
+use App\Models\Message;
+use App\Models\Occupation;
+use App\Models\Photo;
 use App\Models\SportBlock;
+use App\Models\User;
+use App\Models\Video;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
@@ -28,6 +36,22 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Relation::morphMap([
+            'comment' => Comment::class,
+            'event' => Event::class,
+            'fitness' => SportBlock::class,
+            'group' => Community::class,
+            'message' => Message::class,
+            'occupation' => Occupation::class,
+            'photo' => Photo::class,
+            'playground' => SportBlock::class,
+            'shop' => SportBlock::class,
+            'team' => Community::class,
+            'user' => User::class,
+            'user_attach' => User::class,
+            'video' => Video::class,
+        ]);
+
         View::composer('front.*', function ($view) {
             $user = Auth::guard('web')->user();
 

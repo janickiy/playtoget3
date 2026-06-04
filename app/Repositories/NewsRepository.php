@@ -33,6 +33,7 @@ class NewsRepository extends BaseRepository
             ->merge($this->photoCommentItems($limit, $offset))
             ->merge($this->videoCommentItems($limit, $offset))
             ->sortByDesc('time')
+            ->unique('event_key')
             ->values();
 
         return $this->withActionCounts($items);
@@ -75,6 +76,7 @@ class NewsRepository extends BaseRepository
             ->limit($limit)
             ->get()
             ->map(fn ($row) => $this->makeUserItem($row, [
+                'event_key' => 'photo-publish:' . (int) $row->id,
                 'content_id' => (int) $row->id,
                 'likeable_type' => 'photo',
                 'message' => sprintf(
@@ -114,6 +116,7 @@ class NewsRepository extends BaseRepository
             ->limit($limit)
             ->get()
             ->map(fn ($row) => $this->makeUserItem($row, [
+                'event_key' => 'video-publish:' . (int) $row->id,
                 'content_id' => (int) $row->id,
                 'likeable_type' => 'video',
                 'message' => sprintf(
@@ -158,6 +161,7 @@ class NewsRepository extends BaseRepository
             ->limit($limit)
             ->get()
             ->map(fn ($row) => $this->makeUserItem($row, [
+                'event_key' => 'user-comment:' . (int) $row->id,
                 'content_id' => (int) $row->id,
                 'likeable_type' => 'comment',
                 'message' => '<p class="mess_news">Оставил(a) комментарий на своей странице:</p> '
@@ -209,6 +213,7 @@ class NewsRepository extends BaseRepository
             ->limit($limit)
             ->get()
             ->map(fn ($row) => $this->makeUserItem($row, [
+                'event_key' => 'photo-comment:' . (int) $row->id,
                 'content_id' => (int) $row->id,
                 'likeable_type' => 'photo',
                 'message' => sprintf(
@@ -265,6 +270,7 @@ class NewsRepository extends BaseRepository
             ->limit($limit)
             ->get()
             ->map(fn ($row) => $this->makeUserItem($row, [
+                'event_key' => 'video-comment:' . (int) $row->id,
                 'content_id' => (int) $row->id,
                 'likeable_type' => 'video',
                 'message' => sprintf(
@@ -291,6 +297,7 @@ class NewsRepository extends BaseRepository
             'date' => $this->russianDate($createdAt),
             'time' => $createdAt->getTimestamp(),
             'type' => 'user',
+            'event_key' => $data['event_key'],
             'content_id' => $data['content_id'],
             'likeable_type' => $data['likeable_type'],
             'message' => $data['message'],

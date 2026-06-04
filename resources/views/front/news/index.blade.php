@@ -29,12 +29,58 @@
     <script>
         $(function () {
             const $list = $('#comment-list');
+            if (! $list.length) {
+                return;
+            }
+
             const spinner = '{{ asset('templates/images/select2-spinner.gif') }}';
             const csrfToken = '{{ csrf_token() }}';
             let isLoading = false;
             let hasMore = Number($list.data('has-more')) === 1;
             let offset = Number($list.data('offset')) || 0;
             const number = Number($list.data('number')) || 5;
+            const shownNewsKeys = new Set();
+
+            $list.find('.news-block-item[data-news-key]').each(function () {
+                shownNewsKeys.add(String($(this).attr('data-news-key')));
+            });
+
+            function stopNewsScroll() {
+                hasMore = false;
+                $list.attr('data-has-more', 0).data('has-more', 0);
+                $list.find('.loading-bar').remove();
+                $(document).off('scroll.news');
+            }
+
+            function appendUniqueNews(html) {
+                let appended = 0;
+
+                $($.parseHTML($.trim(html), document, true)).each(function () {
+                    const $item = $(this);
+
+                    if (! $item.hasClass('news-block-item')) {
+                        return;
+                    }
+
+                    const key = String($item.attr('data-news-key') || '');
+
+                    if (key && shownNewsKeys.has(key)) {
+                        return;
+                    }
+
+                    if (key) {
+                        shownNewsKeys.add(key);
+                    }
+
+                    $list.append($item);
+                    $item.find('.mess_news').each(function () {
+                        $(this).emotions();
+                    });
+                    appended++;
+                });
+
+                return appended;
+            }
 
             function loadNews() {
                 if (isLoading || !hasMore) {
@@ -46,6 +92,7 @@
 
                 $.ajax({
                     type: 'POST',
+                    dataType: 'json',
                     url: $list.data('endpoint'),
                     data: {
                         _token: csrfToken,
@@ -57,25 +104,27 @@
                         const loaded = Number(data.count) || 0;
 
                         if (loaded > 0 && data.html) {
-                            $list.append(data.html);
-                            $('.mess_news').each(function () {
-                                $(this).emotions();
-                            });
+                            appendUniqueNews(data.html);
                         }
 
                         offset += number;
+                        $list.attr('data-offset', offset).data('offset', offset);
                         hasMore = loaded > 0 && (data.has_more === true || data.has_more === 1 || data.has_more === '1');
+
+                        if (! hasMore) {
+                            stopNewsScroll();
+                        }
                     },
                     complete: function () {
                         isLoading = false;
                     },
                     error: function () {
-                        $list.find('.loading-bar').remove();
-                        hasMore = false;
+                        stopNewsScroll();
                     }
                 });
             }
 
+            $(document).off('scroll.news');
             $(document).on('scroll.news', function () {
                 if ($(window).scrollTop() + $(window).height() >= $(document).height() - 80) {
                     loadNews();

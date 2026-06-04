@@ -1,4 +1,4 @@
-<div class="news-block-item" data-toggle="modal" data-target="#second-post">
+<div class="news-block-item" data-news-key="{{ $item['event_key'] ?? $item['likeable_type'] . ':' . $item['content_id'] }}" data-toggle="modal" data-target="#second-post">
     <div class="news-block-head">
         <a href="{{ route('front.profile.show', ['user' => $item['author_id']]) }}">
             <div class="head-img"><img src="{{ $item['avatar'] }}" alt=""></div>

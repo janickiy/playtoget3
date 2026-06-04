@@ -18,6 +18,8 @@ class Event extends Model
         'cover_page',
         'place',
         'address',
+        'created_at',
+        'updated_at',
         'moderate',
         'banned',
     ];
@@ -30,5 +32,30 @@ class Event extends Model
             'moderate' => 'boolean',
             'banned' => 'boolean',
         ];
+    }
+
+    public function sportType()
+    {
+        return $this->belongsTo(SportType::class, 'sport_type');
+    }
+
+    public function acceptedMembers()
+    {
+        return $this->hasMany(AcceptedEventMember::class);
+    }
+
+    public function members()
+    {
+        return $this->belongsToMany(User::class, 'accepted_event_members', 'event_id', 'member_id')->wherePivot('eventable_type', 'user')->withPivot(['role', 'eventable_type']);
+    }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable', 'commentable_type', 'content_id');
+    }
+
+    public function geoTargets()
+    {
+        return $this->morphMany(GeoTarget::class, 'target', 'target_type', 'target_id');
     }
 }

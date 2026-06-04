@@ -5,17 +5,11 @@ namespace App\Models;
 use App\Http\Traits\StaticTableName;
 use Illuminate\Database\Eloquent\Model;
 
-class ContentPage extends Model
+abstract class BaseModel extends Model
 {
     use StaticTableName;
 
-    protected $table = 'content';
-
     public $timestamps = false;
 
-    protected $fillable = [
-        'title',
-        'text',
-        'hide',
-    ];
+    protected $guarded = [];
 }
