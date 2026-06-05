@@ -38,6 +38,19 @@ class UserRepository extends BaseRepository
         return $user;
     }
 
+    public function findActive(int $id): ?User
+    {
+        /** @var User|null $user */
+        $user = $this->model->newQuery()
+            ->whereKey($id)
+            ->where('confirmed', true)
+            ->where('banned', false)
+            ->where('deleted', false)
+            ->first();
+
+        return $user;
+    }
+
     public function passwordMatchesLegacy(User $user, string $password): bool
     {
         return strlen((string) $user->password) === 32

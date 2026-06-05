@@ -15,8 +15,6 @@ class Video extends BaseModel
         'description',
         'owner_id',
         'banned',
-        'created_at',
-        'updated_at',
     ];
 
     protected function casts(): array

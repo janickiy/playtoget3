@@ -12,6 +12,5 @@ class Job extends BaseModel
         'attempts',
         'reserved_at',
         'available_at',
-        'created_at',
     ];
 }

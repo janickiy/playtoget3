@@ -13,8 +13,6 @@ class Videoalbum extends Model
 
     protected $fillable = [
         'name',
-        'created_at',
-        'updated_at',
         'videoalbumable_type',
         'owner_id',
     ];

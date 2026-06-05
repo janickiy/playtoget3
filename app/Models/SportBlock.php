@@ -22,8 +22,6 @@ class SportBlock extends Model
         'owner_id',
         'active',
         'banned',
-        'created_at',
-        'updated_at',
     ];
 
     protected function casts(): array

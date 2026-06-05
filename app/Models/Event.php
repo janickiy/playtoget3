@@ -18,8 +18,6 @@ class Event extends Model
         'cover_page',
         'place',
         'address',
-        'created_at',
-        'updated_at',
         'moderate',
         'banned',
     ];

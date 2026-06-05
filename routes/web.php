@@ -15,17 +15,12 @@ use App\Http\Controllers\Front\PlaygroundsController;
 use App\Http\Controllers\Front\ProfileController;
 use App\Http\Controllers\Front\ShopsController;
 use App\Http\Controllers\Front\TeamsController;
-use App\Http\Controllers\Front\UploadController;
 use App\Http\Controllers\Front\VideoalbumsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('front.home');
 Route::post('/', [FrontAuthController::class, 'login'])->name('front.login');
 Route::post('front/logout', [FrontAuthController::class, 'logout'])->name('front.logout');
-
-Route::get('legacy-uploads/images/{path}', [UploadController::class, 'image'])
-    ->where('path', '.*')
-    ->name('front.uploads.image');
 
 Route::get('news', [NewsController::class, 'index'])->name('front.news.index');
 Route::get('profile/edit', [ProfileController::class, 'edit'])->name('front.profile.edit');

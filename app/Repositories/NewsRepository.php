@@ -11,6 +11,7 @@ use App\Models\Share;
 use App\Models\Video;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 
 class NewsRepository extends BaseRepository
 {
@@ -371,8 +372,8 @@ class NewsRepository extends BaseRepository
             return asset('templates/images/noimage.png');
         }
 
-        if ($row->avatar && file_exists(public_path('uploads/images/user/avatar/' . $row->avatar))) {
-            return asset('uploads/images/user/avatar/' . $row->avatar);
+        if ($row->avatar && ($url = $this->publicImageUrl('user/avatar/' . $row->avatar))) {
+            return $url;
         }
 
         return asset($row->sex === 'female' ? 'templates/images/default_female.png' : 'templates/images/default_male.png');
@@ -391,8 +392,8 @@ class NewsRepository extends BaseRepository
             return asset('templates/images/noimage.png');
         }
 
-        if ($row->owner_avatar && file_exists(public_path('uploads/images/user/avatar/' . $row->owner_avatar))) {
-            return asset('uploads/images/user/avatar/' . $row->owner_avatar);
+        if ($row->owner_avatar && ($url = $this->publicImageUrl('user/avatar/' . $row->owner_avatar))) {
+            return $url;
         }
 
         return asset($row->owner_sex === 'female' ? 'templates/images/default_female.png' : 'templates/images/default_male.png');
@@ -438,48 +439,27 @@ class NewsRepository extends BaseRepository
 
         $type = $type ?: 'user';
         $paths = [
-            "uploads/images/photogallery/{$type}/{$file}",
-            "uploads/images/photogallery/user_attach/{$file}",
-            "uploads/images/photogallery/user/{$file}",
+            "photogallery/{$type}/{$file}",
+            "photogallery/user_attach/{$file}",
+            "photogallery/user/{$file}",
         ];
 
         foreach ($paths as $path) {
-            if ($this->uploadedImageExists($path)) {
-                return url('legacy-uploads/images/' . $this->relativeUploadImagePath($path));
+            if ($url = $this->publicImageUrl($path)) {
+                return $url;
             }
         }
 
         return asset('templates/images/noimage.png');
     }
 
-    private function uploadedImageExists(string $path): bool
+    private function publicImageUrl(string $path): ?string
     {
-        if (file_exists(public_path($path))) {
-            return true;
-        }
+        $path = 'images/' . ltrim($path, '/');
 
-        $relativePath = $this->relativeUploadImagePath($path);
-
-        foreach ($this->legacyImageRoots() as $root) {
-            if (file_exists($root . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $relativePath))) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function relativeUploadImagePath(string $path): string
-    {
-        return preg_replace('#^uploads/images/#', '', $path);
-    }
-
-    private function legacyImageRoots(): array
-    {
-        return array_values(array_filter(array_unique([
-            realpath((string) env('LEGACY_UPLOADS_IMAGES_PATH')) ?: null,
-            realpath(base_path('../../site5.local/www/uploads/images')) ?: null,
-        ])));
+        return Storage::disk('public')->exists($path)
+            ? Storage::disk('public')->url($path)
+            : null;
     }
 
     private function videoThumbUrl(?string $provider, ?string $video): string

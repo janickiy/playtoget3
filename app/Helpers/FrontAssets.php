@@ -5,6 +5,7 @@ namespace App\Helpers;
 use App\Models\Event;
 use App\Models\SportBlock;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class FrontAssets
 {
@@ -14,8 +15,8 @@ class FrontAssets
             return asset('templates/images/noimage.png');
         }
 
-        if ($user->avatar && file_exists(public_path('uploads/images/user/avatar/' . $user->avatar))) {
-            return asset('uploads/images/user/avatar/' . $user->avatar);
+        if ($user->avatar && ($url = self::publicImageUrl('user/avatar/' . $user->avatar))) {
+            return $url;
         }
 
         return asset($user->sex === 'female' ? 'templates/images/default_female.png' : 'templates/images/default_male.png');
@@ -23,8 +24,8 @@ class FrontAssets
 
     public static function userCover(?User $user): string
     {
-        if ($user && $user->cover_page && file_exists(public_path('uploads/images/user/cover_page/' . $user->cover_page))) {
-            return asset('uploads/images/user/cover_page/' . $user->cover_page);
+        if ($user && $user->cover_page && ($url = self::publicImageUrl('user/cover_page/' . $user->cover_page))) {
+            return $url;
         }
 
         return asset('templates/images/content-bg.png');
@@ -32,8 +33,8 @@ class FrontAssets
 
     public static function eventCover(?Event $event): string
     {
-        if ($event && $event->cover_page && file_exists(public_path('uploads/images/events/cover_page/' . $event->cover_page))) {
-            return asset('uploads/images/events/cover_page/' . $event->cover_page);
+        if ($event && $event->cover_page && ($url = self::publicImageUrl('events/cover_page/' . $event->cover_page))) {
+            return $url;
         }
 
         return asset('templates/images/content-bg.png');
@@ -41,10 +42,19 @@ class FrontAssets
 
     public static function sportBlockAvatar(?SportBlock $sportBlock): string
     {
-        if ($sportBlock && $sportBlock->avatar && file_exists(public_path('uploads/images/sportblocks/avatar/' . $sportBlock->avatar))) {
-            return asset('uploads/images/sportblocks/avatar/' . $sportBlock->avatar);
+        if ($sportBlock && $sportBlock->avatar && ($url = self::publicImageUrl('sportblocks/avatar/' . $sportBlock->avatar))) {
+            return $url;
         }
 
         return asset('templates/images/noimage.png');
+    }
+
+    private static function publicImageUrl(string $path): ?string
+    {
+        $path = 'images/' . ltrim($path, '/');
+
+        return Storage::disk('public')->exists($path)
+            ? Storage::disk('public')->url($path)
+            : null;
     }
 }

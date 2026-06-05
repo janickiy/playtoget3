@@ -2,9 +2,9 @@ function select_place(val, type) {
     const text = val;
     let url = '';
     if (type.match("^search_sport")) {
-        url = './?task=ajax_action&action=search_sport_types&sport_types=';
+        url = '/ajax/search_sport_types?sport_types=';
     } else {
-        url = './?task=ajax_action&action=search_city&city=';
+        url = '/ajax/search_city?city=';
     }
     if (text != '')
         $.ajax({

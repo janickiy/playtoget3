@@ -12,8 +12,6 @@ class SportEvent extends BaseModel
         'header',
         'announce',
         'content',
-        'created_at',
-        'updated_at',
         'image',
     ];
 

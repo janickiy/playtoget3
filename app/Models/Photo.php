@@ -15,8 +15,6 @@ class Photo extends BaseModel
         'description',
         'owner_id',
         'banned',
-        'created_at',
-        'updated_at',
         'moderate',
     ];
 

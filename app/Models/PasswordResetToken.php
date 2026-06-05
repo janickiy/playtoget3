@@ -15,7 +15,6 @@ class PasswordResetToken extends BaseModel
     protected $fillable = [
         'email',
         'token',
-        'created_at',
     ];
 
     protected function casts(): array

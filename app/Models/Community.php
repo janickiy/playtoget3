@@ -16,8 +16,6 @@ class Community extends Model
         'banned',
         'name',
         'about',
-        'created_at',
-        'updated_at',
         'avatar',
         'cover_page',
         'place',

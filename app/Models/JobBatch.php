@@ -21,7 +21,6 @@ class JobBatch extends BaseModel
         'failed_job_ids',
         'options',
         'cancelled_at',
-        'created_at',
         'finished_at',
     ];
 }

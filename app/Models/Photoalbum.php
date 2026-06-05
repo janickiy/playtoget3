@@ -13,8 +13,6 @@ class Photoalbum extends Model
 
     protected $fillable = [
         'name',
-        'created_at',
-        'updated_at',
         'photoalbumable_type',
         'owner_id',
     ];

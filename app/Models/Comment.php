@@ -15,8 +15,6 @@ class Comment extends BaseModel
         'behalfable_type',
         'behalf_id',
         'content',
-        'created_at',
-        'updated_at',
         'parent_id',
     ];
 
