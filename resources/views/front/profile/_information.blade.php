@@ -1,4 +1,8 @@
 @if (! $profileUser->banned && ! $profileUser->deleted)
+    @php
+        $isOwnPage = $viewer && (int) $viewer->id === (int) $profileUser->id;
+    @endphp
+
     <div id="information">
         <ul>
             @if ($profileData['last_visit'] !== '')
@@ -69,18 +73,20 @@
         <a class="minimax" onclick="return false"><i>развернуть</i><i>свернуть</i></a>
     </div>
 
-    <div class="profilelink">
-        @if ($permissions['photo'])
-            <a href="{{ route('front.photoalbums.user', ['user' => $profileUser->id]) }}"><span>Фотографии</span></a>
-        @endif
-        @if ($permissions['video'])
-            <a href="{{ route('front.videoalbums.user', ['user' => $profileUser->id]) }}"><span>Видео</span></a>
-        @endif
-        @if ($permissions['friends'])
-            <a href="{{ route('front.friends.user', ['user' => $profileUser->id]) }}"><span>Друзья</span></a>
-        @endif
-        @if ($permissions['teams'])
-            <a href="{{ route('front.teams.user', ['user' => $profileUser->id]) }}"><span>Команды</span></a>
-        @endif
-    </div>
+    @unless ($isOwnPage)
+        <div class="profilelink">
+            @if ($permissions['photo'])
+                <a href="{{ route('front.photoalbums.user', ['user' => $profileUser->id]) }}"><span>Фотографии</span></a>
+            @endif
+            @if ($permissions['video'])
+                <a href="{{ route('front.videoalbums.user', ['user' => $profileUser->id]) }}"><span>Видео</span></a>
+            @endif
+            @if ($permissions['friends'])
+                <a href="{{ route('front.friends.user', ['user' => $profileUser->id]) }}"><span>Друзья</span></a>
+            @endif
+            @if ($permissions['teams'])
+                <a href="{{ route('front.teams.user', ['user' => $profileUser->id]) }}"><span>Команды</span></a>
+            @endif
+        </div>
+    @endunless
 @endif

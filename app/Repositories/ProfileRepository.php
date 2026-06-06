@@ -6,7 +6,9 @@ use App\Helpers\FrontAssets;
 use App\Models\Attachment;
 use App\Models\Comment;
 use App\Models\Friend;
+use App\Models\Like;
 use App\Models\Log;
+use App\Models\Share;
 use App\Models\User;
 use App\Models\UserSetting;
 use Carbon\CarbonInterface;
@@ -401,6 +403,44 @@ class ProfileRepository extends BaseRepository
         ])->loadCount(['likes', 'shares']);
     }
 
+    public function deleteComment(User $viewer, int $commentId): bool
+    {
+        /** @var Comment|null $comment */
+        $comment = Comment::query()->whereKey($commentId)->first();
+
+        if (! $comment || ! $this->viewerCanDeleteComment($viewer, $comment)) {
+            return false;
+        }
+
+        $commentIds = $this->commentTreeIds($comment);
+
+        DB::transaction(function () use ($commentIds): void {
+            Attachment::query()
+                ->where('type', 'comment')
+                ->whereIn('content_id', $commentIds)
+                ->delete();
+
+            Like::query()
+                ->where('likeable_type', 'comment')
+                ->whereIn('content_id', $commentIds)
+                ->delete();
+
+            Share::query()
+                ->where('shareable_type', 'comment')
+                ->whereIn('content_id', $commentIds)
+                ->delete();
+
+            Comment::query()
+                ->whereIn('id', $commentIds)
+                ->orderByDesc('id')
+                ->get()
+                ->each
+                ->delete();
+        });
+
+        return true;
+    }
+
     public function serializeComment(Comment $comment, ?User $viewer = null, bool $includeReplies = true): array
     {
         $user = $comment->user;
@@ -425,7 +465,10 @@ class ProfileRepository extends BaseRepository
             'can_share' => $viewer && (int) $viewer->id !== (int) $comment->user_id,
             'can_delete' => $viewer && (
                 (int) $viewer->id === (int) $comment->user_id
-                || (int) $viewer->id === (int) $comment->content_id
+                || (
+                    (string) $comment->commentable_type === 'user'
+                    && (int) $viewer->id === (int) $comment->content_id
+                )
             ),
             'replies' => $includeReplies
                 ? $comment->replies->map(fn (Comment $reply): array => $this->serializeComment($reply, $viewer, false))->values()
@@ -451,6 +494,41 @@ class ProfileRepository extends BaseRepository
             ])
             ->withCount(['likes', 'shares'])
             ->orderByDesc('id');
+    }
+
+    private function viewerCanDeleteComment(User $viewer, Comment $comment): bool
+    {
+        if ((int) $viewer->id === (int) $comment->user_id) {
+            return true;
+        }
+
+        return (string) $comment->commentable_type === 'user'
+            && (int) $viewer->id === (int) $comment->content_id;
+    }
+
+    private function commentTreeIds(Comment $comment): Collection
+    {
+        $ids = collect([(int) $comment->id]);
+        $currentIds = [(int) $comment->id];
+
+        while ($currentIds !== []) {
+            $childIds = Comment::query()
+                ->whereIn('parent_id', $currentIds)
+                ->pluck('id')
+                ->map(fn (int|string $id): int => (int) $id)
+                ->all();
+
+            $childIds = array_values(array_diff($childIds, $ids->all()));
+
+            if ($childIds === []) {
+                break;
+            }
+
+            $ids = $ids->merge($childIds);
+            $currentIds = $childIds;
+        }
+
+        return $ids->unique()->values();
     }
 
     private function occupations(User $profile, int $kind): Collection

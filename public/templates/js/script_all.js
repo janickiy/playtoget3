@@ -942,10 +942,13 @@ $(document).ready(function () {
                     'action': function () {
                         $.ajax({
                             type: 'POST',
-                            url: '/?task=ajax_action&action=removecomment',
-                            data: 'id_comment=' + id,
+                            url: '/ajax/removecomment',
+                            data: {
+                                _token: csrfToken(),
+                                id_comment: id
+                            },
+                            dataType: 'json',
                             success: function (msg) {
-                                //console.log(msg);
                                 if (msg.result == 'success') {
                                     $('#message-' + id).remove();
                                 }

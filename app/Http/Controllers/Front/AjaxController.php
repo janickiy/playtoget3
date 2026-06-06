@@ -47,6 +47,7 @@ class AjaxController extends Controller
             'add_photo_ajax_attach' => $this->addPhotoAjaxAttach($request),
             'uploadavatar' => $this->uploadAvatar($request),
             'addcomment' => $this->addComment($request),
+            'removecomment' => $this->removeComment($request),
             'liked' => $this->liked($request),
             'shared' => $this->shared($request),
             'search_city' => $this->searchCity($request),
@@ -393,6 +394,22 @@ class AjaxController extends Controller
                 'viewer' => $viewer,
             ])->render(),
         ]);
+    }
+
+    private function removeComment(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $commentId = (int) $request->input('id_comment', $request->input('id', 0));
+
+        if (! $viewer || $commentId < 1) {
+            return response()->json(['result' => ''], 422);
+        }
+
+        if (! $this->profiles->deleteComment($viewer, $commentId)) {
+            return response()->json(['result' => ''], 403);
+        }
+
+        return response()->json(['result' => 'success']);
     }
 
     private function liked(Request $request): JsonResponse

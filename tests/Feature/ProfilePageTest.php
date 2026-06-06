@@ -284,10 +284,67 @@ class ProfilePageTest extends TestCase
     public function test_wall_attachment_script_uses_laravel_ajax_endpoint(): void
     {
         $script = file_get_contents(public_path('templates/js/emotions.js'));
+        $commonScript = file_get_contents(public_path('templates/js/script_all.js'));
 
         $this->assertStringContainsString("formData.append('_token', token);", $script);
         $this->assertStringContainsString("url: '/ajax/add_photo_ajax_attach'", $script);
         $this->assertStringNotContainsString('/?task=ajax_action&action=add_photo_ajax_attach', $script);
+        $this->assertStringContainsString("url: '/ajax/removecomment'", $commonScript);
+        $this->assertStringNotContainsString('/?task=ajax_action&action=removecomment', $commonScript);
+    }
+
+    public function test_own_profile_hides_external_profile_links(): void
+    {
+        $viewer = $this->user(1, 'Александр', 'Яницкий');
+
+        $this->actingAs($viewer, 'web');
+
+        $this->mock(FriendRepository::class, function (MockInterface $mock): void {
+            $mock->shouldReceive('friendshipStatus')->with(1, 1)->andReturn('');
+        });
+
+        $this->mock(ProfileRepository::class, function (MockInterface $mock) use ($viewer): void {
+            $mock->shouldReceive('profile')->with(1)->andReturn($viewer);
+            $mock->shouldReceive('profileData')->with($viewer)->andReturn([
+                'avatar' => 'http://site3.local/uploads/images/user/avatar/owner.jpg',
+                'cover' => 'http://site3.local/uploads/images/user/cover_page/owner.jpg',
+                'firstname' => 'Александр',
+                'lastname' => 'Яницкий',
+                'secondname' => 'Yanack',
+                'about' => '',
+                'last_visit' => '5 июня 2026 в 00:06',
+                'birthday' => '',
+                'city' => '',
+                'phone' => '',
+                'contact_email' => '',
+                'skype' => '',
+                'website' => '',
+                'about_sport' => 'gh',
+                'is_online' => false,
+                'sport_types' => collect(),
+                'education' => collect(),
+                'work' => collect(),
+            ]);
+            $mock->shouldReceive('permissions')->with($viewer, $viewer, '')->andReturn([
+                'send_message' => false,
+                'wall' => true,
+                'photo' => true,
+                'video' => true,
+                'friends' => true,
+                'teams' => true,
+            ]);
+            $mock->shouldReceive('wallComments')->with(1, 10, 0, $viewer)->andReturn(collect());
+            $mock->shouldReceive('hasMoreWallComments')->with(1, 10, 0)->andReturn(false);
+        });
+
+        $this->get('/profile/1')
+            ->assertStatus(200)
+            ->assertSee('Александр')
+            ->assertDontSee('class="profilelink"', false)
+            ->assertDontSee('photoalbums/user/1', false)
+            ->assertDontSee('videoalbums/user/1', false)
+            ->assertDontSee('friends/user/1', false)
+            ->assertDontSee('teams/user/1', false);
     }
 
     public function test_guest_profile_wall_hides_interactive_legacy_actions(): void
