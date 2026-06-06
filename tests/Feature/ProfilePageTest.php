@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Models\UserSetting;
 use App\Repositories\FriendRepository;
 use App\Repositories\ProfileRepository;
 use Mockery\MockInterface;
@@ -10,6 +11,118 @@ use Tests\TestCase;
 
 class ProfilePageTest extends TestCase
 {
+    public function test_profile_edit_page_renders_legacy_settings_tabs(): void
+    {
+        $viewer = $this->user(1, 'Александр', 'Яницкий');
+        $settings = new UserSetting([
+            'permission_send_message' => 1,
+            'permission_view_profile' => 0,
+            'permission_view_friends' => 0,
+            'permission_view_photo' => 0,
+            'permission_view_video' => 0,
+            'permission_view_wall' => 0,
+            'permission_comment_photo' => 0,
+            'permission_comment_video' => 0,
+            'permission_comment_wall' => 0,
+            'notification_friends_request' => 'yes',
+            'notification_private_messages' => 'no',
+            'notification_wall_comments' => 'yes',
+            'notification_picture_comments' => 'yes',
+            'notification_video_comments' => 'yes',
+            'notification_answers_in_comments' => 'yes',
+            'notification_events' => 'yes',
+            'notification_birthdays' => 'yes',
+        ]);
+
+        $this->actingAs($viewer, 'web');
+
+        $this->mock(ProfileRepository::class, function (MockInterface $mock) use ($viewer, $settings): void {
+            $mock->shouldReceive('topProfileData')->with($viewer)->andReturn([
+                'user' => $viewer,
+                'avatar' => 'http://site3.local/uploads/images/user/avatar/1.jpg',
+                'cover' => 'http://site3.local/uploads/images/user/cover_page/1.jpg',
+                'firstname' => 'Александр',
+                'lastname' => 'Яницкий',
+                'about' => '',
+            ]);
+            $mock->shouldReceive('profileSettings')->with($viewer)->andReturn($settings);
+            $mock->shouldReceive('blockedUsers')->with($viewer)->andReturn(collect([
+                [
+                    'id' => 2,
+                    'name' => 'Дмитрий Панкратов',
+                    'avatar' => 'http://site3.local/uploads/images/user/avatar/2.jpg',
+                    'url' => 'http://site3.local/profile/2',
+                ],
+            ]));
+            $mock->shouldReceive('securityLogs')->with($viewer)->andReturn(collect([
+                ['ip' => '127.0.0.1', 'os' => 'macOS', 'browser' => 'Safari', 'time' => '06.06.2026 12:00'],
+            ]));
+            $mock->shouldReceive('permissionFields')->andReturn([
+                'permission_send_message' => 'Кто может писать мне сообщения',
+            ]);
+            $mock->shouldReceive('notificationFields')->andReturn([
+                'notification_friends_request' => 'Заявки в друзья',
+                'notification_private_messages' => 'Личные сообщения',
+            ]);
+        });
+
+        $this->get('/profile/edit')
+            ->assertStatus(200)
+            ->assertSee('id="profile-settings-form"', false)
+            ->assertSee('id="profile-avatar-input"', false)
+            ->assertSee('id="profile-cover-input"', false)
+            ->assertSee('id="preview_ava"', false)
+            ->assertSee('id="preview_cover"', false)
+            ->assertSee('Контакт')
+            ->assertSee('Приватность')
+            ->assertSee('Оповещения')
+            ->assertSee('Безопасность')
+            ->assertSee('Черный список')
+            ->assertSee('Кто может писать мне сообщения')
+            ->assertSee('Заявки в друзья')
+            ->assertSee('Дмитрий Панкратов')
+            ->assertSee('templates/js/profile-settings.js', false);
+    }
+
+    public function test_profile_edit_post_passes_settings_to_repository(): void
+    {
+        $viewer = $this->user(1, 'Александр', 'Яницкий');
+
+        $this->actingAs($viewer, 'web');
+
+        $this->mock(ProfileRepository::class, function (MockInterface $mock) use ($viewer): void {
+            $mock->shouldReceive('updateProfileSettings')
+                ->once()
+                ->withArgs(fn (User $user, array $input, mixed $avatar, mixed $cover): bool => $user === $viewer
+                    && $input['contact_email'] === 'new@example.test'
+                    && (int) $input['permission_send_message'] === 1
+                    && $input['notification_friends_request'] === 'yes'
+                    && $avatar === null
+                    && $cover === null);
+        });
+
+        $this->post('/profile/edit', [
+            'user' => [
+                'contact_email' => 'new@example.test',
+                'phone' => '+7 999 000-00-00',
+                'skype' => 'alex',
+                'website' => 'https://example.test',
+                'permission_send_message' => 1,
+                'permission_view_profile' => 0,
+                'permission_view_friends' => 0,
+                'permission_view_photo' => 0,
+                'permission_view_video' => 0,
+                'permission_view_wall' => 0,
+                'permission_comment_photo' => 0,
+                'permission_comment_video' => 0,
+                'permission_comment_wall' => 0,
+                'notification_friends_request' => 'yes',
+            ],
+        ])
+            ->assertRedirect('/profile/edit')
+            ->assertSessionHas('status', 'Изменения сохранены');
+    }
+
     public function test_profile_page_renders_legacy_wall_layout(): void
     {
         $viewer = $this->user(1, 'Александр', 'Яницкий');

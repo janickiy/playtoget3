@@ -28,13 +28,29 @@
 }
 
 .profile-edit-page #tabs > ul {
+    background: transparent;
+    border: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
     margin-bottom: 24px;
+    padding: 0;
+    width: 100%;
 }
 
 .profile-edit-page #tabs > ul:after {
     clear: both;
     content: "";
     display: block;
+}
+
+.profile-edit-page #tabs.five > ul > li {
+    box-sizing: border-box;
+    flex: 1 1 0;
+    float: none;
+    margin: 0;
+    top: 0;
+    width: auto;
 }
 
 .profile-edit-page #tabs > div {
@@ -168,8 +184,8 @@
     }
 
     .profile-edit-page #tabs.five > ul > li {
+        flex: 0 0 49%;
         margin-bottom: 5px;
-        width: 49%;
     }
 
     .profile-edit-page .settings-log-row {
