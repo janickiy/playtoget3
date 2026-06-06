@@ -13,7 +13,7 @@ $(document).ready(function () {
                     'class': 'blue',
                     'action': function () {
                         $.ajax({
-                            url: "./?task=ajax_action&action=removepic&id=" + IdPic,
+                            url: "/ajax/removepic?id=" + encodeURIComponent(IdPic),
                             cache: false,
                             dataType: "json",
                             success: function (data) {
@@ -49,9 +49,9 @@ $(document).ready(function () {
 
     function getPhotoInfo(id) {
         $.ajax({
-            type: 'POST',
-            url: './?task=ajax_action&action=getphotoinfo',
-            data: 'photo_id=' + id,
+            type: 'GET',
+            url: '/ajax/getphotoinfo',
+            data: 'photo_id=' + encodeURIComponent(id),
             success: function (data) {
                 //console.log(data);
                 if (data.status === 1) {
@@ -194,7 +194,7 @@ $(document).on("click", ".photo_big_wrap .reply", function () {
 
 
 function getCommentsPhoto(id) {
-    $.post('./?task=ajax_action&action=getcomments', {
+    $.get('/ajax/getcomments', {
         number: 100,
         offset: 0,
         commentable_type: 'photo',

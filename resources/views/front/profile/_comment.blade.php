@@ -50,11 +50,13 @@
             </ul>
         </p>
 
-        <a id="reply-{{ $comment['id'] }}" class="reply" data-item="{{ $comment['id'] }}"> Ответить</a>
-        @if ($comment['can_share'])
-            <a id="tell-comment-{{ $comment['id'] }}" class="tell" data-item="{{ $comment['id'] }}" data-type="comment">{{ $comment['shares_count'] }}</a>
+        @if ($comment['can_interact'] ?? (bool) $viewer)
+            <a id="reply-{{ $comment['id'] }}" class="reply" data-item="{{ $comment['id'] }}"> Ответить</a>
+            @if ($comment['can_share'])
+                <a id="tell-comment-{{ $comment['id'] }}" class="tell" data-item="{{ $comment['id'] }}" data-type="comment">{{ $comment['shares_count'] }}</a>
+            @endif
+            <a id="like-comment-{{ $comment['id'] }}" class="liked" data-item="{{ $comment['id'] }}" data-type="comment">{{ $comment['likes_count'] }}</a>
         @endif
-        <a id="like-comment-{{ $comment['id'] }}" class="liked" data-item="{{ $comment['id'] }}" data-type="comment">{{ $comment['likes_count'] }}</a>
     </div>
 
     @foreach ($comment['replies'] as $reply)

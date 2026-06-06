@@ -109,13 +109,26 @@ class ProfileRepository extends BaseRepository
             'photo' => $this->permissionAllows($settings?->permission_view_photo, $isOwnPage, $isFriend),
             'video' => $this->permissionAllows($settings?->permission_view_video, $isOwnPage, $isFriend),
             'friends' => $this->permissionAllows($settings?->permission_view_friends, $isOwnPage, $isFriend),
-            'teams' => true,
+            'teams' => (bool) $viewer
+                && $profile->communities()
+                    ->where('communities.type', 'team')
+                    ->exists(),
         ];
     }
 
     public function wallComments(int $profileId, int $limit = 10, int $offset = 0, ?User $viewer = null): Collection
     {
-        return $this->wallCommentsQuery($profileId)
+        return $this->comments('user', $profileId, $limit, $offset, $viewer);
+    }
+
+    public function comments(
+        string $commentableType,
+        int $contentId,
+        int $limit = 10,
+        int $offset = 0,
+        ?User $viewer = null,
+    ): Collection {
+        return $this->commentsQuery($commentableType, $contentId)
             ->offset($offset)
             ->limit($limit)
             ->get()
@@ -124,7 +137,12 @@ class ProfileRepository extends BaseRepository
 
     public function hasMoreWallComments(int $profileId, int $limit = 10, int $offset = 0): bool
     {
-        return $this->wallCommentsQuery($profileId)
+        return $this->hasMoreComments('user', $profileId, $limit, $offset);
+    }
+
+    public function hasMoreComments(string $commentableType, int $contentId, int $limit = 10, int $offset = 0): bool
+    {
+        return $this->commentsQuery($commentableType, $contentId)
             ->offset($offset + $limit)
             ->limit(1)
             ->exists();
@@ -177,6 +195,7 @@ class ProfileRepository extends BaseRepository
                 ->values(),
             'likes_count' => (int) ($comment->likes_count ?? 0),
             'shares_count' => (int) ($comment->shares_count ?? 0),
+            'can_interact' => (bool) $viewer,
             'can_share' => $viewer && (int) $viewer->id !== (int) $comment->user_id,
             'can_delete' => $viewer && (
                 (int) $viewer->id === (int) $comment->user_id
@@ -188,11 +207,11 @@ class ProfileRepository extends BaseRepository
         ];
     }
 
-    private function wallCommentsQuery(int $profileId): Builder
+    private function commentsQuery(string $commentableType, int $contentId): Builder
     {
         return Comment::query()
-            ->where('commentable_type', 'user')
-            ->where('content_id', $profileId)
+            ->where('commentable_type', $commentableType)
+            ->where('content_id', $contentId)
             ->where(function (Builder $query): void {
                 $query->whereNull('parent_id')->orWhere('parent_id', 0);
             })
@@ -273,7 +292,7 @@ class ProfileRepository extends BaseRepository
     private function dateTime(?CarbonInterface $date): string
     {
         return $date
-            ? sprintf('%d %s %d в %s', $date->day, self::MONTHS[$date->month], $date->year, $date->format('H:i'))
+            ? sprintf('%d %s %d в %02d:%02d', $date->day, self::MONTHS[$date->month], $date->year, $date->hour, $date->month)
             : '';
     }
 

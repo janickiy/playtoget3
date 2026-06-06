@@ -119,11 +119,13 @@
                             </span>
                         </li>
                         <li><a href="{{ route('front.teams.show', ['community' => 3]) }}"><img src="{{ asset('templates/images/command.png') }}" alt=""></a><span class="for-submenu"><a title="Команды" href="{{ route('front.teams.show', ['community' => 3]) }}">Команды</a></span></li>
+                        <li class="menu_groups_hide"><a href="{{ route('front.playgrounds.index') }}"><img src="{{ asset('templates/images/Group.png') }}" alt=""></a><span class="for-submenu"><a title="Группы" href="{{ route('front.playgrounds.index') }}">Группы</a></span></li>
                         <li class="menu_groups">
                             <a><img src="{{ asset('templates/images/Group.png') }}" alt=""></a>
                             <span class="for-submenu">
                                 <a title="Группы" href="{{ route('front.playgrounds.index') }}">Группы</a>
                                 <ul class="top-mnu-submenu">
+                                    <li><a href="{{ route('front.playgrounds.index') }}">Группы</a></li>
                                     <li><a href="{{ route('front.playgrounds.index') }}">Площадки</a></li>
                                     <li><a href="{{ route('front.shops.index') }}">Магазины</a></li>
                                     <li><a href="{{ route('front.fitness.index') }}">Фитнес</a></li>

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Helpers\FrontAssets;
 use App\Http\Controllers\Controller;
+use App\Models\Photo;
 use App\Models\GeoCity;
 use App\Models\Like;
 use App\Models\Share;
@@ -38,6 +40,7 @@ class AjaxController extends Controller
             'block_user' => $this->blockUser($request),
             'unblock_user' => $this->unblockUser($request),
             'getcomments' => $this->getComments($request),
+            'getphotoinfo' => $this->getPhotoInfo($request),
             'addcomment' => $this->addComment($request),
             'liked' => $this->liked($request),
             'shared' => $this->shared($request),
@@ -187,11 +190,11 @@ class AjaxController extends Controller
         $limit = min(max((int) $request->input('number', 10), 1), 25);
         $offset = max((int) $request->input('offset', 0), 0);
 
-        if ($type !== 'user' || $profileId < 1) {
+        if (! in_array($type, ['user', 'photo'], true) || $profileId < 1) {
             return response()->json(['status' => 0, 'html' => '', 'count' => 0, 'has_more' => false]);
         }
 
-        $comments = $this->profiles->wallComments($profileId, $limit, $offset, $viewer);
+        $comments = $this->profiles->comments($type, $profileId, $limit, $offset, $viewer);
 
         return response()->json([
             'status' => 1,
@@ -200,7 +203,53 @@ class AjaxController extends Controller
                 'viewer' => $viewer,
             ])->render(),
             'count' => $comments->count(),
-            'has_more' => $this->profiles->hasMoreWallComments($profileId, $limit, $offset),
+            'has_more' => $this->profiles->hasMoreComments($type, $profileId, $limit, $offset),
+        ]);
+    }
+
+    private function getPhotoInfo(Request $request): JsonResponse
+    {
+        $photoId = (int) $request->input('photo_id', $request->input('id', 0));
+
+        if ($photoId < 1) {
+            return response()->json(['status' => 0]);
+        }
+
+        /** @var Photo|null $photo */
+        $photo = Photo::query()
+            ->with(['owner', 'album'])
+            ->whereKey($photoId)
+            ->where('banned', false)
+            ->first();
+
+        if (! $photo) {
+            return response()->json(['status' => 0]);
+        }
+
+        $photoUrl = FrontAssets::photoGallery($photo, 'photo') ?: FrontAssets::photoGallery($photo);
+
+        if (! $photoUrl) {
+            return response()->json(['status' => 0]);
+        }
+
+        $owner = $photo->owner;
+
+        return response()->json([
+            'status' => 1,
+            'owner_id' => (int) ($owner?->id ?? $photo->owner_id),
+            'firstname' => (string) ($owner?->firstname ?? ''),
+            'lastname' => (string) ($owner?->lastname ?? ''),
+            'created' => $photo->created_at?->format('d.m.Y H:i') ?? '',
+            'description' => (string) $photo->description,
+            'photo' => $photoUrl,
+            'liked' => Like::query()
+                ->where('likeable_type', 'photo')
+                ->where('content_id', $photo->id)
+                ->count(),
+            'tell' => Share::query()
+                ->where('shareable_type', 'photo')
+                ->where('content_id', $photo->id)
+                ->count(),
         ]);
     }
 
@@ -212,7 +261,7 @@ class AjaxController extends Controller
         $comment = trim((string) $request->input('comment', ''));
         $attach = $request->input('attach', []);
 
-        if (! $viewer || $type !== 'user' || $profileId < 1 || ($comment === '' && empty($attach))) {
+        if (! $viewer || ! in_array($type, ['user', 'photo'], true) || $profileId < 1 || ($comment === '' && empty($attach))) {
             return response()->json([
                 'status' => false,
                 'errors' => ['comment' => 'Заполните комментарий'],

@@ -3,7 +3,12 @@
     <ul>
         <li>
             <img src="{{ asset('templates/images/left-sitebar.png') }}" alt="">
-            <a href="#">Рекомендуем</a>
+            <a href="#">рекомендует</a>
+            <ul class="sub-menu">
+                <li>
+                    <div class="sub-content"><h5 class="marginNone">Раздел находится в разработке</h5></div>
+                </li>
+            </ul>
         </li>
         <li class="ads">
             <a href="{{ route('front.events.index') }}">Мероприятия<span>{{ $frontLayout['eventCount'] }}</span></a>
@@ -27,7 +32,12 @@
             </ul>
         </li>
         <li class="ads">
-            <a href="#">Реклама</a>
+            <a href="#">Объявления</a>
+            <ul class="sub-menu">
+                <li>
+                    <div class="sub-content"><h5>Раздел находится в разработке</h5></div>
+                </li>
+            </ul>
         </li>
     </ul>
 </div>
