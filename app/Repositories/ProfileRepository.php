@@ -194,7 +194,66 @@ class ProfileRepository extends BaseRepository
         return self::NOTIFICATION_FIELDS;
     }
 
-    public function updateProfileSettings(User $user, array $input, ?UploadedFile $avatar, ?UploadedFile $cover): void
+    public function cropTemporaryAvatar(User $user, UploadedFile $file, array $crop): array
+    {
+        $source = $this->imageResource($file);
+        $sourceWidth = imagesx($source);
+        $sourceHeight = imagesy($source);
+
+        if ($sourceWidth < 1 || $sourceHeight < 1) {
+            imagedestroy($source);
+
+            throw new RuntimeException('Не удалось прочитать изображение.');
+        }
+
+        $x = max(0, (int) floor((float) ($crop['x'] ?? 0)));
+        $y = max(0, (int) floor((float) ($crop['y'] ?? 0)));
+        $width = max(0, (int) floor((float) ($crop['w'] ?? 0)));
+        $height = max(0, (int) floor((float) ($crop['h'] ?? 0)));
+        $size = min($width, $height);
+
+        if ($size < 100) {
+            imagedestroy($source);
+
+            throw new RuntimeException('Выделенная область слишком мала.');
+        }
+
+        $size = min($size, $sourceWidth - $x, $sourceHeight - $y);
+
+        if ($size < 100) {
+            imagedestroy($source);
+
+            throw new RuntimeException('Выделенная область выходит за границы изображения.');
+        }
+
+        $target = imagecreatetruecolor(300, 300);
+        imagefill($target, 0, 0, imagecolorallocate($target, 255, 255, 255));
+        imagecopyresampled($target, $source, 0, 0, $x, $y, 300, 300, $size, $size);
+        imagedestroy($source);
+
+        ob_start();
+        imagejpeg($target, null, 90);
+        $contents = ob_get_clean();
+        imagedestroy($target);
+
+        if (! is_string($contents) || $contents === '') {
+            throw new RuntimeException('Не удалось обработать изображение.');
+        }
+
+        $filename = sprintf('%d_%s.jpg', $user->id, Str::lower(Str::random(32)));
+        $path = 'images/tmp/profile/avatar/' . $filename;
+
+        if (! Storage::disk('public')->put($path, $contents)) {
+            throw new RuntimeException('Не удалось сохранить изображение.');
+        }
+
+        return [
+            'file' => $filename,
+            'url' => Storage::disk('public')->url($path),
+        ];
+    }
+
+    public function updateProfileSettings(User $user, array $input, ?string $temporaryAvatar, ?UploadedFile $cover): void
     {
         $contacts = [];
         foreach (self::CONTACT_FIELDS as $field) {
@@ -211,7 +270,7 @@ class ProfileRepository extends BaseRepository
             $notifications[$field] = array_key_exists($field, $input) ? 'yes' : 'no';
         }
 
-        $newAvatar = $avatar ? $this->storeUserImage($avatar, 'user/avatar', $user->id) : null;
+        $newAvatar = $this->promoteTemporaryAvatar($temporaryAvatar, $user->id);
         $newCover = $cover ? $this->storeUserImage($cover, 'user/cover_page', $user->id) : null;
         $oldAvatar = null;
         $oldCover = null;
@@ -469,6 +528,80 @@ class ProfileRepository extends BaseRepository
         }
 
         return $filename;
+    }
+
+    private function promoteTemporaryAvatar(?string $temporaryAvatar, int $userId): ?string
+    {
+        if (! $temporaryAvatar) {
+            return null;
+        }
+
+        $filename = basename($temporaryAvatar);
+
+        if (! preg_match('/^[A-Za-z0-9_.-]+$/', $filename)) {
+            throw new RuntimeException('Некорректное имя файла аватара.');
+        }
+
+        $disk = Storage::disk('public');
+        $source = 'images/tmp/profile/avatar/' . $filename;
+
+        if (! $disk->exists($source)) {
+            throw new RuntimeException('Файл аватара не найден.');
+        }
+
+        $targetFilename = sprintf('%d_%s', $userId, preg_replace('/^\d+_/', '', $filename));
+        $target = 'images/user/avatar/' . $targetFilename;
+
+        if (! $disk->copy($source, $target)) {
+            throw new RuntimeException('Не удалось сохранить аватар.');
+        }
+
+        $disk->delete($source);
+
+        return $targetFilename;
+    }
+
+    private function imageResource(UploadedFile $file): \GdImage
+    {
+        $path = $file->getRealPath();
+        $mime = $file->getMimeType();
+        $image = match ($mime) {
+            'image/jpeg', 'image/jpg' => imagecreatefromjpeg($path),
+            'image/png' => imagecreatefrompng($path),
+            default => false,
+        };
+
+        if (! $image instanceof \GdImage) {
+            throw new RuntimeException('Неверный формат изображения.');
+        }
+
+        return $mime === 'image/jpeg' || $mime === 'image/jpg'
+            ? $this->orientJpeg($image, $path)
+            : $image;
+    }
+
+    private function orientJpeg(\GdImage $image, string $path): \GdImage
+    {
+        if (! function_exists('exif_read_data')) {
+            return $image;
+        }
+
+        $exif = @exif_read_data($path);
+        $orientation = is_array($exif) ? (int) ($exif['Orientation'] ?? 0) : 0;
+        $rotated = match ($orientation) {
+            3 => imagerotate($image, 180, 0),
+            6 => imagerotate($image, -90, 0),
+            8 => imagerotate($image, 90, 0),
+            default => false,
+        };
+
+        if (! $rotated instanceof \GdImage) {
+            return $image;
+        }
+
+        imagedestroy($image);
+
+        return $rotated;
     }
 
     private function deleteUserImage(string $directory, ?string $filename): void

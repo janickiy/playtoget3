@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Models\UserSetting;
 use App\Repositories\FriendRepository;
 use App\Repositories\ProfileRepository;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
@@ -70,6 +72,8 @@ class ProfilePageTest extends TestCase
             ->assertStatus(200)
             ->assertSee('id="profile-settings-form"', false)
             ->assertSee('id="profile-avatar-input"', false)
+            ->assertSee('id="profile-avatar-file"', false)
+            ->assertSee('id="avatar-crop-modal"', false)
             ->assertSee('id="profile-cover-input"', false)
             ->assertSee('id="preview_ava"', false)
             ->assertSee('id="preview_cover"', false)
@@ -81,6 +85,8 @@ class ProfilePageTest extends TestCase
             ->assertSee('Кто может писать мне сообщения')
             ->assertSee('Заявки в друзья')
             ->assertSee('Дмитрий Панкратов')
+            ->assertSee('templates/css/jquery.Jcrop.css', false)
+            ->assertSee('templates/js/jquery.Jcrop.min.js', false)
             ->assertSee('templates/js/profile-settings.js', false);
     }
 
@@ -93,11 +99,11 @@ class ProfilePageTest extends TestCase
         $this->mock(ProfileRepository::class, function (MockInterface $mock) use ($viewer): void {
             $mock->shouldReceive('updateProfileSettings')
                 ->once()
-                ->withArgs(fn (User $user, array $input, mixed $avatar, mixed $cover): bool => $user === $viewer
+                ->withArgs(fn (User $user, array $input, mixed $temporaryAvatar, mixed $cover): bool => $user === $viewer
                     && $input['contact_email'] === 'new@example.test'
                     && (int) $input['permission_send_message'] === 1
                     && $input['notification_friends_request'] === 'yes'
-                    && $avatar === null
+                    && $temporaryAvatar === '1_cropped.jpg'
                     && $cover === null);
         });
 
@@ -118,9 +124,72 @@ class ProfilePageTest extends TestCase
                 'permission_comment_wall' => 0,
                 'notification_friends_request' => 'yes',
             ],
+            'file_ava' => '1_cropped.jpg',
         ])
             ->assertRedirect('/profile/edit')
             ->assertSessionHas('status', 'Изменения сохранены');
+    }
+
+    public function test_profile_avatar_upload_ajax_returns_cropped_temporary_file(): void
+    {
+        $viewer = $this->user(1, 'Александр', 'Яницкий');
+        $file = UploadedFile::fake()->image('avatar.jpg', 600, 500);
+
+        $this->actingAs($viewer, 'web');
+
+        $this->mock(ProfileRepository::class, function (MockInterface $mock) use ($viewer): void {
+            $mock->shouldReceive('cropTemporaryAvatar')
+                ->once()
+                ->withArgs(fn (User $user, UploadedFile $file, array $crop): bool => $user === $viewer
+                    && $file->getClientOriginalName() === 'avatar.jpg'
+                    && (int) $crop['x'] === 10
+                    && (int) $crop['y'] === 20
+                    && (int) $crop['w'] === 300
+                    && (int) $crop['h'] === 300)
+                ->andReturn([
+                    'file' => '1_cropped.jpg',
+                    'url' => 'http://site3.local/uploads/images/tmp/profile/avatar/1_cropped.jpg',
+                ]);
+        });
+
+        $this->post('/ajax/uploadavatar', [
+            'avatar' => $file,
+            'x' => 10,
+            'y' => 20,
+            'w' => 300,
+            'h' => 300,
+        ])
+            ->assertStatus(200)
+            ->assertJson([
+                'result' => 'success',
+                'file' => '1_cropped.jpg',
+                'url' => 'http://site3.local/uploads/images/tmp/profile/avatar/1_cropped.jpg',
+            ]);
+    }
+
+    public function test_profile_repository_crops_avatar_to_square_temporary_image(): void
+    {
+        Storage::fake('public');
+
+        $viewer = $this->user(1, 'Александр', 'Яницкий');
+        $repository = new ProfileRepository(new User());
+        $result = $repository->cropTemporaryAvatar($viewer, UploadedFile::fake()->image('avatar.png', 600, 500), [
+            'x' => 30,
+            'y' => 40,
+            'w' => 300,
+            'h' => 300,
+        ]);
+        $path = 'images/tmp/profile/avatar/' . $result['file'];
+        $temporaryFile = tempnam(sys_get_temp_dir(), 'avatar-crop-');
+
+        Storage::disk('public')->assertExists($path);
+        file_put_contents($temporaryFile, Storage::disk('public')->get($path));
+
+        [$width, $height] = getimagesize($temporaryFile);
+        unlink($temporaryFile);
+
+        $this->assertSame(300, $width);
+        $this->assertSame(300, $height);
     }
 
     public function test_profile_page_renders_legacy_wall_layout(): void

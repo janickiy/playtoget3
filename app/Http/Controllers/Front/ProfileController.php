@@ -91,14 +91,14 @@ class ProfileController extends Controller
             'user.notification_answers_in_comments' => ['nullable', 'in:yes'],
             'user.notification_events' => ['nullable', 'in:yes'],
             'user.notification_birthdays' => ['nullable', 'in:yes'],
-            'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:10240'],
+            'file_ava' => ['nullable', 'string', 'max:255', 'regex:/^[A-Za-z0-9_.-]+$/'],
             'cover' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:10240'],
         ]);
 
         $profiles->updateProfileSettings(
             $viewer,
             $validated['user'] ?? [],
-            $request->file('avatar'),
+            $validated['file_ava'] ?? null,
             $request->file('cover'),
         );
 

@@ -25,6 +25,7 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('templates/css/jquery-ui-1.8.16.custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('templates/css/jquery.Jcrop.css') }}">
     <link rel="stylesheet" href="{{ asset('templates/css/profile-settings.css') }}">
 @endpush
 
@@ -53,10 +54,10 @@
             >
                 @csrf
 
-                <input id="profile-avatar-input" class="profile-asset-input" type="file" name="avatar" accept="image/jpeg,image/png">
+                <input id="profile-avatar-file" type="hidden" name="file_ava" value="{{ old('file_ava') }}">
                 <input id="profile-cover-input" class="profile-asset-input" type="file" name="cover" accept="image/jpeg,image/png">
 
-                @error('avatar')
+                @error('file_ava')
                     <div class="settings-field-error">{{ $message }}</div>
                 @enderror
 
@@ -202,9 +203,43 @@
             </form>
         </div>
     </div>
+
+    <div class="overlay_ava avatar-crop-overlay" id="avatar-crop-overlay">
+        <div class="avatarUpload avatar-crop-modal" id="avatar-crop-modal" data-type="avatar">
+            <button type="button" class="avatar-crop-close" aria-label="Закрыть">×</button>
+            <div class="avatar-crop-inner">
+                <div class="page-header">
+                    <h3>Загрузка аватара</h3>
+                </div>
+                <div class="loading-bar" id="avatar-crop-loading">
+                    <img border="0" src="{{ asset('templates/images/select2-spinner.gif') }}" width="20" alt="">
+                </div>
+                <div class="file_upload2 avatar-crop-file">
+                    <button type="button" id="avatar-select-button">Выберите файл</button>
+                    <input id="profile-avatar-input" type="file" accept="image/jpeg,image/png">
+                </div>
+                <p class="text-show avatar-crop-hint">Выберите область, которую хотите использовать</p>
+                <div class="avatar-crop-stage">
+                    <img
+                        id="avatar-crop-target"
+                        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+                        alt=""
+                    >
+                </div>
+                <form id="avatar-crop-form" autocomplete="off" class="crop">
+                    <input type="hidden" id="avatar-crop-x" name="x" value="0">
+                    <input type="hidden" id="avatar-crop-y" name="y" value="0">
+                    <input type="hidden" id="avatar-crop-w" name="w" value="0">
+                    <input type="hidden" id="avatar-crop-h" name="h" value="0">
+                    <button type="submit" class="save-button saveAva">Сохранить</button>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
     <script src="{{ asset('templates/js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('templates/js/jquery.Jcrop.min.js') }}"></script>
     <script src="{{ asset('templates/js/profile-settings.js') }}"></script>
 @endpush

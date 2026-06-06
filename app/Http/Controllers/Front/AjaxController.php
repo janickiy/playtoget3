@@ -45,6 +45,7 @@ class AjaxController extends Controller
             'getcomments' => $this->getComments($request),
             'getphotoinfo' => $this->getPhotoInfo($request),
             'add_photo_ajax_attach' => $this->addPhotoAjaxAttach($request),
+            'uploadavatar' => $this->uploadAvatar($request),
             'addcomment' => $this->addComment($request),
             'liked' => $this->liked($request),
             'shared' => $this->shared($request),
@@ -322,6 +323,42 @@ class AjaxController extends Controller
                 'small_photo' => FrontAssets::photoGallery($photo),
                 'photo' => FrontAssets::photoGallery($photo, 'photo'),
             ],
+        ]);
+    }
+
+    private function uploadAvatar(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+
+        if (! $viewer) {
+            return response()->json(['result' => 'error', 'error' => 'Unauthorized'], 401);
+        }
+
+        $validated = $request->validate([
+            'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:10240'],
+            'x' => ['required', 'numeric', 'min:0'],
+            'y' => ['required', 'numeric', 'min:0'],
+            'w' => ['required', 'numeric', 'min:100'],
+            'h' => ['required', 'numeric', 'min:100'],
+        ]);
+
+        try {
+            $avatar = $this->profiles->cropTemporaryAvatar(
+                $viewer,
+                $request->file('avatar'),
+                $validated,
+            );
+        } catch (\RuntimeException $exception) {
+            return response()->json([
+                'result' => 'error',
+                'error' => $exception->getMessage(),
+            ], 422);
+        }
+
+        return response()->json([
+            'result' => 'success',
+            'file' => $avatar['file'],
+            'url' => $avatar['url'],
         ]);
     }
 
