@@ -22,13 +22,18 @@ class VideoalbumRepository extends BaseRepository
 
     public function albumsForUser(int $userId): Collection
     {
+        return $this->albumsForOwner($userId, 'user');
+    }
+
+    public function albumsForOwner(int $ownerId, string $type): Collection
+    {
         return $this->model->newQuery()
             ->with(['videos' => fn ($query) => $query
                 ->where('banned', false)
                 ->latest('id')
                 ->limit(1)])
-            ->where('owner_id', $userId)
-            ->where('videoalbumable_type', 'user')
+            ->where('owner_id', $ownerId)
+            ->where('videoalbumable_type', $type)
             ->orderByDesc('id')
             ->get()
             ->map(fn (Videoalbum $album): array => $this->serializeAlbum($album));
@@ -36,12 +41,17 @@ class VideoalbumRepository extends BaseRepository
 
     public function videosForUser(int $userId, int $limit = 6, int $offset = 0): Collection
     {
+        return $this->videosForOwner($userId, 'user', $limit, $offset);
+    }
+
+    public function videosForOwner(int $ownerId, string $type, int $limit = 6, int $offset = 0): Collection
+    {
         return Video::query()
             ->with(['album'])
             ->where('banned', false)
             ->whereHas('album', fn ($query) => $query
-                ->where('owner_id', $userId)
-                ->where('videoalbumable_type', 'user'))
+                ->where('owner_id', $ownerId)
+                ->where('videoalbumable_type', $type))
             ->orderByDesc('id')
             ->offset($offset)
             ->limit($limit)
@@ -51,18 +61,23 @@ class VideoalbumRepository extends BaseRepository
 
     public function hasMoreUserVideos(int $userId, int $limit, int $offset): bool
     {
+        return $this->hasMoreOwnerVideos($userId, 'user', $limit, $offset);
+    }
+
+    public function hasMoreOwnerVideos(int $ownerId, string $type, int $limit, int $offset): bool
+    {
         return Video::query()
             ->where('banned', false)
             ->whereHas('album', fn ($query) => $query
-                ->where('owner_id', $userId)
-                ->where('videoalbumable_type', 'user'))
+                ->where('owner_id', $ownerId)
+                ->where('videoalbumable_type', $type))
             ->orderByDesc('id')
             ->offset($offset + $limit)
             ->limit(1)
             ->exists();
     }
 
-    public function popularVideos(int $limit = 6, int $offset = 0): Collection
+    public function popularVideos(int $limit = 6, int $offset = 0, string $type = 'user'): Collection
     {
         return Video::query()
             ->with(['album'])
@@ -74,7 +89,7 @@ class VideoalbumRepository extends BaseRepository
             ->leftJoin('video_views', 'video_views.video_id', '=', 'videos.id')
             ->join('videoalbums', 'videoalbums.id', '=', 'videos.videoalbum_id')
             ->where('videos.banned', false)
-            ->where('videoalbums.videoalbumable_type', 'user')
+            ->where('videoalbums.videoalbumable_type', $type)
             ->groupBy(
                 'videos.id',
                 'videos.videoalbum_id',
@@ -95,13 +110,13 @@ class VideoalbumRepository extends BaseRepository
             ->map(fn (Video $video): array => $this->serializeVideo($video));
     }
 
-    public function album(int $albumId): ?Videoalbum
+    public function album(int $albumId, ?array $types = null): ?Videoalbum
     {
         /** @var Videoalbum|null $album */
         $album = $this->model->newQuery()
             ->with('owner.settings')
             ->whereKey($albumId)
-            ->where('videoalbumable_type', 'user')
+            ->whereIn('videoalbumable_type', $types ?: ['user'])
             ->first();
 
         return $album;
@@ -131,21 +146,31 @@ class VideoalbumRepository extends BaseRepository
 
     public function editableAlbumsFor(User $user): Collection
     {
+        return $this->editableAlbumsForOwner($user->id, 'user');
+    }
+
+    public function editableAlbumsForOwner(int $ownerId, string $type): Collection
+    {
         return $this->model->newQuery()
-            ->where('owner_id', $user->id)
-            ->where('videoalbumable_type', 'user')
+            ->where('owner_id', $ownerId)
+            ->where('videoalbumable_type', $type)
             ->orderBy('name')
             ->get();
     }
 
     public function ensureDefaultAlbum(User $user): Videoalbum
     {
+        return $this->ensureDefaultAlbumForOwner($user->id, 'user', 'Мой альбом');
+    }
+
+    public function ensureDefaultAlbumForOwner(int $ownerId, string $type, string $name = 'Мой альбом'): Videoalbum
+    {
         /** @var Videoalbum $album */
         $album = $this->model->newQuery()->firstOrCreate([
-            'owner_id' => $user->id,
-            'videoalbumable_type' => 'user',
+            'owner_id' => $ownerId,
+            'videoalbumable_type' => $type,
         ], [
-            'name' => 'Мой альбом',
+            'name' => $name,
         ]);
 
         return $album;
@@ -153,11 +178,16 @@ class VideoalbumRepository extends BaseRepository
 
     public function createUserAlbum(User $user, string $name): Videoalbum
     {
+        return $this->createAlbumForOwner($user->id, 'user', $name);
+    }
+
+    public function createAlbumForOwner(int $ownerId, string $type, string $name): Videoalbum
+    {
         /** @var Videoalbum $album */
         $album = $this->model->newQuery()->create([
             'name' => $name,
-            'videoalbumable_type' => 'user',
-            'owner_id' => $user->id,
+            'videoalbumable_type' => $type,
+            'owner_id' => $ownerId,
         ]);
 
         return $album;
@@ -170,9 +200,14 @@ class VideoalbumRepository extends BaseRepository
 
     public function nameExists(User $user, string $name, ?int $exceptId = null): bool
     {
+        return $this->nameExistsForOwner($user->id, 'user', $name, $exceptId);
+    }
+
+    public function nameExistsForOwner(int $ownerId, string $type, string $name, ?int $exceptId = null): bool
+    {
         return $this->model->newQuery()
-            ->where('owner_id', $user->id)
-            ->where('videoalbumable_type', 'user')
+            ->where('owner_id', $ownerId)
+            ->where('videoalbumable_type', $type)
             ->where('name', $name)
             ->when($exceptId, fn ($query) => $query->whereKeyNot($exceptId))
             ->exists();
@@ -189,6 +224,11 @@ class VideoalbumRepository extends BaseRepository
             throw new RuntimeException('Нет доступа к выбранному альбому.');
         }
 
+        return $this->addVideoToAlbum($user, $album, $link, $description);
+    }
+
+    public function addVideoToAlbum(User $user, Videoalbum $album, string $link, string $description = ''): Video
+    {
         $videoData = $this->detectVideo($link);
 
         if (! $videoData) {
@@ -201,7 +241,7 @@ class VideoalbumRepository extends BaseRepository
             'provider' => $videoData['provider'],
             'video' => $videoData['video'],
             'description' => $description,
-            'owner_id' => $user->id,
+            'owner_id' => $album->videoalbumable_type === 'team' ? $album->owner_id : $user->id,
             'banned' => false,
         ])->load('album');
 
@@ -253,6 +293,11 @@ class VideoalbumRepository extends BaseRepository
             return false;
         }
 
+        return $this->deleteVideo($video);
+    }
+
+    public function deleteVideo(Video $video): bool
+    {
         return DB::transaction(function () use ($video): bool {
             $this->deleteVideoRelations($video);
 

@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Event;
 use App\Models\Photo;
+use App\Models\Community;
 use App\Models\SportBlock;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
@@ -35,6 +36,24 @@ class FrontAssets
     public static function eventCover(?Event $event): string
     {
         if ($event && $event->cover_page && ($url = self::publicImageUrl('events/cover_page/' . $event->cover_page))) {
+            return $url;
+        }
+
+        return asset('frontend/images/content-bg.png');
+    }
+
+    public static function communityAvatar(?Community $community): string
+    {
+        if ($community && ! $community->banned && $community->avatar && ($url = self::publicImageUrl($community->type . 'content/avatar/' . $community->avatar))) {
+            return $url;
+        }
+
+        return asset('frontend/images/noimage.png');
+    }
+
+    public static function communityCover(?Community $community): string
+    {
+        if ($community && ! $community->banned && $community->cover_page && ($url = self::publicImageUrl($community->type . 'content/cover_page/' . $community->cover_page))) {
             return $url;
         }
 

@@ -83,15 +83,35 @@ Route::prefix('videoalbums')->name('front.videoalbums.')->group(function () {
 });
 
 Route::prefix('teams')->name('front.teams.')->group(function () {
+    Route::get('', [TeamsController::class, 'index'])->name('index');
+    Route::get('create', [TeamsController::class, 'create'])->name('create');
+    Route::post('create', [TeamsController::class, 'store'])->name('store');
     Route::get('user/{user}', [TeamsController::class, 'user'])->where('user', '[0-9]+')->name('user');
+    Route::get('photoalbums', [TeamsController::class, 'photoalbums'])->name('photoalbums.default');
+    Route::get('photoalbums/{album}/edit', [TeamsController::class, 'editPhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.edit');
+    Route::post('photoalbums/{album}/edit', [TeamsController::class, 'updatePhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.update');
+    Route::get('videoalbums', [TeamsController::class, 'videoalbums'])->name('videoalbums.default');
+    Route::get('videoalbum/{album}/edit', [TeamsController::class, 'editVideoalbum'])->where('album', '[0-9]+')->name('videoalbum.edit');
+    Route::post('videoalbum/{album}/edit', [TeamsController::class, 'updateVideoalbum'])->where('album', '[0-9]+')->name('videoalbum.update');
+    Route::get('{community}/edit', [TeamsController::class, 'edit'])->where('community', '[0-9]+')->name('edit');
+    Route::post('{community}/edit', [TeamsController::class, 'update'])->where('community', '[0-9]+')->name('update');
     Route::get('{community}/members', [TeamsController::class, 'members'])->where('community', '[0-9]+')->name('members');
     Route::get('{community}/photoalbums/add-photo', [TeamsController::class, 'addPhoto'])->where('community', '[0-9]+')->name('photoalbums.add-photo');
-    Route::get('{community}/photoalbums/photo/{photo}', [TeamsController::class, 'photo'])->where(['community' => '[0-9]+', 'photo' => '[0-9]+'])->name('photoalbums.photo');
+    Route::get('{community}/photoalbums/create', [TeamsController::class, 'createPhotoalbum'])->where('community', '[0-9]+')->name('photoalbums.create');
+    Route::post('{community}/photoalbums/create', [TeamsController::class, 'storePhotoalbum'])->where('community', '[0-9]+')->name('photoalbums.store');
+    Route::get('{community}/photoalbums/photo/{photo}', [TeamsController::class, 'photoWithoutAlbum'])->where(['community' => '[0-9]+', 'photo' => '[0-9]+'])->name('photoalbums.photo.legacy');
+    Route::get('{community}/photoalbums/{album}/photo/{photo}', [TeamsController::class, 'photo'])->where(['community' => '[0-9]+', 'album' => '[0-9]+', 'photo' => '[0-9]+'])->name('photoalbums.photo');
+    Route::get('{community}/photoalbums/{album}', [TeamsController::class, 'showPhotoalbum'])->where(['community' => '[0-9]+', 'album' => '[0-9]+'])->name('photoalbums.show');
     Route::get('{community}/photoalbums', [TeamsController::class, 'photoalbums'])->where('community', '[0-9]+')->name('photoalbums');
-    Route::get('{community}/photoalbum/{album}/edit', [TeamsController::class, 'editPhotoalbum'])->where(['community' => '[0-9]+', 'album' => '[0-9]+'])->name('photoalbum.edit');
+    Route::get('{community}/photoalbum/{album}/edit', [TeamsController::class, 'editPhotoalbumForTeam'])->where(['community' => '[0-9]+', 'album' => '[0-9]+'])->name('photoalbum.edit.with-community');
+    Route::post('{community}/photoalbum/{album}/edit', [TeamsController::class, 'updatePhotoalbumForTeam'])->where(['community' => '[0-9]+', 'album' => '[0-9]+'])->name('photoalbum.update.with-community');
     Route::get('{community}/videoalbums/add-video', [TeamsController::class, 'addVideo'])->where('community', '[0-9]+')->name('videoalbums.add-video');
+    Route::post('{community}/videoalbums/add-video', [TeamsController::class, 'storeVideo'])->where('community', '[0-9]+')->name('videoalbums.store-video');
     Route::get('{community}/videoalbums/create', [TeamsController::class, 'createVideoalbum'])->where('community', '[0-9]+')->name('videoalbums.create');
+    Route::post('{community}/videoalbums/create', [TeamsController::class, 'storeVideoalbum'])->where('community', '[0-9]+')->name('videoalbums.store');
+    Route::get('{community}/videoalbums/{album}', [TeamsController::class, 'showVideoalbum'])->where(['community' => '[0-9]+', 'album' => '[0-9]+'])->name('videoalbums.show');
     Route::get('{community}/videoalbums', [TeamsController::class, 'videoalbums'])->where('community', '[0-9]+')->name('videoalbums');
+    Route::get('{community}/events', [TeamsController::class, 'events'])->where('community', '[0-9]+')->name('events');
     Route::get('{community}', [TeamsController::class, 'show'])->where('community', '[0-9]+')->name('show');
 });
 

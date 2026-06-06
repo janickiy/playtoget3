@@ -148,18 +148,46 @@ class HomeController extends Controller
 
     private function redirectLegacyTeams(Request $request, array $actions): RedirectResponse
     {
+        if ($this->hasLegacyAction($actions, 'create')) {
+            return redirect()->route('front.teams.create');
+        }
+
         if ($request->filled('user_id')) {
             return redirect()->route('front.teams.user', ['user' => $request->query('user_id')]);
         }
 
         $communityId = $request->query('community_id');
 
+        if ($request->filled('photo') && $request->filled('id_album')) {
+            return redirect()->route('front.teams.photoalbums.photo', [
+                'community' => $communityId,
+                'album' => $request->query('id_album'),
+                'photo' => $request->query('photo'),
+            ]);
+        }
+
         if ($request->filled('photo')) {
-            return redirect()->route('front.teams.photoalbums.photo', ['community' => $communityId, 'photo' => $request->query('photo')]);
+            return redirect()->route('front.teams.photoalbums.photo.legacy', [
+                'community' => $communityId,
+                'photo' => $request->query('photo'),
+            ]);
         }
 
         if ($this->hasLegacyAction($actions, 'edit_photoalbum') && $request->filled('id_album')) {
-            return redirect()->route('front.teams.photoalbum.edit', ['community' => $communityId, 'album' => $request->query('id_album')]);
+            return $communityId
+                ? redirect()->route('front.teams.photoalbum.edit.with-community', [
+                    'community' => $communityId,
+                    'album' => $request->query('id_album'),
+                ])
+                : redirect()->route('front.teams.photoalbum.edit', ['album' => $request->query('id_album')]);
+        }
+
+        if ($this->hasLegacyAction($actions, 'edit_videoalbum') && $request->filled('id_album')) {
+            return redirect()->route('front.teams.videoalbum.edit', ['album' => $request->query('id_album')]);
+        }
+
+        if ($this->hasLegacyAction($actions, 'edit')) {
+            return redirect()->route('front.teams.edit', ['community' => $communityId]);
         }
 
         if ($this->hasLegacyAction($actions, 'members')) {
@@ -170,7 +198,18 @@ class HomeController extends Controller
             return redirect()->route('front.teams.photoalbums.add-photo', ['community' => $communityId]);
         }
 
+        if ($this->hasLegacyAction($actions, 'create_photoalbum')) {
+            return redirect()->route('front.teams.photoalbums.create', ['community' => $communityId]);
+        }
+
         if ($this->hasLegacyAction($actions, 'photoalbums')) {
+            if ($request->filled('id_album')) {
+                return redirect()->route('front.teams.photoalbums.show', [
+                    'community' => $communityId,
+                    'album' => $request->query('id_album'),
+                ]);
+            }
+
             return redirect()->route('front.teams.photoalbums', ['community' => $communityId]);
         }
 
@@ -183,7 +222,22 @@ class HomeController extends Controller
         }
 
         if ($this->hasLegacyAction($actions, 'videoalbums')) {
+            if ($request->filled('id_album')) {
+                return redirect()->route('front.teams.videoalbums.show', [
+                    'community' => $communityId,
+                    'album' => $request->query('id_album'),
+                ]);
+            }
+
             return redirect()->route('front.teams.videoalbums', ['community' => $communityId]);
+        }
+
+        if ($this->hasLegacyAction($actions, 'events')) {
+            return redirect()->route('front.teams.events', ['community' => $communityId]);
+        }
+
+        if (! $communityId) {
+            return redirect()->route('front.teams.index');
         }
 
         return redirect()->route('front.teams.show', ['community' => $communityId]);

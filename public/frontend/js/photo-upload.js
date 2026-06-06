@@ -142,7 +142,7 @@
             formData.append('_token', csrfToken());
             formData.append('file', item.file);
             formData.append('categorie', $('select[name=photoalbum_id]').val());
-            formData.append('photoalbumable_type', 'user');
+            formData.append('photoalbumable_type', window.photoalbumableType || 'user');
             formData.append('description', $item.find('textarea').val());
 
             xhr.open('POST', uploadUrl, true);

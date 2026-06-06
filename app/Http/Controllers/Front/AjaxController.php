@@ -13,7 +13,9 @@ use App\Models\SportType;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\VideoView;
+use App\Models\Videoalbum;
 use App\Repositories\FriendRepository;
+use App\Repositories\CommunityRepository;
 use App\Repositories\MessageRepository;
 use App\Repositories\NewsRepository;
 use App\Repositories\PhotoalbumRepository;
@@ -36,6 +38,7 @@ class AjaxController extends Controller
         private readonly MessageRepository $messages,
         private readonly PhotoalbumRepository $photoalbums,
         private readonly VideoalbumRepository $videoalbums,
+        private readonly CommunityRepository $communities,
     )
     {
     }
@@ -218,7 +221,7 @@ class AjaxController extends Controller
         $limit = min(max((int)$request->input('number', 10), 1), 25);
         $offset = max((int)$request->input('offset', 0), 0);
 
-        if (!in_array($type, ['user', 'photo', 'video'], true) || $profileId < 1) {
+        if (!in_array($type, ['user', 'photo', 'video', 'team'], true) || $profileId < 1) {
             return response()->json(['status' => 0, 'html' => '', 'count' => 0, 'has_more' => false]);
         }
 
@@ -295,19 +298,40 @@ class AjaxController extends Controller
             'description' => ['nullable', 'string', 'max:2000'],
         ]);
 
-        $album = $this->photoalbums->album((int)$request->input('categorie'));
+        $albumId = (int)$request->input('categorie');
+        $albumType = (string)$request->input('photoalbumable_type', 'user');
+        $album = $albumType === 'team'
+            ? $this->photoalbums->album($albumId, ['team'])
+            : $this->photoalbums->album($albumId);
 
-        if (!$album || !$this->photoalbums->isOwner($album, $viewer)) {
+        if (!$album) {
+            return response()->json(['info' => null, 'error' => 'Нет доступа к альбому'], 403);
+        }
+
+        $canUpload = $album->photoalbumable_type === 'team'
+            ? $this->communities->canManage($this->communities->findTeam((int)$album->owner_id), $viewer)
+            : $this->photoalbums->isOwner($album, $viewer);
+
+        if (!$canUpload) {
             return response()->json(['info' => null, 'error' => 'Нет доступа к альбому'], 403);
         }
 
         try {
-            $photo = $this->photoalbums->storePhoto(
-                $viewer,
-                $album,
-                $request->file('file'),
-                trim((string)$request->input('description', '')),
-            );
+            if ($album->photoalbumable_type === 'team') {
+                $photo = $this->photoalbums->storePhotoForAlbum(
+                    $viewer,
+                    $album,
+                    $request->file('file'),
+                    trim((string)$request->input('description', '')),
+                );
+            } else {
+                $photo = $this->photoalbums->storePhoto(
+                    $viewer,
+                    $album,
+                    $request->file('file'),
+                    trim((string)$request->input('description', '')),
+                );
+            }
         } catch (\RuntimeException $exception) {
             return response()->json(['info' => null, 'error' => $exception->getMessage()], 422);
         }
@@ -327,16 +351,20 @@ class AjaxController extends Controller
         $ownerId = (int)$request->input('owner_id');
         $type = (string)$request->input('type', 'user');
 
-        if ($ownerId < 1 || $type !== 'user') {
+        if ($ownerId < 1 || !in_array($type, ['user', 'team'], true)) {
             return response()->json(['status' => 0, 'html' => '', 'has_more' => false]);
         }
 
-        $photos = $this->photoalbums->photosForUser($ownerId, $limit, $offset);
+        $photos = $type === 'team'
+            ? $this->photoalbums->photosForOwner($ownerId, 'team', $limit, $offset)
+            : $this->photoalbums->photosForUser($ownerId, $limit, $offset);
 
         return response()->json([
             'status' => $photos->isNotEmpty() ? 1 : 0,
-            'html' => $this->renderPhotos($photos, $viewer),
-            'has_more' => $this->photoalbums->hasMoreUserPhotos($ownerId, $limit, $offset),
+            'html' => $this->renderPhotos($photos, $viewer, $type === 'team' && $this->communities->canManage($this->communities->findTeam($ownerId), $viewer)),
+            'has_more' => $type === 'team'
+                ? $this->photoalbums->hasMoreOwnerPhotos($ownerId, 'team', $limit, $offset)
+                : $this->photoalbums->hasMoreUserPhotos($ownerId, $limit, $offset),
         ]);
     }
 
@@ -345,7 +373,7 @@ class AjaxController extends Controller
         $viewer = $this->viewer();
         $limit = min(max((int)$request->input('number', 9), 1), 30);
         $offset = max((int)$request->input('offset', 0), 0);
-        $album = $this->photoalbums->album((int)$request->input('id_album'));
+        $album = $this->photoalbums->album((int)$request->input('id_album'), ['user', 'user_attach', 'team']);
 
         if (!$album) {
             return response()->json(['status' => 0, 'html' => '', 'has_more' => false]);
@@ -355,7 +383,9 @@ class AjaxController extends Controller
 
         return response()->json([
             'status' => $photos->isNotEmpty() ? 1 : 0,
-            'html' => $this->renderPhotos($photos, $viewer, $this->photoalbums->isOwner($album, $viewer)),
+            'html' => $this->renderPhotos($photos, $viewer, $album->photoalbumable_type === 'team'
+                ? $this->communities->canManage($this->communities->findTeam((int)$album->owner_id), $viewer)
+                : $this->photoalbums->isOwner($album, $viewer)),
             'has_more' => $this->photoalbums->hasMoreAlbumPhotos($album, $limit, $offset),
         ]);
     }
@@ -367,6 +397,18 @@ class AjaxController extends Controller
 
         if (!$viewer || $photoId < 1) {
             return response()->json(['result' => 'error'], 422);
+        }
+
+        $photo = $this->photoalbums->photo($photoId, ['user', 'user_attach', 'team']);
+
+        if ($photo && $photo->album?->photoalbumable_type === 'team') {
+            $team = $this->communities->findTeam((int)$photo->album->owner_id);
+
+            return response()->json([
+                'result' => $team && $this->communities->canManage($team, $viewer) && $this->photoalbums->deletePhoto($photo)
+                    ? 'success'
+                    : 'error',
+            ]);
         }
 
         return response()->json([
@@ -389,7 +431,7 @@ class AjaxController extends Controller
             ->where('banned', false)
             ->first();
 
-        if (!$video || !$video->album || $video->album->videoalbumable_type !== 'user') {
+        if (!$video || !$video->album || !in_array($video->album->videoalbumable_type, ['user', 'team'], true)) {
             return response()->json(['status' => 0]);
         }
 
@@ -436,16 +478,20 @@ class AjaxController extends Controller
         $ownerId = (int)$request->input('owner_id');
         $type = (string)$request->input('type', 'user');
 
-        if ($ownerId < 1 || $type !== 'user') {
+        if ($ownerId < 1 || !in_array($type, ['user', 'team'], true)) {
             return response()->json(['status' => 0, 'html' => '', 'has_more' => false]);
         }
 
-        $videos = $this->videoalbums->videosForUser($ownerId, $limit, $offset);
+        $videos = $type === 'team'
+            ? $this->videoalbums->videosForOwner($ownerId, 'team', $limit, $offset)
+            : $this->videoalbums->videosForUser($ownerId, $limit, $offset);
 
         return response()->json([
             'status' => $videos->isNotEmpty() ? 1 : 0,
-            'html' => $this->renderVideos($videos, $viewer),
-            'has_more' => $this->videoalbums->hasMoreUserVideos($ownerId, $limit, $offset),
+            'html' => $this->renderVideos($videos, $viewer, $type === 'team' && $this->communities->canManage($this->communities->findTeam($ownerId), $viewer)),
+            'has_more' => $type === 'team'
+                ? $this->videoalbums->hasMoreOwnerVideos($ownerId, 'team', $limit, $offset)
+                : $this->videoalbums->hasMoreUserVideos($ownerId, $limit, $offset),
         ]);
     }
 
@@ -454,7 +500,7 @@ class AjaxController extends Controller
         $viewer = $this->viewer();
         $limit = min(max((int)$request->input('number', 6), 1), 30);
         $offset = max((int)$request->input('offset', 0), 0);
-        $album = $this->videoalbums->album((int)$request->input('id_album'));
+        $album = $this->videoalbums->album((int)$request->input('id_album'), ['user', 'team']);
 
         if (!$album) {
             return response()->json(['status' => 0, 'html' => '', 'has_more' => false]);
@@ -464,7 +510,9 @@ class AjaxController extends Controller
 
         return response()->json([
             'status' => $videos->isNotEmpty() ? 1 : 0,
-            'html' => $this->renderVideos($videos, $viewer, $this->videoalbums->isOwner($album, $viewer)),
+            'html' => $this->renderVideos($videos, $viewer, $album->videoalbumable_type === 'team'
+                ? $this->communities->canManage($this->communities->findTeam((int)$album->owner_id), $viewer)
+                : $this->videoalbums->isOwner($album, $viewer)),
             'has_more' => $this->videoalbums->hasMoreAlbumVideos($album, $limit, $offset),
         ]);
     }
@@ -476,6 +524,19 @@ class AjaxController extends Controller
 
         if (!$viewer || $videoId < 1) {
             return response()->json(['result' => 'error'], 422);
+        }
+
+        /** @var Video|null $video */
+        $video = Video::query()->with('album')->whereKey($videoId)->first();
+
+        if ($video && $video->album?->videoalbumable_type === 'team') {
+            $team = $this->communities->findTeam((int)$video->album->owner_id);
+
+            return response()->json([
+                'result' => $team && $this->communities->canManage($team, $viewer) && $this->videoalbums->deleteVideo($video)
+                    ? 'success'
+                    : 'error',
+            ]);
         }
 
         return response()->json([
@@ -595,7 +656,7 @@ class AjaxController extends Controller
         $comment = trim((string)$request->input('comment', ''));
         $attach = $request->input('attach', []);
 
-        if (!$viewer || !in_array($type, ['user', 'photo', 'video'], true) || $profileId < 1 || ($comment === '' && empty($attach))) {
+        if (!$viewer || !in_array($type, ['user', 'photo', 'video', 'team'], true) || $profileId < 1 || ($comment === '' && empty($attach))) {
             return response()->json([
                 'status' => false,
                 'errors' => ['comment' => 'Заполните комментарий'],
