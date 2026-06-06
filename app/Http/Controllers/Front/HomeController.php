@@ -51,9 +51,7 @@ class HomeController extends Controller
                 ? redirect()->route('front.friends.user', ['user' => $request->query('user_id')])
                 : redirect()->route('front.friends.index'),
             'photoalbums' => $this->redirectLegacyPhotoalbums($request, $actions),
-            'videoalbums' => $request->filled('user_id')
-                ? redirect()->route('front.videoalbums.user', ['user' => $request->query('user_id')])
-                : redirect()->route('front.videoalbums.index'),
+            'videoalbums' => $this->redirectLegacyVideoalbums($request, $actions),
             'teams' => $this->redirectLegacyTeams($request, $actions),
             'content' => redirect()->route('front.content.show', ['content' => $request->query('content_id')]),
             'feedback' => redirect()->route('front.feedback.create'),
@@ -112,9 +110,40 @@ class HomeController extends Controller
             return redirect()->route('front.photoalbums.create');
         }
 
+        if ($this->hasLegacyAction($actions, 'edit_photoalbum') && $request->filled('id_album')) {
+            return redirect()->route('front.photoalbums.edit', ['album' => $request->query('id_album')]);
+        }
+
+        if ($request->filled('id_album')) {
+            return redirect()->route('front.photoalbums.show', ['album' => $request->query('id_album')]);
+        }
+
         return $request->filled('user_id')
             ? redirect()->route('front.photoalbums.user', ['user' => $request->query('user_id')])
             : redirect()->route('front.photoalbums.index');
+    }
+
+    private function redirectLegacyVideoalbums(Request $request, array $actions): RedirectResponse
+    {
+        if ($this->hasLegacyAction($actions, 'add_video')) {
+            return redirect()->route('front.videoalbums.add-video');
+        }
+
+        if ($this->hasLegacyAction($actions, 'create_videoalbum')) {
+            return redirect()->route('front.videoalbums.create');
+        }
+
+        if ($this->hasLegacyAction($actions, 'edit_videoalbum') && $request->filled('id_album')) {
+            return redirect()->route('front.videoalbums.edit', ['album' => $request->query('id_album')]);
+        }
+
+        if ($request->filled('id_album')) {
+            return redirect()->route('front.videoalbums.show', ['album' => $request->query('id_album')]);
+        }
+
+        return $request->filled('user_id')
+            ? redirect()->route('front.videoalbums.user', ['user' => $request->query('user_id')])
+            : redirect()->route('front.videoalbums.index');
     }
 
     private function redirectLegacyTeams(Request $request, array $actions): RedirectResponse

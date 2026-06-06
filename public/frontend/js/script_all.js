@@ -66,8 +66,8 @@ function selectAction() {
             $styledSelect.text($(this).text()).removeClass('active');
             $this.val($(this).attr('rel'));
             $list.hide();
-            if (uploader)
-                uploader.settings.multipart_params.categorie = $(this).attr('rel');
+            if (window.uploader)
+                window.uploader.settings.multipart_params.categorie = $(this).attr('rel');
 
         });
 
@@ -248,8 +248,9 @@ function showMorePhotos(id, type) {
     //alert(settMorePhotos.number);
     $.ajax({
         type: 'POST',
-        url: '/?task=ajax_action&action=get_photos_list',
+        url: '/ajax/get_photos_list',
         data: {
+            _token: csrfToken(),
             number: settMorePhotos.number,
             offset: settMorePhotos.offset,
             owner_id: id,
@@ -259,7 +260,13 @@ function showMorePhotos(id, type) {
             //console.log(data);
             if (data.status == 1 && data.html != '') {
                 $('#my-event').before(data.html);
+                if (window.registerPhotoItems) {
+                    window.registerPhotoItems($('#my-event').parent());
+                }
                 settMorePhotos.offset += settMorePhotos.number;
+                if (data.has_more === false) {
+                    $('#my-event').hide();
+                }
             } else {
                 $('#my-event').hide();
             }
@@ -277,8 +284,9 @@ function showMoreVideos(id, type) {
     //alert(id+' '+type);
     $.ajax({
         type: 'POST',
-        url: '/?task=ajax_action&action=get_videos_list',
+        url: '/ajax/get_videos_list',
         data: {
+            _token: csrfToken(),
             number: settMoreVideos.number,
             offset: settMoreVideos.offset,
             owner_id: id,
@@ -288,7 +296,13 @@ function showMoreVideos(id, type) {
             //console.log(data);
             if (data.status == 1 && data.html != '') {
                 $('#my-event').before(data.html);
+                if (window.registerVideoItems) {
+                    window.registerVideoItems($('#my-event').parent());
+                }
                 settMoreVideos.offset += settMoreVideos.number;
+                if (data.has_more === false) {
+                    $('#my-event').hide();
+                }
             } else {
                 $('#my-event').hide();
             }
@@ -775,6 +789,7 @@ $(document).ready(function () {
     */
     /*REMOVE ALBUM*/
     $(document).on('click', '.remove_album', function () {
+        const $form = $(this).closest('form');
         const href = $(this).attr('href');
         $.confirm({
             'title': 'Подтверждение',
@@ -783,7 +798,11 @@ $(document).ready(function () {
                 'Да': {
                     'class': 'blue',
                     'action': function () {
-                        $(location).attr('href', href);
+                        if ($form.length) {
+                            $form.trigger('submit');
+                        } else {
+                            $(location).attr('href', href);
+                        }
                     }
                 },
                 'Нет': {

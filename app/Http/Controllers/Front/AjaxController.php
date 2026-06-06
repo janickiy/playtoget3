@@ -11,11 +11,15 @@ use App\Models\Photoalbum;
 use App\Models\Share;
 use App\Models\SportType;
 use App\Models\User;
+use App\Models\Video;
+use App\Models\VideoView;
 use App\Repositories\FriendRepository;
 use App\Repositories\MessageRepository;
 use App\Repositories\NewsRepository;
+use App\Repositories\PhotoalbumRepository;
 use App\Repositories\ProfileRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\VideoalbumRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +34,8 @@ class AjaxController extends Controller
         private readonly UserRepository    $users,
         private readonly ProfileRepository $profiles,
         private readonly MessageRepository $messages,
+        private readonly PhotoalbumRepository $photoalbums,
+        private readonly VideoalbumRepository $videoalbums,
     )
     {
     }
@@ -47,7 +53,15 @@ class AjaxController extends Controller
             'unblock_user' => $this->unblockUser($request),
             'getcomments' => $this->getComments($request),
             'getphotoinfo' => $this->getPhotoInfo($request),
+            'add_photo_ajax' => $this->addPhotoAjax($request),
             'add_photo_ajax_attach' => $this->addPhotoAjaxAttach($request),
+            'get_photos_list' => $this->getPhotosList($request),
+            'get_album_photos' => $this->getAlbumPhotos($request),
+            'removepic' => $this->removePic($request),
+            'getvideoinfo' => $this->getVideoInfo($request),
+            'get_videos_list' => $this->getVideosList($request),
+            'get_album_videos' => $this->getAlbumVideos($request),
+            'removevideo' => $this->removeVideo($request),
             'uploadavatar' => $this->uploadAvatar($request),
             'addcomment' => $this->addComment($request),
             'removecomment' => $this->removeComment($request),
@@ -204,7 +218,7 @@ class AjaxController extends Controller
         $limit = min(max((int)$request->input('number', 10), 1), 25);
         $offset = max((int)$request->input('offset', 0), 0);
 
-        if (!in_array($type, ['user', 'photo'], true) || $profileId < 1) {
+        if (!in_array($type, ['user', 'photo', 'video'], true) || $profileId < 1) {
             return response()->json(['status' => 0, 'html' => '', 'count' => 0, 'has_more' => false]);
         }
 
@@ -263,7 +277,209 @@ class AjaxController extends Controller
             'tell' => Share::query()
                 ->where('shareable_type', 'photo')
                 ->where('content_id', $photo->id)
+            ->count(),
+        ]);
+    }
+
+    private function addPhotoAjax(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+
+        if (!$viewer) {
+            return response()->json(['info' => null, 'error' => 'Unauthorized'], 401);
+        }
+
+        $request->validate([
+            'file' => ['required', 'image', 'mimes:jpg,jpeg,png,gif', 'max:32768'],
+            'categorie' => ['required', 'integer', 'min:1'],
+            'description' => ['nullable', 'string', 'max:2000'],
+        ]);
+
+        $album = $this->photoalbums->album((int)$request->input('categorie'));
+
+        if (!$album || !$this->photoalbums->isOwner($album, $viewer)) {
+            return response()->json(['info' => null, 'error' => 'Нет доступа к альбому'], 403);
+        }
+
+        try {
+            $photo = $this->photoalbums->storePhoto(
+                $viewer,
+                $album,
+                $request->file('file'),
+                trim((string)$request->input('description', '')),
+            );
+        } catch (\RuntimeException $exception) {
+            return response()->json(['info' => null, 'error' => $exception->getMessage()], 422);
+        }
+
+        return response()->json([
+            'info' => 'FILE_SUCCESSFULLY_DOWNLOADED',
+            'id' => (int)$photo->id,
+            'error' => null,
+        ]);
+    }
+
+    private function getPhotosList(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $limit = min(max((int)$request->input('number', 6), 1), 30);
+        $offset = max((int)$request->input('offset', 0), 0);
+        $ownerId = (int)$request->input('owner_id');
+        $type = (string)$request->input('type', 'user');
+
+        if ($ownerId < 1 || $type !== 'user') {
+            return response()->json(['status' => 0, 'html' => '', 'has_more' => false]);
+        }
+
+        $photos = $this->photoalbums->photosForUser($ownerId, $limit, $offset);
+
+        return response()->json([
+            'status' => $photos->isNotEmpty() ? 1 : 0,
+            'html' => $this->renderPhotos($photos, $viewer),
+            'has_more' => $this->photoalbums->hasMoreUserPhotos($ownerId, $limit, $offset),
+        ]);
+    }
+
+    private function getAlbumPhotos(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $limit = min(max((int)$request->input('number', 9), 1), 30);
+        $offset = max((int)$request->input('offset', 0), 0);
+        $album = $this->photoalbums->album((int)$request->input('id_album'));
+
+        if (!$album) {
+            return response()->json(['status' => 0, 'html' => '', 'has_more' => false]);
+        }
+
+        $photos = $this->photoalbums->albumPhotos($album, $limit, $offset);
+
+        return response()->json([
+            'status' => $photos->isNotEmpty() ? 1 : 0,
+            'html' => $this->renderPhotos($photos, $viewer, $this->photoalbums->isOwner($album, $viewer)),
+            'has_more' => $this->photoalbums->hasMoreAlbumPhotos($album, $limit, $offset),
+        ]);
+    }
+
+    private function removePic(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $photoId = (int)$request->input('id');
+
+        if (!$viewer || $photoId < 1) {
+            return response()->json(['result' => 'error'], 422);
+        }
+
+        return response()->json([
+            'result' => $this->photoalbums->deletePhotoFor($viewer, $photoId) ? 'success' : 'error',
+        ]);
+    }
+
+    private function getVideoInfo(Request $request): JsonResponse
+    {
+        $videoId = (int)$request->input('video_id', $request->input('id', 0));
+
+        if ($videoId < 1) {
+            return response()->json(['status' => 0]);
+        }
+
+        /** @var Video|null $video */
+        $video = Video::query()
+            ->with(['owner', 'album'])
+            ->whereKey($videoId)
+            ->where('banned', false)
+            ->first();
+
+        if (!$video || !$video->album || $video->album->videoalbumable_type !== 'user') {
+            return response()->json(['status' => 0]);
+        }
+
+        $viewer = $this->viewer();
+
+        if ($viewer) {
+            VideoView::query()->create([
+                'user_id' => $viewer->id,
+                'video_id' => $video->id,
+                'time' => now(),
+            ]);
+        }
+
+        $owner = $video->owner;
+
+        return response()->json([
+            'status' => 1,
+            'owner_id' => (int)($owner?->id ?? $video->owner_id),
+            'firstname' => (string)($owner?->firstname ?? ''),
+            'lastname' => (string)($owner?->lastname ?? ''),
+            'created' => $video->created_at?->format('d.m.Y H:i') ?? '',
+            'description' => (string)$video->description,
+            'thumb' => $this->videoalbums->thumbUrl((string)$video->provider, (string)$video->video),
+            'video' => $this->videoalbums->playerHtml((string)$video->provider, (string)$video->video),
+            'liked' => Like::query()
+                ->where('likeable_type', 'video')
+                ->where('content_id', $video->id)
                 ->count(),
+            'tell' => Share::query()
+                ->where('shareable_type', 'video')
+                ->where('content_id', $video->id)
+                ->count(),
+            'views' => VideoView::query()
+                ->where('video_id', $video->id)
+                ->count(),
+        ]);
+    }
+
+    private function getVideosList(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $limit = min(max((int)$request->input('number', 6), 1), 30);
+        $offset = max((int)$request->input('offset', 0), 0);
+        $ownerId = (int)$request->input('owner_id');
+        $type = (string)$request->input('type', 'user');
+
+        if ($ownerId < 1 || $type !== 'user') {
+            return response()->json(['status' => 0, 'html' => '', 'has_more' => false]);
+        }
+
+        $videos = $this->videoalbums->videosForUser($ownerId, $limit, $offset);
+
+        return response()->json([
+            'status' => $videos->isNotEmpty() ? 1 : 0,
+            'html' => $this->renderVideos($videos, $viewer),
+            'has_more' => $this->videoalbums->hasMoreUserVideos($ownerId, $limit, $offset),
+        ]);
+    }
+
+    private function getAlbumVideos(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $limit = min(max((int)$request->input('number', 6), 1), 30);
+        $offset = max((int)$request->input('offset', 0), 0);
+        $album = $this->videoalbums->album((int)$request->input('id_album'));
+
+        if (!$album) {
+            return response()->json(['status' => 0, 'html' => '', 'has_more' => false]);
+        }
+
+        $videos = $this->videoalbums->albumVideos($album, $limit, $offset);
+
+        return response()->json([
+            'status' => $videos->isNotEmpty() ? 1 : 0,
+            'html' => $this->renderVideos($videos, $viewer, $this->videoalbums->isOwner($album, $viewer)),
+            'has_more' => $this->videoalbums->hasMoreAlbumVideos($album, $limit, $offset),
+        ]);
+    }
+
+    private function removeVideo(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $videoId = (int)$request->input('id');
+
+        if (!$viewer || $videoId < 1) {
+            return response()->json(['result' => 'error'], 422);
+        }
+
+        return response()->json([
+            'result' => $this->videoalbums->deleteVideoFor($viewer, $videoId) ? 'success' : 'error',
         ]);
     }
 
@@ -379,7 +595,7 @@ class AjaxController extends Controller
         $comment = trim((string)$request->input('comment', ''));
         $attach = $request->input('attach', []);
 
-        if (!$viewer || !in_array($type, ['user', 'photo'], true) || $profileId < 1 || ($comment === '' && empty($attach))) {
+        if (!$viewer || !in_array($type, ['user', 'photo', 'video'], true) || $profileId < 1 || ($comment === '' && empty($attach))) {
             return response()->json([
                 'status' => false,
                 'errors' => ['comment' => 'Заполните комментарий'],
@@ -647,5 +863,27 @@ class AjaxController extends Controller
             ->unique()
             ->values()
             ->all();
+    }
+
+    private function renderPhotos($photos, ?User $viewer, bool $canManage = false): string
+    {
+        return $photos
+            ->map(fn(array $photo): string => view('front.photoalbums._photo-card', [
+                'photo' => $photo,
+                'viewer' => $viewer,
+                'canManage' => $canManage,
+            ])->render())
+            ->implode('');
+    }
+
+    private function renderVideos($videos, ?User $viewer, bool $canManage = false): string
+    {
+        return $videos
+            ->map(fn(array $video): string => view('front.videoalbums._video-card', [
+                'video' => $video,
+                'viewer' => $viewer,
+                'canManage' => $canManage,
+            ])->render())
+            ->implode('');
     }
 }

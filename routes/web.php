@@ -60,12 +60,25 @@ Route::get('friends', [FriendsController::class, 'index'])->name('front.friends.
 Route::prefix('photoalbums')->name('front.photoalbums.')->group(function () {
     Route::get('add-photo', [PhotoalbumsController::class, 'addPhoto'])->name('add-photo');
     Route::get('create', [PhotoalbumsController::class, 'create'])->name('create');
+    Route::post('create', [PhotoalbumsController::class, 'store'])->name('store');
+    Route::get('edit/{album}', [PhotoalbumsController::class, 'edit'])->where('album', '[0-9]+')->name('edit');
+    Route::post('edit/{album}', [PhotoalbumsController::class, 'update'])->where('album', '[0-9]+')->name('update');
     Route::get('user/{user}', [PhotoalbumsController::class, 'user'])->where('user', '[0-9]+')->name('user');
+    Route::delete('{album}', [PhotoalbumsController::class, 'destroy'])->where('album', '[0-9]+')->name('destroy');
+    Route::get('{album}', [PhotoalbumsController::class, 'show'])->where('album', '[0-9]+')->name('show');
     Route::get('', [PhotoalbumsController::class, 'index'])->name('index');
 });
 
 Route::prefix('videoalbums')->name('front.videoalbums.')->group(function () {
+    Route::get('add-video', [VideoalbumsController::class, 'addVideo'])->name('add-video');
+    Route::post('add-video', [VideoalbumsController::class, 'storeVideo'])->name('store-video');
+    Route::get('create', [VideoalbumsController::class, 'create'])->name('create');
+    Route::post('create', [VideoalbumsController::class, 'store'])->name('store');
+    Route::get('edit/{album}', [VideoalbumsController::class, 'edit'])->where('album', '[0-9]+')->name('edit');
+    Route::post('edit/{album}', [VideoalbumsController::class, 'update'])->where('album', '[0-9]+')->name('update');
     Route::get('user/{user}', [VideoalbumsController::class, 'user'])->where('user', '[0-9]+')->name('user');
+    Route::delete('{album}', [VideoalbumsController::class, 'destroy'])->where('album', '[0-9]+')->name('destroy');
+    Route::get('{album}', [VideoalbumsController::class, 'show'])->where('album', '[0-9]+')->name('show');
     Route::get('', [VideoalbumsController::class, 'index'])->name('index');
 });
 

@@ -1,5 +1,21 @@
 let k = 0;
 const mass_photo = [];
+
+function photoCsrfToken() {
+    return $('meta[name="csrf-token"]').attr('content') || '';
+}
+
+window.registerPhotoItems = function ($scope) {
+    $scope.find('.photo_big').each(function () {
+        const id = $(this).attr('data-num');
+
+        if (parseInt($.inArray(id, mass_photo)) == -1) {
+            mass_photo.push(id);
+            k++;
+        }
+    });
+};
+
 $(document).ready(function () {
 
     $(document).on('click', '.remove_pic', function () {
@@ -13,7 +29,11 @@ $(document).ready(function () {
                     'class': 'blue',
                     'action': function () {
                         $.ajax({
+                            type: 'POST',
                             url: "/ajax/removepic?id=" + encodeURIComponent(IdPic),
+                            data: {
+                                _token: photoCsrfToken(),
+                            },
                             cache: false,
                             dataType: "json",
                             success: function (data) {
@@ -34,17 +54,7 @@ $(document).ready(function () {
         });
     });
     const obj = {};
-    $('.photo_big').each(function () {
-        // const src = $(this).attr('href');
-        const id = $(this).attr('data-num');
-
-        if (parseInt($.inArray(id, mass_photo)) == -1) {
-            mass_photo.push(id);
-            k++;
-        }
-
-//console.log(mass_photo);
-    });
+    window.registerPhotoItems($(document));
 
 
     function getPhotoInfo(id) {
@@ -57,7 +67,7 @@ $(document).ready(function () {
                 if (data.status === 1) {
                     //console.log(data);
                     $('#owner_id').val(data.owner_id);
-                    $('#name_foto').html('<a href="./?task=profile&user_id=' + data.owner_id + '">' + data.firstname + ' ' + data.lastname + '</a>');
+                    $('#name_foto').html('<a href="/profile/' + data.owner_id + '">' + data.firstname + ' ' + data.lastname + '</a>');
                     $('#date_foto .data').html(data.created);
                     $('.info_photo').html(data.description);
                     $('#photo_big').find('.tell').html(data.tell).attr('data-item', id).attr('id', 'tell-photo-' + id).attr('data-type', 'photo');
@@ -140,6 +150,48 @@ $(document).ready(function () {
         getPhotoInfo(mass_photo[index_new]);
     })
 
+});
+
+let albumPhotoLoading = false;
+$(document).scroll(function() {
+    const $albumList = $('#album-photo-list');
+
+    if (!$albumList.length || $albumList.attr('data-has-more') !== '1') {
+        return;
+    }
+
+    if ($(window).scrollTop() + $(window).height() < $(document).height() - 20 || albumPhotoLoading) {
+        return;
+    }
+
+    albumPhotoLoading = true;
+    $albumList.append('<div class="loading-bar"><img border="0" src="/frontend/images/select2-spinner.gif" width="20" alt=""></div>');
+
+    $.ajax({
+        type: 'POST',
+        url: '/ajax/get_album_photos',
+        data: {
+            _token: photoCsrfToken(),
+            number: $albumList.attr('data-number'),
+            offset: $albumList.attr('data-offset'),
+            id_album: $albumList.attr('data-album-id'),
+        },
+        success: function(data) {
+            $albumList.find('.loading-bar').remove();
+
+            if (data.status == 1 && data.html != '') {
+                $albumList.append(data.html);
+                $albumList.attr('data-offset', parseInt($albumList.attr('data-offset'), 10) + parseInt($albumList.attr('data-number'), 10));
+                $albumList.attr('data-has-more', data.has_more === false ? '0' : '1');
+                window.registerPhotoItems($albumList);
+            } else {
+                $albumList.attr('data-has-more', '0');
+            }
+        },
+        complete: function() {
+            albumPhotoLoading = false;
+        }
+    });
 });
 
 $(document).on("click", ".hide-pop-photo-block", function () {

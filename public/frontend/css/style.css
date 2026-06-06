@@ -2144,6 +2144,16 @@ a.show-more:hover i{background-image: url('../images/icon-load-active.png');}
 	cursor: pointer;
 	opacity: 1;
 }
+.my-albums .album .album-delete-form{
+	display:inline;
+}
+.my-albums .album .remove_album{
+	padding:0;
+	border:0;
+	background:none;
+	color:inherit;
+	font:inherit;
+}
 .my-albums .album img{
 	/*width: 309px;
 	height: 182px;*/

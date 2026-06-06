@@ -84,8 +84,14 @@ class FrontAssets
     {
         $path = 'images/' . ltrim($path, '/');
 
-        return Storage::disk('public')->exists($path)
-            ? Storage::disk('public')->url($path)
+        if (Storage::disk('public')->exists($path)) {
+            return Storage::disk('public')->url($path);
+        }
+
+        $legacyPath = 'uploads/' . $path;
+
+        return is_file(public_path($legacyPath))
+            ? asset($legacyPath)
             : null;
     }
 }
