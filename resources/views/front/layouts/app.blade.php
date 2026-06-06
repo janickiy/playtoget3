@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="{{ asset('templates/css/max-width-390.css') }}" media="(max-width: 390px)">
     <link rel="stylesheet" href="{{ asset('templates/css/emotions.css') }}">
     <link rel="stylesheet" href="{{ asset('templates/css/jquery.emotions.fb.css') }}">
+    @stack('styles')
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800&subset=latin,cyrillic" rel="stylesheet" type="text/css">
     <script src="{{ asset('templates/js/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('templates/js/jquery-migrate-3.5.2.min.js') }}"></script>

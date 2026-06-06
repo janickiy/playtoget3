@@ -1,0 +1,178 @@
+.profile-edit-page {
+    padding-bottom: 25px;
+}
+
+.profile-edit-page .job_form {
+    padding: 0 24px;
+}
+
+.profile-edit-page .profile-asset-input {
+    height: 1px;
+    left: -9999px;
+    opacity: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.cover_page.editable-cover-area .upload_cover_img {
+    display: block !important;
+}
+
+.top_thumb_avatar img.editable-avatar,
+.cover_page.editable-cover-area {
+    cursor: pointer;
+}
+
+.profile-edit-page #tabs {
+    margin-top: 15px;
+}
+
+.profile-edit-page #tabs > ul {
+    margin-bottom: 24px;
+}
+
+.profile-edit-page #tabs > ul:after {
+    clear: both;
+    content: "";
+    display: block;
+}
+
+.profile-edit-page #tabs > div {
+    min-height: 260px;
+}
+
+.profile-edit-page .photo-caption.marginTopNone {
+    margin-top: 0;
+}
+
+.profile-edit-page .photo-caption h3 {
+    text-align: center;
+}
+
+.profile-edit-page p {
+    color: #a8a9ad;
+    font: 400 13px/22px Open Sans;
+    margin: 0 0 24px;
+    text-align: center;
+}
+
+.profile-edit-page .form-group {
+    clear: both;
+    margin-left: 0;
+    margin-right: 0;
+    min-height: 54px;
+}
+
+.profile-edit-page .job_form label.control-label {
+    color: #a8a9ad;
+    font: 400 12px/36px Open Sans;
+    margin: 0;
+    padding-top: 0;
+    text-align: left !important;
+}
+
+.profile-edit-page .job_form .form-control,
+.profile-edit-page .job_form input[type="email"],
+.profile-edit-page .job_form input[type="text"],
+.profile-edit-page .job_form select {
+    border: 1px solid #e0e1e4;
+    border-radius: 4px;
+    box-shadow: none;
+    color: #2c2e45 !important;
+    float: none;
+    font: 400 13px/20px Open Sans !important;
+    height: 36px;
+    margin-bottom: 0;
+    padding: 7px 10px;
+    width: 100%;
+}
+
+.profile-edit-page .job_form .form-control:focus,
+.profile-edit-page .job_form input[type="email"]:focus,
+.profile-edit-page .job_form input[type="text"]:focus,
+.profile-edit-page .job_form select:focus {
+    border-color: #39508d !important;
+    outline: none;
+}
+
+.profile-edit-page .notification-row {
+    min-height: 42px;
+}
+
+.profile-edit-page .notification-row .checkbox-label {
+    display: inline-block;
+    margin: 9px 0 0;
+}
+
+.profile-edit-page .settings-field-error {
+    color: #ca6060;
+    font: 600 12px/18px Open Sans;
+    margin-top: 5px;
+}
+
+.profile-edit-page .settings-log-list {
+    border-top: 1px solid #eaebed;
+}
+
+.profile-edit-page .settings-log-row {
+    border-bottom: 1px solid #eaebed;
+    color: #2c2e45;
+    display: grid;
+    font: 400 13px/20px Open Sans;
+    gap: 8px;
+    grid-template-columns: 1fr 1fr;
+    padding: 12px 0;
+}
+
+.profile-edit-page .settings-empty {
+    color: #a8a9ad;
+    margin: 20px 0;
+}
+
+.profile-edit-page .possible-friend-cart {
+    position: relative;
+}
+
+.profile-edit-page .possible-info {
+    padding-top: 22px;
+}
+
+.profile-edit-page .possible-info .name {
+    color: #435a9a !important;
+    font: 700 15px/20px Open Sans;
+}
+
+.profile-edit-page .settings-unblock {
+    background: transparent;
+    border: 0;
+    opacity: 0;
+    padding: 0;
+    position: absolute;
+    right: 18px;
+    top: 18px;
+    transition: opacity .2s;
+}
+
+.profile-edit-page .possible-friend-cart:hover .settings-unblock {
+    opacity: 1;
+}
+
+.profile-edit-page .settings-unblock img {
+    height: 14px;
+    width: 14px;
+}
+
+@media (max-width: 768px) {
+    .profile-edit-page .job_form {
+        padding: 0 12px;
+    }
+
+    .profile-edit-page #tabs.five > ul > li {
+        margin-bottom: 5px;
+        width: 49%;
+    }
+
+    .profile-edit-page .settings-log-row {
+        grid-template-columns: 1fr;
+    }
+}

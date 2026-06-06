@@ -5,10 +5,18 @@ namespace App\Repositories;
 use App\Helpers\FrontAssets;
 use App\Models\Attachment;
 use App\Models\Comment;
+use App\Models\Friend;
+use App\Models\Log;
 use App\Models\User;
+use App\Models\UserSetting;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use RuntimeException;
 
 class ProfileRepository extends BaseRepository
 {
@@ -25,6 +33,36 @@ class ProfileRepository extends BaseRepository
         10 => 'октября',
         11 => 'ноября',
         12 => 'декабря',
+    ];
+
+    private const CONTACT_FIELDS = [
+        'contact_email',
+        'phone',
+        'skype',
+        'website',
+    ];
+
+    private const PERMISSION_FIELDS = [
+        'permission_send_message' => 'Кто может писать мне сообщения',
+        'permission_view_profile' => 'Кто может просматривать мой профиль',
+        'permission_view_friends' => 'Кто может видеть список моих друзей',
+        'permission_view_photo' => 'Кто может просматривать мои фотографии',
+        'permission_view_video' => 'Кто может просматривать мои видеозаписи',
+        'permission_view_wall' => 'Кто может просматривать записи на моей стене',
+        'permission_comment_photo' => 'Кто может комментировать мои фотографии',
+        'permission_comment_video' => 'Кто может комментировать мои видеозаписи',
+        'permission_comment_wall' => 'Кто может комментировать записи на моей стене',
+    ];
+
+    private const NOTIFICATION_FIELDS = [
+        'notification_friends_request' => 'Заявки в друзья',
+        'notification_private_messages' => 'Личные сообщения',
+        'notification_wall_comments' => 'Комментарии на стене',
+        'notification_picture_comments' => 'Комментарии к фотографиям',
+        'notification_video_comments' => 'Комментарии к видео',
+        'notification_answers_in_comments' => 'Ответы в комментариях',
+        'notification_events' => 'Мероприятия',
+        'notification_birthdays' => 'Дни рождения',
     ];
 
     public function __construct(User $model)
@@ -81,6 +119,133 @@ class ProfileRepository extends BaseRepository
             'education' => $this->occupations($profile, 1),
             'work' => $this->occupations($profile, 3),
         ];
+    }
+
+    public function topProfileData(User $user): array
+    {
+        return [
+            'user' => $user,
+            'avatar' => FrontAssets::userAvatar($user),
+            'cover' => FrontAssets::userCover($user),
+            'firstname' => $user->firstname ?: $user->displayName(),
+            'lastname' => (string) $user->lastname,
+            'about' => (string) $user->about,
+        ];
+    }
+
+    public function profileSettings(User $user): UserSetting
+    {
+        /** @var UserSetting $settings */
+        $settings = $user->settings ?: UserSetting::query()->firstOrNew(['user_id' => $user->id]);
+
+        foreach (array_keys(self::PERMISSION_FIELDS) as $field) {
+            $settings->{$field} ??= 0;
+        }
+
+        foreach (array_keys(self::NOTIFICATION_FIELDS) as $field) {
+            $settings->{$field} ??= 'yes';
+        }
+
+        return $settings;
+    }
+
+    public function blockedUsers(User $user): Collection
+    {
+        return Friend::query()
+            ->where('user_id', $user->id)
+            ->where('status', 2)
+            ->with('friend')
+            ->orderByDesc('added')
+            ->get()
+            ->map(fn (Friend $relation): ?array => $relation->friend
+                ? [
+                    'id' => (int) $relation->friend->id,
+                    'name' => $relation->friend->displayName(),
+                    'avatar' => FrontAssets::userAvatar($relation->friend),
+                    'url' => route('front.profile.show', ['user' => $relation->friend->id]),
+                ]
+                : null)
+            ->filter()
+            ->values();
+    }
+
+    public function securityLogs(User $user, int $limit = 10): Collection
+    {
+        return Log::query()
+            ->where('user_id', $user->id)
+            ->orderByDesc('last_sign_in_at')
+            ->limit($limit)
+            ->get()
+            ->map(fn (Log $log): array => [
+                'ip' => (string) $log->ip,
+                'os' => $this->detectOs((string) $log->user_agent),
+                'browser' => $this->detectBrowser((string) $log->user_agent),
+                'time' => $log->last_sign_in_at?->format('d.m.Y H:i') ?? '',
+            ]);
+    }
+
+    public function permissionFields(): array
+    {
+        return self::PERMISSION_FIELDS;
+    }
+
+    public function notificationFields(): array
+    {
+        return self::NOTIFICATION_FIELDS;
+    }
+
+    public function updateProfileSettings(User $user, array $input, ?UploadedFile $avatar, ?UploadedFile $cover): void
+    {
+        $contacts = [];
+        foreach (self::CONTACT_FIELDS as $field) {
+            $contacts[$field] = trim((string) ($input[$field] ?? ''));
+        }
+
+        $permissions = [];
+        foreach (array_keys(self::PERMISSION_FIELDS) as $field) {
+            $permissions[$field] = (int) ($input[$field] ?? 0);
+        }
+
+        $notifications = [];
+        foreach (array_keys(self::NOTIFICATION_FIELDS) as $field) {
+            $notifications[$field] = array_key_exists($field, $input) ? 'yes' : 'no';
+        }
+
+        $newAvatar = $avatar ? $this->storeUserImage($avatar, 'user/avatar', $user->id) : null;
+        $newCover = $cover ? $this->storeUserImage($cover, 'user/cover_page', $user->id) : null;
+        $oldAvatar = null;
+        $oldCover = null;
+
+        try {
+            DB::transaction(function () use ($user, $contacts, $permissions, $notifications, $newAvatar, $newCover, &$oldAvatar, &$oldCover): void {
+                $user->fill($contacts);
+
+                if ($newAvatar) {
+                    $oldAvatar = (string) $user->avatar;
+                    $user->avatar = $newAvatar;
+                }
+
+                if ($newCover) {
+                    $oldCover = (string) $user->cover_page;
+                    $user->cover_page = $newCover;
+                }
+
+                $user->save();
+
+                /** @var UserSetting $settings */
+                $settings = UserSetting::query()->firstOrNew(['user_id' => $user->id]);
+                $settings->fill($permissions + $notifications + ['user_id' => $user->id]);
+                $settings->save();
+            });
+        } catch (\Throwable $exception) {
+            $this->deleteUserImage('user/avatar', $newAvatar);
+            $this->deleteUserImage('user/cover_page', $newCover);
+
+            throw $exception;
+        }
+
+        $this->deleteUserImage('user/avatar', $oldAvatar);
+        $this->deleteUserImage('user/cover_page', $oldCover);
     }
 
     public function permissions(User $profile, ?User $viewer, string $friendshipStatus): array
@@ -289,6 +454,54 @@ class ProfileRepository extends BaseRepository
             ->unique()
             ->values()
             ->all();
+    }
+
+    private function storeUserImage(UploadedFile $file, string $directory, int $userId): string
+    {
+        $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
+        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
+        $filename = sprintf('%d_%s.%s', $userId, Str::lower(Str::random(32)), $extension);
+        $path = 'images/' . trim($directory, '/') . '/' . $filename;
+        $contents = file_get_contents($file->getRealPath());
+
+        if ($contents === false || ! Storage::disk('public')->put($path, $contents)) {
+            throw new RuntimeException('Не удалось сохранить изображение профиля.');
+        }
+
+        return $filename;
+    }
+
+    private function deleteUserImage(string $directory, ?string $filename): void
+    {
+        if (! $filename) {
+            return;
+        }
+
+        Storage::disk('public')->delete('images/' . trim($directory, '/') . '/' . $filename);
+    }
+
+    private function detectOs(string $userAgent): string
+    {
+        return match (true) {
+            stripos($userAgent, 'Windows') !== false => 'Windows',
+            stripos($userAgent, 'Mac OS') !== false || stripos($userAgent, 'Macintosh') !== false => 'macOS',
+            stripos($userAgent, 'iPhone') !== false || stripos($userAgent, 'iPad') !== false => 'iOS',
+            stripos($userAgent, 'Android') !== false => 'Android',
+            stripos($userAgent, 'Linux') !== false => 'Linux',
+            default => 'Не определено',
+        };
+    }
+
+    private function detectBrowser(string $userAgent): string
+    {
+        return match (true) {
+            stripos($userAgent, 'Edg') !== false => 'Edge',
+            stripos($userAgent, 'OPR') !== false || stripos($userAgent, 'Opera') !== false => 'Opera',
+            stripos($userAgent, 'Firefox') !== false => 'Firefox',
+            stripos($userAgent, 'Chrome') !== false => 'Chrome',
+            stripos($userAgent, 'Safari') !== false => 'Safari',
+            default => 'Не определено',
+        };
     }
 
     private function dateTime(?CarbonInterface $date): string
