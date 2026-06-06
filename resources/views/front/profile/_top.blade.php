@@ -20,21 +20,21 @@
 
                 <div id="friends_button">
                     @if ($friendshipStatus === 'invitation_sent')
-                        <button class="btn btn-primary"><span>Приглашение </span>отправлено</button>
+                        <button type="button" class="btn btn-primary"><span>Приглашение </span>отправлено</button>
                     @elseif ($friendshipStatus === 'friend')
-                        <button class="btn btn-danger" id="remove_friend" onclick="remove_friend({{ $profileUser->id }})">Удалить<span> друга</span></button>
+                        <button type="button" class="btn btn-danger" id="remove_friend" data-item="{{ $profileUser->id }}">Удалить<span> друга</span></button>
                     @elseif ($friendshipStatus === 'nofriend')
-                        <button class="btn btn-success" id="add_as_friend" onclick="add_as_friend({{ $profileUser->id }})">Добавить<span> друга</span></button>
+                        <button type="button" class="btn btn-success" id="add_as_friend" data-item="{{ $profileUser->id }}">Добавить<span> друга</span></button>
                     @elseif ($friendshipStatus === 'invated')
-                        <button class="btn btn-success" id="accept_friendship" onclick="accept_friendship({{ $profileUser->id }})">Принять<span> дружбу</span></button>
+                        <button type="button" class="btn btn-success" id="accept_friendship" data-item="{{ $profileUser->id }}">Принять<span> дружбу</span></button>
                     @endif
                 </div>
 
                 <div id="block_user_button">
                     @if ($friendshipStatus === 'block')
-                        <button class="btn btn-danger" id="unblock_user" data-item="{{ $profileUser->id }}">Разблокировать</button>
+                        <button type="button" class="btn btn-danger" id="unblock_user" data-item="{{ $profileUser->id }}">Разблокировать</button>
                     @else
-                        <button class="btn btn-danger" id="block_user" data-item="{{ $profileUser->id }}">Заблокировать</button>
+                        <button type="button" class="btn btn-danger" id="block_user" data-item="{{ $profileUser->id }}">Заблокировать</button>
                     @endif
                 </div>
                 <div class="clearfix"></div>

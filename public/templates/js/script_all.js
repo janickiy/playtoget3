@@ -640,86 +640,100 @@ function change_event_community_status(community_id, event_id, status) {
 }
 
 
-/*ACEPT FRIEND*/
-function accept_friendship(id) {
+function friendActionUrl(action, id) {
+    return '/ajax/' + action + '?user_id=' + encodeURIComponent(id);
+}
+
+function reloadAfterFriendAction(action, id, isSuccessful) {
     $.ajax({
-        url: "/ajax/accept_friendship?user_id=" + encodeURIComponent(id),
+        url: friendActionUrl(action, id),
         cache: false,
         dataType: "json",
         success: function (data) {
-            const Status = data.status;
-
-            if (Status == 1) {
-                // $('#friends_button').html('<button class="btn btn-danger" id="accept_friendship" >${BUTTON_TOP_REMOVE_FRIEND}</button>');
+            if (isSuccessful(data)) {
                 location.reload();
             }
         }
     });
+
     return false;
+}
+
+/*ACEPT FRIEND*/
+function accept_friendship(id) {
+    return reloadAfterFriendAction('accept_friendship', id, function (data) {
+        return data.status == 1;
+    });
 }
 
 /*REMOVE FRIEND*/
 function remove_friend(id) {
-    $.ajax({
-        url: "/ajax/remove_friend?user_id=" + encodeURIComponent(id),
-        cache: false,
-        dataType: "json",
-        success: function (data) {
-            if (data.result != '') {
-                // $('#friends_button').html('<button class="btn btn-success" id="remove_friend" >${STR_ADD_AS_FRIEND}</button>');
-                location.reload();
-            }
-        }
+    return reloadAfterFriendAction('remove_friend', id, function (data) {
+        return data.result != '';
     });
-    return false;
-};
+}
 
 /*ADD FRIEND*/
 function add_as_friend(id) {
-    //alert(id)
-    $.ajax({
-        url: "/ajax/add_as_friend?user_id=" + encodeURIComponent(id),
-        cache: false,
-        dataType: "json",
-        success: function (data) {
-            const Status = data.status;
-
-            if (Status == 0) {
-                //$('#friends_button').html('<button class="btn btn-primary" id="add_as_friend">${STR_INVITATION_SENT}</button>');
-                location.reload();
-            }
-        }
+    return reloadAfterFriendAction('add_as_friend', id, function (data) {
+        return data.status == 0;
     });
-    return false;
 }
 
-$(document).on("click", "#block_user", function () {
+$(document).on("click", "#accept_friendship", function (event) {
+    event.preventDefault();
+    return accept_friendship($(this).attr('data-item'));
+});
+
+$(document).on("click", "#remove_friend", function (event) {
+    event.preventDefault();
+    return remove_friend($(this).attr('data-item'));
+});
+
+$(document).on("click", "#add_as_friend", function (event) {
+    event.preventDefault();
+    return add_as_friend($(this).attr('data-item'));
+});
+
+function blockUserButtonHtml(id, label, action) {
+    return '<button type="button" class="btn btn-danger" id="' + action + '" data-item="' + id + '">' + label + '</button>';
+}
+
+function addAsFriendButtonHtml(id) {
+    return '<button type="button" class="btn btn-success" id="add_as_friend" data-item="' + id + '">Добавить<span> друга</span></button>';
+}
+
+$(document).on("click", "#block_user", function (event) {
     const IdUser = $(this).attr('data-item');
 
+    event.preventDefault();
+
     $.ajax({
-        url: "/ajax/block_user?user_id=" + encodeURIComponent(IdUser),
+        url: friendActionUrl('block_user', IdUser),
         cache: false,
         dataType: "json",
         success: function (data) {
             if (data.result != '') {
                 $('#friends_button').html('');
-                $('#block_user_button').html('<button class="btn btn-danger" id="unblock_user" data-item="' + IdUser + '">Разблокировать</button>');
+                $('#block_user_button').html(blockUserButtonHtml(IdUser, 'Разблокировать', 'unblock_user'));
             }
         }
     });
 });
 
-$(document).on("click", "#unblock_user", function () {
+$(document).on("click", "#unblock_user", function (event) {
     const IdUser = $(this).attr('data-item');
 
+    event.preventDefault();
+
     $.ajax({
-        url: "/ajax/unblock_user?user_id=" + encodeURIComponent(IdUser),
+        url: friendActionUrl('unblock_user', IdUser),
         cache: false,
         dataType: "json",
         success: function (data) {
             if (data.result != '') {
-                $('#friends_button').html('<button class="btn btn-success" id="add_as_friend" onclick="add_as_friend(' + IdUser + ')">Добавить<span> друга</span></button>');
-                $('#block_user_button').html('<button class="btn btn-danger" id="block_user" data-item="' + IdUser + '">Заблокировать</button>');
+                $('#friends_button').html(addAsFriendButtonHtml(IdUser));
+                $('#block_user_button').html(blockUserButtonHtml(IdUser, 'Заблокировать', 'block_user'));
             }
         }
     });

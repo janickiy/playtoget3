@@ -95,6 +95,7 @@
         }
 
         $('#avatar-crop-modal').removeClass('has-image');
+        $('.avatar-crop-stage').removeAttr('style');
         $('#avatar-crop-target')
             .attr('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==')
             .removeAttr('style');
@@ -141,6 +142,57 @@
         $('#avatar-crop-h').val(scaled.h);
     }
 
+    function avatarCropBounds() {
+        var $modal = $('#avatar-crop-modal');
+        var modalTop = parseInt($modal.css('top'), 10) || 24;
+        var modalWidth = $modal.innerWidth() || 700;
+        var horizontalPadding = 48;
+        var reservedHeight = 248;
+
+        return {
+            width: Math.max(260, Math.min(640, modalWidth - horizontalPadding)),
+            height: Math.max(220, $(window).height() - (modalTop * 2) - reservedHeight)
+        };
+    }
+
+    function fitAvatarCropTarget() {
+        var bounds = avatarCropBounds();
+        var ratio = Math.min(
+            bounds.width / avatarNaturalSize.width,
+            bounds.height / avatarNaturalSize.height,
+            1
+        );
+        var displayWidth = Math.max(1, Math.round(avatarNaturalSize.width * ratio));
+        var displayHeight = Math.max(1, Math.round(avatarNaturalSize.height * ratio));
+
+        $('#avatar-crop-target').css({
+            height: displayHeight + 'px',
+            maxHeight: 'none',
+            maxWidth: 'none',
+            width: displayWidth + 'px'
+        });
+
+        $('.avatar-crop-stage').css({
+            height: displayHeight + 'px',
+            maxHeight: bounds.height + 'px',
+            maxWidth: bounds.width + 'px',
+            width: displayWidth + 'px'
+        });
+
+        return {
+            height: displayHeight,
+            width: displayWidth
+        };
+    }
+
+    function decorateAvatarCropUi() {
+        var $selection = avatarCropApi && avatarCropApi.ui ? avatarCropApi.ui.selection : $();
+        var $holder = avatarCropApi && avatarCropApi.ui ? avatarCropApi.ui.holder : $();
+
+        $holder.addClass('jcrop-avatar-circle');
+        $selection.addClass('jcrop-avatar-selection');
+    }
+
     function initAvatarCrop(imageUrl) {
         var $target = $('#avatar-crop-target');
 
@@ -149,8 +201,7 @@
 
         $target.one('load', function () {
             var image = this;
-            var displayWidth;
-            var displayHeight;
+            var displaySize;
             var selectSize;
             var startX;
             var startY;
@@ -160,13 +211,14 @@
                 height: image.naturalHeight || image.height
             };
 
-            displayWidth = $target.width();
-            displayHeight = $target.height();
-            selectSize = Math.min(displayWidth, displayHeight, 360);
-            startX = Math.max(0, Math.round((displayWidth - selectSize) / 2));
-            startY = Math.max(0, Math.round((displayHeight - selectSize) / 2));
+            $('#avatar-crop-modal').addClass('has-image');
+            displaySize = fitAvatarCropTarget();
+            selectSize = Math.min(displaySize.width, displaySize.height, 360);
+            startX = Math.max(0, Math.round((displaySize.width - selectSize) / 2));
+            startY = Math.max(0, Math.round((displaySize.height - selectSize) / 2));
 
             $target.Jcrop({
+                addClass: 'jcrop-avatar-circle',
                 aspectRatio: 1,
                 bgColor: 'black',
                 bgOpacity: 0.45,
@@ -176,16 +228,8 @@
                 onSelect: updateAvatarCoords
             }, function () {
                 avatarCropApi = this;
-                $('#avatar-crop-modal').addClass('has-image');
-
-                if (avatarCropApi.ui && avatarCropApi.ui.holder) {
-                    avatarCropApi.ui.holder.addClass('jcrop-avatar-circle');
-                }
-
-                if (avatarCropApi.ui && avatarCropApi.ui.selection) {
-                    avatarCropApi.ui.selection.addClass('jcrop-avatar-selection');
-                }
-
+                decorateAvatarCropUi();
+                window.setTimeout(decorateAvatarCropUi, 0);
                 updateAvatarCoords(avatarCropApi.tellSelect());
             });
         });
