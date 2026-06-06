@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Models\GeoCity;
+use App\Models\Like;
+use App\Models\Share;
 use App\Models\SportType;
 use App\Models\User;
 use App\Repositories\FriendRepository;
 use App\Repositories\NewsRepository;
+use App\Repositories\ProfileRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,6 +22,7 @@ class AjaxController extends Controller
         private readonly NewsRepository $news,
         private readonly FriendRepository $friends,
         private readonly UserRepository $users,
+        private readonly ProfileRepository $profiles,
     ) {
     }
 
@@ -31,6 +35,12 @@ class AjaxController extends Controller
             'add_as_friend' => $this->addAsFriend($request),
             'accept_friendship' => $this->acceptFriendship($request),
             'remove_friend' => $this->removeFriend($request),
+            'block_user' => $this->blockUser($request),
+            'unblock_user' => $this->unblockUser($request),
+            'getcomments' => $this->getComments($request),
+            'addcomment' => $this->addComment($request),
+            'liked' => $this->liked($request),
+            'shared' => $this->shared($request),
             'search_city' => $this->searchCity($request),
             'search_sport_types' => $this->searchSportTypes($request),
             default => response()->json([
@@ -132,6 +142,158 @@ class AjaxController extends Controller
         return response()->json([
             'status' => $removed ? 'success' : null,
             'result' => $removed ? 'success' : '',
+        ]);
+    }
+
+    private function blockUser(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $friendId = (int) $request->input('user_id');
+
+        if (! $viewer || $friendId < 1 || ! $this->users->findActive($friendId)) {
+            return response()->json(['status' => null, 'result' => ''], 422);
+        }
+
+        $blocked = $this->friends->blockUser($viewer->id, $friendId);
+
+        return response()->json([
+            'status' => $blocked ? 'success' : null,
+            'result' => $blocked ? 'success' : '',
+        ]);
+    }
+
+    private function unblockUser(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $friendId = (int) $request->input('user_id');
+
+        if (! $viewer || $friendId < 1) {
+            return response()->json(['status' => null, 'result' => ''], 422);
+        }
+
+        $unblocked = $this->friends->unblockUser($viewer->id, $friendId);
+
+        return response()->json([
+            'status' => $unblocked ? 'success' : null,
+            'result' => $unblocked ? 'success' : '',
+        ]);
+    }
+
+    private function getComments(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $type = (string) $request->input('commentable_type', 'user');
+        $profileId = (int) $request->input('id', $request->input('content_id', 0));
+        $limit = min(max((int) $request->input('number', 10), 1), 25);
+        $offset = max((int) $request->input('offset', 0), 0);
+
+        if ($type !== 'user' || $profileId < 1) {
+            return response()->json(['status' => 0, 'html' => '', 'count' => 0, 'has_more' => false]);
+        }
+
+        $comments = $this->profiles->wallComments($profileId, $limit, $offset, $viewer);
+
+        return response()->json([
+            'status' => 1,
+            'html' => view('front.profile._comments', [
+                'comments' => $comments,
+                'viewer' => $viewer,
+            ])->render(),
+            'count' => $comments->count(),
+            'has_more' => $this->profiles->hasMoreWallComments($profileId, $limit, $offset),
+        ]);
+    }
+
+    private function addComment(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $type = (string) $request->input('commentable_type', 'user');
+        $profileId = (int) $request->input('content_id');
+        $comment = trim((string) $request->input('comment', ''));
+        $attach = $request->input('attach', []);
+
+        if (! $viewer || $type !== 'user' || $profileId < 1 || ($comment === '' && empty($attach))) {
+            return response()->json([
+                'status' => false,
+                'errors' => ['comment' => 'Заполните комментарий'],
+            ], 422);
+        }
+
+        $created = $this->profiles->createWallComment($viewer, [
+            'commentable_type' => $type,
+            'content_id' => $profileId,
+            'comment' => $comment,
+            'parent_id' => $request->input('parent_id', 0),
+            'attach' => $attach,
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'id' => $created->id,
+            'html' => view('front.profile._comment', [
+                'comment' => $this->profiles->serializeComment($created, $viewer),
+                'viewer' => $viewer,
+            ])->render(),
+        ]);
+    }
+
+    private function liked(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $contentId = (int) $request->input('id');
+        $type = (string) $request->input('likeable_type', 'comment');
+
+        if (! $viewer || $contentId < 1 || $type === '') {
+            return response()->json(['result' => ''], 422);
+        }
+
+        $query = Like::query()
+            ->where('user_id', $viewer->id)
+            ->where('content_id', $contentId)
+            ->where('likeable_type', $type);
+
+        if ($query->exists()) {
+            $query->delete();
+        } else {
+            Like::query()->create([
+                'user_id' => $viewer->id,
+                'content_id' => $contentId,
+                'likeable_type' => $type,
+                'time' => now(),
+            ]);
+        }
+
+        return response()->json([
+            'result' => Like::query()
+                ->where('content_id', $contentId)
+                ->where('likeable_type', $type)
+                ->count(),
+        ]);
+    }
+
+    private function shared(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $contentId = (int) $request->input('id');
+        $type = (string) $request->input('shareable_type', 'comment');
+
+        if (! $viewer || $contentId < 1 || $type === '') {
+            return response()->json(['result' => ''], 422);
+        }
+
+        Share::query()->firstOrCreate([
+            'user_id' => $viewer->id,
+            'content_id' => $contentId,
+            'shareable_type' => $type,
+        ], [
+            'time' => now(),
+        ]);
+
+        return response()->json([
+            'result' => Share::query()
+                ->where('content_id', $contentId)
+                ->where('shareable_type', $type)
+                ->count(),
         ]);
     }
 

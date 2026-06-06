@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\Event;
+use App\Models\Photo;
 use App\Models\SportBlock;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
@@ -47,6 +48,36 @@ class FrontAssets
         }
 
         return asset('templates/images/noimage.png');
+    }
+
+    public static function photoGallery(?Photo $photo, string $field = 'small_photo'): ?string
+    {
+        if (! $photo) {
+            return null;
+        }
+
+        $file = $photo->{$field} ?: $photo->photo;
+
+        if (! $file) {
+            return null;
+        }
+
+        $type = $photo->album?->photoalbumable_type ?: 'user';
+        $paths = [
+            "photogallery/{$type}/{$file}",
+            "photogallery/user_attach/{$file}",
+            "photogallery/user/{$file}",
+            "attachments/comment/{$file}",
+            "attachments/message/{$file}",
+        ];
+
+        foreach ($paths as $path) {
+            if ($url = self::publicImageUrl($path)) {
+                return $url;
+            }
+        }
+
+        return null;
     }
 
     private static function publicImageUrl(string $path): ?string

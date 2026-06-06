@@ -243,6 +243,7 @@ $(document).on("click", ".reply", function () {
     ReplyForm += '<img src="' + avatar + '" alt="" class="img-account">';
     ReplyForm += '</div>';
     ReplyForm += '<form autocomplete="off" id="reply-form-' + IdComment + '" data-num = ' + IdComment + ' action="" enctype="multipart/form-data">';
+    ReplyForm += '<input type="hidden" name="_token" value="' + ($('meta[name="csrf-token"]').attr('content') || '') + '">';
     ReplyForm += '<input type="hidden" name="commentable_type" value="user">';
     ReplyForm += '<input type="hidden" name="content_id" value="' + content_id + '">';
     ReplyForm += '<input type="hidden" name="user_id" value="' + user_id + '">';
@@ -269,17 +270,19 @@ const settComments = {
     number: 10,
     offset: 10,
 };
+let profileCommentsHasMore = typeof window.profileCommentsHasMore === 'undefined' ? true : Boolean(window.profileCommentsHasMore);
 
 $(document).scroll(function () {
 
     if ($(window).scrollTop() + $(window).height() >= $(document).height()) {
-        if (evJob) {
+        if (evJob && profileCommentsHasMore) {
             evJob = false;
             $('#comment-list').append('<div class="loading-bar"><img border="0" src="./templates/images/select2-spinner.gif" width=20px></div>')
             $.ajax({
                 type: 'POST',
-                url: '/?task=ajax_action&action=getcomments',
+                url: window.profileCommentsEndpoint || '/ajax/getcomments',
                 data: {
+                    _token: $('meta[name="csrf-token"]').attr('content') || '',
                     number: settComments.number,
                     offset: settComments.offset,
                     commentable_type: 'user',
@@ -287,7 +290,9 @@ $(document).scroll(function () {
                 },
                 success: function (data) {
                     $('#comment-list').find('.loading-bar').remove();
-                    $('#comment-list').append(data.html);
+                    if (data.html) {
+                        $('#comment-list').append(data.html);
+                    }
                     $('.message-text').each(function () {
                         $(this).emotions();
                     })
@@ -295,6 +300,12 @@ $(document).scroll(function () {
                         $(this).emotions();
                     })
                     settComments.offset += settComments.number;
+                    profileCommentsHasMore = data.has_more === true || data.has_more === 1 || data.has_more === '1';
+                    $('#comment-list').attr('data-has-more', profileCommentsHasMore ? 1 : 0);
+                    evJob = true;
+                },
+                error: function () {
+                    $('#comment-list').find('.loading-bar').remove();
                     evJob = true;
                 }
             })

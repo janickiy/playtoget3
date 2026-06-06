@@ -102,6 +102,10 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function csrfToken() {
+    return $('meta[name="csrf-token"]').attr('content') || '';
+}
+
 function remove_black_list(id) {
     $.confirm({
         'title': 'Подтверждение',
@@ -111,9 +115,7 @@ function remove_black_list(id) {
                 'class': 'blue',
                 'action': function () {
                     $.ajax({
-                        type: 'POST',
-                        url: './?task=ajax_action&action=unblock_user',
-                        data: 'user_id=' + id,
+                        url: '/ajax/unblock_user?user_id=' + encodeURIComponent(id),
                         success: function (msg) {
                             if (msg.status == 'success') {
                                 $('.possible-friend-cart[data-num=' + id + ']').remove();
@@ -641,7 +643,7 @@ function change_event_community_status(community_id, event_id, status) {
 /*ACEPT FRIEND*/
 function accept_friendship(id) {
     $.ajax({
-        url: "./?task=ajax_action&action=accept_friendship&user_id=" + id,
+        url: "/ajax/accept_friendship?user_id=" + encodeURIComponent(id),
         cache: false,
         dataType: "json",
         success: function (data) {
@@ -659,7 +661,7 @@ function accept_friendship(id) {
 /*REMOVE FRIEND*/
 function remove_friend(id) {
     $.ajax({
-        url: "./?task=ajax_action&action=remove_friend&user_id=" + id,
+        url: "/ajax/remove_friend?user_id=" + encodeURIComponent(id),
         cache: false,
         dataType: "json",
         success: function (data) {
@@ -676,7 +678,7 @@ function remove_friend(id) {
 function add_as_friend(id) {
     //alert(id)
     $.ajax({
-        url: "./?task=ajax_action&action=add_as_friend&user_id=" + id,
+        url: "/ajax/add_as_friend?user_id=" + encodeURIComponent(id),
         cache: false,
         dataType: "json",
         success: function (data) {
@@ -690,6 +692,38 @@ function add_as_friend(id) {
     });
     return false;
 }
+
+$(document).on("click", "#block_user", function () {
+    const IdUser = $(this).attr('data-item');
+
+    $.ajax({
+        url: "/ajax/block_user?user_id=" + encodeURIComponent(IdUser),
+        cache: false,
+        dataType: "json",
+        success: function (data) {
+            if (data.result != '') {
+                $('#friends_button').html('');
+                $('#block_user_button').html('<button class="btn btn-danger" id="unblock_user" data-item="' + IdUser + '">Разблокировать</button>');
+            }
+        }
+    });
+});
+
+$(document).on("click", "#unblock_user", function () {
+    const IdUser = $(this).attr('data-item');
+
+    $.ajax({
+        url: "/ajax/unblock_user?user_id=" + encodeURIComponent(IdUser),
+        cache: false,
+        dataType: "json",
+        success: function (data) {
+            if (data.result != '') {
+                $('#friends_button').html('<button class="btn btn-success" id="add_as_friend" onclick="add_as_friend(' + IdUser + ')">Добавить<span> друга</span></button>');
+                $('#block_user_button').html('<button class="btn btn-danger" id="block_user" data-item="' + IdUser + '">Заблокировать</button>');
+            }
+        }
+    });
+});
 
 $(window).load(function () {
 
@@ -835,7 +869,7 @@ $(document).ready(function () {
         let type = $(this).attr('data-type');
         if (type == '') type = 'comment';
         $.ajax({
-            url: "./?task=ajax_action&action=liked&id=" + IdComment + "&likeable_type=" + type,
+            url: "/ajax/liked?id=" + encodeURIComponent(IdComment) + "&likeable_type=" + encodeURIComponent(type),
             cache: false,
             dataType: "json",
             success: function (data) {
@@ -860,7 +894,7 @@ $(document).ready(function () {
         let type = $(this).attr('data-type');
         if (type == '') type = 'comment';
         $.ajax({
-            url: "./?task=ajax_action&action=shared&id=" + IdComment + "&shareable_type=" + type,
+            url: "/ajax/shared?id=" + encodeURIComponent(IdComment) + "&shareable_type=" + encodeURIComponent(type),
             cache: false,
             dataType: "json",
             success: function (data) {
@@ -967,10 +1001,13 @@ $(document).ready(function () {
             const formData = then.serializeArray();
             if (attach.length != 0)
                 formData.push({'name': 'attach', 'value': attach});
+            if (csrfToken()) {
+                formData.push({'name': '_token', 'value': csrfToken()});
+            }
             console.log(formData);
 
             $.ajax({
-                url: './?task=ajax_action&action=addcomment',
+                url: '/ajax/addcomment',
                 data: formData,
                 type: 'POST',
                 success: function (data) {
@@ -1011,9 +1048,12 @@ $(document).ready(function () {
             $('#my-comment-' + IdComment).append('<div class="loading-mess"><img border="0" src="./templates/images/select2-spinner.gif" width=20px></div>');
             const formData = then.serializeArray();
             formData.push({'name': 'attach', 'value': attach});
+            if (csrfToken()) {
+                formData.push({'name': '_token', 'value': csrfToken()});
+            }
             $.ajax({
                 type: 'POST',
-                url: './?task=ajax_action&action=addcomment',
+                url: '/ajax/addcomment',
                 data: formData,
                 success: function (data) {
                     //console.log(data);

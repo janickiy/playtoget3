@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="Cache-Control" content="no-cache">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta property="og:image" content="{{ asset('templates/images/left-sitebar-img-2.png') }}">
     <meta name="description" content="Мы первый спортивный интернет-ресурс, объединивший: приверженцев здорового образа жизни, любителей спорта и профессиональных спортсменов.">
     <title>{{ $title ?? 'PlayToGet' }}</title>
@@ -157,7 +158,9 @@
                 <div class="col-xs-12 bg">
                     @include('front.partials.left-sidebar')
                     <div class="content">
-                        @include('front.partials.top-profile')
+                        @unless($hideTopProfile ?? false)
+                            @include('front.partials.top-profile')
+                        @endunless
                         @yield('content')
                     </div>
                     @include('front.partials.right-sidebar')

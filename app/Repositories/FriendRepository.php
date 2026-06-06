@@ -153,6 +153,57 @@ class FriendRepository extends BaseRepository
         return $this->relationBetween($userId, $friendId)->delete() > 0;
     }
 
+    public function friendshipStatus(?int $userId, int $friendId): string
+    {
+        if (! $userId || $userId === $friendId) {
+            return '';
+        }
+
+        /** @var Friend|null $relation */
+        $relation = $this->relationBetween($userId, $friendId)->first();
+
+        if (! $relation) {
+            return 'nofriend';
+        }
+
+        if ((int) $relation->status === 1) {
+            return 'friend';
+        }
+
+        if ((int) $relation->status === 2) {
+            return (int) $relation->user_id === $userId ? 'block' : 'blocked_by_user';
+        }
+
+        return (int) $relation->user_id === $userId ? 'invitation_sent' : 'invated';
+    }
+
+    public function blockUser(int $userId, int $friendId): bool
+    {
+        if ($userId === $friendId) {
+            return false;
+        }
+
+        $this->relationBetween($userId, $friendId)->delete();
+
+        $this->model->newQuery()->create([
+            'user_id' => $userId,
+            'friend_id' => $friendId,
+            'status' => 2,
+            'added' => now(),
+        ]);
+
+        return true;
+    }
+
+    public function unblockUser(int $userId, int $friendId): bool
+    {
+        return $this->model->newQuery()
+            ->where('user_id', $userId)
+            ->where('friend_id', $friendId)
+            ->where('status', 2)
+            ->delete() > 0;
+    }
+
     public function serializeUsers(Collection $users, ?int $senderId = null): array
     {
         return $users
