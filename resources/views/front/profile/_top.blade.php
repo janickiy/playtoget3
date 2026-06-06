@@ -13,7 +13,7 @@
         @if ($showProfileActions)
             <div class="cover-buttons">
                 @if ($permissions['send_message'])
-                    <a class="cover-send-message" href="{{ route('front.profile.show', ['user' => $viewer->id]) }}?q=messages&sel={{ $profileUser->id }}">
+                    <a class="cover-send-message" href="{{ route('front.profile.messages.show', ['user' => $viewer->id, 'recipient' => $profileUser->id]) }}">
                         <button class="btn btn-primary">Написать <span>сообщение</span></button>
                     </a>
                 @endif

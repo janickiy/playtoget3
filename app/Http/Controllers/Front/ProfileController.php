@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\FriendRepository;
+use App\Repositories\MessageRepository;
 use App\Repositories\ProfileRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -58,6 +60,66 @@ class ProfileController extends Controller
             'securityLogs' => $profiles->securityLogs($viewer),
             'permissionFields' => $profiles->permissionFields(),
             'notificationFields' => $profiles->notificationFields(),
+        ]);
+    }
+
+    public function dialogues(
+        int $user,
+        FriendRepository $friends,
+        MessageRepository $messages,
+    ): View|RedirectResponse {
+        $viewer = Auth::guard('web')->user();
+
+        if (! $viewer) {
+            return redirect()->route('front.home');
+        }
+
+        if ((int) $viewer->id !== $user) {
+            return redirect()->route('front.profile.messages.index', ['user' => $viewer->id]);
+        }
+
+        return view('front.profile.dialogues', [
+            'title' => 'Диалоги',
+            'hideTopProfile' => true,
+            'viewer' => $viewer,
+            'friends' => $friends->friendsFor($viewer->id, 100, 0),
+            'dialogues' => $messages->dialogues($viewer),
+        ]);
+    }
+
+    public function messages(
+        int $user,
+        int $recipient,
+        UserRepository $users,
+        MessageRepository $messages,
+    ): View|RedirectResponse {
+        $viewer = Auth::guard('web')->user();
+
+        if (! $viewer) {
+            return redirect()->route('front.home');
+        }
+
+        if ((int) $viewer->id !== $user) {
+            return redirect()->route('front.profile.messages.show', [
+                'user' => $viewer->id,
+                'recipient' => $recipient,
+            ]);
+        }
+
+        $receiver = $users->findActive($recipient);
+        abort_if(! $receiver, 404);
+
+        $messages->markConversationRead($viewer, $receiver);
+
+        return view('front.profile.messages', [
+            'title' => 'Диалог',
+            'hideTopProfile' => true,
+            'viewer' => $viewer,
+            'receiver' => $receiver,
+            'canSendMessage' => $messages->canSendMessage($viewer, $receiver),
+            'messages' => $messages->conversation($viewer, $receiver, 10, 0),
+            'messagesPageSize' => 10,
+            'hasMoreMessages' => $messages->hasMoreConversation($viewer, $receiver, 10, 0),
         ]);
     }
 

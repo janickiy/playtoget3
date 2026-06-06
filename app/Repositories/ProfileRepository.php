@@ -96,27 +96,27 @@ class ProfileRepository extends BaseRepository
             'avatar' => FrontAssets::userAvatar($profile),
             'cover' => FrontAssets::userCover($profile),
             'firstname' => $profile->firstname ?: $profile->displayName(),
-            'lastname' => (string) $profile->lastname,
-            'secondname' => (string) $profile->secondname,
-            'about' => (string) $profile->about,
+            'lastname' => (string)$profile->lastname,
+            'secondname' => (string)$profile->secondname,
+            'about' => (string)$profile->about,
             'last_visit' => $this->dateTime($profile->activity?->last_activity),
             'birthday' => $this->date($profile->birthday),
-            'city' => (string) $profile->city,
-            'phone' => (string) $profile->phone,
-            'contact_email' => (string) $profile->contact_email,
-            'skype' => (string) $profile->skype,
-            'website' => (string) $profile->website,
-            'about_sport' => (string) $profile->about_sport,
+            'city' => (string)$profile->city,
+            'phone' => (string)$profile->phone,
+            'contact_email' => (string)$profile->contact_email,
+            'skype' => (string)$profile->skype,
+            'website' => (string)$profile->website,
+            'about_sport' => (string)$profile->about_sport,
             'is_online' => $profile->activity?->last_activity
                 ? $profile->activity->last_activity->greaterThan(now()->subMinutes(5))
                 : false,
             'sport_types' => $profile->sportTypes
-                ->map(fn ($row): array => [
-                    'sport_type' => (string) ($row->sportType?->name ?? ''),
-                    'sport_level' => (string) ($row->sportLevel?->name ?? ''),
-                    'search_team' => (int) $row->search_team === 1 ? 'да' : 'нет',
+                ->map(fn($row): array => [
+                    'sport_type' => (string)($row->sportType?->name ?? ''),
+                    'sport_level' => (string)($row->sportLevel?->name ?? ''),
+                    'search_team' => (int)$row->search_team === 1 ? 'да' : 'нет',
                 ])
-                ->filter(fn (array $row): bool => $row['sport_type'] !== '' || $row['sport_level'] !== '')
+                ->filter(fn(array $row): bool => $row['sport_type'] !== '' || $row['sport_level'] !== '')
                 ->values(),
             'education' => $this->occupations($profile, 1),
             'work' => $this->occupations($profile, 3),
@@ -130,8 +130,8 @@ class ProfileRepository extends BaseRepository
             'avatar' => FrontAssets::userAvatar($user),
             'cover' => FrontAssets::userCover($user),
             'firstname' => $user->firstname ?: $user->displayName(),
-            'lastname' => (string) $user->lastname,
-            'about' => (string) $user->about,
+            'lastname' => (string)$user->lastname,
+            'about' => (string)$user->about,
         ];
     }
 
@@ -159,9 +159,9 @@ class ProfileRepository extends BaseRepository
             ->with('friend')
             ->orderByDesc('added')
             ->get()
-            ->map(fn (Friend $relation): ?array => $relation->friend
+            ->map(fn(Friend $relation): ?array => $relation->friend
                 ? [
-                    'id' => (int) $relation->friend->id,
+                    'id' => (int)$relation->friend->id,
                     'name' => $relation->friend->displayName(),
                     'avatar' => FrontAssets::userAvatar($relation->friend),
                     'url' => route('front.profile.show', ['user' => $relation->friend->id]),
@@ -178,10 +178,10 @@ class ProfileRepository extends BaseRepository
             ->orderByDesc('last_sign_in_at')
             ->limit($limit)
             ->get()
-            ->map(fn (Log $log): array => [
-                'ip' => (string) $log->ip,
-                'os' => $this->detectOs((string) $log->user_agent),
-                'browser' => $this->detectBrowser((string) $log->user_agent),
+            ->map(fn(Log $log): array => [
+                'ip' => (string)$log->ip,
+                'os' => $this->detectOs((string)$log->user_agent),
+                'browser' => $this->detectBrowser((string)$log->user_agent),
                 'time' => $log->last_sign_in_at?->format('d.m.Y H:i') ?? '',
             ]);
     }
@@ -208,10 +208,10 @@ class ProfileRepository extends BaseRepository
             throw new RuntimeException('Не удалось прочитать изображение.');
         }
 
-        $x = max(0, (int) floor((float) ($crop['x'] ?? 0)));
-        $y = max(0, (int) floor((float) ($crop['y'] ?? 0)));
-        $width = max(0, (int) floor((float) ($crop['w'] ?? 0)));
-        $height = max(0, (int) floor((float) ($crop['h'] ?? 0)));
+        $x = max(0, (int)floor((float)($crop['x'] ?? 0)));
+        $y = max(0, (int)floor((float)($crop['y'] ?? 0)));
+        $width = max(0, (int)floor((float)($crop['w'] ?? 0)));
+        $height = max(0, (int)floor((float)($crop['h'] ?? 0)));
         $size = min($width, $height);
 
         if ($size < 100) {
@@ -238,14 +238,14 @@ class ProfileRepository extends BaseRepository
         $contents = ob_get_clean();
         imagedestroy($target);
 
-        if (! is_string($contents) || $contents === '') {
+        if (!is_string($contents) || $contents === '') {
             throw new RuntimeException('Не удалось обработать изображение.');
         }
 
         $filename = sprintf('%d_%s.jpg', $user->id, Str::lower(Str::random(32)));
         $path = 'images/tmp/profile/avatar/' . $filename;
 
-        if (! Storage::disk('public')->put($path, $contents)) {
+        if (!Storage::disk('public')->put($path, $contents)) {
             throw new RuntimeException('Не удалось сохранить изображение.');
         }
 
@@ -259,12 +259,12 @@ class ProfileRepository extends BaseRepository
     {
         $contacts = [];
         foreach (self::CONTACT_FIELDS as $field) {
-            $contacts[$field] = trim((string) ($input[$field] ?? ''));
+            $contacts[$field] = trim((string)($input[$field] ?? ''));
         }
 
         $permissions = [];
         foreach (array_keys(self::PERMISSION_FIELDS) as $field) {
-            $permissions[$field] = (int) ($input[$field] ?? 0);
+            $permissions[$field] = (int)($input[$field] ?? 0);
         }
 
         $notifications = [];
@@ -282,12 +282,12 @@ class ProfileRepository extends BaseRepository
                 $user->fill($contacts);
 
                 if ($newAvatar) {
-                    $oldAvatar = (string) $user->avatar;
+                    $oldAvatar = (string)$user->avatar;
                     $user->avatar = $newAvatar;
                 }
 
                 if ($newCover) {
-                    $oldCover = (string) $user->cover_page;
+                    $oldCover = (string)$user->cover_page;
                     $user->cover_page = $newCover;
                 }
 
@@ -311,10 +311,10 @@ class ProfileRepository extends BaseRepository
 
     public function permissions(User $profile, ?User $viewer, string $friendshipStatus): array
     {
-        $isOwnPage = $viewer && (int) $viewer->id === (int) $profile->id;
+        $isOwnPage = $viewer && (int)$viewer->id === (int)$profile->id;
         $isFriend = $friendshipStatus === 'friend';
 
-        if ((bool) $profile->banned || (bool) $profile->deleted) {
+        if ((bool)$profile->banned || (bool)$profile->deleted) {
             return [
                 'send_message' => false,
                 'wall' => false,
@@ -329,13 +329,13 @@ class ProfileRepository extends BaseRepository
 
         return [
             'send_message' => $viewer
-                && ! $isOwnPage
+                && !$isOwnPage
                 && $this->permissionAllows($settings?->permission_send_message, $isOwnPage, $isFriend),
             'wall' => $this->permissionAllows($settings?->permission_view_wall, $isOwnPage, $isFriend),
             'photo' => $this->permissionAllows($settings?->permission_view_photo, $isOwnPage, $isFriend),
             'video' => $this->permissionAllows($settings?->permission_view_video, $isOwnPage, $isFriend),
             'friends' => $this->permissionAllows($settings?->permission_view_friends, $isOwnPage, $isFriend),
-            'teams' => (bool) $viewer
+            'teams' => (bool)$viewer
                 && $profile->communities()
                     ->where('communities.type', 'team')
                     ->exists(),
@@ -349,16 +349,17 @@ class ProfileRepository extends BaseRepository
 
     public function comments(
         string $commentableType,
-        int $contentId,
-        int $limit = 10,
-        int $offset = 0,
-        ?User $viewer = null,
-    ): Collection {
+        int    $contentId,
+        int    $limit = 10,
+        int    $offset = 0,
+        ?User  $viewer = null,
+    ): Collection
+    {
         return $this->commentsQuery($commentableType, $contentId)
             ->offset($offset)
             ->limit($limit)
             ->get()
-            ->map(fn (Comment $comment): array => $this->serializeComment($comment, $viewer));
+            ->map(fn(Comment $comment): array => $this->serializeComment($comment, $viewer));
     }
 
     public function hasMoreWallComments(int $profileId, int $limit = 10, int $offset = 0): bool
@@ -378,13 +379,13 @@ class ProfileRepository extends BaseRepository
     {
         /** @var Comment $comment */
         $comment = Comment::query()->create([
-            'commentable_type' => (string) $data['commentable_type'],
-            'content_id' => (int) $data['content_id'],
+            'commentable_type' => (string)$data['commentable_type'],
+            'content_id' => (int)$data['content_id'],
             'user_id' => $author->id,
-            'behalfable_type' => (string) ($data['behalfable_type'] ?? ''),
-            'behalf_id' => (int) ($data['behalf_id'] ?? 0),
-            'content' => (string) ($data['comment'] ?? ''),
-            'parent_id' => (int) ($data['parent_id'] ?? 0),
+            'behalfable_type' => (string)($data['behalfable_type'] ?? ''),
+            'behalf_id' => (int)($data['behalf_id'] ?? 0),
+            'content' => (string)($data['comment'] ?? ''),
+            'parent_id' => (int)($data['parent_id'] ?? 0),
         ]);
 
         foreach ($this->attachmentIds($data['attach'] ?? []) as $photoId) {
@@ -408,7 +409,7 @@ class ProfileRepository extends BaseRepository
         /** @var Comment|null $comment */
         $comment = Comment::query()->whereKey($commentId)->first();
 
-        if (! $comment || ! $this->viewerCanDeleteComment($viewer, $comment)) {
+        if (!$comment || !$this->viewerCanDeleteComment($viewer, $comment)) {
             return false;
         }
 
@@ -446,32 +447,32 @@ class ProfileRepository extends BaseRepository
         $user = $comment->user;
 
         return [
-            'id' => (int) $comment->id,
-            'parent_id' => (int) $comment->parent_id,
-            'content_id' => (int) $comment->content_id,
-            'author_id' => (int) $comment->user_id,
+            'id' => (int)$comment->id,
+            'parent_id' => (int)$comment->parent_id,
+            'content_id' => (int)$comment->content_id,
+            'author_id' => (int)$comment->user_id,
             'author_name' => $user?->displayName() ?? '',
             'author_url' => $user ? route('front.profile.show', ['user' => $user->id]) : route('front.news.index'),
             'avatar' => FrontAssets::userAvatar($user),
             'created' => $comment->created_at?->format('d.m.Y H:i') ?? '',
-            'content' => (string) $comment->content,
+            'content' => (string)$comment->content,
             'attachments' => $comment->attachments
-                ->map(fn (Attachment $attachment): ?array => $this->serializeAttachment($attachment))
+                ->map(fn(Attachment $attachment): ?array => $this->serializeAttachment($attachment))
                 ->filter()
                 ->values(),
-            'likes_count' => (int) ($comment->likes_count ?? 0),
-            'shares_count' => (int) ($comment->shares_count ?? 0),
-            'can_interact' => (bool) $viewer,
-            'can_share' => $viewer && (int) $viewer->id !== (int) $comment->user_id,
+            'likes_count' => (int)($comment->likes_count ?? 0),
+            'shares_count' => (int)($comment->shares_count ?? 0),
+            'can_interact' => (bool)$viewer,
+            'can_share' => $viewer && (int)$viewer->id !== (int)$comment->user_id,
             'can_delete' => $viewer && (
-                (int) $viewer->id === (int) $comment->user_id
-                || (
-                    (string) $comment->commentable_type === 'user'
-                    && (int) $viewer->id === (int) $comment->content_id
-                )
-            ),
+                    (int)$viewer->id === (int)$comment->user_id
+                    || (
+                        (string)$comment->commentable_type === 'user'
+                        && (int)$viewer->id === (int)$comment->content_id
+                    )
+                ),
             'replies' => $includeReplies
-                ? $comment->replies->map(fn (Comment $reply): array => $this->serializeComment($reply, $viewer, false))->values()
+                ? $comment->replies->map(fn(Comment $reply): array => $this->serializeComment($reply, $viewer, false))->values()
                 : collect(),
         ];
     }
@@ -487,7 +488,7 @@ class ProfileRepository extends BaseRepository
             ->with([
                 'user',
                 'attachments.photo.album',
-                'replies' => fn ($query) => $query
+                'replies' => fn($query) => $query
                     ->with(['user', 'attachments.photo.album'])
                     ->withCount(['likes', 'shares'])
                     ->orderBy('id'),
@@ -498,24 +499,24 @@ class ProfileRepository extends BaseRepository
 
     private function viewerCanDeleteComment(User $viewer, Comment $comment): bool
     {
-        if ((int) $viewer->id === (int) $comment->user_id) {
+        if ((int)$viewer->id === (int)$comment->user_id) {
             return true;
         }
 
-        return (string) $comment->commentable_type === 'user'
-            && (int) $viewer->id === (int) $comment->content_id;
+        return (string)$comment->commentable_type === 'user'
+            && (int)$viewer->id === (int)$comment->content_id;
     }
 
     private function commentTreeIds(Comment $comment): Collection
     {
-        $ids = collect([(int) $comment->id]);
-        $currentIds = [(int) $comment->id];
+        $ids = collect([(int)$comment->id]);
+        $currentIds = [(int)$comment->id];
 
         while ($currentIds !== []) {
             $childIds = Comment::query()
                 ->whereIn('parent_id', $currentIds)
                 ->pluck('id')
-                ->map(fn (int|string $id): int => (int) $id)
+                ->map(fn(int|string $id): int => (int)$id)
                 ->all();
 
             $childIds = array_values(array_diff($childIds, $ids->all()));
@@ -535,39 +536,39 @@ class ProfileRepository extends BaseRepository
     {
         return $profile->occupations
             ->where('kind', $kind)
-            ->map(fn ($row): array => [
-                'name' => (string) $row->name,
-                'description' => (string) $row->description,
+            ->map(fn($row): array => [
+                'name' => (string)$row->name,
+                'description' => (string)$row->description,
                 'period' => trim(implode(' - ', array_filter([
-                    trim((string) $row->month_start . ' ' . (string) $row->year_start),
-                    trim((string) $row->month_finish . ' ' . (string) $row->year_finish),
+                    trim((string)$row->month_start . ' ' . (string)$row->year_start),
+                    trim((string)$row->month_finish . ' ' . (string)$row->year_finish),
                 ]))),
             ])
-            ->filter(fn (array $row): bool => $row['name'] !== '')
+            ->filter(fn(array $row): bool => $row['name'] !== '')
             ->values();
     }
 
     private function serializeAttachment(Attachment $attachment): ?array
     {
-        if (! $attachment->photo) {
+        if (!$attachment->photo) {
             return null;
         }
 
         $url = FrontAssets::photoGallery($attachment->photo);
 
-        if (! $url) {
+        if (!$url) {
             return null;
         }
 
         return [
-            'photo_id' => (int) $attachment->photo->id,
+            'photo_id' => (int)$attachment->photo->id,
             'url' => $url,
         ];
     }
 
     private function permissionAllows(mixed $permission, bool $isOwnPage, bool $isFriend): bool
     {
-        return match ((int) ($permission ?? 0)) {
+        return match ((int)($permission ?? 0)) {
             1 => $isOwnPage || $isFriend,
             2 => $isOwnPage,
             default => true,
@@ -580,14 +581,14 @@ class ProfileRepository extends BaseRepository
             $attach = explode(',', $attach);
         }
 
-        if (! is_array($attach)) {
+        if (!is_array($attach)) {
             return [];
         }
 
         return collect($attach)
-            ->flatMap(fn ($value): array => is_array($value) ? $value : [$value])
-            ->map(fn ($value): int => (int) $value)
-            ->filter(fn (int $id): bool => $id > 0)
+            ->flatMap(fn($value): array => is_array($value) ? $value : [$value])
+            ->map(fn($value): int => (int)$value)
+            ->filter(fn(int $id): bool => $id > 0)
             ->unique()
             ->values()
             ->all();
@@ -601,7 +602,7 @@ class ProfileRepository extends BaseRepository
         $path = 'images/' . trim($directory, '/') . '/' . $filename;
         $contents = file_get_contents($file->getRealPath());
 
-        if ($contents === false || ! Storage::disk('public')->put($path, $contents)) {
+        if ($contents === false || !Storage::disk('public')->put($path, $contents)) {
             throw new RuntimeException('Не удалось сохранить изображение профиля.');
         }
 
@@ -610,27 +611,27 @@ class ProfileRepository extends BaseRepository
 
     private function promoteTemporaryAvatar(?string $temporaryAvatar, int $userId): ?string
     {
-        if (! $temporaryAvatar) {
+        if (!$temporaryAvatar) {
             return null;
         }
 
         $filename = basename($temporaryAvatar);
 
-        if (! preg_match('/^[A-Za-z0-9_.-]+$/', $filename)) {
+        if (!preg_match('/^[A-Za-z0-9_.-]+$/', $filename)) {
             throw new RuntimeException('Некорректное имя файла аватара.');
         }
 
         $disk = Storage::disk('public');
         $source = 'images/tmp/profile/avatar/' . $filename;
 
-        if (! $disk->exists($source)) {
+        if (!$disk->exists($source)) {
             throw new RuntimeException('Файл аватара не найден.');
         }
 
         $targetFilename = sprintf('%d_%s', $userId, preg_replace('/^\d+_/', '', $filename));
         $target = 'images/user/avatar/' . $targetFilename;
 
-        if (! $disk->copy($source, $target)) {
+        if (!$disk->copy($source, $target)) {
             throw new RuntimeException('Не удалось сохранить аватар.');
         }
 
@@ -649,7 +650,7 @@ class ProfileRepository extends BaseRepository
             default => false,
         };
 
-        if (! $image instanceof \GdImage) {
+        if (!$image instanceof \GdImage) {
             throw new RuntimeException('Неверный формат изображения.');
         }
 
@@ -660,12 +661,12 @@ class ProfileRepository extends BaseRepository
 
     private function orientJpeg(\GdImage $image, string $path): \GdImage
     {
-        if (! function_exists('exif_read_data')) {
+        if (!function_exists('exif_read_data')) {
             return $image;
         }
 
         $exif = @exif_read_data($path);
-        $orientation = is_array($exif) ? (int) ($exif['Orientation'] ?? 0) : 0;
+        $orientation = is_array($exif) ? (int)($exif['Orientation'] ?? 0) : 0;
         $rotated = match ($orientation) {
             3 => imagerotate($image, 180, 0),
             6 => imagerotate($image, -90, 0),
@@ -673,7 +674,7 @@ class ProfileRepository extends BaseRepository
             default => false,
         };
 
-        if (! $rotated instanceof \GdImage) {
+        if (!$rotated instanceof \GdImage) {
             return $image;
         }
 
@@ -684,7 +685,7 @@ class ProfileRepository extends BaseRepository
 
     private function deleteUserImage(string $directory, ?string $filename): void
     {
-        if (! $filename) {
+        if (!$filename) {
             return;
         }
 

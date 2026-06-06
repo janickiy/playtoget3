@@ -34,7 +34,7 @@ class HomeController extends Controller
         return match ($task) {
             'ajax_action' => redirect('/ajax/' . $request->query('action', 'index')),
             'news' => redirect()->route('front.news.index'),
-            'profile' => redirect()->route('front.profile.show', ['user' => $request->query('user_id')]),
+            'profile' => $this->redirectLegacyProfile($request, $actions),
             'playgrounds' => $request->filled('id_sport_block')
                 ? redirect()->route('front.playgrounds.index', ['sportBlock' => $request->query('id_sport_block')])
                 : redirect()->route('front.playgrounds.index'),
@@ -84,6 +84,22 @@ class HomeController extends Controller
         }
 
         return redirect()->route('front.events.show', ['event' => $request->query('event_id')]);
+    }
+
+    private function redirectLegacyProfile(Request $request, array $actions): RedirectResponse
+    {
+        if ($this->hasLegacyAction($actions, 'messages') && $request->filled('sel')) {
+            return redirect()->route('front.profile.messages.show', [
+                'user' => $request->query('user_id'),
+                'recipient' => $request->query('sel'),
+            ]);
+        }
+
+        if ($this->hasLegacyAction($actions, 'dialogues')) {
+            return redirect()->route('front.profile.messages.index', ['user' => $request->query('user_id')]);
+        }
+
+        return redirect()->route('front.profile.show', ['user' => $request->query('user_id')]);
     }
 
     private function redirectLegacyPhotoalbums(Request $request, array $actions): RedirectResponse

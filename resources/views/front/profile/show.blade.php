@@ -20,10 +20,10 @@
                     <textarea id="comment" name="comment" data-num="{{ $profileUser->id }}" class="ahref_input" placeholder="Что у Вас интересного?"></textarea>
                     <div class="smile-files">
                         <a id="smilesBtn" class="smile smilesBtn" data-num="{{ $profileUser->id }}">
-                            <img src="{{ asset('templates/images/smile.png') }}" alt="">
+                            <img src="{{ asset('frontend/images/smile.png') }}" alt="">
                         </a>
                         <a href="#" class="files" data-num="{{ $profileUser->id }}" data-tooltip="Прикрепить изображение">
-                            <img src="{{ asset('templates/images/files.png') }}" alt="">
+                            <img src="{{ asset('frontend/images/files.png') }}" alt="">
                         </a>
                         <div class="smilesChoose" data-num="{{ $profileUser->id }}"></div>
                     </div>
@@ -59,6 +59,6 @@
         window.profileCommentsEndpoint = '{{ route('front.ajax.handle', ['action' => 'getcomments']) }}';
         window.profileCommentsHasMore = {{ $hasMoreComments ? 'true' : 'false' }};
     </script>
-    <script src="{{ asset('templates/js/autoresize.js') }}"></script>
-    <script src="{{ asset('templates/js/profile.js') }}"></script>
+    <script src="{{ asset('frontend/js/autoresize.js') }}"></script>
+    <script src="{{ asset('frontend/js/profile.js') }}"></script>
 @endpush

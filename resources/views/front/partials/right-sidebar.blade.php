@@ -1,5 +1,5 @@
 @php use App\Helpers\FrontAssets; @endphp
-<script src="{{ asset('templates/js/jquery.sticky-kit.min.js') }}"></script>
+<script src="{{ asset('frontend/js/jquery.sticky-kit.min.js') }}"></script>
 <div class="right-sitebar">
     <ul>
         <li>

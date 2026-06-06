@@ -7,21 +7,21 @@
     <meta name="description" content="Мы первый спортивный интернет-ресурс, объединивший приверженцев здорового образа жизни, любителей спорта и профессиональных спортсменов.">
     <title>{{ $title ?? 'PlayToGet' }}</title>
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
-    <link rel="stylesheet" href="{{ asset('templates/css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('templates/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('templates/css/responsive.css') }}">
-    <link rel="stylesheet" href="{{ asset('templates/css/max-width-1440.css') }}" media="(max-width: 1440px)">
-    <link rel="stylesheet" href="{{ asset('templates/css/max-width-1190.css') }}" media="(max-width: 1190px)">
-    <link rel="stylesheet" href="{{ asset('templates/css/max-width-960.css') }}" media="(max-width: 960px)">
-    <link rel="stylesheet" href="{{ asset('templates/css/max-width-768.css') }}" media="(max-width: 768px)">
-    <link rel="stylesheet" href="{{ asset('templates/css/max-width-640.css') }}" media="(max-width: 640px)">
-    <link rel="stylesheet" href="{{ asset('templates/css/max-width-480.css') }}" media="(max-width: 480px)">
-    <link rel="stylesheet" href="{{ asset('templates/css/max-width-390.css') }}" media="(max-width: 390px)">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/max-width-1440.css') }}" media="(max-width: 1440px)">
+    <link rel="stylesheet" href="{{ asset('frontend/css/max-width-1190.css') }}" media="(max-width: 1190px)">
+    <link rel="stylesheet" href="{{ asset('frontend/css/max-width-960.css') }}" media="(max-width: 960px)">
+    <link rel="stylesheet" href="{{ asset('frontend/css/max-width-768.css') }}" media="(max-width: 768px)">
+    <link rel="stylesheet" href="{{ asset('frontend/css/max-width-640.css') }}" media="(max-width: 640px)">
+    <link rel="stylesheet" href="{{ asset('frontend/css/max-width-480.css') }}" media="(max-width: 480px)">
+    <link rel="stylesheet" href="{{ asset('frontend/css/max-width-390.css') }}" media="(max-width: 390px)">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800&subset=latin,cyrillic" rel="stylesheet" type="text/css">
-    <script src="{{ asset('templates/js/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('templates/js/jquery-migrate-3.5.2.min.js') }}"></script>
-    <script src="{{ asset('templates/js/jquery.validate.min.js') }}"></script>
-    <script src="{{ asset('templates/js/main_page.js') }}"></script>
+    <script src="{{ asset('frontend/js/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('frontend/js/jquery-migrate-3.5.2.min.js') }}"></script>
+    <script src="{{ asset('frontend/js/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('frontend/js/main_page.js') }}"></script>
 </head>
 <body class="index-registration-body rel">
 <div class="wrapper-backgrounded">
@@ -34,7 +34,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <a href="{{ route('front.home') }}" class="entrance-logo">
-                                        <img src="{{ asset('templates/images/logo-main.png') }}" alt="playtoget-logo">
+                                        <img src="{{ asset('frontend/images/logo-main.png') }}" alt="playtoget-logo">
                                     </a>
                                     <div class="col-md-6 col-md-offset-3"><hr></div>
                                     <div class="col-md-8 col-md-offset-2">
@@ -44,22 +44,22 @@
                                     </div>
                                     <div class="col-md-12 cols">
                                         <div class="col-md-3">
-                                            <img src="{{ asset('templates/images/teams.png') }}" alt="">
+                                            <img src="{{ asset('frontend/images/teams.png') }}" alt="">
                                             <h3>создавай и находи команды</h3>
                                             <p>Устраивай соревнования, ищи противников и приглашай болельщиков</p>
                                         </div>
                                         <div class="col-md-3">
-                                            <img src="{{ asset('templates/images/child.png') }}" alt="">
+                                            <img src="{{ asset('frontend/images/child.png') }}" alt="">
                                             <h3>принимай участие</h3>
                                             <p>Следи за спортивными мероприятиями твоего города вместе с друзьями</p>
                                         </div>
                                         <div class="col-md-3">
-                                            <img src="{{ asset('templates/images/master.png') }}" alt="">
+                                            <img src="{{ asset('frontend/images/master.png') }}" alt="">
                                             <h3>повышай мастерство</h3>
                                             <p>Находи наставников, получай советы и делись опытом</p>
                                         </div>
                                         <div class="col-md-3">
-                                            <img src="{{ asset('templates/images/kurs.png') }}" alt="">
+                                            <img src="{{ asset('frontend/images/kurs.png') }}" alt="">
                                             <h3>будь в курсе</h3>
                                             <p>Общайся с единомышленниками, получай фото- и видеорепортажи</p>
                                         </div>

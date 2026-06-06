@@ -57,7 +57,7 @@ class NewsInfiniteScrollTest extends TestCase
     {
         $items = collect(range(1, 6))->map(fn (int $id): array => [
             'author_id' => $id,
-            'avatar' => '/templates/images/no-avatar.png',
+            'avatar' => '/frontend/images/no-avatar.png',
             'author_name' => 'User ' . $id,
             'online' => false,
             'date' => '05.06.2026',

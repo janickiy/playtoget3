@@ -6,7 +6,7 @@
     $lastname = $friend->firstname ? (string) $friend->lastname : '';
     $city = $friend->city;
     $messageUrl = $viewer
-        ? route('front.profile.show', ['user' => $viewer->id]) . '?q=messages&sel=' . $friend->id
+        ? route('front.profile.messages.show', ['user' => $viewer->id, 'recipient' => $friend->id])
         : $profileUrl;
 @endphp
 
@@ -32,12 +32,12 @@
         <div class="control">
             <span>
                 <a onclick="add_as_friend({{ $friend->id }});" data-tooltip="Добавить в друзья">
-                    <img src="{{ asset('templates/images/icon-ok.png') }}" alt="">
+                    <img src="{{ asset('frontend/images/icon-ok.png') }}" alt="">
                 </a>
             </span>
             <span>
                 <img
-                    src="{{ asset('templates/images/icon-krest.png') }}"
+                    src="{{ asset('frontend/images/icon-krest.png') }}"
                     alt=""
                     class="js-hide-possible-friend"
                     data-num="{{ $friend->id }}"
@@ -50,7 +50,7 @@
             <span></span>
             <span>
                 <a onclick="remove_friend({{ $friend->id }});" data-tooltip="Удалить из друзей">
-                    <img src="{{ asset('templates/images/icon-krest.png') }}" alt="">
+                    <img src="{{ asset('frontend/images/icon-krest.png') }}" alt="">
                 </a>
             </span>
         </div>
@@ -58,7 +58,7 @@
         <div class="control">
             <span>
                 <a onclick="accept_friendship({{ $friend->id }});" data-tooltip="Принять заявку">
-                    <img src="{{ asset('templates/images/icon-ok.png') }}" alt="">
+                    <img src="{{ asset('frontend/images/icon-ok.png') }}" alt="">
                 </a>
             </span>
             <span></span>

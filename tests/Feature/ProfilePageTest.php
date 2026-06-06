@@ -85,9 +85,9 @@ class ProfilePageTest extends TestCase
             ->assertSee('Кто может писать мне сообщения')
             ->assertSee('Заявки в друзья')
             ->assertSee('Дмитрий Панкратов')
-            ->assertSee('templates/css/jquery.Jcrop.css', false)
-            ->assertSee('templates/js/jquery.Jcrop.min.js', false)
-            ->assertSee('templates/js/profile-settings.js', false);
+            ->assertSee('frontend/css/jquery.Jcrop.css', false)
+            ->assertSee('frontend/js/jquery.Jcrop.min.js', false)
+            ->assertSee('frontend/js/profile-settings.js', false);
     }
 
     public function test_profile_edit_post_passes_settings_to_repository(): void
@@ -208,7 +208,7 @@ class ProfilePageTest extends TestCase
             $mock->shouldReceive('profile')->with(2)->andReturn($profile);
             $mock->shouldReceive('profileData')->with($profile)->andReturn([
                 'avatar' => 'http://site3.local/uploads/images/user/avatar/profile.jpg',
-                'cover' => 'http://site3.local/templates/images/content-bg.png',
+                'cover' => 'http://site3.local/frontend/images/content-bg.png',
                 'firstname' => 'Дмитрий',
                 'lastname' => 'Панкратов',
                 'secondname' => 'ebgik',
@@ -262,6 +262,7 @@ class ProfilePageTest extends TestCase
             ->assertSee('Панкратов')
             ->assertSee('(ebgik)')
             ->assertSee('Написать <span>сообщение</span>', false)
+            ->assertSee('/profile/1/messages/user/2', false)
             ->assertSee('Удалить<span> друга</span>', false)
             ->assertSee('id="remove_friend" data-item="2"', false)
             ->assertSee('Заблокировать')
@@ -278,13 +279,13 @@ class ProfilePageTest extends TestCase
             ->assertSee('<div class="link_attach" data-num="2"></div>', false)
             ->assertSee('<div class="files_block" data-num="2"></div>', false)
             ->assertDontSee('class="send" value="Отправить"', false)
-            ->assertSee('templates/js/profile.js', false);
+            ->assertSee('frontend/js/profile.js', false);
     }
 
     public function test_wall_attachment_script_uses_laravel_ajax_endpoint(): void
     {
-        $script = file_get_contents(public_path('templates/js/emotions.js'));
-        $commonScript = file_get_contents(public_path('templates/js/script_all.js'));
+        $script = file_get_contents(public_path('frontend/js/emotions.js'));
+        $commonScript = file_get_contents(public_path('frontend/js/script_all.js'));
 
         $this->assertStringContainsString("formData.append('_token', token);", $script);
         $this->assertStringContainsString("url: '/ajax/add_photo_ajax_attach'", $script);

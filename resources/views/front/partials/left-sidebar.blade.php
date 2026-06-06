@@ -2,7 +2,7 @@
 <div class="left-sitebar">
     <ul>
         <li>
-            <img src="{{ asset('templates/images/left-sitebar.png') }}" alt="">
+            <img src="{{ asset('frontend/images/left-sitebar.png') }}" alt="">
             <a href="#">рекомендует</a>
             <ul class="sub-menu">
                 <li>

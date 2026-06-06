@@ -36,8 +36,9 @@ class FriendsPageTest extends TestCase
             ->assertSee('Мария')
             ->assertSee('Иван')
             ->assertSee('/ajax', false)
+            ->assertSee('/profile/1/messages/user/2', false)
             ->assertSee('показать ещё')
-            ->assertSee('templates/js/friends.js', false);
+            ->assertSee('frontend/js/friends.js', false);
     }
 
     private function user(int $id, string $firstname, string $lastname, ?string $city = null): User

@@ -12,6 +12,7 @@ use App\Models\Share;
 use App\Models\SportType;
 use App\Models\User;
 use App\Repositories\FriendRepository;
+use App\Repositories\MessageRepository;
 use App\Repositories\NewsRepository;
 use App\Repositories\ProfileRepository;
 use App\Repositories\UserRepository;
@@ -24,11 +25,13 @@ use Illuminate\Support\Str;
 class AjaxController extends Controller
 {
     public function __construct(
-        private readonly NewsRepository $news,
-        private readonly FriendRepository $friends,
-        private readonly UserRepository $users,
+        private readonly NewsRepository    $news,
+        private readonly FriendRepository  $friends,
+        private readonly UserRepository    $users,
         private readonly ProfileRepository $profiles,
-    ) {
+        private readonly MessageRepository $messages,
+    )
+    {
     }
 
     public function handle(Request $request, string $action): JsonResponse
@@ -48,6 +51,11 @@ class AjaxController extends Controller
             'uploadavatar' => $this->uploadAvatar($request),
             'addcomment' => $this->addComment($request),
             'removecomment' => $this->removeComment($request),
+            'addmessage' => $this->addMessage($request),
+            'getmessages' => $this->getMessages($request),
+            'get_new_messages' => $this->getNewMessages($request),
+            'remove_message' => $this->removeMessage($request),
+            'remove_dialog' => $this->removeDialog($request),
             'liked' => $this->liked($request),
             'shared' => $this->shared($request),
             'search_city' => $this->searchCity($request),
@@ -62,8 +70,8 @@ class AjaxController extends Controller
 
     private function getUserNewsList(Request $request): JsonResponse
     {
-        $limit = min(max((int) $request->input('number', 5), 1), 25);
-        $offset = max((int) $request->input('offset', 0), 0);
+        $limit = min(max((int)$request->input('number', 5), 1), 25);
+        $offset = max((int)$request->input('offset', 0), 0);
         $news = $this->news->feedPage($limit, $offset);
         $hasMore = $this->news->feedPage($limit, $offset + $limit)->isNotEmpty();
 
@@ -79,11 +87,11 @@ class AjaxController extends Controller
     {
         $viewer = $this->viewer();
 
-        if (! $viewer) {
+        if (!$viewer) {
             return response()->json(['item' => []], 401);
         }
 
-        $limit = min(max((int) $request->input('number', 6), 1), 24);
+        $limit = min(max((int)$request->input('number', 6), 1), 24);
         $users = $this->friends->possibleFriendsFor($viewer->id, $limit);
 
         return response()->json([
@@ -95,13 +103,13 @@ class AjaxController extends Controller
     {
         $viewer = $this->viewer();
 
-        if (! $viewer) {
+        if (!$viewer) {
             return response()->json(['item' => []], 401);
         }
 
-        $limit = min(max((int) $request->input('number', 10), 1), 24);
-        $offset = max((int) $request->input('offset', 0), 0);
-        $userId = (int) $request->input('user_id', $viewer->id);
+        $limit = min(max((int)$request->input('number', 10), 1), 24);
+        $offset = max((int)$request->input('offset', 0), 0);
+        $userId = (int)$request->input('user_id', $viewer->id);
         $users = $this->friends->friendsFor($userId, $limit, $offset);
 
         return response()->json([
@@ -112,9 +120,9 @@ class AjaxController extends Controller
     private function addAsFriend(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
-        $friendId = (int) $request->input('user_id');
+        $friendId = (int)$request->input('user_id');
 
-        if (! $viewer || $friendId < 1 || ! $this->users->findActive($friendId)) {
+        if (!$viewer || $friendId < 1 || !$this->users->findActive($friendId)) {
             return response()->json(['status' => null], 422);
         }
 
@@ -126,9 +134,9 @@ class AjaxController extends Controller
     private function acceptFriendship(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
-        $friendId = (int) $request->input('user_id');
+        $friendId = (int)$request->input('user_id');
 
-        if (! $viewer || $friendId < 1 || ! $this->users->findActive($friendId)) {
+        if (!$viewer || $friendId < 1 || !$this->users->findActive($friendId)) {
             return response()->json(['status' => null], 422);
         }
 
@@ -140,9 +148,9 @@ class AjaxController extends Controller
     private function removeFriend(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
-        $friendId = (int) $request->input('user_id');
+        $friendId = (int)$request->input('user_id');
 
-        if (! $viewer || $friendId < 1) {
+        if (!$viewer || $friendId < 1) {
             return response()->json(['status' => null, 'result' => ''], 422);
         }
 
@@ -157,9 +165,9 @@ class AjaxController extends Controller
     private function blockUser(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
-        $friendId = (int) $request->input('user_id');
+        $friendId = (int)$request->input('user_id');
 
-        if (! $viewer || $friendId < 1 || ! $this->users->findActive($friendId)) {
+        if (!$viewer || $friendId < 1 || !$this->users->findActive($friendId)) {
             return response()->json(['status' => null, 'result' => ''], 422);
         }
 
@@ -174,9 +182,9 @@ class AjaxController extends Controller
     private function unblockUser(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
-        $friendId = (int) $request->input('user_id');
+        $friendId = (int)$request->input('user_id');
 
-        if (! $viewer || $friendId < 1) {
+        if (!$viewer || $friendId < 1) {
             return response()->json(['status' => null, 'result' => ''], 422);
         }
 
@@ -191,12 +199,12 @@ class AjaxController extends Controller
     private function getComments(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
-        $type = (string) $request->input('commentable_type', 'user');
-        $profileId = (int) $request->input('id', $request->input('content_id', 0));
-        $limit = min(max((int) $request->input('number', 10), 1), 25);
-        $offset = max((int) $request->input('offset', 0), 0);
+        $type = (string)$request->input('commentable_type', 'user');
+        $profileId = (int)$request->input('id', $request->input('content_id', 0));
+        $limit = min(max((int)$request->input('number', 10), 1), 25);
+        $offset = max((int)$request->input('offset', 0), 0);
 
-        if (! in_array($type, ['user', 'photo'], true) || $profileId < 1) {
+        if (!in_array($type, ['user', 'photo'], true) || $profileId < 1) {
             return response()->json(['status' => 0, 'html' => '', 'count' => 0, 'has_more' => false]);
         }
 
@@ -215,7 +223,7 @@ class AjaxController extends Controller
 
     private function getPhotoInfo(Request $request): JsonResponse
     {
-        $photoId = (int) $request->input('photo_id', $request->input('id', 0));
+        $photoId = (int)$request->input('photo_id', $request->input('id', 0));
 
         if ($photoId < 1) {
             return response()->json(['status' => 0]);
@@ -228,13 +236,13 @@ class AjaxController extends Controller
             ->where('banned', false)
             ->first();
 
-        if (! $photo) {
+        if (!$photo) {
             return response()->json(['status' => 0]);
         }
 
         $photoUrl = FrontAssets::photoGallery($photo, 'photo') ?: FrontAssets::photoGallery($photo);
 
-        if (! $photoUrl) {
+        if (!$photoUrl) {
             return response()->json(['status' => 0]);
         }
 
@@ -242,11 +250,11 @@ class AjaxController extends Controller
 
         return response()->json([
             'status' => 1,
-            'owner_id' => (int) ($owner?->id ?? $photo->owner_id),
-            'firstname' => (string) ($owner?->firstname ?? ''),
-            'lastname' => (string) ($owner?->lastname ?? ''),
+            'owner_id' => (int)($owner?->id ?? $photo->owner_id),
+            'firstname' => (string)($owner?->firstname ?? ''),
+            'lastname' => (string)($owner?->lastname ?? ''),
             'created' => $photo->created_at?->format('d.m.Y H:i') ?? '',
-            'description' => (string) $photo->description,
+            'description' => (string)$photo->description,
             'photo' => $photoUrl,
             'liked' => Like::query()
                 ->where('likeable_type', 'photo')
@@ -263,7 +271,7 @@ class AjaxController extends Controller
     {
         $viewer = $this->viewer();
 
-        if (! $viewer) {
+        if (!$viewer) {
             return response()->json(['status' => 0, 'error' => 'Unauthorized'], 401);
         }
 
@@ -273,7 +281,7 @@ class AjaxController extends Controller
 
         $file = $request->file('file');
 
-        if (! $file || ! $file->isValid()) {
+        if (!$file || !$file->isValid()) {
             return response()->json(['status' => 0, 'error' => 'Invalid file'], 422);
         }
 
@@ -299,7 +307,7 @@ class AjaxController extends Controller
         $originalPath = $directory . '/' . $filename;
         $smallPath = $directory . '/' . $smallFilename;
 
-        if (! $disk->put($originalPath, $contents) || ! $disk->put($smallPath, $contents)) {
+        if (!$disk->put($originalPath, $contents) || !$disk->put($smallPath, $contents)) {
             $disk->delete([$originalPath, $smallPath]);
 
             return response()->json(['status' => 0, 'error' => 'File was not saved'], 500);
@@ -318,9 +326,9 @@ class AjaxController extends Controller
 
         return response()->json([
             'status' => 1,
-            'num' => (int) $request->input('num', 0),
+            'num' => (int)$request->input('num', 0),
             'message' => [
-                'id' => (int) $photo->id,
+                'id' => (int)$photo->id,
                 'small_photo' => FrontAssets::photoGallery($photo),
                 'photo' => FrontAssets::photoGallery($photo, 'photo'),
             ],
@@ -331,7 +339,7 @@ class AjaxController extends Controller
     {
         $viewer = $this->viewer();
 
-        if (! $viewer) {
+        if (!$viewer) {
             return response()->json(['result' => 'error', 'error' => 'Unauthorized'], 401);
         }
 
@@ -366,12 +374,12 @@ class AjaxController extends Controller
     private function addComment(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
-        $type = (string) $request->input('commentable_type', 'user');
-        $profileId = (int) $request->input('content_id');
-        $comment = trim((string) $request->input('comment', ''));
+        $type = (string)$request->input('commentable_type', 'user');
+        $profileId = (int)$request->input('content_id');
+        $comment = trim((string)$request->input('comment', ''));
         $attach = $request->input('attach', []);
 
-        if (! $viewer || ! in_array($type, ['user', 'photo'], true) || $profileId < 1 || ($comment === '' && empty($attach))) {
+        if (!$viewer || !in_array($type, ['user', 'photo'], true) || $profileId < 1 || ($comment === '' && empty($attach))) {
             return response()->json([
                 'status' => false,
                 'errors' => ['comment' => 'Заполните комментарий'],
@@ -399,26 +407,121 @@ class AjaxController extends Controller
     private function removeComment(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
-        $commentId = (int) $request->input('id_comment', $request->input('id', 0));
+        $commentId = (int)$request->input('id_comment', $request->input('id', 0));
 
-        if (! $viewer || $commentId < 1) {
+        if (!$viewer || $commentId < 1) {
             return response()->json(['result' => ''], 422);
         }
 
-        if (! $this->profiles->deleteComment($viewer, $commentId)) {
+        if (!$this->profiles->deleteComment($viewer, $commentId)) {
             return response()->json(['result' => ''], 403);
         }
 
         return response()->json(['result' => 'success']);
     }
 
+    private function addMessage(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $receiverId = (int)$request->input('receiver_id');
+        $receiver = $receiverId > 0 ? $this->users->findActive($receiverId) : null;
+        $message = trim((string)$request->input('message', ''));
+        $attach = $request->input('attach', []);
+
+        if (!$viewer || !$receiver) {
+            return response()->json(['status' => 0, 'errors' => ['message' => 'Сообщение не было отправлено']], 422);
+        }
+
+        if ($message === '' && $this->attachmentIds($attach) === []) {
+            return response()->json(['status' => 0, 'errors' => ['message' => 'Введите сообщение']], 422);
+        }
+
+        if (!$this->messages->canSendMessage($viewer, $receiver)) {
+            return response()->json(['status' => 0, 'errors' => ['message' => 'Вы не можете написать сообщение пользователю']], 403);
+        }
+
+        $created = $this->messages->createMessage($viewer, $receiver, $message, $attach);
+
+        return response()->json($this->messages->serializeMessage($created) + [
+            'status' => 1,
+            'count' => $this->messages->unreadCount($viewer),
+        ]);
+    }
+
+    private function getMessages(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $receiverId = (int)$request->input('receiver_id');
+        $receiver = $receiverId > 0 ? $this->users->findActive($receiverId) : null;
+
+        if (!$viewer || !$receiver) {
+            return response()->json(['item' => [], 'has_more' => false], 422);
+        }
+
+        $limit = min(max((int)$request->input('number', 10), 1), 30);
+        $offset = max((int)$request->input('offset', 0), 0);
+
+        return response()->json([
+            'item' => $this->messages->conversation($viewer, $receiver, $limit, $offset)->values(),
+            'has_more' => $this->messages->hasMoreConversation($viewer, $receiver, $limit, $offset),
+            'count' => $this->messages->unreadCount($viewer),
+        ]);
+    }
+
+    private function getNewMessages(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+
+        if (!$viewer) {
+            return response()->json(['item' => [], 'count' => 0], 401);
+        }
+
+        $receiverId = (int)$request->input('receiver_id');
+        $receiver = $receiverId > 0 ? $this->users->findActive($receiverId) : null;
+        $lastId = max((int)$request->input('last_id', 0), 0);
+
+        return response()->json([
+            'item' => $this->messages->newMessages($viewer, $lastId, $receiver)->values(),
+            'count' => $this->messages->unreadCount($viewer),
+        ]);
+    }
+
+    private function removeMessage(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $messageId = (int)$request->input('id', $request->input('message_id', 0));
+
+        if (!$viewer || $messageId < 1) {
+            return response()->json(['result' => 'error'], 422);
+        }
+
+        return response()->json([
+            'result' => $this->messages->deleteMessageFor($viewer, $messageId) ? 'success' : 'error',
+        ]);
+    }
+
+    private function removeDialog(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $partnerId = (int)$request->input('user_id', $request->input('receiver_id', 0));
+        $partner = $partnerId > 0 ? $this->users->findActive($partnerId) : null;
+
+        if (!$viewer || !$partner) {
+            return response()->json(['result' => 'error'], 422);
+        }
+
+        return response()->json([
+            'result' => $this->messages->deleteDialogFor($viewer, $partner) ? 'success' : 'error',
+        ]);
+    }
+
     private function liked(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
-        $contentId = (int) $request->input('id');
-        $type = (string) $request->input('likeable_type', 'comment');
+        $contentId = (int)$request->input('id');
+        $type = (string)$request->input('likeable_type', 'comment');
 
-        if (! $viewer || $contentId < 1 || $type === '') {
+        if (!$viewer || $contentId < 1 || $type === '') {
             return response()->json(['result' => ''], 422);
         }
 
@@ -449,10 +552,10 @@ class AjaxController extends Controller
     private function shared(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
-        $contentId = (int) $request->input('id');
-        $type = (string) $request->input('shareable_type', 'comment');
+        $contentId = (int)$request->input('id');
+        $type = (string)$request->input('shareable_type', 'comment');
 
-        if (! $viewer || $contentId < 1 || $type === '') {
+        if (!$viewer || $contentId < 1 || $type === '') {
             return response()->json(['result' => ''], 422);
         }
 
@@ -474,7 +577,7 @@ class AjaxController extends Controller
 
     private function searchCity(Request $request): JsonResponse
     {
-        $city = trim((string) $request->query('city', ''));
+        $city = trim((string)$request->query('city', ''));
 
         if ($city === '') {
             return response()->json(['item' => []]);
@@ -490,7 +593,7 @@ class AjaxController extends Controller
             ->orderBy('name_ru')
             ->limit(10)
             ->get(['id', 'name_ru'])
-            ->map(fn (GeoCity $city): array => [
+            ->map(fn(GeoCity $city): array => [
                 'id' => $city->id,
                 'name' => $city->name_ru,
             ]);
@@ -500,7 +603,7 @@ class AjaxController extends Controller
 
     private function searchSportTypes(Request $request): JsonResponse
     {
-        $sportTypes = trim((string) $request->query('sport_types', ''));
+        $sportTypes = trim((string)$request->query('sport_types', ''));
 
         if ($sportTypes === '') {
             return response()->json(['item' => []]);
@@ -511,7 +614,7 @@ class AjaxController extends Controller
             ->orderBy('name')
             ->limit(10)
             ->get(['id', 'name'])
-            ->map(fn (SportType $sportType): array => [
+            ->map(fn(SportType $sportType): array => [
                 'id' => $sportType->id,
                 'name' => $sportType->name,
             ]);
@@ -525,5 +628,24 @@ class AjaxController extends Controller
         $user = Auth::guard('web')->user();
 
         return $user;
+    }
+
+    private function attachmentIds(mixed $attach): array
+    {
+        if (is_string($attach)) {
+            $attach = explode(',', $attach);
+        }
+
+        if (!is_array($attach)) {
+            return [];
+        }
+
+        return collect($attach)
+            ->flatMap(fn($value): array => is_array($value) ? $value : [$value])
+            ->map(fn($value): int => (int)$value)
+            ->filter(fn(int $id): bool => $id > 0)
+            ->unique()
+            ->values()
+            ->all();
     }
 }

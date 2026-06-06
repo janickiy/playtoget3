@@ -24,9 +24,9 @@
 @endphp
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('templates/css/jquery-ui-1.8.16.custom.css') }}">
-    <link rel="stylesheet" href="{{ asset('templates/css/jquery.Jcrop.css') }}">
-    <link rel="stylesheet" href="{{ asset('templates/css/profile-settings.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/jquery-ui-1.8.16.custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/jquery.Jcrop.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/profile-settings.css') }}">
 @endpush
 
 @section('content')
@@ -186,7 +186,7 @@
                                         <a class="name" href="{{ $blockedUser['url'] }}">{{ $blockedUser['name'] }}</a>
                                     </div>
                                     <button type="button" class="settings-unblock" onclick="remove_black_list({{ $blockedUser['id'] }})">
-                                        <img src="{{ asset('templates/images/icon-krest.png') }}" alt="">
+                                        <img src="{{ asset('frontend/images/icon-krest.png') }}" alt="">
                                     </button>
                                 </div>
                             @empty
@@ -212,7 +212,7 @@
                     <h3>Загрузка аватара</h3>
                 </div>
                 <div class="loading-bar" id="avatar-crop-loading">
-                    <img border="0" src="{{ asset('templates/images/select2-spinner.gif') }}" width="20" alt="">
+                    <img border="0" src="{{ asset('frontend/images/select2-spinner.gif') }}" width="20" alt="">
                 </div>
                 <div class="file_upload2 avatar-crop-file">
                     <button type="button" id="avatar-select-button">Выберите файл</button>
@@ -239,7 +239,7 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('templates/js/jquery-ui.min.js') }}"></script>
-    <script src="{{ asset('templates/js/jquery.Jcrop.min.js') }}"></script>
-    <script src="{{ asset('templates/js/profile-settings.js') }}"></script>
+    <script src="{{ asset('frontend/js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('frontend/js/jquery.Jcrop.min.js') }}"></script>
+    <script src="{{ asset('frontend/js/profile-settings.js') }}"></script>
 @endpush

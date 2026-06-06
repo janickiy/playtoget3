@@ -25,6 +25,12 @@ Route::post('front/logout', [FrontAuthController::class, 'logout'])->name('front
 Route::get('news', [NewsController::class, 'index'])->name('front.news.index');
 Route::get('profile/edit', [ProfileController::class, 'edit'])->name('front.profile.edit');
 Route::post('profile/edit', [ProfileController::class, 'update'])->name('front.profile.update');
+Route::get('profile/{user}/messages/user/{recipient}', [ProfileController::class, 'messages'])
+    ->where(['user' => '[0-9]+', 'recipient' => '[0-9]+'])
+    ->name('front.profile.messages.show');
+Route::get('profile/{user}/messages', [ProfileController::class, 'dialogues'])
+    ->where('user', '[0-9]+')
+    ->name('front.profile.messages.index');
 Route::get('profile/{user}', [ProfileController::class, 'show'])->where('user', '[0-9]+')->name('front.profile.show');
 
 Route::get('playgrounds/{sportBlock?}', [PlaygroundsController::class, 'index'])

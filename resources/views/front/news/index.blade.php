@@ -33,7 +33,7 @@
                 return;
             }
 
-            const spinner = '{{ asset('templates/images/select2-spinner.gif') }}';
+            const spinner = '{{ asset('frontend/images/select2-spinner.gif') }}';
             const csrfToken = '{{ csrf_token() }}';
             let isLoading = false;
             let hasMore = Number($list.data('has-more')) === 1;

@@ -13,14 +13,14 @@ class FrontAssets
     public static function userAvatar(?User $user): string
     {
         if (! $user || $user->banned || $user->deleted) {
-            return asset('templates/images/noimage.png');
+            return asset('frontend/images/noimage.png');
         }
 
         if ($user->avatar && ($url = self::publicImageUrl('user/avatar/' . $user->avatar))) {
             return $url;
         }
 
-        return asset($user->sex === 'female' ? 'templates/images/default_female.png' : 'templates/images/default_male.png');
+        return asset($user->sex === 'female' ? 'frontend/images/default_female.png' : 'frontend/images/default_male.png');
     }
 
     public static function userCover(?User $user): string
@@ -29,7 +29,7 @@ class FrontAssets
             return $url;
         }
 
-        return asset('templates/images/content-bg.png');
+        return asset('frontend/images/content-bg.png');
     }
 
     public static function eventCover(?Event $event): string
@@ -38,7 +38,7 @@ class FrontAssets
             return $url;
         }
 
-        return asset('templates/images/content-bg.png');
+        return asset('frontend/images/content-bg.png');
     }
 
     public static function sportBlockAvatar(?SportBlock $sportBlock): string
@@ -47,7 +47,7 @@ class FrontAssets
             return $url;
         }
 
-        return asset('templates/images/noimage.png');
+        return asset('frontend/images/noimage.png');
     }
 
     public static function photoGallery(?Photo $photo, string $field = 'small_photo'): ?string

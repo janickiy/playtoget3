@@ -2,14 +2,14 @@
     $viewer = $frontLayout['user'] ?? null;
 @endphp
 
-<script src="{{ asset('templates/js/photoalbum.js') }}"></script>
+<script src="{{ asset('frontend/js/photoalbum.js') }}"></script>
 <div class="overlay" id="photo_big">
     <div class="overlay-back back_one">Закрыть</div>
     <div class="prev">Предыдущая</div>
     <div class="photo_big_wrap">
         <input type="hidden" id="owner_id">
         <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" class="photo_wrap next" alt="">
-        <div class="loading-bar"><img border="0" src="{{ asset('templates/images/select2-spinner.gif') }}" width="20" alt=""></div>
+        <div class="loading-bar"><img border="0" src="{{ asset('frontend/images/select2-spinner.gif') }}" width="20" alt=""></div>
         <div class="text">
             <div class="message">
                 <div class="text-block" id="name_foto">
@@ -45,8 +45,8 @@
                             <textarea class="form-control form-dark" id="comment" rows="4" name="comment" data-num="0"></textarea>
                         </div>
                         <div class="smile-files">
-                            <a id="smilesBtn" class="smile smilesBtn" data-num="0"><img src="{{ asset('templates/images/smile.png') }}" alt=""></a>
-                            <a href="#" class="files" data-num="0" data-tooltip="Прикрепить изображение"><img src="{{ asset('templates/images/files.png') }}" alt=""></a>
+                            <a id="smilesBtn" class="smile smilesBtn" data-num="0"><img src="{{ asset('frontend/images/smile.png') }}" alt=""></a>
+                            <a href="#" class="files" data-num="0" data-tooltip="Прикрепить изображение"><img src="{{ asset('frontend/images/files.png') }}" alt=""></a>
                             <div class="smilesChoose" data-num="0"></div>
                         </div>
                         <div class="files_block" data-num="0"></div>

@@ -15,7 +15,7 @@ class AuthController extends Controller
     {
         $user = $users->findForLogin($request->email());
 
-        if (! $user) {
+        if (!$user) {
             return back()
                 ->withInput($request->only('username'))
                 ->withErrors(['username' => 'Пользователь не найден или доступ к аккаунту ограничен.']);
@@ -25,7 +25,7 @@ class AuthController extends Controller
             $users->replacePassword($user, Hash::make($request->password()));
 
             $user->refresh();
-        } elseif (! $users->passwordUsesBcrypt($user) || ! Hash::check($request->password(), $user->password)) {
+        } elseif (!$users->passwordUsesBcrypt($user) || !Hash::check($request->password(), $user->password)) {
             return back()
                 ->withInput($request->only('username'))
                 ->withErrors(['username' => 'Неверный email или пароль.']);

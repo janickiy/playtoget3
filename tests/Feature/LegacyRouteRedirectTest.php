@@ -11,6 +11,8 @@ class LegacyRouteRedirectTest extends TestCase
         $cases = [
             '/?task=news' => '/news',
             '/?task=profile&user_id=1' => '/profile/1',
+            '/?task=profile&user_id=1&q=messages&sel=2' => '/profile/1/messages/user/2',
+            '/?task=profile&user_id=1&q=dialogues' => '/profile/1/messages',
             '/?task=playgrounds' => '/playgrounds',
             '/?task=playgrounds&id_sport_block=17' => '/playgrounds/17',
             '/?task=shops' => '/shops',

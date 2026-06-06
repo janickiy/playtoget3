@@ -369,14 +369,14 @@ class NewsRepository extends BaseRepository
     private function userAvatar(object $row): string
     {
         if ((bool) $row->banned || (bool) $row->deleted) {
-            return asset('templates/images/noimage.png');
+            return asset('frontend/images/noimage.png');
         }
 
         if ($row->avatar && ($url = $this->publicImageUrl('user/avatar/' . $row->avatar))) {
             return $url;
         }
 
-        return asset($row->sex === 'female' ? 'templates/images/default_female.png' : 'templates/images/default_male.png');
+        return asset($row->sex === 'female' ? 'frontend/images/default_female.png' : 'frontend/images/default_male.png');
     }
 
     private function ownerName(object $row): string
@@ -389,14 +389,14 @@ class NewsRepository extends BaseRepository
     private function ownerAvatar(object $row): string
     {
         if ((bool) $row->owner_banned || (bool) $row->owner_deleted) {
-            return asset('templates/images/noimage.png');
+            return asset('frontend/images/noimage.png');
         }
 
         if ($row->owner_avatar && ($url = $this->publicImageUrl('user/avatar/' . $row->owner_avatar))) {
             return $url;
         }
 
-        return asset($row->owner_sex === 'female' ? 'templates/images/default_female.png' : 'templates/images/default_male.png');
+        return asset($row->owner_sex === 'female' ? 'frontend/images/default_female.png' : 'frontend/images/default_male.png');
     }
 
     private function safeText(string $value): string
@@ -434,7 +434,7 @@ class NewsRepository extends BaseRepository
     private function photoUrl(?string $file, ?string $type): string
     {
         if (! $file) {
-            return asset('templates/images/noimage.png');
+            return asset('frontend/images/noimage.png');
         }
 
         $type = $type ?: 'user';
@@ -450,7 +450,7 @@ class NewsRepository extends BaseRepository
             }
         }
 
-        return asset('templates/images/noimage.png');
+        return asset('frontend/images/noimage.png');
     }
 
     private function publicImageUrl(string $path): ?string
@@ -468,7 +468,7 @@ class NewsRepository extends BaseRepository
             return 'https://img.youtube.com/vi/' . rawurlencode($video) . '/hqdefault.jpg';
         }
 
-        return asset('templates/images/noimage.png');
+        return asset('frontend/images/noimage.png');
     }
 
     private function russianDate(Carbon $date): string

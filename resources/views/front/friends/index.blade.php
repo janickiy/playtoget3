@@ -6,12 +6,12 @@
         data-ajax-base="{{ url('/ajax') }}"
         data-csrf="{{ csrf_token() }}"
         data-profile-base="{{ url('/profile') }}"
-        data-message-base="{{ $viewer ? route('front.profile.show', ['user' => $viewer->id]) : url('/profile/' . $targetUser->id) }}"
-        data-icon-ok="{{ asset('templates/images/icon-ok.png') }}"
-        data-icon-remove="{{ asset('templates/images/icon-krest.png') }}"
+        data-message-base="{{ $viewer ? url('/profile/' . $viewer->id . '/messages/user') : url('/profile/' . $targetUser->id) }}"
+        data-icon-ok="{{ asset('frontend/images/icon-ok.png') }}"
+        data-icon-remove="{{ asset('frontend/images/icon-krest.png') }}"
     >
         @if ($isOwnPage && $possibleFriends->isNotEmpty())
-            <link rel="stylesheet" type="text/css" href="{{ asset('templates/css/select2.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ asset('frontend/css/select2.css') }}">
             <form autocomplete="off" action="{{ $searchRoute }}" method="GET" role="search" class="search_friends">
                 <input type="hidden" name="task" value="search">
                 <input type="hidden" value="user" name="q">
@@ -90,7 +90,7 @@
                 </div>
             </form>
             <script>selectAction();</script>
-            <script type="text/javascript" src="{{ asset('templates/js/search.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('frontend/js/search.js') }}"></script>
 
             <div class="photo-caption">
                 <h3>Возможные друзья
@@ -168,5 +168,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('templates/js/friends.js') }}"></script>
+    <script src="{{ asset('frontend/js/friends.js') }}"></script>
 @endpush
