@@ -155,6 +155,8 @@ class ProfileRepository extends BaseRepository
             'commentable_type' => (string) $data['commentable_type'],
             'content_id' => (int) $data['content_id'],
             'user_id' => $author->id,
+            'behalfable_type' => (string) ($data['behalfable_type'] ?? ''),
+            'behalf_id' => (int) ($data['behalf_id'] ?? 0),
             'content' => (string) ($data['comment'] ?? ''),
             'parent_id' => (int) ($data['parent_id'] ?? 0),
         ]);

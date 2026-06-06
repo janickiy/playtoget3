@@ -90,7 +90,20 @@ class ProfilePageTest extends TestCase
             ->assertSee('id="message-296"', false)
             ->assertSee('Real')
             ->assertSee('/ajax/getcomments', false)
+            ->assertSee('<input id="submit" type="submit">', false)
+            ->assertSee('<div class="link_attach" data-num="2"></div>', false)
+            ->assertSee('<div class="files_block" data-num="2"></div>', false)
+            ->assertDontSee('class="send" value="Отправить"', false)
             ->assertSee('templates/js/profile.js', false);
+    }
+
+    public function test_wall_attachment_script_uses_laravel_ajax_endpoint(): void
+    {
+        $script = file_get_contents(public_path('templates/js/emotions.js'));
+
+        $this->assertStringContainsString("formData.append('_token', token);", $script);
+        $this->assertStringContainsString("url: '/ajax/add_photo_ajax_attach'", $script);
+        $this->assertStringNotContainsString('/?task=ajax_action&action=add_photo_ajax_attach', $script);
     }
 
     public function test_guest_profile_wall_hides_interactive_legacy_actions(): void

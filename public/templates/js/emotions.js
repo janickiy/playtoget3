@@ -150,9 +150,14 @@ $(document).ready(function () {
                         formData.append('photoalbumable_type', 'user_attach');
                         formData.append('file', files[a]);
                         formData.append('num', a);
+                        const token = $('meta[name="csrf-token"]').attr('content');
+
+                        if (token) {
+                            formData.append('_token', token);
+                        }
 
                         $.ajax({
-                            url: '/?task=ajax_action&action=add_photo_ajax_attach',
+                            url: '/ajax/add_photo_ajax_attach',
                             type: 'POST',
                             contentType: false,
                             processData: false,

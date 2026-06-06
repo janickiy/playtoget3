@@ -10,9 +10,6 @@
     @elseif ($permissions['wall'])
         @if ($viewer)
             <div class="message-content">
-                <div class="message-account">
-                    <img src="{{ \App\Helpers\FrontAssets::userAvatar($viewer) }}" alt="" class="img-account">
-                </div>
                 <form autocomplete="off" id="addCommentForm" method="POST" action="" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="commentable_type" value="user">
@@ -21,7 +18,6 @@
                     <input type="hidden" name="parent_id" value="0">
                     <input type="file" class="file_name" name="file_name[]" data-num="{{ $profileUser->id }}" multiple>
                     <textarea id="comment" name="comment" data-num="{{ $profileUser->id }}" class="ahref_input" placeholder="Что у Вас интересного?"></textarea>
-                    <div class="link_attach"></div>
                     <div class="smile-files">
                         <a id="smilesBtn" class="smile smilesBtn" data-num="{{ $profileUser->id }}">
                             <img src="{{ asset('templates/images/smile.png') }}" alt="">
@@ -29,10 +25,11 @@
                         <a href="#" class="files" data-num="{{ $profileUser->id }}" data-tooltip="Прикрепить изображение">
                             <img src="{{ asset('templates/images/files.png') }}" alt="">
                         </a>
-                        <div class="smilesChoose add" data-num="{{ $profileUser->id }}"></div>
+                        <div class="smilesChoose" data-num="{{ $profileUser->id }}"></div>
                     </div>
+                    <input id="submit" type="submit">
+                    <div class="link_attach" data-num="{{ $profileUser->id }}"></div>
                     <div class="files_block" data-num="{{ $profileUser->id }}"></div>
-                    <input type="submit" class="send" value="Отправить">
                 </form>
                 <div style="clear:both"></div>
             </div>

@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Front;
 
 use App\Helpers\FrontAssets;
 use App\Http\Controllers\Controller;
-use App\Models\Photo;
 use App\Models\GeoCity;
 use App\Models\Like;
+use App\Models\Photo;
+use App\Models\Photoalbum;
 use App\Models\Share;
 use App\Models\SportType;
 use App\Models\User;
@@ -17,6 +18,8 @@ use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class AjaxController extends Controller
 {
@@ -41,6 +44,7 @@ class AjaxController extends Controller
             'unblock_user' => $this->unblockUser($request),
             'getcomments' => $this->getComments($request),
             'getphotoinfo' => $this->getPhotoInfo($request),
+            'add_photo_ajax_attach' => $this->addPhotoAjaxAttach($request),
             'addcomment' => $this->addComment($request),
             'liked' => $this->liked($request),
             'shared' => $this->shared($request),
@@ -250,6 +254,74 @@ class AjaxController extends Controller
                 ->where('shareable_type', 'photo')
                 ->where('content_id', $photo->id)
                 ->count(),
+        ]);
+    }
+
+    private function addPhotoAjaxAttach(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+
+        if (! $viewer) {
+            return response()->json(['status' => 0, 'error' => 'Unauthorized'], 401);
+        }
+
+        $request->validate([
+            'file' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:10240'],
+        ]);
+
+        $file = $request->file('file');
+
+        if (! $file || ! $file->isValid()) {
+            return response()->json(['status' => 0, 'error' => 'Invalid file'], 422);
+        }
+
+        $album = Photoalbum::query()->firstOrCreate([
+            'owner_id' => $viewer->id,
+            'photoalbumable_type' => 'user_attach',
+        ], [
+            'name' => 'Мои прикрепленные фотографии',
+        ]);
+
+        $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
+        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
+        $filename = Str::lower(Str::random(32)) . '.' . $extension;
+        $smallFilename = 's_' . $filename;
+        $directory = 'images/photogallery/user_attach';
+        $contents = file_get_contents($file->getRealPath());
+
+        if ($contents === false) {
+            return response()->json(['status' => 0, 'error' => 'Invalid file'], 422);
+        }
+
+        $disk = Storage::disk('public');
+        $originalPath = $directory . '/' . $filename;
+        $smallPath = $directory . '/' . $smallFilename;
+
+        if (! $disk->put($originalPath, $contents) || ! $disk->put($smallPath, $contents)) {
+            $disk->delete([$originalPath, $smallPath]);
+
+            return response()->json(['status' => 0, 'error' => 'File was not saved'], 500);
+        }
+
+        /** @var Photo $photo */
+        $photo = Photo::query()->create([
+            'photoalbum_id' => $album->id,
+            'small_photo' => $smallFilename,
+            'photo' => $filename,
+            'description' => '',
+            'owner_id' => $viewer->id,
+            'banned' => false,
+            'moderate' => false,
+        ])->load('album');
+
+        return response()->json([
+            'status' => 1,
+            'num' => (int) $request->input('num', 0),
+            'message' => [
+                'id' => (int) $photo->id,
+                'small_photo' => FrontAssets::photoGallery($photo),
+                'photo' => FrontAssets::photoGallery($photo, 'photo'),
+            ],
         ]);
     }
 
