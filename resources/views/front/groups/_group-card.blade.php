@@ -1,6 +1,6 @@
 <div class="event-item" id="community_{{ $group['id'] }}">
     <a href="{{ route('front.groups.show', ['community' => $group['id']]) }}" class="img">
-        <img border="0" src="{{ $group['avatar'] }}" alt="">
+        <img border="0" src="{{ $group['avatar'] ?: asset('frontend/images/noimage.png') }}" alt="" onerror="this.onerror=null;this.src='{{ asset('frontend/images/noimage.png') }}';">
     </a>
     <div class="teg">
         <p><a href="{{ route('front.groups.show', ['community' => $group['id']]) }}">{{ $group['name'] }}</a></p>

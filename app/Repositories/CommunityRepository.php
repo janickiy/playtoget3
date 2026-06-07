@@ -12,6 +12,7 @@ use App\Models\GeoCity;
 use App\Models\GeoTarget;
 use App\Models\SportType;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -92,15 +93,20 @@ class CommunityRepository extends BaseRepository
         return $this->findTeam($ownerId);
     }
 
-    public function myTeams(int $userId, int $limit = 5, int $offset = 0): Collection
+    public function myTeams(int $userId, int $limit = 5, int $offset = 0, array $filters = []): Collection
     {
-        return $this->model->newQuery()
+        $query = $this->model->newQuery()
+            ->with(['settings'])
             ->withCount(['roles as members_count' => fn ($query) => $query->whereIn('role', [1, 2, 3])])
             ->join('community_roles', 'community_roles.community_id', '=', 'communities.id')
             ->where('community_roles.user_id', $userId)
             ->whereIn('community_roles.role', [1, 2, 3])
             ->where('communities.type', 'team')
-            ->where('communities.banned', false)
+            ->where('communities.banned', false);
+
+        $this->applyCommunityFilters($query, $filters);
+
+        return $query
             ->orderBy('community_roles.role')
             ->orderBy('communities.name')
             ->offset($offset)
@@ -110,12 +116,31 @@ class CommunityRepository extends BaseRepository
             ->map(fn (Community $team): array => $this->serializeTeam($team));
     }
 
-    public function popularTeams(int $limit = 5, int $offset = 0): Collection
+    public function myTeamsCount(int $userId, array $filters = []): int
     {
-        return $this->model->newQuery()
+        $query = $this->model->newQuery()
+            ->join('community_roles', 'community_roles.community_id', '=', 'communities.id')
+            ->where('community_roles.user_id', $userId)
+            ->whereIn('community_roles.role', [1, 2, 3])
+            ->where('communities.type', 'team')
+            ->where('communities.banned', false);
+
+        $this->applyCommunityFilters($query, $filters);
+
+        return (int) $query->count(DB::raw('distinct communities.id'));
+    }
+
+    public function popularTeams(int $limit = 5, int $offset = 0, array $filters = []): Collection
+    {
+        $query = $this->model->newQuery()
+            ->with(['settings'])
             ->withCount(['roles as members_count' => fn ($query) => $query->whereIn('role', [1, 2, 3])])
             ->where('type', 'team')
-            ->where('banned', false)
+            ->where('banned', false);
+
+        $this->applyCommunityFilters($query, $filters);
+
+        return $query
             ->orderByDesc('members_count')
             ->orderBy('name')
             ->offset($offset)
@@ -124,21 +149,51 @@ class CommunityRepository extends BaseRepository
             ->map(fn (Community $team): array => $this->serializeTeam($team));
     }
 
-    public function invitedTeams(int $userId, int $limit = 5, int $offset = 0): Collection
+    public function popularTeamsCount(array $filters = []): int
     {
-        return $this->model->newQuery()
+        $query = $this->model->newQuery()
+            ->where('type', 'team')
+            ->where('banned', false);
+
+        $this->applyCommunityFilters($query, $filters);
+
+        return (int) $query->count();
+    }
+
+    public function invitedTeams(int $userId, int $limit = 5, int $offset = 0, array $filters = []): Collection
+    {
+        $query = $this->model->newQuery()
+            ->with(['settings'])
             ->withCount(['roles as members_count' => fn ($query) => $query->whereIn('role', [1, 2, 3])])
             ->join('community_roles', 'community_roles.community_id', '=', 'communities.id')
             ->where('community_roles.user_id', $userId)
             ->where('community_roles.role', 5)
             ->where('communities.type', 'team')
-            ->where('communities.banned', false)
+            ->where('communities.banned', false);
+
+        $this->applyCommunityFilters($query, $filters);
+
+        return $query
             ->orderBy('communities.name')
             ->offset($offset)
             ->limit($limit)
             ->select('communities.*')
             ->get()
             ->map(fn (Community $team): array => $this->serializeTeam($team));
+    }
+
+    public function invitedTeamsCount(int $userId, array $filters = []): int
+    {
+        $query = $this->model->newQuery()
+            ->join('community_roles', 'community_roles.community_id', '=', 'communities.id')
+            ->where('community_roles.user_id', $userId)
+            ->where('community_roles.role', 5)
+            ->where('communities.type', 'team')
+            ->where('communities.banned', false);
+
+        $this->applyCommunityFilters($query, $filters);
+
+        return (int) $query->count(DB::raw('distinct communities.id'));
     }
 
     public function myGroups(int $userId, int $limit = 5, int $offset = 0): Collection
@@ -638,6 +693,39 @@ class CommunityRepository extends BaseRepository
         }
 
         return true;
+    }
+
+    private function applyCommunityFilters(Builder $query, array $filters): void
+    {
+        $place = trim((string) ($filters['place'] ?? ''));
+        $sport = trim((string) ($filters['sport'] ?? ''));
+        $search = trim((string) ($filters['search'] ?? ''));
+
+        if ($place === '' && (int) ($filters['id_place'] ?? 0) > 0) {
+            $place = $this->cityName((int) $filters['id_place']);
+        }
+
+        if ($sport === '' && (int) ($filters['id_sport'] ?? 0) > 0) {
+            $sport = $this->sportName((int) $filters['id_sport']);
+        }
+
+        if ($place !== '') {
+            $query->where('communities.place', 'like', '%' . $place . '%');
+        }
+
+        if ($sport !== '') {
+            $query->where('communities.sport_type', 'like', '%' . $sport . '%');
+        }
+
+        if ($search !== '') {
+            $query->where(function (Builder $query) use ($search): void {
+                $query
+                    ->where('communities.name', 'like', '%' . $search . '%')
+                    ->orWhere('communities.about', 'like', '%' . $search . '%')
+                    ->orWhere('communities.place', 'like', '%' . $search . '%')
+                    ->orWhere('communities.sport_type', 'like', '%' . $search . '%');
+            });
+        }
     }
 
     private function syncGeoTarget(Community $community, int $cityId): void

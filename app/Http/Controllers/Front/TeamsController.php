@@ -18,11 +18,12 @@ use Illuminate\Support\Facades\Auth;
 
 class TeamsController extends Controller
 {
+    private const PAGE_SIZE = 5;
     private const PHOTOS_LIMIT = 6;
     private const ALBUM_PHOTOS_LIMIT = 9;
     private const VIDEOS_LIMIT = 6;
 
-    public function index(CommunityRepository $communities): View|RedirectResponse
+    public function index(Request $request, CommunityRepository $communities): View|RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
 
@@ -30,11 +31,17 @@ class TeamsController extends Controller
             return redirect()->route('front.home');
         }
 
+        $filters = $this->teamFilters($request);
+
         return view('front.teams.index', [
             'title' => 'Команды',
-            'myTeams' => $this->teamsForViewer($communities->myTeams($viewer->id), $communities, $viewer),
-            'popularTeams' => $this->teamsForViewer($communities->popularTeams(), $communities, $viewer),
-            'invitedTeams' => $this->teamsForViewer($communities->invitedTeams($viewer->id), $communities, $viewer),
+            'myTeams' => $this->teamsForViewer($communities->myTeams($viewer->id, self::PAGE_SIZE, 0, $filters), $communities, $viewer),
+            'popularTeams' => $this->teamsForViewer($communities->popularTeams(self::PAGE_SIZE, 0, $filters), $communities, $viewer),
+            'invitedTeams' => $this->teamsForViewer($communities->invitedTeams($viewer->id, self::PAGE_SIZE, 0, $filters), $communities, $viewer),
+            'myTeamsTotal' => $communities->myTeamsCount($viewer->id, $filters),
+            'popularTeamsTotal' => $communities->popularTeamsCount($filters),
+            'invitedTeamsTotal' => $communities->invitedTeamsCount($viewer->id, $filters),
+            'teamsPageSize' => self::PAGE_SIZE,
             'viewer' => $viewer,
         ]);
     }
@@ -429,6 +436,17 @@ class TeamsController extends Controller
 
             return $team;
         });
+    }
+
+    private function teamFilters(Request $request): array
+    {
+        return [
+            'place' => trim((string) $request->query('place', '')),
+            'sport' => trim((string) $request->query('sport', '')),
+            'search' => trim((string) $request->query('search', '')),
+            'id_place' => (int) $request->query('id_place', 0),
+            'id_sport' => (int) $request->query('id_sport', 0),
+        ];
     }
 
     private function validateTeam(Request $request, CommunityRepository $communities, bool $withSettings = false): array

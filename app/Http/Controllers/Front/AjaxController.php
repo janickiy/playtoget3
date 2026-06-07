@@ -117,17 +117,28 @@ class AjaxController extends Controller
         $offset = max((int)$request->input('offset', 0), 0);
         $userId = max((int)$request->input('user_id', $viewer->id), 1);
         $type = (string)$request->input('type', 'group');
+        $feed = (string)$request->input('feed', 'mygroups');
+        $filters = $this->communityFilters($request);
 
         if (!in_array($type, ['group', 'team'], true)) {
             return response()->json(['status' => 0, 'html' => ''], 422);
         }
 
-        $items = $type === 'team'
-            ? $this->communities->myTeams($userId, $limit, $offset)
-            : $this->communities->myGroups($userId, $limit, $offset);
-        $nextItems = $type === 'team'
-            ? $this->communities->myTeams($userId, 1, $offset + $limit)
-            : $this->communities->myGroups($userId, 1, $offset + $limit);
+        if ($feed === 'invited') {
+            $items = $type === 'team'
+                ? $this->communities->invitedTeams($userId, $limit, $offset, $filters)
+                : $this->communities->invitedGroups($userId, $limit, $offset);
+            $nextItems = $type === 'team'
+                ? $this->communities->invitedTeams($userId, 1, $offset + $limit, $filters)
+                : $this->communities->invitedGroups($userId, 1, $offset + $limit);
+        } else {
+            $items = $type === 'team'
+                ? $this->communities->myTeams($userId, $limit, $offset, $filters)
+                : $this->communities->myGroups($userId, $limit, $offset);
+            $nextItems = $type === 'team'
+                ? $this->communities->myTeams($userId, 1, $offset + $limit, $filters)
+                : $this->communities->myGroups($userId, 1, $offset + $limit);
+        }
 
         return response()->json([
             'status' => 1,
@@ -148,16 +159,17 @@ class AjaxController extends Controller
         $limit = min(max((int)$request->input('number', 5), 1), 25);
         $offset = max((int)$request->input('offset', 0), 0);
         $type = (string)$request->input('type', 'group');
+        $filters = $this->communityFilters($request);
 
         if (!in_array($type, ['group', 'team'], true)) {
             return response()->json(['status' => 0, 'html' => ''], 422);
         }
 
         $items = $type === 'team'
-            ? $this->communities->popularTeams($limit, $offset)
+            ? $this->communities->popularTeams($limit, $offset, $filters)
             : $this->communities->popularGroups($limit, $offset);
         $nextItems = $type === 'team'
-            ? $this->communities->popularTeams(1, $offset + $limit)
+            ? $this->communities->popularTeams(1, $offset + $limit, $filters)
             : $this->communities->popularGroups(1, $offset + $limit);
 
         return response()->json([
@@ -1044,5 +1056,16 @@ class AjaxController extends Controller
         return $items
             ->map(fn(array $item): string => view($view, [$key => $item])->render())
             ->implode('');
+    }
+
+    private function communityFilters(Request $request): array
+    {
+        return [
+            'place' => trim((string)$request->input('place', '')),
+            'sport' => trim((string)$request->input('sport', '')),
+            'search' => trim((string)$request->input('search', '')),
+            'id_place' => (int)$request->input('id_place', 0),
+            'id_sport' => (int)$request->input('id_sport', 0),
+        ];
     }
 }

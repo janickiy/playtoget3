@@ -83,6 +83,29 @@ class GroupsPageTest extends TestCase
         $this->assertStringContainsString('Беговой клуб', $response->json('html'));
     }
 
+    public function test_group_and_team_cards_use_legacy_noimage_fallback(): void
+    {
+        $community = [
+            'id' => 7,
+            'name' => 'Упражнения для мужчин',
+            'type_label' => 'Открытая группа',
+            'sport_type' => 'Здоровый образ жизни',
+            'status' => '',
+            'place' => 'Москва',
+            'members_text' => '0 участников',
+            'avatar' => '',
+            'can_edit' => false,
+        ];
+
+        $groupHtml = view('front.groups._group-card', ['group' => $community])->render();
+        $teamHtml = view('front.teams._team-card', ['team' => $community])->render();
+
+        $this->assertStringContainsString('frontend/images/noimage.png', $groupHtml);
+        $this->assertStringContainsString('frontend/images/noimage.png', $teamHtml);
+        $this->assertStringNotContainsString('frontend/images/default_group.png', $groupHtml);
+        $this->assertStringNotContainsString('frontend/images/default_group.png', $teamHtml);
+    }
+
     private function user(int $id): User
     {
         $user = new User([
