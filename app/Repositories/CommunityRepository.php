@@ -111,6 +111,23 @@ class CommunityRepository extends BaseRepository
             ->map(fn (Community $team): array => $this->serializeTeam($team));
     }
 
+    public function invitedTeams(int $userId, int $limit = 5, int $offset = 0): Collection
+    {
+        return $this->model->newQuery()
+            ->withCount(['roles as members_count' => fn ($query) => $query->whereIn('role', [1, 2, 3])])
+            ->join('community_roles', 'community_roles.community_id', '=', 'communities.id')
+            ->where('community_roles.user_id', $userId)
+            ->where('community_roles.role', 5)
+            ->where('communities.type', 'team')
+            ->where('communities.banned', false)
+            ->orderBy('communities.name')
+            ->offset($offset)
+            ->limit($limit)
+            ->select('communities.*')
+            ->get()
+            ->map(fn (Community $team): array => $this->serializeTeam($team));
+    }
+
     public function members(int $teamId): Collection
     {
         return CommunityRole::query()
@@ -196,6 +213,11 @@ class CommunityRepository extends BaseRepository
             ->where('community_id', $teamId)
             ->where('user_id', $userId)
             ->value('role');
+    }
+
+    public function roleLabel(?int $role): string
+    {
+        return $role === null ? '' : $this->roleName($role);
     }
 
     public function isOwner(?Community $team, ?User $viewer): bool
@@ -353,9 +375,11 @@ class CommunityRepository extends BaseRepository
             'about' => (string) $team->about,
             'place' => (string) $team->place,
             'sport_type' => (string) $team->sport_type,
+            'type_label' => $this->communityTypeLabel((int) ($team->settings?->type ?? $this->settings($team)->type)),
             'avatar' => FrontAssets::communityAvatar($team),
             'cover' => FrontAssets::communityCover($team),
             'members_count' => (int) ($team->members_count ?? $team->roles()->whereIn('role', [1, 2, 3])->count()),
+            'members_text' => ((int) ($team->members_count ?? $team->roles()->whereIn('role', [1, 2, 3])->count())) . ' участников',
         ];
     }
 
@@ -390,6 +414,15 @@ class CommunityRepository extends BaseRepository
             4 => 'Заблокирован',
             5 => 'Приглашен',
             default => '',
+        };
+    }
+
+    private function communityTypeLabel(int $type): string
+    {
+        return match ($type) {
+            1 => 'Приватная команда',
+            2 => 'Закрытая команда',
+            default => 'Открытая команда',
         };
     }
 

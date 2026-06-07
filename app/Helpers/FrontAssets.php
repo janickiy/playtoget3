@@ -48,7 +48,7 @@ class FrontAssets
             return $url;
         }
 
-        return asset('frontend/images/noimage.png');
+        return asset('frontend/images/default_group.png');
     }
 
     public static function communityCover(?Community $community): string

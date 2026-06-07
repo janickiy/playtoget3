@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Models\Community;
 use App\Models\Photoalbum;
+use App\Models\User;
 use App\Models\Videoalbum;
 use App\Repositories\CommunityRepository;
 use App\Repositories\PhotoalbumRepository;
@@ -12,6 +13,7 @@ use App\Repositories\VideoalbumRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class TeamsController extends Controller
@@ -30,9 +32,9 @@ class TeamsController extends Controller
 
         return view('front.teams.index', [
             'title' => 'Команды',
-            'teams' => $communities->teams(),
-            'myTeams' => $communities->myTeams($viewer->id),
-            'popularTeams' => $communities->popularTeams(),
+            'myTeams' => $this->teamsForViewer($communities->myTeams($viewer->id), $communities, $viewer),
+            'popularTeams' => $this->teamsForViewer($communities->popularTeams(), $communities, $viewer),
+            'invitedTeams' => $this->teamsForViewer($communities->invitedTeams($viewer->id), $communities, $viewer),
             'viewer' => $viewer,
         ]);
     }
@@ -41,9 +43,9 @@ class TeamsController extends Controller
     {
         return view('front.teams.index', [
             'title' => 'Команды пользователя',
-            'teams' => collect(),
-            'myTeams' => $communities->myTeams($user, 20),
+            'myTeams' => $this->teamsForViewer($communities->myTeams($user, 20), $communities, Auth::guard('web')->user()),
             'popularTeams' => collect(),
+            'invitedTeams' => collect(),
             'viewer' => Auth::guard('web')->user(),
             'viewedUserId' => $user,
         ]);
@@ -415,6 +417,18 @@ class TeamsController extends Controller
             'canManageTeam' => $communities->canManage($team, $viewer),
             'section' => $section,
         ];
+    }
+
+    private function teamsForViewer(Collection $teams, CommunityRepository $communities, ?User $viewer): Collection
+    {
+        return $teams->map(function (array $team) use ($communities, $viewer): array {
+            $role = $communities->role((int) $team['id'], $viewer?->id);
+
+            $team['status'] = $communities->roleLabel($role);
+            $team['can_edit'] = $role === 1;
+
+            return $team;
+        });
     }
 
     private function validateTeam(Request $request, CommunityRepository $communities, bool $withSettings = false): array
