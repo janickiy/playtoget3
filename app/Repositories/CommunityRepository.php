@@ -12,8 +12,11 @@ use App\Models\GeoCity;
 use App\Models\GeoTarget;
 use App\Models\SportType;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CommunityRepository extends BaseRepository
 {
@@ -243,6 +246,9 @@ class CommunityRepository extends BaseRepository
     public function createTeam(User $owner, array $data): Community
     {
         return DB::transaction(function () use ($owner, $data): Community {
+            $avatar = $this->storeCommunityImage($data['avatar_file'] ?? null, 'avatar');
+            $cover = $this->storeCommunityImage($data['cover_file'] ?? null, 'cover_page');
+
             /** @var Community $team */
             $team = $this->model->newQuery()->create([
                 'type' => 'team',
@@ -250,8 +256,8 @@ class CommunityRepository extends BaseRepository
                 'about' => $data['about'] ?? '',
                 'place' => $data['place'] ?? '',
                 'sport_type' => $data['sport_type'] ?? '',
-                'avatar' => $data['avatar'] ?? '',
-                'cover_page' => $data['cover_page'] ?? '',
+                'avatar' => $avatar ?? '',
+                'cover_page' => $cover ?? '',
                 'banned' => false,
                 'moderate' => true,
             ]);
@@ -279,12 +285,34 @@ class CommunityRepository extends BaseRepository
     public function updateTeam(Community $team, array $data): bool
     {
         return DB::transaction(function () use ($team, $data): bool {
-            $team->fill([
+            $oldAvatar = (string) $team->avatar;
+            $oldCover = (string) $team->cover_page;
+            $avatar = $this->storeCommunityImage($data['avatar_file'] ?? null, 'avatar');
+            $cover = $this->storeCommunityImage($data['cover_file'] ?? null, 'cover_page');
+            $fields = [
                 'name' => $data['name'],
                 'about' => $data['about'] ?? '',
                 'place' => $data['place'] ?? '',
                 'sport_type' => $data['sport_type'] ?? '',
-            ])->save();
+            ];
+
+            if ($avatar) {
+                $fields['avatar'] = $avatar;
+            }
+
+            if ($cover) {
+                $fields['cover_page'] = $cover;
+            }
+
+            $team->fill($fields)->save();
+
+            if ($avatar && $oldAvatar) {
+                $this->deleteCommunityImage($oldAvatar, 'avatar');
+            }
+
+            if ($cover && $oldCover) {
+                $this->deleteCommunityImage($oldCover, 'cover_page');
+            }
 
             $this->settings($team)->fill([
                 'permission_wall' => (int) ($data['permission_wall'] ?? 0),
@@ -394,5 +422,30 @@ class CommunityRepository extends BaseRepository
         ], [
             'city_id' => $cityId,
         ]);
+    }
+
+    private function storeCommunityImage(?UploadedFile $file, string $directory): ?string
+    {
+        if (! $file) {
+            return null;
+        }
+
+        $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
+        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
+        $filename = Str::lower(md5(microtime(true) . $file->getClientOriginalName() . Str::random(8))) . '.' . $extension;
+
+        return Storage::disk('public')->putFileAs('images/teamcontent/' . $directory, $file, $filename)
+            ? $filename
+            : null;
+    }
+
+    private function deleteCommunityImage(string $filename, string $directory): void
+    {
+        Storage::disk('public')->delete('images/teamcontent/' . $directory . '/' . $filename);
+
+        $legacyPath = public_path('uploads/images/teamcontent/' . $directory . '/' . $filename);
+        if (is_file($legacyPath)) {
+            @unlink($legacyPath);
+        }
     }
 }

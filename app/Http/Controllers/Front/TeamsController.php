@@ -426,6 +426,8 @@ class TeamsController extends Controller
             'id_sport' => ['nullable', 'integer'],
             'place' => ['nullable', 'string', 'max:255'],
             'sport' => ['nullable', 'string', 'max:255'],
+            'avatar_file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif', 'max:8192'],
+            'cover_file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif', 'max:8192'],
             'community.permission_wall' => ['nullable', 'integer', 'min:0', 'max:3'],
             'community.permission_photo' => ['nullable', 'integer', 'min:0', 'max:2'],
             'community.permission_video' => ['nullable', 'integer', 'min:0', 'max:2'],
@@ -449,6 +451,8 @@ class TeamsController extends Controller
             'permission_photo' => $withSettings ? (int) ($settings['permission_photo'] ?? 0) : 0,
             'permission_video' => $withSettings ? (int) ($settings['permission_video'] ?? 0) : 0,
             'type' => $withSettings ? (int) ($settings['type'] ?? 0) : 0,
+            'avatar_file' => $request->file('avatar_file'),
+            'cover_file' => $request->file('cover_file'),
         ];
     }
 

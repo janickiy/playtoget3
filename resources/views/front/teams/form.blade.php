@@ -18,7 +18,7 @@
         @endif
 
         <div class="job_form">
-            <form class="form-horizontal" method="POST" action="{{ $action }}">
+            <form class="form-horizontal" method="POST" action="{{ $action }}" enctype="multipart/form-data">
                 @csrf
                 <div id="tabs">
                     <ul>
@@ -64,9 +64,11 @@
                         <div class="form-group">
                             <div class="col-sm-6">
                                 <img id="preview_ava" border="0" width="200" src="{{ $team ? $teamData['avatar'] : asset('frontend/images/noimage.png') }}" alt="">
+                                <input class="form-control" type="file" name="avatar_file" accept="image/jpeg,image/png,image/gif">
                             </div>
                             <div class="col-sm-6">
                                 <img id="preview_cover" border="0" width="200" src="{{ $team ? $teamData['cover'] : asset('frontend/images/default_group.png') }}" alt="">
+                                <input class="form-control" type="file" name="cover_file" accept="image/jpeg,image/png,image/gif">
                             </div>
                         </div>
                     </div>
