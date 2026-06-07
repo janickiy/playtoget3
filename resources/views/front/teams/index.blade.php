@@ -139,21 +139,39 @@
         .content-groups #tabs #main-menu li {
             box-sizing: border-box;
             float: none;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 40px;
             list-style: none;
             margin: 0;
             min-width: 0;
+            padding: 0 !important;
+            position: relative;
+            text-align: center !important;
             width: 100% !important;
         }
 
         .content-groups #tabs #main-menu li a {
             box-sizing: border-box;
             display: block;
-            height: 53px;
-            line-height: 53px;
+            height: 40px;
+            line-height: 40px;
             padding: 0;
             text-align: center;
             white-space: nowrap;
             width: 100%;
+        }
+
+        .content-groups #tabs #main-menu li sup {
+            border-radius: 50px;
+            display: block;
+            height: 15px;
+            line-height: 15px;
+            position: absolute;
+            right: 5px;
+            text-align: center;
+            top: 5px;
+            width: 15px;
         }
 
         .content-groups #tabs > .paddingTop20 {
