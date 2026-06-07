@@ -4,7 +4,7 @@
     <div class="content-groups friends">
         @empty($viewedUserId)
             <form autocomplete="off" action="{{ route('front.teams.index') }}" method="GET" role="search">
-                <div class="add-photos-album selects-field-events">
+                <div class="add-photos-album selects-field-events teams-search-form">
                     <div class="select-container-text two_block">
                         <input type="hidden" name="id_place" class="id_place" data-type="search_city">
                         <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('place') }}" name="place" data-type="search_city" placeholder="Искать команду в городе">
@@ -99,6 +99,70 @@
     </div>
 @endsection
 
+@push('styles')
+    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/css/select2.css') }}">
+    <style>
+        .content-groups .event-container .event-item p.team-members {
+            color: #929292;
+            font-size: 12px;
+            font-weight: 100;
+            margin-bottom: 4px;
+        }
+
+        .content-groups .event-container .event-item p.team-members i {
+            background: url('{{ asset('frontend/images/icon-running.png') }}') no-repeat;
+            display: inline-block;
+            height: 14px;
+            margin-right: 5px;
+            vertical-align: -2px;
+            width: 18px;
+        }
+
+        .content-groups .teams-search-form:after {
+            clear: both;
+            content: "";
+            display: block;
+        }
+
+        .content-groups #tabs {
+            clear: both;
+            margin-top: 10px;
+        }
+
+        .content-groups #tabs #main-menu.marginBottom-40 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            margin: 0 0 20px !important;
+            padding: 0;
+        }
+
+        .content-groups #tabs #main-menu li {
+            box-sizing: border-box;
+            float: none;
+            list-style: none;
+            margin: 0;
+            min-width: 0;
+            width: 100% !important;
+        }
+
+        .content-groups #tabs #main-menu li a {
+            box-sizing: border-box;
+            display: block;
+            height: 53px;
+            line-height: 53px;
+            padding: 0;
+            text-align: center;
+            white-space: nowrap;
+            width: 100%;
+        }
+
+        .content-groups #tabs > .paddingTop20 {
+            clear: both;
+            padding-top: 0 !important;
+        }
+    </style>
+@endpush
+
 @push('scripts')
     <script>
         (function () {
@@ -118,6 +182,10 @@
             $tabs.find('#main-menu a').on('click', function (event) {
                 event.preventDefault();
                 activateTab($(this).attr('href'));
+            });
+
+            $('.teams-search-form .lupa span').on('click', function () {
+                $(this).closest('form').trigger('submit');
             });
 
             activateTab('#popular');

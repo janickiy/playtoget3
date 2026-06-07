@@ -87,12 +87,22 @@ Route::prefix('teams')->name('front.teams.')->group(function () {
     Route::get('create', [TeamsController::class, 'create'])->name('create');
     Route::post('create', [TeamsController::class, 'store'])->name('store');
     Route::get('user/{user}', [TeamsController::class, 'user'])->where('user', '[0-9]+')->name('user');
-    Route::get('photoalbums', [TeamsController::class, 'photoalbums'])->name('photoalbums.default');
-    Route::get('photoalbums/{album}/edit', [TeamsController::class, 'editPhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.edit');
-    Route::post('photoalbums/{album}/edit', [TeamsController::class, 'updatePhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.update');
-    Route::get('videoalbums', [TeamsController::class, 'videoalbums'])->name('videoalbums.default');
-    Route::get('videoalbum/{album}/edit', [TeamsController::class, 'editVideoalbum'])->where('album', '[0-9]+')->name('videoalbum.edit');
-    Route::post('videoalbum/{album}/edit', [TeamsController::class, 'updateVideoalbum'])->where('album', '[0-9]+')->name('videoalbum.update');
+
+    Route::prefix('photoalbums')->group(function () {
+        Route::get('', [TeamsController::class, 'photoalbums'])->name('photoalbums.default');
+        Route::get('{album}/edit', [TeamsController::class, 'editPhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.edit');
+        Route::post('{album}/edit', [TeamsController::class, 'updatePhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.update');
+    });
+
+
+
+    Route::prefix('videoalbums')->group(function () {
+        Route::get('', [TeamsController::class, 'videoalbums'])->name('videoalbums.default');
+        Route::get('{album}/edit', [TeamsController::class, 'editVideoalbum'])->where('album', '[0-9]+')->name('videoalbum.edit');
+        Route::post('{album}/edit', [TeamsController::class, 'updateVideoalbum'])->where('album', '[0-9]+')->name('videoalbum.update');
+
+    });
+
     Route::get('{community}/edit', [TeamsController::class, 'edit'])->where('community', '[0-9]+')->name('edit');
     Route::post('{community}/edit', [TeamsController::class, 'update'])->where('community', '[0-9]+')->name('update');
     Route::get('{community}/members', [TeamsController::class, 'members'])->where('community', '[0-9]+')->name('members');

@@ -16,7 +16,7 @@
                 {{ $team['place'] }}
             @endif
         </p>
-        <p><i></i>{{ $team['members_text'] }}</p>
+        <p class="team-members"><i></i>{{ $team['members_text'] }}</p>
         @if ($team['can_edit'] ?? false)
             <a href="{{ route('front.teams.edit', ['community' => $team['id']]) }}">Редактировать</a>
         @endif

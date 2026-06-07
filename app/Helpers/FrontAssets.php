@@ -44,8 +44,25 @@ class FrontAssets
 
     public static function communityAvatar(?Community $community): string
     {
-        if ($community && ! $community->banned && $community->avatar && ($url = self::publicImageUrl($community->type . 'content/avatar/' . $community->avatar))) {
-            return $url;
+        if ($community && ! $community->banned && $community->avatar) {
+            $paths = match ($community->type) {
+                'team' => [
+                    'groupcontent/avatar/' . $community->avatar,
+                    'teamcontent/avatar/' . $community->avatar,
+                ],
+                'group' => [
+                    'groupcontent/avatar/' . $community->avatar,
+                ],
+                default => [
+                    $community->type . 'content/avatar/' . $community->avatar,
+                ],
+            };
+
+            foreach ($paths as $path) {
+                if ($url = self::publicImageUrl($path)) {
+                    return $url;
+                }
+            }
         }
 
         return asset('frontend/images/default_group.png');
