@@ -20,6 +20,7 @@ use App\Repositories\MessageRepository;
 use App\Repositories\NewsRepository;
 use App\Repositories\PhotoalbumRepository;
 use App\Repositories\ProfileRepository;
+use App\Repositories\SportBlockRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\VideoalbumRepository;
 use Illuminate\Http\JsonResponse;
@@ -39,6 +40,7 @@ class AjaxController extends Controller
         private readonly PhotoalbumRepository $photoalbums,
         private readonly VideoalbumRepository $videoalbums,
         private readonly CommunityRepository $communities,
+        private readonly SportBlockRepository $sportBlocks,
     )
     {
     }
@@ -300,24 +302,32 @@ class AjaxController extends Controller
 
         $albumId = (int)$request->input('categorie');
         $albumType = (string)$request->input('photoalbumable_type', 'user');
-        $album = $albumType === 'team'
-            ? $this->photoalbums->album($albumId, ['team'])
-            : $this->photoalbums->album($albumId);
+        $sportBlockTypes = ['playground', 'shop', 'fitness'];
+        $album = match (true) {
+            $albumType === 'team' => $this->photoalbums->album($albumId, ['team']),
+            in_array($albumType, $sportBlockTypes, true) => $this->photoalbums->album($albumId, $sportBlockTypes),
+            default => $this->photoalbums->album($albumId),
+        };
 
         if (!$album) {
             return response()->json(['info' => null, 'error' => 'Нет доступа к альбому'], 403);
         }
 
-        $canUpload = $album->photoalbumable_type === 'team'
-            ? $this->communities->canManage($this->communities->findTeam((int)$album->owner_id), $viewer)
-            : $this->photoalbums->isOwner($album, $viewer);
+        $canUpload = match (true) {
+            $album->photoalbumable_type === 'team' => $this->communities->canManage($this->communities->findTeam((int)$album->owner_id), $viewer),
+            in_array($album->photoalbumable_type, $sportBlockTypes, true) => $this->sportBlocks->isOwner(
+                $this->sportBlocks->findByType((int)$album->owner_id, $album->photoalbumable_type),
+                $viewer,
+            ),
+            default => $this->photoalbums->isOwner($album, $viewer),
+        };
 
         if (!$canUpload) {
             return response()->json(['info' => null, 'error' => 'Нет доступа к альбому'], 403);
         }
 
         try {
-            if ($album->photoalbumable_type === 'team') {
+            if ($album->photoalbumable_type === 'team' || in_array($album->photoalbumable_type, $sportBlockTypes, true)) {
                 $photo = $this->photoalbums->storePhotoForAlbum(
                     $viewer,
                     $album,

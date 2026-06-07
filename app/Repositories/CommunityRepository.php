@@ -128,6 +128,58 @@ class CommunityRepository extends BaseRepository
             ->map(fn (Community $team): array => $this->serializeTeam($team));
     }
 
+    public function myGroups(int $userId, int $limit = 5, int $offset = 0): Collection
+    {
+        return $this->model->newQuery()
+            ->with(['settings'])
+            ->withCount(['roles as members_count' => fn ($query) => $query->whereIn('role', [1, 2, 3])])
+            ->join('community_roles', 'community_roles.community_id', '=', 'communities.id')
+            ->where('community_roles.user_id', $userId)
+            ->whereIn('community_roles.role', [1, 2, 3])
+            ->where('communities.type', 'group')
+            ->where('communities.banned', false)
+            ->orderBy('community_roles.role')
+            ->orderBy('communities.name')
+            ->offset($offset)
+            ->limit($limit)
+            ->select('communities.*')
+            ->get()
+            ->map(fn (Community $group): array => $this->serializeGroup($group));
+    }
+
+    public function popularGroups(int $limit = 5, int $offset = 0): Collection
+    {
+        return $this->model->newQuery()
+            ->with(['settings'])
+            ->withCount(['roles as members_count' => fn ($query) => $query->whereIn('role', [1, 2, 3])])
+            ->where('type', 'group')
+            ->where('banned', false)
+            ->orderByDesc('members_count')
+            ->orderBy('name')
+            ->offset($offset)
+            ->limit($limit)
+            ->get()
+            ->map(fn (Community $group): array => $this->serializeGroup($group));
+    }
+
+    public function invitedGroups(int $userId, int $limit = 5, int $offset = 0): Collection
+    {
+        return $this->model->newQuery()
+            ->with(['settings'])
+            ->withCount(['roles as members_count' => fn ($query) => $query->whereIn('role', [1, 2, 3])])
+            ->join('community_roles', 'community_roles.community_id', '=', 'communities.id')
+            ->where('community_roles.user_id', $userId)
+            ->where('community_roles.role', 5)
+            ->where('communities.type', 'group')
+            ->where('communities.banned', false)
+            ->orderBy('communities.name')
+            ->offset($offset)
+            ->limit($limit)
+            ->select('communities.*')
+            ->get()
+            ->map(fn (Community $group): array => $this->serializeGroup($group));
+    }
+
     public function members(int $teamId): Collection
     {
         return CommunityRole::query()
@@ -304,6 +356,45 @@ class CommunityRepository extends BaseRepository
         });
     }
 
+    public function createGroup(User $owner, array $data): Community
+    {
+        return DB::transaction(function () use ($owner, $data): Community {
+            $avatar = $this->storeCommunityImage($data['avatar_file'] ?? null, 'avatar', 'group');
+            $cover = $this->storeCommunityImage($data['cover_file'] ?? null, 'cover_page', 'group');
+
+            /** @var Community $group */
+            $group = $this->model->newQuery()->create([
+                'type' => 'group',
+                'name' => $data['name'],
+                'about' => $data['about'] ?? '',
+                'place' => $data['place'] ?? '',
+                'sport_type' => $data['sport_type'] ?? '',
+                'avatar' => $avatar ?? '',
+                'cover_page' => $cover ?? '',
+                'banned' => false,
+                'moderate' => true,
+            ]);
+
+            CommunityRole::query()->create([
+                'community_id' => $group->id,
+                'user_id' => $owner->id,
+                'role' => 1,
+            ]);
+
+            CommunitySetting::query()->create([
+                'community_id' => $group->id,
+                'permission_wall' => 0,
+                'permission_photo' => 0,
+                'permission_video' => 0,
+                'type' => 0,
+            ]);
+
+            $this->syncGeoTarget($group, (int) ($data['city_id'] ?? 0));
+
+            return $group;
+        });
+    }
+
     public function updateTeam(Community $team, array $data): bool
     {
         return DB::transaction(function () use ($team, $data): bool {
@@ -375,11 +466,27 @@ class CommunityRepository extends BaseRepository
             'about' => (string) $team->about,
             'place' => (string) $team->place,
             'sport_type' => (string) $team->sport_type,
-            'type_label' => $this->communityTypeLabel((int) ($team->settings?->type ?? $this->settings($team)->type)),
+            'type_label' => $this->communityTypeLabel((int) ($team->settings?->type ?? $this->settings($team)->type), 'team'),
             'avatar' => FrontAssets::communityAvatar($team),
             'cover' => FrontAssets::communityCover($team),
             'members_count' => (int) ($team->members_count ?? $team->roles()->whereIn('role', [1, 2, 3])->count()),
             'members_text' => ((int) ($team->members_count ?? $team->roles()->whereIn('role', [1, 2, 3])->count())) . ' участников',
+        ];
+    }
+
+    public function serializeGroup(Community $group): array
+    {
+        return [
+            'id' => (int) $group->id,
+            'name' => (string) $group->name,
+            'about' => (string) $group->about,
+            'place' => (string) $group->place,
+            'sport_type' => (string) $group->sport_type,
+            'type_label' => $this->communityTypeLabel((int) ($group->settings?->type ?? $this->settings($group)->type), 'group'),
+            'avatar' => FrontAssets::communityAvatar($group),
+            'cover' => FrontAssets::communityCover($group),
+            'members_count' => (int) ($group->members_count ?? $group->roles()->whereIn('role', [1, 2, 3])->count()),
+            'members_text' => ((int) ($group->members_count ?? $group->roles()->whereIn('role', [1, 2, 3])->count())) . ' участников',
         ];
     }
 
@@ -417,12 +524,14 @@ class CommunityRepository extends BaseRepository
         };
     }
 
-    private function communityTypeLabel(int $type): string
+    private function communityTypeLabel(int $type, string $kind = 'team'): string
     {
+        $noun = $kind === 'group' ? 'группа' : 'команда';
+
         return match ($type) {
-            1 => 'Приватная команда',
-            2 => 'Закрытая команда',
-            default => 'Открытая команда',
+            1 => 'Приватная ' . $noun,
+            2 => 'Закрытая ' . $noun,
+            default => 'Открытая ' . $noun,
         };
     }
 
@@ -443,21 +552,21 @@ class CommunityRepository extends BaseRepository
         return true;
     }
 
-    private function syncGeoTarget(Community $team, int $cityId): void
+    private function syncGeoTarget(Community $community, int $cityId): void
     {
         if ($cityId < 1) {
             return;
         }
 
         GeoTarget::query()->updateOrCreate([
-            'target_type' => 'team',
-            'target_id' => $team->id,
+            'target_type' => $community->type,
+            'target_id' => $community->id,
         ], [
             'city_id' => $cityId,
         ]);
     }
 
-    private function storeCommunityImage(?UploadedFile $file, string $directory): ?string
+    private function storeCommunityImage(?UploadedFile $file, string $directory, string $kind = 'team'): ?string
     {
         if (! $file) {
             return null;
@@ -467,7 +576,7 @@ class CommunityRepository extends BaseRepository
         $extension = $extension === 'jpeg' ? 'jpg' : $extension;
         $filename = Str::lower(md5(microtime(true) . $file->getClientOriginalName() . Str::random(8))) . '.' . $extension;
 
-        return Storage::disk('public')->putFileAs('images/teamcontent/' . $directory, $file, $filename)
+        return Storage::disk('public')->putFileAs('images/' . $kind . 'content/' . $directory, $file, $filename)
             ? $filename
             : null;
     }

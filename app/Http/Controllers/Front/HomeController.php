@@ -35,12 +35,8 @@ class HomeController extends Controller
             'ajax_action' => redirect('/ajax/' . $request->query('action', 'index')),
             'news' => redirect()->route('front.news.index'),
             'profile' => $this->redirectLegacyProfile($request, $actions),
-            'playgrounds' => $request->filled('id_sport_block')
-                ? redirect()->route('front.playgrounds.index', ['sportBlock' => $request->query('id_sport_block')])
-                : redirect()->route('front.playgrounds.index'),
-            'shops' => $request->filled('id_sport_block')
-                ? redirect()->route('front.shops.index', ['sportBlock' => $request->query('id_sport_block')])
-                : redirect()->route('front.shops.index'),
+            'playgrounds' => $this->redirectLegacySportBlocks($request, $actions, 'front.playgrounds'),
+            'shops' => $this->redirectLegacySportBlocks($request, $actions, 'front.shops'),
             'fitness' => $request->filled('id_sport_block')
                 ? redirect()->route('front.fitness.index', ['sportBlock' => $request->query('id_sport_block')])
                 : redirect()->route('front.fitness.index'),
@@ -53,6 +49,9 @@ class HomeController extends Controller
             'photoalbums' => $this->redirectLegacyPhotoalbums($request, $actions),
             'videoalbums' => $this->redirectLegacyVideoalbums($request, $actions),
             'teams' => $this->redirectLegacyTeams($request, $actions),
+            'groups' => $this->hasLegacyAction($actions, 'create')
+                ? redirect()->route('front.playgrounds.create')
+                : redirect()->route('front.playgrounds.index'),
             'content' => redirect()->route('front.content.show', ['content' => $request->query('content_id')]),
             'feedback' => redirect()->route('front.feedback.create'),
             default => redirect()->route('front.news.index'),
@@ -82,6 +81,23 @@ class HomeController extends Controller
         }
 
         return redirect()->route('front.events.show', ['event' => $request->query('event_id')]);
+    }
+
+    private function redirectLegacySportBlocks(Request $request, array $actions, string $routePrefix): RedirectResponse
+    {
+        if ($this->hasLegacyAction($actions, 'create')) {
+            return redirect()->route($routePrefix . '.create');
+        }
+
+        if (! $request->filled('id_sport_block')) {
+            return redirect()->route($routePrefix . '.index');
+        }
+
+        if ($this->hasLegacyAction($actions, 'edit')) {
+            return redirect()->route($routePrefix . '.edit', ['sportBlock' => $request->query('id_sport_block')]);
+        }
+
+        return redirect()->route($routePrefix . '.index', ['sportBlock' => $request->query('id_sport_block')]);
     }
 
     private function redirectLegacyProfile(Request $request, array $actions): RedirectResponse

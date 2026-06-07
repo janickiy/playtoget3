@@ -33,9 +33,25 @@ Route::get('profile/{user}/messages', [ProfileController::class, 'dialogues'])
     ->name('front.profile.messages.index');
 Route::get('profile/{user}', [ProfileController::class, 'show'])->where('user', '[0-9]+')->name('front.profile.show');
 
+Route::get('playgrounds/create', [PlaygroundsController::class, 'create'])->name('front.playgrounds.create');
+Route::post('playgrounds/create', [PlaygroundsController::class, 'store'])->name('front.playgrounds.store');
+Route::get('playgrounds/{sportBlock}/edit', [PlaygroundsController::class, 'edit'])
+    ->where('sportBlock', '[0-9]+')
+    ->name('front.playgrounds.edit');
+Route::post('playgrounds/{sportBlock}/edit', [PlaygroundsController::class, 'update'])
+    ->where('sportBlock', '[0-9]+')
+    ->name('front.playgrounds.update');
 Route::get('playgrounds/{sportBlock?}', [PlaygroundsController::class, 'index'])
     ->where('sportBlock', '[0-9]+')
     ->name('front.playgrounds.index');
+Route::get('shops/create', [ShopsController::class, 'create'])->name('front.shops.create');
+Route::post('shops/create', [ShopsController::class, 'store'])->name('front.shops.store');
+Route::get('shops/{sportBlock}/edit', [ShopsController::class, 'edit'])
+    ->where('sportBlock', '[0-9]+')
+    ->name('front.shops.edit');
+Route::post('shops/{sportBlock}/edit', [ShopsController::class, 'update'])
+    ->where('sportBlock', '[0-9]+')
+    ->name('front.shops.update');
 Route::get('shops/{sportBlock?}', [ShopsController::class, 'index'])
     ->where('sportBlock', '[0-9]+')
     ->name('front.shops.index');
