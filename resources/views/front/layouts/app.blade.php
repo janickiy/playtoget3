@@ -126,13 +126,13 @@
                             </span>
                         </li>
                         <li><a href="{{ route('front.teams.index') }}"><img src="{{ asset('frontend/images/command.png') }}" alt=""></a><span class="for-submenu"><a title="Команды" href="{{ route('front.teams.index') }}">Команды</a></span></li>
-                        <li class="menu_groups_hide"><a href="{{ route('front.playgrounds.index') }}"><img src="{{ asset('frontend/images/Group.png') }}" alt=""></a><span class="for-submenu"><a title="Группы" href="{{ route('front.playgrounds.index') }}">Группы</a></span></li>
+                        <li class="menu_groups_hide"><a href="{{ route('front.groups.index') }}"><img src="{{ asset('frontend/images/Group.png') }}" alt=""></a><span class="for-submenu"><a title="Группы" href="{{ route('front.groups.index') }}">Группы</a></span></li>
                         <li class="menu_groups">
                             <a><img src="{{ asset('frontend/images/Group.png') }}" alt=""></a>
                             <span class="for-submenu">
-                                <a title="Группы" href="{{ route('front.playgrounds.index') }}">Группы</a>
+                                <a title="Группы" href="{{ route('front.groups.index') }}">Группы</a>
                                 <ul class="top-mnu-submenu">
-                                    <li><a href="{{ route('front.playgrounds.index') }}">Группы</a></li>
+                                    <li><a href="{{ route('front.groups.index') }}">Группы</a></li>
                                     <li><a href="{{ route('front.playgrounds.index') }}">Площадки</a></li>
                                     <li><a href="{{ route('front.shops.index') }}">Магазины</a></li>
                                     <li><a href="{{ route('front.fitness.index') }}">Фитнес</a></li>

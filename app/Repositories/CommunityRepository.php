@@ -49,6 +49,19 @@ class CommunityRepository extends BaseRepository
         return $community;
     }
 
+    public function findGroup(int $id): ?Community
+    {
+        /** @var Community|null $community */
+        $community = $this->model->newQuery()
+            ->with(['settings', 'roles.user'])
+            ->withCount(['roles as members_count' => fn ($query) => $query->whereIn('role', [1, 2, 3])])
+            ->where('type', 'group')
+            ->whereKey($id)
+            ->first();
+
+        return $community;
+    }
+
     public function defaultTeam(?User $viewer = null): ?Community
     {
         if ($viewer) {
@@ -440,6 +453,51 @@ class CommunityRepository extends BaseRepository
         });
     }
 
+    public function updateGroup(Community $group, array $data): bool
+    {
+        return DB::transaction(function () use ($group, $data): bool {
+            $oldAvatar = (string) $group->avatar;
+            $oldCover = (string) $group->cover_page;
+            $avatar = $this->storeCommunityImage($data['avatar_file'] ?? null, 'avatar', 'group');
+            $cover = $this->storeCommunityImage($data['cover_file'] ?? null, 'cover_page', 'group');
+            $fields = [
+                'name' => $data['name'],
+                'about' => $data['about'] ?? '',
+                'place' => $data['place'] ?? '',
+                'sport_type' => $data['sport_type'] ?? '',
+            ];
+
+            if ($avatar) {
+                $fields['avatar'] = $avatar;
+            }
+
+            if ($cover) {
+                $fields['cover_page'] = $cover;
+            }
+
+            $group->fill($fields)->save();
+
+            if ($avatar && $oldAvatar) {
+                $this->deleteCommunityImage($oldAvatar, 'avatar', 'group');
+            }
+
+            if ($cover && $oldCover) {
+                $this->deleteCommunityImage($oldCover, 'cover_page', 'group');
+            }
+
+            $this->settings($group)->fill([
+                'permission_wall' => (int) ($data['permission_wall'] ?? 0),
+                'permission_photo' => (int) ($data['permission_photo'] ?? 0),
+                'permission_video' => (int) ($data['permission_video'] ?? 0),
+                'type' => (int) ($data['type'] ?? 0),
+            ])->save();
+
+            $this->syncGeoTarget($group, (int) ($data['city_id'] ?? 0));
+
+            return true;
+        });
+    }
+
     public function cityName(?int $cityId): string
     {
         if (! $cityId) {
@@ -581,11 +639,11 @@ class CommunityRepository extends BaseRepository
             : null;
     }
 
-    private function deleteCommunityImage(string $filename, string $directory): void
+    private function deleteCommunityImage(string $filename, string $directory, string $kind = 'team'): void
     {
-        Storage::disk('public')->delete('images/teamcontent/' . $directory . '/' . $filename);
+        Storage::disk('public')->delete('images/' . $kind . 'content/' . $directory . '/' . $filename);
 
-        $legacyPath = public_path('uploads/images/teamcontent/' . $directory . '/' . $filename);
+        $legacyPath = public_path('uploads/images/' . $kind . 'content/' . $directory . '/' . $filename);
         if (is_file($legacyPath)) {
             @unlink($legacyPath);
         }

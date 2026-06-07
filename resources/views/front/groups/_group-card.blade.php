@@ -1,9 +1,9 @@
 <div class="event-item" id="community_{{ $group['id'] }}">
-    <a href="{{ route('front.playgrounds.index') }}" class="img">
+    <a href="{{ route('front.groups.show', ['community' => $group['id']]) }}" class="img">
         <img border="0" src="{{ $group['avatar'] }}" alt="">
     </a>
     <div class="teg">
-        <p><a href="{{ route('front.playgrounds.index') }}">{{ $group['name'] }}</a></p>
+        <p><a href="{{ route('front.groups.show', ['community' => $group['id']]) }}">{{ $group['name'] }}</a></p>
         <p>{{ $group['type_label'] }}</p>
         <p>
             @if ($group['sport_type'])
@@ -17,6 +17,9 @@
             @endif
         </p>
         <p class="group-members"><i></i>{{ $group['members_text'] }}</p>
+        @if ($group['can_edit'] ?? false)
+            <a href="{{ route('front.groups.edit', ['community' => $group['id']]) }}">Редактировать</a>
+        @endif
         <div class="transparent"></div>
     </div>
 </div>

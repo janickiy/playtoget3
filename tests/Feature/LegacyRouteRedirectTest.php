@@ -52,6 +52,11 @@ class LegacyRouteRedirectTest extends TestCase
             '/?task=teams&community_id=3&q=videoalbums' => '/teams/3/videoalbums',
             '/?task=teams&community_id=3&q=videoalbums&q=add_video' => '/teams/3/videoalbums/add-video',
             '/?task=teams&community_id=3&q=videoalbums&q=create_videoalbum' => '/teams/3/videoalbums/create',
+            '/?task=groups' => '/groups',
+            '/?task=groups&q=create' => '/groups/create',
+            '/?task=groups&community_id=9' => '/groups/9',
+            '/?task=groups&community_id=9&q=members' => '/groups/9/members',
+            '/?task=groups&community_id=9&q=edit' => '/groups/9/edit',
             '/?task=ajax_action&action=addmessage' => '/ajax/addmessage',
         ];
 

@@ -49,9 +49,7 @@ class HomeController extends Controller
             'photoalbums' => $this->redirectLegacyPhotoalbums($request, $actions),
             'videoalbums' => $this->redirectLegacyVideoalbums($request, $actions),
             'teams' => $this->redirectLegacyTeams($request, $actions),
-            'groups' => $this->hasLegacyAction($actions, 'create')
-                ? redirect()->route('front.playgrounds.create')
-                : redirect()->route('front.playgrounds.index'),
+            'groups' => $this->redirectLegacyGroups($request, $actions),
             'content' => redirect()->route('front.content.show', ['content' => $request->query('content_id')]),
             'feedback' => redirect()->route('front.feedback.create'),
             default => redirect()->route('front.news.index'),
@@ -98,6 +96,27 @@ class HomeController extends Controller
         }
 
         return redirect()->route($routePrefix . '.index', ['sportBlock' => $request->query('id_sport_block')]);
+    }
+
+    private function redirectLegacyGroups(Request $request, array $actions): RedirectResponse
+    {
+        if ($this->hasLegacyAction($actions, 'create')) {
+            return redirect()->route('front.groups.create');
+        }
+
+        if (! $request->filled('community_id')) {
+            return redirect()->route('front.groups.index');
+        }
+
+        if ($this->hasLegacyAction($actions, 'members')) {
+            return redirect()->route('front.groups.members', ['community' => $request->query('community_id')]);
+        }
+
+        if ($this->hasLegacyAction($actions, 'edit')) {
+            return redirect()->route('front.groups.edit', ['community' => $request->query('community_id')]);
+        }
+
+        return redirect()->route('front.groups.show', ['community' => $request->query('community_id')]);
     }
 
     private function redirectLegacyProfile(Request $request, array $actions): RedirectResponse

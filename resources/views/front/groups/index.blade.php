@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="content-groups friends">
-        <form autocomplete="off" action="{{ route('front.playgrounds.index') }}" method="GET" role="search">
+        <form autocomplete="off" action="{{ route('front.groups.index') }}" method="GET" role="search">
             <div class="add-photos-album selects-field-events groups-search-form">
                 <div class="select-container-text two_block">
                     <input type="hidden" name="id_place" class="id_place" data-type="search_city">
@@ -19,7 +19,7 @@
                     <span></span>
                 </p>
                 <input type="submit" class="displayNone">
-                <button type="button" onclick="location.href='{{ route('front.playgrounds.create') }}'" class="btn btn-white">Создать группу</button>
+                <button type="button" onclick="location.href='{{ route('front.groups.create') }}'" class="btn btn-white">Создать группу</button>
             </div>
         </form>
 

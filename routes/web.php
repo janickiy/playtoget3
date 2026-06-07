@@ -44,6 +44,7 @@ Route::post('playgrounds/{sportBlock}/edit', [PlaygroundsController::class, 'upd
 Route::get('playgrounds/{sportBlock?}', [PlaygroundsController::class, 'index'])
     ->where('sportBlock', '[0-9]+')
     ->name('front.playgrounds.index');
+
 Route::get('shops/create', [ShopsController::class, 'create'])->name('front.shops.create');
 Route::post('shops/create', [ShopsController::class, 'store'])->name('front.shops.store');
 Route::get('shops/{sportBlock}/edit', [ShopsController::class, 'edit'])
@@ -109,8 +110,6 @@ Route::prefix('teams')->name('front.teams.')->group(function () {
         Route::get('{album}/edit', [TeamsController::class, 'editPhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.edit');
         Route::post('{album}/edit', [TeamsController::class, 'updatePhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.update');
     });
-
-
 
     Route::prefix('videoalbums')->group(function () {
         Route::get('', [TeamsController::class, 'videoalbums'])->name('videoalbums.default');
