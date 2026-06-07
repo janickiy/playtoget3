@@ -18,9 +18,9 @@
         @endif
 
         <div class="job_form">
-            <form class="form-horizontal" method="POST" action="{{ $action }}" enctype="multipart/form-data">
+            <form class="form-horizontal create_form" method="POST" action="{{ $action }}" enctype="multipart/form-data" autocomplete="off">
                 @csrf
-                <div id="tabs">
+                <div id="tabs" @class(['team-form-tabs', 'team-form-tabs-single' => ! $canEditSettings])>
                     <ul>
                         <li><a href="#info">Информация</a></li>
                         @if ($canEditSettings)
@@ -61,14 +61,20 @@
                                 <div class="select-place" data-type="search_sport"></div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <img id="preview_ava" border="0" width="200" src="{{ $team ? $teamData['avatar'] : asset('frontend/images/noimage.png') }}" alt="">
-                                <input class="form-control" type="file" name="avatar_file" accept="image/jpeg,image/png,image/gif">
+                        <div class="form-group team-form-images">
+                            <div class="col-sm-6 team-form-image-field">
+                                <img id="preview_ava" border="0" src="{{ $team ? $teamData['avatar'] : asset('frontend/images/noimage.png') }}" alt="">
+                                <div class="file_upload team-file-upload">
+                                    <button type="button">Загрузить аватар</button>
+                                    <input class="team-avatar-input" type="file" name="avatar_file" accept="image/jpeg,image/png,image/gif">
+                                </div>
                             </div>
-                            <div class="col-sm-6">
-                                <img id="preview_cover" border="0" width="200" src="{{ $team ? $teamData['cover'] : asset('frontend/images/default_group.png') }}" alt="">
-                                <input class="form-control" type="file" name="cover_file" accept="image/jpeg,image/png,image/gif">
+                            <div class="col-sm-6 team-form-image-field">
+                                <img id="preview_cover" border="0" src="{{ $team ? $teamData['cover'] : asset('frontend/images/default_group.png') }}" alt="">
+                                <div class="file_upload team-file-upload">
+                                    <button type="button">Загрузить обложку</button>
+                                    <input class="team-cover-input" type="file" name="cover_file" accept="image/jpeg,image/png,image/gif">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -172,8 +178,81 @@
     </div>
 @endsection
 
+@push('styles')
+    <style>
+        .team-form-tabs-single > ul {
+            display: none;
+        }
+
+        .team-form-tabs-single #info {
+            padding-top: 10px;
+        }
+
+        .team-form-images {
+            margin-top: 18px;
+        }
+
+        .team-form-image-field {
+            text-align: center;
+        }
+
+        .team-form-image-field img {
+            display: block;
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            margin: 0 auto 10px;
+            border-radius: 5px;
+            border: 1px solid #eaebed;
+            background: #eef5f5;
+        }
+
+        .team-form-image-field #preview_cover {
+            height: 77px;
+        }
+
+        .team-file-upload {
+            margin: 0 auto;
+        }
+
+        .team-file-upload > button {
+            width: 145px;
+        }
+    </style>
+@endpush
+
 @push('scripts')
     <script>
-        selectAction();
+        if (typeof selectAction === 'function') {
+            selectAction();
+        }
+
+        (function () {
+            function bindTeamPreview(inputSelector, imageSelector) {
+                const input = document.querySelector(inputSelector);
+                const image = document.querySelector(imageSelector);
+
+                if (!input || !image) {
+                    return;
+                }
+
+                input.addEventListener('change', function () {
+                    const file = input.files && input.files[0];
+
+                    if (!file || !file.type.match(/^image\//)) {
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        image.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            bindTeamPreview('.team-avatar-input', '#preview_ava');
+            bindTeamPreview('.team-cover-input', '#preview_cover');
+        })();
     </script>
 @endpush

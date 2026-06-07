@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Videoalbum;
 use App\Repositories\CommunityRepository;
 use App\Repositories\PhotoalbumRepository;
+use App\Repositories\ProfileRepository;
 use App\Repositories\VideoalbumRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -22,6 +23,7 @@ class TeamsController extends Controller
     private const PHOTOS_LIMIT = 6;
     private const ALBUM_PHOTOS_LIMIT = 9;
     private const VIDEOS_LIMIT = 6;
+    private const COMMENTS_LIMIT = 10;
 
     public function index(Request $request, CommunityRepository $communities): View|RedirectResponse
     {
@@ -90,7 +92,23 @@ class TeamsController extends Controller
         return redirect()->route('front.teams.show', ['community' => $team->id]);
     }
 
-    public function show(int $community, CommunityRepository $communities): View
+    public function show(int $community, CommunityRepository $communities, ProfileRepository $profiles): View
+    {
+        $team = $this->teamOrFail($community, $communities);
+        $payload = $this->teamPayload($team, $communities, 'feed');
+
+        return view('front.teams.feed', $payload + [
+            'comments' => $payload['permissions']['wall']
+                ? $profiles->comments('team', $team->id, self::COMMENTS_LIMIT, 0, Auth::guard('web')->user())
+                : collect(),
+            'commentsPageSize' => self::COMMENTS_LIMIT,
+            'hasMoreComments' => $payload['permissions']['wall']
+                ? $profiles->hasMoreComments('team', $team->id, self::COMMENTS_LIMIT, 0)
+                : false,
+        ]);
+    }
+
+    public function members(int $community, CommunityRepository $communities): View
     {
         $team = $this->teamOrFail($community, $communities);
 
@@ -102,19 +120,14 @@ class TeamsController extends Controller
         ]);
     }
 
-    public function members(int $community, CommunityRepository $communities): View
-    {
-        return $this->show($community, $communities);
-    }
-
     public function edit(int $community, CommunityRepository $communities): View
     {
         $team = $this->teamOrFail($community, $communities);
         $viewer = Auth::guard('web')->user();
 
-        abort_unless($communities->isOwner($team, $viewer), 403);
+        abort_unless($communities->canManage($team, $viewer), 403);
 
-        return view('front.teams.form', $this->teamPayload($team, $communities, 'edit') + [
+        return view('front.teams.form', array_merge($this->teamPayload($team, $communities, 'edit'), [
             'title' => 'Редактирование команды',
             'action' => route('front.teams.update', ['community' => $team->id]),
             'button' => 'Сохранить',
@@ -123,7 +136,7 @@ class TeamsController extends Controller
             'canEditSettings' => true,
             'admins' => $communities->admins($team->id),
             'blocked' => $communities->blocked($team->id),
-        ]);
+        ]));
     }
 
     public function update(int $community, Request $request, CommunityRepository $communities): RedirectResponse
@@ -131,7 +144,7 @@ class TeamsController extends Controller
         $team = $this->teamOrFail($community, $communities);
         $viewer = Auth::guard('web')->user();
 
-        abort_unless($communities->isOwner($team, $viewer), 403);
+        abort_unless($communities->canManage($team, $viewer), 403);
 
         $communities->updateTeam($team, $this->validateTeam($request, $communities, true));
 
@@ -421,7 +434,9 @@ class TeamsController extends Controller
             'teamData' => $communities->serializeTeam($team),
             'permissions' => $communities->permissions($team, $viewer),
             'role' => $communities->role($team->id, $viewer?->id),
+            'membershipType' => $communities->membershipType($team, $viewer),
             'canManageTeam' => $communities->canManage($team, $viewer),
+            'canInviteTeam' => $communities->canInvite($team, $viewer),
             'section' => $section,
         ];
     }

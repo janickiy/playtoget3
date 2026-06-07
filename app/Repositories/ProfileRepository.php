@@ -5,6 +5,8 @@ namespace App\Repositories;
 use App\Helpers\FrontAssets;
 use App\Models\Attachment;
 use App\Models\Comment;
+use App\Models\Community;
+use App\Models\CommunityRole;
 use App\Models\Friend;
 use App\Models\Like;
 use App\Models\Log;
@@ -445,15 +447,29 @@ class ProfileRepository extends BaseRepository
     public function serializeComment(Comment $comment, ?User $viewer = null, bool $includeReplies = true): array
     {
         $user = $comment->user;
+        $behalf = in_array((string) $comment->behalfable_type, ['team', 'group'], true) && (int) $comment->behalf_id > 0
+            ? Community::query()->find((int) $comment->behalf_id)
+            : null;
+        $authorName = $user?->displayName() ?? '';
+        $authorUrl = $user ? route('front.profile.show', ['user' => $user->id]) : route('front.news.index');
+        $avatar = FrontAssets::userAvatar($user);
+
+        if ($behalf instanceof Community) {
+            $authorName = (string) $behalf->name;
+            $authorUrl = $behalf->type === 'group'
+                ? route('front.groups.show', ['community' => $behalf->id])
+                : route('front.teams.show', ['community' => $behalf->id]);
+            $avatar = FrontAssets::communityAvatar($behalf);
+        }
 
         return [
             'id' => (int)$comment->id,
             'parent_id' => (int)$comment->parent_id,
             'content_id' => (int)$comment->content_id,
             'author_id' => (int)$comment->user_id,
-            'author_name' => $user?->displayName() ?? '',
-            'author_url' => $user ? route('front.profile.show', ['user' => $user->id]) : route('front.news.index'),
-            'avatar' => FrontAssets::userAvatar($user),
+            'author_name' => $authorName,
+            'author_url' => $authorUrl,
+            'avatar' => $avatar,
             'created' => $comment->created_at?->format('d.m.Y H:i') ?? '',
             'content' => (string)$comment->content,
             'attachments' => $comment->attachments
@@ -464,13 +480,7 @@ class ProfileRepository extends BaseRepository
             'shares_count' => (int)($comment->shares_count ?? 0),
             'can_interact' => (bool)$viewer,
             'can_share' => $viewer && (int)$viewer->id !== (int)$comment->user_id,
-            'can_delete' => $viewer && (
-                    (int)$viewer->id === (int)$comment->user_id
-                    || (
-                        (string)$comment->commentable_type === 'user'
-                        && (int)$viewer->id === (int)$comment->content_id
-                    )
-                ),
+            'can_delete' => $viewer && $this->viewerCanDeleteComment($viewer, $comment),
             'replies' => $includeReplies
                 ? $comment->replies->map(fn(Comment $reply): array => $this->serializeComment($reply, $viewer, false))->values()
                 : collect(),
@@ -503,8 +513,19 @@ class ProfileRepository extends BaseRepository
             return true;
         }
 
-        return (string)$comment->commentable_type === 'user'
-            && (int)$viewer->id === (int)$comment->content_id;
+        if ((string)$comment->commentable_type === 'user') {
+            return (int)$viewer->id === (int)$comment->content_id;
+        }
+
+        if (in_array((string)$comment->commentable_type, ['team', 'group'], true)) {
+            return CommunityRole::query()
+                ->where('community_id', (int)$comment->content_id)
+                ->where('user_id', (int)$viewer->id)
+                ->whereIn('role', [1, 2])
+                ->exists();
+        }
+
+        return false;
     }
 
     private function commentTreeIds(Comment $comment): Collection

@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Community;
+use App\Models\CommunitySetting;
 use App\Models\User;
 use App\Repositories\CommunityRepository;
 use Mockery\MockInterface;
@@ -99,6 +101,105 @@ class TeamsPageTest extends TestCase
         $this->assertStringContainsString('Приглашен', $response->json('html'));
     }
 
+    public function test_team_create_page_renders_legacy_form_controls(): void
+    {
+        $this->actingAs($this->user(1), 'web');
+
+        $this->get('/teams/create')
+            ->assertOk()
+            ->assertSee('Создание команды')
+            ->assertSee('class="form-horizontal create_form"', false)
+            ->assertSee('name="name"', false)
+            ->assertSee('name="about"', false)
+            ->assertSee('name="place"', false)
+            ->assertSee('name="sport"', false)
+            ->assertSee('id="preview_ava"', false)
+            ->assertSee('id="preview_cover"', false)
+            ->assertSee('class="file_upload team-file-upload"', false)
+            ->assertSee('name="avatar_file"', false)
+            ->assertSee('name="cover_file"', false)
+            ->assertSee('Загрузить аватар')
+            ->assertSee('Загрузить обложку');
+    }
+
+    public function test_team_edit_page_renders_tabs_and_top_actions(): void
+    {
+        $viewer = $this->user(1);
+        $team = $this->community(18);
+        $settings = $this->settings(18);
+
+        $this->actingAs($viewer, 'web');
+
+        $this->mock(CommunityRepository::class, function (MockInterface $mock) use ($viewer, $team, $settings): void {
+            $mock->shouldReceive('findTeam')->with(18)->andReturn($team);
+            $mock->shouldReceive('canManage')->with($team, $viewer)->andReturn(true);
+            $mock->shouldReceive('serializeTeam')->with($team)->andReturn($this->teamData(18, 'выпы'));
+            $mock->shouldReceive('permissions')->with($team, $viewer)->andReturn(['wall' => true, 'photo' => true, 'video' => true]);
+            $mock->shouldReceive('role')->with(18, $viewer->id)->andReturn(1);
+            $mock->shouldReceive('membershipType')->with($team, $viewer)->andReturn('owner');
+            $mock->shouldReceive('canInvite')->with($team, $viewer)->andReturn(true);
+            $mock->shouldReceive('settings')->with($team)->andReturn($settings);
+            $mock->shouldReceive('admins')->with(18)->andReturn(collect());
+            $mock->shouldReceive('blocked')->with(18)->andReturn(collect());
+        });
+
+        $this->get('/teams/18/edit')
+            ->assertOk()
+            ->assertSee('Редактирование команды')
+            ->assertSee('Пригласить друзей')
+            ->assertSee('class="groups_button_leave js-team-leave"', false)
+            ->assertSee('Администраторы')
+            ->assertSee('Приватность')
+            ->assertSee('Черный список')
+            ->assertSee('name="community[permission_wall]"', false)
+            ->assertSee('name="community[type]"', false)
+            ->assertSee('Загрузить аватар')
+            ->assertSee('Загрузить обложку');
+    }
+
+    public function test_team_membership_ajax_changes_status(): void
+    {
+        $viewer = $this->user(1);
+        $team = $this->community(18);
+
+        $this->actingAs($viewer, 'web');
+
+        $this->mock(CommunityRepository::class, function (MockInterface $mock) use ($viewer, $team): void {
+            $mock->shouldReceive('findTeam')->with(18)->andReturn($team);
+            $mock->shouldReceive('changeMembership')->with($team, $viewer, 0)->andReturn(true);
+            $mock->shouldReceive('membershipType')->with($team, $viewer)->andReturn('none');
+        });
+
+        $this->post('/ajax/changememberstatus', [
+            'id' => 18,
+            'status' => 0,
+        ])
+            ->assertOk()
+            ->assertJsonPath('result', 'success')
+            ->assertJsonPath('member', 'none');
+    }
+
+    public function test_team_invitation_ajax_invites_friends(): void
+    {
+        $viewer = $this->user(1);
+        $team = $this->community(18);
+
+        $this->actingAs($viewer, 'web');
+
+        $this->mock(CommunityRepository::class, function (MockInterface $mock) use ($viewer, $team): void {
+            $mock->shouldReceive('findTeam')->with(18)->andReturn($team);
+            $mock->shouldReceive('canInvite')->with($team, $viewer)->andReturn(true);
+            $mock->shouldReceive('inviteFriends')->with($team, $viewer)->andReturn(4);
+        });
+
+        $this->post('/ajax/send_community_invitation', [
+            'community_id' => 18,
+        ])
+            ->assertOk()
+            ->assertJsonPath('result', 'success')
+            ->assertJsonPath('count', 4);
+    }
+
     private function team(int $id, string $name): array
     {
         return [
@@ -111,6 +212,55 @@ class TeamsPageTest extends TestCase
             'members_text' => '5 участников',
             'avatar' => 'http://site3.local/uploads/images/teamcontent/avatar/team.jpg',
             'can_edit' => false,
+        ];
+    }
+
+    private function community(int $id): Community
+    {
+        $team = new Community([
+            'type' => 'team',
+            'name' => 'выпы',
+            'about' => 'Описание',
+            'place' => 'Моготуй',
+            'sport_type' => 'Радиоспорт',
+            'avatar' => '',
+            'cover_page' => '',
+            'banned' => false,
+            'moderate' => true,
+        ]);
+        $team->id = $id;
+        $team->exists = true;
+
+        return $team;
+    }
+
+    private function settings(int $communityId): CommunitySetting
+    {
+        $settings = new CommunitySetting([
+            'community_id' => $communityId,
+            'permission_wall' => 0,
+            'permission_photo' => 0,
+            'permission_video' => 0,
+            'type' => 0,
+        ]);
+        $settings->exists = true;
+
+        return $settings;
+    }
+
+    private function teamData(int $id, string $name): array
+    {
+        return [
+            'id' => $id,
+            'name' => $name,
+            'about' => 'Описание',
+            'place' => 'Моготуй',
+            'sport_type' => 'Радиоспорт',
+            'type_label' => 'Открытая команда',
+            'avatar' => 'http://site3.local/frontend/images/default_group.png',
+            'cover' => 'http://site3.local/frontend/images/default_group.png',
+            'members_count' => 1,
+            'members_text' => '1 участников',
         ];
     }
 

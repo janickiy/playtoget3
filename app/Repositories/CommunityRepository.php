@@ -8,6 +8,7 @@ use App\Models\Community;
 use App\Models\CommunityRole;
 use App\Models\CommunitySetting;
 use App\Models\Event;
+use App\Models\Friend;
 use App\Models\GeoCity;
 use App\Models\GeoTarget;
 use App\Models\SportType;
@@ -386,6 +387,126 @@ class CommunityRepository extends BaseRepository
         }
 
         return in_array($this->role((int) $team->id, $viewer?->id), [1, 2], true);
+    }
+
+    public function canInvite(?Community $team, ?User $viewer): bool
+    {
+        if (! $team || ! $viewer) {
+            return false;
+        }
+
+        return in_array($this->role((int) $team->id, (int) $viewer->id), [1, 2, 3], true);
+    }
+
+    public function membershipType(Community $team, ?User $viewer): string
+    {
+        return match ($this->role((int) $team->id, $viewer?->id)) {
+            1 => 'owner',
+            2 => 'admin',
+            3 => 'member',
+            0 => 'applied',
+            4 => 'blocked',
+            5 => 'invited',
+            default => 'none',
+        };
+    }
+
+    public function changeMembership(Community $team, User $viewer, int $status): bool
+    {
+        if (! in_array($status, [0, 1], true)) {
+            return false;
+        }
+
+        return DB::transaction(function () use ($team, $viewer, $status): bool {
+            /** @var CommunityRole|null $role */
+            $role = CommunityRole::query()
+                ->where('community_id', $team->id)
+                ->where('user_id', $viewer->id)
+                ->lockForUpdate()
+                ->first();
+
+            if ($status === 0) {
+                return $role ? (bool) $role->delete() : false;
+            }
+
+            if ($role && (int) $role->role === 4) {
+                return false;
+            }
+
+            if ($role && in_array((int) $role->role, [1, 2, 3], true)) {
+                return true;
+            }
+
+            $memberRole = $role && (int) $role->role === 5
+                ? 3
+                : ((int) $this->settings($team)->type === 0 ? 3 : 0);
+
+            if ($role) {
+                $role->fill(['role' => $memberRole])->save();
+
+                return true;
+            }
+
+            CommunityRole::query()->create([
+                'community_id' => $team->id,
+                'user_id' => $viewer->id,
+                'role' => $memberRole,
+            ]);
+
+            return true;
+        });
+    }
+
+    public function inviteFriends(Community $team, User $viewer): int
+    {
+        if (! $this->canInvite($team, $viewer)) {
+            return 0;
+        }
+
+        $friendIds = Friend::query()
+            ->where('status', 1)
+            ->where(function (Builder $query) use ($viewer): void {
+                $query
+                    ->where('user_id', $viewer->id)
+                    ->orWhere('friend_id', $viewer->id);
+            })
+            ->get(['user_id', 'friend_id'])
+            ->map(fn (Friend $friend): int => (int) ((int) $friend->user_id === (int) $viewer->id ? $friend->friend_id : $friend->user_id))
+            ->filter(fn (int $id): bool => $id > 0 && $id !== (int) $viewer->id)
+            ->unique()
+            ->values();
+
+        if ($friendIds->isEmpty()) {
+            return 0;
+        }
+
+        $existingIds = CommunityRole::query()
+            ->where('community_id', $team->id)
+            ->whereIn('user_id', $friendIds)
+            ->pluck('user_id')
+            ->map(fn ($id): int => (int) $id);
+
+        $inviteIds = User::query()
+            ->whereIn('id', $friendIds->diff($existingIds)->values())
+            ->where('confirmed', true)
+            ->where('banned', false)
+            ->where('deleted', false)
+            ->pluck('id')
+            ->map(fn ($id): int => (int) $id);
+
+        if ($inviteIds->isEmpty()) {
+            return 0;
+        }
+
+        $rows = $inviteIds->map(fn (int $id): array => [
+            'community_id' => $team->id,
+            'user_id' => $id,
+            'role' => 5,
+        ])->all();
+
+        CommunityRole::query()->insert($rows);
+
+        return count($rows);
     }
 
     public function permissions(Community $team, ?User $viewer): array

@@ -264,7 +264,7 @@ $(document).on("click", ".reply", function () {
     ReplyForm += '</div>';
     ReplyForm += '<form autocomplete="off" id="reply-form-' + IdComment + '" data-num = ' + IdComment + ' action="" enctype="multipart/form-data">';
     ReplyForm += '<input type="hidden" name="_token" value="' + ($('meta[name="csrf-token"]').attr('content') || '') + '">';
-    ReplyForm += '<input type="hidden" name="commentable_type" value="user">';
+    ReplyForm += '<input type="hidden" name="commentable_type" value="' + (window.profileCommentableType || 'user') + '">';
     ReplyForm += '<input type="hidden" name="content_id" value="' + content_id + '">';
     ReplyForm += '<input type="hidden" name="user_id" value="' + user_id + '">';
     ReplyForm += '<input type="hidden" name="parent_id" value="' + IdComment + '">';
@@ -305,7 +305,7 @@ $(document).scroll(function () {
                     _token: $('meta[name="csrf-token"]').attr('content') || '',
                     number: settComments.number,
                     offset: settComments.offset,
-                    commentable_type: 'user',
+                    commentable_type: window.profileCommentableType || $('#comment-list').attr('data-commentable-type') || 'user',
                     id: id_profile
                 },
                 success: function (data) {

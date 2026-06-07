@@ -59,6 +59,8 @@ class AjaxController extends Controller
             'remove_friend' => $this->removeFriend($request),
             'block_user' => $this->blockUser($request),
             'unblock_user' => $this->unblockUser($request),
+            'changememberstatus' => $this->changeCommunityMemberStatus($request),
+            'send_community_invitation' => $this->sendCommunityInvitation($request),
             'getcomments' => $this->getComments($request),
             'getphotoinfo' => $this->getPhotoInfo($request),
             'add_photo_ajax' => $this->addPhotoAjax($request),
@@ -290,6 +292,49 @@ class AjaxController extends Controller
         return response()->json([
             'status' => $unblocked ? 'success' : null,
             'result' => $unblocked ? 'success' : '',
+        ]);
+    }
+
+    private function changeCommunityMemberStatus(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $communityId = (int)$request->input('id', $request->input('community_id', 0));
+        $status = (int)$request->input('status');
+        $community = $communityId > 0
+            ? ($this->communities->findTeam($communityId) ?: $this->communities->findGroup($communityId))
+            : null;
+
+        if (!$viewer || !$community || !in_array($status, [0, 1], true)) {
+            return response()->json(['status' => 0, 'result' => 'error'], 422);
+        }
+
+        $changed = $this->communities->changeMembership($community, $viewer, $status);
+
+        return response()->json([
+            'status' => $changed ? 1 : 0,
+            'result' => $changed ? 'success' : 'error',
+            'member' => $changed ? $this->communities->membershipType($community, $viewer) : null,
+        ]);
+    }
+
+    private function sendCommunityInvitation(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $communityId = (int)$request->input('community_id', $request->input('id', 0));
+        $community = $communityId > 0
+            ? ($this->communities->findTeam($communityId) ?: $this->communities->findGroup($communityId))
+            : null;
+
+        if (!$viewer || !$community || !$this->communities->canInvite($community, $viewer)) {
+            return response()->json(['status' => 0, 'result' => 'error', 'count' => 0], 422);
+        }
+
+        $count = $this->communities->inviteFriends($community, $viewer);
+
+        return response()->json([
+            'status' => 1,
+            'result' => 'success',
+            'count' => $count,
         ]);
     }
 
@@ -751,9 +796,30 @@ class AjaxController extends Controller
             ], 422);
         }
 
+        $behalfableType = '';
+        $behalfId = 0;
+
+        if ($type === 'team') {
+            $team = $this->communities->findTeam($profileId);
+
+            if (!$team || !$this->communities->permissions($team, $viewer)['wall']) {
+                return response()->json([
+                    'status' => false,
+                    'errors' => ['comment' => 'Нет доступа к ленте команды'],
+                ], 403);
+            }
+
+            if ($request->boolean('author_community') && $this->communities->canManage($team, $viewer)) {
+                $behalfableType = 'team';
+                $behalfId = $team->id;
+            }
+        }
+
         $created = $this->profiles->createWallComment($viewer, [
             'commentable_type' => $type,
             'content_id' => $profileId,
+            'behalfable_type' => $behalfableType,
+            'behalf_id' => $behalfId,
             'comment' => $comment,
             'parent_id' => $request->input('parent_id', 0),
             'attach' => $attach,
