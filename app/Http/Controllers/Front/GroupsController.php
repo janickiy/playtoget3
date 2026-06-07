@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Auth;
 
 class GroupsController extends Controller
 {
+    private const PAGE_SIZE = 5;
+
     public function index(CommunityRepository $communities): View|RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
@@ -24,9 +26,13 @@ class GroupsController extends Controller
 
         return view('front.groups.index', [
             'title' => 'Группы',
-            'myGroups' => $this->groupsForViewer($communities->myGroups($viewer->id), $communities, $viewer),
-            'popularGroups' => $this->groupsForViewer($communities->popularGroups(), $communities, $viewer),
-            'invitedGroups' => $this->groupsForViewer($communities->invitedGroups($viewer->id), $communities, $viewer),
+            'myGroups' => $this->groupsForViewer($communities->myGroups($viewer->id, self::PAGE_SIZE, 0), $communities, $viewer),
+            'popularGroups' => $this->groupsForViewer($communities->popularGroups(self::PAGE_SIZE, 0), $communities, $viewer),
+            'invitedGroups' => $this->groupsForViewer($communities->invitedGroups($viewer->id, self::PAGE_SIZE, 0), $communities, $viewer),
+            'myGroupsTotal' => $communities->myGroupsCount($viewer->id),
+            'popularGroupsTotal' => $communities->popularGroupsCount(),
+            'invitedGroupsTotal' => $communities->invitedGroupsCount($viewer->id),
+            'groupsPageSize' => self::PAGE_SIZE,
             'viewer' => $viewer,
         ]);
     }

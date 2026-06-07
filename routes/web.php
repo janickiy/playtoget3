@@ -8,6 +8,7 @@ use App\Http\Controllers\Front\EventsController;
 use App\Http\Controllers\Front\FeedbackController;
 use App\Http\Controllers\Front\FitnessController;
 use App\Http\Controllers\Front\FriendsController;
+use App\Http\Controllers\Front\GroupsController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\NewsController;
 use App\Http\Controllers\Front\PhotoalbumsController;
@@ -73,6 +74,16 @@ Route::prefix('events')->name('front.events.')->group(function () {
 
 Route::get('friends/user/{user}', [FriendsController::class, 'user'])->where('user', '[0-9]+')->name('front.friends.user');
 Route::get('friends', [FriendsController::class, 'index'])->name('front.friends.index');
+
+Route::prefix('groups')->name('front.groups.')->group(function () {
+    Route::get('', [GroupsController::class, 'index'])->name('index');
+    Route::get('create', [GroupsController::class, 'create'])->name('create');
+    Route::post('create', [GroupsController::class, 'store'])->name('store');
+    Route::get('{community}/edit', [GroupsController::class, 'edit'])->where('community', '[0-9]+')->name('edit');
+    Route::post('{community}/edit', [GroupsController::class, 'update'])->where('community', '[0-9]+')->name('update');
+    Route::get('{community}/members', [GroupsController::class, 'members'])->where('community', '[0-9]+')->name('members');
+    Route::get('{community}', [GroupsController::class, 'show'])->where('community', '[0-9]+')->name('show');
+});
 
 Route::prefix('photoalbums')->name('front.photoalbums.')->group(function () {
     Route::get('add-photo', [PhotoalbumsController::class, 'addPhoto'])->name('add-photo');

@@ -25,6 +25,7 @@ use App\Repositories\UserRepository;
 use App\Repositories\VideoalbumRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -49,6 +50,8 @@ class AjaxController extends Controller
     {
         return match ($action) {
             'get_usernews_list' => $this->getUserNewsList($request),
+            'get_communities_list' => $this->getCommunitiesList($request),
+            'get_pop_communities_list' => $this->getPopCommunitiesList($request),
             'getpossiblefriends' => $this->getPossibleFriends($request),
             'get_friends_list' => $this->getFriendsList($request),
             'add_as_friend' => $this->addAsFriend($request),
@@ -99,6 +102,69 @@ class AjaxController extends Controller
             'html' => view('front.news._items', ['news' => $news])->render(),
             'count' => $news->count(),
             'has_more' => $hasMore,
+        ]);
+    }
+
+    private function getCommunitiesList(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+
+        if (!$viewer) {
+            return response()->json(['status' => 0, 'html' => ''], 401);
+        }
+
+        $limit = min(max((int)$request->input('number', 5), 1), 25);
+        $offset = max((int)$request->input('offset', 0), 0);
+        $userId = max((int)$request->input('user_id', $viewer->id), 1);
+        $type = (string)$request->input('type', 'group');
+
+        if (!in_array($type, ['group', 'team'], true)) {
+            return response()->json(['status' => 0, 'html' => ''], 422);
+        }
+
+        $items = $type === 'team'
+            ? $this->communities->myTeams($userId, $limit, $offset)
+            : $this->communities->myGroups($userId, $limit, $offset);
+        $nextItems = $type === 'team'
+            ? $this->communities->myTeams($userId, 1, $offset + $limit)
+            : $this->communities->myGroups($userId, 1, $offset + $limit);
+
+        return response()->json([
+            'status' => 1,
+            'html' => $this->renderCommunities($this->communitiesForViewer($items, $viewer), $type),
+            'count' => $items->count(),
+            'has_more' => $nextItems->isNotEmpty(),
+        ]);
+    }
+
+    private function getPopCommunitiesList(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+
+        if (!$viewer) {
+            return response()->json(['status' => 0, 'html' => ''], 401);
+        }
+
+        $limit = min(max((int)$request->input('number', 5), 1), 25);
+        $offset = max((int)$request->input('offset', 0), 0);
+        $type = (string)$request->input('type', 'group');
+
+        if (!in_array($type, ['group', 'team'], true)) {
+            return response()->json(['status' => 0, 'html' => ''], 422);
+        }
+
+        $items = $type === 'team'
+            ? $this->communities->popularTeams($limit, $offset)
+            : $this->communities->popularGroups($limit, $offset);
+        $nextItems = $type === 'team'
+            ? $this->communities->popularTeams(1, $offset + $limit)
+            : $this->communities->popularGroups(1, $offset + $limit);
+
+        return response()->json([
+            'status' => 1,
+            'html' => $this->renderCommunities($this->communitiesForViewer($items, $viewer), $type),
+            'count' => $items->count(),
+            'has_more' => $nextItems->isNotEmpty(),
         ]);
     }
 
@@ -955,6 +1021,28 @@ class AjaxController extends Controller
                 'viewer' => $viewer,
                 'canManage' => $canManage,
             ])->render())
+            ->implode('');
+    }
+
+    private function communitiesForViewer(Collection $items, User $viewer): Collection
+    {
+        return $items->map(function (array $item) use ($viewer): array {
+            $role = $this->communities->role((int)$item['id'], $viewer->id);
+
+            $item['status'] = $this->communities->roleLabel($role);
+            $item['can_edit'] = $role === 1;
+
+            return $item;
+        });
+    }
+
+    private function renderCommunities(Collection $items, string $type): string
+    {
+        $view = $type === 'team' ? 'front.teams._team-card' : 'front.groups._group-card';
+        $key = $type === 'team' ? 'team' : 'group';
+
+        return $items
+            ->map(fn(array $item): string => view($view, [$key => $item])->render())
             ->implode('');
     }
 }

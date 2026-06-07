@@ -28,15 +28,15 @@
                 <li data-type="popular" class="active"><a href="#popular">Популярные группы</a></li>
                 <li data-type="mygroups">
                     <a href="#mygroups">Мои группы
-                        @if ($myGroups->isNotEmpty())
-                            <sup>{{ $myGroups->count() }}</sup>
+                        @if ($myGroupsTotal > 0)
+                            <sup>{{ $myGroupsTotal }}</sup>
                         @endif
                     </a>
                 </li>
                 <li data-type="invited">
                     <a href="#invited">Меня пригласили
-                        @if ($invitedGroups->isNotEmpty())
-                            <sup class="active">{{ $invitedGroups->count() }}</sup>
+                        @if ($invitedGroupsTotal > 0)
+                            <sup class="active">{{ $invitedGroupsTotal }}</sup>
                         @endif
                     </a>
                 </li>
@@ -45,11 +45,17 @@
             <div id="popular" class="paddingTop20">
                 @if ($popularGroups->isNotEmpty())
                     <div class="event-container">
-                        <div id="pop_group_list">
+                        <div id="pop_group_list"
+                             data-next-offset="{{ $popularGroups->count() }}"
+                             data-page-size="{{ $groupsPageSize }}"
+                             data-has-more="{{ $popularGroupsTotal > $popularGroups->count() ? 1 : 0 }}">
                             @foreach ($popularGroups as $group)
                                 @include('front.groups._group-card', ['group' => $group])
                             @endforeach
                         </div>
+                        <a href="#" class="show-more js-groups-load-more" data-feed="popular" @style(['display: none' => $popularGroupsTotal <= $popularGroups->count()])>
+                            <i></i><span>Показать еще</span>
+                        </a>
                     </div>
                 @else
                     <center><h5>Популярные группы отсутствуют</h5></center>
@@ -59,9 +65,18 @@
             <div id="mygroups" class="paddingTop20" style="display:none">
                 @if ($myGroups->isNotEmpty())
                     <div class="event-container">
-                        @foreach ($myGroups as $group)
-                            @include('front.groups._group-card', ['group' => $group])
-                        @endforeach
+                        <div id="my_group_list"
+                             data-next-offset="{{ $myGroups->count() }}"
+                             data-page-size="{{ $groupsPageSize }}"
+                             data-has-more="{{ $myGroupsTotal > $myGroups->count() ? 1 : 0 }}"
+                             data-user-id="{{ $viewer->id }}">
+                            @foreach ($myGroups as $group)
+                                @include('front.groups._group-card', ['group' => $group])
+                            @endforeach
+                        </div>
+                        <a href="#" class="show-more js-groups-load-more" data-feed="mygroups" @style(['display: none' => $myGroupsTotal <= $myGroups->count()])>
+                            <i></i><span>Показать еще</span>
+                        </a>
                     </div>
                 @else
                     <center><h5>Вы пока не вступали в группы</h5></center>
@@ -158,12 +173,17 @@
             width: 15px;
         }
 
-        .content-groups #tabs > .paddingTop20 {
-            clear: both;
-            padding-top: 0 !important;
+	        .content-groups #tabs > .paddingTop20 {
+	            clear: both;
+	            padding-top: 0 !important;
+	        }
+
+        .content-groups .show-more.groups-loading {
+            opacity: .6;
+            pointer-events: none;
         }
-    </style>
-@endpush
+	    </style>
+	@endpush
 
 @push('scripts')
     <script>
@@ -174,21 +194,111 @@
                 return;
             }
 
-            function activateTab(selector) {
-                $tabs.children('div').hide();
-                $(selector).show();
-                $tabs.find('#main-menu li').removeClass('active ui-state-active');
-                $tabs.find('#main-menu a[href="' + selector + '"]').closest('li').addClass('active ui-state-active');
-            }
+	            function activateTab(selector) {
+	                $tabs.children('div').hide();
+	                $(selector).show();
+	                $tabs.find('#main-menu li').removeClass('active ui-state-active');
+	                $tabs.find('#main-menu a[href="' + selector + '"]').closest('li').addClass('active ui-state-active');
+                    requestNextPageIfNeeded();
+	            }
 
-            $tabs.find('#main-menu a').on('click', function (event) {
-                event.preventDefault();
-                activateTab($(this).attr('href'));
-            });
+                const feeds = {
+                    popular: {
+                        url: '{{ route('front.ajax.handle', ['action' => 'get_pop_communities_list']) }}',
+                        $container: $('#pop_group_list'),
+                    },
+                    mygroups: {
+                        url: '{{ route('front.ajax.handle', ['action' => 'get_communities_list']) }}',
+                        $container: $('#my_group_list'),
+                    },
+                };
 
-            $('.groups-search-form .lupa span').on('click', function () {
-                $(this).closest('form').trigger('submit');
-            });
+                let loading = false;
+                let scrollTimer = null;
+
+                function activeFeedName() {
+                    return $tabs.find('#main-menu li.active').data('type');
+                }
+
+                function feedConfig(feedName) {
+                    const config = feeds[feedName];
+
+                    if (!config || !config.$container.length) {
+                        return null;
+                    }
+
+                    return config;
+                }
+
+                function loadGroups(feedName) {
+                    const config = feedConfig(feedName);
+
+                    if (!config || loading || Number(config.$container.data('has-more')) !== 1) {
+                        return;
+                    }
+
+                    const $button = $('.js-groups-load-more[data-feed="' + feedName + '"]');
+                    const pageSize = Number(config.$container.data('page-size')) || 5;
+                    const offset = Number(config.$container.data('next-offset')) || 0;
+
+                    loading = true;
+                    $button.addClass('groups-loading');
+
+                    $.ajax({
+                        type: 'POST',
+                        url: config.url,
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content'),
+                            number: pageSize,
+                            offset: offset,
+                            type: 'group',
+                            user_id: config.$container.data('user-id') || '{{ $viewer->id }}',
+                        },
+                        success: function (data) {
+                            if (data.status === 1 && data.html) {
+                                config.$container.append(data.html);
+                                config.$container.data('next-offset', offset + (Number(data.count) || pageSize));
+                                config.$container.data('has-more', data.has_more ? 1 : 0);
+                            } else {
+                                config.$container.data('has-more', 0);
+                            }
+
+                            if (Number(config.$container.data('has-more')) !== 1) {
+                                $button.hide();
+                            }
+                        },
+                        complete: function () {
+                            loading = false;
+                            $button.removeClass('groups-loading');
+                            requestNextPageIfNeeded();
+                        },
+                    });
+                }
+
+                function requestNextPageIfNeeded() {
+                    window.clearTimeout(scrollTimer);
+                    scrollTimer = window.setTimeout(function () {
+                        if ($(window).scrollTop() + $(window).height() + 300 >= $(document).height()) {
+                            loadGroups(activeFeedName());
+                        }
+                    }, 80);
+                }
+
+	            $tabs.find('#main-menu a').on('click', function (event) {
+	                event.preventDefault();
+	                activateTab($(this).attr('href'));
+	            });
+
+                $('.js-groups-load-more').on('click', function (event) {
+                    event.preventDefault();
+                    loadGroups($(this).data('feed'));
+                });
+
+                $(window).on('scroll.groups', requestNextPageIfNeeded);
+
+	            $('.groups-search-form .lupa span').on('click', function () {
+	                $(this).closest('form').trigger('submit');
+	            });
 
             activateTab('#popular');
         })();
