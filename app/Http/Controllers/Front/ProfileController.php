@@ -154,6 +154,7 @@ class ProfileController extends Controller
             'user.notification_events' => ['nullable', 'in:yes'],
             'user.notification_birthdays' => ['nullable', 'in:yes'],
             'file_ava' => ['nullable', 'string', 'max:255', 'regex:/^[A-Za-z0-9_.-]+$/'],
+            'file_cover' => ['nullable', 'string', 'max:255', 'regex:/^[A-Za-z0-9_.-]+$/'],
             'cover' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:10240'],
         ]);
 
@@ -161,6 +162,7 @@ class ProfileController extends Controller
             $viewer,
             $validated['user'] ?? [],
             $validated['file_ava'] ?? null,
+            $validated['file_cover'] ?? null,
             $request->file('cover'),
         );
 

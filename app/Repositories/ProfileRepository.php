@@ -24,6 +24,9 @@ use RuntimeException;
 
 class ProfileRepository extends BaseRepository
 {
+    private const COVER_WIDTH = 1200;
+    private const COVER_HEIGHT = 350;
+
     private const MONTHS = [
         1 => 'января',
         2 => 'февраля',
@@ -257,7 +260,78 @@ class ProfileRepository extends BaseRepository
         ];
     }
 
-    public function updateProfileSettings(User $user, array $input, ?string $temporaryAvatar, ?UploadedFile $cover): void
+    public function cropTemporaryCover(User $user, UploadedFile $file, array $crop): array
+    {
+        $source = $this->imageResource($file);
+        $sourceWidth = imagesx($source);
+        $sourceHeight = imagesy($source);
+
+        if ($sourceWidth < 1 || $sourceHeight < 1) {
+            imagedestroy($source);
+
+            throw new RuntimeException('Не удалось прочитать изображение.');
+        }
+
+        $x = max(0, (int)floor((float)($crop['x'] ?? 0)));
+        $y = max(0, (int)floor((float)($crop['y'] ?? 0)));
+        $width = max(0, (int)floor((float)($crop['w'] ?? 0)));
+        $height = max(0, (int)floor((float)($crop['h'] ?? 0)));
+        $width = min($width, $sourceWidth - $x);
+        $height = min($height, $sourceHeight - $y);
+
+        if ($width < 300 || $height < 80) {
+            imagedestroy($source);
+
+            throw new RuntimeException('Выделенная область слишком мала.');
+        }
+
+        [$x, $y, $width, $height] = $this->normalizeCoverCrop($x, $y, $width, $height);
+
+        if ($width < 300 || $height < 80) {
+            imagedestroy($source);
+
+            throw new RuntimeException('Выделенная область выходит за границы изображения.');
+        }
+
+        $target = imagecreatetruecolor(self::COVER_WIDTH, self::COVER_HEIGHT);
+        imagefill($target, 0, 0, imagecolorallocate($target, 255, 255, 255));
+        imagecopyresampled(
+            $target,
+            $source,
+            0,
+            0,
+            $x,
+            $y,
+            self::COVER_WIDTH,
+            self::COVER_HEIGHT,
+            $width,
+            $height,
+        );
+        imagedestroy($source);
+
+        ob_start();
+        imagejpeg($target, null, 90);
+        $contents = ob_get_clean();
+        imagedestroy($target);
+
+        if (!is_string($contents) || $contents === '') {
+            throw new RuntimeException('Не удалось обработать изображение.');
+        }
+
+        $filename = sprintf('%d_%s.jpg', $user->id, Str::lower(Str::random(32)));
+        $path = 'images/tmp/profile/cover_page/' . $filename;
+
+        if (!Storage::disk('public')->put($path, $contents)) {
+            throw new RuntimeException('Не удалось сохранить изображение.');
+        }
+
+        return [
+            'file' => $filename,
+            'url' => Storage::disk('public')->url($path),
+        ];
+    }
+
+    public function updateProfileSettings(User $user, array $input, ?string $temporaryAvatar, ?string $temporaryCover, ?UploadedFile $cover = null): void
     {
         $contacts = [];
         foreach (self::CONTACT_FIELDS as $field) {
@@ -275,7 +349,8 @@ class ProfileRepository extends BaseRepository
         }
 
         $newAvatar = $this->promoteTemporaryAvatar($temporaryAvatar, $user->id);
-        $newCover = $cover ? $this->storeUserImage($cover, 'user/cover_page', $user->id) : null;
+        $newCover = $this->promoteTemporaryCover($temporaryCover, $user->id)
+            ?? ($cover ? $this->storeUserImage($cover, 'user/cover_page', $user->id) : null);
         $oldAvatar = null;
         $oldCover = null;
 
@@ -659,6 +734,62 @@ class ProfileRepository extends BaseRepository
         $disk->delete($source);
 
         return $targetFilename;
+    }
+
+    private function promoteTemporaryCover(?string $temporaryCover, int $userId): ?string
+    {
+        if (!$temporaryCover) {
+            return null;
+        }
+
+        $filename = basename($temporaryCover);
+
+        if (!preg_match('/^[A-Za-z0-9_.-]+$/', $filename)) {
+            throw new RuntimeException('Некорректное имя файла обложки.');
+        }
+
+        $disk = Storage::disk('public');
+        $source = 'images/tmp/profile/cover_page/' . $filename;
+
+        if (!$disk->exists($source)) {
+            throw new RuntimeException('Файл обложки не найден.');
+        }
+
+        $targetFilename = sprintf('%d_%s', $userId, preg_replace('/^\d+_/', '', $filename));
+        $target = 'images/user/cover_page/' . $targetFilename;
+
+        if (!$disk->copy($source, $target)) {
+            throw new RuntimeException('Не удалось сохранить обложку.');
+        }
+
+        $disk->delete($source);
+
+        return $targetFilename;
+    }
+
+    /**
+     * Keeps the persisted cover at the same ratio as the profile header.
+     */
+    private function normalizeCoverCrop(int $x, int $y, int $width, int $height): array
+    {
+        $targetRatio = self::COVER_WIDTH / self::COVER_HEIGHT;
+        $currentRatio = $width / max(1, $height);
+
+        if (abs($currentRatio - $targetRatio) < 0.01) {
+            return [$x, $y, $width, $height];
+        }
+
+        if ($currentRatio > $targetRatio) {
+            $normalizedWidth = (int)floor($height * $targetRatio);
+            $x += (int)floor(($width - $normalizedWidth) / 2);
+            $width = $normalizedWidth;
+        } else {
+            $normalizedHeight = (int)floor($width / $targetRatio);
+            $y += (int)floor(($height - $normalizedHeight) / 2);
+            $height = $normalizedHeight;
+        }
+
+        return [$x, $y, $width, $height];
     }
 
     private function imageResource(UploadedFile $file): \GdImage

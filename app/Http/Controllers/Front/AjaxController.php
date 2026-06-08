@@ -75,6 +75,7 @@ class AjaxController extends Controller
             'get_album_videos' => $this->getAlbumVideos($request),
             'removevideo' => $this->removeVideo($request),
             'uploadavatar' => $this->uploadAvatar($request),
+            'uploadcover' => $this->uploadCover($request),
             'addcomment' => $this->addComment($request),
             'removecomment' => $this->removeComment($request),
             'addmessage' => $this->addMessage($request),
@@ -861,6 +862,42 @@ class AjaxController extends Controller
             'result' => 'success',
             'file' => $avatar['file'],
             'url' => $avatar['url'],
+        ]);
+    }
+
+    private function uploadCover(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+
+        if (!$viewer) {
+            return response()->json(['result' => 'error', 'error' => 'Unauthorized'], 401);
+        }
+
+        $validated = $request->validate([
+            'cover' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:10240'],
+            'x' => ['required', 'numeric', 'min:0'],
+            'y' => ['required', 'numeric', 'min:0'],
+            'w' => ['required', 'numeric', 'min:300'],
+            'h' => ['required', 'numeric', 'min:80'],
+        ]);
+
+        try {
+            $cover = $this->profiles->cropTemporaryCover(
+                $viewer,
+                $request->file('cover'),
+                $validated,
+            );
+        } catch (\RuntimeException $exception) {
+            return response()->json([
+                'result' => 'error',
+                'error' => $exception->getMessage(),
+            ], 422);
+        }
+
+        return response()->json([
+            'result' => 'success',
+            'file' => $cover['file'],
+            'url' => $cover['url'],
         ]);
     }
 

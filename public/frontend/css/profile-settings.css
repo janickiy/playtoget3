@@ -200,6 +200,11 @@
     z-index: 100501;
 }
 
+.cover-crop-modal.avatarUpload {
+    margin-left: -410px;
+    width: 820px;
+}
+
 .avatar-crop-modal .avatar-crop-inner {
     max-height: calc(100vh - 90px);
     overflow: hidden;
@@ -271,7 +276,8 @@
     display: block;
 }
 
-#avatar-crop-target {
+#avatar-crop-target,
+#cover-crop-target {
     display: block;
     height: auto;
     margin: 0 auto;
@@ -352,6 +358,22 @@
     border-radius: 50%;
 }
 
+.jcrop-cover-selection {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, .95) inset;
+    overflow: visible !important;
+}
+
+.jcrop-cover-rect .jcrop-handle {
+    background: #fff;
+    border-color: rgba(42, 45, 63, .55);
+    border-radius: 0;
+}
+
+.jcrop-cover-rect .jcrop-vline,
+.jcrop-cover-rect .jcrop-hline {
+    opacity: .35 !important;
+}
+
 @media (max-width: 768px) {
     .profile-edit-page .job_form {
         padding: 0 12px;
@@ -366,7 +388,8 @@
         grid-template-columns: 1fr;
     }
 
-    .avatar-crop-modal.avatarUpload {
+    .avatar-crop-modal.avatarUpload,
+    .cover-crop-modal.avatarUpload {
         left: 5%;
         margin-left: 0;
         max-height: 90vh;
