@@ -1066,9 +1066,9 @@ $(document).ready(function () {
     })
 
     /*SUBMIT COMMENT FORM*/
-    $(document).on('submit', '#addCommentForm', function () {
+    $(document).on('submit', '#addCommentForm, .js-wall-comment-form', function () {
         const then = $(this);
-        const comment = then.find('#comment').val();
+        const comment = then.find('[name=comment]').val();
         const files = then.find('.attach');
         const type = then.find('input[name=commentable_type]').val();
         const attach = [];
@@ -1077,16 +1077,14 @@ $(document).ready(function () {
         })
         if (comment != '' || attach.length != 0) {
             $('span.error').remove();
-            $('.files_block').append('<div class="loading-mess"><img border="0" src="./frontend/images/select2-spinner.gif" width=20px></div>');
-            $('.files_block').html('');
+            then.find('.files_block').append('<div class="loading-mess"><img border="0" src="./frontend/images/select2-spinner.gif" width=20px></div>');
+            then.find('.files_block').html('');
             const formData = then.serializeArray();
             if (attach.length != 0)
                 formData.push({'name': 'attach', 'value': attach});
             if (csrfToken()) {
                 formData.push({'name': '_token', 'value': csrfToken()});
             }
-            console.log(formData);
-
             $.ajax({
                 url: '/ajax/addcomment',
                 data: formData,
@@ -1098,7 +1096,7 @@ $(document).ready(function () {
 
                     if (data.status) {
                         $(data.html).hide().insertAfter('#addCommentContainers[data-type=' + type + ']').slideDown();
-                        $('#comment').val('');
+                        then.find('[name=comment]').val('');
                         $('.message-text').emotions();
                     } else {
                         $.each(data.errors, function (k, v) {

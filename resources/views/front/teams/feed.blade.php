@@ -20,7 +20,7 @@
         @if ($permissions['wall'])
             @if ($viewer)
                 <div class="message-content">
-                    <form autocomplete="off" id="addCommentForm" method="POST" action="" enctype="multipart/form-data">
+                    <form autocomplete="off" id="wallCommentForm" class="js-wall-comment-form" method="POST" action="" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="commentable_type" value="{{ $communityKind }}">
                         <input type="hidden" name="content_id" value="{{ $community->id }}">
