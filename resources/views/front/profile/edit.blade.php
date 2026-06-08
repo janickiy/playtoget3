@@ -55,9 +55,14 @@
                 @csrf
 
                 <input id="profile-avatar-file" type="hidden" name="file_ava" value="{{ old('file_ava') }}">
-                <input id="profile-cover-input" class="profile-asset-input" type="file" name="cover" accept="image/jpeg,image/png">
+                <input id="profile-cover-file" type="hidden" name="file_cover" value="{{ old('file_cover') }}">
+                <input id="profile-cover-input" class="profile-asset-input" type="file" accept="image/jpeg,image/png">
 
                 @error('file_ava')
+                    <div class="settings-field-error">{{ $message }}</div>
+                @enderror
+
+                @error('file_cover')
                     <div class="settings-field-error">{{ $message }}</div>
                 @enderror
 
@@ -232,6 +237,38 @@
                     <input type="hidden" id="avatar-crop-w" name="w" value="0">
                     <input type="hidden" id="avatar-crop-h" name="h" value="0">
                     <button type="submit" class="save-button saveAva">Сохранить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay_ava avatar-crop-overlay" id="cover-crop-overlay">
+        <div class="avatarUpload avatar-crop-modal cover-crop-modal" id="cover-crop-modal" data-type="cover">
+            <button type="button" class="avatar-crop-close cover-crop-close" aria-label="Закрыть">×</button>
+            <div class="avatar-crop-inner">
+                <div class="page-header">
+                    <h3>Загрузка Обложки</h3>
+                </div>
+                <div class="loading-bar" id="cover-crop-loading">
+                    <img border="0" src="{{ asset('frontend/images/select2-spinner.gif') }}" width="20" alt="">
+                </div>
+                <div class="file_upload2 avatar-crop-file">
+                    <button type="button" id="cover-select-button">Выберите файл</button>
+                </div>
+                <p class="text-show avatar-crop-hint">Выберите область, которую хотите использовать</p>
+                <div class="avatar-crop-stage cover-crop-stage">
+                    <img
+                        id="cover-crop-target"
+                        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+                        alt=""
+                    >
+                </div>
+                <form id="cover-crop-form" autocomplete="off" class="crop">
+                    <input type="hidden" id="cover-crop-x" name="x" value="0">
+                    <input type="hidden" id="cover-crop-y" name="y" value="0">
+                    <input type="hidden" id="cover-crop-w" name="w" value="0">
+                    <input type="hidden" id="cover-crop-h" name="h" value="0">
+                    <button type="submit" class="save-button saveCover">Сохранить</button>
                 </form>
             </div>
         </div>

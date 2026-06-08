@@ -1,9 +1,63 @@
 (function ($) {
     'use strict';
 
-    var avatarCropApi = null;
-    var avatarCropFile = null;
-    var avatarNaturalSize = { width: 0, height: 0 };
+    var blankImage = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+    var croppers = {
+        avatar: {
+            api: null,
+            file: null,
+            naturalSize: { width: 0, height: 0 },
+            ajaxFileName: 'avatar',
+            ajaxUrl: '/ajax/uploadavatar',
+            aspectRatio: 1,
+            input: '#profile-avatar-input',
+            modal: '#avatar-crop-modal',
+            overlay: '#avatar-crop-overlay',
+            loading: '#avatar-crop-loading',
+            selectButton: '#avatar-select-button',
+            form: '#avatar-crop-form',
+            stage: '.avatar-crop-stage',
+            target: '#avatar-crop-target',
+            hiddenFile: '#profile-avatar-file',
+            x: '#avatar-crop-x',
+            y: '#avatar-crop-y',
+            w: '#avatar-crop-w',
+            h: '#avatar-crop-h',
+            minOriginalWidth: 100,
+            minOriginalHeight: 100,
+            minDisplaySize: [80, 80],
+            maxDisplayWidth: 640,
+            reservedHeight: 248,
+            successText: 'Аватар подготовлен. Нажмите «Применить»'
+        },
+        cover: {
+            api: null,
+            file: null,
+            naturalSize: { width: 0, height: 0 },
+            ajaxFileName: 'cover',
+            ajaxUrl: '/ajax/uploadcover',
+            aspectRatio: 1200 / 350,
+            input: '#profile-cover-input',
+            modal: '#cover-crop-modal',
+            overlay: '#cover-crop-overlay',
+            loading: '#cover-crop-loading',
+            selectButton: '#cover-select-button',
+            form: '#cover-crop-form',
+            stage: '.cover-crop-stage',
+            target: '#cover-crop-target',
+            hiddenFile: '#profile-cover-file',
+            x: '#cover-crop-x',
+            y: '#cover-crop-y',
+            w: '#cover-crop-w',
+            h: '#cover-crop-h',
+            minOriginalWidth: 300,
+            minOriginalHeight: 80,
+            minDisplaySize: [140, 40],
+            maxDisplayWidth: 760,
+            reservedHeight: 246,
+            successText: 'Обложка подготовлена. Нажмите «Применить»'
+        }
+    };
 
     function showFail(message) {
         var $message = $('<div class="save_window_fail"></div>').text(message);
@@ -55,30 +109,12 @@
         });
     }
 
-    function previewSelectedImage(input, previewSelector) {
-        var file = input.files && input.files[0] ? input.files[0] : null;
-
-        if (!file) {
-            return;
-        }
-
-        if (!/^image\/(jpeg|png)$/i.test(file.type)) {
-            input.value = '';
-            showFail('Можно загрузить только JPG или PNG');
-            return;
-        }
-
-        var reader = new FileReader();
-
-        reader.onload = function (event) {
-            $(previewSelector).attr('src', event.target.result);
-        };
-
-        reader.readAsDataURL(file);
+    function config(type) {
+        return croppers[type];
     }
 
-    function setAvatarLoading(message) {
-        var $loading = $('#avatar-crop-loading');
+    function setLoading(type, message) {
+        var $loading = $(config(type).loading);
 
         if (!message) {
             $loading.fadeOut(120);
@@ -88,42 +124,49 @@
         $loading.html(message).fadeIn(120);
     }
 
-    function destroyAvatarCrop() {
-        if (avatarCropApi) {
-            avatarCropApi.destroy();
-            avatarCropApi = null;
+    function destroyCrop(type) {
+        var cropper = config(type);
+
+        if (cropper.api) {
+            cropper.api.destroy();
+            cropper.api = null;
         }
 
-        $('#avatar-crop-modal').removeClass('has-image');
-        $('.avatar-crop-stage').removeAttr('style');
-        $('#avatar-crop-target')
-            .attr('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==')
+        $(cropper.modal).removeClass('has-image');
+        $(cropper.stage).removeAttr('style');
+        $(cropper.target)
+            .attr('src', blankImage)
             .removeAttr('style');
-        $('#avatar-crop-x, #avatar-crop-y, #avatar-crop-w, #avatar-crop-h').val(0);
+        $(cropper.x + ', ' + cropper.y + ', ' + cropper.w + ', ' + cropper.h).val(0);
     }
 
-    function openAvatarCrop() {
-        avatarCropFile = null;
-        $('#profile-avatar-input').val('');
-        destroyAvatarCrop();
-        $('#avatar-crop-overlay').fadeIn(150);
-        $('#avatar-crop-modal').fadeIn(150);
+    function openCrop(type) {
+        var cropper = config(type);
+
+        cropper.file = null;
+        $(cropper.input).val('');
+        destroyCrop(type);
+        $(cropper.overlay).fadeIn(150);
+        $(cropper.modal).fadeIn(150);
         $('body').css('overflow', 'hidden');
-        setAvatarLoading('');
+        setLoading(type, '');
     }
 
-    function closeAvatarCrop() {
-        $('#avatar-crop-overlay').fadeOut(150);
-        $('#avatar-crop-modal').fadeOut(150);
+    function closeCrop(type) {
+        var cropper = config(type);
+
+        $(cropper.overlay).fadeOut(150);
+        $(cropper.modal).fadeOut(150);
         $('body').css('overflow', 'auto');
     }
 
-    function scaledCropCoords(coords) {
-        var $target = $('#avatar-crop-target');
+    function scaledCropCoords(type, coords) {
+        var cropper = config(type);
+        var $target = $(cropper.target);
         var displayWidth = $target.width() || 1;
         var displayHeight = $target.height() || 1;
-        var scaleX = avatarNaturalSize.width / displayWidth;
-        var scaleY = avatarNaturalSize.height / displayHeight;
+        var scaleX = cropper.naturalSize.width / displayWidth;
+        var scaleY = cropper.naturalSize.height / displayHeight;
 
         return {
             x: Math.max(0, Math.round(coords.x * scaleX)),
@@ -133,46 +176,49 @@
         };
     }
 
-    function updateAvatarCoords(coords) {
-        var scaled = scaledCropCoords(coords);
+    function updateCropCoords(type, coords) {
+        var cropper = config(type);
+        var scaled = scaledCropCoords(type, coords);
 
-        $('#avatar-crop-x').val(scaled.x);
-        $('#avatar-crop-y').val(scaled.y);
-        $('#avatar-crop-w').val(scaled.w);
-        $('#avatar-crop-h').val(scaled.h);
+        $(cropper.x).val(scaled.x);
+        $(cropper.y).val(scaled.y);
+        $(cropper.w).val(scaled.w);
+        $(cropper.h).val(scaled.h);
     }
 
-    function avatarCropBounds() {
-        var $modal = $('#avatar-crop-modal');
+    function cropBounds(type) {
+        var cropper = config(type);
+        var $modal = $(cropper.modal);
         var modalTop = parseInt($modal.css('top'), 10) || 24;
         var modalWidth = $modal.innerWidth() || 700;
         var horizontalPadding = 48;
-        var reservedHeight = 248;
+        var availableHeight = $(window).height() - (modalTop * 2) - cropper.reservedHeight;
 
         return {
-            width: Math.max(260, Math.min(640, modalWidth - horizontalPadding)),
-            height: Math.max(220, $(window).height() - (modalTop * 2) - reservedHeight)
+            width: Math.max(260, Math.min(cropper.maxDisplayWidth, modalWidth - horizontalPadding)),
+            height: Math.max(130, availableHeight)
         };
     }
 
-    function fitAvatarCropTarget() {
-        var bounds = avatarCropBounds();
+    function fitCropTarget(type) {
+        var cropper = config(type);
+        var bounds = cropBounds(type);
         var ratio = Math.min(
-            bounds.width / avatarNaturalSize.width,
-            bounds.height / avatarNaturalSize.height,
+            bounds.width / cropper.naturalSize.width,
+            bounds.height / cropper.naturalSize.height,
             1
         );
-        var displayWidth = Math.max(1, Math.round(avatarNaturalSize.width * ratio));
-        var displayHeight = Math.max(1, Math.round(avatarNaturalSize.height * ratio));
+        var displayWidth = Math.max(1, Math.round(cropper.naturalSize.width * ratio));
+        var displayHeight = Math.max(1, Math.round(cropper.naturalSize.height * ratio));
 
-        $('#avatar-crop-target').css({
+        $(cropper.target).css({
             height: displayHeight + 'px',
             maxHeight: 'none',
             maxWidth: 'none',
             width: displayWidth + 'px'
         });
 
-        $('.avatar-crop-stage').css({
+        $(cropper.stage).css({
             height: displayHeight + 'px',
             maxHeight: bounds.height + 'px',
             maxWidth: bounds.width + 'px',
@@ -185,57 +231,95 @@
         };
     }
 
-    function decorateAvatarCropUi() {
-        var $selection = avatarCropApi && avatarCropApi.ui ? avatarCropApi.ui.selection : $();
-        var $holder = avatarCropApi && avatarCropApi.ui ? avatarCropApi.ui.holder : $();
+    function initialSelection(type, displaySize) {
+        var cropper = config(type);
+        var width;
+        var height;
+        var x;
+        var y;
 
-        $holder.addClass('jcrop-avatar-circle');
-        $selection.addClass('jcrop-avatar-selection');
+        if (type === 'avatar') {
+            width = Math.min(displaySize.width, displaySize.height, 360);
+            height = width;
+        } else {
+            width = Math.min(displaySize.width * 0.9, displaySize.width);
+            height = width / cropper.aspectRatio;
+
+            if (height > displaySize.height * 0.7) {
+                height = displaySize.height * 0.7;
+                width = height * cropper.aspectRatio;
+            }
+        }
+
+        width = Math.max(1, Math.round(width));
+        height = Math.max(1, Math.round(height));
+        x = Math.max(0, Math.round((displaySize.width - width) / 2));
+        y = Math.max(0, Math.round((displaySize.height - height) / 2));
+
+        return [x, y, x + width, y + height];
     }
 
-    function initAvatarCrop(imageUrl) {
-        var $target = $('#avatar-crop-target');
+    function decorateCropUi(type) {
+        var cropper = config(type);
+        var $selection = cropper.api && cropper.api.ui ? cropper.api.ui.selection : $();
+        var $holder = cropper.api && cropper.api.ui ? cropper.api.ui.holder : $();
 
-        destroyAvatarCrop();
-        $target.attr('src', imageUrl);
+        if (type === 'avatar') {
+            $holder.addClass('jcrop-avatar-circle');
+            $selection.addClass('jcrop-avatar-selection');
+            return;
+        }
+
+        $holder.addClass('jcrop-cover-rect');
+        $selection.addClass('jcrop-cover-selection');
+    }
+
+    function initCrop(type, imageUrl) {
+        var cropper = config(type);
+        var $target = $(cropper.target);
+
+        destroyCrop(type);
 
         $target.one('load', function () {
             var image = this;
             var displaySize;
-            var selectSize;
-            var startX;
-            var startY;
 
-            avatarNaturalSize = {
+            cropper.naturalSize = {
                 width: image.naturalWidth || image.width,
                 height: image.naturalHeight || image.height
             };
 
-            $('#avatar-crop-modal').addClass('has-image');
-            displaySize = fitAvatarCropTarget();
-            selectSize = Math.min(displaySize.width, displaySize.height, 360);
-            startX = Math.max(0, Math.round((displaySize.width - selectSize) / 2));
-            startY = Math.max(0, Math.round((displaySize.height - selectSize) / 2));
+            $(cropper.modal).addClass('has-image');
+            displaySize = fitCropTarget(type);
 
             $target.Jcrop({
-                addClass: 'jcrop-avatar-circle',
-                aspectRatio: 1,
+                addClass: type === 'avatar' ? 'jcrop-avatar-circle' : 'jcrop-cover-rect',
+                aspectRatio: cropper.aspectRatio,
                 bgColor: 'black',
                 bgOpacity: 0.45,
-                minSize: [80, 80],
-                setSelect: [startX, startY, startX + selectSize, startY + selectSize],
-                onChange: updateAvatarCoords,
-                onSelect: updateAvatarCoords
+                minSize: cropper.minDisplaySize,
+                setSelect: initialSelection(type, displaySize),
+                onChange: function (coords) {
+                    updateCropCoords(type, coords);
+                },
+                onSelect: function (coords) {
+                    updateCropCoords(type, coords);
+                }
             }, function () {
-                avatarCropApi = this;
-                decorateAvatarCropUi();
-                window.setTimeout(decorateAvatarCropUi, 0);
-                updateAvatarCoords(avatarCropApi.tellSelect());
+                cropper.api = this;
+                decorateCropUi(type);
+                window.setTimeout(function () {
+                    decorateCropUi(type);
+                }, 0);
+                updateCropCoords(type, cropper.api.tellSelect());
             });
         });
+
+        $target.attr('src', imageUrl);
     }
 
-    function chooseAvatarFile(input) {
+    function chooseCropFile(type, input) {
+        var cropper = config(type);
         var file = input.files && input.files[0] ? input.files[0] : null;
         var reader;
 
@@ -245,39 +329,53 @@
 
         if (!/^image\/(jpeg|png)$/i.test(file.type)) {
             input.value = '';
-            avatarCropFile = null;
+            cropper.file = null;
             showFail('Можно загрузить только JPG или PNG');
             return;
         }
 
-        avatarCropFile = file;
-        setAvatarLoading('<img border="0" src="/frontend/images/select2-spinner.gif" width="20" alt="">');
+        cropper.file = file;
+        setLoading(type, '<img border="0" src="/frontend/images/select2-spinner.gif" width="20" alt="">');
 
         reader = new FileReader();
         reader.onload = function (event) {
-            setAvatarLoading('');
-            initAvatarCrop(event.target.result);
+            setLoading(type, '');
+            initCrop(type, event.target.result);
         };
         reader.onerror = function () {
-            setAvatarLoading('Ошибка чтения файла');
+            setLoading(type, 'Ошибка чтения файла');
         };
         reader.readAsDataURL(file);
     }
 
-    function saveAvatarCrop(event) {
+    function updatePreviews(type, response) {
+        var url = response.url + '?' + Math.random();
+
+        if (type === 'avatar') {
+            $('#preview_ava').attr('src', url);
+            $('.mini_thumb_avatar img').attr('src', url);
+            return;
+        }
+
+        $('#preview_cover').attr('src', url);
+        $('.cover-photo').attr('src', url);
+    }
+
+    function saveCrop(type, event) {
+        var cropper = config(type);
         var formData;
         var token;
-        var width = parseInt($('#avatar-crop-w').val(), 10);
-        var height = parseInt($('#avatar-crop-h').val(), 10);
+        var width = parseInt($(cropper.w).val(), 10);
+        var height = parseInt($(cropper.h).val(), 10);
 
         event.preventDefault();
 
-        if (!avatarCropFile) {
+        if (!cropper.file) {
             showFail('Выберите файл');
             return false;
         }
 
-        if (!width || !height || width < 100 || height < 100) {
+        if (!width || !height || width < cropper.minOriginalWidth || height < cropper.minOriginalHeight) {
             showFail('Выделенная область слишком мала');
             return false;
         }
@@ -285,16 +383,16 @@
         token = $('meta[name="csrf-token"]').attr('content');
         formData = new FormData();
         formData.append('_token', token);
-        formData.append('avatar', avatarCropFile);
-        formData.append('x', $('#avatar-crop-x').val());
-        formData.append('y', $('#avatar-crop-y').val());
-        formData.append('w', $('#avatar-crop-w').val());
-        formData.append('h', $('#avatar-crop-h').val());
+        formData.append(cropper.ajaxFileName, cropper.file);
+        formData.append('x', $(cropper.x).val());
+        formData.append('y', $(cropper.y).val());
+        formData.append('w', $(cropper.w).val());
+        formData.append('h', $(cropper.h).val());
 
-        setAvatarLoading('<img border="0" src="/frontend/images/select2-spinner.gif" width="20" alt="">');
+        setLoading(type, '<img border="0" src="/frontend/images/select2-spinner.gif" width="20" alt="">');
 
         $.ajax({
-            url: '/ajax/uploadavatar',
+            url: cropper.ajaxUrl,
             type: 'POST',
             data: formData,
             processData: false,
@@ -302,23 +400,22 @@
             dataType: 'json',
             success: function (response) {
                 if (!response || response.result !== 'success') {
-                    setAvatarLoading(response && response.error ? response.error : 'Ошибка обработки изображения');
+                    setLoading(type, response && response.error ? response.error : 'Ошибка обработки изображения');
                     return;
                 }
 
-                $('#profile-avatar-file').val(response.file);
-                $('#preview_ava').attr('src', response.url + '?' + Math.random());
-                $('.mini_thumb_avatar img').attr('src', response.url + '?' + Math.random());
-                setAvatarLoading('');
-                closeAvatarCrop();
-                showOk('Аватар подготовлен. Нажмите «Применить»');
+                $(cropper.hiddenFile).val(response.file);
+                updatePreviews(type, response);
+                setLoading(type, '');
+                closeCrop(type);
+                showOk(cropper.successText);
             },
             error: function (xhr) {
                 var message = xhr.responseJSON && xhr.responseJSON.error
                     ? xhr.responseJSON.error
                     : 'Ошибка обработки изображения';
 
-                setAvatarLoading(message);
+                setLoading(type, message);
             }
         });
 
@@ -329,29 +426,15 @@
         initTabs();
 
         $('#profile-avatar-input').on('change', function () {
-            chooseAvatarFile(this);
+            chooseCropFile('avatar', this);
         });
 
         $('#profile-cover-input').on('change', function () {
-            previewSelectedImage(this, '#preview_cover');
+            chooseCropFile('cover', this);
         });
 
         $(document).on('click', '.top_thumb_avatar img.editable-avatar', function () {
-            openAvatarCrop();
-        });
-
-        $('#avatar-select-button').on('click', function () {
-            $('#profile-avatar-input').trigger('click');
-        });
-
-        $('#avatar-crop-form').on('submit', saveAvatarCrop);
-
-        $('.avatar-crop-close').on('click', closeAvatarCrop);
-
-        $('#avatar-crop-overlay').on('click', function (event) {
-            if (event.target === this) {
-                closeAvatarCrop();
-            }
+            openCrop('avatar');
         });
 
         $(document).on('click', '.cover_page.editable-cover-area', function (event) {
@@ -359,7 +442,35 @@
                 return;
             }
 
+            openCrop('cover');
+        });
+
+        $('#avatar-select-button').on('click', function () {
+            $('#profile-avatar-input').trigger('click');
+        });
+
+        $('#cover-select-button').on('click', function () {
             $('#profile-cover-input').trigger('click');
+        });
+
+        $('#avatar-crop-form').on('submit', function (event) {
+            saveCrop('avatar', event);
+        });
+
+        $('#cover-crop-form').on('submit', function (event) {
+            saveCrop('cover', event);
+        });
+
+        $('.avatar-crop-close').on('click', function () {
+            closeCrop($(this).closest('.avatar-crop-modal').data('type'));
+        });
+
+        $('#avatar-crop-overlay, #cover-crop-overlay').on('click', function (event) {
+            if (event.target !== this) {
+                return;
+            }
+
+            closeCrop($(this).find('.avatar-crop-modal').data('type'));
         });
     });
 })(jQuery);

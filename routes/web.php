@@ -19,173 +19,213 @@ use App\Http\Controllers\Front\TeamsController;
 use App\Http\Controllers\Front\VideoalbumsController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index'])->name('front.home');
-Route::post('/', [FrontAuthController::class, 'login'])->name('front.login');
-Route::post('front/logout', [FrontAuthController::class, 'logout'])->name('front.logout');
-
-Route::get('news', [NewsController::class, 'index'])->name('front.news.index');
-Route::get('profile/edit', [ProfileController::class, 'edit'])->name('front.profile.edit');
-Route::post('profile/edit', [ProfileController::class, 'update'])->name('front.profile.update');
-Route::get('profile/{user}/messages/user/{recipient}', [ProfileController::class, 'messages'])
-    ->where(['user' => '[0-9]+', 'recipient' => '[0-9]+'])
-    ->name('front.profile.messages.show');
-Route::get('profile/{user}/messages', [ProfileController::class, 'dialogues'])
-    ->where('user', '[0-9]+')
-    ->name('front.profile.messages.index');
-Route::get('profile/{user}', [ProfileController::class, 'show'])->where('user', '[0-9]+')->name('front.profile.show');
-
-Route::get('playgrounds/create', [PlaygroundsController::class, 'create'])->name('front.playgrounds.create');
-Route::post('playgrounds/create', [PlaygroundsController::class, 'store'])->name('front.playgrounds.store');
-Route::get('playgrounds/{sportBlock}/edit', [PlaygroundsController::class, 'edit'])
-    ->where('sportBlock', '[0-9]+')
-    ->name('front.playgrounds.edit');
-Route::post('playgrounds/{sportBlock}/edit', [PlaygroundsController::class, 'update'])
-    ->where('sportBlock', '[0-9]+')
-    ->name('front.playgrounds.update');
-Route::get('playgrounds/{sportBlock?}', [PlaygroundsController::class, 'index'])
-    ->where('sportBlock', '[0-9]+')
-    ->name('front.playgrounds.index');
-
-Route::get('shops/create', [ShopsController::class, 'create'])->name('front.shops.create');
-Route::post('shops/create', [ShopsController::class, 'store'])->name('front.shops.store');
-Route::get('shops/{sportBlock}/edit', [ShopsController::class, 'edit'])
-    ->where('sportBlock', '[0-9]+')
-    ->name('front.shops.edit');
-Route::post('shops/{sportBlock}/edit', [ShopsController::class, 'update'])
-    ->where('sportBlock', '[0-9]+')
-    ->name('front.shops.update');
-Route::get('shops/{sportBlock?}', [ShopsController::class, 'index'])
-    ->where('sportBlock', '[0-9]+')
-    ->name('front.shops.index');
-Route::get('fitness/{sportBlock?}', [FitnessController::class, 'index'])
-    ->where('sportBlock', '[0-9]+')
-    ->name('front.fitness.index');
-
-Route::get('calendar', [CalendarController::class, 'index'])->name('front.calendar.index');
-
-Route::prefix('events')->name('front.events.')->group(function () {
-    Route::get('create', [EventsController::class, 'create'])->name('create');
-    Route::get('{event}/members', [EventsController::class, 'members'])->where('event', '[0-9]+')->name('members');
-    Route::get('{event}/photoalbums', [EventsController::class, 'photoalbums'])->where('event', '[0-9]+')->name('photoalbums');
-    Route::get('{event}/videoalbums', [EventsController::class, 'videoalbums'])->where('event', '[0-9]+')->name('videoalbums');
-    Route::get('{event}', [EventsController::class, 'show'])->where('event', '[0-9]+')->name('show');
-    Route::get('', [EventsController::class, 'index'])->name('index');
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/', 'index')->name('front.home');
 });
 
-Route::get('friends/user/{user}', [FriendsController::class, 'user'])->where('user', '[0-9]+')->name('front.friends.user');
-Route::get('friends', [FriendsController::class, 'index'])->name('front.friends.index');
+Route::controller(FrontAuthController::class)->name('front.')->group(function () {
+    Route::post('/', 'login')->name('login');
+    Route::post('front/logout', 'logout')->name('logout');
+});
 
-Route::prefix('groups')->name('front.groups.')->group(function () {
-    Route::get('', [GroupsController::class, 'index'])->name('index');
-    Route::get('create', [GroupsController::class, 'create'])->name('create');
-    Route::post('create', [GroupsController::class, 'store'])->name('store');
-    Route::get('user/{user}', [GroupsController::class, 'user'])->where('user', '[0-9]+')->name('user');
+Route::prefix('news')->name('front.news.')->controller(NewsController::class)->group(function () {
+    Route::get('', 'index')->name('index');
+});
+
+Route::prefix('profile')->name('front.profile.')->controller(ProfileController::class)->group(function () {
+    Route::get('edit', 'edit')->name('edit');
+    Route::post('edit', 'update')->name('update');
+    Route::get('{user}/messages/user/{recipient}', 'messages')
+        ->where(['user' => '[0-9]+', 'recipient' => '[0-9]+'])
+        ->name('messages.show');
+    Route::get('{user}/messages', 'dialogues')->where('user', '[0-9]+')->name('messages.index');
+    Route::get('{user}', 'show')->where('user', '[0-9]+')->name('show');
+});
+
+Route::prefix('playgrounds')->name('front.playgrounds.')->controller(PlaygroundsController::class)->group(function () {
+    Route::get('create', 'create')->name('create');
+    Route::post('create', 'store')->name('store');
+    Route::get('{sportBlock}/edit', 'edit')->where('sportBlock', '[0-9]+')->name('edit');
+    Route::post('{sportBlock}/edit', 'update')->where('sportBlock', '[0-9]+')->name('update');
+    Route::get('{sportBlock?}', 'index')->where('sportBlock', '[0-9]+')->name('index');
+});
+
+Route::prefix('shops')->name('front.shops.')->controller(ShopsController::class)->group(function () {
+    Route::get('create', 'create')->name('create');
+    Route::post('create', 'store')->name('store');
+    Route::get('{sportBlock}/edit', 'edit')->where('sportBlock', '[0-9]+')->name('edit');
+    Route::post('{sportBlock}/edit', 'update')->where('sportBlock', '[0-9]+')->name('update');
+    Route::get('{sportBlock?}', 'index')->where('sportBlock', '[0-9]+')->name('index');
+});
+
+Route::prefix('fitness')->name('front.fitness.')->controller(FitnessController::class)->group(function () {
+    Route::get('{sportBlock?}', 'index')->where('sportBlock', '[0-9]+')->name('index');
+});
+
+Route::prefix('calendar')->name('front.calendar.')->controller(CalendarController::class)->group(function () {
+    Route::get('', 'index')->name('index');
+});
+
+Route::prefix('events')->name('front.events.')->controller(EventsController::class)->group(function () {
+    Route::get('create', 'create')->name('create');
+    Route::get('{event}/members', 'members')->where('event', '[0-9]+')->name('members');
+    Route::get('{event}/photoalbums', 'photoalbums')->where('event', '[0-9]+')->name('photoalbums');
+    Route::get('{event}/videoalbums', 'videoalbums')->where('event', '[0-9]+')->name('videoalbums');
+    Route::get('{event}', 'show')->where('event', '[0-9]+')->name('show');
+    Route::get('', 'index')->name('index');
+});
+
+Route::prefix('friends')->name('front.friends.')->controller(FriendsController::class)->group(function () {
+    Route::get('user/{user}', 'user')->where('user', '[0-9]+')->name('user');
+    Route::get('', 'index')->name('index');
+});
+
+Route::prefix('groups')->name('front.groups.')->controller(GroupsController::class)->group(function () {
+    Route::get('', 'index')->name('index');
+    Route::get('create', 'create')->name('create');
+    Route::post('create', 'store')->name('store');
+    Route::get('user/{user}', 'user')->where('user', '[0-9]+')->name('user');
 
     Route::prefix('photoalbums')->group(function () {
-        Route::get('', [GroupsController::class, 'photoalbums'])->name('photoalbums.default');
-        Route::get('{album}/edit', [GroupsController::class, 'editPhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.edit');
-        Route::post('{album}/edit', [GroupsController::class, 'updatePhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.update');
-        Route::delete('{album}', [GroupsController::class, 'destroyPhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.destroy');
+        Route::get('', 'photoalbums')->name('photoalbums.default');
+        Route::get('{album}/edit', 'editPhotoalbum')->where('album', '[0-9]+')->name('photoalbum.edit');
+        Route::post('{album}/edit', 'updatePhotoalbum')->where('album', '[0-9]+')->name('photoalbum.update');
+        Route::delete('{album}', 'destroyPhotoalbum')->where('album', '[0-9]+')->name('photoalbum.destroy');
     });
 
     Route::prefix('videoalbums')->group(function () {
-        Route::get('', [GroupsController::class, 'videoalbums'])->name('videoalbums.default');
-        Route::get('{album}/edit', [GroupsController::class, 'editVideoalbum'])->where('album', '[0-9]+')->name('videoalbum.edit');
-        Route::post('{album}/edit', [GroupsController::class, 'updateVideoalbum'])->where('album', '[0-9]+')->name('videoalbum.update');
-        Route::delete('{album}', [GroupsController::class, 'destroyVideoalbum'])->where('album', '[0-9]+')->name('videoalbum.destroy');
+        Route::get('', 'videoalbums')->name('videoalbums.default');
+        Route::get('{album}/edit', 'editVideoalbum')->where('album', '[0-9]+')->name('videoalbum.edit');
+        Route::post('{album}/edit', 'updateVideoalbum')->where('album', '[0-9]+')->name('videoalbum.update');
+        Route::delete('{album}', 'destroyVideoalbum')->where('album', '[0-9]+')->name('videoalbum.destroy');
     });
 
-    Route::get('{community}/edit', [GroupsController::class, 'edit'])->where('community', '[0-9]+')->name('edit');
-    Route::post('{community}/edit', [GroupsController::class, 'update'])->where('community', '[0-9]+')->name('update');
-    Route::get('{community}/members', [GroupsController::class, 'members'])->where('community', '[0-9]+')->name('members');
-    Route::get('{community}/photoalbums/add-photo', [GroupsController::class, 'addPhoto'])->where('community', '[0-9]+')->name('photoalbums.add-photo');
-    Route::get('{community}/photoalbums/create', [GroupsController::class, 'createPhotoalbum'])->where('community', '[0-9]+')->name('photoalbums.create');
-    Route::post('{community}/photoalbums/create', [GroupsController::class, 'storePhotoalbum'])->where('community', '[0-9]+')->name('photoalbums.store');
-    Route::get('{community}/photoalbums/photo/{photo}', [GroupsController::class, 'photoWithoutAlbum'])->where(['community' => '[0-9]+', 'photo' => '[0-9]+'])->name('photoalbums.photo.legacy');
-    Route::get('{community}/photoalbums/{album}/photo/{photo}', [GroupsController::class, 'photo'])->where(['community' => '[0-9]+', 'album' => '[0-9]+', 'photo' => '[0-9]+'])->name('photoalbums.photo');
-    Route::get('{community}/photoalbums/{album}', [GroupsController::class, 'showPhotoalbum'])->where(['community' => '[0-9]+', 'album' => '[0-9]+'])->name('photoalbums.show');
-    Route::get('{community}/photoalbums', [GroupsController::class, 'photoalbums'])->where('community', '[0-9]+')->name('photoalbums');
-    Route::get('{community}/photoalbum/{album}/edit', [GroupsController::class, 'editPhotoalbumForGroup'])->where(['community' => '[0-9]+', 'album' => '[0-9]+'])->name('photoalbum.edit.with-community');
-    Route::post('{community}/photoalbum/{album}/edit', [GroupsController::class, 'updatePhotoalbumForGroup'])->where(['community' => '[0-9]+', 'album' => '[0-9]+'])->name('photoalbum.update.with-community');
-    Route::get('{community}/videoalbums/add-video', [GroupsController::class, 'addVideo'])->where('community', '[0-9]+')->name('videoalbums.add-video');
-    Route::post('{community}/videoalbums/add-video', [GroupsController::class, 'storeVideo'])->where('community', '[0-9]+')->name('videoalbums.store-video');
-    Route::get('{community}/videoalbums/create', [GroupsController::class, 'createVideoalbum'])->where('community', '[0-9]+')->name('videoalbums.create');
-    Route::post('{community}/videoalbums/create', [GroupsController::class, 'storeVideoalbum'])->where('community', '[0-9]+')->name('videoalbums.store');
-    Route::get('{community}/videoalbums/{album}', [GroupsController::class, 'showVideoalbum'])->where(['community' => '[0-9]+', 'album' => '[0-9]+'])->name('videoalbums.show');
-    Route::get('{community}/videoalbums', [GroupsController::class, 'videoalbums'])->where('community', '[0-9]+')->name('videoalbums');
-    Route::get('{community}/events', [GroupsController::class, 'events'])->where('community', '[0-9]+')->name('events');
-    Route::get('{community}', [GroupsController::class, 'show'])->where('community', '[0-9]+')->name('show');
+    Route::get('{community}/edit', 'edit')->where('community', '[0-9]+')->name('edit');
+    Route::post('{community}/edit', 'update')->where('community', '[0-9]+')->name('update');
+    Route::get('{community}/members', 'members')->where('community', '[0-9]+')->name('members');
+
+    Route::prefix('{community}/photoalbums')->where(['community' => '[0-9]+'])->group(function () {
+        Route::get('add-photo', 'addPhoto')->name('photoalbums.add-photo');
+        Route::get('create', 'createPhotoalbum')->name('photoalbums.create');
+        Route::post('create', 'storePhotoalbum')->name('photoalbums.store');
+        Route::get('photo/{photo}', 'photoWithoutAlbum')->where('photo', '[0-9]+')->name('photoalbums.photo.legacy');
+        Route::get('{album}/photo/{photo}', 'photo')
+            ->where(['album' => '[0-9]+', 'photo' => '[0-9]+'])
+            ->name('photoalbums.photo');
+        Route::get('{album}', 'showPhotoalbum')->where('album', '[0-9]+')->name('photoalbums.show');
+        Route::get('', 'photoalbums')->name('photoalbums');
+    });
+
+    Route::get('{community}/photoalbum/{album}/edit', 'editPhotoalbumForGroup')
+        ->where(['community' => '[0-9]+', 'album' => '[0-9]+'])
+        ->name('photoalbum.edit.with-community');
+    Route::post('{community}/photoalbum/{album}/edit', 'updatePhotoalbumForGroup')
+        ->where(['community' => '[0-9]+', 'album' => '[0-9]+'])
+        ->name('photoalbum.update.with-community');
+
+    Route::prefix('{community}/videoalbums')->where(['community' => '[0-9]+'])->group(function () {
+        Route::get('add-video', 'addVideo')->name('videoalbums.add-video');
+        Route::post('add-video', 'storeVideo')->name('videoalbums.store-video');
+        Route::get('create', 'createVideoalbum')->name('videoalbums.create');
+        Route::post('create', 'storeVideoalbum')->name('videoalbums.store');
+        Route::get('{album}', 'showVideoalbum')->where('album', '[0-9]+')->name('videoalbums.show');
+        Route::get('', 'videoalbums')->name('videoalbums');
+    });
+
+    Route::get('{community}/events', 'events')->where('community', '[0-9]+')->name('events');
+    Route::get('{community}', 'show')->where('community', '[0-9]+')->name('show');
 });
 
-Route::prefix('photoalbums')->name('front.photoalbums.')->group(function () {
-    Route::get('add-photo', [PhotoalbumsController::class, 'addPhoto'])->name('add-photo');
-    Route::get('create', [PhotoalbumsController::class, 'create'])->name('create');
-    Route::post('create', [PhotoalbumsController::class, 'store'])->name('store');
-    Route::get('edit/{album}', [PhotoalbumsController::class, 'edit'])->where('album', '[0-9]+')->name('edit');
-    Route::post('edit/{album}', [PhotoalbumsController::class, 'update'])->where('album', '[0-9]+')->name('update');
-    Route::get('user/{user}', [PhotoalbumsController::class, 'user'])->where('user', '[0-9]+')->name('user');
-    Route::delete('{album}', [PhotoalbumsController::class, 'destroy'])->where('album', '[0-9]+')->name('destroy');
-    Route::get('{album}', [PhotoalbumsController::class, 'show'])->where('album', '[0-9]+')->name('show');
-    Route::get('', [PhotoalbumsController::class, 'index'])->name('index');
+Route::prefix('photoalbums')->name('front.photoalbums.')->controller(PhotoalbumsController::class)->group(function () {
+    Route::get('add-photo', 'addPhoto')->name('add-photo');
+    Route::get('create', 'create')->name('create');
+    Route::post('create', 'store')->name('store');
+    Route::get('edit/{album}', 'edit')->where('album', '[0-9]+')->name('edit');
+    Route::post('edit/{album}', 'update')->where('album', '[0-9]+')->name('update');
+    Route::get('user/{user}', 'user')->where('user', '[0-9]+')->name('user');
+    Route::delete('{album}', 'destroy')->where('album', '[0-9]+')->name('destroy');
+    Route::get('{album}', 'show')->where('album', '[0-9]+')->name('show');
+    Route::get('', 'index')->name('index');
 });
 
-Route::prefix('videoalbums')->name('front.videoalbums.')->group(function () {
-    Route::get('add-video', [VideoalbumsController::class, 'addVideo'])->name('add-video');
-    Route::post('add-video', [VideoalbumsController::class, 'storeVideo'])->name('store-video');
-    Route::get('create', [VideoalbumsController::class, 'create'])->name('create');
-    Route::post('create', [VideoalbumsController::class, 'store'])->name('store');
-    Route::get('edit/{album}', [VideoalbumsController::class, 'edit'])->where('album', '[0-9]+')->name('edit');
-    Route::post('edit/{album}', [VideoalbumsController::class, 'update'])->where('album', '[0-9]+')->name('update');
-    Route::get('user/{user}', [VideoalbumsController::class, 'user'])->where('user', '[0-9]+')->name('user');
-    Route::delete('{album}', [VideoalbumsController::class, 'destroy'])->where('album', '[0-9]+')->name('destroy');
-    Route::get('{album}', [VideoalbumsController::class, 'show'])->where('album', '[0-9]+')->name('show');
-    Route::get('', [VideoalbumsController::class, 'index'])->name('index');
+Route::prefix('videoalbums')->name('front.videoalbums.')->controller(VideoalbumsController::class)->group(function () {
+    Route::get('add-video', 'addVideo')->name('add-video');
+    Route::post('add-video', 'storeVideo')->name('store-video');
+    Route::get('create', 'create')->name('create');
+    Route::post('create', 'store')->name('store');
+    Route::get('edit/{album}', 'edit')->where('album', '[0-9]+')->name('edit');
+    Route::post('edit/{album}', 'update')->where('album', '[0-9]+')->name('update');
+    Route::get('user/{user}', 'user')->where('user', '[0-9]+')->name('user');
+    Route::delete('{album}', 'destroy')->where('album', '[0-9]+')->name('destroy');
+    Route::get('{album}', 'show')->where('album', '[0-9]+')->name('show');
+    Route::get('', 'index')->name('index');
 });
 
-Route::prefix('teams')->name('front.teams.')->group(function () {
-    Route::get('', [TeamsController::class, 'index'])->name('index');
-    Route::get('create', [TeamsController::class, 'create'])->name('create');
-    Route::post('create', [TeamsController::class, 'store'])->name('store');
-    Route::get('user/{user}', [TeamsController::class, 'user'])->where('user', '[0-9]+')->name('user');
+Route::prefix('teams')->name('front.teams.')->controller(TeamsController::class)->group(function () {
+    Route::get('', 'index')->name('index');
+    Route::get('create', 'create')->name('create');
+    Route::post('create', 'store')->name('store');
+    Route::get('user/{user}', 'user')->where('user', '[0-9]+')->name('user');
 
     Route::prefix('photoalbums')->group(function () {
-        Route::get('', [TeamsController::class, 'photoalbums'])->name('photoalbums.default');
-        Route::get('{album}/edit', [TeamsController::class, 'editPhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.edit');
-        Route::post('{album}/edit', [TeamsController::class, 'updatePhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.update');
-        Route::delete('{album}', [TeamsController::class, 'destroyPhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.destroy');
+        Route::get('', 'photoalbums')->name('photoalbums.default');
+        Route::get('{album}/edit', 'editPhotoalbum')->where('album', '[0-9]+')->name('photoalbum.edit');
+        Route::post('{album}/edit', 'updatePhotoalbum')->where('album', '[0-9]+')->name('photoalbum.update');
+        Route::delete('{album}', 'destroyPhotoalbum')->where('album', '[0-9]+')->name('photoalbum.destroy');
     });
 
     Route::prefix('videoalbums')->group(function () {
-        Route::get('', [TeamsController::class, 'videoalbums'])->name('videoalbums.default');
-        Route::get('{album}/edit', [TeamsController::class, 'editVideoalbum'])->where('album', '[0-9]+')->name('videoalbum.edit');
-        Route::post('{album}/edit', [TeamsController::class, 'updateVideoalbum'])->where('album', '[0-9]+')->name('videoalbum.update');
-        Route::delete('{album}', [TeamsController::class, 'destroyVideoalbum'])->where('album', '[0-9]+')->name('videoalbum.destroy');
-
+        Route::get('', 'videoalbums')->name('videoalbums.default');
+        Route::get('{album}/edit', 'editVideoalbum')->where('album', '[0-9]+')->name('videoalbum.edit');
+        Route::post('{album}/edit', 'updateVideoalbum')->where('album', '[0-9]+')->name('videoalbum.update');
+        Route::delete('{album}', 'destroyVideoalbum')->where('album', '[0-9]+')->name('videoalbum.destroy');
     });
 
-    Route::get('{community}/edit', [TeamsController::class, 'edit'])->where('community', '[0-9]+')->name('edit');
-    Route::post('{community}/edit', [TeamsController::class, 'update'])->where('community', '[0-9]+')->name('update');
-    Route::get('{community}/members', [TeamsController::class, 'members'])->where('community', '[0-9]+')->name('members');
-    Route::get('{community}/photoalbums/add-photo', [TeamsController::class, 'addPhoto'])->where('community', '[0-9]+')->name('photoalbums.add-photo');
-    Route::get('{community}/photoalbums/create', [TeamsController::class, 'createPhotoalbum'])->where('community', '[0-9]+')->name('photoalbums.create');
-    Route::post('{community}/photoalbums/create', [TeamsController::class, 'storePhotoalbum'])->where('community', '[0-9]+')->name('photoalbums.store');
-    Route::get('{community}/photoalbums/photo/{photo}', [TeamsController::class, 'photoWithoutAlbum'])->where(['community' => '[0-9]+', 'photo' => '[0-9]+'])->name('photoalbums.photo.legacy');
-    Route::get('{community}/photoalbums/{album}/photo/{photo}', [TeamsController::class, 'photo'])->where(['community' => '[0-9]+', 'album' => '[0-9]+', 'photo' => '[0-9]+'])->name('photoalbums.photo');
-    Route::get('{community}/photoalbums/{album}', [TeamsController::class, 'showPhotoalbum'])->where(['community' => '[0-9]+', 'album' => '[0-9]+'])->name('photoalbums.show');
-    Route::get('{community}/photoalbums', [TeamsController::class, 'photoalbums'])->where('community', '[0-9]+')->name('photoalbums');
-    Route::get('{community}/photoalbum/{album}/edit', [TeamsController::class, 'editPhotoalbumForTeam'])->where(['community' => '[0-9]+', 'album' => '[0-9]+'])->name('photoalbum.edit.with-community');
-    Route::post('{community}/photoalbum/{album}/edit', [TeamsController::class, 'updatePhotoalbumForTeam'])->where(['community' => '[0-9]+', 'album' => '[0-9]+'])->name('photoalbum.update.with-community');
-    Route::get('{community}/videoalbums/add-video', [TeamsController::class, 'addVideo'])->where('community', '[0-9]+')->name('videoalbums.add-video');
-    Route::post('{community}/videoalbums/add-video', [TeamsController::class, 'storeVideo'])->where('community', '[0-9]+')->name('videoalbums.store-video');
-    Route::get('{community}/videoalbums/create', [TeamsController::class, 'createVideoalbum'])->where('community', '[0-9]+')->name('videoalbums.create');
-    Route::post('{community}/videoalbums/create', [TeamsController::class, 'storeVideoalbum'])->where('community', '[0-9]+')->name('videoalbums.store');
-    Route::get('{community}/videoalbums/{album}', [TeamsController::class, 'showVideoalbum'])->where(['community' => '[0-9]+', 'album' => '[0-9]+'])->name('videoalbums.show');
-    Route::get('{community}/videoalbums', [TeamsController::class, 'videoalbums'])->where('community', '[0-9]+')->name('videoalbums');
-    Route::get('{community}/events', [TeamsController::class, 'events'])->where('community', '[0-9]+')->name('events');
-    Route::get('{community}', [TeamsController::class, 'show'])->where('community', '[0-9]+')->name('show');
+    Route::get('{community}/edit', 'edit')->where('community', '[0-9]+')->name('edit');
+    Route::post('{community}/edit', 'update')->where('community', '[0-9]+')->name('update');
+    Route::get('{community}/members', 'members')->where('community', '[0-9]+')->name('members');
+
+    Route::prefix('{community}/photoalbums')->where(['community' => '[0-9]+'])->group(function () {
+        Route::get('add-photo', 'addPhoto')->name('photoalbums.add-photo');
+        Route::get('create', 'createPhotoalbum')->name('photoalbums.create');
+        Route::post('create', 'storePhotoalbum')->name('photoalbums.store');
+        Route::get('photo/{photo}', 'photoWithoutAlbum')->where('photo', '[0-9]+')->name('photoalbums.photo.legacy');
+        Route::get('{album}/photo/{photo}', 'photo')
+            ->where(['album' => '[0-9]+', 'photo' => '[0-9]+'])
+            ->name('photoalbums.photo');
+        Route::get('{album}', 'showPhotoalbum')->where('album', '[0-9]+')->name('photoalbums.show');
+        Route::get('', 'photoalbums')->name('photoalbums');
+    });
+
+    Route::get('{community}/photoalbum/{album}/edit', 'editPhotoalbumForTeam')
+        ->where(['community' => '[0-9]+', 'album' => '[0-9]+'])
+        ->name('photoalbum.edit.with-community');
+    Route::post('{community}/photoalbum/{album}/edit', 'updatePhotoalbumForTeam')
+        ->where(['community' => '[0-9]+', 'album' => '[0-9]+'])
+        ->name('photoalbum.update.with-community');
+
+    Route::prefix('{community}/videoalbums')->where(['community' => '[0-9]+'])->group(function () {
+        Route::get('add-video', 'addVideo')->name('videoalbums.add-video');
+        Route::post('add-video', 'storeVideo')->name('videoalbums.store-video');
+        Route::get('create', 'createVideoalbum')->name('videoalbums.create');
+        Route::post('create', 'storeVideoalbum')->name('videoalbums.store');
+        Route::get('{album}', 'showVideoalbum')->where('album', '[0-9]+')->name('videoalbums.show');
+        Route::get('', 'videoalbums')->name('videoalbums');
+    });
+
+    Route::get('{community}/events', 'events')->where('community', '[0-9]+')->name('events');
+    Route::get('{community}', 'show')->where('community', '[0-9]+')->name('show');
 });
 
-Route::get('page/{content}', [ContentController::class, 'show'])->where('content', '[0-9]+')->name('front.content.show');
-Route::get('feedback', [FeedbackController::class, 'create'])->name('front.feedback.create');
-Route::post('feedback', [FeedbackController::class, 'store'])->name('front.feedback.store');
-Route::match(['GET', 'POST'], 'ajax/{action}', [AjaxController::class, 'handle'])->name('front.ajax.handle');
+Route::prefix('page')->name('front.content.')->controller(ContentController::class)->group(function () {
+    Route::get('{content}', 'show')->where('content', '[0-9]+')->name('show');
+});
+
+Route::prefix('feedback')->name('front.feedback.')->controller(FeedbackController::class)->group(function () {
+    Route::get('', 'create')->name('create');
+    Route::post('', 'store')->name('store');
+});
+
+Route::prefix('ajax')->name('front.ajax.')->controller(AjaxController::class)->group(function () {
+    Route::match(['GET', 'POST'], '{action}', 'handle')->name('handle');
+});
