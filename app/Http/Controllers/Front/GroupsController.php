@@ -254,6 +254,19 @@ class GroupsController extends Controller
         return redirect()->route('front.groups.photoalbums', ['community' => $group->id]);
     }
 
+    public function destroyPhotoalbum(int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
+    {
+        $photoalbum = $photoalbums->album($album, ['group']);
+        abort_if(! $photoalbum, 404);
+
+        $group = $this->groupOrFail((int) $photoalbum->owner_id, $communities);
+        abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
+
+        $photoalbums->deleteAlbum($photoalbum);
+
+        return redirect()->route('front.groups.photoalbums', ['community' => $group->id]);
+    }
+
     public function editPhotoalbumForGroup(int $community, int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums): View
     {
         return $this->editPhotoalbum($album, $communities, $photoalbums, $community);
@@ -406,6 +419,19 @@ class GroupsController extends Controller
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
         $videoalbums->updateUserAlbum($videoalbum, $this->validateAlbumName($request));
+
+        return redirect()->route('front.groups.videoalbums', ['community' => $group->id]);
+    }
+
+    public function destroyVideoalbum(int $album, CommunityRepository $communities, VideoalbumRepository $videoalbums): RedirectResponse
+    {
+        $videoalbum = $videoalbums->album($album, ['group']);
+        abort_if(! $videoalbum, 404);
+
+        $group = $this->groupOrFail((int) $videoalbum->owner_id, $communities);
+        abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
+
+        $videoalbums->deleteAlbum($videoalbum);
 
         return redirect()->route('front.groups.videoalbums', ['community' => $group->id]);
     }

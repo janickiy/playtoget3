@@ -85,12 +85,14 @@ Route::prefix('groups')->name('front.groups.')->group(function () {
         Route::get('', [GroupsController::class, 'photoalbums'])->name('photoalbums.default');
         Route::get('{album}/edit', [GroupsController::class, 'editPhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.edit');
         Route::post('{album}/edit', [GroupsController::class, 'updatePhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.update');
+        Route::delete('{album}', [GroupsController::class, 'destroyPhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.destroy');
     });
 
     Route::prefix('videoalbums')->group(function () {
         Route::get('', [GroupsController::class, 'videoalbums'])->name('videoalbums.default');
         Route::get('{album}/edit', [GroupsController::class, 'editVideoalbum'])->where('album', '[0-9]+')->name('videoalbum.edit');
         Route::post('{album}/edit', [GroupsController::class, 'updateVideoalbum'])->where('album', '[0-9]+')->name('videoalbum.update');
+        Route::delete('{album}', [GroupsController::class, 'destroyVideoalbum'])->where('album', '[0-9]+')->name('videoalbum.destroy');
     });
 
     Route::get('{community}/edit', [GroupsController::class, 'edit'])->where('community', '[0-9]+')->name('edit');
@@ -150,12 +152,14 @@ Route::prefix('teams')->name('front.teams.')->group(function () {
         Route::get('', [TeamsController::class, 'photoalbums'])->name('photoalbums.default');
         Route::get('{album}/edit', [TeamsController::class, 'editPhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.edit');
         Route::post('{album}/edit', [TeamsController::class, 'updatePhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.update');
+        Route::delete('{album}', [TeamsController::class, 'destroyPhotoalbum'])->where('album', '[0-9]+')->name('photoalbum.destroy');
     });
 
     Route::prefix('videoalbums')->group(function () {
         Route::get('', [TeamsController::class, 'videoalbums'])->name('videoalbums.default');
         Route::get('{album}/edit', [TeamsController::class, 'editVideoalbum'])->where('album', '[0-9]+')->name('videoalbum.edit');
         Route::post('{album}/edit', [TeamsController::class, 'updateVideoalbum'])->where('album', '[0-9]+')->name('videoalbum.update');
+        Route::delete('{album}', [TeamsController::class, 'destroyVideoalbum'])->where('album', '[0-9]+')->name('videoalbum.destroy');
 
     });
 

@@ -7,12 +7,12 @@
                 <div class="add-photos-album selects-field-events teams-search-form">
                     <div class="select-container-text two_block">
                         <input type="hidden" name="id_place" class="id_place" value="{{ request('id_place') }}" data-type="search_city">
-                        <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('place') }}" name="place" data-type="search_city" placeholder="Искать команду в городе">
+                        <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('place') }}" name="place" data-type="search_city" placeholder="Ищу команду в городе">
                         <div class="select-place" data-type="search_city"></div>
                     </div>
                     <div class="select-container-text two_block borderLeft">
                         <input type="hidden" name="id_sport" class="id_place" value="{{ request('id_sport') }}" data-type="search_sport">
-                        <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('sport') }}" name="sport" data-type="search_sport" placeholder="Искать вид спорта">
+                        <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('sport') }}" name="sport" data-type="search_sport" placeholder="Ищу свой спорт">
                         <div class="select-place" data-type="search_sport"></div>
                     </div>
                     <p class="select-container-text lupa">
@@ -207,10 +207,26 @@
             opacity: .6;
             pointer-events: none;
         }
+
+        .content-groups .teams-search-form .select-place {
+            border-radius: 0 0 5px 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .18);
+            max-height: 260px;
+            top: 100%;
+            z-index: 100;
+        }
+
+        .content-groups .teams-search-form .select-place .place-item {
+            font-size: 18px;
+            line-height: 30px;
+            padding: 6px 10px;
+            text-align: center;
+        }
     </style>
 @endpush
 
 @push('scripts')
+    <script src="{{ asset('frontend/js/search.js') }}"></script>
     <script>
         (function () {
             const $tabs = $('#tabs');
