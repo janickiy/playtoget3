@@ -89,6 +89,31 @@ class CommunityRepository extends BaseRepository
             ->first();
     }
 
+    public function defaultGroup(?User $viewer = null): ?Community
+    {
+        if ($viewer) {
+            $group = $this->model->newQuery()
+                ->where('communities.type', 'group')
+                ->where('communities.banned', false)
+                ->join('community_roles', 'community_roles.community_id', '=', 'communities.id')
+                ->where('community_roles.user_id', $viewer->id)
+                ->whereIn('community_roles.role', [1, 2, 3])
+                ->orderBy('community_roles.role')
+                ->select('communities.*')
+                ->first();
+
+            if ($group) {
+                return $this->findGroup((int) $group->id);
+            }
+        }
+
+        return $this->model->newQuery()
+            ->where('type', 'group')
+            ->where('banned', false)
+            ->orderBy('id')
+            ->first();
+    }
+
     public function teamForAlbumOwner(int $ownerId): ?Community
     {
         return $this->findTeam($ownerId);
@@ -197,16 +222,20 @@ class CommunityRepository extends BaseRepository
         return (int) $query->count(DB::raw('distinct communities.id'));
     }
 
-    public function myGroups(int $userId, int $limit = 5, int $offset = 0): Collection
+    public function myGroups(int $userId, int $limit = 5, int $offset = 0, array $filters = []): Collection
     {
-        return $this->model->newQuery()
+        $query = $this->model->newQuery()
             ->with(['settings'])
             ->withCount(['roles as members_count' => fn ($query) => $query->whereIn('role', [1, 2, 3])])
             ->join('community_roles', 'community_roles.community_id', '=', 'communities.id')
             ->where('community_roles.user_id', $userId)
             ->whereIn('community_roles.role', [1, 2, 3])
             ->where('communities.type', 'group')
-            ->where('communities.banned', false)
+            ->where('communities.banned', false);
+
+        $this->applyCommunityFilters($query, $filters);
+
+        return $query
             ->orderBy('community_roles.role')
             ->orderBy('communities.name')
             ->offset($offset)
@@ -216,24 +245,31 @@ class CommunityRepository extends BaseRepository
             ->map(fn (Community $group): array => $this->serializeGroup($group));
     }
 
-    public function myGroupsCount(int $userId): int
+    public function myGroupsCount(int $userId, array $filters = []): int
     {
-        return (int) $this->model->newQuery()
+        $query = $this->model->newQuery()
             ->join('community_roles', 'community_roles.community_id', '=', 'communities.id')
             ->where('community_roles.user_id', $userId)
             ->whereIn('community_roles.role', [1, 2, 3])
             ->where('communities.type', 'group')
-            ->where('communities.banned', false)
-            ->count(DB::raw('distinct communities.id'));
+            ->where('communities.banned', false);
+
+        $this->applyCommunityFilters($query, $filters);
+
+        return (int) $query->count(DB::raw('distinct communities.id'));
     }
 
-    public function popularGroups(int $limit = 5, int $offset = 0): Collection
+    public function popularGroups(int $limit = 5, int $offset = 0, array $filters = []): Collection
     {
-        return $this->model->newQuery()
+        $query = $this->model->newQuery()
             ->with(['settings'])
             ->withCount(['roles as members_count' => fn ($query) => $query->whereIn('role', [1, 2, 3])])
             ->where('type', 'group')
-            ->where('banned', false)
+            ->where('banned', false);
+
+        $this->applyCommunityFilters($query, $filters);
+
+        return $query
             ->orderByDesc('members_count')
             ->orderBy('name')
             ->offset($offset)
@@ -242,24 +278,31 @@ class CommunityRepository extends BaseRepository
             ->map(fn (Community $group): array => $this->serializeGroup($group));
     }
 
-    public function popularGroupsCount(): int
+    public function popularGroupsCount(array $filters = []): int
     {
-        return (int) $this->model->newQuery()
+        $query = $this->model->newQuery()
             ->where('type', 'group')
-            ->where('banned', false)
-            ->count();
+            ->where('banned', false);
+
+        $this->applyCommunityFilters($query, $filters);
+
+        return (int) $query->count();
     }
 
-    public function invitedGroups(int $userId, int $limit = 5, int $offset = 0): Collection
+    public function invitedGroups(int $userId, int $limit = 5, int $offset = 0, array $filters = []): Collection
     {
-        return $this->model->newQuery()
+        $query = $this->model->newQuery()
             ->with(['settings'])
             ->withCount(['roles as members_count' => fn ($query) => $query->whereIn('role', [1, 2, 3])])
             ->join('community_roles', 'community_roles.community_id', '=', 'communities.id')
             ->where('community_roles.user_id', $userId)
             ->where('community_roles.role', 5)
             ->where('communities.type', 'group')
-            ->where('communities.banned', false)
+            ->where('communities.banned', false);
+
+        $this->applyCommunityFilters($query, $filters);
+
+        return $query
             ->orderBy('communities.name')
             ->offset($offset)
             ->limit($limit)
@@ -268,15 +311,18 @@ class CommunityRepository extends BaseRepository
             ->map(fn (Community $group): array => $this->serializeGroup($group));
     }
 
-    public function invitedGroupsCount(int $userId): int
+    public function invitedGroupsCount(int $userId, array $filters = []): int
     {
-        return (int) $this->model->newQuery()
+        $query = $this->model->newQuery()
             ->join('community_roles', 'community_roles.community_id', '=', 'communities.id')
             ->where('community_roles.user_id', $userId)
             ->where('community_roles.role', 5)
             ->where('communities.type', 'group')
-            ->where('communities.banned', false)
-            ->count(DB::raw('distinct communities.id'));
+            ->where('communities.banned', false);
+
+        $this->applyCommunityFilters($query, $filters);
+
+        return (int) $query->count(DB::raw('distinct communities.id'));
     }
 
     public function members(int $teamId): Collection
@@ -328,27 +374,32 @@ class CommunityRepository extends BaseRepository
             ->values();
     }
 
-    public function events(int $teamId): Collection
+    public function events(int $communityId, string $eventableType = 'team'): Collection
     {
         return Event::query()
             ->with('sportType')
             ->where('banned', false)
             ->whereHas('acceptedMembers', fn ($query) => $query
-                ->where('eventable_type', 'team')
-                ->where('member_id', $teamId))
+                ->where('eventable_type', $eventableType)
+                ->where('member_id', $communityId))
             ->orderByDesc('date_from')
             ->get()
-            ->map(fn (Event $event): array => $this->serializeEvent($event));
+            ->map(fn (Event $event): array => $this->serializeEvent($event, $eventableType));
     }
 
     public function searchEventsForTeam(int $teamId, string $search = '', int $limit = 10, int $offset = 0, array $filters = []): Collection
+    {
+        return $this->searchEventsForCommunity($teamId, 'team', $search, $limit, $offset, $filters);
+    }
+
+    public function searchEventsForCommunity(int $communityId, string $eventableType, string $search = '', int $limit = 10, int $offset = 0, array $filters = []): Collection
     {
         $query = Event::query()
             ->with('sportType')
             ->where('banned', false)
             ->whereDoesntHave('acceptedMembers', fn ($query) => $query
-                ->where('eventable_type', 'team')
-                ->where('member_id', $teamId));
+                ->where('eventable_type', $eventableType)
+                ->where('member_id', $communityId));
 
         $place = trim((string) ($filters['place'] ?? ''));
         $sport = trim((string) ($filters['sport'] ?? ''));
@@ -390,7 +441,7 @@ class CommunityRepository extends BaseRepository
             ->offset(max($offset, 0))
             ->limit(max($limit, 1))
             ->get()
-            ->map(fn (Event $event): array => $this->serializeEvent($event));
+            ->map(fn (Event $event): array => $this->serializeEvent($event, $eventableType));
     }
 
     public function changeEventMembership(Community $team, int $eventId, int $status): bool
@@ -847,7 +898,7 @@ class CommunityRepository extends BaseRepository
         ];
     }
 
-    private function serializeEvent(Event $event): array
+    private function serializeEvent(Event $event, string $participantType = 'team'): array
     {
         return [
             'id' => (int) $event->id,
@@ -860,7 +911,7 @@ class CommunityRepository extends BaseRepository
             'description' => (string) $event->description,
             'participants' => AcceptedEventMember::query()
                 ->where('event_id', $event->id)
-                ->where('eventable_type', 'team')
+                ->where('eventable_type', $participantType)
                 ->count(),
             'user_participants' => AcceptedEventMember::query()
                 ->where('event_id', $event->id)

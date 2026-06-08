@@ -2,15 +2,16 @@
 
 @section('content')
     <div class="content-groups friends">
+        @empty($viewedUserId)
         <form autocomplete="off" action="{{ route('front.groups.index') }}" method="GET" role="search">
             <div class="add-photos-album selects-field-events groups-search-form">
                 <div class="select-container-text two_block">
-                    <input type="hidden" name="id_place" class="id_place" data-type="search_city">
+                    <input type="hidden" name="id_place" class="id_place" value="{{ request('id_place') }}" data-type="search_city">
                     <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('place') }}" name="place" data-type="search_city" placeholder="Искать группу в городе">
                     <div class="select-place" data-type="search_city"></div>
                 </div>
                 <div class="select-container-text two_block borderLeft">
-                    <input type="hidden" name="id_sport" class="id_place" data-type="search_sport">
+                    <input type="hidden" name="id_sport" class="id_place" value="{{ request('id_sport') }}" data-type="search_sport">
                     <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('sport') }}" name="sport" data-type="search_sport" placeholder="Искать вид спорта">
                     <div class="select-place" data-type="search_sport"></div>
                 </div>
@@ -86,15 +87,39 @@
             <div id="invited" class="paddingTop20" style="display:none">
                 @if ($invitedGroups->isNotEmpty())
                     <div class="event-container">
-                        @foreach ($invitedGroups as $group)
-                            @include('front.groups._group-card', ['group' => $group])
-                        @endforeach
+                        <div id="invited_group_list"
+                             data-next-offset="{{ $invitedGroups->count() }}"
+                             data-page-size="{{ $groupsPageSize }}"
+                             data-has-more="{{ $invitedGroupsTotal > $invitedGroups->count() ? 1 : 0 }}"
+                             data-user-id="{{ $viewer->id }}">
+                            @foreach ($invitedGroups as $group)
+                                @include('front.groups._group-card', ['group' => $group])
+                            @endforeach
+                        </div>
+                        <a href="#" class="show-more js-groups-load-more" data-feed="invited" @style(['display: none' => $invitedGroupsTotal <= $invitedGroups->count()])>
+                            <i></i><span>Показать еще</span>
+                        </a>
                     </div>
                 @else
                     <center><h5>У вас нет приглашений.</h5></center>
                 @endif
             </div>
         </div>
+        @else
+            <div class="photo-caption">
+                <h3>Группы<sup>{{ $myGroups->count() }}</sup></h3>
+            </div>
+
+            @if ($myGroups->isNotEmpty())
+                <div class="event-container">
+                    @foreach ($myGroups as $group)
+                        @include('front.groups._group-card', ['group' => $group])
+                    @endforeach
+                </div>
+            @else
+                <p class="no_message">Групп пока нет.</p>
+            @endif
+        @endempty
     </div>
 @endsection
 
@@ -211,10 +236,25 @@
                         url: '{{ route('front.ajax.handle', ['action' => 'get_communities_list']) }}',
                         $container: $('#my_group_list'),
                     },
+                    invited: {
+                        url: '{{ route('front.ajax.handle', ['action' => 'get_communities_list']) }}',
+                        $container: $('#invited_group_list'),
+                    },
                 };
 
                 let loading = false;
                 let scrollTimer = null;
+
+                function searchPayload() {
+                    const payload = {};
+                    const params = new URLSearchParams(window.location.search);
+
+                    ['id_place', 'place', 'id_sport', 'sport', 'search'].forEach(function (name) {
+                        payload[name] = params.get(name) || '';
+                    });
+
+                    return payload;
+                }
 
                 function activeFeedName() {
                     return $tabs.find('#main-menu li.active').data('type');
@@ -247,13 +287,14 @@
                     $.ajax({
                         type: 'POST',
                         url: config.url,
-                        data: {
+                        data: Object.assign({
                             _token: $('meta[name="csrf-token"]').attr('content'),
                             number: pageSize,
                             offset: offset,
                             type: 'group',
+                            feed: feedName,
                             user_id: config.$container.data('user-id') || '{{ $viewer->id }}',
-                        },
+                        }, searchPayload()),
                         success: function (data) {
                             if (data.status === 1 && data.html) {
                                 config.$container.append(data.html);

@@ -1,15 +1,25 @@
 @extends('front.layouts.app')
 
 @section('content')
+    @php
+        $communityView = $communityView ?? [
+            'kind' => 'team',
+            'route' => 'front.teams',
+            'top' => 'front.teams._top',
+            'label' => 'Команда',
+            'entity' => $team,
+        ];
+        $community = $communityView['entity'] ?? $team;
+    @endphp
     <div class="content-groups friends">
-        @include('front.teams._top')
+        @include($communityView['top'])
 
         @if (! $permissions['video'])
-            <h4 class="blocking">Команда ограничила доступ к этому разделу</h4>
+            <h4 class="blocking">{{ $communityView['label'] }} ограничила доступ к этому разделу</h4>
         @else
             <h2>{{ $videoalbum->name }}</h2>
             <p>
-                <a href="{{ route('front.teams.videoalbums', ['community' => $team->id]) }}">
+                <a href="{{ route($communityView['route'] . '.videoalbums', ['community' => $community->id]) }}">
                     Все видео
                 </a>
             </p>

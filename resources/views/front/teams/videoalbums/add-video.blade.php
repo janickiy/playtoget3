@@ -1,8 +1,17 @@
 @extends('front.layouts.app')
 
 @section('content')
+    @php
+        $communityView = $communityView ?? [
+            'kind' => 'team',
+            'route' => 'front.teams',
+            'top' => 'front.teams._top',
+            'entity' => $team,
+        ];
+        $community = $communityView['entity'] ?? $team;
+    @endphp
     <div class="content-groups friends">
-        @include('front.teams._top')
+        @include($communityView['top'])
 
         <h2>{{ $title }}</h2>
 
@@ -13,7 +22,7 @@
             </div>
         @endif
 
-        <form autocomplete="off" class="form-horizontal" method="POST" action="{{ route('front.teams.videoalbums.store-video', ['community' => $team->id]) }}" accept-charset="UTF-8">
+        <form autocomplete="off" class="form-horizontal" method="POST" action="{{ route($communityView['route'] . '.videoalbums.store-video', ['community' => $community->id]) }}" accept-charset="UTF-8">
             @csrf
             <div class="job_form">
                 <div class="form-group">

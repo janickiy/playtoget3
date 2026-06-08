@@ -1,8 +1,22 @@
 @extends('front.layouts.app')
 
 @section('content')
+    @php
+        $communityView = $communityView ?? [
+            'kind' => 'team',
+            'route' => 'front.teams',
+            'top' => 'front.teams._top',
+            'label' => 'Команда',
+            'labelLower' => 'команда',
+            'labelGenitive' => 'команды',
+            'pluralGenitive' => 'команд',
+            'entity' => $team,
+        ];
+        $community = $communityView['entity'] ?? $team;
+        $communityKind = $communityView['kind'];
+    @endphp
     <div class="content-groups friends">
-        @include('front.teams._top')
+        @include($communityView['top'])
 
         @if ($canManage)
             <div class="photo-caption">
@@ -23,7 +37,7 @@
         @endif
 
         <div class="photo-caption">
-            <h3>Мероприятия команды</h3>
+            <h3>Мероприятия {{ $communityView['labelGenitive'] }}</h3>
         </div>
 
         @if ($events->isNotEmpty())
@@ -43,7 +57,7 @@
                                 {{ $event['date'] }}
                             </p>
                             <p>{{ $event['description'] }}</p>
-                            <p><i></i>{{ $event['participants'] }} команд</p>
+                            <p><i></i>{{ $event['participants'] }} {{ $communityView['pluralGenitive'] }}</p>
                             <span @class(['ended' => ! $event['active']])>{{ $event['active'] ? 'Мероприятие продолжается' : 'Мероприятие завершено' }}</span>
                         </div>
                     </div>
@@ -51,7 +65,7 @@
             </div>
         @else
             <div class="photo-caption">
-                <h5 class="center_text">У команды пока нет мероприятий</h5>
+                <h5 class="center_text">У {{ $communityView['labelGenitive'] }} пока нет мероприятий</h5>
             </div>
         @endif
     </div>
@@ -67,8 +81,8 @@
                 const settings = {
                     number: 10,
                     offset: 0,
-                    member_id: '{{ $team->id }}',
-                    eventable_type: 'team',
+                    member_id: '{{ $community->id }}',
+                    eventable_type: '{{ $communityKind }}',
                 };
                 const $results = $('#resultSearch');
                 let timer = null;
@@ -120,6 +134,7 @@
                             _token: token,
                             event_id: $button.attr('data-item'),
                             community_id: settings.member_id,
+                            eventable_type: settings.eventable_type,
                             status: $button.attr('data-status') || 1,
                         },
                         success: function (data) {

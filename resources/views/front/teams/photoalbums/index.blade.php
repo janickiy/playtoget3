@@ -1,17 +1,30 @@
 @extends('front.layouts.app')
 
 @section('content')
+    @php
+        $communityView = $communityView ?? [
+            'kind' => 'team',
+            'route' => 'front.teams',
+            'top' => 'front.teams._top',
+            'label' => 'Команда',
+            'labelLower' => 'команда',
+            'labelGenitive' => 'команды',
+            'entity' => $team,
+        ];
+        $community = $communityView['entity'] ?? $team;
+        $communityKind = $communityView['kind'];
+    @endphp
     <div class="content-groups friends">
-        @include('front.teams._top')
+        @include($communityView['top'])
 
         @if (! $permissions['photo'])
-            <h4 class="blocking">Команда ограничила доступ к этому разделу</h4>
+            <h4 class="blocking">{{ $communityView['label'] }} ограничила доступ к этому разделу</h4>
         @else
             @if ($canManage)
                 <div class="add-photos-album">
-                    <span><i></i><a href="{{ route('front.teams.photoalbums.add-photo', ['community' => $team->id]) }}">Добавить фото</a></span>
+                    <span><i></i><a href="{{ route($communityView['route'] . '.photoalbums.add-photo', ['community' => $community->id]) }}">Добавить фото</a></span>
                     <span>или</span>
-                    <span><i></i><a href="{{ route('front.teams.photoalbums.create', ['community' => $team->id]) }}">Создать фотоальбом</a></span>
+                    <span><i></i><a href="{{ route($communityView['route'] . '.photoalbums.create', ['community' => $community->id]) }}">Создать фотоальбом</a></span>
                 </div>
             @endif
 
@@ -52,7 +65,7 @@
                         @include('front.photoalbums._photo-card', ['photo' => $photo, 'canManage' => $canManage])
                     @endforeach
                     @if ($hasMorePhotos)
-                        <a class="show-more" id="my-event" onclick="showMorePhotos('{{ $team->id }}', 'team')">
+                        <a class="show-more" id="my-event" onclick="showMorePhotos('{{ $community->id }}', '{{ $communityKind }}')">
                             <i></i><span id="show-more">показать ещё</span>
                         </a>
                     @endif

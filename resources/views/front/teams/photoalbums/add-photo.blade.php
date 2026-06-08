@@ -1,8 +1,18 @@
 @extends('front.layouts.app')
 
 @section('content')
+    @php
+        $communityView = $communityView ?? [
+            'kind' => 'team',
+            'route' => 'front.teams',
+            'top' => 'front.teams._top',
+            'entity' => $team,
+        ];
+        $community = $communityView['entity'] ?? $team;
+        $communityKind = $communityView['kind'];
+    @endphp
     <div class="content-groups friends">
-        @include('front.teams._top')
+        @include($communityView['top'])
 
         <center><h2>{{ $title }}</h2></center>
 
@@ -42,8 +52,8 @@
 @push('scripts')
     <script>
         window.photoUploadUrl = '{{ route('front.ajax.handle', ['action' => 'add_photo_ajax']) }}';
-        window.photoAlbumRedirectBase = '{{ url('/teams/' . $team->id . '/photoalbums') }}';
-        window.photoalbumableType = 'team';
+        window.photoAlbumRedirectBase = '{{ url('/' . ($communityKind === 'group' ? 'groups' : 'teams') . '/' . $community->id . '/photoalbums') }}';
+        window.photoalbumableType = '{{ $communityKind }}';
         selectAction();
     </script>
     <script src="{{ asset('frontend/js/photo-upload.js') }}"></script>

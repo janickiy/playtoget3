@@ -1,17 +1,28 @@
 @extends('front.layouts.app')
 
 @section('content')
+    @php
+        $communityView = $communityView ?? [
+            'kind' => 'team',
+            'route' => 'front.teams',
+            'top' => 'front.teams._top',
+            'label' => 'Команда',
+            'entity' => $team,
+        ];
+        $community = $communityView['entity'] ?? $team;
+        $communityKind = $communityView['kind'];
+    @endphp
     <div class="content-groups friends">
-        @include('front.teams._top')
+        @include($communityView['top'])
 
         @if (! $permissions['video'])
-            <h4 class="blocking">Команда ограничила доступ к этому разделу</h4>
+            <h4 class="blocking">{{ $communityView['label'] }} ограничила доступ к этому разделу</h4>
         @else
             @if ($canManage)
                 <div class="add-photos-album">
-                    <span><i class="videoicon"></i><a href="{{ route('front.teams.videoalbums.add-video', ['community' => $team->id]) }}">Добавить видео</a></span>
+                    <span><i class="videoicon"></i><a href="{{ route($communityView['route'] . '.videoalbums.add-video', ['community' => $community->id]) }}">Добавить видео</a></span>
                     <span>или</span>
-                    <span><i></i><a href="{{ route('front.teams.videoalbums.create', ['community' => $team->id]) }}">Создать видеоальбом</a></span>
+                    <span><i></i><a href="{{ route($communityView['route'] . '.videoalbums.create', ['community' => $community->id]) }}">Создать видеоальбом</a></span>
                 </div>
             @endif
 
@@ -52,7 +63,7 @@
                         @include('front.videoalbums._video-card', ['video' => $video, 'canManage' => $canManage])
                     @endforeach
                     @if ($hasMoreVideos)
-                        <a class="show-more" id="my-event" onclick="showMoreVideos('{{ $team->id }}', 'team')">
+                        <a class="show-more" id="my-event" onclick="showMoreVideos('{{ $community->id }}', '{{ $communityKind }}')">
                             <i></i><span id="show-more">показать ещё</span>
                         </a>
                     @endif

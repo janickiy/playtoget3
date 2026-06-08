@@ -1,8 +1,9 @@
 @extends('front.layouts.app')
 
 @section('content')
+    @php($communityView = $communityView ?? ['top' => 'front.teams._top'])
     <div class="content-groups friends">
-        @include('front.teams._top')
+        @include($communityView['top'])
 
         <h2>{{ $title }}</h2>
 
