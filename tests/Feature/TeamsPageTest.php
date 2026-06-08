@@ -6,6 +6,7 @@ use App\Models\Community;
 use App\Models\CommunitySetting;
 use App\Models\User;
 use App\Repositories\CommunityRepository;
+use App\Repositories\ProfileRepository;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
@@ -157,6 +158,108 @@ class TeamsPageTest extends TestCase
             ->assertSee('Загрузить обложку');
     }
 
+    public function test_team_show_page_renders_feed_wall(): void
+    {
+        $viewer = $this->user(1);
+        $team = $this->community(18);
+        $comment = $this->comment(100, 'Запись команды');
+
+        $this->actingAs($viewer, 'web');
+
+        $this->mock(CommunityRepository::class, function (MockInterface $mock) use ($viewer, $team): void {
+            $mock->shouldReceive('findTeam')->with(18)->andReturn($team);
+            $mock->shouldReceive('serializeTeam')->with($team)->andReturn($this->teamData(18, 'выпы'));
+            $mock->shouldReceive('permissions')->with($team, $viewer)->andReturn(['wall' => true, 'photo' => true, 'video' => true]);
+            $mock->shouldReceive('role')->with(18, $viewer->id)->andReturn(1);
+            $mock->shouldReceive('membershipType')->with($team, $viewer)->andReturn('owner');
+            $mock->shouldReceive('canManage')->with($team, $viewer)->andReturn(true);
+            $mock->shouldReceive('canInvite')->with($team, $viewer)->andReturn(true);
+        });
+
+        $this->mock(ProfileRepository::class, function (MockInterface $mock) use ($viewer, $comment): void {
+            $mock->shouldReceive('comments')->with('team', 18, 10, 0, $viewer)->andReturn(collect([$comment]));
+            $mock->shouldReceive('hasMoreComments')->with('team', 18, 10, 0)->andReturn(false);
+        });
+
+        $this->get('/teams/18')
+            ->assertOk()
+            ->assertSee('value="team"', false)
+            ->assertSee('data-commentable-type="team"', false)
+            ->assertSee('Что у Вас интересного?')
+            ->assertSee('подпись')
+            ->assertSee('Запись команды')
+            ->assertSee('active-link', false)
+            ->assertSee('Лента');
+    }
+
+    public function test_team_members_page_still_renders_members(): void
+    {
+        $viewer = $this->user(1);
+        $team = $this->community(18);
+        $member = [
+            'id' => 2,
+            'name' => 'Дмитрий Панкратов',
+            'firstname' => 'Дмитрий',
+            'lastname' => 'Панкратов',
+            'avatar' => 'http://site3.local/frontend/images/noimage.png',
+            'city' => 'Москва',
+            'role' => 3,
+            'role_name' => 'Участник',
+            'is_online' => false,
+        ];
+
+        $this->actingAs($viewer, 'web');
+
+        $this->mock(CommunityRepository::class, function (MockInterface $mock) use ($viewer, $team, $member): void {
+            $mock->shouldReceive('findTeam')->with(18)->andReturn($team);
+            $mock->shouldReceive('serializeTeam')->with($team)->andReturn($this->teamData(18, 'выпы'));
+            $mock->shouldReceive('permissions')->with($team, $viewer)->andReturn(['wall' => true, 'photo' => true, 'video' => true]);
+            $mock->shouldReceive('role')->with(18, $viewer->id)->andReturn(1);
+            $mock->shouldReceive('membershipType')->with($team, $viewer)->andReturn('owner');
+            $mock->shouldReceive('canManage')->with($team, $viewer)->andReturn(true);
+            $mock->shouldReceive('canInvite')->with($team, $viewer)->andReturn(true);
+            $mock->shouldReceive('members')->with(18)->andReturn(collect([$member]));
+            $mock->shouldReceive('applications')->with(18)->andReturn(collect());
+        });
+
+        $this->get('/teams/18/members')
+            ->assertOk()
+            ->assertSee('Участники')
+            ->assertSee('Дмитрий')
+            ->assertSee('Панкратов')
+            ->assertDontSee('data-commentable-type="team"', false);
+    }
+
+    public function test_team_events_page_renders_legacy_search_form_for_managers(): void
+    {
+        $viewer = $this->user(1);
+        $team = $this->community(18);
+
+        $this->actingAs($viewer, 'web');
+
+        $this->mock(CommunityRepository::class, function (MockInterface $mock) use ($viewer, $team): void {
+            $mock->shouldReceive('findTeam')->with(18)->andReturn($team);
+            $mock->shouldReceive('serializeTeam')->with($team)->andReturn($this->teamData(18, 'выпы'));
+            $mock->shouldReceive('permissions')->with($team, $viewer)->andReturn(['wall' => true, 'photo' => true, 'video' => true]);
+            $mock->shouldReceive('role')->with(18, $viewer->id)->andReturn(1);
+            $mock->shouldReceive('membershipType')->with($team, $viewer)->andReturn('owner');
+            $mock->shouldReceive('canManage')->with($team, $viewer)->andReturn(true);
+            $mock->shouldReceive('canInvite')->with($team, $viewer)->andReturn(true);
+            $mock->shouldReceive('events')->with(18)->andReturn(collect([$this->eventData(7, 'Командный турнир')]));
+        });
+
+        $this->get('/teams/18/events')
+            ->assertOk()
+            ->assertSee('Поиск')
+            ->assertSee('class="form-control search_events"', false)
+            ->assertSee('placeholder="Начните вводить"', false)
+            ->assertSee('id="resultSearch"', false)
+            ->assertSee('search_event', false)
+            ->assertSee('change_event_community_status', false)
+            ->assertSee('Мероприятия команды')
+            ->assertSee('Командный турнир');
+    }
+
     public function test_team_membership_ajax_changes_status(): void
     {
         $viewer = $this->user(1);
@@ -177,6 +280,62 @@ class TeamsPageTest extends TestCase
             ->assertOk()
             ->assertJsonPath('result', 'success')
             ->assertJsonPath('member', 'none');
+    }
+
+    public function test_team_event_search_ajax_uses_repository(): void
+    {
+        $viewer = $this->user(1);
+        $team = $this->community(18);
+        $event = $this->eventData(7, 'Весенний турнир');
+
+        $this->actingAs($viewer, 'web');
+
+        $this->mock(CommunityRepository::class, function (MockInterface $mock) use ($viewer, $team, $event): void {
+            $mock->shouldReceive('findTeam')->with(18)->andReturn($team);
+            $mock->shouldReceive('canManage')->with($team, $viewer)->andReturn(true);
+            $mock->shouldReceive('searchEventsForTeam')->with(18, 'турнир', 10, 0, [
+                'place' => '',
+                'sport' => '',
+            ])->andReturn(collect([$event]));
+        });
+
+        $response = $this->post('/ajax/search_event', [
+            'number' => 10,
+            'offset' => 0,
+            'member_id' => 18,
+            'eventable_type' => 'team',
+            'search' => 'турнир',
+        ])
+            ->assertOk()
+            ->assertJsonPath('status', 1)
+            ->assertJsonPath('count', 1);
+
+        $this->assertStringContainsString('Весенний турнир', $response->json('html'));
+        $this->assertStringContainsString('class="addEvent"', $response->json('html'));
+        $this->assertStringContainsString('data-item="7"', $response->json('html'));
+    }
+
+    public function test_team_event_membership_ajax_uses_repository(): void
+    {
+        $viewer = $this->user(1);
+        $team = $this->community(18);
+
+        $this->actingAs($viewer, 'web');
+
+        $this->mock(CommunityRepository::class, function (MockInterface $mock) use ($viewer, $team): void {
+            $mock->shouldReceive('findTeam')->with(18)->andReturn($team);
+            $mock->shouldReceive('canManage')->with($team, $viewer)->andReturn(true);
+            $mock->shouldReceive('changeEventMembership')->with($team, 7, 1)->andReturn(true);
+        });
+
+        $this->post('/ajax/change_event_community_status', [
+            'event_id' => 7,
+            'community_id' => 18,
+            'status' => 1,
+        ])
+            ->assertOk()
+            ->assertJsonPath('status', 1)
+            ->assertJsonPath('result', 'success');
     }
 
     public function test_team_invitation_ajax_invites_friends(): void
@@ -261,6 +420,45 @@ class TeamsPageTest extends TestCase
             'cover' => 'http://site3.local/frontend/images/default_group.png',
             'members_count' => 1,
             'members_text' => '1 участников',
+        ];
+    }
+
+    private function eventData(int $id, string $name): array
+    {
+        return [
+            'id' => $id,
+            'name' => $name,
+            'avatar' => 'http://site3.local/frontend/images/noimage.png',
+            'sport_type' => 'Футбол',
+            'city' => 'Москва',
+            'date' => '08.06.2026 12:00',
+            'date_to' => '08.06.2026 14:00',
+            'description' => 'Описание мероприятия',
+            'participants' => 2,
+            'user_participants' => 3,
+            'active' => true,
+        ];
+    }
+
+    private function comment(int $id, string $content): array
+    {
+        return [
+            'id' => $id,
+            'parent_id' => 0,
+            'content_id' => 18,
+            'author_id' => 1,
+            'author_name' => 'Александр Яницкий',
+            'author_url' => 'http://site3.local/profile/1',
+            'avatar' => 'http://site3.local/frontend/images/noimage.png',
+            'created' => '08.06.2026 02:30',
+            'content' => $content,
+            'attachments' => collect(),
+            'likes_count' => 0,
+            'shares_count' => 0,
+            'can_interact' => true,
+            'can_share' => false,
+            'can_delete' => true,
+            'replies' => collect(),
         ];
     }
 

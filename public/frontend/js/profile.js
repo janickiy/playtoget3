@@ -275,6 +275,15 @@ $(document).on("click", ".reply", function () {
     ReplyForm += '<a href="#" class="files" data-num="' + IdComment + '"  data-tooltip="Прикрепить изображение"><img src="./frontend/images/files.png" alt=""></a>';
     ReplyForm += "<div class='smilesChoose add' data-num='" + IdComment + "'></div>";
     ReplyForm += '</div>';
+    if (window.profileCanPostAsCommunity && (window.profileCommentableType === 'team' || window.profileCommentableType === 'group')) {
+        ReplyForm += '<div class="col-lg-6 col-lg-offset-2">';
+        ReplyForm += '<div class="checkbox team_check">';
+        ReplyForm += '<input id="team_check_reply_' + IdComment + '" type="checkbox" hidden checked name="author_community" value="1">';
+        ReplyForm += '<label for="team_check_reply_' + IdComment + '"></label>';
+        ReplyForm += '</div>';
+        ReplyForm += '<label class="col-lg-6 control-label label_team_check" for="team_check_reply_' + IdComment + '">подпись</label>';
+        ReplyForm += '</div>';
+    }
     ReplyForm += "<div class='files_block two' data-num='" + IdComment + "'></div>";
     ReplyForm += '<input type="submit" id="send-reply" class="send" value="Отправить" data-item="' + IdComment + '">';
     ReplyForm += '</form>';

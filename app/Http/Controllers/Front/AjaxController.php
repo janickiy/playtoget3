@@ -61,6 +61,8 @@ class AjaxController extends Controller
             'unblock_user' => $this->unblockUser($request),
             'changememberstatus' => $this->changeCommunityMemberStatus($request),
             'send_community_invitation' => $this->sendCommunityInvitation($request),
+            'search_event' => $this->searchEvent($request),
+            'change_event_community_status' => $this->changeEventCommunityStatus($request),
             'getcomments' => $this->getComments($request),
             'getphotoinfo' => $this->getPhotoInfo($request),
             'add_photo_ajax' => $this->addPhotoAjax($request),
@@ -335,6 +337,60 @@ class AjaxController extends Controller
             'status' => 1,
             'result' => 'success',
             'count' => $count,
+        ]);
+    }
+
+    private function searchEvent(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $teamId = (int)$request->input('member_id', $request->input('community_id', 0));
+        $type = (string)$request->input('eventable_type', 'team');
+        $team = $type === 'team' && $teamId > 0 ? $this->communities->findTeam($teamId) : null;
+
+        if (!$viewer || !$team || !$this->communities->canManage($team, $viewer)) {
+            return response()->json(['status' => 0, 'html' => '', 'count' => 0], 403);
+        }
+
+        $limit = min(max((int)$request->input('number', 10), 1), 25);
+        $offset = max((int)$request->input('offset', 0), 0);
+        $events = $this->communities->searchEventsForTeam(
+            $team->id,
+            trim((string)$request->input('search', '')),
+            $limit,
+            $offset,
+            [
+                'place' => trim((string)$request->input('place', '')),
+                'sport' => trim((string)$request->input('sport', '')),
+            ],
+        );
+
+        return response()->json([
+            'status' => 1,
+            'html' => view('front.teams._event-search-results', [
+                'team' => $team,
+                'events' => $events,
+            ])->render(),
+            'count' => $events->count(),
+        ]);
+    }
+
+    private function changeEventCommunityStatus(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $teamId = (int)$request->input('community_id', $request->input('member_id', 0));
+        $eventId = (int)$request->input('event_id', $request->input('id', 0));
+        $status = (int)$request->input('status', 1);
+        $team = $teamId > 0 ? $this->communities->findTeam($teamId) : null;
+
+        if (!$viewer || !$team || $eventId < 1 || !$this->communities->canManage($team, $viewer)) {
+            return response()->json(['status' => 0, 'result' => 'error'], 422);
+        }
+
+        $changed = $this->communities->changeEventMembership($team, $eventId, $status);
+
+        return response()->json([
+            'status' => $changed ? 1 : 0,
+            'result' => $changed ? 'success' : 'error',
         ]);
     }
 

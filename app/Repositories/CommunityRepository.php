@@ -338,20 +338,92 @@ class CommunityRepository extends BaseRepository
                 ->where('member_id', $teamId))
             ->orderByDesc('date_from')
             ->get()
-            ->map(fn (Event $event): array => [
-                'id' => (int) $event->id,
-                'name' => (string) $event->name,
-                'avatar' => FrontAssets::eventCover($event),
-                'sport_type' => $event->sportType?->name ?: (string) $event->sport_type,
-                'city' => (string) $event->place,
-                'date' => $event->date_from?->format('d.m.Y H:i') ?? '',
-                'description' => (string) $event->description,
-                'participants' => AcceptedEventMember::query()
-                    ->where('event_id', $event->id)
-                    ->where('eventable_type', 'team')
-                    ->count(),
-                'active' => ! $event->date_to || $event->date_to->isFuture(),
-            ]);
+            ->map(fn (Event $event): array => $this->serializeEvent($event));
+    }
+
+    public function searchEventsForTeam(int $teamId, string $search = '', int $limit = 10, int $offset = 0, array $filters = []): Collection
+    {
+        $query = Event::query()
+            ->with('sportType')
+            ->where('banned', false)
+            ->whereDoesntHave('acceptedMembers', fn ($query) => $query
+                ->where('eventable_type', 'team')
+                ->where('member_id', $teamId));
+
+        $place = trim((string) ($filters['place'] ?? ''));
+        $sport = trim((string) ($filters['sport'] ?? ''));
+        $search = trim($search);
+
+        if ($search !== '') {
+            $query->where(function (Builder $query) use ($search): void {
+                $words = preg_split('/\s+/', $search) ?: [];
+
+                foreach ($words as $word) {
+                    $word = trim($word);
+
+                    if ($word === '') {
+                        continue;
+                    }
+
+                    $query->orWhere('name', 'like', '%' . $word . '%')
+                        ->orWhere('description', 'like', '%' . $word . '%')
+                        ->orWhere('place', 'like', '%' . $word . '%')
+                        ->orWhereHas('sportType', fn (Builder $sportQuery) => $sportQuery->where('name', 'like', '%' . $word . '%'));
+                }
+            });
+        }
+
+        if ($place !== '') {
+            $query->where('place', 'like', '%' . $place . '%');
+        }
+
+        if ($sport !== '') {
+            $query->where(function (Builder $query) use ($sport): void {
+                $query
+                    ->where('sport_type', 'like', '%' . $sport . '%')
+                    ->orWhereHas('sportType', fn (Builder $sportQuery) => $sportQuery->where('name', 'like', '%' . $sport . '%'));
+            });
+        }
+
+        return $query
+            ->orderBy('name')
+            ->offset(max($offset, 0))
+            ->limit(max($limit, 1))
+            ->get()
+            ->map(fn (Event $event): array => $this->serializeEvent($event));
+    }
+
+    public function changeEventMembership(Community $team, int $eventId, int $status): bool
+    {
+        if (! in_array($status, [0, 1], true)) {
+            return false;
+        }
+
+        /** @var Event|null $event */
+        $event = Event::query()
+            ->whereKey($eventId)
+            ->where('banned', false)
+            ->first();
+
+        if (! $event) {
+            return false;
+        }
+
+        $attributes = [
+            'event_id' => $event->id,
+            'eventable_type' => (string) $team->type,
+            'member_id' => $team->id,
+        ];
+
+        if ($status === 0) {
+            return AcceptedEventMember::query()->where($attributes)->delete() > 0;
+        }
+
+        AcceptedEventMember::query()->updateOrCreate($attributes, [
+            'role' => 3,
+        ]);
+
+        return true;
     }
 
     public function role(int $teamId, ?int $userId): ?int
@@ -772,6 +844,29 @@ class CommunityRepository extends BaseRepository
             'role' => (int) $role->role,
             'role_name' => $this->roleName((int) $role->role),
             'is_online' => false,
+        ];
+    }
+
+    private function serializeEvent(Event $event): array
+    {
+        return [
+            'id' => (int) $event->id,
+            'name' => (string) $event->name,
+            'avatar' => FrontAssets::eventCover($event),
+            'sport_type' => $event->sportType?->name ?: (string) $event->sport_type,
+            'city' => (string) $event->place,
+            'date' => $event->date_from?->format('d.m.Y H:i') ?? '',
+            'date_to' => $event->date_to?->format('d.m.Y H:i') ?? '',
+            'description' => (string) $event->description,
+            'participants' => AcceptedEventMember::query()
+                ->where('event_id', $event->id)
+                ->where('eventable_type', 'team')
+                ->count(),
+            'user_participants' => AcceptedEventMember::query()
+                ->where('event_id', $event->id)
+                ->where('eventable_type', 'user')
+                ->count(),
+            'active' => ! $event->date_to || $event->date_to->isFuture(),
         ];
     }
 

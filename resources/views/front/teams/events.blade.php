@@ -4,6 +4,24 @@
     <div class="content-groups friends">
         @include('front.teams._top')
 
+        @if ($canManage)
+            <div class="photo-caption">
+                <h3>Поиск</h3>
+            </div>
+            <form class="form-horizontal team-events-search-form" enctype="multipart/form-data" method="post" action="">
+                <div class="form-group">
+                    <div class="col-lg-12">
+                        <p class="select-container-text lupa width100">
+                            <input class="form-control search_events" type="text" name="name" placeholder="Начните вводить" autocomplete="off">
+                            <span></span>
+                        </p>
+                    </div>
+                </div>
+            </form>
+            <br>
+            <div id="resultSearch"></div>
+        @endif
+
         <div class="photo-caption">
             <h3>Мероприятия команды</h3>
         </div>
@@ -38,3 +56,83 @@
         @endif
     </div>
 @endsection
+
+@if ($canManage)
+    @push('scripts')
+        <script>
+            $(function () {
+                const searchEndpoint = '{{ route('front.ajax.handle', ['action' => 'search_event']) }}';
+                const changeEndpoint = '{{ route('front.ajax.handle', ['action' => 'change_event_community_status']) }}';
+                const token = $('meta[name="csrf-token"]').attr('content') || '';
+                const settings = {
+                    number: 10,
+                    offset: 0,
+                    member_id: '{{ $team->id }}',
+                    eventable_type: 'team',
+                };
+                const $results = $('#resultSearch');
+                let timer = null;
+
+                $('.search_events').on('keyup input', function () {
+                    const value = $(this).val();
+
+                    window.clearTimeout(timer);
+                    timer = window.setTimeout(function () {
+                        $results.html('');
+
+                        $.ajax({
+                            type: 'POST',
+                            url: searchEndpoint,
+                            data: {
+                                _token: token,
+                                number: settings.number,
+                                offset: settings.offset,
+                                member_id: settings.member_id,
+                                eventable_type: settings.eventable_type,
+                                search: value,
+                            },
+                            success: function (data) {
+                                if (data.status === 1 && data.html) {
+                                    $results.html('<div class="event-container">' + data.html + '</div>');
+                                } else {
+                                    $results.html('<div class="photo-caption"><h5 class="center_text">Мероприятия не найдены</h5></div>');
+                                }
+                            }
+                        });
+                    }, 250);
+                });
+
+                $(document).on('click', '.addEvent', function (event) {
+                    event.preventDefault();
+
+                    const $button = $(this);
+
+                    if ($button.data('loading')) {
+                        return;
+                    }
+
+                    $button.data('loading', true);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: changeEndpoint,
+                        data: {
+                            _token: token,
+                            event_id: $button.attr('data-item'),
+                            community_id: settings.member_id,
+                            status: $button.attr('data-status') || 1,
+                        },
+                        success: function (data) {
+                            if (data.result === 'success') {
+                                window.location.reload();
+                            }
+                        },
+                        complete: function () {
+                            $button.data('loading', false);
+                        }
+                    });
+                });
+            });
+        </script>
+    @endpush
+@endif
