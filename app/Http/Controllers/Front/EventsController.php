@@ -18,16 +18,28 @@ use Illuminate\Support\Facades\Auth;
 class EventsController extends Controller
 {
     private const EVENTS_LIMIT = 30;
+    private const EVENTS_PAGE_SIZE = 5;
     private const PHOTOS_LIMIT = 6;
     private const ALBUM_PHOTOS_LIMIT = 9;
     private const VIDEOS_LIMIT = 6;
     private const COMMENTS_LIMIT = 10;
 
-    public function index(EventRepository $events): View
+    public function index(Request $request, EventRepository $events): View
     {
+        $viewer = Auth::guard('web')->user();
+        $filters = $this->eventFilters($request);
+        $viewerId = (int) ($viewer?->id ?? 0);
+
         return view('front.events.index', [
             'title' => 'Мероприятия',
-            'events' => $events->upcoming(self::EVENTS_LIMIT),
+            'viewer' => $viewer,
+            'eventsPageSize' => self::EVENTS_PAGE_SIZE,
+            'popularEvents' => $events->popularEvents(self::EVENTS_PAGE_SIZE, 0, $filters, $viewer),
+            'popularEventsTotal' => $events->popularEventsCount($filters),
+            'myEvents' => $viewerId > 0 ? $events->myEvents($viewerId, self::EVENTS_PAGE_SIZE, 0, $filters) : collect(),
+            'myEventsTotal' => $viewerId > 0 ? $events->myEventsCount($viewerId, $filters) : 0,
+            'invitedEvents' => $viewerId > 0 ? $events->invitedEvents($viewerId, self::EVENTS_PAGE_SIZE, 0, $filters) : collect(),
+            'invitedEventsTotal' => $viewerId > 0 ? $events->invitedEventsCount($viewerId, $filters) : 0,
         ]);
     }
 
@@ -446,6 +458,17 @@ class EventsController extends Controller
         ]);
 
         return trim($validated['name']);
+    }
+
+    private function eventFilters(Request $request): array
+    {
+        return [
+            'place' => trim((string) $request->input('place', '')),
+            'sport' => trim((string) $request->input('sport', '')),
+            'search' => trim((string) $request->input('search', '')),
+            'id_place' => (int) $request->input('id_place', 0),
+            'id_sport' => (int) $request->input('id_sport', 0),
+        ];
     }
 
     private function eventOrFail(int $event, EventRepository $events): Event
