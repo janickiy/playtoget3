@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Helpers\FrontAssets;
+use App\Models\AcceptedEventMember;
 use App\Models\Attachment;
 use App\Models\Comment;
 use App\Models\Community;
@@ -596,6 +597,15 @@ class ProfileRepository extends BaseRepository
             return CommunityRole::query()
                 ->where('community_id', (int)$comment->content_id)
                 ->where('user_id', (int)$viewer->id)
+                ->whereIn('role', [1, 2])
+                ->exists();
+        }
+
+        if ((string)$comment->commentable_type === 'event') {
+            return AcceptedEventMember::query()
+                ->where('event_id', (int)$comment->content_id)
+                ->where('eventable_type', 'user')
+                ->where('member_id', (int)$viewer->id)
                 ->whereIn('role', [1, 2])
                 ->exists();
         }

@@ -10,6 +10,7 @@
         ];
         $community = $communityView['entity'] ?? $team;
         $communityKind = $communityView['kind'];
+        $photoRedirectBase = $communityView['basePath'] ?? url('/' . ($communityKind === 'group' ? 'groups' : 'teams') . '/' . $community->id . '/photoalbums');
     @endphp
     <div class="content-groups friends">
         @include($communityView['top'])
@@ -52,7 +53,7 @@
 @push('scripts')
     <script>
         window.photoUploadUrl = '{{ route('front.ajax.handle', ['action' => 'add_photo_ajax']) }}';
-        window.photoAlbumRedirectBase = '{{ url('/' . ($communityKind === 'group' ? 'groups' : 'teams') . '/' . $community->id . '/photoalbums') }}';
+        window.photoAlbumRedirectBase = '{{ $photoRedirectBase }}';
         window.photoalbumableType = '{{ $communityKind }}';
         selectAction();
     </script>

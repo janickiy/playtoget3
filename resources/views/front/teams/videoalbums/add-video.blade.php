@@ -9,6 +9,7 @@
             'entity' => $team,
         ];
         $community = $communityView['entity'] ?? $team;
+        $routeParam = $communityView['routeParam'] ?? 'community';
     @endphp
     <div class="content-groups friends">
         @include($communityView['top'])
@@ -22,7 +23,7 @@
             </div>
         @endif
 
-        <form autocomplete="off" class="form-horizontal" method="POST" action="{{ route($communityView['route'] . '.videoalbums.store-video', ['community' => $community->id]) }}" accept-charset="UTF-8">
+        <form autocomplete="off" class="form-horizontal" method="POST" action="{{ route($communityView['route'] . '.videoalbums.store-video', [$routeParam => $community->id]) }}" accept-charset="UTF-8">
             @csrf
             <div class="job_form">
                 <div class="form-group">

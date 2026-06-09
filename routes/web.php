@@ -68,9 +68,50 @@ Route::prefix('calendar')->name('front.calendar.')->controller(CalendarControlle
 
 Route::prefix('events')->name('front.events.')->controller(EventsController::class)->group(function () {
     Route::get('create', 'create')->name('create');
+    Route::post('create', 'store')->name('store');
+    Route::get('{event}/edit', 'edit')->where('event', '[0-9]+')->name('edit');
+    Route::post('{event}/edit', 'update')->where('event', '[0-9]+')->name('update');
     Route::get('{event}/members', 'members')->where('event', '[0-9]+')->name('members');
-    Route::get('{event}/photoalbums', 'photoalbums')->where('event', '[0-9]+')->name('photoalbums');
-    Route::get('{event}/videoalbums', 'videoalbums')->where('event', '[0-9]+')->name('videoalbums');
+
+    Route::prefix('{event}/photoalbums')->where(['event' => '[0-9]+'])->group(function () {
+        Route::get('add-photo', 'addPhoto')->name('photoalbums.add-photo');
+        Route::get('create', 'createPhotoAlbum')->name('photoalbums.create');
+        Route::post('create', 'storePhotoAlbum')->name('photoalbums.store');
+        Route::get('photo/{photo}', 'photoWithoutAlbum')->where('photo', '[0-9]+')->name('photoalbums.photo.legacy');
+        Route::get('{album}/photo/{photo}', 'photo')
+            ->where(['album' => '[0-9]+', 'photo' => '[0-9]+'])
+            ->name('photoalbums.photo');
+        Route::get('{album}', 'showPhotoalbum')->where('album', '[0-9]+')->name('photoalbums.show');
+        Route::get('', 'photoAlbums')->name('photoalbums');
+    });
+    Route::get('{event}/photoalbum/{album}/edit', 'editPhotoalbum')
+        ->where(['event' => '[0-9]+', 'album' => '[0-9]+'])
+        ->name('photoalbum.edit');
+    Route::post('{event}/photoalbum/{album}/edit', 'updatePhotoalbum')
+        ->where(['event' => '[0-9]+', 'album' => '[0-9]+'])
+        ->name('photoalbum.update');
+    Route::delete('{event}/photoalbum/{album}', 'destroyPhotoalbum')
+        ->where(['event' => '[0-9]+', 'album' => '[0-9]+'])
+        ->name('photoalbum.destroy');
+
+    Route::prefix('{event}/videoalbums')->where(['event' => '[0-9]+'])->group(function () {
+        Route::get('add-video', 'addVideo')->name('videoalbums.add-video');
+        Route::post('add-video', 'storeVideo')->name('videoalbums.store-video');
+        Route::get('create', 'createVideoAlbum')->name('videoalbums.create');
+        Route::post('create', 'storeVideoAlbum')->name('videoalbums.store');
+        Route::get('{album}', 'showVideoAlbum')->where('album', '[0-9]+')->name('videoalbums.show');
+        Route::get('', 'videoAlbums')->name('videoalbums');
+    });
+    Route::get('{event}/videoalbum/{album}/edit', 'editVideoalbum')
+        ->where(['event' => '[0-9]+', 'album' => '[0-9]+'])
+        ->name('videoalbum.edit');
+    Route::post('{event}/videoalbum/{album}/edit', 'updateVideoalbum')
+        ->where(['event' => '[0-9]+', 'album' => '[0-9]+'])
+        ->name('videoalbum.update');
+    Route::delete('{event}/videoalbum/{album}', 'destroyVideoalbum')
+        ->where(['event' => '[0-9]+', 'album' => '[0-9]+'])
+        ->name('videoalbum.destroy');
+
     Route::get('{event}', 'show')->where('event', '[0-9]+')->name('show');
     Route::get('', 'index')->name('index');
 });
@@ -87,14 +128,14 @@ Route::prefix('groups')->name('front.groups.')->controller(GroupsController::cla
     Route::get('user/{user}', 'user')->where('user', '[0-9]+')->name('user');
 
     Route::prefix('photoalbums')->group(function () {
-        Route::get('', 'photoalbums')->name('photoalbums.default');
+        Route::get('', 'photoAlbums')->name('photoalbums.default');
         Route::get('{album}/edit', 'editPhotoalbum')->where('album', '[0-9]+')->name('photoalbum.edit');
         Route::post('{album}/edit', 'updatePhotoalbum')->where('album', '[0-9]+')->name('photoalbum.update');
         Route::delete('{album}', 'destroyPhotoalbum')->where('album', '[0-9]+')->name('photoalbum.destroy');
     });
 
     Route::prefix('videoalbums')->group(function () {
-        Route::get('', 'videoalbums')->name('videoalbums.default');
+        Route::get('', 'videoAlbums')->name('videoalbums.default');
         Route::get('{album}/edit', 'editVideoalbum')->where('album', '[0-9]+')->name('videoalbum.edit');
         Route::post('{album}/edit', 'updateVideoalbum')->where('album', '[0-9]+')->name('videoalbum.update');
         Route::delete('{album}', 'destroyVideoalbum')->where('album', '[0-9]+')->name('videoalbum.destroy');
@@ -106,14 +147,14 @@ Route::prefix('groups')->name('front.groups.')->controller(GroupsController::cla
 
     Route::prefix('{community}/photoalbums')->where(['community' => '[0-9]+'])->group(function () {
         Route::get('add-photo', 'addPhoto')->name('photoalbums.add-photo');
-        Route::get('create', 'createPhotoalbum')->name('photoalbums.create');
-        Route::post('create', 'storePhotoalbum')->name('photoalbums.store');
+        Route::get('create', 'createPhotoAlbum')->name('photoalbums.create');
+        Route::post('create', 'storePhotoAlbum')->name('photoalbums.store');
         Route::get('photo/{photo}', 'photoWithoutAlbum')->where('photo', '[0-9]+')->name('photoalbums.photo.legacy');
         Route::get('{album}/photo/{photo}', 'photo')
             ->where(['album' => '[0-9]+', 'photo' => '[0-9]+'])
             ->name('photoalbums.photo');
         Route::get('{album}', 'showPhotoalbum')->where('album', '[0-9]+')->name('photoalbums.show');
-        Route::get('', 'photoalbums')->name('photoalbums');
+        Route::get('', 'photoAlbums')->name('photoalbums');
     });
 
     Route::get('{community}/photoalbum/{album}/edit', 'editPhotoalbumForGroup')
@@ -122,15 +163,21 @@ Route::prefix('groups')->name('front.groups.')->controller(GroupsController::cla
     Route::post('{community}/photoalbum/{album}/edit', 'updatePhotoalbumForGroup')
         ->where(['community' => '[0-9]+', 'album' => '[0-9]+'])
         ->name('photoalbum.update.with-community');
+    Route::delete('{community}/photoalbum/{album}', 'destroyPhotoalbumForGroup')
+        ->where(['community' => '[0-9]+', 'album' => '[0-9]+'])
+        ->name('photoalbum.destroy.with-community');
 
     Route::prefix('{community}/videoalbums')->where(['community' => '[0-9]+'])->group(function () {
         Route::get('add-video', 'addVideo')->name('videoalbums.add-video');
         Route::post('add-video', 'storeVideo')->name('videoalbums.store-video');
-        Route::get('create', 'createVideoalbum')->name('videoalbums.create');
-        Route::post('create', 'storeVideoalbum')->name('videoalbums.store');
-        Route::get('{album}', 'showVideoalbum')->where('album', '[0-9]+')->name('videoalbums.show');
-        Route::get('', 'videoalbums')->name('videoalbums');
+        Route::get('create', 'createVideoAlbum')->name('videoalbums.create');
+        Route::post('create', 'storeVideoAlbum')->name('videoalbums.store');
+        Route::get('{album}', 'showVideoAlbum')->where('album', '[0-9]+')->name('videoalbums.show');
+        Route::get('', 'videoAlbums')->name('videoalbums');
     });
+    Route::delete('{community}/videoalbum/{album}', 'destroyVideoalbumForGroup')
+        ->where(['community' => '[0-9]+', 'album' => '[0-9]+'])
+        ->name('videoalbum.destroy.with-community');
 
     Route::get('{community}/events', 'events')->where('community', '[0-9]+')->name('events');
     Route::get('{community}', 'show')->where('community', '[0-9]+')->name('show');
@@ -168,14 +215,14 @@ Route::prefix('teams')->name('front.teams.')->controller(TeamsController::class)
     Route::get('user/{user}', 'user')->where('user', '[0-9]+')->name('user');
 
     Route::prefix('photoalbums')->group(function () {
-        Route::get('', 'photoalbums')->name('photoalbums.default');
+        Route::get('', 'photoAlbums')->name('photoalbums.default');
         Route::get('{album}/edit', 'editPhotoalbum')->where('album', '[0-9]+')->name('photoalbum.edit');
         Route::post('{album}/edit', 'updatePhotoalbum')->where('album', '[0-9]+')->name('photoalbum.update');
         Route::delete('{album}', 'destroyPhotoalbum')->where('album', '[0-9]+')->name('photoalbum.destroy');
     });
 
     Route::prefix('videoalbums')->group(function () {
-        Route::get('', 'videoalbums')->name('videoalbums.default');
+        Route::get('', 'videoAlbums')->name('videoalbums.default');
         Route::get('{album}/edit', 'editVideoalbum')->where('album', '[0-9]+')->name('videoalbum.edit');
         Route::post('{album}/edit', 'updateVideoalbum')->where('album', '[0-9]+')->name('videoalbum.update');
         Route::delete('{album}', 'destroyVideoalbum')->where('album', '[0-9]+')->name('videoalbum.destroy');
@@ -187,14 +234,14 @@ Route::prefix('teams')->name('front.teams.')->controller(TeamsController::class)
 
     Route::prefix('{community}/photoalbums')->where(['community' => '[0-9]+'])->group(function () {
         Route::get('add-photo', 'addPhoto')->name('photoalbums.add-photo');
-        Route::get('create', 'createPhotoalbum')->name('photoalbums.create');
-        Route::post('create', 'storePhotoalbum')->name('photoalbums.store');
+        Route::get('create', 'createPhotoAlbum')->name('photoalbums.create');
+        Route::post('create', 'storePhotoAlbum')->name('photoalbums.store');
         Route::get('photo/{photo}', 'photoWithoutAlbum')->where('photo', '[0-9]+')->name('photoalbums.photo.legacy');
         Route::get('{album}/photo/{photo}', 'photo')
             ->where(['album' => '[0-9]+', 'photo' => '[0-9]+'])
             ->name('photoalbums.photo');
         Route::get('{album}', 'showPhotoalbum')->where('album', '[0-9]+')->name('photoalbums.show');
-        Route::get('', 'photoalbums')->name('photoalbums');
+        Route::get('', 'photoAlbums')->name('photoalbums');
     });
 
     Route::get('{community}/photoalbum/{album}/edit', 'editPhotoalbumForTeam')
@@ -207,10 +254,10 @@ Route::prefix('teams')->name('front.teams.')->controller(TeamsController::class)
     Route::prefix('{community}/videoalbums')->where(['community' => '[0-9]+'])->group(function () {
         Route::get('add-video', 'addVideo')->name('videoalbums.add-video');
         Route::post('add-video', 'storeVideo')->name('videoalbums.store-video');
-        Route::get('create', 'createVideoalbum')->name('videoalbums.create');
-        Route::post('create', 'storeVideoalbum')->name('videoalbums.store');
-        Route::get('{album}', 'showVideoalbum')->where('album', '[0-9]+')->name('videoalbums.show');
-        Route::get('', 'videoalbums')->name('videoalbums');
+        Route::get('create', 'createVideoAlbum')->name('videoalbums.create');
+        Route::post('create', 'storeVideoAlbum')->name('videoalbums.store');
+        Route::get('{album}', 'showVideoAlbum')->where('album', '[0-9]+')->name('videoalbums.show');
+        Route::get('', 'videoAlbums')->name('videoalbums');
     });
 
     Route::get('{community}/events', 'events')->where('community', '[0-9]+')->name('events');

@@ -66,15 +66,49 @@ class HomeController extends Controller
             return redirect()->route('front.events.index');
         }
 
+        if ($this->hasLegacyAction($actions, 'edit')) {
+            return redirect()->route('front.events.edit', ['event' => $request->query('event_id')]);
+        }
+
         if ($this->hasLegacyAction($actions, 'members')) {
             return redirect()->route('front.events.members', ['event' => $request->query('event_id')]);
         }
 
+        if ($this->hasLegacyAction($actions, 'add_photo')) {
+            return redirect()->route('front.events.photoalbums.add-photo', ['event' => $request->query('event_id')]);
+        }
+
+        if ($this->hasLegacyAction($actions, 'create_photoalbum')) {
+            return redirect()->route('front.events.photoalbums.create', ['event' => $request->query('event_id')]);
+        }
+
         if ($this->hasLegacyAction($actions, 'photoalbums')) {
+            if ($request->filled('id_album')) {
+                return redirect()->route('front.events.photoalbums.show', [
+                    'event' => $request->query('event_id'),
+                    'album' => $request->query('id_album'),
+                ]);
+            }
+
             return redirect()->route('front.events.photoalbums', ['event' => $request->query('event_id')]);
         }
 
+        if ($this->hasLegacyAction($actions, 'add_video')) {
+            return redirect()->route('front.events.videoalbums.add-video', ['event' => $request->query('event_id')]);
+        }
+
+        if ($this->hasLegacyAction($actions, 'create_videoalbum')) {
+            return redirect()->route('front.events.videoalbums.create', ['event' => $request->query('event_id')]);
+        }
+
         if ($this->hasLegacyAction($actions, 'videoalbums')) {
+            if ($request->filled('id_album')) {
+                return redirect()->route('front.events.videoalbums.show', [
+                    'event' => $request->query('event_id'),
+                    'album' => $request->query('id_album'),
+                ]);
+            }
+
             return redirect()->route('front.events.videoalbums', ['event' => $request->query('event_id')]);
         }
 

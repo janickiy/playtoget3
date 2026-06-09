@@ -13,6 +13,8 @@
         ];
         $community = $communityView['entity'] ?? $team;
         $communityKind = $communityView['kind'];
+        $routeParam = $communityView['routeParam'] ?? 'community';
+        $routeParams = [$routeParam => $community->id];
     @endphp
     <div class="content-groups friends">
         @include($communityView['top'])
@@ -22,9 +24,9 @@
         @else
             @if ($canManage)
                 <div class="add-photos-album">
-                    <span><i></i><a href="{{ route($communityView['route'] . '.photoalbums.add-photo', ['community' => $community->id]) }}">Добавить фото</a></span>
+                    <span><i></i><a href="{{ route($communityView['route'] . '.photoalbums.add-photo', $routeParams) }}">Добавить фото</a></span>
                     <span>или</span>
-                    <span><i></i><a href="{{ route($communityView['route'] . '.photoalbums.create', ['community' => $community->id]) }}">Создать фотоальбом</a></span>
+                    <span><i></i><a href="{{ route($communityView['route'] . '.photoalbums.create', $routeParams) }}">Создать фотоальбом</a></span>
                 </div>
             @endif
 

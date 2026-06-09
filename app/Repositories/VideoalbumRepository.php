@@ -241,7 +241,7 @@ class VideoalbumRepository extends BaseRepository
             'provider' => $videoData['provider'],
             'video' => $videoData['video'],
             'description' => $description,
-            'owner_id' => in_array($album->videoalbumable_type, ['team', 'group'], true) ? $album->owner_id : $user->id,
+            'owner_id' => in_array($album->videoalbumable_type, ['team', 'group', 'event'], true) ? $album->owner_id : $user->id,
             'banned' => false,
         ])->load('album');
 

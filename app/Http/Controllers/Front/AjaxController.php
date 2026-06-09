@@ -16,6 +16,7 @@ use App\Models\VideoView;
 use App\Models\Videoalbum;
 use App\Repositories\FriendRepository;
 use App\Repositories\CommunityRepository;
+use App\Repositories\EventRepository;
 use App\Repositories\MessageRepository;
 use App\Repositories\NewsRepository;
 use App\Repositories\PhotoalbumRepository;
@@ -41,6 +42,7 @@ class AjaxController extends Controller
         private readonly PhotoalbumRepository $photoalbums,
         private readonly VideoalbumRepository $videoalbums,
         private readonly CommunityRepository $communities,
+        private readonly EventRepository $events,
         private readonly SportBlockRepository $sportBlocks,
     )
     {
@@ -63,6 +65,8 @@ class AjaxController extends Controller
             'send_community_invitation' => $this->sendCommunityInvitation($request),
             'search_event' => $this->searchEvent($request),
             'change_event_community_status' => $this->changeEventCommunityStatus($request),
+            'change_event_memberstatus' => $this->changeEventMemberStatus($request),
+            'send_event_invitation' => $this->sendEventInvitation($request),
             'getcomments' => $this->getComments($request),
             'getphotoinfo' => $this->getPhotoInfo($request),
             'add_photo_ajax' => $this->addPhotoAjax($request),
@@ -402,6 +406,43 @@ class AjaxController extends Controller
         ]);
     }
 
+    private function changeEventMemberStatus(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $eventId = (int)$request->input('event_id', $request->input('id', 0));
+        $status = (int)$request->input('status');
+        $event = $eventId > 0 ? $this->events->findActive($eventId) : null;
+
+        if (!$viewer || !$event || !in_array($status, [0, 1], true)) {
+            return response()->json(['status' => 0, 'result' => 'error'], 422);
+        }
+
+        $changed = $this->events->changeMembership($event, $viewer, $status);
+
+        return response()->json([
+            'status' => $changed ? 1 : 0,
+            'result' => $changed ? 'success' : 'error',
+            'member' => $changed ? $this->events->membershipType($event, $viewer) : null,
+        ]);
+    }
+
+    private function sendEventInvitation(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $eventId = (int)$request->input('event_id', $request->input('id', 0));
+        $event = $eventId > 0 ? $this->events->findActive($eventId) : null;
+
+        if (!$viewer || !$event || !$this->events->canInvite($event, $viewer)) {
+            return response()->json(['status' => 0, 'result' => 'error', 'count' => 0], 422);
+        }
+
+        return response()->json([
+            'status' => 1,
+            'result' => 'success',
+            'count' => $this->events->inviteFriends($event, $viewer),
+        ]);
+    }
+
     private function getComments(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -410,7 +451,7 @@ class AjaxController extends Controller
         $limit = min(max((int)$request->input('number', 10), 1), 25);
         $offset = max((int)$request->input('offset', 0), 0);
 
-        if (!in_array($type, ['user', 'photo', 'video', 'team', 'group'], true) || $profileId < 1) {
+        if (!in_array($type, ['user', 'photo', 'video', 'team', 'group', 'event'], true) || $profileId < 1) {
             return response()->json(['status' => 0, 'html' => '', 'count' => 0, 'has_more' => false]);
         }
 
@@ -489,10 +530,10 @@ class AjaxController extends Controller
 
         $albumId = (int)$request->input('categorie');
         $albumType = (string)$request->input('photoalbumable_type', 'user');
-        $communityTypes = ['team', 'group'];
+        $managedOwnerTypes = ['team', 'group', 'event'];
         $sportBlockTypes = ['playground', 'shop', 'fitness'];
         $album = match (true) {
-            in_array($albumType, $communityTypes, true) => $this->photoalbums->album($albumId, $communityTypes),
+            in_array($albumType, $managedOwnerTypes, true) => $this->photoalbums->album($albumId, $managedOwnerTypes),
             in_array($albumType, $sportBlockTypes, true) => $this->photoalbums->album($albumId, $sportBlockTypes),
             default => $this->photoalbums->album($albumId),
         };
@@ -504,6 +545,7 @@ class AjaxController extends Controller
         $canUpload = match (true) {
             $album->photoalbumable_type === 'team' => $this->communities->canManage($this->communities->findTeam((int)$album->owner_id), $viewer),
             $album->photoalbumable_type === 'group' => $this->communities->canManage($this->communities->findGroup((int)$album->owner_id), $viewer),
+            $album->photoalbumable_type === 'event' => $this->events->canManage($this->events->findActive((int)$album->owner_id), $viewer),
             in_array($album->photoalbumable_type, $sportBlockTypes, true) => $this->sportBlocks->isOwner(
                 $this->sportBlocks->findByType((int)$album->owner_id, $album->photoalbumable_type),
                 $viewer,
@@ -516,7 +558,7 @@ class AjaxController extends Controller
         }
 
         try {
-            if (in_array($album->photoalbumable_type, array_merge($communityTypes, $sportBlockTypes), true)) {
+            if (in_array($album->photoalbumable_type, array_merge($managedOwnerTypes, $sportBlockTypes), true)) {
                 $photo = $this->photoalbums->storePhotoForAlbum(
                     $viewer,
                     $album,
@@ -550,23 +592,26 @@ class AjaxController extends Controller
         $ownerId = (int)$request->input('owner_id');
         $type = (string)$request->input('type', 'user');
 
-        if ($ownerId < 1 || !in_array($type, ['user', 'team', 'group'], true)) {
+        if ($ownerId < 1 || !in_array($type, ['user', 'team', 'group', 'event'], true)) {
             return response()->json(['status' => 0, 'html' => '', 'has_more' => false]);
         }
 
-        $photos = in_array($type, ['team', 'group'], true)
-            ? $this->photoalbums->photosForOwner($ownerId, $type, $limit, $offset)
-            : $this->photoalbums->photosForUser($ownerId, $limit, $offset);
-        $community = $type === 'team'
-            ? $this->communities->findTeam($ownerId)
-            : ($type === 'group' ? $this->communities->findGroup($ownerId) : null);
+        $photos = $type === 'user'
+            ? $this->photoalbums->photosForUser($ownerId, $limit, $offset)
+            : $this->photoalbums->photosForOwner($ownerId, $type, $limit, $offset);
+        $canManage = match ($type) {
+            'team' => $this->communities->canManage($this->communities->findTeam($ownerId), $viewer),
+            'group' => $this->communities->canManage($this->communities->findGroup($ownerId), $viewer),
+            'event' => $this->events->canManage($this->events->findActive($ownerId), $viewer),
+            default => false,
+        };
 
         return response()->json([
             'status' => $photos->isNotEmpty() ? 1 : 0,
-            'html' => $this->renderPhotos($photos, $viewer, $community && $this->communities->canManage($community, $viewer)),
-            'has_more' => in_array($type, ['team', 'group'], true)
-                ? $this->photoalbums->hasMoreOwnerPhotos($ownerId, $type, $limit, $offset)
-                : $this->photoalbums->hasMoreUserPhotos($ownerId, $limit, $offset),
+            'html' => $this->renderPhotos($photos, $viewer, $canManage),
+            'has_more' => $type === 'user'
+                ? $this->photoalbums->hasMoreUserPhotos($ownerId, $limit, $offset)
+                : $this->photoalbums->hasMoreOwnerPhotos($ownerId, $type, $limit, $offset),
         ]);
     }
 
@@ -575,23 +620,23 @@ class AjaxController extends Controller
         $viewer = $this->viewer();
         $limit = min(max((int)$request->input('number', 9), 1), 30);
         $offset = max((int)$request->input('offset', 0), 0);
-        $album = $this->photoalbums->album((int)$request->input('id_album'), ['user', 'user_attach', 'team', 'group']);
+        $album = $this->photoalbums->album((int)$request->input('id_album'), ['user', 'user_attach', 'team', 'group', 'event']);
 
         if (!$album) {
             return response()->json(['status' => 0, 'html' => '', 'has_more' => false]);
         }
 
         $photos = $this->photoalbums->albumPhotos($album, $limit, $offset);
-
-        $community = $album->photoalbumable_type === 'team'
-            ? $this->communities->findTeam((int)$album->owner_id)
-            : ($album->photoalbumable_type === 'group' ? $this->communities->findGroup((int)$album->owner_id) : null);
+        $canManage = match ($album->photoalbumable_type) {
+            'team' => $this->communities->canManage($this->communities->findTeam((int)$album->owner_id), $viewer),
+            'group' => $this->communities->canManage($this->communities->findGroup((int)$album->owner_id), $viewer),
+            'event' => $this->events->canManage($this->events->findActive((int)$album->owner_id), $viewer),
+            default => $this->photoalbums->isOwner($album, $viewer),
+        };
 
         return response()->json([
             'status' => $photos->isNotEmpty() ? 1 : 0,
-            'html' => $this->renderPhotos($photos, $viewer, in_array($album->photoalbumable_type, ['team', 'group'], true)
-                ? $this->communities->canManage($community, $viewer)
-                : $this->photoalbums->isOwner($album, $viewer)),
+            'html' => $this->renderPhotos($photos, $viewer, $canManage),
             'has_more' => $this->photoalbums->hasMoreAlbumPhotos($album, $limit, $offset),
         ]);
     }
@@ -605,15 +650,18 @@ class AjaxController extends Controller
             return response()->json(['result' => 'error'], 422);
         }
 
-        $photo = $this->photoalbums->photo($photoId, ['user', 'user_attach', 'team', 'group']);
+        $photo = $this->photoalbums->photo($photoId, ['user', 'user_attach', 'team', 'group', 'event']);
 
-        if ($photo && in_array($photo->album?->photoalbumable_type, ['team', 'group'], true)) {
-            $community = $photo->album->photoalbumable_type === 'team'
-                ? $this->communities->findTeam((int)$photo->album->owner_id)
-                : $this->communities->findGroup((int)$photo->album->owner_id);
+        if ($photo && in_array($photo->album?->photoalbumable_type, ['team', 'group', 'event'], true)) {
+            $canManage = match ($photo->album->photoalbumable_type) {
+                'team' => $this->communities->canManage($this->communities->findTeam((int)$photo->album->owner_id), $viewer),
+                'group' => $this->communities->canManage($this->communities->findGroup((int)$photo->album->owner_id), $viewer),
+                'event' => $this->events->canManage($this->events->findActive((int)$photo->album->owner_id), $viewer),
+                default => false,
+            };
 
             return response()->json([
-                'result' => $community && $this->communities->canManage($community, $viewer) && $this->photoalbums->deletePhoto($photo)
+                'result' => $canManage && $this->photoalbums->deletePhoto($photo)
                     ? 'success'
                     : 'error',
             ]);
@@ -639,7 +687,7 @@ class AjaxController extends Controller
             ->where('banned', false)
             ->first();
 
-        if (!$video || !$video->album || !in_array($video->album->videoalbumable_type, ['user', 'team', 'group'], true)) {
+        if (!$video || !$video->album || !in_array($video->album->videoalbumable_type, ['user', 'team', 'group', 'event'], true)) {
             return response()->json(['status' => 0]);
         }
 
@@ -686,23 +734,26 @@ class AjaxController extends Controller
         $ownerId = (int)$request->input('owner_id');
         $type = (string)$request->input('type', 'user');
 
-        if ($ownerId < 1 || !in_array($type, ['user', 'team', 'group'], true)) {
+        if ($ownerId < 1 || !in_array($type, ['user', 'team', 'group', 'event'], true)) {
             return response()->json(['status' => 0, 'html' => '', 'has_more' => false]);
         }
 
-        $videos = in_array($type, ['team', 'group'], true)
-            ? $this->videoalbums->videosForOwner($ownerId, $type, $limit, $offset)
-            : $this->videoalbums->videosForUser($ownerId, $limit, $offset);
-        $community = $type === 'team'
-            ? $this->communities->findTeam($ownerId)
-            : ($type === 'group' ? $this->communities->findGroup($ownerId) : null);
+        $videos = $type === 'user'
+            ? $this->videoalbums->videosForUser($ownerId, $limit, $offset)
+            : $this->videoalbums->videosForOwner($ownerId, $type, $limit, $offset);
+        $canManage = match ($type) {
+            'team' => $this->communities->canManage($this->communities->findTeam($ownerId), $viewer),
+            'group' => $this->communities->canManage($this->communities->findGroup($ownerId), $viewer),
+            'event' => $this->events->canManage($this->events->findActive($ownerId), $viewer),
+            default => false,
+        };
 
         return response()->json([
             'status' => $videos->isNotEmpty() ? 1 : 0,
-            'html' => $this->renderVideos($videos, $viewer, $community && $this->communities->canManage($community, $viewer)),
-            'has_more' => in_array($type, ['team', 'group'], true)
-                ? $this->videoalbums->hasMoreOwnerVideos($ownerId, $type, $limit, $offset)
-                : $this->videoalbums->hasMoreUserVideos($ownerId, $limit, $offset),
+            'html' => $this->renderVideos($videos, $viewer, $canManage),
+            'has_more' => $type === 'user'
+                ? $this->videoalbums->hasMoreUserVideos($ownerId, $limit, $offset)
+                : $this->videoalbums->hasMoreOwnerVideos($ownerId, $type, $limit, $offset),
         ]);
     }
 
@@ -711,23 +762,23 @@ class AjaxController extends Controller
         $viewer = $this->viewer();
         $limit = min(max((int)$request->input('number', 6), 1), 30);
         $offset = max((int)$request->input('offset', 0), 0);
-        $album = $this->videoalbums->album((int)$request->input('id_album'), ['user', 'team', 'group']);
+        $album = $this->videoalbums->album((int)$request->input('id_album'), ['user', 'team', 'group', 'event']);
 
         if (!$album) {
             return response()->json(['status' => 0, 'html' => '', 'has_more' => false]);
         }
 
         $videos = $this->videoalbums->albumVideos($album, $limit, $offset);
-
-        $community = $album->videoalbumable_type === 'team'
-            ? $this->communities->findTeam((int)$album->owner_id)
-            : ($album->videoalbumable_type === 'group' ? $this->communities->findGroup((int)$album->owner_id) : null);
+        $canManage = match ($album->videoalbumable_type) {
+            'team' => $this->communities->canManage($this->communities->findTeam((int)$album->owner_id), $viewer),
+            'group' => $this->communities->canManage($this->communities->findGroup((int)$album->owner_id), $viewer),
+            'event' => $this->events->canManage($this->events->findActive((int)$album->owner_id), $viewer),
+            default => $this->videoalbums->isOwner($album, $viewer),
+        };
 
         return response()->json([
             'status' => $videos->isNotEmpty() ? 1 : 0,
-            'html' => $this->renderVideos($videos, $viewer, in_array($album->videoalbumable_type, ['team', 'group'], true)
-                ? $this->communities->canManage($community, $viewer)
-                : $this->videoalbums->isOwner($album, $viewer)),
+            'html' => $this->renderVideos($videos, $viewer, $canManage),
             'has_more' => $this->videoalbums->hasMoreAlbumVideos($album, $limit, $offset),
         ]);
     }
@@ -744,13 +795,16 @@ class AjaxController extends Controller
         /** @var Video|null $video */
         $video = Video::query()->with('album')->whereKey($videoId)->first();
 
-        if ($video && in_array($video->album?->videoalbumable_type, ['team', 'group'], true)) {
-            $community = $video->album->videoalbumable_type === 'team'
-                ? $this->communities->findTeam((int)$video->album->owner_id)
-                : $this->communities->findGroup((int)$video->album->owner_id);
+        if ($video && in_array($video->album?->videoalbumable_type, ['team', 'group', 'event'], true)) {
+            $canManage = match ($video->album->videoalbumable_type) {
+                'team' => $this->communities->canManage($this->communities->findTeam((int)$video->album->owner_id), $viewer),
+                'group' => $this->communities->canManage($this->communities->findGroup((int)$video->album->owner_id), $viewer),
+                'event' => $this->events->canManage($this->events->findActive((int)$video->album->owner_id), $viewer),
+                default => false,
+            };
 
             return response()->json([
-                'result' => $community && $this->communities->canManage($community, $viewer) && $this->videoalbums->deleteVideo($video)
+                'result' => $canManage && $this->videoalbums->deleteVideo($video)
                     ? 'success'
                     : 'error',
             ]);
@@ -909,7 +963,7 @@ class AjaxController extends Controller
         $comment = trim((string)$request->input('comment', ''));
         $attach = $request->input('attach', []);
 
-        if (!$viewer || !in_array($type, ['user', 'photo', 'video', 'team', 'group'], true) || $profileId < 1 || ($comment === '' && empty($attach))) {
+        if (!$viewer || !in_array($type, ['user', 'photo', 'video', 'team', 'group', 'event'], true) || $profileId < 1 || ($comment === '' && empty($attach))) {
             return response()->json([
                 'status' => false,
                 'errors' => ['comment' => 'Заполните комментарий'],
@@ -934,6 +988,17 @@ class AjaxController extends Controller
             if ($request->boolean('author_community') && $this->communities->canManage($community, $viewer)) {
                 $behalfableType = $type;
                 $behalfId = $community->id;
+            }
+        }
+
+        if ($type === 'event') {
+            $event = $this->events->findActive($profileId);
+
+            if (!$event || !$this->events->permissions($event, $viewer)['wall']) {
+                return response()->json([
+                    'status' => false,
+                    'errors' => ['comment' => 'Нет доступа к ленте мероприятия'],
+                ], 403);
             }
         }
 

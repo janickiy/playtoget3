@@ -10,6 +10,7 @@
             'entity' => $team,
         ];
         $community = $communityView['entity'] ?? $team;
+        $routeParam = $communityView['routeParam'] ?? 'community';
     @endphp
     <div class="content-groups friends">
         @include($communityView['top'])
@@ -19,7 +20,7 @@
         @else
             <h2>{{ $videoalbum->name }}</h2>
             <p>
-                <a href="{{ route($communityView['route'] . '.videoalbums', ['community' => $community->id]) }}">
+                <a href="{{ route($communityView['route'] . '.videoalbums', [$routeParam => $community->id]) }}">
                     Все видео
                 </a>
             </p>
