@@ -9,6 +9,7 @@ use App\Models\Event;
 use App\Models\Friend;
 use App\Models\GeoCity;
 use App\Models\GeoTarget;
+use App\Models\SportType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
@@ -32,6 +33,94 @@ class EventRepository extends BaseRepository
             ->orderBy('date_from')
             ->limit($limit)
             ->get();
+    }
+
+    public function popularEvents(int $limit = 5, int $offset = 0, array $filters = [], ?User $viewer = null): Collection
+    {
+        $query = $this->eventListQuery($filters);
+
+        return $query
+            ->withCount(['acceptedMembers as members_count' => fn (Builder $query) => $query
+                ->where('eventable_type', 'user')
+                ->whereIn('role', [1, 2, 3])])
+            ->orderByDesc('members_count')
+            ->orderByRaw('events.date_from IS NULL')
+            ->orderBy('events.date_from')
+            ->orderBy('events.name')
+            ->offset(max($offset, 0))
+            ->limit(max($limit, 1))
+            ->get()
+            ->map(fn (Event $event): array => $this->serializeListEvent($event, $viewer));
+    }
+
+    public function popularEventsCount(array $filters = []): int
+    {
+        return (int) $this->eventListQuery($filters)->count();
+    }
+
+    public function myEvents(int $userId, int $limit = 5, int $offset = 0, array $filters = []): Collection
+    {
+        $query = $this->eventListQuery($filters)
+            ->join('accepted_event_members as event_members', 'event_members.event_id', '=', 'events.id')
+            ->where('event_members.eventable_type', 'user')
+            ->where('event_members.member_id', $userId)
+            ->whereIn('event_members.role', [1, 2, 3])
+            ->select('events.*', 'event_members.role as viewer_role');
+
+        return $query
+            ->withCount(['acceptedMembers as members_count' => fn (Builder $query) => $query
+                ->where('eventable_type', 'user')
+                ->whereIn('role', [1, 2, 3])])
+            ->orderBy('event_members.role')
+            ->orderByRaw('events.date_from IS NULL')
+            ->orderByDesc('events.date_from')
+            ->offset(max($offset, 0))
+            ->limit(max($limit, 1))
+            ->get()
+            ->map(fn (Event $event): array => $this->serializeListEvent($event, null, (int) $event->viewer_role));
+    }
+
+    public function myEventsCount(int $userId, array $filters = []): int
+    {
+        $query = $this->eventListQuery($filters)
+            ->join('accepted_event_members as event_members', 'event_members.event_id', '=', 'events.id')
+            ->where('event_members.eventable_type', 'user')
+            ->where('event_members.member_id', $userId)
+            ->whereIn('event_members.role', [1, 2, 3]);
+
+        return (int) $query->count(DB::raw('distinct events.id'));
+    }
+
+    public function invitedEvents(int $userId, int $limit = 5, int $offset = 0, array $filters = []): Collection
+    {
+        $query = $this->eventListQuery($filters)
+            ->join('accepted_event_members as event_members', 'event_members.event_id', '=', 'events.id')
+            ->where('event_members.eventable_type', 'user')
+            ->where('event_members.member_id', $userId)
+            ->where('event_members.role', 5)
+            ->select('events.*', 'event_members.role as viewer_role');
+
+        return $query
+            ->withCount(['acceptedMembers as members_count' => fn (Builder $query) => $query
+                ->where('eventable_type', 'user')
+                ->whereIn('role', [1, 2, 3])])
+            ->orderByRaw('events.date_from IS NULL')
+            ->orderByDesc('events.date_from')
+            ->offset(max($offset, 0))
+            ->limit(max($limit, 1))
+            ->get()
+            ->map(fn (Event $event): array => $this->serializeListEvent($event, null, 5));
+    }
+
+    public function invitedEventsCount(int $userId, array $filters = []): int
+    {
+        $query = $this->eventListQuery($filters)
+            ->join('accepted_event_members as event_members', 'event_members.event_id', '=', 'events.id')
+            ->where('event_members.eventable_type', 'user')
+            ->where('event_members.member_id', $userId)
+            ->where('event_members.role', 5);
+
+        return (int) $query->count(DB::raw('distinct events.id'));
     }
 
     public function findActive(int $eventId): ?Event
@@ -61,6 +150,30 @@ class EventRepository extends BaseRepository
             'date_to_value' => $event->date_to?->format('Y-m-d\TH:i') ?? '',
             'active' => ! $event->date_to || $event->date_to->isFuture(),
             'members_count' => $this->membersCount($event->id),
+        ];
+    }
+
+    public function serializeListEvent(Event $event, ?User $viewer = null, ?int $viewerRole = null): array
+    {
+        $role = $viewerRole ?? $this->role((int) $event->id, $viewer?->id);
+        $participantsCount = (int) ($event->members_count ?? $this->membersCount($event->id));
+
+        return [
+            'id' => (int) $event->id,
+            'name' => (string) $event->name,
+            'avatar' => FrontAssets::eventCover($event),
+            'sport_type' => (string) $event->sport_type,
+            'city' => (string) $event->place,
+            'date_from' => $event->date_from ? 'Начало: ' . $event->date_from->format('d.m.Y в H:i') : '',
+            'date_to' => $event->date_to ? 'Окончание: ' . $event->date_to->format('d.m.Y в H:i') : '',
+            'description' => (string) $event->description,
+            'role' => $role !== null ? mb_strtolower($this->roleName((int) $role)) : '',
+            'participants' => 'Участвуют ' . $participantsCount . ' ' . $this->personWord($participantsCount),
+            'active' => ! $event->date_to || $event->date_to->isFuture(),
+            'status' => ! $event->date_to || $event->date_to->isFuture()
+                ? 'Мероприятие продолжается'
+                : 'Мероприятие завершено',
+            'can_edit' => in_array($role, [1, 2], true),
         ];
     }
 
@@ -360,6 +473,58 @@ class EventRepository extends BaseRepository
         return (string) (GeoCity::query()->find($cityId)?->name_ru ?? '');
     }
 
+    private function eventListQuery(array $filters = []): Builder
+    {
+        $query = $this->model->newQuery()
+            ->where('events.banned', false);
+
+        $this->applyEventFilters($query, $filters);
+
+        return $query;
+    }
+
+    private function applyEventFilters(Builder $query, array $filters): void
+    {
+        $place = trim((string) ($filters['place'] ?? ''));
+        $sport = trim((string) ($filters['sport'] ?? ''));
+        $search = trim((string) ($filters['search'] ?? ''));
+
+        if ($place === '' && (int) ($filters['id_place'] ?? 0) > 0) {
+            $place = $this->cityName((int) $filters['id_place']);
+        }
+
+        if ($sport === '' && (int) ($filters['id_sport'] ?? 0) > 0) {
+            $sport = $this->sportName((int) $filters['id_sport']);
+        }
+
+        if ($place !== '') {
+            $query->where('events.place', 'like', '%' . $place . '%');
+        }
+
+        if ($sport !== '') {
+            $query->where('events.sport_type', 'like', '%' . $sport . '%');
+        }
+
+        if ($search !== '') {
+            $query->where(function (Builder $query) use ($search): void {
+                $query
+                    ->where('events.name', 'like', '%' . $search . '%')
+                    ->orWhere('events.description', 'like', '%' . $search . '%')
+                    ->orWhere('events.place', 'like', '%' . $search . '%')
+                    ->orWhere('events.sport_type', 'like', '%' . $search . '%');
+            });
+        }
+    }
+
+    private function sportName(int $sportId): string
+    {
+        if ($sportId < 1) {
+            return '';
+        }
+
+        return (string) (SportType::query()->find($sportId)?->name ?? '');
+    }
+
     private function serializeUserMember(AcceptedEventMember $member): ?array
     {
         $user = $member->member;
@@ -391,6 +556,22 @@ class EventRepository extends BaseRepository
             4 => 'Заблокирован',
             5 => 'Приглашен',
             default => '',
+        };
+    }
+
+    private function personWord(int $count): string
+    {
+        $lastTwo = $count % 100;
+        $last = $count % 10;
+
+        if ($lastTwo >= 11 && $lastTwo <= 14) {
+            return 'человек';
+        }
+
+        return match ($last) {
+            1 => 'человек',
+            2, 3, 4 => 'человека',
+            default => 'человек',
         };
     }
 
