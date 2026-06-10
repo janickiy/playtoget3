@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\DTO\Profile\ImageCropData;
+use App\Models\User;
 use GdImage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -10,6 +12,77 @@ use RuntimeException;
 
 class ProfileImageService
 {
+    /**
+     * @param User $user
+     * @param ImageCropData $data
+     * @return array
+     */
+    public function cropTemporaryAvatar(User $user, ImageCropData $data): array
+    {
+        $file = $data->file;
+        $source = $this->imageResource($file);
+        $sourceWidth = imagesx($source);
+        $sourceHeight = imagesy($source);
+
+        if ($sourceWidth < 1 || $sourceHeight < 1) {
+            imagedestroy($source);
+
+            throw new RuntimeException('Не удалось прочитать изображение.');
+        }
+
+        $x = max(0, (int) floor($data->x));
+        $y = max(0, (int) floor($data->y));
+        $width = max(0, (int) floor($data->width));
+        $height = max(0, (int) floor($data->height));
+        $size = min($width, $height);
+
+        if ($size < 100) {
+            imagedestroy($source);
+
+            throw new RuntimeException('Выделенная область слишком мала.');
+        }
+
+        $size = min($size, $sourceWidth - $x, $sourceHeight - $y);
+
+        if ($size < 100) {
+            imagedestroy($source);
+
+            throw new RuntimeException('Выделенная область выходит за границы изображения.');
+        }
+
+        $target = imagecreatetruecolor(300, 300);
+        imagefill($target, 0, 0, imagecolorallocate($target, 255, 255, 255));
+        imagecopyresampled($target, $source, 0, 0, $x, $y, 300, 300, $size, $size);
+        imagedestroy($source);
+
+        ob_start();
+        imagejpeg($target, null, 90);
+        $contents = ob_get_clean();
+        imagedestroy($target);
+
+        if (! is_string($contents) || $contents === '') {
+            throw new RuntimeException('Не удалось обработать изображение.');
+        }
+
+        $filename = sprintf('%d_%s.jpg', $user->id, Str::lower(Str::random(32)));
+        $path = 'images/tmp/profile/avatar/' . $filename;
+
+        if (! Storage::disk('public')->put($path, $contents)) {
+            throw new RuntimeException('Не удалось сохранить изображение.');
+        }
+
+        return [
+            'file' => $filename,
+            'url' => Storage::disk('public')->url($path),
+        ];
+    }
+
+    /**
+     * @param UploadedFile $file
+     * @param string $directory
+     * @param int $userId
+     * @return string
+     */
     public function storeUserImage(UploadedFile $file, string $directory, int $userId): string
     {
         $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
@@ -25,6 +98,11 @@ class ProfileImageService
         return $filename;
     }
 
+    /**
+     * @param string|null $temporaryAvatar
+     * @param int $userId
+     * @return string|null
+     */
     public function promoteTemporaryAvatar(?string $temporaryAvatar, int $userId): ?string
     {
         if (! $temporaryAvatar) {
@@ -42,6 +120,11 @@ class ProfileImageService
         );
     }
 
+    /**
+     * @param string|null $temporaryCover
+     * @param int $userId
+     * @return string|null
+     */
     public function promoteTemporaryCover(?string $temporaryCover, int $userId): ?string
     {
         if (! $temporaryCover) {
@@ -59,6 +142,10 @@ class ProfileImageService
         );
     }
 
+    /**
+     * @param UploadedFile $file
+     * @return GdImage
+     */
     public function imageResource(UploadedFile $file): GdImage
     {
         $path = $file->getRealPath();
@@ -78,6 +165,11 @@ class ProfileImageService
             : $image;
     }
 
+    /**
+     * @param string $directory
+     * @param string|null $filename
+     * @return void
+     */
     public function deleteUserImage(string $directory, ?string $filename): void
     {
         if (! $filename) {
@@ -87,6 +179,16 @@ class ProfileImageService
         Storage::disk('public')->delete('images/' . trim($directory, '/') . '/' . $filename);
     }
 
+    /**
+     * @param string $temporaryImage
+     * @param int $userId
+     * @param string $sourceDirectory
+     * @param string $targetDirectory
+     * @param string $invalidNameMessage
+     * @param string $missingFileMessage
+     * @param string $copyFailedMessage
+     * @return string
+     */
     private function promoteTemporaryImage(
         string $temporaryImage,
         int $userId,
@@ -121,6 +223,11 @@ class ProfileImageService
         return $targetFilename;
     }
 
+    /**
+     * @param GdImage $image
+     * @param string $path
+     * @return GdImage
+     */
     private function orientJpeg(GdImage $image, string $path): GdImage
     {
         if (! function_exists('exif_read_data')) {

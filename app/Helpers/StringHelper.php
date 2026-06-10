@@ -21,6 +21,20 @@ class StringHelper
     }
 
     /**
+     * @param string|null $provider
+     * @param string|null $video
+     * @return string
+     */
+    public static function videoThumbUrl(?string $provider, ?string $video): string
+    {
+        if ($provider === 'youtube' && $video) {
+            return 'https://img.youtube.com/vi/' . rawurlencode($video) . '/hqdefault.jpg';
+        }
+
+        return asset('frontend/images/noimage.png');
+    }
+
+    /**
      * @param Carbon $date
      * @return string
      */

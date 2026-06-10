@@ -11,7 +11,9 @@ use App\Repositories\FriendRepository;
 use App\Repositories\PhotoalbumRepository;
 use App\Repositories\ProfileRepository;
 use App\Service\AlbumPhotoStorageService;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Mockery\MockInterface;
 use Tests\TestCase;
@@ -190,6 +192,28 @@ class PhotoalbumsPageTest extends TestCase
         $this->assertSame(300, $smallHeight);
     }
 
+    public function test_album_photo_storage_service_saves_attachment_photo_and_album(): void
+    {
+        $this->createPhotoalbumsTable();
+        Storage::fake('public');
+
+        try {
+            $viewer = $this->user(1, 'Александр', 'Яницкий');
+            $service = new AlbumPhotoStorageService();
+            $result = $service->storeAttachmentPhoto($viewer, UploadedFile::fake()->image('attach.jpeg', 600, 400));
+
+            $this->assertInstanceOf(PhotoAlbums::class, $result['album']);
+            $this->assertSame('Мои прикрепленные фотографии', $result['album']->name);
+            $this->assertSame('user_attach', $result['album']->photoalbumable_type);
+            $this->assertMatchesRegularExpression('/^[a-z0-9]+\.jpg$/', $result['photo']);
+            $this->assertSame('s_' . $result['photo'], $result['small_photo']);
+            Storage::disk('public')->assertExists('images/photogallery/user_attach/' . $result['photo']);
+            Storage::disk('public')->assertExists('images/photogallery/user_attach/' . $result['small_photo']);
+        } finally {
+            Schema::dropIfExists('photoalbums');
+        }
+    }
+
     private function mockProfile(User $viewer): void
     {
         $this->mock(ProfileRepository::class, function (MockInterface $mock) use ($viewer): void {
@@ -235,6 +259,18 @@ class PhotoalbumsPageTest extends TestCase
             'owner_id' => 1,
             'type' => 'user',
         ];
+    }
+
+    private function createPhotoalbumsTable(): void
+    {
+        Schema::dropIfExists('photoalbums');
+        Schema::create('photoalbums', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name')->nullable();
+            $table->string('photoalbumable_type')->nullable();
+            $table->unsignedBigInteger('owner_id');
+            $table->timestamps();
+        });
     }
 
     private function user(int $id, string $firstname, string $lastname): User

@@ -18,7 +18,7 @@
         @if (! $permissions['video'])
             <h4 class="blocking">{{ $communityView['label'] }} ограничила доступ к этому разделу</h4>
         @else
-            <h2>{{ $videoalbum->name }}</h2>
+            <h2>{{ $videoAlbum->name }}</h2>
             <p>
                 <a href="{{ route($communityView['route'] . '.videoalbums', [$routeParam => $community->id]) }}">
                     Все видео
@@ -28,7 +28,7 @@
             <div
                 class="photo-container video-container vid-no-border"
                 id="album-video-list"
-                data-album-id="{{ $videoalbum->id }}"
+                data-album-id="{{ $videoAlbum->id }}"
                 data-number="{{ $videosPageSize }}"
                 data-offset="{{ $videosPageSize }}"
                 data-has-more="{{ $hasMoreVideos ? 1 : 0 }}"

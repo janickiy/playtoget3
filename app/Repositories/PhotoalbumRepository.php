@@ -6,21 +6,20 @@ use App\DTO\Album\AlbumData;
 use App\DTO\Photo\PhotoUploadData;
 use App\Helpers\FrontAssets;
 use App\Models\Attachment;
-use App\Models\Comment;
-use App\Models\Like;
 use App\Models\Photo;
 use App\Models\PhotoAlbums;
-use App\Models\Share;
 use App\Models\User;
+use App\Repositories\Concerns\DeletesContentRelations;
 use App\Service\AlbumPhotoStorageService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use RuntimeException;
 
 class PhotoalbumRepository extends BaseRepository
 {
+    use DeletesContentRelations;
+
     private const USER_TYPES = ['user', 'user_attach'];
 
     public function __construct(
@@ -332,6 +331,12 @@ class PhotoalbumRepository extends BaseRepository
         return $this->storePhotoForAlbum($user, $album, $data);
     }
 
+    /**
+     * @param User $user
+     * @param PhotoAlbums $album
+     * @param PhotoUploadData $data
+     * @return Photo
+     */
     public function storePhotoForAlbum(User $user, PhotoAlbums $album, PhotoUploadData $data): Photo
     {
         $storedPhoto = $this->photos->storePhoto($data->file, $album->photoalbumable_type);
@@ -350,43 +355,22 @@ class PhotoalbumRepository extends BaseRepository
         return $photo;
     }
 
+    /**
+     * @param User $user
+     * @param PhotoUploadData $data
+     * @return Photo
+     */
     public function storeAttachmentPhoto(User $user, PhotoUploadData $data): Photo
     {
+        $storedPhoto = $this->photos->storeAttachmentPhoto($user, $data->file);
         /** @var PhotoAlbums $album */
-        $album = $this->model->newQuery()->firstOrCreate([
-            'owner_id' => $user->id,
-            'photoalbumable_type' => 'user_attach',
-        ], [
-            'name' => 'Мои прикрепленные фотографии',
-        ]);
-
-        $file = $data->file;
-        $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
-        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
-        $filename = Str::lower(Str::random(32)) . '.' . $extension;
-        $smallFilename = 's_' . $filename;
-        $directory = 'images/photogallery/user_attach';
-        $contents = file_get_contents($file->getRealPath());
-
-        if ($contents === false) {
-            throw new RuntimeException('Invalid file');
-        }
-
-        $disk = Storage::disk('public');
-        $originalPath = $directory . '/' . $filename;
-        $smallPath = $directory . '/' . $smallFilename;
-
-        if (! $disk->put($originalPath, $contents) || ! $disk->put($smallPath, $contents)) {
-            $disk->delete([$originalPath, $smallPath]);
-
-            throw new RuntimeException('File was not saved');
-        }
+        $album = $storedPhoto['album'];
 
         /** @var Photo $photo */
         $photo = Photo::query()->create([
             'photoalbum_id' => $album->id,
-            'small_photo' => $smallFilename,
-            'photo' => $filename,
+            'small_photo' => $storedPhoto['small_photo'],
+            'photo' => $storedPhoto['photo'],
             'description' => '',
             'owner_id' => $user->id,
             'banned' => false,
@@ -396,6 +380,11 @@ class PhotoalbumRepository extends BaseRepository
         return $photo;
     }
 
+    /**
+     * @param int $photoId
+     * @param array|null $types
+     * @return Photo|null
+     */
     public function photo(int $photoId, ?array $types = null): ?Photo
     {
         /** @var Photo|null $photo */
@@ -409,6 +398,11 @@ class PhotoalbumRepository extends BaseRepository
         return $photo;
     }
 
+    /**
+     * @param Photo $photo
+     * @return bool
+     * @throws \Throwable
+     */
     public function deletePhoto(Photo $photo): bool
     {
         return DB::transaction(function () use ($photo): bool {
@@ -419,6 +413,11 @@ class PhotoalbumRepository extends BaseRepository
         });
     }
 
+    /**
+     * @param PhotoAlbums $album
+     * @return bool
+     * @throws \Throwable
+     */
     public function deleteAlbum(PhotoAlbums $album): bool
     {
         return DB::transaction(function () use ($album): bool {
@@ -484,20 +483,7 @@ class PhotoalbumRepository extends BaseRepository
 
     private function deletePhotoRelations(Photo $photo): void
     {
-        Comment::query()
-            ->where('commentable_type', 'photo')
-            ->where('content_id', $photo->id)
-            ->delete();
-
-        Like::query()
-            ->where('likeable_type', 'photo')
-            ->where('content_id', $photo->id)
-            ->delete();
-
-        Share::query()
-            ->where('shareable_type', 'photo')
-            ->where('content_id', $photo->id)
-            ->delete();
+        $this->deleteContentRelations('photo', (int) $photo->id);
 
         Attachment::query()
             ->where('photo_id', $photo->id)

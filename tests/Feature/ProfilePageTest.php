@@ -171,13 +171,13 @@ class ProfilePageTest extends TestCase
             ]);
     }
 
-    public function test_profile_repository_crops_avatar_to_square_temporary_image(): void
+    public function test_profile_image_service_crops_avatar_to_square_temporary_image(): void
     {
         Storage::fake('public');
 
         $viewer = $this->user(1, 'Александр', 'Яницкий');
-        $repository = new ProfileRepository(new User(), new ProfileImageService());
-        $result = $repository->cropTemporaryAvatar($viewer, ImageCropData::fromArray([
+        $service = new ProfileImageService();
+        $result = $service->cropTemporaryAvatar($viewer, ImageCropData::fromArray([
             'file' => UploadedFile::fake()->image('avatar.png', 600, 500),
             'x' => 30,
             'y' => 40,

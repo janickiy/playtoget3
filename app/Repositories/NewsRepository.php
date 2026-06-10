@@ -148,7 +148,7 @@ class NewsRepository extends BaseRepository
                 'likeable_type' => 'video',
                 'message' => sprintf(
                     '<p class="mess_news">Опубликовал(а) видео:</p><br> <ul class="attach_image"><li><img class="video_prev" alt="" src="%s" data-num="%d"></li></ul>',
-                    e($this->formatter->videoThumbUrl($row->provider, $row->video)),
+                    e(StringHelper::videoThumbUrl($row->provider, $row->video)),
                     (int) $row->id
                 ),
             ]));
@@ -325,7 +325,7 @@ class NewsRepository extends BaseRepository
                     e($this->formatter->ownerAvatar($row)),
                     e($this->formatter->ownerName($row)),
                     e(StringHelper::russianDate(Carbon::parse($row->content_created_at ?: $row->created_at))),
-                    e($this->formatter->videoThumbUrl($row->provider, $row->video)),
+                    e(StringHelper::videoThumbUrl($row->provider, $row->video)),
                     (int) $row->video_id
                 ),
             ]));

@@ -22,9 +22,6 @@ use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use RuntimeException;
 
 class ProfileRepository extends BaseRepository
 {
@@ -180,6 +177,11 @@ class ProfileRepository extends BaseRepository
             ->values();
     }
 
+    /**
+     * @param User $user
+     * @param int $limit
+     * @return Collection
+     */
     public function securityLogs(User $user, int $limit = 10): Collection
     {
         return Log::query()
@@ -207,64 +209,15 @@ class ProfileRepository extends BaseRepository
 
     public function cropTemporaryAvatar(User $user, ImageCropData $data): array
     {
-        $file = $data->file;
-        $source = $this->images->imageResource($file);
-        $sourceWidth = imagesx($source);
-        $sourceHeight = imagesy($source);
-
-        if ($sourceWidth < 1 || $sourceHeight < 1) {
-            imagedestroy($source);
-
-            throw new RuntimeException('Не удалось прочитать изображение.');
-        }
-
-        $x = max(0, (int) floor($data->x));
-        $y = max(0, (int) floor($data->y));
-        $width = max(0, (int) floor($data->width));
-        $height = max(0, (int) floor($data->height));
-        $size = min($width, $height);
-
-        if ($size < 100) {
-            imagedestroy($source);
-
-            throw new RuntimeException('Выделенная область слишком мала.');
-        }
-
-        $size = min($size, $sourceWidth - $x, $sourceHeight - $y);
-
-        if ($size < 100) {
-            imagedestroy($source);
-
-            throw new RuntimeException('Выделенная область выходит за границы изображения.');
-        }
-
-        $target = imagecreatetruecolor(300, 300);
-        imagefill($target, 0, 0, imagecolorallocate($target, 255, 255, 255));
-        imagecopyresampled($target, $source, 0, 0, $x, $y, 300, 300, $size, $size);
-        imagedestroy($source);
-
-        ob_start();
-        imagejpeg($target, null, 90);
-        $contents = ob_get_clean();
-        imagedestroy($target);
-
-        if (!is_string($contents) || $contents === '') {
-            throw new RuntimeException('Не удалось обработать изображение.');
-        }
-
-        $filename = sprintf('%d_%s.jpg', $user->id, Str::lower(Str::random(32)));
-        $path = 'images/tmp/profile/avatar/' . $filename;
-
-        if (!Storage::disk('public')->put($path, $contents)) {
-            throw new RuntimeException('Не удалось сохранить изображение.');
-        }
-
-        return [
-            'file' => $filename,
-            'url' => Storage::disk('public')->url($path),
-        ];
+        return $this->images->cropTemporaryAvatar($user, $data);
     }
 
+    /**
+     * @param User $user
+     * @param ProfileSettingsData $data
+     * @return void
+     * @throws \Throwable
+     */
     public function updateProfileSettings(User $user, ProfileSettingsData $data): void
     {
         $contacts = [];
@@ -320,6 +273,12 @@ class ProfileRepository extends BaseRepository
         $this->images->deleteUserImage('user/cover_page', $oldCover);
     }
 
+    /**
+     * @param User $profile
+     * @param User|null $viewer
+     * @param string $friendshipStatus
+     * @return array|false[]
+     */
     public function permissions(User $profile, ?User $viewer, string $friendshipStatus): array
     {
         $isOwnPage = $viewer && (int)$viewer->id === (int)$profile->id;
@@ -353,6 +312,13 @@ class ProfileRepository extends BaseRepository
         ];
     }
 
+    /**
+     * @param int $profileId
+     * @param int $limit
+     * @param int $offset
+     * @param User|null $viewer
+     * @return Collection
+     */
     public function wallComments(int $profileId, int $limit = 10, int $offset = 0, ?User $viewer = null): Collection
     {
         return $this->comments('user', $profileId, $limit, $offset, $viewer);
@@ -373,11 +339,24 @@ class ProfileRepository extends BaseRepository
             ->map(fn(Comment $comment): array => $this->serializeComment($comment, $viewer));
     }
 
+    /**
+     * @param int $profileId
+     * @param int $limit
+     * @param int $offset
+     * @return bool
+     */
     public function hasMoreWallComments(int $profileId, int $limit = 10, int $offset = 0): bool
     {
         return $this->hasMoreComments('user', $profileId, $limit, $offset);
     }
 
+    /**
+     * @param string $commentableType
+     * @param int $contentId
+     * @param int $limit
+     * @param int $offset
+     * @return bool
+     */
     public function hasMoreComments(string $commentableType, int $contentId, int $limit = 10, int $offset = 0): bool
     {
         return $this->commentsQuery($commentableType, $contentId)
@@ -386,6 +365,11 @@ class ProfileRepository extends BaseRepository
             ->exists();
     }
 
+    /**
+     * @param User $author
+     * @param CommentData $data
+     * @return Comment
+     */
     public function createWallComment(User $author, CommentData $data): Comment
     {
         /** @var Comment $comment */
@@ -415,6 +399,12 @@ class ProfileRepository extends BaseRepository
         ])->loadCount(['likes', 'shares']);
     }
 
+    /**
+     * @param User $viewer
+     * @param int $commentId
+     * @return bool
+     * @throws \Throwable
+     */
     public function deleteComment(User $viewer, int $commentId): bool
     {
         /** @var Comment|null $comment */
@@ -453,6 +443,12 @@ class ProfileRepository extends BaseRepository
         return true;
     }
 
+    /**
+     * @param Comment $comment
+     * @param User|null $viewer
+     * @param bool $includeReplies
+     * @return array
+     */
     public function serializeComment(Comment $comment, ?User $viewer = null, bool $includeReplies = true): array
     {
         $user = $comment->user;
@@ -496,6 +492,11 @@ class ProfileRepository extends BaseRepository
         ];
     }
 
+    /**
+     * @param string $commentableType
+     * @param int $contentId
+     * @return Builder
+     */
     private function commentsQuery(string $commentableType, int $contentId): Builder
     {
         return Comment::query()
@@ -516,6 +517,11 @@ class ProfileRepository extends BaseRepository
             ->orderByDesc('id');
     }
 
+    /**
+     * @param User $viewer
+     * @param Comment $comment
+     * @return bool
+     */
     private function viewerCanDeleteComment(User $viewer, Comment $comment): bool
     {
         if ((int)$viewer->id === (int)$comment->user_id) {
@@ -546,6 +552,10 @@ class ProfileRepository extends BaseRepository
         return false;
     }
 
+    /**
+     * @param Comment $comment
+     * @return Collection
+     */
     private function commentTreeIds(Comment $comment): Collection
     {
         $ids = collect([(int)$comment->id]);
@@ -571,6 +581,11 @@ class ProfileRepository extends BaseRepository
         return $ids->unique()->values();
     }
 
+    /**
+     * @param User $profile
+     * @param int $kind
+     * @return Collection
+     */
     private function occupations(User $profile, int $kind): Collection
     {
         return $profile->occupations
@@ -587,6 +602,10 @@ class ProfileRepository extends BaseRepository
             ->values();
     }
 
+    /**
+     * @param Attachment $attachment
+     * @return array|null
+     */
     private function serializeAttachment(Attachment $attachment): ?array
     {
         if (!$attachment->photo) {
@@ -605,6 +624,12 @@ class ProfileRepository extends BaseRepository
         ];
     }
 
+    /**
+     * @param mixed $permission
+     * @param bool $isOwnPage
+     * @param bool $isFriend
+     * @return bool
+     */
     private function permissionAllows(mixed $permission, bool $isOwnPage, bool $isFriend): bool
     {
         return match ((int)($permission ?? 0)) {
@@ -614,6 +639,10 @@ class ProfileRepository extends BaseRepository
         };
     }
 
+    /**
+     * @param mixed $attach
+     * @return array
+     */
     private function attachmentIds(mixed $attach): array
     {
         if (is_string($attach)) {

@@ -5,9 +5,9 @@ namespace App\Repositories;
 use App\DTO\SportBlock\SportBlockData;
 use App\Helpers\FrontAssets;
 use App\Models\GeoCity;
-use App\Models\GeoTarget;
 use App\Models\SportBlock;
 use App\Models\User;
+use App\Repositories\Concerns\SyncsGeoTargets;
 use App\Service\SportBlockAvatarService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 
 class SportBlockRepository extends BaseRepository
 {
+    use SyncsGeoTargets;
+
     public function __construct(SportBlock $model, private readonly SportBlockAvatarService $avatars)
     {
         parent::__construct($model);
@@ -128,7 +130,7 @@ class SportBlockRepository extends BaseRepository
                 'banned' => false,
             ]);
 
-            $this->syncGeoTarget($sportBlock, $data->cityId);
+            $this->syncGeoTarget($sportBlock->type, (int) $sportBlock->id, $data->cityId);
 
             return $sportBlock;
         });
@@ -160,7 +162,7 @@ class SportBlockRepository extends BaseRepository
             }
 
             $sportBlock->save();
-            $this->syncGeoTarget($sportBlock, $data->cityId);
+            $this->syncGeoTarget($sportBlock->type, (int) $sportBlock->id, $data->cityId);
 
             return true;
         });
@@ -205,20 +207,6 @@ class SportBlockRepository extends BaseRepository
                 });
             })
             ->when($place !== '', fn (Builder $query) => $query->where('place', 'like', '%' . $place . '%'));
-    }
-
-    private function syncGeoTarget(SportBlock $sportBlock, int $cityId): void
-    {
-        if ($cityId < 1) {
-            return;
-        }
-
-        GeoTarget::query()->updateOrCreate([
-            'target_type' => $sportBlock->type,
-            'target_id' => $sportBlock->id,
-        ], [
-            'city_id' => $cityId,
-        ]);
     }
 
 }

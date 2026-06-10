@@ -65,11 +65,11 @@ class VideoalbumsController extends Controller
         FriendRepository     $friends,
     ): View
     {
-        $videoalbum = $videoAlbums->album($album);
+        $videoAlbum = $videoAlbums->album($album);
 
-        abort_if(!$videoalbum || !$videoalbum->owner, 404);
+        abort_if(!$videoAlbum || !$videoAlbum->owner, 404);
 
-        $profile = $profiles->profile($videoalbum->owner_id);
+        $profile = $profiles->profile($videoAlbum->owner_id);
 
         abort_if(!$profile, 404);
 
@@ -77,7 +77,7 @@ class VideoalbumsController extends Controller
         $friendshipStatus = $friends->friendshipStatus($viewer?->id, $profile->id);
         $permissions = $profiles->permissions($profile, $viewer, $friendshipStatus);
         $videos = $permissions['video']
-            ? $videoAlbums->albumVideos($videoalbum, self::ALBUM_VIDEOS_LIMIT, 0)
+            ? $videoAlbums->albumVideos($videoAlbum, self::ALBUM_VIDEOS_LIMIT, 0)
             : collect();
 
         return view('front.videoalbums.show', [
@@ -88,13 +88,13 @@ class VideoalbumsController extends Controller
             'profileData' => $profiles->profileData($profile),
             'permissions' => $permissions,
             'friendshipStatus' => $friendshipStatus,
-            'videoalbum' => $videoalbum,
+            'videoAlbum' => $videoAlbum,
             'videos' => $videos,
             'videosPageSize' => self::ALBUM_VIDEOS_LIMIT,
             'hasMoreVideos' => $permissions['video']
-                ? $videoAlbums->hasMoreAlbumVideos($videoalbum, self::ALBUM_VIDEOS_LIMIT, 0)
+                ? $videoAlbums->hasMoreAlbumVideos($videoAlbum, self::ALBUM_VIDEOS_LIMIT, 0)
                 : false,
-            'canManage' => $videoAlbums->isOwner($videoalbum, $viewer),
+            'canManage' => $videoAlbums->isOwner($videoAlbum, $viewer),
         ]);
     }
 
@@ -216,11 +216,11 @@ class VideoalbumsController extends Controller
     public function edit(int $album, VideoalbumRepository $videoAlbums): View|RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
-        $videoalbum = $videoAlbums->album($album);
+        $videoAlbum = $videoAlbums->album($album);
 
-        abort_if(!$videoalbum, 404);
+        abort_if(!$videoAlbum, 404);
 
-        if (!$viewer || !$videoAlbums->isOwner($videoalbum, $viewer)) {
+        if (!$viewer || !$videoAlbums->isOwner($videoAlbum, $viewer)) {
             abort(403);
         }
 
@@ -228,9 +228,9 @@ class VideoalbumsController extends Controller
             'title' => 'Редактирование видеоальбома',
             'viewer' => $viewer,
             'profileLayout' => $this->profileLayout($viewer),
-            'videoalbum' => $videoalbum,
-            'action' => route('front.videoalbums.update', ['album' => $videoalbum->id]),
-            'name' => old('name', $videoalbum->name),
+            'videoAlbum' => $videoAlbum,
+            'action' => route('front.videoalbums.update', ['album' => $videoAlbum->id]),
+            'name' => old('name', $videoAlbum->name),
             'button' => 'Редактировать',
         ]);
     }
@@ -246,23 +246,23 @@ class VideoalbumsController extends Controller
     public function update(int $album, AlbumRequest $request, VideoalbumRepository $videoAlbums): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
-        $videoalbum = $videoAlbums->album($album);
+        $videoAlbum = $videoAlbums->album($album);
 
-        abort_if(!$videoalbum, 404);
+        abort_if(!$videoAlbum, 404);
 
-        if (!$viewer || !$videoAlbums->isOwner($videoalbum, $viewer)) {
+        if (!$viewer || !$videoAlbums->isOwner($videoAlbum, $viewer)) {
             abort(403);
         }
 
         $albumData = $request->toDto();
 
-        if ($videoAlbums->nameExists($viewer, $albumData->name, $videoalbum->id)) {
+        if ($videoAlbums->nameExists($viewer, $albumData->name, $videoAlbum->id)) {
             return back()
                 ->withErrors(['name' => 'Альбом с таким названием уже существует.'])
                 ->withInput();
         }
 
-        $videoAlbums->updateUserAlbum($videoalbum, $albumData);
+        $videoAlbums->updateUserAlbum($videoAlbum, $albumData);
 
         return redirect()->route('front.videoalbums.index');
     }
@@ -277,15 +277,15 @@ class VideoalbumsController extends Controller
     public function destroy(int $album, VideoalbumRepository $videoAlbums): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
-        $videoalbum = $videoAlbums->album($album);
+        $videoAlbum = $videoAlbums->album($album);
 
-        abort_if(!$videoalbum, 404);
+        abort_if(!$videoAlbum, 404);
 
-        if (!$viewer || !$videoAlbums->isOwner($videoalbum, $viewer)) {
+        if (!$viewer || !$videoAlbums->isOwner($videoAlbum, $viewer)) {
             abort(403);
         }
 
-        $videoAlbums->deleteAlbum($videoalbum);
+        $videoAlbums->deleteAlbum($videoAlbum);
 
         return redirect()->route('front.videoalbums.index');
     }

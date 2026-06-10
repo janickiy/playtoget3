@@ -410,13 +410,13 @@ class EventsController extends Controller
     public function showVideoAlbum(int $event, int $album, EventRepository $events, VideoalbumRepository $videoAlbums): View
     {
         $eventModel = $this->eventOrFail($event, $events);
-        $videoalbum = $this->eventVideoalbumOrFail($album, $eventModel, $videoAlbums);
+        $videoAlbum = $this->eventVideoalbumOrFail($album, $eventModel, $videoAlbums);
 
         return view('front.teams.videoalbums.show', $this->eventPayload($eventModel, $events, 'videoalbums') + [
-            'videoalbum' => $videoalbum,
-            'videos' => $videoAlbums->albumVideos($videoalbum, self::VIDEOS_LIMIT, 0),
+            'videoAlbum' => $videoAlbum,
+            'videos' => $videoAlbums->albumVideos($videoAlbum, self::VIDEOS_LIMIT, 0),
             'videosPageSize' => self::VIDEOS_LIMIT,
-            'hasMoreVideos' => $videoAlbums->hasMoreAlbumVideos($videoalbum, self::VIDEOS_LIMIT, 0),
+            'hasMoreVideos' => $videoAlbums->hasMoreAlbumVideos($videoAlbum, self::VIDEOS_LIMIT, 0),
             'canManage' => $events->canManage($eventModel, Auth::guard('web')->user()),
         ]);
     }
@@ -493,14 +493,14 @@ class EventsController extends Controller
     public function editVideoalbum(int $event, int $album, EventRepository $events, VideoalbumRepository $videoAlbums): View
     {
         $eventModel = $this->eventOrFail($event, $events);
-        $videoalbum = $this->eventVideoalbumOrFail($album, $eventModel, $videoAlbums);
+        $videoAlbum = $this->eventVideoalbumOrFail($album, $eventModel, $videoAlbums);
 
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->eventPayload($eventModel, $events, 'videoalbums') + [
             'title' => 'Редактирование видеоальбома',
-            'action' => route('front.events.videoalbum.update', ['event' => $eventModel->id, 'album' => $videoalbum->id]),
-            'name' => old('name', $videoalbum->name),
+            'action' => route('front.events.videoalbum.update', ['event' => $eventModel->id, 'album' => $videoAlbum->id]),
+            'name' => old('name', $videoAlbum->name),
             'button' => 'Редактировать',
         ]);
     }
@@ -511,11 +511,11 @@ class EventsController extends Controller
     public function updateVideoalbum(int $event, int $album, AlbumRequest $request, EventRepository $events, VideoalbumRepository $videoAlbums): RedirectResponse
     {
         $eventModel = $this->eventOrFail($event, $events);
-        $videoalbum = $this->eventVideoalbumOrFail($album, $eventModel, $videoAlbums);
+        $videoAlbum = $this->eventVideoalbumOrFail($album, $eventModel, $videoAlbums);
 
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
-        $videoAlbums->updateUserAlbum($videoalbum, $request->toDto());
+        $videoAlbums->updateUserAlbum($videoAlbum, $request->toDto());
 
         return redirect()->route('front.events.videoalbums', ['event' => $eventModel->id]);
     }
@@ -526,11 +526,11 @@ class EventsController extends Controller
     public function destroyVideoalbum(int $event, int $album, EventRepository $events, VideoalbumRepository $videoAlbums): RedirectResponse
     {
         $eventModel = $this->eventOrFail($event, $events);
-        $videoalbum = $this->eventVideoalbumOrFail($album, $eventModel, $videoAlbums);
+        $videoAlbum = $this->eventVideoalbumOrFail($album, $eventModel, $videoAlbums);
 
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
-        $videoAlbums->deleteAlbum($videoalbum);
+        $videoAlbums->deleteAlbum($videoAlbum);
 
         return redirect()->route('front.events.videoalbums', ['event' => $eventModel->id]);
     }
@@ -620,10 +620,10 @@ class EventsController extends Controller
      */
     private function eventVideoalbumOrFail(int $album, Event $event, VideoalbumRepository $videoAlbums): VideoAlbums
     {
-        $videoalbum = $videoAlbums->album($album, ['event']);
+        $videoAlbum = $videoAlbums->album($album, ['event']);
 
-        abort_if(! $videoalbum || (int) $videoalbum->owner_id !== (int) $event->id, 404);
+        abort_if(! $videoAlbum || (int) $videoAlbum->owner_id !== (int) $event->id, 404);
 
-        return $videoalbum;
+        return $videoAlbum;
     }
 }

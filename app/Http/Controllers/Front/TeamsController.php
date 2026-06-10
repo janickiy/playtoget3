@@ -504,15 +504,15 @@ class TeamsController extends Controller
     public function showVideoAlbum(int $community, int $album, CommunityRepository $communities, VideoalbumRepository $videoAlbums): View
     {
         $team = $this->teamOrFail($community, $communities);
-        $videoalbum = $this->teamVideoalbumOrFail($album, $team, $videoAlbums);
+        $videoAlbum = $this->teamVideoalbumOrFail($album, $team, $videoAlbums);
         $payload = $this->teamPayload($team, $communities, 'videoalbums');
         abort_unless($payload['permissions']['video'], 404);
 
         return view('front.teams.videoalbums.show', $payload + [
-            'videoalbum' => $videoalbum,
-            'videos' => $videoAlbums->albumVideos($videoalbum, self::VIDEOS_LIMIT, 0),
+            'videoAlbum' => $videoAlbum,
+            'videos' => $videoAlbums->albumVideos($videoAlbum, self::VIDEOS_LIMIT, 0),
             'videosPageSize' => self::VIDEOS_LIMIT,
-            'hasMoreVideos' => $videoAlbums->hasMoreAlbumVideos($videoalbum, self::VIDEOS_LIMIT, 0),
+            'hasMoreVideos' => $videoAlbums->hasMoreAlbumVideos($videoAlbum, self::VIDEOS_LIMIT, 0),
             'canManage' => $communities->canManage($team, Auth::guard('web')->user()),
         ]);
     }
@@ -615,17 +615,17 @@ class TeamsController extends Controller
      */
     public function editVideoalbum(int $album, CommunityRepository $communities, VideoalbumRepository $videoAlbums, ?int $community = null): View
     {
-        $videoalbum = $videoAlbums->album($album, ['team']);
-        abort_if(! $videoalbum, 404);
+        $videoAlbum = $videoAlbums->album($album, ['team']);
+        abort_if(! $videoAlbum, 404);
 
-        $team = $community ? $this->teamOrFail($community, $communities) : $this->teamOrFail((int) $videoalbum->owner_id, $communities);
+        $team = $community ? $this->teamOrFail($community, $communities) : $this->teamOrFail((int) $videoAlbum->owner_id, $communities);
         $this->teamVideoalbumOrFail($album, $team, $videoAlbums);
         abort_unless($communities->canManage($team, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->teamPayload($team, $communities, 'videoalbums') + [
             'title' => 'Редактирование видеоальбома',
-            'action' => route('front.teams.videoalbum.update', ['album' => $videoalbum->id]),
-            'name' => old('name', $videoalbum->name),
+            'action' => route('front.teams.videoalbum.update', ['album' => $videoAlbum->id]),
+            'name' => old('name', $videoAlbum->name),
             'button' => 'Редактировать',
         ]);
     }
@@ -641,12 +641,12 @@ class TeamsController extends Controller
      */
     public function updateVideoalbum(int $album, AlbumRequest $request, CommunityRepository $communities, VideoalbumRepository $videoAlbums): RedirectResponse
     {
-        $videoalbum = $videoAlbums->album($album, ['team']);
-        abort_if(! $videoalbum, 404);
-        $team = $this->teamOrFail((int) $videoalbum->owner_id, $communities);
+        $videoAlbum = $videoAlbums->album($album, ['team']);
+        abort_if(! $videoAlbum, 404);
+        $team = $this->teamOrFail((int) $videoAlbum->owner_id, $communities);
         abort_unless($communities->canManage($team, Auth::guard('web')->user()), 403);
 
-        $videoAlbums->updateUserAlbum($videoalbum, $request->toDto());
+        $videoAlbums->updateUserAlbum($videoAlbum, $request->toDto());
 
         return redirect()->route('front.teams.videoalbums', ['community' => $team->id]);
     }
@@ -661,13 +661,13 @@ class TeamsController extends Controller
      */
     public function destroyVideoalbum(int $album, CommunityRepository $communities, VideoalbumRepository $videoAlbums): RedirectResponse
     {
-        $videoalbum = $videoAlbums->album($album, ['team']);
-        abort_if(! $videoalbum, 404);
+        $videoAlbum = $videoAlbums->album($album, ['team']);
+        abort_if(! $videoAlbum, 404);
 
-        $team = $this->teamOrFail((int) $videoalbum->owner_id, $communities);
+        $team = $this->teamOrFail((int) $videoAlbum->owner_id, $communities);
         abort_unless($communities->canManage($team, Auth::guard('web')->user()), 403);
 
-        $videoAlbums->deleteAlbum($videoalbum);
+        $videoAlbums->deleteAlbum($videoAlbum);
 
         return redirect()->route('front.teams.videoalbums', ['community' => $team->id]);
     }
@@ -812,10 +812,10 @@ class TeamsController extends Controller
      */
     private function teamVideoalbumOrFail(int $album, Community $team, VideoalbumRepository $videoAlbums): VideoAlbums
     {
-        $videoalbum = $videoAlbums->album($album, ['team']);
+        $videoAlbum = $videoAlbums->album($album, ['team']);
 
-        abort_if(! $videoalbum || (int) $videoalbum->owner_id !== (int) $team->id, 404);
+        abort_if(! $videoAlbum || (int) $videoAlbum->owner_id !== (int) $team->id, 404);
 
-        return $videoalbum;
+        return $videoAlbum;
     }
 }

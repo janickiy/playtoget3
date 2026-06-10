@@ -10,9 +10,9 @@ use App\Models\Community;
 use App\Models\Event;
 use App\Models\Friend;
 use App\Models\GeoCity;
-use App\Models\GeoTarget;
 use App\Models\SportType;
 use App\Models\User;
+use App\Repositories\Concerns\SyncsGeoTargets;
 use App\Service\EventCoverService;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonPeriod;
@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\DB;
 
 class EventRepository extends BaseRepository
 {
+    use SyncsGeoTargets;
+
     public function __construct(
         Event $model,
         private readonly EventCoverService $covers
@@ -574,7 +576,7 @@ class EventRepository extends BaseRepository
                 'role' => 1,
             ]);
 
-            $this->syncGeoTarget($event, $data->cityId);
+            $this->syncGeoTarget('event', (int) $event->id, $data->cityId);
 
             return $event;
         });
@@ -606,7 +608,7 @@ class EventRepository extends BaseRepository
             }
 
             $event->fill($fields)->save();
-            $this->syncGeoTarget($event, $data->cityId);
+            $this->syncGeoTarget('event', (int) $event->id, $data->cityId);
 
             if ($cover && $oldCover) {
                 $this->covers->deleteCover($oldCover);
@@ -727,6 +729,10 @@ class EventRepository extends BaseRepository
         ];
     }
 
+    /**
+     * @param int $count
+     * @return string
+     */
     private function personWord(int $count): string
     {
         $lastTwo = $count % 100;
@@ -741,25 +747,6 @@ class EventRepository extends BaseRepository
             2, 3, 4 => 'человека',
             default => 'человек',
         };
-    }
-
-    /**
-     * @param Event $event
-     * @param int $cityId
-     * @return void
-     */
-    private function syncGeoTarget(Event $event, int $cityId): void
-    {
-        if ($cityId < 1) {
-            return;
-        }
-
-        GeoTarget::query()->updateOrCreate([
-            'target_type' => 'event',
-            'target_id' => $event->id,
-        ], [
-            'city_id' => $cityId,
-        ]);
     }
 
 }

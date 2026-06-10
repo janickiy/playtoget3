@@ -5,13 +5,11 @@ namespace App\Repositories;
 use App\DTO\Album\AlbumData;
 use App\DTO\Video\VideoData;
 use App\Helpers\StringHelper;
-use App\Models\Comment;
-use App\Models\Like;
-use App\Models\Share;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\VideoView;
 use App\Models\VideoAlbums;
+use App\Repositories\Concerns\DeletesContentRelations;
 use App\Service\VideoService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +17,8 @@ use RuntimeException;
 
 class VideoalbumRepository extends BaseRepository
 {
+    use DeletesContentRelations;
+
     public function __construct(VideoAlbums $model, private readonly VideoService $videos)
     {
         parent::__construct($model);
@@ -68,6 +68,13 @@ class VideoalbumRepository extends BaseRepository
         return $this->hasMoreOwnerVideos($userId, 'user', $limit, $offset);
     }
 
+    /**
+     * @param int $ownerId
+     * @param string $type
+     * @param int $limit
+     * @param int $offset
+     * @return bool
+     */
     public function hasMoreOwnerVideos(int $ownerId, string $type, int $limit, int $offset): bool
     {
         return Video::query()
@@ -81,6 +88,12 @@ class VideoalbumRepository extends BaseRepository
             ->exists();
     }
 
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @param string $type
+     * @return Collection
+     */
     public function popularVideos(int $limit = 6, int $offset = 0, string $type = 'user'): Collection
     {
         return Video::query()
@@ -114,6 +127,11 @@ class VideoalbumRepository extends BaseRepository
             ->map(fn (Video $video): array => $this->serializeVideo($video));
     }
 
+    /**
+     * @param int $albumId
+     * @param array|null $types
+     * @return VideoAlbums|null
+     */
     public function album(int $albumId, ?array $types = null): ?VideoAlbums
     {
         /** @var VideoAlbums|null $album */
@@ -126,6 +144,12 @@ class VideoalbumRepository extends BaseRepository
         return $album;
     }
 
+    /**
+     * @param VideoAlbums $album
+     * @param int $limit
+     * @param int $offset
+     * @return Collection
+     */
     public function albumVideos(VideoAlbums $album, int $limit = 6, int $offset = 0): Collection
     {
         return $album->videos()
@@ -138,6 +162,12 @@ class VideoalbumRepository extends BaseRepository
             ->map(fn (Video $video): array => $this->serializeVideo($video));
     }
 
+    /**
+     * @param VideoAlbums $album
+     * @param int $limit
+     * @param int $offset
+     * @return bool
+     */
     public function hasMoreAlbumVideos(VideoAlbums $album, int $limit, int $offset): bool
     {
         return $album->videos()
@@ -148,11 +178,21 @@ class VideoalbumRepository extends BaseRepository
             ->exists();
     }
 
+    /**
+     * @param User $user
+     * @return Collection
+     */
+
     public function editableAlbumsFor(User $user): Collection
     {
         return $this->editableAlbumsForOwner($user->id, 'user');
     }
 
+    /**
+     * @param int $ownerId
+     * @param string $type
+     * @return Collection
+     */
     public function editableAlbumsForOwner(int $ownerId, string $type): Collection
     {
         return $this->model->newQuery()
@@ -162,11 +202,21 @@ class VideoalbumRepository extends BaseRepository
             ->get();
     }
 
+    /**
+     * @param User $user
+     * @return VideoAlbums
+     */
     public function ensureDefaultAlbum(User $user): VideoAlbums
     {
         return $this->ensureDefaultAlbumForOwner($user->id, 'user', 'Мой альбом');
     }
 
+    /**
+     * @param int $ownerId
+     * @param string $type
+     * @param string $name
+     * @return VideoAlbums
+     */
     public function ensureDefaultAlbumForOwner(int $ownerId, string $type, string $name = 'Мой альбом'): VideoAlbums
     {
         /** @var VideoAlbums $album */
@@ -180,11 +230,22 @@ class VideoalbumRepository extends BaseRepository
         return $album;
     }
 
+    /**
+     * @param User $user
+     * @param AlbumData $data
+     * @return VideoAlbums
+     */
     public function createUserAlbum(User $user, AlbumData $data): VideoAlbums
     {
         return $this->createAlbumForOwner($user->id, 'user', $data);
     }
 
+    /**
+     * @param int $ownerId
+     * @param string $type
+     * @param AlbumData $data
+     * @return VideoAlbums
+     */
     public function createAlbumForOwner(int $ownerId, string $type, AlbumData $data): VideoAlbums
     {
         /** @var VideoAlbums $album */
@@ -197,16 +258,34 @@ class VideoalbumRepository extends BaseRepository
         return $album;
     }
 
+    /**
+     * @param VideoAlbums $album
+     * @param AlbumData $data
+     * @return bool
+     */
     public function updateUserAlbum(VideoAlbums $album, AlbumData $data): bool
     {
         return $album->fill($data->toArray())->save();
     }
 
+    /**
+     * @param User $user
+     * @param string $name
+     * @param int|null $exceptId
+     * @return bool
+     */
     public function nameExists(User $user, string $name, ?int $exceptId = null): bool
     {
         return $this->nameExistsForOwner($user->id, 'user', $name, $exceptId);
     }
 
+    /**
+     * @param int $ownerId
+     * @param string $type
+     * @param string $name
+     * @param int|null $exceptId
+     * @return bool
+     */
     public function nameExistsForOwner(int $ownerId, string $type, string $name, ?int $exceptId = null): bool
     {
         return $this->model->newQuery()
@@ -217,11 +296,22 @@ class VideoalbumRepository extends BaseRepository
             ->exists();
     }
 
+    /**
+     * @param VideoAlbums $album
+     * @param User|null $user
+     * @return bool
+     */
     public function isOwner(VideoAlbums $album, ?User $user): bool
     {
         return $user && (int) $album->owner_id === (int) $user->id;
     }
 
+    /**
+     * @param User $user
+     * @param VideoAlbums $album
+     * @param VideoData $data
+     * @return Video
+     */
     public function addUserVideo(User $user, VideoAlbums $album, VideoData $data): Video
     {
         if (! $this->isOwner($album, $user) || $album->videoalbumable_type !== 'user') {
@@ -231,6 +321,12 @@ class VideoalbumRepository extends BaseRepository
         return $this->addVideoToAlbum($user, $album, $data);
     }
 
+    /**
+     * @param User $user
+     * @param VideoAlbums $album
+     * @param VideoData $data
+     * @return Video
+     */
     public function addVideoToAlbum(User $user, VideoAlbums $album, VideoData $data): Video
     {
         $videoData = $this->videos->detectVideo($data->link);
@@ -252,6 +348,11 @@ class VideoalbumRepository extends BaseRepository
         return $video;
     }
 
+    /**
+     * @param VideoAlbums $album
+     * @return bool
+     * @throws \Throwable
+     */
     public function deleteAlbum(VideoAlbums $album): bool
     {
         return DB::transaction(function () use ($album): bool {
@@ -266,6 +367,11 @@ class VideoalbumRepository extends BaseRepository
         });
     }
 
+    /**
+     * @param User $user
+     * @param int $videoId
+     * @return bool
+     */
     public function deleteVideoFor(User $user, int $videoId): bool
     {
         /** @var Video|null $video */
@@ -281,6 +387,11 @@ class VideoalbumRepository extends BaseRepository
         return $this->deleteVideo($video);
     }
 
+    /**
+     * @param Video $video
+     * @return bool
+     * @throws \Throwable
+     */
     public function deleteVideo(Video $video): bool
     {
         return DB::transaction(function () use ($video): bool {
@@ -290,6 +401,10 @@ class VideoalbumRepository extends BaseRepository
         });
     }
 
+    /**
+     * @param Video $video
+     * @return array
+     */
     public function serializeVideo(Video $video): array
     {
         $video->loadMissing('album');
@@ -305,6 +420,10 @@ class VideoalbumRepository extends BaseRepository
         ];
     }
 
+    /**
+     * @param VideoAlbums $album
+     * @return array
+     */
     public function serializeAlbum(VideoAlbums $album): array
     {
         $album->loadMissing(['videos' => fn ($query) => $query
@@ -324,22 +443,13 @@ class VideoalbumRepository extends BaseRepository
         ];
     }
 
+    /**
+     * @param Video $video
+     * @return void
+     */
     private function deleteVideoRelations(Video $video): void
     {
-        Comment::query()
-            ->where('commentable_type', 'video')
-            ->where('content_id', $video->id)
-            ->delete();
-
-        Like::query()
-            ->where('likeable_type', 'video')
-            ->where('content_id', $video->id)
-            ->delete();
-
-        Share::query()
-            ->where('shareable_type', 'video')
-            ->where('content_id', $video->id)
-            ->delete();
+        $this->deleteContentRelations('video', (int) $video->id);
 
         VideoView::query()
             ->where('video_id', $video->id)

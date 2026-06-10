@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Models\PhotoAlbums;
+use App\Models\User;
 use GdImage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -10,6 +12,11 @@ use RuntimeException;
 
 class AlbumPhotoStorageService
 {
+    /**
+     * @param UploadedFile $file
+     * @param string|null $albumType
+     * @return string[]
+     */
     public function storePhoto(UploadedFile $file, ?string $albumType): array
     {
         $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
@@ -39,6 +46,53 @@ class AlbumPhotoStorageService
         ];
     }
 
+    /**
+     * @param User $user
+     * @param UploadedFile $file
+     * @return array
+     */
+    public function storeAttachmentPhoto(User $user, UploadedFile $file): array
+    {
+        /** @var PhotoAlbums $album */
+        $album = PhotoAlbums::query()->firstOrCreate([
+            'owner_id' => $user->id,
+            'photoalbumable_type' => 'user_attach',
+        ], [
+            'name' => 'Мои прикрепленные фотографии',
+        ]);
+
+        $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
+        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
+        $filename = Str::lower(Str::random(32)) . '.' . $extension;
+        $smallFilename = 's_' . $filename;
+        $directory = 'images/photogallery/user_attach';
+        $contents = file_get_contents($file->getRealPath());
+
+        if ($contents === false) {
+            throw new RuntimeException('Invalid file');
+        }
+
+        $disk = Storage::disk('public');
+        $originalPath = $directory . '/' . $filename;
+        $smallPath = $directory . '/' . $smallFilename;
+
+        if (! $disk->put($originalPath, $contents) || ! $disk->put($smallPath, $contents)) {
+            $disk->delete([$originalPath, $smallPath]);
+
+            throw new RuntimeException('File was not saved');
+        }
+
+        return [
+            'album' => $album,
+            'photo' => $filename,
+            'small_photo' => $smallFilename,
+        ];
+    }
+
+    /**
+     * @param UploadedFile $file
+     * @return GdImage
+     */
     private function imageResource(UploadedFile $file): GdImage
     {
         $path = $file->getRealPath();
@@ -58,6 +112,13 @@ class AlbumPhotoStorageService
             : $image;
     }
 
+    /**
+     * @param GdImage $source
+     * @param string|null $mime
+     * @param int|null $maxWidth
+     * @param int|null $maxHeight
+     * @return string
+     */
     private function resizedImageContents(GdImage $source, ?string $mime, ?int $maxWidth, ?int $maxHeight): string
     {
         $sourceWidth = imagesx($source);
@@ -104,6 +165,11 @@ class AlbumPhotoStorageService
         return $contents;
     }
 
+    /**
+     * @param GdImage $image
+     * @param string $path
+     * @return GdImage
+     */
     private function orientJpeg(GdImage $image, string $path): GdImage
     {
         if (! function_exists('exif_read_data')) {

@@ -13,9 +13,9 @@ use App\Models\CommunitySetting;
 use App\Models\Event;
 use App\Models\Friend;
 use App\Models\GeoCity;
-use App\Models\GeoTarget;
 use App\Models\SportType;
 use App\Models\User;
+use App\Repositories\Concerns\SyncsGeoTargets;
 use App\Service\CommunityImageService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -23,6 +23,8 @@ use Illuminate\Support\Facades\DB;
 
 class CommunityRepository extends BaseRepository
 {
+    use SyncsGeoTargets;
+
     public function __construct(Community $model, private readonly CommunityImageService $images)
     {
         parent::__construct($model);
@@ -853,7 +855,7 @@ class CommunityRepository extends BaseRepository
                 'type' => 0,
             ]);
 
-            $this->syncGeoTarget($team, $data->cityId);
+            $this->syncGeoTarget($team->type, (int) $team->id, $data->cityId);
 
             return $team;
         });
@@ -898,7 +900,7 @@ class CommunityRepository extends BaseRepository
                 'type' => 0,
             ]);
 
-            $this->syncGeoTarget($group, $data->cityId);
+            $this->syncGeoTarget($group->type, (int) $group->id, $data->cityId);
 
             return $group;
         });
@@ -949,7 +951,7 @@ class CommunityRepository extends BaseRepository
                 'type' => $data->type,
             ])->save();
 
-            $this->syncGeoTarget($team, $data->cityId);
+            $this->syncGeoTarget($team->type, (int) $team->id, $data->cityId);
 
             return true;
         });
@@ -1000,7 +1002,7 @@ class CommunityRepository extends BaseRepository
                 'type' => $data->type,
             ])->save();
 
-            $this->syncGeoTarget($group, $data->cityId);
+            $this->syncGeoTarget($group->type, (int) $group->id, $data->cityId);
 
             return true;
         });
@@ -1166,25 +1168,6 @@ class CommunityRepository extends BaseRepository
                     ->orWhere('communities.sport_type', 'like', '%' . $search . '%');
             });
         }
-    }
-
-    /**
-     * @param Community $community
-     * @param int $cityId
-     * @return void
-     */
-    private function syncGeoTarget(Community $community, int $cityId): void
-    {
-        if ($cityId < 1) {
-            return;
-        }
-
-        GeoTarget::query()->updateOrCreate([
-            'target_type' => $community->type,
-            'target_id' => $community->id,
-        ], [
-            'city_id' => $cityId,
-        ]);
     }
 
 }

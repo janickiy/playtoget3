@@ -100,17 +100,4 @@ class NewsFeedFormatterService
             : null;
     }
 
-    /**
-     * @param string|null $provider
-     * @param string|null $video
-     * @return string
-     */
-    public function videoThumbUrl(?string $provider, ?string $video): string
-    {
-        if ($provider === 'youtube' && $video) {
-            return 'https://img.youtube.com/vi/' . rawurlencode($video) . '/hqdefault.jpg';
-        }
-
-        return asset('frontend/images/noimage.png');
-    }
 }
