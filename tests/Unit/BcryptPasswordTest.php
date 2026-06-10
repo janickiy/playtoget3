@@ -7,14 +7,13 @@ use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
-class LegacyPasswordTest extends TestCase
+class BcryptPasswordTest extends TestCase
 {
-    public function test_legacy_md5_password_is_detected_before_bcrypt_check(): void
+    public function test_md5_password_is_not_detected_as_bcrypt(): void
     {
         $repository = new UserRepository(new User());
         $user = new User(['password' => md5('1111')]);
 
-        $this->assertTrue($repository->passwordMatchesLegacy($user, '1111'));
         $this->assertFalse($repository->passwordUsesBcrypt($user));
     }
 
@@ -23,7 +22,6 @@ class LegacyPasswordTest extends TestCase
         $repository = new UserRepository(new User());
         $user = new User(['password' => Hash::make('1111')]);
 
-        $this->assertFalse($repository->passwordMatchesLegacy($user, '1111'));
         $this->assertTrue($repository->passwordUsesBcrypt($user));
     }
 }

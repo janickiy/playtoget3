@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\DTO\Community\CommunityData;
+use App\Enums\CommunityPrivacyType;
+use App\Enums\MembershipRole;
 use App\Helpers\FrontAssets;
 use App\Models\AcceptedEventMember;
 use App\Models\Community;
@@ -14,16 +16,14 @@ use App\Models\GeoCity;
 use App\Models\GeoTarget;
 use App\Models\SportType;
 use App\Models\User;
+use App\Service\CommunityImageService;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class CommunityRepository extends BaseRepository
 {
-    public function __construct(Community $model)
+    public function __construct(Community $model, private readonly CommunityImageService $images)
     {
         parent::__construct($model);
     }
@@ -39,6 +39,10 @@ class CommunityRepository extends BaseRepository
             ->map(fn (Community $team): array => $this->serializeTeam($team));
     }
 
+    /**
+     * @param int $id
+     * @return Community|null
+     */
     public function findTeam(int $id): ?Community
     {
         /** @var Community|null $community */
@@ -52,6 +56,10 @@ class CommunityRepository extends BaseRepository
         return $community;
     }
 
+    /**
+     * @param int $id
+     * @return Community|null
+     */
     public function findGroup(int $id): ?Community
     {
         /** @var Community|null $community */
@@ -65,6 +73,10 @@ class CommunityRepository extends BaseRepository
         return $community;
     }
 
+    /**
+     * @param User|null $viewer
+     * @return Community|null
+     */
     public function defaultTeam(?User $viewer = null): ?Community
     {
         if ($viewer) {
@@ -90,6 +102,10 @@ class CommunityRepository extends BaseRepository
             ->first();
     }
 
+    /**
+     * @param User|null $viewer
+     * @return Community|null
+     */
     public function defaultGroup(?User $viewer = null): ?Community
     {
         if ($viewer) {
@@ -120,6 +136,13 @@ class CommunityRepository extends BaseRepository
         return $this->findTeam($ownerId);
     }
 
+    /**
+     * @param int $userId
+     * @param int $limit
+     * @param int $offset
+     * @param array $filters
+     * @return Collection
+     */
     public function myTeams(int $userId, int $limit = 5, int $offset = 0, array $filters = []): Collection
     {
         $query = $this->model->newQuery()
@@ -143,6 +166,11 @@ class CommunityRepository extends BaseRepository
             ->map(fn (Community $team): array => $this->serializeTeam($team));
     }
 
+    /**
+     * @param int $userId
+     * @param array $filters
+     * @return int
+     */
     public function myTeamsCount(int $userId, array $filters = []): int
     {
         $query = $this->model->newQuery()
@@ -157,6 +185,12 @@ class CommunityRepository extends BaseRepository
         return (int) $query->count(DB::raw('distinct communities.id'));
     }
 
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @param array $filters
+     * @return Collection
+     */
     public function popularTeams(int $limit = 5, int $offset = 0, array $filters = []): Collection
     {
         $query = $this->model->newQuery()
@@ -187,6 +221,13 @@ class CommunityRepository extends BaseRepository
         return (int) $query->count();
     }
 
+    /**
+     * @param int $userId
+     * @param int $limit
+     * @param int $offset
+     * @param array $filters
+     * @return Collection
+     */
     public function invitedTeams(int $userId, int $limit = 5, int $offset = 0, array $filters = []): Collection
     {
         $query = $this->model->newQuery()
@@ -209,6 +250,11 @@ class CommunityRepository extends BaseRepository
             ->map(fn (Community $team): array => $this->serializeTeam($team));
     }
 
+    /**
+     * @param int $userId
+     * @param array $filters
+     * @return int
+     */
     public function invitedTeamsCount(int $userId, array $filters = []): int
     {
         $query = $this->model->newQuery()
@@ -223,6 +269,13 @@ class CommunityRepository extends BaseRepository
         return (int) $query->count(DB::raw('distinct communities.id'));
     }
 
+    /**
+     * @param int $userId
+     * @param int $limit
+     * @param int $offset
+     * @param array $filters
+     * @return Collection
+     */
     public function myGroups(int $userId, int $limit = 5, int $offset = 0, array $filters = []): Collection
     {
         $query = $this->model->newQuery()
@@ -246,6 +299,11 @@ class CommunityRepository extends BaseRepository
             ->map(fn (Community $group): array => $this->serializeGroup($group));
     }
 
+    /**
+     * @param int $userId
+     * @param array $filters
+     * @return int
+     */
     public function myGroupsCount(int $userId, array $filters = []): int
     {
         $query = $this->model->newQuery()
@@ -260,6 +318,12 @@ class CommunityRepository extends BaseRepository
         return (int) $query->count(DB::raw('distinct communities.id'));
     }
 
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @param array $filters
+     * @return Collection
+     */
     public function popularGroups(int $limit = 5, int $offset = 0, array $filters = []): Collection
     {
         $query = $this->model->newQuery()
@@ -279,6 +343,10 @@ class CommunityRepository extends BaseRepository
             ->map(fn (Community $group): array => $this->serializeGroup($group));
     }
 
+    /**
+     * @param array $filters
+     * @return int
+     */
     public function popularGroupsCount(array $filters = []): int
     {
         $query = $this->model->newQuery()
@@ -290,6 +358,13 @@ class CommunityRepository extends BaseRepository
         return (int) $query->count();
     }
 
+    /**
+     * @param int $userId
+     * @param int $limit
+     * @param int $offset
+     * @param array $filters
+     * @return Collection
+     */
     public function invitedGroups(int $userId, int $limit = 5, int $offset = 0, array $filters = []): Collection
     {
         $query = $this->model->newQuery()
@@ -312,6 +387,11 @@ class CommunityRepository extends BaseRepository
             ->map(fn (Community $group): array => $this->serializeGroup($group));
     }
 
+    /**
+     * @param int $userId
+     * @param array $filters
+     * @return int
+     */
     public function invitedGroupsCount(int $userId, array $filters = []): int
     {
         $query = $this->model->newQuery()
@@ -326,6 +406,10 @@ class CommunityRepository extends BaseRepository
         return (int) $query->count(DB::raw('distinct communities.id'));
     }
 
+    /**
+     * @param int $teamId
+     * @return Collection
+     */
     public function members(int $teamId): Collection
     {
         return CommunityRole::query()
@@ -339,6 +423,10 @@ class CommunityRepository extends BaseRepository
             ->values();
     }
 
+    /**
+     * @param int $teamId
+     * @return Collection
+     */
     public function applications(int $teamId): Collection
     {
         return CommunityRole::query()
@@ -351,6 +439,10 @@ class CommunityRepository extends BaseRepository
             ->values();
     }
 
+    /**
+     * @param int $teamId
+     * @return Collection
+     */
     public function admins(int $teamId): Collection
     {
         return CommunityRole::query()
@@ -363,6 +455,10 @@ class CommunityRepository extends BaseRepository
             ->values();
     }
 
+    /**
+     * @param int $teamId
+     * @return Collection
+     */
     public function blocked(int $teamId): Collection
     {
         return CommunityRole::query()
@@ -375,6 +471,11 @@ class CommunityRepository extends BaseRepository
             ->values();
     }
 
+    /**
+     * @param int $communityId
+     * @param string $eventableType
+     * @return Collection
+     */
     public function events(int $communityId, string $eventableType = 'team'): Collection
     {
         return Event::query()
@@ -393,6 +494,15 @@ class CommunityRepository extends BaseRepository
         return $this->searchEventsForCommunity($teamId, 'team', $search, $limit, $offset, $filters);
     }
 
+    /**
+     * @param int $communityId
+     * @param string $eventableType
+     * @param string $search
+     * @param int $limit
+     * @param int $offset
+     * @param array $filters
+     * @return Collection
+     */
     public function searchEventsForCommunity(int $communityId, string $eventableType, string $search = '', int $limit = 10, int $offset = 0, array $filters = []): Collection
     {
         $query = Event::query()
@@ -445,6 +555,12 @@ class CommunityRepository extends BaseRepository
             ->map(fn (Event $event): array => $this->serializeEvent($event, $eventableType));
     }
 
+    /**
+     * @param Community $team
+     * @param int $eventId
+     * @param int $status
+     * @return bool
+     */
     public function changeEventMembership(Community $team, int $eventId, int $status): bool
     {
         if (! in_array($status, [0, 1], true)) {
@@ -478,6 +594,11 @@ class CommunityRepository extends BaseRepository
         return true;
     }
 
+    /**
+     * @param int $teamId
+     * @param int|null $userId
+     * @return int|null
+     */
     public function role(int $teamId, ?int $userId): ?int
     {
         if (! $userId) {
@@ -490,11 +611,20 @@ class CommunityRepository extends BaseRepository
             ->value('role');
     }
 
+    /**
+     * @param int|null $role
+     * @return string
+     */
     public function roleLabel(?int $role): string
     {
-        return $role === null ? '' : $this->roleName($role);
+        return MembershipRole::labelFor($role);
     }
 
+    /**
+     * @param Community|null $team
+     * @param User|null $viewer
+     * @return bool
+     */
     public function isOwner(?Community $team, ?User $viewer): bool
     {
         if (! $team) {
@@ -504,6 +634,11 @@ class CommunityRepository extends BaseRepository
         return $this->role((int) $team->id, $viewer?->id) === 1;
     }
 
+    /**
+     * @param Community|null $team
+     * @param User|null $viewer
+     * @return bool
+     */
     public function canManage(?Community $team, ?User $viewer): bool
     {
         if (! $team) {
@@ -513,6 +648,11 @@ class CommunityRepository extends BaseRepository
         return in_array($this->role((int) $team->id, $viewer?->id), [1, 2], true);
     }
 
+    /**
+     * @param Community|null $team
+     * @param User|null $viewer
+     * @return bool
+     */
     public function canInvite(?Community $team, ?User $viewer): bool
     {
         if (! $team || ! $viewer) {
@@ -522,19 +662,23 @@ class CommunityRepository extends BaseRepository
         return in_array($this->role((int) $team->id, (int) $viewer->id), [1, 2, 3], true);
     }
 
+    /**
+     * @param Community $team
+     * @param User|null $viewer
+     * @return string
+     */
     public function membershipType(Community $team, ?User $viewer): string
     {
-        return match ($this->role((int) $team->id, $viewer?->id)) {
-            1 => 'owner',
-            2 => 'admin',
-            3 => 'member',
-            0 => 'applied',
-            4 => 'blocked',
-            5 => 'invited',
-            default => 'none',
-        };
+        return MembershipRole::membershipTypeFor($this->role((int) $team->id, $viewer?->id));
     }
 
+    /**
+     * @param Community $team
+     * @param User $viewer
+     * @param int $status
+     * @return bool
+     * @throws \Throwable
+     */
     public function changeMembership(Community $team, User $viewer, int $status): bool
     {
         if (! in_array($status, [0, 1], true)) {
@@ -581,6 +725,11 @@ class CommunityRepository extends BaseRepository
         });
     }
 
+    /**
+     * @param Community $team
+     * @param User $viewer
+     * @return int
+     */
     public function inviteFriends(Community $team, User $viewer): int
     {
         if (! $this->canInvite($team, $viewer)) {
@@ -633,6 +782,11 @@ class CommunityRepository extends BaseRepository
         return count($rows);
     }
 
+    /**
+     * @param Community $team
+     * @param User|null $viewer
+     * @return array
+     */
     public function permissions(Community $team, ?User $viewer): array
     {
         $settings = $this->settings($team);
@@ -660,11 +814,17 @@ class CommunityRepository extends BaseRepository
         return $settings;
     }
 
+    /**
+     * @param User $owner
+     * @param CommunityData $data
+     * @return Community
+     * @throws \Throwable
+     */
     public function createTeam(User $owner, CommunityData $data): Community
     {
         return DB::transaction(function () use ($owner, $data): Community {
-            $avatar = $this->storeCommunityImage($data->avatarFile, 'avatar');
-            $cover = $this->storeCommunityImage($data->coverFile, 'cover_page');
+            $avatar = $this->images->storeCommunityImage($data->avatarFile, 'avatar');
+            $cover = $this->images->storeCommunityImage($data->coverFile, 'cover_page');
 
             /** @var Community $team */
             $team = $this->model->newQuery()->create([
@@ -699,11 +859,17 @@ class CommunityRepository extends BaseRepository
         });
     }
 
+    /**
+     * @param User $owner
+     * @param CommunityData $data
+     * @return Community
+     * @throws \Throwable
+     */
     public function createGroup(User $owner, CommunityData $data): Community
     {
         return DB::transaction(function () use ($owner, $data): Community {
-            $avatar = $this->storeCommunityImage($data->avatarFile, 'avatar', 'group');
-            $cover = $this->storeCommunityImage($data->coverFile, 'cover_page', 'group');
+            $avatar = $this->images->storeCommunityImage($data->avatarFile, 'avatar', 'group');
+            $cover = $this->images->storeCommunityImage($data->coverFile, 'cover_page', 'group');
 
             /** @var Community $group */
             $group = $this->model->newQuery()->create([
@@ -738,13 +904,19 @@ class CommunityRepository extends BaseRepository
         });
     }
 
+    /**
+     * @param Community $team
+     * @param CommunityData $data
+     * @return bool
+     * @throws \Throwable
+     */
     public function updateTeam(Community $team, CommunityData $data): bool
     {
         return DB::transaction(function () use ($team, $data): bool {
             $oldAvatar = (string) $team->avatar;
             $oldCover = (string) $team->cover_page;
-            $avatar = $this->storeCommunityImage($data->avatarFile, 'avatar');
-            $cover = $this->storeCommunityImage($data->coverFile, 'cover_page');
+            $avatar = $this->images->storeCommunityImage($data->avatarFile, 'avatar');
+            $cover = $this->images->storeCommunityImage($data->coverFile, 'cover_page');
             $fields = [
                 'name' => $data->name,
                 'about' => $data->about,
@@ -763,11 +935,11 @@ class CommunityRepository extends BaseRepository
             $team->fill($fields)->save();
 
             if ($avatar && $oldAvatar) {
-                $this->deleteCommunityImage($oldAvatar, 'avatar');
+                $this->images->deleteCommunityImage($oldAvatar, 'avatar');
             }
 
             if ($cover && $oldCover) {
-                $this->deleteCommunityImage($oldCover, 'cover_page');
+                $this->images->deleteCommunityImage($oldCover, 'cover_page');
             }
 
             $this->settings($team)->fill([
@@ -783,13 +955,19 @@ class CommunityRepository extends BaseRepository
         });
     }
 
+    /**
+     * @param Community $group
+     * @param CommunityData $data
+     * @return bool
+     * @throws \Throwable
+     */
     public function updateGroup(Community $group, CommunityData $data): bool
     {
         return DB::transaction(function () use ($group, $data): bool {
             $oldAvatar = (string) $group->avatar;
             $oldCover = (string) $group->cover_page;
-            $avatar = $this->storeCommunityImage($data->avatarFile, 'avatar', 'group');
-            $cover = $this->storeCommunityImage($data->coverFile, 'cover_page', 'group');
+            $avatar = $this->images->storeCommunityImage($data->avatarFile, 'avatar', 'group');
+            $cover = $this->images->storeCommunityImage($data->coverFile, 'cover_page', 'group');
             $fields = [
                 'name' => $data->name,
                 'about' => $data->about,
@@ -808,11 +986,11 @@ class CommunityRepository extends BaseRepository
             $group->fill($fields)->save();
 
             if ($avatar && $oldAvatar) {
-                $this->deleteCommunityImage($oldAvatar, 'avatar', 'group');
+                $this->images->deleteCommunityImage($oldAvatar, 'avatar', 'group');
             }
 
             if ($cover && $oldCover) {
-                $this->deleteCommunityImage($oldCover, 'cover_page', 'group');
+                $this->images->deleteCommunityImage($oldCover, 'cover_page', 'group');
             }
 
             $this->settings($group)->fill([
@@ -854,7 +1032,7 @@ class CommunityRepository extends BaseRepository
             'about' => (string) $team->about,
             'place' => (string) $team->place,
             'sport_type' => (string) $team->sport_type,
-            'type_label' => $this->communityTypeLabel((int) ($team->settings?->type ?? $this->settings($team)->type), 'team'),
+            'type_label' => CommunityPrivacyType::labelFor((int) ($team->settings?->type ?? $this->settings($team)->type), 'team'),
             'avatar' => FrontAssets::communityAvatar($team),
             'cover' => FrontAssets::communityCover($team),
             'members_count' => (int) ($team->members_count ?? $team->roles()->whereIn('role', [1, 2, 3])->count()),
@@ -862,6 +1040,10 @@ class CommunityRepository extends BaseRepository
         ];
     }
 
+    /**
+     * @param Community $group
+     * @return array
+     */
     public function serializeGroup(Community $group): array
     {
         return [
@@ -870,7 +1052,7 @@ class CommunityRepository extends BaseRepository
             'about' => (string) $group->about,
             'place' => (string) $group->place,
             'sport_type' => (string) $group->sport_type,
-            'type_label' => $this->communityTypeLabel((int) ($group->settings?->type ?? $this->settings($group)->type), 'group'),
+            'type_label' => CommunityPrivacyType::labelFor((int) ($group->settings?->type ?? $this->settings($group)->type), 'group'),
             'avatar' => FrontAssets::communityAvatar($group),
             'cover' => FrontAssets::communityCover($group),
             'members_count' => (int) ($group->members_count ?? $group->roles()->whereIn('role', [1, 2, 3])->count()),
@@ -878,6 +1060,10 @@ class CommunityRepository extends BaseRepository
         ];
     }
 
+    /**
+     * @param CommunityRole $role
+     * @return array|null
+     */
     private function serializeMember(CommunityRole $role): ?array
     {
         $user = $role->user;
@@ -894,11 +1080,16 @@ class CommunityRepository extends BaseRepository
             'avatar' => FrontAssets::userAvatar($user),
             'city' => (string) $user->city,
             'role' => (int) $role->role,
-            'role_name' => $this->roleName((int) $role->role),
+            'role_name' => MembershipRole::labelFor((int) $role->role),
             'is_online' => false,
         ];
     }
 
+    /**
+     * @param Event $event
+     * @param string $participantType
+     * @return array
+     */
     private function serializeEvent(Event $event, string $participantType = 'team'): array
     {
         return [
@@ -922,30 +1113,6 @@ class CommunityRepository extends BaseRepository
         ];
     }
 
-    private function roleName(int $role): string
-    {
-        return match ($role) {
-            1 => 'Владелец',
-            2 => 'Администратор',
-            3 => 'Участник',
-            0 => 'Заявка',
-            4 => 'Заблокирован',
-            5 => 'Приглашен',
-            default => '',
-        };
-    }
-
-    private function communityTypeLabel(int $type, string $kind = 'team'): string
-    {
-        $noun = $kind === 'group' ? 'группа' : 'команда';
-
-        return match ($type) {
-            1 => 'Приватная ' . $noun,
-            2 => 'Закрытая ' . $noun,
-            default => 'Открытая ' . $noun,
-        };
-    }
-
     private function permissionAllows(int $permission, ?int $role, bool $isWall): bool
     {
         if ($role === 4 || $permission === 1) {
@@ -963,6 +1130,11 @@ class CommunityRepository extends BaseRepository
         return true;
     }
 
+    /**
+     * @param Builder $query
+     * @param array $filters
+     * @return void
+     */
     private function applyCommunityFilters(Builder $query, array $filters): void
     {
         $place = trim((string) ($filters['place'] ?? ''));
@@ -996,6 +1168,11 @@ class CommunityRepository extends BaseRepository
         }
     }
 
+    /**
+     * @param Community $community
+     * @param int $cityId
+     * @return void
+     */
     private function syncGeoTarget(Community $community, int $cityId): void
     {
         if ($cityId < 1) {
@@ -1010,28 +1187,4 @@ class CommunityRepository extends BaseRepository
         ]);
     }
 
-    private function storeCommunityImage(?UploadedFile $file, string $directory, string $kind = 'team'): ?string
-    {
-        if (! $file) {
-            return null;
-        }
-
-        $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
-        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
-        $filename = Str::lower(md5(microtime(true) . $file->getClientOriginalName() . Str::random(8))) . '.' . $extension;
-
-        return Storage::disk('public')->putFileAs('images/' . $kind . 'content/' . $directory, $file, $filename)
-            ? $filename
-            : null;
-    }
-
-    private function deleteCommunityImage(string $filename, string $directory, string $kind = 'team'): void
-    {
-        Storage::disk('public')->delete('images/' . $kind . 'content/' . $directory . '/' . $filename);
-
-        $legacyPath = public_path('uploads/images/' . $kind . 'content/' . $directory . '/' . $filename);
-        if (is_file($legacyPath)) {
-            @unlink($legacyPath);
-        }
-    }
 }

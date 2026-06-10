@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\DTO\Album\AlbumData;
 use App\DTO\Video\VideoData;
+use App\Helpers\StringHelper;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Share;
@@ -11,13 +12,14 @@ use App\Models\User;
 use App\Models\Video;
 use App\Models\VideoView;
 use App\Models\VideoAlbums;
+use App\Service\VideoService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
 class VideoalbumRepository extends BaseRepository
 {
-    public function __construct(VideoAlbums $model)
+    public function __construct(VideoAlbums $model, private readonly VideoService $videos)
     {
         parent::__construct($model);
     }
@@ -231,7 +233,7 @@ class VideoalbumRepository extends BaseRepository
 
     public function addVideoToAlbum(User $user, VideoAlbums $album, VideoData $data): Video
     {
-        $videoData = $this->detectVideo($data->link);
+        $videoData = $this->videos->detectVideo($data->link);
 
         if (! $videoData) {
             throw new RuntimeException('Укажите корректную ссылку на YouTube-видео.');
@@ -248,25 +250,6 @@ class VideoalbumRepository extends BaseRepository
         ])->load('album');
 
         return $video;
-    }
-
-    public function detectVideo(string $link): ?array
-    {
-        $link = trim($link);
-
-        if ($link === '') {
-            return null;
-        }
-
-        if (preg_match('~youtu\.be/([^\?&/]+)~i', $link, $matches)) {
-            return ['provider' => 'youtube', 'video' => $matches[1]];
-        }
-
-        if (preg_match('~(?:v/|embed/|watch\?(?:.*&)?v=)([^&\?]+)~i', $link, $matches)) {
-            return ['provider' => 'youtube', 'video' => $matches[1]];
-        }
-
-        return null;
     }
 
     public function deleteAlbum(VideoAlbums $album): bool
@@ -313,8 +296,8 @@ class VideoalbumRepository extends BaseRepository
 
         return [
             'id' => (int) $video->id,
-            'thumb' => $this->thumbUrl((string) $video->provider, (string) $video->video),
-            'player' => $this->playerHtml((string) $video->provider, (string) $video->video),
+            'thumb' => StringHelper::thumbUrl((string) $video->provider, (string) $video->video),
+            'player' => $this->videos->playerHtml((string) $video->provider, (string) $video->video),
             'description' => (string) $video->description,
             'owner_id' => (int) $video->owner_id,
             'views_count' => (int) $video->views()->count(),
@@ -337,26 +320,8 @@ class VideoalbumRepository extends BaseRepository
             'name' => (string) $album->name,
             'type' => (string) $album->videoalbumable_type,
             'owner_id' => (int) $album->owner_id,
-            'image' => $video ? $this->thumbUrl((string) $video->provider, (string) $video->video) : null,
+            'image' => $video ? StringHelper::thumbUrl((string) $video->provider, (string) $video->video) : null,
         ];
-    }
-
-    public function thumbUrl(string $provider, string $video): string
-    {
-        if ($provider === 'youtube' && $video !== '') {
-            return 'https://img.youtube.com/vi/' . rawurlencode($video) . '/hqdefault.jpg';
-        }
-
-        return asset('frontend/images/default_group.png');
-    }
-
-    public function playerHtml(string $provider, string $video): string
-    {
-        if ($provider === 'youtube' && $video !== '') {
-            return '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/' . e($video) . '" frameborder="0" allowfullscreen></iframe>';
-        }
-
-        return '';
     }
 
     private function deleteVideoRelations(Video $video): void

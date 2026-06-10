@@ -25,6 +25,10 @@ class UserRepository extends BaseRepository
             ->count();
     }
 
+    /**
+     * @param string $email
+     * @return User|null
+     */
     public function findForLogin(string $email): ?User
     {
         /** @var User|null $user */
@@ -38,6 +42,10 @@ class UserRepository extends BaseRepository
         return $user;
     }
 
+    /**
+     * @param int $id
+     * @return User|null
+     */
     public function findActive(int $id): ?User
     {
         /** @var User|null $user */
@@ -51,21 +59,8 @@ class UserRepository extends BaseRepository
         return $user;
     }
 
-    public function passwordMatchesLegacy(User $user, string $password): bool
-    {
-        return strlen((string) $user->password) === 32
-            && hash_equals((string) $user->password, md5($password));
-    }
-
     public function passwordUsesBcrypt(User $user): bool
     {
         return password_get_info((string) $user->password)['algoName'] === 'bcrypt';
-    }
-
-    public function replacePassword(User $user, string $passwordHash): bool
-    {
-        $user->password = $passwordHash;
-
-        return $user->save();
     }
 }

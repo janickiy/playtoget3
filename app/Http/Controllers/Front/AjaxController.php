@@ -7,6 +7,7 @@ use App\DTO\Photo\PhotoUploadData;
 use App\DTO\Profile\CommentData;
 use App\DTO\Profile\ImageCropData;
 use App\Helpers\FrontAssets;
+use App\Helpers\StringHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Front\Ajax\AddCommentRequest;
 use App\Http\Requests\Front\Ajax\AddMessageRequest;
@@ -32,6 +33,8 @@ use App\Repositories\ProfileRepository;
 use App\Repositories\SportBlockRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\VideoalbumRepository;
+use App\Service\ProfileCoverCropService;
+use App\Service\VideoService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -54,6 +57,8 @@ class AjaxController extends Controller
         private readonly CommunityRepository  $communities,
         private readonly EventRepository      $events,
         private readonly SportBlockRepository $sportBlocks,
+        private readonly ProfileCoverCropService $profileCovers,
+        private readonly VideoService         $videos,
     )
     {
     }
@@ -949,8 +954,8 @@ class AjaxController extends Controller
             'lastname' => (string)($owner?->lastname ?? ''),
             'created' => $video->created_at?->format('d.m.Y H:i') ?? '',
             'description' => (string)$video->description,
-            'thumb' => $this->videoAlbums->thumbUrl((string)$video->provider, (string)$video->video),
-            'video' => $this->videoAlbums->playerHtml((string)$video->provider, (string)$video->video),
+            'thumb' => StringHelper::thumbUrl((string)$video->provider, (string)$video->video),
+            'video' => $this->videos->playerHtml((string)$video->provider, (string)$video->video),
             'liked' => Like::query()
                 ->where('likeable_type', 'video')
                 ->where('content_id', $video->id)
@@ -1163,7 +1168,7 @@ class AjaxController extends Controller
         ]);
 
         try {
-            $cover = $this->profiles->cropTemporaryCover(
+            $cover = $this->profileCovers->cropTemporaryCover(
                 $viewer,
                 $cropData,
             );

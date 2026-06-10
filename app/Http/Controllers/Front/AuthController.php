@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     /**
-     * Проверяет пользователя, обновляет legacy-пароль при необходимости и авторизует на сайт
+     * Проверяет пользователя по bcrypt-паролю и авторизует на сайт.
      *
      * @param LoginRequest $request
      * @param UserRepository $users
@@ -28,11 +28,7 @@ class AuthController extends Controller
                 ->withErrors(['username' => 'Пользователь не найден или доступ к аккаунту ограничен.']);
         }
 
-        if ($users->passwordMatchesLegacy($user, $request->password())) {
-            $users->replacePassword($user, Hash::make($request->password()));
-
-            $user->refresh();
-        } elseif (!$users->passwordUsesBcrypt($user) || !Hash::check($request->password(), $user->password)) {
+        if (!$users->passwordUsesBcrypt($user) || !Hash::check($request->password(), $user->password)) {
             return back()
                 ->withInput($request->only('username'))
                 ->withErrors(['username' => 'Неверный email или пароль.']);

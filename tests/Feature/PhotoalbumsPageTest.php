@@ -10,7 +10,9 @@ use App\Models\User;
 use App\Repositories\FriendRepository;
 use App\Repositories\PhotoalbumRepository;
 use App\Repositories\ProfileRepository;
+use App\Service\AlbumPhotoStorageService;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
@@ -158,6 +160,34 @@ class PhotoalbumsPageTest extends TestCase
                 'id' => 10,
                 'error' => null,
             ]);
+    }
+
+    public function test_album_photo_storage_service_saves_resized_photo_and_thumbnail(): void
+    {
+        Storage::fake('public');
+
+        $service = new AlbumPhotoStorageService();
+        $result = $service->storePhoto(UploadedFile::fake()->image('photo.jpg', 1200, 900), 'user');
+
+        $originalPath = 'images/photogallery/user/' . $result['photo'];
+        $smallPath = 'images/photogallery/user/' . $result['small_photo'];
+        $originalFile = tempnam(sys_get_temp_dir(), 'album-photo-');
+        $smallFile = tempnam(sys_get_temp_dir(), 'album-thumb-');
+
+        Storage::disk('public')->assertExists($originalPath);
+        Storage::disk('public')->assertExists($smallPath);
+        file_put_contents($originalFile, Storage::disk('public')->get($originalPath));
+        file_put_contents($smallFile, Storage::disk('public')->get($smallPath));
+
+        [$originalWidth, $originalHeight] = getimagesize($originalFile);
+        [$smallWidth, $smallHeight] = getimagesize($smallFile);
+        unlink($originalFile);
+        unlink($smallFile);
+
+        $this->assertSame(800, $originalWidth);
+        $this->assertSame(600, $originalHeight);
+        $this->assertSame(400, $smallWidth);
+        $this->assertSame(300, $smallHeight);
     }
 
     private function mockProfile(User $viewer): void

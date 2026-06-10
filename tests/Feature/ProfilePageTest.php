@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\UserSetting;
 use App\Repositories\FriendRepository;
 use App\Repositories\ProfileRepository;
+use App\Service\ProfileCoverCropService;
+use App\Service\ProfileImageService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Mockery\MockInterface;
@@ -174,7 +176,7 @@ class ProfilePageTest extends TestCase
         Storage::fake('public');
 
         $viewer = $this->user(1, 'Александр', 'Яницкий');
-        $repository = new ProfileRepository(new User());
+        $repository = new ProfileRepository(new User(), new ProfileImageService());
         $result = $repository->cropTemporaryAvatar($viewer, ImageCropData::fromArray([
             'file' => UploadedFile::fake()->image('avatar.png', 600, 500),
             'x' => 30,
@@ -193,6 +195,58 @@ class ProfilePageTest extends TestCase
 
         $this->assertSame(300, $width);
         $this->assertSame(300, $height);
+    }
+
+    public function test_profile_cover_crop_service_creates_header_temporary_image(): void
+    {
+        Storage::fake('public');
+
+        $viewer = $this->user(1, 'Александр', 'Яницкий');
+        $service = new ProfileCoverCropService();
+        $result = $service->cropTemporaryCover($viewer, ImageCropData::fromArray([
+            'file' => UploadedFile::fake()->image('cover.png', 1600, 900),
+            'x' => 0,
+            'y' => 0,
+            'w' => 1600,
+            'h' => 900,
+        ]));
+        $path = 'images/tmp/profile/cover_page/' . $result['file'];
+        $temporaryFile = tempnam(sys_get_temp_dir(), 'cover-crop-');
+
+        Storage::disk('public')->assertExists($path);
+        file_put_contents($temporaryFile, Storage::disk('public')->get($path));
+
+        [$width, $height] = getimagesize($temporaryFile);
+        unlink($temporaryFile);
+
+        $this->assertSame(1200, $width);
+        $this->assertSame(350, $height);
+    }
+
+    public function test_profile_image_service_stores_promotes_and_deletes_profile_images(): void
+    {
+        Storage::fake('public');
+
+        $service = new ProfileImageService();
+        Storage::disk('public')->put('images/tmp/profile/avatar/1_tmp_avatar.jpg', 'avatar');
+        Storage::disk('public')->put('images/tmp/profile/cover_page/1_tmp_cover.jpg', 'cover');
+
+        $avatar = $service->promoteTemporaryAvatar('1_tmp_avatar.jpg', 1);
+        $cover = $service->promoteTemporaryCover('1_tmp_cover.jpg', 1);
+        $stored = $service->storeUserImage(UploadedFile::fake()->image('cover.jpeg', 10, 10), 'user/cover_page', 1);
+
+        $this->assertSame('1_tmp_avatar.jpg', $avatar);
+        $this->assertSame('1_tmp_cover.jpg', $cover);
+        Storage::disk('public')->assertExists('images/user/avatar/' . $avatar);
+        Storage::disk('public')->assertExists('images/user/cover_page/' . $cover);
+        Storage::disk('public')->assertMissing('images/tmp/profile/avatar/1_tmp_avatar.jpg');
+        Storage::disk('public')->assertMissing('images/tmp/profile/cover_page/1_tmp_cover.jpg');
+        $this->assertMatchesRegularExpression('/^1_[a-z0-9]+\.jpg$/', $stored);
+        Storage::disk('public')->assertExists('images/user/cover_page/' . $stored);
+
+        $service->deleteUserImage('user/cover_page', $stored);
+
+        Storage::disk('public')->assertMissing('images/user/cover_page/' . $stored);
     }
 
     public function test_profile_page_renders_legacy_wall_layout(): void

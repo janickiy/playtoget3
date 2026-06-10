@@ -22,6 +22,13 @@ class MessageRepository extends BaseRepository
         parent::__construct($model);
     }
 
+    /**
+     * @param User $viewer
+     * @param User $receiver
+     * @param int $limit
+     * @param int $offset
+     * @return Collection
+     */
     public function conversation(User $viewer, User $receiver, int $limit = 10, int $offset = 0): Collection
     {
         return $this->visibleBetweenQuery($viewer->id, $receiver->id)
@@ -36,6 +43,13 @@ class MessageRepository extends BaseRepository
             ->map(fn (Message $message): array => $this->serializeMessage($message));
     }
 
+    /**
+     * @param User $viewer
+     * @param User $receiver
+     * @param int $limit
+     * @param int $offset
+     * @return bool
+     */
     public function hasMoreConversation(User $viewer, User $receiver, int $limit = 10, int $offset = 0): bool
     {
         return $this->visibleBetweenQuery($viewer->id, $receiver->id)
@@ -44,6 +58,11 @@ class MessageRepository extends BaseRepository
             ->exists();
     }
 
+    /**
+     * @param User $viewer
+     * @param int $limit
+     * @return Collection
+     */
     public function dialogues(User $viewer, int $limit = 100): Collection
     {
         $seenUsers = [];
@@ -86,6 +105,13 @@ class MessageRepository extends BaseRepository
             ->values();
     }
 
+    /**
+     * @param User $sender
+     * @param User $receiver
+     * @param MessageData $data
+     * @return Message
+     * @throws \Throwable
+     */
     public function createMessage(User $sender, User $receiver, MessageData $data): Message
     {
         /** @var Message $message */
@@ -112,6 +138,13 @@ class MessageRepository extends BaseRepository
         return $message->load(['sender', 'attachments.photo.album']);
     }
 
+    /**
+     * @param User $viewer
+     * @param int $lastId
+     * @param User|null $receiver
+     * @param int $limit
+     * @return Collection
+     */
     public function newMessages(User $viewer, int $lastId = 0, ?User $receiver = null, int $limit = 20): Collection
     {
         $query = $receiver
@@ -134,6 +167,11 @@ class MessageRepository extends BaseRepository
         return $messages->map(fn (Message $message): array => $this->serializeMessage($message));
     }
 
+    /**
+     * @param User $viewer
+     * @param User $sender
+     * @return void
+     */
     public function markConversationRead(User $viewer, User $sender): void
     {
         $this->model->newQuery()
@@ -143,6 +181,10 @@ class MessageRepository extends BaseRepository
             ->update(['status' => 1]);
     }
 
+    /**
+     * @param User $viewer
+     * @return int
+     */
     public function unreadCount(User $viewer): int
     {
         return $this->model->newQuery()
@@ -151,6 +193,11 @@ class MessageRepository extends BaseRepository
             ->count();
     }
 
+    /**
+     * @param User $sender
+     * @param User $receiver
+     * @return bool
+     */
     public function canSendMessage(User $sender, User $receiver): bool
     {
         if ((int) $sender->id === (int) $receiver->id || $receiver->banned || $receiver->deleted) {
@@ -170,6 +217,11 @@ class MessageRepository extends BaseRepository
         };
     }
 
+    /**
+     * @param User $viewer
+     * @param int $messageId
+     * @return bool
+     */
     public function deleteMessageFor(User $viewer, int $messageId): bool
     {
         /** @var Message|null $message */
@@ -199,6 +251,11 @@ class MessageRepository extends BaseRepository
         return $message->save();
     }
 
+    /**
+     * @param User $viewer
+     * @param User $partner
+     * @return bool
+     */
     public function deleteDialogFor(User $viewer, User $partner): bool
     {
         $ids = $this->visibleBetweenQuery($viewer->id, $partner->id)->pluck('id');
@@ -210,6 +267,10 @@ class MessageRepository extends BaseRepository
         return true;
     }
 
+    /**
+     * @param Message $message
+     * @return array
+     */
     public function serializeMessage(Message $message): array
     {
         $sender = $message->sender;
@@ -231,6 +292,11 @@ class MessageRepository extends BaseRepository
         ];
     }
 
+    /**
+     * @param int $viewerId
+     * @param int $otherId
+     * @return Builder
+     */
     private function visibleBetweenQuery(int $viewerId, int $otherId): Builder
     {
         return $this->model->newQuery()
@@ -255,6 +321,10 @@ class MessageRepository extends BaseRepository
             });
     }
 
+    /**
+     * @param int $viewerId
+     * @return Builder
+     */
     private function visibleForViewerQuery(int $viewerId): Builder
     {
         return $this->model->newQuery()
@@ -277,6 +347,11 @@ class MessageRepository extends BaseRepository
             });
     }
 
+    /**
+     * @param int $userId
+     * @param int $friendId
+     * @return bool
+     */
     private function hasBlockBetween(int $userId, int $friendId): bool
     {
         return Friend::query()
@@ -293,6 +368,11 @@ class MessageRepository extends BaseRepository
             ->exists();
     }
 
+    /**
+     * @param int $userId
+     * @param int $friendId
+     * @return bool
+     */
     private function isFriend(int $userId, int $friendId): bool
     {
         return Friend::query()
@@ -309,6 +389,10 @@ class MessageRepository extends BaseRepository
             ->exists();
     }
 
+    /**
+     * @param array|string|null $attach
+     * @return array
+     */
     private function attachmentIds(array|string|null $attach): array
     {
         if (is_string($attach)) {
@@ -328,6 +412,10 @@ class MessageRepository extends BaseRepository
             ->all();
     }
 
+    /**
+     * @param string $content
+     * @return string
+     */
     private function renderContent(string $content): string
     {
         $escaped = e($content);
@@ -340,6 +428,10 @@ class MessageRepository extends BaseRepository
         return nl2br($linked ?? $escaped, false);
     }
 
+    /**
+     * @param Collection $attachments
+     * @return string
+     */
     private function renderAttachments(Collection $attachments): string
     {
         $items = $attachments

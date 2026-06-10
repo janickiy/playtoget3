@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\DTO\Event\EventData;
+use App\Enums\MembershipRole;
 use App\Helpers\FrontAssets;
 use App\Models\AcceptedEventMember;
 use App\Models\Community;
@@ -12,18 +13,19 @@ use App\Models\GeoCity;
 use App\Models\GeoTarget;
 use App\Models\SportType;
 use App\Models\User;
+use App\Service\EventCoverService;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class EventRepository extends BaseRepository
 {
-    public function __construct(Event $model)
+    public function __construct(
+        Event $model,
+        private readonly EventCoverService $covers
+    )
     {
         parent::__construct($model);
     }
@@ -38,6 +40,11 @@ class EventRepository extends BaseRepository
             ->get();
     }
 
+    /**
+     * @param CarbonImmutable $monthStart
+     * @param CarbonImmutable $monthEnd
+     * @return Collection
+     */
     public function calendarDays(CarbonImmutable $monthStart, CarbonImmutable $monthEnd): Collection
     {
         $events = $this->model->newQuery()
@@ -90,6 +97,13 @@ class EventRepository extends BaseRepository
         return collect($days);
     }
 
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @param array $filters
+     * @param User|null $viewer
+     * @return Collection
+     */
     public function popularEvents(int $limit = 5, int $offset = 0, array $filters = [], ?User $viewer = null): Collection
     {
         $query = $this->eventListQuery($filters);
@@ -113,6 +127,13 @@ class EventRepository extends BaseRepository
         return (int) $this->eventListQuery($filters)->count();
     }
 
+    /**
+     * @param int $userId
+     * @param int $limit
+     * @param int $offset
+     * @param array $filters
+     * @return Collection
+     */
     public function myEvents(int $userId, int $limit = 5, int $offset = 0, array $filters = []): Collection
     {
         $query = $this->eventListQuery($filters)
@@ -135,6 +156,11 @@ class EventRepository extends BaseRepository
             ->map(fn (Event $event): array => $this->serializeListEvent($event, null, (int) $event->viewer_role));
     }
 
+    /**
+     * @param int $userId
+     * @param array $filters
+     * @return int
+     */
     public function myEventsCount(int $userId, array $filters = []): int
     {
         $query = $this->eventListQuery($filters)
@@ -146,6 +172,13 @@ class EventRepository extends BaseRepository
         return (int) $query->count(DB::raw('distinct events.id'));
     }
 
+    /**
+     * @param int $userId
+     * @param int $limit
+     * @param int $offset
+     * @param array $filters
+     * @return Collection
+     */
     public function invitedEvents(int $userId, int $limit = 5, int $offset = 0, array $filters = []): Collection
     {
         $query = $this->eventListQuery($filters)
@@ -167,6 +200,11 @@ class EventRepository extends BaseRepository
             ->map(fn (Event $event): array => $this->serializeListEvent($event, null, 5));
     }
 
+    /**
+     * @param int $userId
+     * @param array $filters
+     * @return int
+     */
     public function invitedEventsCount(int $userId, array $filters = []): int
     {
         $query = $this->eventListQuery($filters)
@@ -222,7 +260,7 @@ class EventRepository extends BaseRepository
             'date_from' => $event->date_from ? 'Начало: ' . $event->date_from->format('d.m.Y в H:i') : '',
             'date_to' => $event->date_to ? 'Окончание: ' . $event->date_to->format('d.m.Y в H:i') : '',
             'description' => (string) $event->description,
-            'role' => $role !== null ? mb_strtolower($this->roleName((int) $role)) : '',
+            'role' => $role !== null ? mb_strtolower(MembershipRole::labelFor((int) $role)) : '',
             'participants' => 'Участвуют ' . $participantsCount . ' ' . $this->personWord($participantsCount),
             'active' => ! $event->date_to || $event->date_to->isFuture(),
             'status' => ! $event->date_to || $event->date_to->isFuture()
@@ -232,6 +270,11 @@ class EventRepository extends BaseRepository
         ];
     }
 
+    /**
+     * @param int $eventId
+     * @param int|null $userId
+     * @return int|null
+     */
     public function role(int $eventId, ?int $userId): ?int
     {
         if (! $userId) {
@@ -249,22 +292,24 @@ class EventRepository extends BaseRepository
 
     public function roleLabel(?int $role): string
     {
-        return $role === null ? '' : $this->roleName($role);
+        return MembershipRole::labelFor($role);
     }
 
+    /**
+     * @param Event $event
+     * @param User|null $viewer
+     * @return string
+     */
     public function membershipType(Event $event, ?User $viewer): string
     {
-        return match ($this->role((int) $event->id, $viewer?->id)) {
-            1 => 'owner',
-            2 => 'admin',
-            3 => 'member',
-            0 => 'applied',
-            4 => 'blocked',
-            5 => 'invited',
-            default => 'none',
-        };
+        return MembershipRole::membershipTypeFor($this->role((int) $event->id, $viewer?->id));
     }
 
+    /**
+     * @param Event|null $event
+     * @param User|null $viewer
+     * @return bool
+     */
     public function canManage(?Event $event, ?User $viewer): bool
     {
         if (! $event || ! $viewer) {
@@ -274,6 +319,11 @@ class EventRepository extends BaseRepository
         return in_array($this->role((int) $event->id, (int) $viewer->id), [1, 2], true);
     }
 
+    /**
+     * @param Event|null $event
+     * @param User|null $viewer
+     * @return bool
+     */
     public function canInvite(?Event $event, ?User $viewer): bool
     {
         if (! $event || ! $viewer) {
@@ -283,6 +333,11 @@ class EventRepository extends BaseRepository
         return in_array($this->role((int) $event->id, (int) $viewer->id), [1, 2, 3], true);
     }
 
+    /**
+     * @param Event $event
+     * @param User|null $viewer
+     * @return bool[]
+     */
     public function permissions(Event $event, ?User $viewer): array
     {
         $role = $this->role((int) $event->id, $viewer?->id);
@@ -294,6 +349,10 @@ class EventRepository extends BaseRepository
         ];
     }
 
+    /**
+     * @param int $eventId
+     * @return Collection
+     */
     public function members(int $eventId): Collection
     {
         return AcceptedEventMember::query()
@@ -308,6 +367,10 @@ class EventRepository extends BaseRepository
             ->values();
     }
 
+    /**
+     * @param int $eventId
+     * @return Collection
+     */
     public function applications(int $eventId): Collection
     {
         return AcceptedEventMember::query()
@@ -321,6 +384,11 @@ class EventRepository extends BaseRepository
             ->values();
     }
 
+    /**
+     * @param int $eventId
+     * @param string $type
+     * @return Collection
+     */
     public function communities(int $eventId, string $type): Collection
     {
         return AcceptedEventMember::query()
@@ -354,6 +422,11 @@ class EventRepository extends BaseRepository
             });
     }
 
+    /**
+     * @param int $eventId
+     * @param string $type
+     * @return int
+     */
     public function membersCount(int $eventId, string $type = 'user'): int
     {
         return AcceptedEventMember::query()
@@ -363,6 +436,13 @@ class EventRepository extends BaseRepository
             ->count();
     }
 
+    /**
+     * @param Event $event
+     * @param User $viewer
+     * @param int $status
+     * @return bool
+     * @throws \Throwable
+     */
     public function changeMembership(Event $event, User $viewer, int $status): bool
     {
         if (! in_array($status, [0, 1], true)) {
@@ -407,6 +487,11 @@ class EventRepository extends BaseRepository
         });
     }
 
+    /**
+     * @param Event $event
+     * @param User $viewer
+     * @return int
+     */
     public function inviteFriends(Event $event, User $viewer): int
     {
         if (! $this->canInvite($event, $viewer)) {
@@ -459,6 +544,12 @@ class EventRepository extends BaseRepository
         return $inviteIds->count();
     }
 
+    /**
+     * @param User $owner
+     * @param EventData $data
+     * @return Event
+     * @throws \Throwable
+     */
     public function createEvent(User $owner, EventData $data): Event
     {
         return DB::transaction(function () use ($owner, $data): Event {
@@ -469,7 +560,7 @@ class EventRepository extends BaseRepository
                 'date_to' => $data->dateTo,
                 'description' => $data->description,
                 'sport_type' => $data->sportType,
-                'cover_page' => $this->storeCover($data->coverFile) ?? '',
+                'cover_page' => $this->covers->storeCover($data->coverFile) ?? '',
                 'place' => $data->place ?: $this->cityName($data->cityId),
                 'address' => $data->address,
                 'moderate' => true,
@@ -489,11 +580,17 @@ class EventRepository extends BaseRepository
         });
     }
 
+    /**
+     * @param Event $event
+     * @param EventData $data
+     * @return bool
+     * @throws \Throwable
+     */
     public function updateEvent(Event $event, EventData $data): bool
     {
         return DB::transaction(function () use ($event, $data): bool {
             $oldCover = (string) $event->cover_page;
-            $cover = $this->storeCover($data->coverFile);
+            $cover = $this->covers->storeCover($data->coverFile);
             $fields = [
                 'name' => $data->name,
                 'date_from' => $data->dateFrom,
@@ -512,13 +609,17 @@ class EventRepository extends BaseRepository
             $this->syncGeoTarget($event, $data->cityId);
 
             if ($cover && $oldCover) {
-                $this->deleteCover($oldCover);
+                $this->covers->deleteCover($oldCover);
             }
 
             return true;
         });
     }
 
+    /**
+     * @param int|null $cityId
+     * @return string
+     */
     public function cityName(?int $cityId): string
     {
         if (! $cityId) {
@@ -528,6 +629,10 @@ class EventRepository extends BaseRepository
         return (string) (GeoCity::query()->find($cityId)?->name_ru ?? '');
     }
 
+    /**
+     * @param array $filters
+     * @return Builder
+     */
     private function eventListQuery(array $filters = []): Builder
     {
         $query = $this->model->newQuery()
@@ -538,6 +643,11 @@ class EventRepository extends BaseRepository
         return $query;
     }
 
+    /**
+     * @param Builder $query
+     * @param array $filters
+     * @return void
+     */
     private function applyEventFilters(Builder $query, array $filters): void
     {
         $place = trim((string) ($filters['place'] ?? ''));
@@ -592,6 +702,10 @@ class EventRepository extends BaseRepository
         return (string) (SportType::query()->find($sportId)?->name ?? '');
     }
 
+    /**
+     * @param AcceptedEventMember $member
+     * @return array|null
+     */
     private function serializeUserMember(AcceptedEventMember $member): ?array
     {
         $user = $member->member;
@@ -608,22 +722,9 @@ class EventRepository extends BaseRepository
             'avatar' => FrontAssets::userAvatar($user),
             'city' => (string) $user->city,
             'role' => (int) $member->role,
-            'role_name' => $this->roleName((int) $member->role),
+            'role_name' => MembershipRole::labelFor((int) $member->role),
             'is_online' => false,
         ];
-    }
-
-    private function roleName(int $role): string
-    {
-        return match ($role) {
-            1 => 'Владелец',
-            2 => 'Администратор',
-            3 => 'Участник',
-            0 => 'Заявка',
-            4 => 'Заблокирован',
-            5 => 'Приглашен',
-            default => '',
-        };
     }
 
     private function personWord(int $count): string
@@ -642,6 +743,11 @@ class EventRepository extends BaseRepository
         };
     }
 
+    /**
+     * @param Event $event
+     * @param int $cityId
+     * @return void
+     */
     private function syncGeoTarget(Event $event, int $cityId): void
     {
         if ($cityId < 1) {
@@ -656,28 +762,4 @@ class EventRepository extends BaseRepository
         ]);
     }
 
-    private function storeCover(?UploadedFile $file): ?string
-    {
-        if (! $file) {
-            return null;
-        }
-
-        $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
-        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
-        $filename = Str::lower(md5(microtime(true) . $file->getClientOriginalName() . Str::random(8))) . '.' . $extension;
-
-        return Storage::disk('public')->putFileAs('images/events/cover_page', $file, $filename)
-            ? $filename
-            : null;
-    }
-
-    private function deleteCover(string $filename): void
-    {
-        Storage::disk('public')->delete('images/events/cover_page/' . $filename);
-
-        $legacyPath = public_path('uploads/images/events/cover_page/' . $filename);
-        if (is_file($legacyPath)) {
-            @unlink($legacyPath);
-        }
-    }
 }

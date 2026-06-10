@@ -8,19 +8,25 @@ use App\Models\GeoCity;
 use App\Models\GeoTarget;
 use App\Models\SportBlock;
 use App\Models\User;
+use App\Service\SportBlockAvatarService;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class SportBlockRepository extends BaseRepository
 {
-    public function __construct(SportBlock $model)
+    public function __construct(SportBlock $model, private readonly SportBlockAvatarService $avatars)
     {
         parent::__construct($model);
     }
 
+    /**
+     * @param string $type
+     * @param array $filters
+     * @param int|null $limit
+     * @param int $offset
+     * @return Collection
+     */
     public function byType(string $type, array $filters = [], ?int $limit = null, int $offset = 0): Collection
     {
         $query = $this->queryByType($type, $filters)->orderBy('name');
@@ -32,17 +38,34 @@ class SportBlockRepository extends BaseRepository
         return $query->get();
     }
 
+    /**
+     * @param string $type
+     * @param array $filters
+     * @param int|null $limit
+     * @param int $offset
+     * @return Collection
+     */
     public function serializedByType(string $type, array $filters = [], ?int $limit = null, int $offset = 0): Collection
     {
         return $this->byType($type, $filters, $limit, $offset)
             ->map(fn (SportBlock $sportBlock): array => $this->serialize($sportBlock));
     }
 
+    /**
+     * @param string $type
+     * @param array $filters
+     * @return int
+     */
     public function countByType(string $type, array $filters = []): int
     {
         return (int) $this->queryByType($type, $filters)->count();
     }
 
+    /**
+     * @param int $id
+     * @param string $type
+     * @return SportBlock|null
+     */
     public function findByType(int $id, string $type): ?SportBlock
     {
         /** @var SportBlock|null $sportBlock */
@@ -55,6 +78,10 @@ class SportBlockRepository extends BaseRepository
         return $sportBlock;
     }
 
+    /**
+     * @param SportBlock $sportBlock
+     * @return array
+     */
     public function serialize(SportBlock $sportBlock): array
     {
         return [
@@ -73,10 +100,17 @@ class SportBlockRepository extends BaseRepository
         ];
     }
 
+    /**
+     * @param User $owner
+     * @param string $type
+     * @param SportBlockData $data
+     * @return SportBlock
+     * @throws \Throwable
+     */
     public function createBlock(User $owner, string $type, SportBlockData $data): SportBlock
     {
         return DB::transaction(function () use ($owner, $type, $data): SportBlock {
-            $avatar = $this->storeAvatar($data->avatarFile);
+            $avatar = $this->avatars->storeAvatar($data->avatarFile);
 
             /** @var SportBlock $sportBlock */
             $sportBlock = $this->model->newQuery()->create([
@@ -100,10 +134,16 @@ class SportBlockRepository extends BaseRepository
         });
     }
 
+    /**
+     * @param SportBlock $sportBlock
+     * @param SportBlockData $data
+     * @return bool
+     * @throws \Throwable
+     */
     public function updateBlock(SportBlock $sportBlock, SportBlockData $data): bool
     {
         return DB::transaction(function () use ($sportBlock, $data): bool {
-            $avatar = $this->storeAvatar($data->avatarFile);
+            $avatar = $this->avatars->storeAvatar($data->avatarFile);
 
             $sportBlock->fill([
                 'name' => $data->name,
@@ -140,6 +180,11 @@ class SportBlockRepository extends BaseRepository
         return $sportBlock && $viewer && (int) $sportBlock->owner_id === (int) $viewer->id;
     }
 
+    /**
+     * @param string $type
+     * @param array $filters
+     * @return Builder
+     */
     private function queryByType(string $type, array $filters = []): Builder
     {
         $search = trim((string) ($filters['search'] ?? ''));
@@ -176,16 +221,4 @@ class SportBlockRepository extends BaseRepository
         ]);
     }
 
-    private function storeAvatar(?UploadedFile $file): ?string
-    {
-        if (! $file) {
-            return null;
-        }
-
-        $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
-        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
-        $filename = Str::lower(md5(microtime(true) . $file->getClientOriginalName() . Str::random(8))) . '.' . $extension;
-
-        return $file->storeAs('images/sportblocks/avatar', $filename, 'public') ? $filename : null;
-    }
 }

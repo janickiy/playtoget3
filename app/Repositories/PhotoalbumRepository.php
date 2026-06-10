@@ -12,7 +12,7 @@ use App\Models\Photo;
 use App\Models\PhotoAlbums;
 use App\Models\Share;
 use App\Models\User;
-use Illuminate\Http\UploadedFile;
+use App\Service\AlbumPhotoStorageService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -23,7 +23,10 @@ class PhotoalbumRepository extends BaseRepository
 {
     private const USER_TYPES = ['user', 'user_attach'];
 
-    public function __construct(PhotoAlbums $model)
+    public function __construct(
+        PhotoAlbums $model,
+        private readonly AlbumPhotoStorageService $photos
+    )
     {
         parent::__construct($model);
     }
@@ -33,6 +36,11 @@ class PhotoalbumRepository extends BaseRepository
         return $this->albumsForOwner($userId, 'user');
     }
 
+    /**
+     * @param int $ownerId
+     * @param string $type
+     * @return Collection
+     */
     public function albumsForOwner(int $ownerId, string $type): Collection
     {
         return $this->model->newQuery()
@@ -47,11 +55,24 @@ class PhotoalbumRepository extends BaseRepository
             ->map(fn (PhotoAlbums $album): array => $this->serializeAlbum($album));
     }
 
+    /**
+     * @param int $userId
+     * @param int $limit
+     * @param int $offset
+     * @return Collection
+     */
     public function photosForUser(int $userId, int $limit = 6, int $offset = 0): Collection
     {
         return $this->photosForOwner($userId, 'user', $limit, $offset);
     }
 
+    /**
+     * @param int $ownerId
+     * @param string $type
+     * @param int $limit
+     * @param int $offset
+     * @return Collection
+     */
     public function photosForOwner(int $ownerId, string $type, int $limit = 6, int $offset = 0): Collection
     {
         return Photo::query()
@@ -67,11 +88,24 @@ class PhotoalbumRepository extends BaseRepository
             ->map(fn (Photo $photo): array => $this->serializePhoto($photo));
     }
 
+    /**
+     * @param int $userId
+     * @param int $limit
+     * @param int $offset
+     * @return bool
+     */
     public function hasMoreUserPhotos(int $userId, int $limit, int $offset): bool
     {
         return $this->hasMoreOwnerPhotos($userId, 'user', $limit, $offset);
     }
 
+    /**
+     * @param int $ownerId
+     * @param string $type
+     * @param int $limit
+     * @param int $offset
+     * @return bool
+     */
     public function hasMoreOwnerPhotos(int $ownerId, string $type, int $limit, int $offset): bool
     {
         return Photo::query()
@@ -85,6 +119,12 @@ class PhotoalbumRepository extends BaseRepository
             ->exists();
     }
 
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @param string $type
+     * @return Collection
+     */
     public function popularPhotos(int $limit = 9, int $offset = 0, string $type = 'user'): Collection
     {
         return Photo::query()
@@ -117,6 +157,11 @@ class PhotoalbumRepository extends BaseRepository
             ->map(fn (Photo $photo): array => $this->serializePhoto($photo));
     }
 
+    /**
+     * @param int $albumId
+     * @param array|null $types
+     * @return PhotoAlbums|null
+     */
     public function album(int $albumId, ?array $types = null): ?PhotoAlbums
     {
         /** @var PhotoAlbums|null $album */
@@ -129,6 +174,12 @@ class PhotoalbumRepository extends BaseRepository
         return $album;
     }
 
+    /**
+     * @param PhotoAlbums $album
+     * @param int $limit
+     * @param int $offset
+     * @return Collection
+     */
     public function albumPhotos(PhotoAlbums $album, int $limit = 9, int $offset = 0): Collection
     {
         return $album->photos()
@@ -141,6 +192,12 @@ class PhotoalbumRepository extends BaseRepository
             ->map(fn (Photo $photo): array => $this->serializePhoto($photo));
     }
 
+    /**
+     * @param PhotoAlbums $album
+     * @param int $limit
+     * @param int $offset
+     * @return bool
+     */
     public function hasMoreAlbumPhotos(PhotoAlbums $album, int $limit, int $offset): bool
     {
         return $album->photos()
@@ -170,6 +227,12 @@ class PhotoalbumRepository extends BaseRepository
         return $this->ensureDefaultAlbumForOwner($user->id, 'user', 'Мой альбом');
     }
 
+    /**
+     * @param int $ownerId
+     * @param string $type
+     * @param string $name
+     * @return PhotoAlbums
+     */
     public function ensureDefaultAlbumForOwner(int $ownerId, string $type, string $name = 'Мой альбом'): PhotoAlbums
     {
         /** @var PhotoAlbums $album */
@@ -183,11 +246,22 @@ class PhotoalbumRepository extends BaseRepository
         return $album;
     }
 
+    /**
+     * @param User $user
+     * @param AlbumData $data
+     * @return PhotoAlbums
+     */
     public function createUserAlbum(User $user, AlbumData $data): PhotoAlbums
     {
         return $this->createAlbumForOwner($user->id, 'user', $data);
     }
 
+    /**
+     * @param int $ownerId
+     * @param string $type
+     * @param AlbumData $data
+     * @return PhotoAlbums
+     */
     public function createAlbumForOwner(int $ownerId, string $type, AlbumData $data): PhotoAlbums
     {
         /** @var PhotoAlbums $album */
@@ -200,16 +274,34 @@ class PhotoalbumRepository extends BaseRepository
         return $album;
     }
 
+    /**
+     * @param PhotoAlbums $album
+     * @param AlbumData $data
+     * @return bool
+     */
     public function updateUserAlbum(PhotoAlbums $album, AlbumData $data): bool
     {
         return $album->fill($data->toArray())->save();
     }
 
+    /**
+     * @param User $user
+     * @param string $name
+     * @param int|null $exceptId
+     * @return bool
+     */
     public function nameExists(User $user, string $name, ?int $exceptId = null): bool
     {
         return $this->nameExistsForOwner($user->id, 'user', $name, $exceptId);
     }
 
+    /**
+     * @param int $ownerId
+     * @param string $type
+     * @param string $name
+     * @param int|null $exceptId
+     * @return bool
+     */
     public function nameExistsForOwner(int $ownerId, string $type, string $name, ?int $exceptId = null): bool
     {
         return $this->model->newQuery()
@@ -225,6 +317,12 @@ class PhotoalbumRepository extends BaseRepository
         return $user && (int) $album->owner_id === (int) $user->id;
     }
 
+    /**
+     * @param User $user
+     * @param PhotoAlbums $album
+     * @param PhotoUploadData $data
+     * @return Photo
+     */
     public function storePhoto(User $user, PhotoAlbums $album, PhotoUploadData $data): Photo
     {
         if (! $this->isOwner($album, $user) || $album->photoalbumable_type !== 'user') {
@@ -236,33 +334,13 @@ class PhotoalbumRepository extends BaseRepository
 
     public function storePhotoForAlbum(User $user, PhotoAlbums $album, PhotoUploadData $data): Photo
     {
-        $file = $data->file;
-        $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
-        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
-        $filename = Str::lower(md5(microtime(true) . $file->getClientOriginalName() . Str::random(8))) . '.' . $extension;
-        $smallFilename = 's_' . $filename;
-        $directory = 'images/photogallery/' . ($album->photoalbumable_type ?: 'user');
-
-        $source = $this->imageResource($file);
-        $original = $this->resizedImageContents($source, $file->getMimeType(), 800, null);
-        $thumb = $this->resizedImageContents($source, $file->getMimeType(), null, 300);
-        imagedestroy($source);
-
-        $disk = Storage::disk('public');
-        $originalPath = $directory . '/' . $filename;
-        $smallPath = $directory . '/' . $smallFilename;
-
-        if (! $disk->put($originalPath, $original) || ! $disk->put($smallPath, $thumb)) {
-            $disk->delete([$originalPath, $smallPath]);
-
-            throw new RuntimeException('Не удалось сохранить фотографию.');
-        }
+        $storedPhoto = $this->photos->storePhoto($data->file, $album->photoalbumable_type);
 
         /** @var Photo $photo */
         $photo = Photo::query()->create([
             'photoalbum_id' => $album->id,
-            'small_photo' => $smallFilename,
-            'photo' => $filename,
+            'small_photo' => $storedPhoto['small_photo'],
+            'photo' => $storedPhoto['photo'],
             'description' => $data->description,
             'owner_id' => $user->id,
             'banned' => false,
@@ -441,92 +519,4 @@ class PhotoalbumRepository extends BaseRepository
         }
     }
 
-    private function imageResource(UploadedFile $file): \GdImage
-    {
-        $path = $file->getRealPath();
-        $image = match ($file->getMimeType()) {
-            'image/jpeg', 'image/jpg' => imagecreatefromjpeg($path),
-            'image/png' => imagecreatefrompng($path),
-            'image/gif' => imagecreatefromgif($path),
-            default => false,
-        };
-
-        if (! $image instanceof \GdImage) {
-            throw new RuntimeException('Неверный формат изображения.');
-        }
-
-        return $file->getMimeType() === 'image/jpeg' || $file->getMimeType() === 'image/jpg'
-            ? $this->orientJpeg($image, $path)
-            : $image;
-    }
-
-    private function resizedImageContents(\GdImage $source, ?string $mime, ?int $maxWidth, ?int $maxHeight): string
-    {
-        $sourceWidth = imagesx($source);
-        $sourceHeight = imagesy($source);
-        $ratio = 1.0;
-
-        if ($maxWidth && $sourceWidth > $maxWidth) {
-            $ratio = min($ratio, $maxWidth / $sourceWidth);
-        }
-
-        if ($maxHeight && $sourceHeight > $maxHeight) {
-            $ratio = min($ratio, $maxHeight / $sourceHeight);
-        }
-
-        $targetWidth = max(1, (int) round($sourceWidth * $ratio));
-        $targetHeight = max(1, (int) round($sourceHeight * $ratio));
-        $target = imagecreatetruecolor($targetWidth, $targetHeight);
-
-        if ($mime === 'image/png' || $mime === 'image/gif') {
-            imagealphablending($target, false);
-            imagesavealpha($target, true);
-            imagefill($target, 0, 0, imagecolorallocatealpha($target, 0, 0, 0, 127));
-        } else {
-            imagefill($target, 0, 0, imagecolorallocate($target, 255, 255, 255));
-        }
-
-        imagecopyresampled($target, $source, 0, 0, 0, 0, $targetWidth, $targetHeight, $sourceWidth, $sourceHeight);
-
-        ob_start();
-
-        match ($mime) {
-            'image/png' => imagepng($target, null, 8),
-            'image/gif' => imagegif($target),
-            default => imagejpeg($target, null, 90),
-        };
-
-        $contents = ob_get_clean();
-        imagedestroy($target);
-
-        if (! is_string($contents) || $contents === '') {
-            throw new RuntimeException('Не удалось обработать изображение.');
-        }
-
-        return $contents;
-    }
-
-    private function orientJpeg(\GdImage $image, string $path): \GdImage
-    {
-        if (! function_exists('exif_read_data')) {
-            return $image;
-        }
-
-        $exif = @exif_read_data($path);
-        $orientation = is_array($exif) ? (int) ($exif['Orientation'] ?? 0) : 0;
-        $rotated = match ($orientation) {
-            3 => imagerotate($image, 180, 0),
-            6 => imagerotate($image, -90, 0),
-            8 => imagerotate($image, 90, 0),
-            default => false,
-        };
-
-        if (! $rotated instanceof \GdImage) {
-            return $image;
-        }
-
-        imagedestroy($image);
-
-        return $rotated;
-    }
 }

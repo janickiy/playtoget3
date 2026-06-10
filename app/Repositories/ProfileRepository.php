@@ -17,9 +17,9 @@ use App\Models\Log;
 use App\Models\Share;
 use App\Models\User;
 use App\Models\UserSetting;
+use App\Service\ProfileImageService;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -28,9 +28,6 @@ use RuntimeException;
 
 class ProfileRepository extends BaseRepository
 {
-    private const COVER_WIDTH = 1200;
-    private const COVER_HEIGHT = 350;
-
     private const MONTHS = [
         1 => 'января',
         2 => 'февраля',
@@ -76,7 +73,10 @@ class ProfileRepository extends BaseRepository
         'notification_birthdays' => 'Дни рождения',
     ];
 
-    public function __construct(User $model)
+    public function __construct(
+        User $model,
+        private readonly ProfileImageService $images
+    )
     {
         parent::__construct($model);
     }
@@ -208,7 +208,7 @@ class ProfileRepository extends BaseRepository
     public function cropTemporaryAvatar(User $user, ImageCropData $data): array
     {
         $file = $data->file;
-        $source = $this->imageResource($file);
+        $source = $this->images->imageResource($file);
         $sourceWidth = imagesx($source);
         $sourceHeight = imagesy($source);
 
@@ -265,78 +265,6 @@ class ProfileRepository extends BaseRepository
         ];
     }
 
-    public function cropTemporaryCover(User $user, ImageCropData $data): array
-    {
-        $file = $data->file;
-        $source = $this->imageResource($file);
-        $sourceWidth = imagesx($source);
-        $sourceHeight = imagesy($source);
-
-        if ($sourceWidth < 1 || $sourceHeight < 1) {
-            imagedestroy($source);
-
-            throw new RuntimeException('Не удалось прочитать изображение.');
-        }
-
-        $x = max(0, (int) floor($data->x));
-        $y = max(0, (int) floor($data->y));
-        $width = max(0, (int) floor($data->width));
-        $height = max(0, (int) floor($data->height));
-        $width = min($width, $sourceWidth - $x);
-        $height = min($height, $sourceHeight - $y);
-
-        if ($width < 300 || $height < 80) {
-            imagedestroy($source);
-
-            throw new RuntimeException('Выделенная область слишком мала.');
-        }
-
-        [$x, $y, $width, $height] = $this->normalizeCoverCrop($x, $y, $width, $height);
-
-        if ($width < 300 || $height < 80) {
-            imagedestroy($source);
-
-            throw new RuntimeException('Выделенная область выходит за границы изображения.');
-        }
-
-        $target = imagecreatetruecolor(self::COVER_WIDTH, self::COVER_HEIGHT);
-        imagefill($target, 0, 0, imagecolorallocate($target, 255, 255, 255));
-        imagecopyresampled(
-            $target,
-            $source,
-            0,
-            0,
-            $x,
-            $y,
-            self::COVER_WIDTH,
-            self::COVER_HEIGHT,
-            $width,
-            $height,
-        );
-        imagedestroy($source);
-
-        ob_start();
-        imagejpeg($target, null, 90);
-        $contents = ob_get_clean();
-        imagedestroy($target);
-
-        if (!is_string($contents) || $contents === '') {
-            throw new RuntimeException('Не удалось обработать изображение.');
-        }
-
-        $filename = sprintf('%d_%s.jpg', $user->id, Str::lower(Str::random(32)));
-        $path = 'images/tmp/profile/cover_page/' . $filename;
-
-        if (!Storage::disk('public')->put($path, $contents)) {
-            throw new RuntimeException('Не удалось сохранить изображение.');
-        }
-
-        return [
-            'file' => $filename,
-            'url' => Storage::disk('public')->url($path),
-        ];
-    }
-
     public function updateProfileSettings(User $user, ProfileSettingsData $data): void
     {
         $contacts = [];
@@ -354,9 +282,9 @@ class ProfileRepository extends BaseRepository
             $notifications[$field] = array_key_exists($field, $data->user) ? 'yes' : 'no';
         }
 
-        $newAvatar = $this->promoteTemporaryAvatar($data->temporaryAvatar, $user->id);
-        $newCover = $this->promoteTemporaryCover($data->temporaryCover, $user->id)
-            ?? ($data->coverFile ? $this->storeUserImage($data->coverFile, 'user/cover_page', $user->id) : null);
+        $newAvatar = $this->images->promoteTemporaryAvatar($data->temporaryAvatar, $user->id);
+        $newCover = $this->images->promoteTemporaryCover($data->temporaryCover, $user->id)
+            ?? ($data->coverFile ? $this->images->storeUserImage($data->coverFile, 'user/cover_page', $user->id) : null);
         $oldAvatar = null;
         $oldCover = null;
 
@@ -382,14 +310,14 @@ class ProfileRepository extends BaseRepository
                 $settings->save();
             });
         } catch (\Throwable $exception) {
-            $this->deleteUserImage('user/avatar', $newAvatar);
-            $this->deleteUserImage('user/cover_page', $newCover);
+            $this->images->deleteUserImage('user/avatar', $newAvatar);
+            $this->images->deleteUserImage('user/cover_page', $newCover);
 
             throw $exception;
         }
 
-        $this->deleteUserImage('user/avatar', $oldAvatar);
-        $this->deleteUserImage('user/cover_page', $oldCover);
+        $this->images->deleteUserImage('user/avatar', $oldAvatar);
+        $this->images->deleteUserImage('user/cover_page', $oldCover);
     }
 
     public function permissions(User $profile, ?User $viewer, string $friendshipStatus): array
@@ -703,160 +631,6 @@ class ProfileRepository extends BaseRepository
             ->unique()
             ->values()
             ->all();
-    }
-
-    private function storeUserImage(UploadedFile $file, string $directory, int $userId): string
-    {
-        $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
-        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
-        $filename = sprintf('%d_%s.%s', $userId, Str::lower(Str::random(32)), $extension);
-        $path = 'images/' . trim($directory, '/') . '/' . $filename;
-        $contents = file_get_contents($file->getRealPath());
-
-        if ($contents === false || !Storage::disk('public')->put($path, $contents)) {
-            throw new RuntimeException('Не удалось сохранить изображение профиля.');
-        }
-
-        return $filename;
-    }
-
-    private function promoteTemporaryAvatar(?string $temporaryAvatar, int $userId): ?string
-    {
-        if (!$temporaryAvatar) {
-            return null;
-        }
-
-        $filename = basename($temporaryAvatar);
-
-        if (!preg_match('/^[A-Za-z0-9_.-]+$/', $filename)) {
-            throw new RuntimeException('Некорректное имя файла аватара.');
-        }
-
-        $disk = Storage::disk('public');
-        $source = 'images/tmp/profile/avatar/' . $filename;
-
-        if (!$disk->exists($source)) {
-            throw new RuntimeException('Файл аватара не найден.');
-        }
-
-        $targetFilename = sprintf('%d_%s', $userId, preg_replace('/^\d+_/', '', $filename));
-        $target = 'images/user/avatar/' . $targetFilename;
-
-        if (!$disk->copy($source, $target)) {
-            throw new RuntimeException('Не удалось сохранить аватар.');
-        }
-
-        $disk->delete($source);
-
-        return $targetFilename;
-    }
-
-    private function promoteTemporaryCover(?string $temporaryCover, int $userId): ?string
-    {
-        if (!$temporaryCover) {
-            return null;
-        }
-
-        $filename = basename($temporaryCover);
-
-        if (!preg_match('/^[A-Za-z0-9_.-]+$/', $filename)) {
-            throw new RuntimeException('Некорректное имя файла обложки.');
-        }
-
-        $disk = Storage::disk('public');
-        $source = 'images/tmp/profile/cover_page/' . $filename;
-
-        if (!$disk->exists($source)) {
-            throw new RuntimeException('Файл обложки не найден.');
-        }
-
-        $targetFilename = sprintf('%d_%s', $userId, preg_replace('/^\d+_/', '', $filename));
-        $target = 'images/user/cover_page/' . $targetFilename;
-
-        if (!$disk->copy($source, $target)) {
-            throw new RuntimeException('Не удалось сохранить обложку.');
-        }
-
-        $disk->delete($source);
-
-        return $targetFilename;
-    }
-
-    /**
-     * Keeps the persisted cover at the same ratio as the profile header.
-     */
-    private function normalizeCoverCrop(int $x, int $y, int $width, int $height): array
-    {
-        $targetRatio = self::COVER_WIDTH / self::COVER_HEIGHT;
-        $currentRatio = $width / max(1, $height);
-
-        if (abs($currentRatio - $targetRatio) < 0.01) {
-            return [$x, $y, $width, $height];
-        }
-
-        if ($currentRatio > $targetRatio) {
-            $normalizedWidth = (int)floor($height * $targetRatio);
-            $x += (int)floor(($width - $normalizedWidth) / 2);
-            $width = $normalizedWidth;
-        } else {
-            $normalizedHeight = (int)floor($width / $targetRatio);
-            $y += (int)floor(($height - $normalizedHeight) / 2);
-            $height = $normalizedHeight;
-        }
-
-        return [$x, $y, $width, $height];
-    }
-
-    private function imageResource(UploadedFile $file): \GdImage
-    {
-        $path = $file->getRealPath();
-        $mime = $file->getMimeType();
-        $image = match ($mime) {
-            'image/jpeg', 'image/jpg' => imagecreatefromjpeg($path),
-            'image/png' => imagecreatefrompng($path),
-            default => false,
-        };
-
-        if (!$image instanceof \GdImage) {
-            throw new RuntimeException('Неверный формат изображения.');
-        }
-
-        return $mime === 'image/jpeg' || $mime === 'image/jpg'
-            ? $this->orientJpeg($image, $path)
-            : $image;
-    }
-
-    private function orientJpeg(\GdImage $image, string $path): \GdImage
-    {
-        if (!function_exists('exif_read_data')) {
-            return $image;
-        }
-
-        $exif = @exif_read_data($path);
-        $orientation = is_array($exif) ? (int)($exif['Orientation'] ?? 0) : 0;
-        $rotated = match ($orientation) {
-            3 => imagerotate($image, 180, 0),
-            6 => imagerotate($image, -90, 0),
-            8 => imagerotate($image, 90, 0),
-            default => false,
-        };
-
-        if (!$rotated instanceof \GdImage) {
-            return $image;
-        }
-
-        imagedestroy($image);
-
-        return $rotated;
-    }
-
-    private function deleteUserImage(string $directory, ?string $filename): void
-    {
-        if (!$filename) {
-            return;
-        }
-
-        Storage::disk('public')->delete('images/' . trim($directory, '/') . '/' . $filename);
     }
 
     private function detectOs(string $userAgent): string

@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Helpers\StringHelper;
 use App\Models\Attachment;
 use App\Models\Comment;
 use App\Models\Like;
@@ -9,13 +10,16 @@ use App\Models\NewsRssSport;
 use App\Models\Photo;
 use App\Models\Share;
 use App\Models\Video;
+use App\Service\NewsFeedFormatterService;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 
 class NewsRepository extends BaseRepository
 {
-    public function __construct(NewsRssSport $model)
+    public function __construct(
+        NewsRssSport $model,
+        private readonly NewsFeedFormatterService $formatter
+    )
     {
         parent::__construct($model);
     }
@@ -30,6 +34,11 @@ class NewsRepository extends BaseRepository
         return $this->feedPage($limit);
     }
 
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @return Collection
+     */
     public function feedPage(int $limit = 5, int $offset = 0): Collection
     {
         $items = collect()
@@ -45,6 +54,11 @@ class NewsRepository extends BaseRepository
         return $this->withActionCounts($items);
     }
 
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @return Collection
+     */
     private function photoItems(int $limit, int $offset = 0): Collection
     {
         return Photo::query()
@@ -88,12 +102,17 @@ class NewsRepository extends BaseRepository
                 'likeable_type' => 'photo',
                 'message' => sprintf(
                     '<p class="mess_news">Опубликовал(а) фото:</p><br> <ul class="attach_image"><li><img class="photo_big" alt="" src="%s" data-num="%d"></li></ul>',
-                    e($this->photoUrl($row->small_photo ?: $row->photo, $row->photoalbumable_type)),
+                    e($this->formatter->photoUrl($row->small_photo ?: $row->photo, $row->photoalbumable_type)),
                     (int) $row->id
                 ),
             ]));
     }
 
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @return Collection
+     */
     private function videoItems(int $limit, int $offset = 0): Collection
     {
         return Video::query()
@@ -129,12 +148,17 @@ class NewsRepository extends BaseRepository
                 'likeable_type' => 'video',
                 'message' => sprintf(
                     '<p class="mess_news">Опубликовал(а) видео:</p><br> <ul class="attach_image"><li><img class="video_prev" alt="" src="%s" data-num="%d"></li></ul>',
-                    e($this->videoThumbUrl($row->provider, $row->video)),
+                    e($this->formatter->videoThumbUrl($row->provider, $row->video)),
                     (int) $row->id
                 ),
             ]));
     }
 
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @return Collection
+     */
     private function commentItems(int $limit, int $offset = 0): Collection
     {
         return Comment::query()
@@ -174,11 +198,16 @@ class NewsRepository extends BaseRepository
                 'content_id' => (int) $row->id,
                 'likeable_type' => 'comment',
                 'message' => '<p class="mess_news">Оставил(a) комментарий на своей странице:</p> '
-                    . nl2br($this->safeText((string) $row->content))
+                    . nl2br($this->formatter->safeText((string) $row->content))
                     . $this->commentAttachmentsHtml((int) $row->id),
             ]));
     }
 
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @return Collection
+     */
     private function photoCommentItems(int $limit, int $offset = 0): Collection
     {
         return Comment::query()
@@ -228,17 +257,22 @@ class NewsRepository extends BaseRepository
                 'likeable_type' => 'photo',
                 'message' => sprintf(
                     '<p class="mess_news">Прокомментировал(а) фото: <br><br>%s</p> <div class="art_mess"><a href="%s"><div class="message-account"><div class="head-img"><img src="%s" alt=""></div><p class="head-topic">%s</p><p class="data">%s</p></div></a><div style="clear:both"> <ul class="attach_image"><li><img class="photo_big" alt="" src="%s" data-num="%d"></li></ul></div></div>',
-                    nl2br($this->safeText((string) $row->content)),
+                    nl2br($this->formatter->safeText((string) $row->content)),
                     e(route('front.profile.show', ['user' => (int) $row->owner_id])),
-                    e($this->ownerAvatar($row)),
-                    e($this->ownerName($row)),
-                    e($this->russianDate(Carbon::parse($row->content_created_at ?: $row->created_at))),
-                    e($this->photoUrl($row->small_photo ?: $row->photo, $row->photoalbumable_type)),
+                    e($this->formatter->ownerAvatar($row)),
+                    e($this->formatter->ownerName($row)),
+                    e(StringHelper::russianDate(Carbon::parse($row->content_created_at ?: $row->created_at))),
+                    e($this->formatter->photoUrl($row->small_photo ?: $row->photo, $row->photoalbumable_type)),
                     (int) $row->photo_id
                 ),
             ]));
     }
 
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @return Collection
+     */
     private function videoCommentItems(int $limit, int $offset = 0): Collection
     {
         return Comment::query()
@@ -286,17 +320,22 @@ class NewsRepository extends BaseRepository
                 'likeable_type' => 'video',
                 'message' => sprintf(
                     '<p class="mess_news">Прокомментировал(а) видео: <br><br>%s</p> <div class="art_mess"><a href="%s"><div class="message-account"><div class="head-img"><img src="%s" alt=""></div><p class="head-topic">%s</p><p class="data">%s</p></div></a><div style="clear:both"> <ul class="attach_image"><li><img class="video_prev" alt="" src="%s" data-num="%d"></li></ul></div></div>',
-                    nl2br($this->safeText((string) $row->content)),
+                    nl2br($this->formatter->safeText((string) $row->content)),
                     e(route('front.profile.show', ['user' => (int) $row->owner_id])),
-                    e($this->ownerAvatar($row)),
-                    e($this->ownerName($row)),
-                    e($this->russianDate(Carbon::parse($row->content_created_at ?: $row->created_at))),
-                    e($this->videoThumbUrl($row->provider, $row->video)),
+                    e($this->formatter->ownerAvatar($row)),
+                    e($this->formatter->ownerName($row)),
+                    e(StringHelper::russianDate(Carbon::parse($row->content_created_at ?: $row->created_at))),
+                    e($this->formatter->videoThumbUrl($row->provider, $row->video)),
                     (int) $row->video_id
                 ),
             ]));
     }
 
+    /**
+     * @param object $row
+     * @param array $data
+     * @return array
+     */
     private function makeUserItem(object $row, array $data): array
     {
         $createdAt = $row->created_at ? Carbon::parse($row->created_at) : now();
@@ -304,8 +343,8 @@ class NewsRepository extends BaseRepository
         return [
             'author_id' => (int) $row->author_id,
             'author_name' => $this->userName($row),
-            'avatar' => $this->userAvatar($row),
-            'date' => $this->russianDate($createdAt),
+            'avatar' => $this->formatter->userAvatar($row),
+            'date' => StringHelper::russianDate($createdAt),
             'time' => $createdAt->getTimestamp(),
             'type' => 'user',
             'event_key' => $data['event_key'],
@@ -318,6 +357,10 @@ class NewsRepository extends BaseRepository
         ];
     }
 
+    /**
+     * @param Collection $items
+     * @return Collection
+     */
     private function withActionCounts(Collection $items): Collection
     {
         $keys = $items
@@ -338,6 +381,12 @@ class NewsRepository extends BaseRepository
         });
     }
 
+    /**
+     * @param string $modelClass
+     * @param string $typeColumn
+     * @param Collection $keys
+     * @return Collection
+     */
     private function countsByType(string $modelClass, string $typeColumn, Collection $keys): Collection
     {
         if ($keys->isEmpty()) {
@@ -366,44 +415,10 @@ class NewsRepository extends BaseRepository
         return $name !== '' ? $name : (string) $row->email;
     }
 
-    private function userAvatar(object $row): string
-    {
-        if ((bool) $row->banned || (bool) $row->deleted) {
-            return asset('frontend/images/noimage.png');
-        }
-
-        if ($row->avatar && ($url = $this->publicImageUrl('user/avatar/' . $row->avatar))) {
-            return $url;
-        }
-
-        return asset($row->sex === 'female' ? 'frontend/images/default_female.png' : 'frontend/images/default_male.png');
-    }
-
-    private function ownerName(object $row): string
-    {
-        $name = trim(sprintf('%s %s', (string) $row->owner_firstname, (string) $row->owner_lastname));
-
-        return $name !== '' ? $name : (string) $row->owner_email;
-    }
-
-    private function ownerAvatar(object $row): string
-    {
-        if ((bool) $row->owner_banned || (bool) $row->owner_deleted) {
-            return asset('frontend/images/noimage.png');
-        }
-
-        if ($row->owner_avatar && ($url = $this->publicImageUrl('user/avatar/' . $row->owner_avatar))) {
-            return $url;
-        }
-
-        return asset($row->owner_sex === 'female' ? 'frontend/images/default_female.png' : 'frontend/images/default_male.png');
-    }
-
-    private function safeText(string $value): string
-    {
-        return e(html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
-    }
-
+    /**
+     * @param int $commentId
+     * @return string
+     */
     private function commentAttachmentsHtml(int $commentId): string
     {
         $photos = Attachment::query()
@@ -423,71 +438,11 @@ class NewsRepository extends BaseRepository
         $items = $photos
             ->map(fn ($photo) => sprintf(
                 '<li><img border="0" src="%s" class="photo_big" data-num="%d"></li>',
-                e($this->photoUrl($photo->small_photo ?: $photo->photo, $photo->photoalbumable_type)),
+                e($this->formatter->photoUrl($photo->small_photo ?: $photo->photo, $photo->photoalbumable_type)),
                 (int) $photo->id
             ))
             ->implode('');
 
         return '<ul class="attach_image">' . $items . '</ul>';
-    }
-
-    private function photoUrl(?string $file, ?string $type): string
-    {
-        if (! $file) {
-            return asset('frontend/images/noimage.png');
-        }
-
-        $type = $type ?: 'user';
-        $paths = [
-            "photogallery/{$type}/{$file}",
-            "photogallery/user_attach/{$file}",
-            "photogallery/user/{$file}",
-        ];
-
-        foreach ($paths as $path) {
-            if ($url = $this->publicImageUrl($path)) {
-                return $url;
-            }
-        }
-
-        return asset('frontend/images/noimage.png');
-    }
-
-    private function publicImageUrl(string $path): ?string
-    {
-        $path = 'images/' . ltrim($path, '/');
-
-        return Storage::disk('public')->exists($path)
-            ? Storage::disk('public')->url($path)
-            : null;
-    }
-
-    private function videoThumbUrl(?string $provider, ?string $video): string
-    {
-        if ($provider === 'youtube' && $video) {
-            return 'https://img.youtube.com/vi/' . rawurlencode($video) . '/hqdefault.jpg';
-        }
-
-        return asset('frontend/images/noimage.png');
-    }
-
-    private function russianDate(Carbon $date): string
-    {
-        $months = [
-            1 => 'января',
-            2 => 'февраля',
-            3 => 'марта',
-            4 => 'апреля',
-            5 => 'мая',
-            6 => 'июня',
-            7 => 'июля',
-            8 => 'августа',
-            9 => 'сентября',
-            10 => 'октября',
-            11 => 'ноября',
-            12 => 'декабря',
-        ];
-
-        return $date->day . ' ' . $months[$date->month] . ' ' . $date->year;
     }
 }

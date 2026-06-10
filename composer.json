@@ -13,7 +13,8 @@
         "laravel/framework": "^13.0",
         "laravel/tinker": "^3.0",
         "yajra/laravel-datatables-buttons": "^13.0",
-        "yajra/laravel-datatables-html": "^13.0"
+        "yajra/laravel-datatables-html": "^13.0",
+        "ext-gd": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

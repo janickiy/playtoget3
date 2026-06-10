@@ -15,6 +15,12 @@ class FriendRepository extends BaseRepository
         parent::__construct($model);
     }
 
+    /**
+     * @param int $userId
+     * @param int $limit
+     * @param array $filters
+     * @return Collection
+     */
     public function possibleFriendsFor(int $userId, int $limit = 6, array $filters = []): Collection
     {
         $excludedIds = $this->relationUserIds($userId)->all();
@@ -27,6 +33,13 @@ class FriendRepository extends BaseRepository
             ->get();
     }
 
+    /**
+     * @param int $userId
+     * @param int $limit
+     * @param int $offset
+     * @param array $filters
+     * @return Collection
+     */
     public function friendsFor(int $userId, int $limit = 10, int $offset = 0, array $filters = []): Collection
     {
         return $this->usersFromRelations($this->friendRelations($userId), $userId, $filters)
@@ -34,11 +47,23 @@ class FriendRepository extends BaseRepository
             ->values();
     }
 
+    /**
+     * @param int $userId
+     * @param array $filters
+     * @return int
+     */
     public function friendsCountFor(int $userId, array $filters = []): int
     {
         return $this->usersFromRelations($this->friendRelations($userId), $userId, $filters)->count();
     }
 
+    /**
+     * @param int $userId
+     * @param int $limit
+     * @param int $offset
+     * @param array $filters
+     * @return Collection
+     */
     public function incomingRequestsFor(int $userId, int $limit = 10, int $offset = 0, array $filters = []): Collection
     {
         $relations = $this->model->newQuery()
@@ -53,11 +78,23 @@ class FriendRepository extends BaseRepository
             ->values();
     }
 
+    /**
+     * @param int $userId
+     * @param array $filters
+     * @return int
+     */
     public function incomingRequestsCountFor(int $userId, array $filters = []): int
     {
         return $this->incomingRequestsFor($userId, PHP_INT_MAX, 0, $filters)->count();
     }
 
+    /**
+     * @param int $userId
+     * @param int $limit
+     * @param int $offset
+     * @param array $filters
+     * @return Collection
+     */
     public function outgoingRequestsFor(int $userId, int $limit = 10, int $offset = 0, array $filters = []): Collection
     {
         $relations = $this->model->newQuery()
@@ -77,6 +114,11 @@ class FriendRepository extends BaseRepository
         return $this->outgoingRequestsFor($userId, PHP_INT_MAX, 0, $filters)->count();
     }
 
+    /**
+     * @param int $userId
+     * @param int $friendId
+     * @return int|null
+     */
     public function requestFriendship(int $userId, int $friendId): ?int
     {
         if ($userId === $friendId) {
@@ -120,6 +162,11 @@ class FriendRepository extends BaseRepository
         return 0;
     }
 
+    /**
+     * @param int $userId
+     * @param int $friendId
+     * @return int|null
+     */
     public function acceptFriendship(int $userId, int $friendId): ?int
     {
         if ($userId === $friendId) {
@@ -148,11 +195,21 @@ class FriendRepository extends BaseRepository
         return 1;
     }
 
+    /**
+     * @param int $userId
+     * @param int $friendId
+     * @return bool
+     */
     public function removeFriendship(int $userId, int $friendId): bool
     {
         return $this->relationBetween($userId, $friendId)->delete() > 0;
     }
 
+    /**
+     * @param int|null $userId
+     * @param int $friendId
+     * @return string
+     */
     public function friendshipStatus(?int $userId, int $friendId): string
     {
         if (!$userId || $userId === $friendId) {
@@ -177,6 +234,11 @@ class FriendRepository extends BaseRepository
         return (int)$relation->user_id === $userId ? 'invitation_sent' : 'invated';
     }
 
+    /**
+     * @param int $userId
+     * @param int $friendId
+     * @return bool
+     */
     public function blockUser(int $userId, int $friendId): bool
     {
         if ($userId === $friendId) {
@@ -195,6 +257,11 @@ class FriendRepository extends BaseRepository
         return true;
     }
 
+    /**
+     * @param int $userId
+     * @param int $friendId
+     * @return bool
+     */
     public function unblockUser(int $userId, int $friendId): bool
     {
         return $this->model->newQuery()
@@ -204,6 +271,11 @@ class FriendRepository extends BaseRepository
                 ->delete() > 0;
     }
 
+    /**
+     * @param Collection $users
+     * @param int|null $senderId
+     * @return array
+     */
     public function serializeUsers(Collection $users, ?int $senderId = null): array
     {
         return $users
@@ -220,6 +292,10 @@ class FriendRepository extends BaseRepository
             ->all();
     }
 
+    /**
+     * @param int $userId
+     * @return Collection
+     */
     private function friendRelations(int $userId): Collection
     {
         return $this->model->newQuery()
@@ -234,6 +310,12 @@ class FriendRepository extends BaseRepository
             ->get();
     }
 
+    /**
+     * @param Collection $relations
+     * @param int $userId
+     * @param array $filters
+     * @return Collection
+     */
     private function usersFromRelations(Collection $relations, int $userId, array $filters = []): Collection
     {
         $ids = $relations
@@ -249,6 +331,10 @@ class FriendRepository extends BaseRepository
         return $this->usersByOrderedIds($ids, $filters);
     }
 
+    /**
+     * @param int $userId
+     * @return Collection
+     */
     private function relationUserIds(int $userId): Collection
     {
         return $this->model->newQuery()
@@ -267,6 +353,11 @@ class FriendRepository extends BaseRepository
             ->values();
     }
 
+    /**
+     * @param Collection $ids
+     * @param array $filters
+     * @return Collection
+     */
     private function usersByOrderedIds(Collection $ids, array $filters = []): Collection
     {
         if ($ids->isEmpty()) {
@@ -284,6 +375,10 @@ class FriendRepository extends BaseRepository
             ->values();
     }
 
+    /**
+     * @param array $filters
+     * @return Builder
+     */
     private function activeUsersQuery(array $filters = []): Builder
     {
         return User::query()
@@ -312,6 +407,11 @@ class FriendRepository extends BaseRepository
             ->when($filters['max_age'] ?? null, fn(Builder $query, int $age) => $query->whereDate('birthday', '>=', now()->subYears($age + 1)->addDay()->toDateString()));
     }
 
+    /**
+     * @param int $userId
+     * @param int $friendId
+     * @return Builder
+     */
     private function relationBetween(int $userId, int $friendId): Builder
     {
         return $this->model->newQuery()
