@@ -42,6 +42,15 @@ class FrontAssets
         return asset('frontend/images/content-bg.png');
     }
 
+    public static function eventAvatar(?Event $event): string
+    {
+        if ($event && $event->cover_page && ($url = self::publicImageUrl('events/cover_page/' . $event->cover_page))) {
+            return $url;
+        }
+
+        return asset('frontend/images/noimage.png');
+    }
+
     public static function communityAvatar(?Community $community): string
     {
         if ($community && ! $community->banned && $community->avatar) {

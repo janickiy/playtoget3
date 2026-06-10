@@ -11,6 +11,8 @@ use App\Models\GeoCity;
 use App\Models\GeoTarget;
 use App\Models\SportType;
 use App\Models\User;
+use Carbon\CarbonImmutable;
+use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
@@ -33,6 +35,58 @@ class EventRepository extends BaseRepository
             ->orderBy('date_from')
             ->limit($limit)
             ->get();
+    }
+
+    public function calendarDays(CarbonImmutable $monthStart, CarbonImmutable $monthEnd): Collection
+    {
+        $events = $this->model->newQuery()
+            ->where('events.banned', false)
+            ->whereNotNull('events.date_from')
+            ->whereDate('events.date_from', '<=', $monthEnd->toDateString())
+            ->where(function (Builder $query) use ($monthStart): void {
+                $query
+                    ->whereDate('events.date_from', '>=', $monthStart->toDateString())
+                    ->orWhereDate('events.date_to', '>=', $monthStart->toDateString());
+            })
+            ->orderBy('events.date_from')
+            ->get();
+
+        $days = [];
+
+        foreach ($events as $event) {
+            if (! $event->date_from) {
+                continue;
+            }
+
+            $eventStart = CarbonImmutable::instance($event->date_from)->startOfDay();
+            $eventEnd = $event->date_to
+                ? CarbonImmutable::instance($event->date_to)->startOfDay()
+                : $eventStart;
+            $periodStart = $eventStart->lessThan($monthStart) ? $monthStart : $eventStart;
+            $periodEnd = $eventEnd->greaterThan($monthEnd) ? $monthEnd : $eventEnd;
+
+            foreach (CarbonPeriod::create($periodStart, '1 day', $periodEnd) as $date) {
+                $key = $date->format('Y-m-d');
+                $days[$key] ??= [
+                    'date' => $key,
+                    'count' => 0,
+                    'events' => [],
+                ];
+                $days[$key]['count']++;
+
+                if (count($days[$key]['events']) < 3) {
+                    $days[$key]['events'][] = [
+                        'id' => (int) $event->id,
+                        'name' => (string) $event->name,
+                        'time' => $event->date_from?->format('H:i') ?? '',
+                    ];
+                }
+            }
+        }
+
+        ksort($days);
+
+        return collect($days);
     }
 
     public function popularEvents(int $limit = 5, int $offset = 0, array $filters = [], ?User $viewer = null): Collection
@@ -161,7 +215,7 @@ class EventRepository extends BaseRepository
         return [
             'id' => (int) $event->id,
             'name' => (string) $event->name,
-            'avatar' => FrontAssets::eventCover($event),
+            'avatar' => FrontAssets::eventAvatar($event),
             'sport_type' => (string) $event->sport_type,
             'city' => (string) $event->place,
             'date_from' => $event->date_from ? 'Начало: ' . $event->date_from->format('d.m.Y в H:i') : '',
@@ -488,6 +542,7 @@ class EventRepository extends BaseRepository
         $place = trim((string) ($filters['place'] ?? ''));
         $sport = trim((string) ($filters['sport'] ?? ''));
         $search = trim((string) ($filters['search'] ?? ''));
+        $date = trim((string) ($filters['date'] ?? ''));
 
         if ($place === '' && (int) ($filters['id_place'] ?? 0) > 0) {
             $place = $this->cityName((int) $filters['id_place']);
@@ -513,6 +568,17 @@ class EventRepository extends BaseRepository
                     ->orWhere('events.place', 'like', '%' . $search . '%')
                     ->orWhere('events.sport_type', 'like', '%' . $search . '%');
             });
+        }
+
+        if ($date !== '') {
+            $query
+                ->whereNotNull('events.date_from')
+                ->whereDate('events.date_from', '<=', $date)
+                ->where(function (Builder $query) use ($date): void {
+                    $query
+                        ->whereDate('events.date_from', $date)
+                        ->orWhereDate('events.date_to', '>=', $date);
+                });
         }
     }
 

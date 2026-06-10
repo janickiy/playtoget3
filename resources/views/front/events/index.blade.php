@@ -1,9 +1,18 @@
 @extends('front.layouts.app')
 
+@php
+    $dateFilter = (string) request('date');
+    $selectedDate = preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateFilter) === 1
+        && checkdate((int) substr($dateFilter, 5, 2), (int) substr($dateFilter, 8, 2), (int) substr($dateFilter, 0, 4))
+        ? \Carbon\CarbonImmutable::createFromFormat('Y-m-d', $dateFilter)
+        : null;
+@endphp
+
 @section('content')
     <div class="content-groups friends">
         <form autocomplete="off" action="{{ route('front.events.index') }}" method="GET" role="search">
             <div class="add-photos-album selects-field-events events-search-form">
+                <input type="hidden" name="date" value="{{ request('date') }}">
                 <div class="select-container-text two_block">
                     <input type="hidden" name="id_place" class="id_place" value="{{ request('id_place') }}" data-type="search_city">
                     <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('place') }}" name="place" data-type="search_city" placeholder="Ищу мероприятие в городе">
@@ -24,6 +33,13 @@
                 @endif
             </div>
         </form>
+
+        @if ($selectedDate)
+            <div class="events-date-filter">
+                Мероприятия на {{ $selectedDate->format('d.m.Y') }}
+                <a href="{{ route('front.events.index') }}">сбросить</a>
+            </div>
+        @endif
 
         <div id="tabs">
             <ul id="main-menu" class="marginBottom-40">
@@ -121,6 +137,21 @@
         .content-groups #tabs {
             clear: both;
             margin-top: 10px;
+        }
+
+        .content-groups .events-date-filter {
+            background: #eef7ff;
+            border: 1px solid #c8dff3;
+            border-radius: 4px;
+            clear: both;
+            color: #337ab7;
+            font-size: 14px;
+            margin: 0 0 14px;
+            padding: 10px 14px;
+        }
+
+        .content-groups .events-date-filter a {
+            float: right;
         }
 
         .content-groups #tabs #main-menu.marginBottom-40 {
@@ -254,7 +285,7 @@
                 const payload = {};
                 const params = new URLSearchParams(window.location.search);
 
-                ['id_place', 'place', 'id_sport', 'sport', 'search'].forEach(function (name) {
+                ['id_place', 'place', 'id_sport', 'sport', 'search', 'date'].forEach(function (name) {
                     payload[name] = params.get(name) || '';
                 });
 

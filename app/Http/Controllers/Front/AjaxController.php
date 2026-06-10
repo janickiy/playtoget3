@@ -13,7 +13,6 @@ use App\Models\SportType;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\VideoView;
-use App\Models\Videoalbum;
 use App\Repositories\FriendRepository;
 use App\Repositories\CommunityRepository;
 use App\Repositories\EventRepository;
@@ -1419,10 +1418,15 @@ class AjaxController extends Controller
 
     private function eventFilters(Request $request): array
     {
+        $date = (string) $request->input('date', '');
+        $validDate = preg_match('/^\d{4}-\d{2}-\d{2}$/', $date) === 1
+            && checkdate((int) substr($date, 5, 2), (int) substr($date, 8, 2), (int) substr($date, 0, 4));
+
         return [
             'place' => trim((string)$request->input('place', '')),
             'sport' => trim((string)$request->input('sport', '')),
             'search' => trim((string)$request->input('search', '')),
+            'date' => $validDate ? $date : '',
             'id_place' => (int)$request->input('id_place', 0),
             'id_sport' => (int)$request->input('id_sport', 0),
         ];

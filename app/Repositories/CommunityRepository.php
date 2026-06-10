@@ -903,7 +903,7 @@ class CommunityRepository extends BaseRepository
         return [
             'id' => (int) $event->id,
             'name' => (string) $event->name,
-            'avatar' => FrontAssets::eventCover($event),
+            'avatar' => FrontAssets::eventAvatar($event),
             'sport_type' => $event->sportType?->name ?: (string) $event->sport_type,
             'city' => (string) $event->place,
             'date' => $event->date_from?->format('d.m.Y H:i') ?? '',
