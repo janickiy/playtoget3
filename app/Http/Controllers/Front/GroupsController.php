@@ -363,6 +363,11 @@ class GroupsController extends Controller
 
     /**
      * Проверяет права и удаляет фотоальбом группы.
+     *
+     * @param int $album
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoAlbums
+     * @return RedirectResponse
      */
     public function destroyPhotoalbum(int $album, CommunityRepository $communities, PhotoalbumRepository $photoAlbums): RedirectResponse
     {
@@ -379,6 +384,12 @@ class GroupsController extends Controller
 
     /**
      * Проверяет группу в URL и удаляет ее фотоальбом.
+     *
+     * @param int $community
+     * @param int $album
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoAlbums
+     * @return RedirectResponse
      */
     public function destroyPhotoalbumForGroup(int $community, int $album, CommunityRepository $communities, PhotoalbumRepository $photoAlbums): RedirectResponse
     {
@@ -394,6 +405,12 @@ class GroupsController extends Controller
 
     /**
      * Показывает форму редактирования фотоальбома конкретной группы.
+     *
+     * @param int $community
+     * @param int $album
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoAlbums
+     * @return View
      */
     public function editPhotoalbumForGroup(int $community, int $album, CommunityRepository $communities, PhotoalbumRepository $photoAlbums): View
     {
@@ -417,6 +434,13 @@ class GroupsController extends Controller
 
     /**
      * Показывает конкретную фотографию из фотоальбома группы.
+     *
+     * @param int $community
+     * @param int $album
+     * @param int $photo
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoAlbums
+     * @return View
      */
     public function photo(int $community, int $album, int $photo, CommunityRepository $communities, PhotoalbumRepository $photoAlbums): View
     {
@@ -426,8 +450,15 @@ class GroupsController extends Controller
         return $view;
     }
 
+
     /**
      * Показывает фотографию группы без привязки к выбранному альбому.
+     *
+     * @param int $community
+     * @param int $photo
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoAlbums
+     * @return View
      */
     public function photoWithoutAlbum(int $community, int $photo, CommunityRepository $communities, PhotoalbumRepository $photoAlbums): View
     {
@@ -442,6 +473,11 @@ class GroupsController extends Controller
 
     /**
      * Показывает видеоальбомы группы или текущей группы.
+     *
+     * @param CommunityRepository $communities
+     * @param VideoalbumRepository $videoAlbums
+     * @param int|null $community
+     * @return View
      */
     public function videoAlbums(CommunityRepository $communities, VideoalbumRepository $videoAlbums, ?int $community = null): View
     {
@@ -460,7 +496,13 @@ class GroupsController extends Controller
     }
 
     /**
-     * Показывает видео выбранного видеоальбома группы.
+     * Показывает видео выбранного видеоальбома групп
+     *
+     * @param int $community
+     * @param int $album
+     * @param CommunityRepository $communities
+     * @param VideoalbumRepository $videoAlbums
+     * @return View
      */
     public function showVideoAlbum(int $community, int $album, CommunityRepository $communities, VideoalbumRepository $videoAlbums): View
     {
@@ -480,6 +522,11 @@ class GroupsController extends Controller
 
     /**
      * Показывает форму добавления видео в видеоальбом группы.
+     *
+     * @param int $community
+     * @param CommunityRepository $communities
+     * @param VideoalbumRepository $videoAlbums
+     * @return View
      */
     public function addVideo(int $community, CommunityRepository $communities, VideoalbumRepository $videoAlbums): View
     {
@@ -496,6 +543,12 @@ class GroupsController extends Controller
 
     /**
      * Валидирует ссылку и добавляет видео в видеоальбом группы.
+     *
+     * @param int $community
+     * @param StoreVideoRequest $request
+     * @param CommunityRepository $communities
+     * @param VideoalbumRepository $videoAlbums
+     * @return RedirectResponse
      */
     public function storeVideo(int $community, StoreVideoRequest $request, CommunityRepository $communities, VideoalbumRepository $videoAlbums): RedirectResponse
     {
@@ -511,6 +564,10 @@ class GroupsController extends Controller
 
     /**
      * Показывает форму создания видеоальбома группы.
+     *
+     * @param int $community
+     * @param CommunityRepository $communities
+     * @return View
      */
     public function createVideoAlbum(int $community, CommunityRepository $communities): View
     {
@@ -526,7 +583,13 @@ class GroupsController extends Controller
     }
 
     /**
-     * Создает видеоальбом группы из валидированных данных формы.
+     * Создает видеоальбом группы из валидированных данных формы
+     *
+     * @param int $community
+     * @param AlbumRequest $request
+     * @param CommunityRepository $communities
+     * @param VideoalbumRepository $videoAlbums
+     * @return RedirectResponse
      */
     public function storeVideoAlbum(int $community, AlbumRequest $request, CommunityRepository $communities, VideoalbumRepository $videoAlbums): RedirectResponse
     {
@@ -546,6 +609,12 @@ class GroupsController extends Controller
 
     /**
      * Проверяет права и показывает форму редактирования видеоальбома группы.
+     *
+     * @param int $album
+     * @param CommunityRepository $communities
+     * @param VideoalbumRepository $videoAlbums
+     * @param int|null $community
+     * @return View
      */
     public function editVideoalbum(int $album, CommunityRepository $communities, VideoalbumRepository $videoAlbums, ?int $community = null): View
     {
@@ -566,6 +635,12 @@ class GroupsController extends Controller
 
     /**
      * Проверяет права и сохраняет изменения видеоальбома группы.
+     *
+     * @param int $album
+     * @param AlbumRequest $request
+     * @param CommunityRepository $communities
+     * @param VideoalbumRepository $videoAlbums
+     * @return RedirectResponse
      */
     public function updateVideoalbum(int $album, AlbumRequest $request, CommunityRepository $communities, VideoalbumRepository $videoAlbums): RedirectResponse
     {
@@ -581,6 +656,11 @@ class GroupsController extends Controller
 
     /**
      * Проверяет права и удаляет видеоальбом группы.
+     *
+     * @param int $album
+     * @param CommunityRepository $communities
+     * @param VideoalbumRepository $videoAlbums
+     * @return RedirectResponse
      */
     public function destroyVideoalbum(int $album, CommunityRepository $communities, VideoalbumRepository $videoAlbums): RedirectResponse
     {
@@ -595,8 +675,15 @@ class GroupsController extends Controller
         return redirect()->route('front.groups.videoalbums', ['community' => $group->id]);
     }
 
+
     /**
      * Проверяет группу в URL и удаляет ее видеоальбом.
+     *
+     * @param int $community
+     * @param int $album
+     * @param CommunityRepository $communities
+     * @param VideoalbumRepository $videoAlbums
+     * @return RedirectResponse
      */
     public function destroyVideoalbumForGroup(int $community, int $album, CommunityRepository $communities, VideoalbumRepository $videoAlbums): RedirectResponse
     {
@@ -612,6 +699,10 @@ class GroupsController extends Controller
 
     /**
      * Показывает мероприятия группы.
+     *
+     * @param int $community
+     * @param CommunityRepository $communities
+     * @return View
      */
     public function events(int $community, CommunityRepository $communities): View
     {

@@ -750,9 +750,9 @@ class AjaxController extends Controller
         $managedOwnerTypes = ['team', 'group', 'event'];
         $sportBlockTypes = ['playground', 'shop', 'fitness'];
         $album = match (true) {
-            in_array($albumType, $managedOwnerTypes, true) => $this->photoalbums->album($albumId, $managedOwnerTypes),
-            in_array($albumType, $sportBlockTypes, true) => $this->photoalbums->album($albumId, $sportBlockTypes),
-            default => $this->photoalbums->album($albumId),
+            in_array($albumType, $managedOwnerTypes, true) => $this->photoAlbums->album($albumId, $managedOwnerTypes),
+            in_array($albumType, $sportBlockTypes, true) => $this->photoAlbums->album($albumId, $sportBlockTypes),
+            default => $this->photoAlbums->album($albumId),
         };
 
         if (!$album) {
@@ -767,7 +767,7 @@ class AjaxController extends Controller
                 $this->sportBlocks->findByType((int)$album->owner_id, $album->photoalbumable_type),
                 $viewer,
             ),
-            default => $this->photoalbums->isOwner($album, $viewer),
+            default => $this->photoAlbums->isOwner($album, $viewer),
         };
 
         if (!$canUpload) {
@@ -776,13 +776,13 @@ class AjaxController extends Controller
 
         try {
             if (in_array($album->photoalbumable_type, array_merge($managedOwnerTypes, $sportBlockTypes), true)) {
-                $photo = $this->photoalbums->storePhotoForAlbum(
+                $photo = $this->photoAlbums->storePhotoForAlbum(
                     $viewer,
                     $album,
                     $photoData,
                 );
             } else {
-                $photo = $this->photoalbums->storePhoto(
+                $photo = $this->photoAlbums->storePhoto(
                     $viewer,
                     $album,
                     $photoData,
@@ -818,8 +818,8 @@ class AjaxController extends Controller
         }
 
         $photos = $type === 'user'
-            ? $this->photoalbums->photosForUser($ownerId, $limit, $offset)
-            : $this->photoalbums->photosForOwner($ownerId, $type, $limit, $offset);
+            ? $this->photoAlbums->photosForUser($ownerId, $limit, $offset)
+            : $this->photoAlbums->photosForOwner($ownerId, $type, $limit, $offset);
         $canManage = match ($type) {
             'team' => $this->communities->canManage($this->communities->findTeam($ownerId), $viewer),
             'group' => $this->communities->canManage($this->communities->findGroup($ownerId), $viewer),
@@ -831,8 +831,8 @@ class AjaxController extends Controller
             'status' => $photos->isNotEmpty() ? 1 : 0,
             'html' => $this->renderPhotos($photos, $viewer, $canManage),
             'has_more' => $type === 'user'
-                ? $this->photoalbums->hasMoreUserPhotos($ownerId, $limit, $offset)
-                : $this->photoalbums->hasMoreOwnerPhotos($ownerId, $type, $limit, $offset),
+                ? $this->photoAlbums->hasMoreUserPhotos($ownerId, $limit, $offset)
+                : $this->photoAlbums->hasMoreOwnerPhotos($ownerId, $type, $limit, $offset),
         ]);
     }
 
@@ -847,24 +847,24 @@ class AjaxController extends Controller
         $viewer = $this->viewer();
         $limit = min(max((int)$request->input('number', 9), 1), 30);
         $offset = max((int)$request->input('offset', 0), 0);
-        $album = $this->photoalbums->album((int)$request->input('id_album'), ['user', 'user_attach', 'team', 'group', 'event']);
+        $album = $this->photoAlbums->album((int)$request->input('id_album'), ['user', 'user_attach', 'team', 'group', 'event']);
 
         if (!$album) {
             return response()->json(['status' => 0, 'html' => '', 'has_more' => false]);
         }
 
-        $photos = $this->photoalbums->albumPhotos($album, $limit, $offset);
+        $photos = $this->photoAlbums->albumPhotos($album, $limit, $offset);
         $canManage = match ($album->photoalbumable_type) {
             'team' => $this->communities->canManage($this->communities->findTeam((int)$album->owner_id), $viewer),
             'group' => $this->communities->canManage($this->communities->findGroup((int)$album->owner_id), $viewer),
             'event' => $this->events->canManage($this->events->findActive((int)$album->owner_id), $viewer),
-            default => $this->photoalbums->isOwner($album, $viewer),
+            default => $this->photoAlbums->isOwner($album, $viewer),
         };
 
         return response()->json([
             'status' => $photos->isNotEmpty() ? 1 : 0,
             'html' => $this->renderPhotos($photos, $viewer, $canManage),
-            'has_more' => $this->photoalbums->hasMoreAlbumPhotos($album, $limit, $offset),
+            'has_more' => $this->photoAlbums->hasMoreAlbumPhotos($album, $limit, $offset),
         ]);
     }
 
@@ -883,7 +883,7 @@ class AjaxController extends Controller
             return response()->json(['result' => 'error'], 422);
         }
 
-        $photo = $this->photoalbums->photo($photoId, ['user', 'user_attach', 'team', 'group', 'event']);
+        $photo = $this->photoAlbums->photo($photoId, ['user', 'user_attach', 'team', 'group', 'event']);
 
         if ($photo && in_array($photo->album?->photoalbumable_type, ['team', 'group', 'event'], true)) {
             $canManage = match ($photo->album->photoalbumable_type) {
@@ -894,14 +894,14 @@ class AjaxController extends Controller
             };
 
             return response()->json([
-                'result' => $canManage && $this->photoalbums->deletePhoto($photo)
+                'result' => $canManage && $this->photoAlbums->deletePhoto($photo)
                     ? 'success'
                     : 'error',
             ]);
         }
 
         return response()->json([
-            'result' => $this->photoalbums->deletePhotoFor($viewer, $photoId) ? 'success' : 'error',
+            'result' => $this->photoAlbums->deletePhotoFor($viewer, $photoId) ? 'success' : 'error',
         ]);
     }
 
@@ -1091,7 +1091,7 @@ class AjaxController extends Controller
         ]);
 
         try {
-            $photo = $this->photoalbums->storeAttachmentPhoto($viewer, $photoData);
+            $photo = $this->photoAlbums->storeAttachmentPhoto($viewer, $photoData);
         } catch (\RuntimeException $exception) {
             return response()->json(['status' => 0, 'error' => $exception->getMessage()], 422);
         }
