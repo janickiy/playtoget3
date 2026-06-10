@@ -45,7 +45,7 @@ class HomeController extends Controller
         $actions = $this->legacyQueryValues($request, 'q');
 
         return match ($task) {
-            'ajax_action' => redirect('/ajax/' . $request->query('action', 'index')),
+            'ajax_action' => redirect('/ajax/' . $this->legacyAjaxAction((string) $request->query('action', 'index'))),
             'news' => redirect()->route('front.news.index'),
             'profile' => $this->redirectLegacyProfile($request, $actions),
             'playgrounds' => $this->redirectLegacySportBlocks($request, $actions, 'front.playgrounds'),
@@ -131,6 +131,28 @@ class HomeController extends Controller
         }
 
         return redirect()->route('front.events.show', ['event' => $request->query('event_id')]);
+    }
+
+    /**
+     * Преобразует старые AJAX action-имена в актуальные snake_case-обработчики.
+     */
+    private function legacyAjaxAction(string $action): string
+    {
+        return [
+            'getpossiblefriends' => 'get_possible_friends',
+            'changememberstatus' => 'change_member_status',
+            'getcomments' => 'get_comments',
+            'getphotoinfo' => 'get_photoinfo',
+            'removevideo' => 'remove_video',
+            'uploadavatar' => 'upload_avatar',
+            'uploadcover' => 'upload_cover',
+            'addcomment' => 'add_comment',
+            'removecomment' => 'remove_comment',
+            'addmessage' => 'add_message',
+            'getmessages' => 'get_messages',
+            'removepic' => 'remove_pic',
+            'getvideoinfo' => 'get_video_info',
+        ][$action] ?? $action;
     }
 
     /**

@@ -42,8 +42,8 @@ class TeamsPageTest extends TestCase
 
         $this->get('/teams?' . http_build_query($filters))
             ->assertStatus(200)
-            ->assertSee('Искать команду в городе')
-            ->assertSee('Искать вид спорта')
+            ->assertSee('Ищу команду в городе')
+            ->assertSee('Ищу свой спорт')
             ->assertSee('Ключевое слово')
             ->assertSee('value="Москва"', false)
             ->assertSee('value="Футбол"', false)
@@ -273,7 +273,7 @@ class TeamsPageTest extends TestCase
             $mock->shouldReceive('membershipType')->with($team, $viewer)->andReturn('none');
         });
 
-        $this->post('/ajax/changememberstatus', [
+        $this->post('/ajax/change_member_status', [
             'id' => 18,
             'status' => 0,
         ])

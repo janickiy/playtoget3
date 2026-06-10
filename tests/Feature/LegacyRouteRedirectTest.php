@@ -57,7 +57,7 @@ class LegacyRouteRedirectTest extends TestCase
             '/?task=groups&community_id=9' => '/groups/9',
             '/?task=groups&community_id=9&q=members' => '/groups/9/members',
             '/?task=groups&community_id=9&q=edit' => '/groups/9/edit',
-            '/?task=ajax_action&action=addmessage' => '/ajax/addmessage',
+            '/?task=ajax_action&action=addmessage' => '/ajax/add_message',
         ];
 
         foreach ($cases as $legacy => $modern) {

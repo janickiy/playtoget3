@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\DTO\Event\EventData;
 use App\Helpers\FrontAssets;
 use App\Models\AcceptedEventMember;
 use App\Models\Community;
@@ -458,19 +459,19 @@ class EventRepository extends BaseRepository
         return $inviteIds->count();
     }
 
-    public function createEvent(User $owner, array $data): Event
+    public function createEvent(User $owner, EventData $data): Event
     {
         return DB::transaction(function () use ($owner, $data): Event {
             /** @var Event $event */
             $event = $this->model->newQuery()->create([
-                'name' => $data['name'],
-                'date_from' => $data['date_from'] ?? null,
-                'date_to' => $data['date_to'] ?? null,
-                'description' => $data['description'] ?? '',
-                'sport_type' => $data['sport_type'] ?? '',
-                'cover_page' => $this->storeCover($data['cover_file'] ?? null) ?? '',
-                'place' => $data['place'] ?? '',
-                'address' => $data['address'] ?? '',
+                'name' => $data->name,
+                'date_from' => $data->dateFrom,
+                'date_to' => $data->dateTo,
+                'description' => $data->description,
+                'sport_type' => $data->sportType,
+                'cover_page' => $this->storeCover($data->coverFile) ?? '',
+                'place' => $data->place ?: $this->cityName($data->cityId),
+                'address' => $data->address,
                 'moderate' => true,
                 'banned' => false,
             ]);
@@ -482,25 +483,25 @@ class EventRepository extends BaseRepository
                 'role' => 1,
             ]);
 
-            $this->syncGeoTarget($event, (int) ($data['city_id'] ?? 0));
+            $this->syncGeoTarget($event, $data->cityId);
 
             return $event;
         });
     }
 
-    public function updateEvent(Event $event, array $data): bool
+    public function updateEvent(Event $event, EventData $data): bool
     {
         return DB::transaction(function () use ($event, $data): bool {
             $oldCover = (string) $event->cover_page;
-            $cover = $this->storeCover($data['cover_file'] ?? null);
+            $cover = $this->storeCover($data->coverFile);
             $fields = [
-                'name' => $data['name'],
-                'date_from' => $data['date_from'] ?? null,
-                'date_to' => $data['date_to'] ?? null,
-                'description' => $data['description'] ?? '',
-                'sport_type' => $data['sport_type'] ?? '',
-                'place' => $data['place'] ?? '',
-                'address' => $data['address'] ?? '',
+                'name' => $data->name,
+                'date_from' => $data->dateFrom,
+                'date_to' => $data->dateTo,
+                'description' => $data->description,
+                'sport_type' => $data->sportType,
+                'place' => $data->place ?: $this->cityName($data->cityId),
+                'address' => $data->address,
             ];
 
             if ($cover) {
@@ -508,7 +509,7 @@ class EventRepository extends BaseRepository
             }
 
             $event->fill($fields)->save();
-            $this->syncGeoTarget($event, (int) ($data['city_id'] ?? 0));
+            $this->syncGeoTarget($event, $data->cityId);
 
             if ($cover && $oldCover) {
                 $this->deleteCover($oldCover);

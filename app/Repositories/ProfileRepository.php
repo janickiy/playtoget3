@@ -2,6 +2,9 @@
 
 namespace App\Repositories;
 
+use App\DTO\Profile\ProfileSettingsData;
+use App\DTO\Profile\CommentData;
+use App\DTO\Profile\ImageCropData;
 use App\Helpers\FrontAssets;
 use App\Models\AcceptedEventMember;
 use App\Models\Attachment;
@@ -202,8 +205,9 @@ class ProfileRepository extends BaseRepository
         return self::NOTIFICATION_FIELDS;
     }
 
-    public function cropTemporaryAvatar(User $user, UploadedFile $file, array $crop): array
+    public function cropTemporaryAvatar(User $user, ImageCropData $data): array
     {
+        $file = $data->file;
         $source = $this->imageResource($file);
         $sourceWidth = imagesx($source);
         $sourceHeight = imagesy($source);
@@ -214,10 +218,10 @@ class ProfileRepository extends BaseRepository
             throw new RuntimeException('Не удалось прочитать изображение.');
         }
 
-        $x = max(0, (int)floor((float)($crop['x'] ?? 0)));
-        $y = max(0, (int)floor((float)($crop['y'] ?? 0)));
-        $width = max(0, (int)floor((float)($crop['w'] ?? 0)));
-        $height = max(0, (int)floor((float)($crop['h'] ?? 0)));
+        $x = max(0, (int) floor($data->x));
+        $y = max(0, (int) floor($data->y));
+        $width = max(0, (int) floor($data->width));
+        $height = max(0, (int) floor($data->height));
         $size = min($width, $height);
 
         if ($size < 100) {
@@ -261,8 +265,9 @@ class ProfileRepository extends BaseRepository
         ];
     }
 
-    public function cropTemporaryCover(User $user, UploadedFile $file, array $crop): array
+    public function cropTemporaryCover(User $user, ImageCropData $data): array
     {
+        $file = $data->file;
         $source = $this->imageResource($file);
         $sourceWidth = imagesx($source);
         $sourceHeight = imagesy($source);
@@ -273,10 +278,10 @@ class ProfileRepository extends BaseRepository
             throw new RuntimeException('Не удалось прочитать изображение.');
         }
 
-        $x = max(0, (int)floor((float)($crop['x'] ?? 0)));
-        $y = max(0, (int)floor((float)($crop['y'] ?? 0)));
-        $width = max(0, (int)floor((float)($crop['w'] ?? 0)));
-        $height = max(0, (int)floor((float)($crop['h'] ?? 0)));
+        $x = max(0, (int) floor($data->x));
+        $y = max(0, (int) floor($data->y));
+        $width = max(0, (int) floor($data->width));
+        $height = max(0, (int) floor($data->height));
         $width = min($width, $sourceWidth - $x);
         $height = min($height, $sourceHeight - $y);
 
@@ -332,26 +337,26 @@ class ProfileRepository extends BaseRepository
         ];
     }
 
-    public function updateProfileSettings(User $user, array $input, ?string $temporaryAvatar, ?string $temporaryCover, ?UploadedFile $cover = null): void
+    public function updateProfileSettings(User $user, ProfileSettingsData $data): void
     {
         $contacts = [];
         foreach (self::CONTACT_FIELDS as $field) {
-            $contacts[$field] = trim((string)($input[$field] ?? ''));
+            $contacts[$field] = trim((string)($data->user[$field] ?? ''));
         }
 
         $permissions = [];
         foreach (array_keys(self::PERMISSION_FIELDS) as $field) {
-            $permissions[$field] = (int)($input[$field] ?? 0);
+            $permissions[$field] = (int)($data->user[$field] ?? 0);
         }
 
         $notifications = [];
         foreach (array_keys(self::NOTIFICATION_FIELDS) as $field) {
-            $notifications[$field] = array_key_exists($field, $input) ? 'yes' : 'no';
+            $notifications[$field] = array_key_exists($field, $data->user) ? 'yes' : 'no';
         }
 
-        $newAvatar = $this->promoteTemporaryAvatar($temporaryAvatar, $user->id);
-        $newCover = $this->promoteTemporaryCover($temporaryCover, $user->id)
-            ?? ($cover ? $this->storeUserImage($cover, 'user/cover_page', $user->id) : null);
+        $newAvatar = $this->promoteTemporaryAvatar($data->temporaryAvatar, $user->id);
+        $newCover = $this->promoteTemporaryCover($data->temporaryCover, $user->id)
+            ?? ($data->coverFile ? $this->storeUserImage($data->coverFile, 'user/cover_page', $user->id) : null);
         $oldAvatar = null;
         $oldCover = null;
 
@@ -453,20 +458,20 @@ class ProfileRepository extends BaseRepository
             ->exists();
     }
 
-    public function createWallComment(User $author, array $data): Comment
+    public function createWallComment(User $author, CommentData $data): Comment
     {
         /** @var Comment $comment */
         $comment = Comment::query()->create([
-            'commentable_type' => (string)$data['commentable_type'],
-            'content_id' => (int)$data['content_id'],
+            'commentable_type' => $data->commentableType,
+            'content_id' => $data->contentId,
             'user_id' => $author->id,
-            'behalfable_type' => (string)($data['behalfable_type'] ?? ''),
-            'behalf_id' => (int)($data['behalf_id'] ?? 0),
-            'content' => (string)($data['comment'] ?? ''),
-            'parent_id' => (int)($data['parent_id'] ?? 0),
+            'behalfable_type' => $data->behalfableType,
+            'behalf_id' => $data->behalfId,
+            'content' => $data->content,
+            'parent_id' => $data->parentId,
         ]);
 
-        foreach ($this->attachmentIds($data['attach'] ?? []) as $photoId) {
+        foreach ($this->attachmentIds($data->attach) as $photoId) {
             Attachment::query()->create([
                 'type' => 'comment',
                 'content_id' => $comment->id,

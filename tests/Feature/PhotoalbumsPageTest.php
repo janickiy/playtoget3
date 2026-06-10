@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\DTO\Album\AlbumData;
+use App\DTO\Photo\PhotoUploadData;
 use App\Models\Photoalbum;
 use App\Models\Photo;
 use App\Models\User;
@@ -80,7 +82,9 @@ class PhotoalbumsPageTest extends TestCase
 
         $this->mock(PhotoalbumRepository::class, function (MockInterface $mock) use ($viewer): void {
             $mock->shouldReceive('nameExists')->with($viewer, 'Новый альбом')->andReturn(false);
-            $mock->shouldReceive('createUserAlbum')->once()->with($viewer, 'Новый альбом');
+            $mock->shouldReceive('createUserAlbum')
+                ->once()
+                ->withArgs(fn (User $user, AlbumData $data): bool => $user === $viewer && $data->name === 'Новый альбом');
         });
 
         $this->post('/photoalbums/create', ['name' => 'Новый альбом'])
@@ -136,10 +140,10 @@ class PhotoalbumsPageTest extends TestCase
             $mock->shouldReceive('isOwner')->with($album, $viewer)->andReturn(true);
             $mock->shouldReceive('storePhoto')
                 ->once()
-                ->withArgs(fn (User $user, Photoalbum $receivedAlbum, UploadedFile $file, string $description): bool => $user === $viewer
+                ->withArgs(fn (User $user, Photoalbum $receivedAlbum, PhotoUploadData $data): bool => $user === $viewer
                     && $receivedAlbum === $album
-                    && $file->getClientOriginalName() === 'photo.jpg'
-                    && $description === 'Описание')
+                    && $data->file->getClientOriginalName() === 'photo.jpg'
+                    && $data->description === 'Описание')
                 ->andReturn($photo);
         });
 

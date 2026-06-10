@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Front;
 
 use App\Helpers\FrontAssets;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Front\Album\AlbumRequest;
+use App\Http\Requests\Front\Video\StoreVideoRequest;
 use App\Repositories\FriendRepository;
 use App\Repositories\ProfileRepository;
 use App\Repositories\VideoalbumRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class VideoalbumsController extends Controller
@@ -21,7 +22,7 @@ class VideoalbumsController extends Controller
      * Показывает видеоальбомы текущего пользователя.
      */
     public function index(
-        VideoalbumRepository $videoalbums,
+        VideoalbumRepository $videoAlbums,
         ProfileRepository    $profiles,
         FriendRepository     $friends,
     ): View|RedirectResponse
@@ -32,7 +33,7 @@ class VideoalbumsController extends Controller
             return redirect()->route('front.home');
         }
 
-        return $this->listing($viewer->id, $videoalbums, $profiles, $friends, true);
+        return $this->listing($viewer->id, $videoAlbums, $profiles, $friends, true);
     }
 
     /**
@@ -40,31 +41,31 @@ class VideoalbumsController extends Controller
      */
     public function user(
         int                  $user,
-        VideoalbumRepository $videoalbums,
+        VideoalbumRepository $videoAlbums,
         ProfileRepository    $profiles,
         FriendRepository     $friends,
     ): View
     {
-        return $this->listing($user, $videoalbums, $profiles, $friends, false);
+        return $this->listing($user, $videoAlbums, $profiles, $friends, false);
     }
 
     /**
      * Показывает видео выбранного видеоальбома.
      *
      * @param int $album
-     * @param VideoalbumRepository $videoalbums
+     * @param VideoalbumRepository $videoAlbums
      * @param ProfileRepository $profiles
      * @param FriendRepository $friends
      * @return View
      */
     public function show(
         int                  $album,
-        VideoalbumRepository $videoalbums,
+        VideoalbumRepository $videoAlbums,
         ProfileRepository    $profiles,
         FriendRepository     $friends,
     ): View
     {
-        $videoalbum = $videoalbums->album($album);
+        $videoalbum = $videoAlbums->album($album);
 
         abort_if(!$videoalbum || !$videoalbum->owner, 404);
 
@@ -76,7 +77,7 @@ class VideoalbumsController extends Controller
         $friendshipStatus = $friends->friendshipStatus($viewer?->id, $profile->id);
         $permissions = $profiles->permissions($profile, $viewer, $friendshipStatus);
         $videos = $permissions['video']
-            ? $videoalbums->albumVideos($videoalbum, self::ALBUM_VIDEOS_LIMIT, 0)
+            ? $videoAlbums->albumVideos($videoalbum, self::ALBUM_VIDEOS_LIMIT, 0)
             : collect();
 
         return view('front.videoalbums.show', [
@@ -91,19 +92,19 @@ class VideoalbumsController extends Controller
             'videos' => $videos,
             'videosPageSize' => self::ALBUM_VIDEOS_LIMIT,
             'hasMoreVideos' => $permissions['video']
-                ? $videoalbums->hasMoreAlbumVideos($videoalbum, self::ALBUM_VIDEOS_LIMIT, 0)
+                ? $videoAlbums->hasMoreAlbumVideos($videoalbum, self::ALBUM_VIDEOS_LIMIT, 0)
                 : false,
-            'canManage' => $videoalbums->isOwner($videoalbum, $viewer),
+            'canManage' => $videoAlbums->isOwner($videoalbum, $viewer),
         ]);
     }
 
     /**
      * Показывает форму добавления видео в доступный альбом.
      *
-     * @param VideoalbumRepository $videoalbums
+     * @param VideoalbumRepository $videoAlbums
      * @return View|RedirectResponse
      */
-    public function addVideo(VideoalbumRepository $videoalbums): View|RedirectResponse
+    public function addVideo(VideoalbumRepository $videoAlbums): View|RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
 
@@ -111,13 +112,13 @@ class VideoalbumsController extends Controller
             return redirect()->route('front.home');
         }
 
-        $videoalbums->ensureDefaultAlbum($viewer);
+        $videoAlbums->ensureDefaultAlbum($viewer);
 
         return view('front.videoalbums.add-video', [
             'title' => 'Добавление видео',
             'viewer' => $viewer,
             'profileLayout' => $this->profileLayout($viewer),
-            'albums' => $videoalbums->editableAlbumsFor($viewer),
+            'albums' => $videoAlbums->editableAlbumsFor($viewer),
         ]);
     }
 
@@ -125,11 +126,11 @@ class VideoalbumsController extends Controller
     /**
      * Валидирует ссылку и добавляет видео в выбранный альбом.
      *
-     * @param Request $request
-     * @param VideoalbumRepository $videoalbums
+     * @param StoreVideoRequest $request
+     * @param VideoalbumRepository $videoAlbums
      * @return RedirectResponse
      */
-    public function storeVideo(Request $request, VideoalbumRepository $videoalbums): RedirectResponse
+    public function storeVideo(StoreVideoRequest $request, VideoalbumRepository $videoAlbums): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
 
@@ -137,28 +138,16 @@ class VideoalbumsController extends Controller
             return redirect()->route('front.home');
         }
 
-        $validated = $request->validate([
-            'video' => ['required', 'string', 'max:1000'],
-            'description' => ['nullable', 'string', 'max:2000'],
-            'videoalbum_id' => ['required', 'integer', 'min:1'],
-        ], [
-            'video.required' => 'Укажите ссылку на видео.',
-            'videoalbum_id.required' => 'Выберите альбом.',
-        ]);
+        $videoData = $request->toDto();
 
-        $album = $videoalbums->album((int)$validated['videoalbum_id']);
+        $album = $videoAlbums->album($videoData->albumId);
 
-        if (!$album || !$videoalbums->isOwner($album, $viewer)) {
+        if (!$album || !$videoAlbums->isOwner($album, $viewer)) {
             abort(403);
         }
 
         try {
-            $videoalbums->addUserVideo(
-                $viewer,
-                $album,
-                $validated['video'],
-                trim((string)($validated['description'] ?? '')),
-            );
+            $videoAlbums->addUserVideo($viewer, $album, $videoData);
         } catch (\RuntimeException $exception) {
             return back()
                 ->withErrors(['video' => $exception->getMessage()])
@@ -192,11 +181,11 @@ class VideoalbumsController extends Controller
     /**
      * Создает видеоальбом из валидированных данных формы.
      *
-     * @param Request $request
-     * @param VideoalbumRepository $videoalbums
+     * @param AlbumRequest $request
+     * @param VideoalbumRepository $videoAlbums
      * @return RedirectResponse
      */
-    public function store(Request $request, VideoalbumRepository $videoalbums): RedirectResponse
+    public function store(AlbumRequest $request, VideoalbumRepository $videoAlbums): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
 
@@ -204,21 +193,15 @@ class VideoalbumsController extends Controller
             return redirect()->route('front.home');
         }
 
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-        ], [
-            'name.required' => 'Укажите название альбома.',
-        ]);
+        $albumData = $request->toDto();
 
-        $name = trim($validated['name']);
-
-        if ($videoalbums->nameExists($viewer, $name)) {
+        if ($videoAlbums->nameExists($viewer, $albumData->name)) {
             return back()
                 ->withErrors(['name' => 'Альбом с таким названием уже существует.'])
                 ->withInput();
         }
 
-        $videoalbums->createUserAlbum($viewer, $name);
+        $videoAlbums->createUserAlbum($viewer, $albumData);
 
         return redirect()->route('front.videoalbums.index');
     }
@@ -227,17 +210,17 @@ class VideoalbumsController extends Controller
      * Проверяет права и показывает форму редактирования видеоальбома.
      *
      * @param int $album
-     * @param VideoalbumRepository $videoalbums
+     * @param VideoalbumRepository $videoAlbums
      * @return View|RedirectResponse
      */
-    public function edit(int $album, VideoalbumRepository $videoalbums): View|RedirectResponse
+    public function edit(int $album, VideoalbumRepository $videoAlbums): View|RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
-        $videoalbum = $videoalbums->album($album);
+        $videoalbum = $videoAlbums->album($album);
 
         abort_if(!$videoalbum, 404);
 
-        if (!$viewer || !$videoalbums->isOwner($videoalbum, $viewer)) {
+        if (!$viewer || !$videoAlbums->isOwner($videoalbum, $viewer)) {
             abort(403);
         }
 
@@ -256,36 +239,30 @@ class VideoalbumsController extends Controller
      * Проверяет права и сохраняет изменения видеоальбома
      *
      * @param int $album
-     * @param Request $request
-     * @param VideoalbumRepository $videoalbums
+     * @param AlbumRequest $request
+     * @param VideoalbumRepository $videoAlbums
      * @return RedirectResponse
      */
-    public function update(int $album, Request $request, VideoalbumRepository $videoalbums): RedirectResponse
+    public function update(int $album, AlbumRequest $request, VideoalbumRepository $videoAlbums): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
-        $videoalbum = $videoalbums->album($album);
+        $videoalbum = $videoAlbums->album($album);
 
         abort_if(!$videoalbum, 404);
 
-        if (!$viewer || !$videoalbums->isOwner($videoalbum, $viewer)) {
+        if (!$viewer || !$videoAlbums->isOwner($videoalbum, $viewer)) {
             abort(403);
         }
 
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-        ], [
-            'name.required' => 'Укажите название альбома.',
-        ]);
+        $albumData = $request->toDto();
 
-        $name = trim($validated['name']);
-
-        if ($videoalbums->nameExists($viewer, $name, $videoalbum->id)) {
+        if ($videoAlbums->nameExists($viewer, $albumData->name, $videoalbum->id)) {
             return back()
                 ->withErrors(['name' => 'Альбом с таким названием уже существует.'])
                 ->withInput();
         }
 
-        $videoalbums->updateUserAlbum($videoalbum, $name);
+        $videoAlbums->updateUserAlbum($videoalbum, $albumData);
 
         return redirect()->route('front.videoalbums.index');
     }
@@ -294,21 +271,21 @@ class VideoalbumsController extends Controller
      * Проверяет права и удаляет видеоальбом.
      *
      * @param int $album
-     * @param VideoalbumRepository $videoalbums
+     * @param VideoalbumRepository $videoAlbums
      * @return RedirectResponse
      */
-    public function destroy(int $album, VideoalbumRepository $videoalbums): RedirectResponse
+    public function destroy(int $album, VideoalbumRepository $videoAlbums): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
-        $videoalbum = $videoalbums->album($album);
+        $videoalbum = $videoAlbums->album($album);
 
         abort_if(!$videoalbum, 404);
 
-        if (!$viewer || !$videoalbums->isOwner($videoalbum, $viewer)) {
+        if (!$viewer || !$videoAlbums->isOwner($videoalbum, $viewer)) {
             abort(403);
         }
 
-        $videoalbums->deleteAlbum($videoalbum);
+        $videoAlbums->deleteAlbum($videoalbum);
 
         return redirect()->route('front.videoalbums.index');
     }
@@ -317,7 +294,7 @@ class VideoalbumsController extends Controller
      * Готовит общую выдачу видеоальбомов для текущего или выбранного пользователя.
      *
      * @param int $userId
-     * @param VideoalbumRepository $videoalbums
+     * @param VideoalbumRepository $videoAlbums
      * @param ProfileRepository $profiles
      * @param FriendRepository $friends
      * @param bool $showPopular
@@ -325,7 +302,7 @@ class VideoalbumsController extends Controller
      */
     private function listing(
         int                  $userId,
-        VideoalbumRepository $videoalbums,
+        VideoalbumRepository $videoAlbums,
         ProfileRepository    $profiles,
         FriendRepository     $friends,
         bool                 $showPopular,
@@ -340,7 +317,7 @@ class VideoalbumsController extends Controller
         $permissions = $profiles->permissions($profile, $viewer, $friendshipStatus);
         $canManage = $viewer && (int)$viewer->id === (int)$profile->id;
         $videos = $permissions['video']
-            ? $videoalbums->videosForUser($profile->id, self::USER_VIDEOS_LIMIT, 0)
+            ? $videoAlbums->videosForUser($profile->id, self::USER_VIDEOS_LIMIT, 0)
             : collect();
 
         return view('front.videoalbums.index', [
@@ -354,13 +331,13 @@ class VideoalbumsController extends Controller
             'canManage' => $canManage,
             'showPopular' => $showPopular,
             'popularVideos' => $showPopular && $permissions['video']
-                ? $videoalbums->popularVideos(6, 0)
+                ? $videoAlbums->popularVideos(6, 0)
                 : collect(),
-            'albums' => $permissions['video'] ? $videoalbums->albumsForUser($profile->id) : collect(),
+            'albums' => $permissions['video'] ? $videoAlbums->albumsForUser($profile->id) : collect(),
             'videos' => $videos,
             'videosPageSize' => self::USER_VIDEOS_LIMIT,
             'hasMoreVideos' => $permissions['video']
-                ? $videoalbums->hasMoreUserVideos($profile->id, self::USER_VIDEOS_LIMIT, 0)
+                ? $videoAlbums->hasMoreUserVideos($profile->id, self::USER_VIDEOS_LIMIT, 0)
                 : false,
         ]);
     }

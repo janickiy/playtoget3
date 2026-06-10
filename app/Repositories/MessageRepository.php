@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\DTO\Message\MessageData;
 use App\Helpers\FrontAssets;
 use App\Models\Attachment;
 use App\Models\Friend;
@@ -85,19 +86,19 @@ class MessageRepository extends BaseRepository
             ->values();
     }
 
-    public function createMessage(User $sender, User $receiver, string $content, array|string|null $attach = null): Message
+    public function createMessage(User $sender, User $receiver, MessageData $data): Message
     {
         /** @var Message $message */
-        $message = DB::transaction(function () use ($sender, $receiver, $content, $attach): Message {
+        $message = DB::transaction(function () use ($sender, $receiver, $data): Message {
             /** @var Message $created */
             $created = $this->model->newQuery()->create([
                 'sender_id' => $sender->id,
                 'receiver_id' => $receiver->id,
-                'content' => $content,
+                'content' => $data->content,
                 'status' => 0,
             ]);
 
-            foreach ($this->attachmentIds($attach) as $photoId) {
+            foreach ($this->attachmentIds($data->attach) as $photoId) {
                 Attachment::query()->create([
                     'type' => 'message',
                     'content_id' => $created->id,

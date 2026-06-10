@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\DTO\Profile\ImageCropData;
+use App\DTO\Profile\ProfileSettingsData;
 use App\Models\User;
 use App\Models\UserSetting;
 use App\Repositories\FriendRepository;
@@ -99,12 +101,12 @@ class ProfilePageTest extends TestCase
         $this->mock(ProfileRepository::class, function (MockInterface $mock) use ($viewer): void {
             $mock->shouldReceive('updateProfileSettings')
                 ->once()
-                ->withArgs(fn (User $user, array $input, mixed $temporaryAvatar, mixed $cover): bool => $user === $viewer
-                    && $input['contact_email'] === 'new@example.test'
-                    && (int) $input['permission_send_message'] === 1
-                    && $input['notification_friends_request'] === 'yes'
-                    && $temporaryAvatar === '1_cropped.jpg'
-                    && $cover === null);
+                ->withArgs(fn (User $user, ProfileSettingsData $data): bool => $user === $viewer
+                    && $data->user['contact_email'] === 'new@example.test'
+                    && (int) $data->user['permission_send_message'] === 1
+                    && $data->user['notification_friends_request'] === 'yes'
+                    && $data->temporaryAvatar === '1_cropped.jpg'
+                    && $data->coverFile === null);
         });
 
         $this->post('/profile/edit', [
@@ -140,19 +142,19 @@ class ProfilePageTest extends TestCase
         $this->mock(ProfileRepository::class, function (MockInterface $mock) use ($viewer): void {
             $mock->shouldReceive('cropTemporaryAvatar')
                 ->once()
-                ->withArgs(fn (User $user, UploadedFile $file, array $crop): bool => $user === $viewer
-                    && $file->getClientOriginalName() === 'avatar.jpg'
-                    && (int) $crop['x'] === 10
-                    && (int) $crop['y'] === 20
-                    && (int) $crop['w'] === 300
-                    && (int) $crop['h'] === 300)
+                ->withArgs(fn (User $user, ImageCropData $data): bool => $user === $viewer
+                    && $data->file->getClientOriginalName() === 'avatar.jpg'
+                    && (int) $data->x === 10
+                    && (int) $data->y === 20
+                    && (int) $data->width === 300
+                    && (int) $data->height === 300)
                 ->andReturn([
                     'file' => '1_cropped.jpg',
                     'url' => 'http://site3.local/uploads/images/tmp/profile/avatar/1_cropped.jpg',
                 ]);
         });
 
-        $this->post('/ajax/uploadavatar', [
+        $this->post('/ajax/upload_avatar', [
             'avatar' => $file,
             'x' => 10,
             'y' => 20,
@@ -173,12 +175,13 @@ class ProfilePageTest extends TestCase
 
         $viewer = $this->user(1, 'Александр', 'Яницкий');
         $repository = new ProfileRepository(new User());
-        $result = $repository->cropTemporaryAvatar($viewer, UploadedFile::fake()->image('avatar.png', 600, 500), [
+        $result = $repository->cropTemporaryAvatar($viewer, ImageCropData::fromArray([
+            'file' => UploadedFile::fake()->image('avatar.png', 600, 500),
             'x' => 30,
             'y' => 40,
             'w' => 300,
             'h' => 300,
-        ]);
+        ]));
         $path = 'images/tmp/profile/avatar/' . $result['file'];
         $temporaryFile = tempnam(sys_get_temp_dir(), 'avatar-crop-');
 
@@ -274,7 +277,7 @@ class ProfilePageTest extends TestCase
             ->assertSee('id="addCommentForm"', false)
             ->assertSee('id="message-296"', false)
             ->assertSee('Real')
-            ->assertSee('/ajax/getcomments', false)
+            ->assertSee('/ajax/get_comments', false)
             ->assertSee('<input id="submit" type="submit">', false)
             ->assertSee('<div class="link_attach" data-num="2"></div>', false)
             ->assertSee('<div class="files_block" data-num="2"></div>', false)
@@ -290,7 +293,7 @@ class ProfilePageTest extends TestCase
         $this->assertStringContainsString("formData.append('_token', token);", $script);
         $this->assertStringContainsString("url: '/ajax/add_photo_ajax_attach'", $script);
         $this->assertStringNotContainsString('/?task=ajax_action&action=add_photo_ajax_attach', $script);
-        $this->assertStringContainsString("url: '/ajax/removecomment'", $commonScript);
+        $this->assertStringContainsString("url: '/ajax/remove_comment'", $commonScript);
         $this->assertStringNotContainsString('/?task=ajax_action&action=removecomment', $commonScript);
     }
 

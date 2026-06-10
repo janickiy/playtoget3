@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\DTO\Album\AlbumData;
+use App\DTO\Photo\PhotoUploadData;
 use App\Helpers\FrontAssets;
 use App\Models\Attachment;
 use App\Models\Comment;
@@ -181,16 +183,16 @@ class PhotoalbumRepository extends BaseRepository
         return $album;
     }
 
-    public function createUserAlbum(User $user, string $name): Photoalbum
+    public function createUserAlbum(User $user, AlbumData $data): Photoalbum
     {
-        return $this->createAlbumForOwner($user->id, 'user', $name);
+        return $this->createAlbumForOwner($user->id, 'user', $data);
     }
 
-    public function createAlbumForOwner(int $ownerId, string $type, string $name): Photoalbum
+    public function createAlbumForOwner(int $ownerId, string $type, AlbumData $data): Photoalbum
     {
         /** @var Photoalbum $album */
         $album = $this->model->newQuery()->create([
-            'name' => $name,
+            'name' => $data->name,
             'photoalbumable_type' => $type,
             'owner_id' => $ownerId,
         ]);
@@ -198,9 +200,9 @@ class PhotoalbumRepository extends BaseRepository
         return $album;
     }
 
-    public function updateUserAlbum(Photoalbum $album, string $name): bool
+    public function updateUserAlbum(Photoalbum $album, AlbumData $data): bool
     {
-        return $album->fill(['name' => $name])->save();
+        return $album->fill($data->toArray())->save();
     }
 
     public function nameExists(User $user, string $name, ?int $exceptId = null): bool
@@ -223,17 +225,18 @@ class PhotoalbumRepository extends BaseRepository
         return $user && (int) $album->owner_id === (int) $user->id;
     }
 
-    public function storePhoto(User $user, Photoalbum $album, UploadedFile $file, string $description = ''): Photo
+    public function storePhoto(User $user, Photoalbum $album, PhotoUploadData $data): Photo
     {
         if (! $this->isOwner($album, $user) || $album->photoalbumable_type !== 'user') {
             throw new RuntimeException('Нет доступа к выбранному альбому.');
         }
 
-        return $this->storePhotoForAlbum($user, $album, $file, $description);
+        return $this->storePhotoForAlbum($user, $album, $data);
     }
 
-    public function storePhotoForAlbum(User $user, Photoalbum $album, UploadedFile $file, string $description = ''): Photo
+    public function storePhotoForAlbum(User $user, Photoalbum $album, PhotoUploadData $data): Photo
     {
+        $file = $data->file;
         $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
         $extension = $extension === 'jpeg' ? 'jpg' : $extension;
         $filename = Str::lower(md5(microtime(true) . $file->getClientOriginalName() . Str::random(8))) . '.' . $extension;
@@ -260,7 +263,53 @@ class PhotoalbumRepository extends BaseRepository
             'photoalbum_id' => $album->id,
             'small_photo' => $smallFilename,
             'photo' => $filename,
-            'description' => $description,
+            'description' => $data->description,
+            'owner_id' => $user->id,
+            'banned' => false,
+            'moderate' => false,
+        ])->load('album');
+
+        return $photo;
+    }
+
+    public function storeAttachmentPhoto(User $user, PhotoUploadData $data): Photo
+    {
+        /** @var Photoalbum $album */
+        $album = $this->model->newQuery()->firstOrCreate([
+            'owner_id' => $user->id,
+            'photoalbumable_type' => 'user_attach',
+        ], [
+            'name' => 'Мои прикрепленные фотографии',
+        ]);
+
+        $file = $data->file;
+        $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
+        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
+        $filename = Str::lower(Str::random(32)) . '.' . $extension;
+        $smallFilename = 's_' . $filename;
+        $directory = 'images/photogallery/user_attach';
+        $contents = file_get_contents($file->getRealPath());
+
+        if ($contents === false) {
+            throw new RuntimeException('Invalid file');
+        }
+
+        $disk = Storage::disk('public');
+        $originalPath = $directory . '/' . $filename;
+        $smallPath = $directory . '/' . $smallFilename;
+
+        if (! $disk->put($originalPath, $contents) || ! $disk->put($smallPath, $contents)) {
+            $disk->delete([$originalPath, $smallPath]);
+
+            throw new RuntimeException('File was not saved');
+        }
+
+        /** @var Photo $photo */
+        $photo = Photo::query()->create([
+            'photoalbum_id' => $album->id,
+            'small_photo' => $smallFilename,
+            'photo' => $filename,
+            'description' => '',
             'owner_id' => $user->id,
             'banned' => false,
             'moderate' => false,

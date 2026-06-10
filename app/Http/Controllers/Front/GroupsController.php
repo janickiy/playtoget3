@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Front\Album\AlbumRequest;
+use App\Http\Requests\Front\Community\CommunityRequest;
+use App\Http\Requests\Front\Video\StoreVideoRequest;
 use App\Models\Community;
 use App\Models\Photoalbum;
 use App\Models\User;
@@ -101,11 +104,11 @@ class GroupsController extends Controller
     /**
      * Валидирует данные формы и создает группу.
      *
-     * @param Request $request
+     * @param CommunityRequest $request
      * @param CommunityRepository $communities
      * @return RedirectResponse
      */
-    public function store(Request $request, CommunityRepository $communities): RedirectResponse
+    public function store(CommunityRequest $request, CommunityRepository $communities): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
 
@@ -113,7 +116,7 @@ class GroupsController extends Controller
             return redirect()->route('front.home');
         }
 
-        $group = $communities->createGroup($viewer, $this->validateGroup($request, $communities));
+        $group = $communities->createGroup($viewer, $request->toDto());
 
         return redirect()->route('front.groups.show', ['community' => $group->id]);
     }
@@ -191,18 +194,18 @@ class GroupsController extends Controller
      * Проверяет права и сохраняет изменения группы
      *
      * @param int $community
-     * @param Request $request
+     * @param CommunityRequest $request
      * @param CommunityRepository $communities
      * @return RedirectResponse
      */
-    public function update(int $community, Request $request, CommunityRepository $communities): RedirectResponse
+    public function update(int $community, CommunityRequest $request, CommunityRepository $communities): RedirectResponse
     {
         $group = $this->groupOrFail($community, $communities);
         $viewer = Auth::guard('web')->user();
 
         abort_unless($communities->canManage($group, $viewer), 403);
 
-        $communities->updateGroup($group, $this->validateGroup($request, $communities, true));
+        $communities->updateGroup($group, $request->toDto(true));
 
         return redirect()->route('front.groups.show', ['community' => $group->id]);
     }
@@ -243,15 +246,15 @@ class GroupsController extends Controller
     public function showPhotoalbum(int $community, int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums): View
     {
         $group = $this->groupOrFail($community, $communities);
-        $photoalbum = $this->groupPhotoalbumOrFail($album, $group, $photoalbums);
+        $photoAlbum = $this->groupPhotoalbumOrFail($album, $group, $photoalbums);
         $payload = $this->groupPayload($group, $communities, 'photoalbums');
         abort_unless($payload['permissions']['photo'], 404);
 
         return view('front.teams.photoalbums.show', $payload + [
-            'photoalbum' => $photoalbum,
-            'photos' => $photoalbums->albumPhotos($photoalbum, self::ALBUM_PHOTOS_LIMIT, 0),
+            'photoalbum' => $photoAlbum,
+            'photos' => $photoalbums->albumPhotos($photoAlbum, self::ALBUM_PHOTOS_LIMIT, 0),
             'photosPageSize' => self::ALBUM_PHOTOS_LIMIT,
-            'hasMorePhotos' => $photoalbums->hasMoreAlbumPhotos($photoalbum, self::ALBUM_PHOTOS_LIMIT, 0),
+            'hasMorePhotos' => $photoalbums->hasMoreAlbumPhotos($photoAlbum, self::ALBUM_PHOTOS_LIMIT, 0),
             'canManage' => $communities->canManage($group, Auth::guard('web')->user()),
             'openPhotoId' => null,
         ]);
@@ -302,23 +305,23 @@ class GroupsController extends Controller
      * Создает фотоальбом группы из валидированных данных формы.
      *
      * @param int $community
-     * @param Request $request
+     * @param AlbumRequest $request
      * @param CommunityRepository $communities
      * @param PhotoalbumRepository $photoalbums
      * @return RedirectResponse
      */
-    public function storePhotoAlbum(int $community, Request $request, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
+    public function storePhotoAlbum(int $community, AlbumRequest $request, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $group = $this->groupOrFail($community, $communities);
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
-        $name = $this->validateAlbumName($request);
+        $albumData = $request->toDto();
 
-        if ($photoalbums->nameExistsForOwner($group->id, 'group', $name)) {
+        if ($photoalbums->nameExistsForOwner($group->id, 'group', $albumData->name)) {
             return back()->withErrors(['name' => 'Альбом с таким названием уже существует.'])->withInput();
         }
 
-        $photoalbums->createAlbumForOwner($group->id, 'group', $name);
+        $photoalbums->createAlbumForOwner($group->id, 'group', $albumData);
 
         return redirect()->route('front.groups.photoalbums', ['community' => $group->id]);
     }
@@ -328,17 +331,17 @@ class GroupsController extends Controller
      */
     public function editPhotoalbum(int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums, ?int $community = null): View
     {
-        $photoalbum = $photoalbums->album($album, ['group']);
-        abort_if(! $photoalbum, 404);
+        $photoAlbum = $photoalbums->album($album, ['group']);
+        abort_if(! $photoAlbum, 404);
 
-        $group = $community ? $this->groupOrFail($community, $communities) : $this->groupOrFail((int) $photoalbum->owner_id, $communities);
+        $group = $community ? $this->groupOrFail($community, $communities) : $this->groupOrFail((int) $photoAlbum->owner_id, $communities);
         $this->groupPhotoalbumOrFail($album, $group, $photoalbums);
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->groupPayload($group, $communities, 'photoalbums') + [
             'title' => 'Редактирование фотоальбома',
-            'action' => route('front.groups.photoalbum.update', ['album' => $photoalbum->id]),
-            'name' => old('name', $photoalbum->name),
+            'action' => route('front.groups.photoalbum.update', ['album' => $photoAlbum->id]),
+            'name' => old('name', $photoAlbum->name),
             'button' => 'Редактировать',
         ]);
     }
@@ -346,14 +349,14 @@ class GroupsController extends Controller
     /**
      * Проверяет права и сохраняет изменения фотоальбома группы.
      */
-    public function updatePhotoalbum(int $album, Request $request, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
+    public function updatePhotoalbum(int $album, AlbumRequest $request, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
     {
-        $photoalbum = $photoalbums->album($album, ['group']);
-        abort_if(! $photoalbum, 404);
-        $group = $this->groupOrFail((int) $photoalbum->owner_id, $communities);
+        $photoAlbum = $photoalbums->album($album, ['group']);
+        abort_if(! $photoAlbum, 404);
+        $group = $this->groupOrFail((int) $photoAlbum->owner_id, $communities);
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
-        $photoalbums->updateUserAlbum($photoalbum, $this->validateAlbumName($request));
+        $photoalbums->updateUserAlbum($photoAlbum, $request->toDto());
 
         return redirect()->route('front.groups.photoalbums', ['community' => $group->id]);
     }
@@ -363,13 +366,13 @@ class GroupsController extends Controller
      */
     public function destroyPhotoalbum(int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
     {
-        $photoalbum = $photoalbums->album($album, ['group']);
-        abort_if(! $photoalbum, 404);
+        $photoAlbum = $photoalbums->album($album, ['group']);
+        abort_if(! $photoAlbum, 404);
 
-        $group = $this->groupOrFail((int) $photoalbum->owner_id, $communities);
+        $group = $this->groupOrFail((int) $photoAlbum->owner_id, $communities);
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
-        $photoalbums->deleteAlbum($photoalbum);
+        $photoalbums->deleteAlbum($photoAlbum);
 
         return redirect()->route('front.groups.photoalbums', ['community' => $group->id]);
     }
@@ -380,11 +383,11 @@ class GroupsController extends Controller
     public function destroyPhotoalbumForGroup(int $community, int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $group = $this->groupOrFail($community, $communities);
-        $photoalbum = $this->groupPhotoalbumOrFail($album, $group, $photoalbums);
+        $photoAlbum = $this->groupPhotoalbumOrFail($album, $group, $photoalbums);
 
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
-        $photoalbums->deleteAlbum($photoalbum);
+        $photoalbums->deleteAlbum($photoAlbum);
 
         return redirect()->route('front.groups.photoalbums', ['community' => $group->id]);
     }
@@ -400,14 +403,14 @@ class GroupsController extends Controller
     /**
      * Сохраняет изменения фотоальбома конкретной группы.
      */
-    public function updatePhotoalbumForGroup(int $community, int $album, Request $request, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
+    public function updatePhotoalbumForGroup(int $community, int $album, AlbumRequest $request, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $group = $this->groupOrFail($community, $communities);
-        $photoalbum = $this->groupPhotoalbumOrFail($album, $group, $photoalbums);
+        $photoAlbum = $this->groupPhotoalbumOrFail($album, $group, $photoalbums);
 
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
-        $photoalbums->updateUserAlbum($photoalbum, $this->validateAlbumName($request));
+        $photoalbums->updateUserAlbum($photoAlbum, $request->toDto());
 
         return redirect()->route('front.groups.photoalbums', ['community' => $group->id]);
     }
@@ -432,15 +435,15 @@ class GroupsController extends Controller
         $photoModel = $photoalbums->photo($photo, ['group']);
         abort_if(! $photoModel, 404);
 
-        $photoalbum = $this->groupPhotoalbumOrFail((int) $photoModel->photoalbum_id, $group, $photoalbums);
+        $photoAlbum = $this->groupPhotoalbumOrFail((int) $photoModel->photoalbum_id, $group, $photoalbums);
 
-        return $this->photo($community, $photoalbum->id, $photo, $communities, $photoalbums);
+        return $this->photo($community, $photoAlbum->id, $photo, $communities, $photoalbums);
     }
 
     /**
      * Показывает видеоальбомы группы или текущей группы.
      */
-    public function videoAlbums(CommunityRepository $communities, VideoalbumRepository $videoalbums, ?int $community = null): View
+    public function videoAlbums(CommunityRepository $communities, VideoalbumRepository $videoAlbums, ?int $community = null): View
     {
         $group = $this->resolveGroup($community, $communities);
         $payload = $this->groupPayload($group, $communities, 'videoalbums');
@@ -448,29 +451,29 @@ class GroupsController extends Controller
 
         return view('front.teams.videoalbums.index', $payload + [
             'canManage' => $communities->canManage($group, Auth::guard('web')->user()),
-            'albums' => $videoalbums->albumsForOwner($group->id, 'group'),
-            'videos' => $videoalbums->videosForOwner($group->id, 'group', self::VIDEOS_LIMIT, 0),
+            'albums' => $videoAlbums->albumsForOwner($group->id, 'group'),
+            'videos' => $videoAlbums->videosForOwner($group->id, 'group', self::VIDEOS_LIMIT, 0),
             'videosPageSize' => self::VIDEOS_LIMIT,
-            'hasMoreVideos' => $videoalbums->hasMoreOwnerVideos($group->id, 'group', self::VIDEOS_LIMIT, 0),
-            'popularVideos' => $videoalbums->popularVideos(6, 0, 'group'),
+            'hasMoreVideos' => $videoAlbums->hasMoreOwnerVideos($group->id, 'group', self::VIDEOS_LIMIT, 0),
+            'popularVideos' => $videoAlbums->popularVideos(6, 0, 'group'),
         ]);
     }
 
     /**
      * Показывает видео выбранного видеоальбома группы.
      */
-    public function showVideoAlbum(int $community, int $album, CommunityRepository $communities, VideoalbumRepository $videoalbums): View
+    public function showVideoAlbum(int $community, int $album, CommunityRepository $communities, VideoalbumRepository $videoAlbums): View
     {
         $group = $this->groupOrFail($community, $communities);
-        $videoalbum = $this->groupVideoalbumOrFail($album, $group, $videoalbums);
+        $videoalbum = $this->groupVideoalbumOrFail($album, $group, $videoAlbums);
         $payload = $this->groupPayload($group, $communities, 'videoalbums');
         abort_unless($payload['permissions']['video'], 404);
 
         return view('front.teams.videoalbums.show', $payload + [
             'videoalbum' => $videoalbum,
-            'videos' => $videoalbums->albumVideos($videoalbum, self::VIDEOS_LIMIT, 0),
+            'videos' => $videoAlbums->albumVideos($videoalbum, self::VIDEOS_LIMIT, 0),
             'videosPageSize' => self::VIDEOS_LIMIT,
-            'hasMoreVideos' => $videoalbums->hasMoreAlbumVideos($videoalbum, self::VIDEOS_LIMIT, 0),
+            'hasMoreVideos' => $videoAlbums->hasMoreAlbumVideos($videoalbum, self::VIDEOS_LIMIT, 0),
             'canManage' => $communities->canManage($group, Auth::guard('web')->user()),
         ]);
     }
@@ -478,35 +481,30 @@ class GroupsController extends Controller
     /**
      * Показывает форму добавления видео в видеоальбом группы.
      */
-    public function addVideo(int $community, CommunityRepository $communities, VideoalbumRepository $videoalbums): View
+    public function addVideo(int $community, CommunityRepository $communities, VideoalbumRepository $videoAlbums): View
     {
         $group = $this->groupOrFail($community, $communities);
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
-        $videoalbums->ensureDefaultAlbumForOwner($group->id, 'group', 'Альбом сообщества');
+        $videoAlbums->ensureDefaultAlbumForOwner($group->id, 'group', 'Альбом сообщества');
 
         return view('front.teams.videoalbums.add-video', $this->groupPayload($group, $communities, 'videoalbums') + [
             'title' => 'Добавление видеозаписи',
-            'albums' => $videoalbums->editableAlbumsForOwner($group->id, 'group'),
+            'albums' => $videoAlbums->editableAlbumsForOwner($group->id, 'group'),
         ]);
     }
 
     /**
      * Валидирует ссылку и добавляет видео в видеоальбом группы.
      */
-    public function storeVideo(int $community, Request $request, CommunityRepository $communities, VideoalbumRepository $videoalbums): RedirectResponse
+    public function storeVideo(int $community, StoreVideoRequest $request, CommunityRepository $communities, VideoalbumRepository $videoAlbums): RedirectResponse
     {
         $group = $this->groupOrFail($community, $communities);
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
-        $validated = $request->validate([
-            'video' => ['required', 'string', 'max:1000'],
-            'description' => ['nullable', 'string', 'max:2000'],
-            'videoalbum_id' => ['required', 'integer', 'min:1'],
-        ]);
-
-        $album = $this->groupVideoalbumOrFail((int) $validated['videoalbum_id'], $group, $videoalbums);
-        $videoalbums->addVideoToAlbum(Auth::guard('web')->user(), $album, $validated['video'], trim((string) ($validated['description'] ?? '')));
+        $videoData = $request->toDto();
+        $album = $this->groupVideoalbumOrFail($videoData->albumId, $group, $videoAlbums);
+        $videoAlbums->addVideoToAlbum(Auth::guard('web')->user(), $album, $videoData);
 
         return redirect()->route('front.groups.videoalbums', ['community' => $group->id]);
     }
@@ -530,18 +528,18 @@ class GroupsController extends Controller
     /**
      * Создает видеоальбом группы из валидированных данных формы.
      */
-    public function storeVideoAlbum(int $community, Request $request, CommunityRepository $communities, VideoalbumRepository $videoalbums): RedirectResponse
+    public function storeVideoAlbum(int $community, AlbumRequest $request, CommunityRepository $communities, VideoalbumRepository $videoAlbums): RedirectResponse
     {
         $group = $this->groupOrFail($community, $communities);
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
-        $name = $this->validateAlbumName($request);
+        $albumData = $request->toDto();
 
-        if ($videoalbums->nameExistsForOwner($group->id, 'group', $name)) {
+        if ($videoAlbums->nameExistsForOwner($group->id, 'group', $albumData->name)) {
             return back()->withErrors(['name' => 'Альбом с таким названием уже существует.'])->withInput();
         }
 
-        $videoalbums->createAlbumForOwner($group->id, 'group', $name);
+        $videoAlbums->createAlbumForOwner($group->id, 'group', $albumData);
 
         return redirect()->route('front.groups.videoalbums', ['community' => $group->id]);
     }
@@ -549,13 +547,13 @@ class GroupsController extends Controller
     /**
      * Проверяет права и показывает форму редактирования видеоальбома группы.
      */
-    public function editVideoalbum(int $album, CommunityRepository $communities, VideoalbumRepository $videoalbums, ?int $community = null): View
+    public function editVideoalbum(int $album, CommunityRepository $communities, VideoalbumRepository $videoAlbums, ?int $community = null): View
     {
-        $videoalbum = $videoalbums->album($album, ['group']);
+        $videoalbum = $videoAlbums->album($album, ['group']);
         abort_if(! $videoalbum, 404);
 
         $group = $community ? $this->groupOrFail($community, $communities) : $this->groupOrFail((int) $videoalbum->owner_id, $communities);
-        $this->groupVideoalbumOrFail($album, $group, $videoalbums);
+        $this->groupVideoalbumOrFail($album, $group, $videoAlbums);
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->groupPayload($group, $communities, 'videoalbums') + [
@@ -569,14 +567,14 @@ class GroupsController extends Controller
     /**
      * Проверяет права и сохраняет изменения видеоальбома группы.
      */
-    public function updateVideoalbum(int $album, Request $request, CommunityRepository $communities, VideoalbumRepository $videoalbums): RedirectResponse
+    public function updateVideoalbum(int $album, AlbumRequest $request, CommunityRepository $communities, VideoalbumRepository $videoAlbums): RedirectResponse
     {
-        $videoalbum = $videoalbums->album($album, ['group']);
+        $videoalbum = $videoAlbums->album($album, ['group']);
         abort_if(! $videoalbum, 404);
         $group = $this->groupOrFail((int) $videoalbum->owner_id, $communities);
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
-        $videoalbums->updateUserAlbum($videoalbum, $this->validateAlbumName($request));
+        $videoAlbums->updateUserAlbum($videoalbum, $request->toDto());
 
         return redirect()->route('front.groups.videoalbums', ['community' => $group->id]);
     }
@@ -584,15 +582,15 @@ class GroupsController extends Controller
     /**
      * Проверяет права и удаляет видеоальбом группы.
      */
-    public function destroyVideoalbum(int $album, CommunityRepository $communities, VideoalbumRepository $videoalbums): RedirectResponse
+    public function destroyVideoalbum(int $album, CommunityRepository $communities, VideoalbumRepository $videoAlbums): RedirectResponse
     {
-        $videoalbum = $videoalbums->album($album, ['group']);
+        $videoalbum = $videoAlbums->album($album, ['group']);
         abort_if(! $videoalbum, 404);
 
         $group = $this->groupOrFail((int) $videoalbum->owner_id, $communities);
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
-        $videoalbums->deleteAlbum($videoalbum);
+        $videoAlbums->deleteAlbum($videoalbum);
 
         return redirect()->route('front.groups.videoalbums', ['community' => $group->id]);
     }
@@ -600,14 +598,14 @@ class GroupsController extends Controller
     /**
      * Проверяет группу в URL и удаляет ее видеоальбом.
      */
-    public function destroyVideoalbumForGroup(int $community, int $album, CommunityRepository $communities, VideoalbumRepository $videoalbums): RedirectResponse
+    public function destroyVideoalbumForGroup(int $community, int $album, CommunityRepository $communities, VideoalbumRepository $videoAlbums): RedirectResponse
     {
         $group = $this->groupOrFail($community, $communities);
-        $videoalbum = $this->groupVideoalbumOrFail($album, $group, $videoalbums);
+        $videoalbum = $this->groupVideoalbumOrFail($album, $group, $videoAlbums);
 
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
-        $videoalbums->deleteAlbum($videoalbum);
+        $videoAlbums->deleteAlbum($videoalbum);
 
         return redirect()->route('front.groups.videoalbums', ['community' => $group->id]);
     }
@@ -693,62 +691,6 @@ class GroupsController extends Controller
     }
 
     /**
-     * Валидирует форму группы и нормализует настройки, город и спорт.
-     */
-    private function validateGroup(Request $request, CommunityRepository $communities, bool $withSettings = false): array
-    {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'about' => ['nullable', 'string', 'max:5000'],
-            'id_place' => ['nullable', 'integer'],
-            'id_sport' => ['nullable', 'integer'],
-            'place' => ['nullable', 'string', 'max:255'],
-            'sport' => ['nullable', 'string', 'max:255'],
-            'avatar_file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif', 'max:8192'],
-            'cover_file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif', 'max:8192'],
-            'community.permission_wall' => ['nullable', 'integer', 'min:0', 'max:3'],
-            'community.permission_photo' => ['nullable', 'integer', 'min:0', 'max:2'],
-            'community.permission_video' => ['nullable', 'integer', 'min:0', 'max:2'],
-            'community.type' => ['nullable', 'integer', 'min:0', 'max:2'],
-        ], [
-            'name.required' => 'Укажите название группы.',
-        ]);
-
-        $cityId = (int) ($validated['id_place'] ?? 0);
-        $sportId = (int) ($validated['id_sport'] ?? 0);
-        $settings = $validated['community'] ?? [];
-
-        return [
-            'name' => trim($validated['name']),
-            'about' => trim((string) ($validated['about'] ?? '')),
-            'city_id' => $cityId,
-            'sport_id' => $sportId,
-            'place' => trim((string) ($validated['place'] ?? '')) ?: $communities->cityName($cityId),
-            'sport_type' => trim((string) ($validated['sport'] ?? '')) ?: $communities->sportName($sportId),
-            'permission_wall' => $withSettings ? (int) ($settings['permission_wall'] ?? 0) : 0,
-            'permission_photo' => $withSettings ? (int) ($settings['permission_photo'] ?? 0) : 0,
-            'permission_video' => $withSettings ? (int) ($settings['permission_video'] ?? 0) : 0,
-            'type' => $withSettings ? (int) ($settings['type'] ?? 0) : 0,
-            'avatar_file' => $request->file('avatar_file'),
-            'cover_file' => $request->file('cover_file'),
-        ];
-    }
-
-    /**
-     * Валидирует название альбома и возвращает очищенную строку.
-     */
-    private function validateAlbumName(Request $request): string
-    {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-        ], [
-            'name.required' => 'Укажите название альбома.',
-        ]);
-
-        return trim($validated['name']);
-    }
-
-    /**
      * Определяет группу из параметра маршрута или из текущего пользователя.
      */
     private function resolveGroup(?int $community, CommunityRepository $communities): Community
@@ -781,19 +723,19 @@ class GroupsController extends Controller
      */
     private function groupPhotoalbumOrFail(int $album, Community $group, PhotoalbumRepository $photoalbums): Photoalbum
     {
-        $photoalbum = $photoalbums->album($album, ['group']);
+        $photoAlbum = $photoalbums->album($album, ['group']);
 
-        abort_if(! $photoalbum || (int) $photoalbum->owner_id !== (int) $group->id, 404);
+        abort_if(! $photoAlbum || (int) $photoAlbum->owner_id !== (int) $group->id, 404);
 
-        return $photoalbum;
+        return $photoAlbum;
     }
 
     /**
      * Находит видеоальбом, принадлежащий группе, или завершает запрос ошибкой 404.
      */
-    private function groupVideoalbumOrFail(int $album, Community $group, VideoalbumRepository $videoalbums): Videoalbum
+    private function groupVideoalbumOrFail(int $album, Community $group, VideoalbumRepository $videoAlbums): Videoalbum
     {
-        $videoalbum = $videoalbums->album($album, ['group']);
+        $videoalbum = $videoAlbums->album($album, ['group']);
 
         abort_if(! $videoalbum || (int) $videoalbum->owner_id !== (int) $group->id, 404);
 

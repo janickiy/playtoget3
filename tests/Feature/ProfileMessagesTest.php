@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\DTO\Message\MessageData;
 use App\Models\Message;
 use App\Models\User;
 use App\Repositories\FriendRepository;
@@ -51,7 +52,7 @@ class ProfileMessagesTest extends TestCase
             ->assertSee('id="message-77"', false)
             ->assertSee('id="addMessageForm"', false)
             ->assertSee('name="receiver_id" value="2"', false)
-            ->assertSee('/ajax/getmessages', false)
+            ->assertSee('/ajax/get_messages', false)
             ->assertSee('frontend/js/profile.js', false);
     }
 
@@ -110,10 +111,10 @@ class ProfileMessagesTest extends TestCase
             $mock->shouldReceive('canSendMessage')->with($viewer, $receiver)->andReturn(true);
             $mock->shouldReceive('createMessage')
                 ->once()
-                ->withArgs(fn (User $sender, User $recipient, string $content, mixed $attach): bool => $sender === $viewer
+                ->withArgs(fn (User $sender, User $recipient, MessageData $data): bool => $sender === $viewer
                     && $recipient === $receiver
-                    && $content === 'Привет'
-                    && $attach === [935])
+                    && $data->content === 'Привет'
+                    && $data->attach === [935])
                 ->andReturn($message);
             $mock->shouldReceive('serializeMessage')->with($message)->andReturn([
                 'id' => 55,
@@ -127,7 +128,7 @@ class ProfileMessagesTest extends TestCase
         });
 
         $this->actingAs($viewer, 'web')
-            ->postJson('/ajax/addmessage', [
+            ->postJson('/ajax/add_message', [
                 'receiver_id' => 2,
                 'message' => 'Привет',
                 'attach' => [935],

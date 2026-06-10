@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\DTO\Album\AlbumData;
+use App\DTO\Video\VideoData;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\Videoalbum;
@@ -78,7 +80,10 @@ class VideoalbumsPageTest extends TestCase
 
         $this->mock(VideoalbumRepository::class, function (MockInterface $mock) use ($viewer): void {
             $mock->shouldReceive('nameExists')->with($viewer, 'Новый альбом')->andReturn(false);
-            $mock->shouldReceive('createUserAlbum')->once()->with($viewer, 'Новый альбом')->andReturn(new Videoalbum());
+            $mock->shouldReceive('createUserAlbum')
+                ->once()
+                ->withArgs(fn (User $user, AlbumData $data): bool => $user === $viewer && $data->name === 'Новый альбом')
+                ->andReturn(new Videoalbum());
         });
 
         $this->post('/videoalbums/create', ['name' => 'Новый альбом'])
@@ -103,7 +108,11 @@ class VideoalbumsPageTest extends TestCase
             $mock->shouldReceive('isOwner')->with($album, $viewer)->andReturn(true);
             $mock->shouldReceive('addUserVideo')
                 ->once()
-                ->with($viewer, $album, 'https://youtu.be/abc123', 'Описание')
+                ->withArgs(fn (User $user, Videoalbum $receivedAlbum, VideoData $data): bool => $user === $viewer
+                    && $receivedAlbum === $album
+                    && $data->link === 'https://youtu.be/abc123'
+                    && $data->description === 'Описание'
+                    && $data->albumId === 19)
                 ->andReturn($video);
         });
 

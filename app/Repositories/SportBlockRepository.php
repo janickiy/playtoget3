@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\DTO\SportBlock\SportBlockData;
 use App\Helpers\FrontAssets;
 use App\Models\GeoCity;
 use App\Models\GeoTarget;
@@ -72,46 +73,46 @@ class SportBlockRepository extends BaseRepository
         ];
     }
 
-    public function createBlock(User $owner, string $type, array $data): SportBlock
+    public function createBlock(User $owner, string $type, SportBlockData $data): SportBlock
     {
         return DB::transaction(function () use ($owner, $type, $data): SportBlock {
-            $avatar = $this->storeAvatar($data['avatar_file'] ?? null);
+            $avatar = $this->storeAvatar($data->avatarFile);
 
             /** @var SportBlock $sportBlock */
             $sportBlock = $this->model->newQuery()->create([
                 'type' => $type,
                 'owner_id' => $owner->id,
-                'name' => $data['name'],
-                'about' => $data['about'] ?? '',
-                'place' => $data['place'] ?? '',
-                'address' => $data['address'] ?? '',
-                'phone' => $data['phone'] ?? '',
-                'email' => $data['email'] ?? '',
-                'website' => $data['website'] ?? '',
+                'name' => $data->name,
+                'about' => $data->about,
+                'place' => $data->place ?: $this->cityName($data->cityId),
+                'address' => $data->address,
+                'phone' => $data->phone,
+                'email' => $data->email,
+                'website' => $data->website,
                 'avatar' => $avatar ?? '',
                 'active' => true,
                 'banned' => false,
             ]);
 
-            $this->syncGeoTarget($sportBlock, (int) ($data['city_id'] ?? 0));
+            $this->syncGeoTarget($sportBlock, $data->cityId);
 
             return $sportBlock;
         });
     }
 
-    public function updateBlock(SportBlock $sportBlock, array $data): bool
+    public function updateBlock(SportBlock $sportBlock, SportBlockData $data): bool
     {
         return DB::transaction(function () use ($sportBlock, $data): bool {
-            $avatar = $this->storeAvatar($data['avatar_file'] ?? null);
+            $avatar = $this->storeAvatar($data->avatarFile);
 
             $sportBlock->fill([
-                'name' => $data['name'],
-                'about' => $data['about'] ?? '',
-                'place' => $data['place'] ?? '',
-                'address' => $data['address'] ?? '',
-                'phone' => $data['phone'] ?? '',
-                'email' => $data['email'] ?? '',
-                'website' => $data['website'] ?? '',
+                'name' => $data->name,
+                'about' => $data->about,
+                'place' => $data->place ?: $this->cityName($data->cityId),
+                'address' => $data->address,
+                'phone' => $data->phone,
+                'email' => $data->email,
+                'website' => $data->website,
             ]);
 
             if ($avatar) {
@@ -119,7 +120,7 @@ class SportBlockRepository extends BaseRepository
             }
 
             $sportBlock->save();
-            $this->syncGeoTarget($sportBlock, (int) ($data['city_id'] ?? 0));
+            $this->syncGeoTarget($sportBlock, $data->cityId);
 
             return true;
         });

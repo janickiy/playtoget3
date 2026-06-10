@@ -2,12 +2,21 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\DTO\Message\MessageData;
+use App\DTO\Photo\PhotoUploadData;
+use App\DTO\Profile\CommentData;
+use App\DTO\Profile\ImageCropData;
 use App\Helpers\FrontAssets;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Front\Ajax\AddCommentRequest;
+use App\Http\Requests\Front\Ajax\AddMessageRequest;
+use App\Http\Requests\Front\Ajax\AttachmentPhotoRequest;
+use App\Http\Requests\Front\Ajax\CropAvatarRequest;
+use App\Http\Requests\Front\Ajax\CropCoverRequest;
+use App\Http\Requests\Front\Ajax\PhotoUploadRequest;
 use App\Models\GeoCity;
 use App\Models\Like;
 use App\Models\Photo;
-use App\Models\Photoalbum;
 use App\Models\Share;
 use App\Models\SportType;
 use App\Models\User;
@@ -27,8 +36,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 
 class AjaxController extends Controller
 {
@@ -42,7 +50,7 @@ class AjaxController extends Controller
         private readonly ProfileRepository    $profiles,
         private readonly MessageRepository    $messages,
         private readonly PhotoalbumRepository $photoalbums,
-        private readonly VideoalbumRepository $videoalbums,
+        private readonly VideoalbumRepository $videoAlbums,
         private readonly CommunityRepository  $communities,
         private readonly EventRepository      $events,
         private readonly SportBlockRepository $sportBlocks,
@@ -734,13 +742,10 @@ class AjaxController extends Controller
             return response()->json(['info' => null, 'error' => 'Unauthorized'], 401);
         }
 
-        $request->validate([
-            'file' => ['required', 'image', 'mimes:jpg,jpeg,png,gif', 'max:32768'],
-            'categorie' => ['required', 'integer', 'min:1'],
-            'description' => ['nullable', 'string', 'max:2000'],
+        $photoData = PhotoUploadData::fromArray($this->validateAjax($request, PhotoUploadRequest::class) + [
+            'file' => $request->file('file'),
         ]);
-
-        $albumId = (int)$request->input('categorie');
+        $albumId = $photoData->albumId;
         $albumType = (string)$request->input('photoalbumable_type', 'user');
         $managedOwnerTypes = ['team', 'group', 'event'];
         $sportBlockTypes = ['playground', 'shop', 'fitness'];
@@ -774,15 +779,13 @@ class AjaxController extends Controller
                 $photo = $this->photoalbums->storePhotoForAlbum(
                     $viewer,
                     $album,
-                    $request->file('file'),
-                    trim((string)$request->input('description', '')),
+                    $photoData,
                 );
             } else {
                 $photo = $this->photoalbums->storePhoto(
                     $viewer,
                     $album,
-                    $request->file('file'),
-                    trim((string)$request->input('description', '')),
+                    $photoData,
                 );
             }
         } catch (\RuntimeException $exception) {
@@ -946,8 +949,8 @@ class AjaxController extends Controller
             'lastname' => (string)($owner?->lastname ?? ''),
             'created' => $video->created_at?->format('d.m.Y H:i') ?? '',
             'description' => (string)$video->description,
-            'thumb' => $this->videoalbums->thumbUrl((string)$video->provider, (string)$video->video),
-            'video' => $this->videoalbums->playerHtml((string)$video->provider, (string)$video->video),
+            'thumb' => $this->videoAlbums->thumbUrl((string)$video->provider, (string)$video->video),
+            'video' => $this->videoAlbums->playerHtml((string)$video->provider, (string)$video->video),
             'liked' => Like::query()
                 ->where('likeable_type', 'video')
                 ->where('content_id', $video->id)
@@ -981,8 +984,8 @@ class AjaxController extends Controller
         }
 
         $videos = $type === 'user'
-            ? $this->videoalbums->videosForUser($ownerId, $limit, $offset)
-            : $this->videoalbums->videosForOwner($ownerId, $type, $limit, $offset);
+            ? $this->videoAlbums->videosForUser($ownerId, $limit, $offset)
+            : $this->videoAlbums->videosForOwner($ownerId, $type, $limit, $offset);
         $canManage = match ($type) {
             'team' => $this->communities->canManage($this->communities->findTeam($ownerId), $viewer),
             'group' => $this->communities->canManage($this->communities->findGroup($ownerId), $viewer),
@@ -994,8 +997,8 @@ class AjaxController extends Controller
             'status' => $videos->isNotEmpty() ? 1 : 0,
             'html' => $this->renderVideos($videos, $viewer, $canManage),
             'has_more' => $type === 'user'
-                ? $this->videoalbums->hasMoreUserVideos($ownerId, $limit, $offset)
-                : $this->videoalbums->hasMoreOwnerVideos($ownerId, $type, $limit, $offset),
+                ? $this->videoAlbums->hasMoreUserVideos($ownerId, $limit, $offset)
+                : $this->videoAlbums->hasMoreOwnerVideos($ownerId, $type, $limit, $offset),
         ]);
     }
 
@@ -1010,24 +1013,24 @@ class AjaxController extends Controller
         $viewer = $this->viewer();
         $limit = min(max((int)$request->input('number', 6), 1), 30);
         $offset = max((int)$request->input('offset', 0), 0);
-        $album = $this->videoalbums->album((int)$request->input('id_album'), ['user', 'team', 'group', 'event']);
+        $album = $this->videoAlbums->album((int)$request->input('id_album'), ['user', 'team', 'group', 'event']);
 
         if (!$album) {
             return response()->json(['status' => 0, 'html' => '', 'has_more' => false]);
         }
 
-        $videos = $this->videoalbums->albumVideos($album, $limit, $offset);
+        $videos = $this->videoAlbums->albumVideos($album, $limit, $offset);
         $canManage = match ($album->videoalbumable_type) {
             'team' => $this->communities->canManage($this->communities->findTeam((int)$album->owner_id), $viewer),
             'group' => $this->communities->canManage($this->communities->findGroup((int)$album->owner_id), $viewer),
             'event' => $this->events->canManage($this->events->findActive((int)$album->owner_id), $viewer),
-            default => $this->videoalbums->isOwner($album, $viewer),
+            default => $this->videoAlbums->isOwner($album, $viewer),
         };
 
         return response()->json([
             'status' => $videos->isNotEmpty() ? 1 : 0,
             'html' => $this->renderVideos($videos, $viewer, $canManage),
-            'has_more' => $this->videoalbums->hasMoreAlbumVideos($album, $limit, $offset),
+            'has_more' => $this->videoAlbums->hasMoreAlbumVideos($album, $limit, $offset),
         ]);
     }
 
@@ -1058,14 +1061,14 @@ class AjaxController extends Controller
             };
 
             return response()->json([
-                'result' => $canManage && $this->videoalbums->deleteVideo($video)
+                'result' => $canManage && $this->videoAlbums->deleteVideo($video)
                     ? 'success'
                     : 'error',
             ]);
         }
 
         return response()->json([
-            'result' => $this->videoalbums->deleteVideoFor($viewer, $videoId) ? 'success' : 'error',
+            'result' => $this->videoAlbums->deleteVideoFor($viewer, $videoId) ? 'success' : 'error',
         ]);
     }
 
@@ -1083,54 +1086,15 @@ class AjaxController extends Controller
             return response()->json(['status' => 0, 'error' => 'Unauthorized'], 401);
         }
 
-        $request->validate([
-            'file' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:10240'],
+        $photoData = PhotoUploadData::fromArray($this->validateAjax($request, AttachmentPhotoRequest::class) + [
+            'file' => $request->file('file'),
         ]);
 
-        $file = $request->file('file');
-
-        if (!$file || !$file->isValid()) {
-            return response()->json(['status' => 0, 'error' => 'Invalid file'], 422);
+        try {
+            $photo = $this->photoalbums->storeAttachmentPhoto($viewer, $photoData);
+        } catch (\RuntimeException $exception) {
+            return response()->json(['status' => 0, 'error' => $exception->getMessage()], 422);
         }
-
-        $album = Photoalbum::query()->firstOrCreate([
-            'owner_id' => $viewer->id,
-            'photoalbumable_type' => 'user_attach',
-        ], [
-            'name' => 'Мои прикрепленные фотографии',
-        ]);
-
-        $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
-        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
-        $filename = Str::lower(Str::random(32)) . '.' . $extension;
-        $smallFilename = 's_' . $filename;
-        $directory = 'images/photogallery/user_attach';
-        $contents = file_get_contents($file->getRealPath());
-
-        if ($contents === false) {
-            return response()->json(['status' => 0, 'error' => 'Invalid file'], 422);
-        }
-
-        $disk = Storage::disk('public');
-        $originalPath = $directory . '/' . $filename;
-        $smallPath = $directory . '/' . $smallFilename;
-
-        if (!$disk->put($originalPath, $contents) || !$disk->put($smallPath, $contents)) {
-            $disk->delete([$originalPath, $smallPath]);
-
-            return response()->json(['status' => 0, 'error' => 'File was not saved'], 500);
-        }
-
-        /** @var Photo $photo */
-        $photo = Photo::query()->create([
-            'photoalbum_id' => $album->id,
-            'small_photo' => $smallFilename,
-            'photo' => $filename,
-            'description' => '',
-            'owner_id' => $viewer->id,
-            'banned' => false,
-            'moderate' => false,
-        ])->load('album');
 
         return response()->json([
             'status' => 1,
@@ -1157,19 +1121,14 @@ class AjaxController extends Controller
             return response()->json(['result' => 'error', 'error' => 'Unauthorized'], 401);
         }
 
-        $validated = $request->validate([
-            'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:10240'],
-            'x' => ['required', 'numeric', 'min:0'],
-            'y' => ['required', 'numeric', 'min:0'],
-            'w' => ['required', 'numeric', 'min:100'],
-            'h' => ['required', 'numeric', 'min:100'],
+        $cropData = ImageCropData::fromArray($this->validateAjax($request, CropAvatarRequest::class) + [
+            'file' => $request->file('avatar'),
         ]);
 
         try {
             $avatar = $this->profiles->cropTemporaryAvatar(
                 $viewer,
-                $request->file('avatar'),
-                $validated,
+                $cropData,
             );
         } catch (\RuntimeException $exception) {
             return response()->json([
@@ -1199,19 +1158,14 @@ class AjaxController extends Controller
             return response()->json(['result' => 'error', 'error' => 'Unauthorized'], 401);
         }
 
-        $validated = $request->validate([
-            'cover' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:10240'],
-            'x' => ['required', 'numeric', 'min:0'],
-            'y' => ['required', 'numeric', 'min:0'],
-            'w' => ['required', 'numeric', 'min:300'],
-            'h' => ['required', 'numeric', 'min:80'],
+        $cropData = ImageCropData::fromArray($this->validateAjax($request, CropCoverRequest::class) + [
+            'file' => $request->file('cover'),
         ]);
 
         try {
             $cover = $this->profiles->cropTemporaryCover(
                 $viewer,
-                $request->file('cover'),
-                $validated,
+                $cropData,
             );
         } catch (\RuntimeException $exception) {
             return response()->json([
@@ -1236,10 +1190,11 @@ class AjaxController extends Controller
     private function addComment(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
-        $type = (string)$request->input('commentable_type', 'user');
-        $profileId = (int)$request->input('content_id');
-        $comment = trim((string)$request->input('comment', ''));
-        $attach = $request->input('attach', []);
+        $validated = $this->validateAjax($request, AddCommentRequest::class);
+        $type = (string)($validated['commentable_type'] ?? 'user');
+        $profileId = (int)($validated['content_id'] ?? 0);
+        $comment = trim((string)($validated['comment'] ?? ''));
+        $attach = $validated['attach'] ?? [];
 
         if (!$viewer || !in_array($type, ['user', 'photo', 'video', 'team', 'group', 'event'], true) || $profileId < 1 || ($comment === '' && empty($attach))) {
             return response()->json([
@@ -1280,15 +1235,16 @@ class AjaxController extends Controller
             }
         }
 
-        $created = $this->profiles->createWallComment($viewer, [
+        $commentData = CommentData::fromArray([
             'commentable_type' => $type,
             'content_id' => $profileId,
             'behalfable_type' => $behalfableType,
             'behalf_id' => $behalfId,
             'comment' => $comment,
-            'parent_id' => $request->input('parent_id', 0),
+            'parent_id' => $validated['parent_id'] ?? 0,
             'attach' => $attach,
         ]);
+        $created = $this->profiles->createWallComment($viewer, $commentData);
 
         return response()->json([
             'status' => true,
@@ -1331,16 +1287,16 @@ class AjaxController extends Controller
     private function addMessage(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
-        $receiverId = (int)$request->input('receiver_id');
+        $validated = $this->validateAjax($request, AddMessageRequest::class);
+        $receiverId = (int)($validated['receiver_id'] ?? 0);
         $receiver = $receiverId > 0 ? $this->users->findActive($receiverId) : null;
-        $message = trim((string)$request->input('message', ''));
-        $attach = $request->input('attach', []);
+        $messageData = MessageData::fromArray($validated);
 
         if (!$viewer || !$receiver) {
             return response()->json(['status' => 0, 'errors' => ['message' => 'Сообщение не было отправлено']], 422);
         }
 
-        if ($message === '' && $this->attachmentIds($attach) === []) {
+        if ($messageData->content === '' && $this->attachmentIds($messageData->attach) === []) {
             return response()->json(['status' => 0, 'errors' => ['message' => 'Введите сообщение']], 422);
         }
 
@@ -1348,7 +1304,7 @@ class AjaxController extends Controller
             return response()->json(['status' => 0, 'errors' => ['message' => 'Вы не можете написать сообщение пользователю']], 403);
         }
 
-        $created = $this->messages->createMessage($viewer, $receiver, $message, $attach);
+        $created = $this->messages->createMessage($viewer, $receiver, $messageData);
 
         return response()->json($this->messages->serializeMessage($created) + [
                 'status' => 1,
@@ -1751,5 +1707,20 @@ class AjaxController extends Controller
             'search' => trim((string)$request->input('search', '')),
             'id_place' => (int)$request->input('id_place', 0),
         ];
+    }
+
+    /**
+     * Валидирует AJAX-запрос правилами из FormRequest-класса.
+     */
+    private function validateAjax(Request $request, string $requestClass): array
+    {
+        $formRequest = app($requestClass);
+
+        return Validator::make(
+            $request->all(),
+            $formRequest->rules(),
+            method_exists($formRequest, 'messages') ? $formRequest->messages() : [],
+            method_exists($formRequest, 'attributes') ? $formRequest->attributes() : [],
+        )->validate();
     }
 }

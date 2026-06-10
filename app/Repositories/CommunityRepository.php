@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\DTO\Community\CommunityData;
 use App\Helpers\FrontAssets;
 use App\Models\AcceptedEventMember;
 use App\Models\Community;
@@ -659,19 +660,19 @@ class CommunityRepository extends BaseRepository
         return $settings;
     }
 
-    public function createTeam(User $owner, array $data): Community
+    public function createTeam(User $owner, CommunityData $data): Community
     {
         return DB::transaction(function () use ($owner, $data): Community {
-            $avatar = $this->storeCommunityImage($data['avatar_file'] ?? null, 'avatar');
-            $cover = $this->storeCommunityImage($data['cover_file'] ?? null, 'cover_page');
+            $avatar = $this->storeCommunityImage($data->avatarFile, 'avatar');
+            $cover = $this->storeCommunityImage($data->coverFile, 'cover_page');
 
             /** @var Community $team */
             $team = $this->model->newQuery()->create([
                 'type' => 'team',
-                'name' => $data['name'],
-                'about' => $data['about'] ?? '',
-                'place' => $data['place'] ?? '',
-                'sport_type' => $data['sport_type'] ?? '',
+                'name' => $data->name,
+                'about' => $data->about,
+                'place' => $data->place ?: $this->cityName($data->cityId),
+                'sport_type' => $data->sportType ?: $this->sportName($data->sportId),
                 'avatar' => $avatar ?? '',
                 'cover_page' => $cover ?? '',
                 'banned' => false,
@@ -692,25 +693,25 @@ class CommunityRepository extends BaseRepository
                 'type' => 0,
             ]);
 
-            $this->syncGeoTarget($team, (int) ($data['city_id'] ?? 0));
+            $this->syncGeoTarget($team, $data->cityId);
 
             return $team;
         });
     }
 
-    public function createGroup(User $owner, array $data): Community
+    public function createGroup(User $owner, CommunityData $data): Community
     {
         return DB::transaction(function () use ($owner, $data): Community {
-            $avatar = $this->storeCommunityImage($data['avatar_file'] ?? null, 'avatar', 'group');
-            $cover = $this->storeCommunityImage($data['cover_file'] ?? null, 'cover_page', 'group');
+            $avatar = $this->storeCommunityImage($data->avatarFile, 'avatar', 'group');
+            $cover = $this->storeCommunityImage($data->coverFile, 'cover_page', 'group');
 
             /** @var Community $group */
             $group = $this->model->newQuery()->create([
                 'type' => 'group',
-                'name' => $data['name'],
-                'about' => $data['about'] ?? '',
-                'place' => $data['place'] ?? '',
-                'sport_type' => $data['sport_type'] ?? '',
+                'name' => $data->name,
+                'about' => $data->about,
+                'place' => $data->place ?: $this->cityName($data->cityId),
+                'sport_type' => $data->sportType ?: $this->sportName($data->sportId),
                 'avatar' => $avatar ?? '',
                 'cover_page' => $cover ?? '',
                 'banned' => false,
@@ -731,24 +732,24 @@ class CommunityRepository extends BaseRepository
                 'type' => 0,
             ]);
 
-            $this->syncGeoTarget($group, (int) ($data['city_id'] ?? 0));
+            $this->syncGeoTarget($group, $data->cityId);
 
             return $group;
         });
     }
 
-    public function updateTeam(Community $team, array $data): bool
+    public function updateTeam(Community $team, CommunityData $data): bool
     {
         return DB::transaction(function () use ($team, $data): bool {
             $oldAvatar = (string) $team->avatar;
             $oldCover = (string) $team->cover_page;
-            $avatar = $this->storeCommunityImage($data['avatar_file'] ?? null, 'avatar');
-            $cover = $this->storeCommunityImage($data['cover_file'] ?? null, 'cover_page');
+            $avatar = $this->storeCommunityImage($data->avatarFile, 'avatar');
+            $cover = $this->storeCommunityImage($data->coverFile, 'cover_page');
             $fields = [
-                'name' => $data['name'],
-                'about' => $data['about'] ?? '',
-                'place' => $data['place'] ?? '',
-                'sport_type' => $data['sport_type'] ?? '',
+                'name' => $data->name,
+                'about' => $data->about,
+                'place' => $data->place ?: $this->cityName($data->cityId),
+                'sport_type' => $data->sportType ?: $this->sportName($data->sportId),
             ];
 
             if ($avatar) {
@@ -770,30 +771,30 @@ class CommunityRepository extends BaseRepository
             }
 
             $this->settings($team)->fill([
-                'permission_wall' => (int) ($data['permission_wall'] ?? 0),
-                'permission_photo' => (int) ($data['permission_photo'] ?? 0),
-                'permission_video' => (int) ($data['permission_video'] ?? 0),
-                'type' => (int) ($data['type'] ?? 0),
+                'permission_wall' => $data->permissionWall,
+                'permission_photo' => $data->permissionPhoto,
+                'permission_video' => $data->permissionVideo,
+                'type' => $data->type,
             ])->save();
 
-            $this->syncGeoTarget($team, (int) ($data['city_id'] ?? 0));
+            $this->syncGeoTarget($team, $data->cityId);
 
             return true;
         });
     }
 
-    public function updateGroup(Community $group, array $data): bool
+    public function updateGroup(Community $group, CommunityData $data): bool
     {
         return DB::transaction(function () use ($group, $data): bool {
             $oldAvatar = (string) $group->avatar;
             $oldCover = (string) $group->cover_page;
-            $avatar = $this->storeCommunityImage($data['avatar_file'] ?? null, 'avatar', 'group');
-            $cover = $this->storeCommunityImage($data['cover_file'] ?? null, 'cover_page', 'group');
+            $avatar = $this->storeCommunityImage($data->avatarFile, 'avatar', 'group');
+            $cover = $this->storeCommunityImage($data->coverFile, 'cover_page', 'group');
             $fields = [
-                'name' => $data['name'],
-                'about' => $data['about'] ?? '',
-                'place' => $data['place'] ?? '',
-                'sport_type' => $data['sport_type'] ?? '',
+                'name' => $data->name,
+                'about' => $data->about,
+                'place' => $data->place ?: $this->cityName($data->cityId),
+                'sport_type' => $data->sportType ?: $this->sportName($data->sportId),
             ];
 
             if ($avatar) {
@@ -815,13 +816,13 @@ class CommunityRepository extends BaseRepository
             }
 
             $this->settings($group)->fill([
-                'permission_wall' => (int) ($data['permission_wall'] ?? 0),
-                'permission_photo' => (int) ($data['permission_photo'] ?? 0),
-                'permission_video' => (int) ($data['permission_video'] ?? 0),
-                'type' => (int) ($data['type'] ?? 0),
+                'permission_wall' => $data->permissionWall,
+                'permission_photo' => $data->permissionPhoto,
+                'permission_video' => $data->permissionVideo,
+                'type' => $data->type,
             ])->save();
 
-            $this->syncGeoTarget($group, (int) ($data['city_id'] ?? 0));
+            $this->syncGeoTarget($group, $data->cityId);
 
             return true;
         });

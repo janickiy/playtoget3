@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Front\SportBlock\SportBlockRequest;
 use App\Models\SportBlock;
 use App\Repositories\PhotoalbumRepository;
 use App\Repositories\SportBlockRepository;
@@ -58,11 +59,11 @@ class ShopsController extends Controller
     /**
      * Валидирует данные формы, создает магазин и перенаправляет на его карточку.
      *
-     * @param Request $request
+     * @param SportBlockRequest $request
      * @param SportBlockRepository $sportBlocks
      * @return RedirectResponse
      */
-    public function store(Request $request, SportBlockRepository $sportBlocks): RedirectResponse
+    public function store(SportBlockRequest $request, SportBlockRepository $sportBlocks): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
 
@@ -70,7 +71,7 @@ class ShopsController extends Controller
             return redirect()->route('front.home');
         }
 
-        $sportBlock = $sportBlocks->createBlock($viewer, self::TYPE, $this->validated($request, $sportBlocks));
+        $sportBlock = $sportBlocks->createBlock($viewer, self::TYPE, $request->toDto());
 
         return redirect()->route('front.shops.index', ['sportBlock' => $sportBlock->id]);
     }
@@ -99,16 +100,16 @@ class ShopsController extends Controller
      * Проверяет владельца, сохраняет изменения магазина и возвращает на карточку.
      *
      * @param int $sportBlock
-     * @param Request $request
+     * @param SportBlockRequest $request
      * @param SportBlockRepository $sportBlocks
      * @return RedirectResponse
      */
-    public function update(int $sportBlock, Request $request, SportBlockRepository $sportBlocks): RedirectResponse
+    public function update(int $sportBlock, SportBlockRequest $request, SportBlockRepository $sportBlocks): RedirectResponse
     {
         $entity = $this->sportBlockOrFail($sportBlocks, $sportBlock);
         abort_unless($sportBlocks->isOwner($entity, Auth::guard('web')->user()), 403);
 
-        $sportBlocks->updateBlock($entity, $this->validated($request, $sportBlocks));
+        $sportBlocks->updateBlock($entity, $request->toDto());
 
         return redirect()->route('front.shops.index', ['sportBlock' => $entity->id]);
     }
@@ -186,41 +187,4 @@ class ShopsController extends Controller
         ];
     }
 
-    /**
-     * Валидирует форму магазина и нормализует данные для репозитория.
-     *
-     * @param Request $request
-     * @param SportBlockRepository $sportBlocks
-     * @return array
-     */
-    private function validated(Request $request, SportBlockRepository $sportBlocks): array
-    {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'about' => ['nullable', 'string', 'max:5000'],
-            'id_place' => ['nullable', 'integer'],
-            'place' => ['nullable', 'string', 'max:255'],
-            'address' => ['nullable', 'string', 'max:1000'],
-            'phone' => ['nullable', 'string', 'max:255'],
-            'email' => ['nullable', 'email', 'max:100'],
-            'website' => ['nullable', 'string', 'max:255'],
-            'avatar_file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif', 'max:8192'],
-        ], [
-            'name.required' => 'Укажите название магазина.',
-        ]);
-
-        $cityId = (int) ($validated['id_place'] ?? 0);
-
-        return [
-            'name' => trim($validated['name']),
-            'about' => trim((string) ($validated['about'] ?? '')),
-            'city_id' => $cityId,
-            'place' => trim((string) ($validated['place'] ?? '')) ?: $sportBlocks->cityName($cityId),
-            'address' => trim((string) ($validated['address'] ?? '')),
-            'phone' => trim((string) ($validated['phone'] ?? '')),
-            'email' => trim((string) ($validated['email'] ?? '')),
-            'website' => trim((string) ($validated['website'] ?? '')),
-            'avatar_file' => $request->file('avatar_file'),
-        ];
-    }
 }

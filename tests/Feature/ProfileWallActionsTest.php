@@ -21,7 +21,7 @@ class ProfileWallActionsTest extends TestCase
         });
 
         $this->actingAs($viewer, 'web')
-            ->postJson('/ajax/removecomment', ['id_comment' => 123])
+            ->postJson('/ajax/remove_comment', ['id_comment' => 123])
             ->assertOk()
             ->assertJson(['result' => 'success']);
     }

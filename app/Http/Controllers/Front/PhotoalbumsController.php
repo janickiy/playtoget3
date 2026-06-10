@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Front\Album\AlbumRequest;
 use App\Repositories\FriendRepository;
 use App\Repositories\PhotoalbumRepository;
 use App\Repositories\ProfileRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PhotoalbumsController extends Controller
@@ -69,11 +69,11 @@ class PhotoalbumsController extends Controller
         FriendRepository     $friends,
     ): View
     {
-        $photoalbum = $photoalbums->album($album);
+        $photoAlbum = $photoalbums->album($album);
 
-        abort_if(!$photoalbum || !$photoalbum->owner, 404);
+        abort_if(!$photoAlbum || !$photoAlbum->owner, 404);
 
-        $profile = $profiles->profile($photoalbum->owner_id);
+        $profile = $profiles->profile($photoAlbum->owner_id);
 
         abort_if(!$profile, 404);
 
@@ -81,7 +81,7 @@ class PhotoalbumsController extends Controller
         $friendshipStatus = $friends->friendshipStatus($viewer?->id, $profile->id);
         $permissions = $profiles->permissions($profile, $viewer, $friendshipStatus);
         $photos = $permissions['photo']
-            ? $photoalbums->albumPhotos($photoalbum, self::ALBUM_PHOTOS_LIMIT, 0)
+            ? $photoalbums->albumPhotos($photoAlbum, self::ALBUM_PHOTOS_LIMIT, 0)
             : collect();
 
         return view('front.photoalbums.show', [
@@ -92,13 +92,13 @@ class PhotoalbumsController extends Controller
             'profileData' => $profiles->profileData($profile),
             'permissions' => $permissions,
             'friendshipStatus' => $friendshipStatus,
-            'photoalbum' => $photoalbum,
+            'photoalbum' => $photoAlbum,
             'photos' => $photos,
             'photosPageSize' => self::ALBUM_PHOTOS_LIMIT,
             'hasMorePhotos' => $permissions['photo']
-                ? $photoalbums->hasMoreAlbumPhotos($photoalbum, self::ALBUM_PHOTOS_LIMIT, 0)
+                ? $photoalbums->hasMoreAlbumPhotos($photoAlbum, self::ALBUM_PHOTOS_LIMIT, 0)
                 : false,
-            'canManage' => $photoalbums->isOwner($photoalbum, $viewer),
+            'canManage' => $photoalbums->isOwner($photoAlbum, $viewer),
         ]);
     }
 
@@ -151,11 +151,11 @@ class PhotoalbumsController extends Controller
     /**
      * Создает фотоальбом из валидированных данных формы.
      *
-     * @param Request $request
+     * @param AlbumRequest $request
      * @param PhotoalbumRepository $photoalbums
      * @return RedirectResponse
      */
-    public function store(Request $request, PhotoalbumRepository $photoalbums): RedirectResponse
+    public function store(AlbumRequest $request, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
 
@@ -163,21 +163,15 @@ class PhotoalbumsController extends Controller
             return redirect()->route('front.home');
         }
 
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-        ], [
-            'name.required' => 'Укажите название альбома.',
-        ]);
+        $albumData = $request->toDto();
 
-        $name = trim($validated['name']);
-
-        if ($photoalbums->nameExists($viewer, $name)) {
+        if ($photoalbums->nameExists($viewer, $albumData->name)) {
             return back()
                 ->withErrors(['name' => 'Альбом с таким названием уже существует.'])
                 ->withInput();
         }
 
-        $photoalbums->createUserAlbum($viewer, $name);
+        $photoalbums->createUserAlbum($viewer, $albumData);
 
         return redirect()->route('front.photoalbums.index');
     }
@@ -192,11 +186,11 @@ class PhotoalbumsController extends Controller
     public function edit(int $album, PhotoalbumRepository $photoalbums): View|RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
-        $photoalbum = $photoalbums->album($album);
+        $photoAlbum = $photoalbums->album($album);
 
-        abort_if(!$photoalbum, 404);
+        abort_if(!$photoAlbum, 404);
 
-        if (!$viewer || !$photoalbums->isOwner($photoalbum, $viewer)) {
+        if (!$viewer || !$photoalbums->isOwner($photoAlbum, $viewer)) {
             abort(403);
         }
 
@@ -204,10 +198,10 @@ class PhotoalbumsController extends Controller
             'title' => 'Редактирование фотоальбома',
             'viewer' => $viewer,
             'profileLayout' => $this->profileLayout($viewer),
-            'photoalbum' => $photoalbum,
-            'action' => route('front.photoalbums.update', ['album' => $photoalbum->id]),
+            'photoalbum' => $photoAlbum,
+            'action' => route('front.photoalbums.update', ['album' => $photoAlbum->id]),
             'method' => 'POST',
-            'name' => old('name', $photoalbum->name),
+            'name' => old('name', $photoAlbum->name),
             'button' => 'Редактировать',
         ]);
     }
@@ -216,36 +210,30 @@ class PhotoalbumsController extends Controller
      * Проверяет права и сохраняет изменения фотоальбома.
      *
      * @param int $album
-     * @param Request $request
+     * @param AlbumRequest $request
      * @param PhotoalbumRepository $photoalbums
      * @return RedirectResponse
      */
-    public function update(int $album, Request $request, PhotoalbumRepository $photoalbums): RedirectResponse
+    public function update(int $album, AlbumRequest $request, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
-        $photoalbum = $photoalbums->album($album);
+        $photoAlbum = $photoalbums->album($album);
 
-        abort_if(!$photoalbum, 404);
+        abort_if(!$photoAlbum, 404);
 
-        if (!$viewer || !$photoalbums->isOwner($photoalbum, $viewer)) {
+        if (!$viewer || !$photoalbums->isOwner($photoAlbum, $viewer)) {
             abort(403);
         }
 
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-        ], [
-            'name.required' => 'Укажите название альбома.',
-        ]);
+        $albumData = $request->toDto();
 
-        $name = trim($validated['name']);
-
-        if ($photoalbums->nameExists($viewer, $name, $photoalbum->id)) {
+        if ($photoalbums->nameExists($viewer, $albumData->name, $photoAlbum->id)) {
             return back()
                 ->withErrors(['name' => 'Альбом с таким названием уже существует.'])
                 ->withInput();
         }
 
-        $photoalbums->updateUserAlbum($photoalbum, $name);
+        $photoalbums->updateUserAlbum($photoAlbum, $albumData);
 
         return redirect()->route('front.photoalbums.index');
     }
@@ -260,15 +248,15 @@ class PhotoalbumsController extends Controller
     public function destroy(int $album, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
-        $photoalbum = $photoalbums->album($album);
+        $photoAlbum = $photoalbums->album($album);
 
-        abort_if(!$photoalbum, 404);
+        abort_if(!$photoAlbum, 404);
 
-        if (!$viewer || !$photoalbums->isOwner($photoalbum, $viewer)) {
+        if (!$viewer || !$photoalbums->isOwner($photoAlbum, $viewer)) {
             abort(403);
         }
 
-        $photoalbums->deleteAlbum($photoalbum);
+        $photoalbums->deleteAlbum($photoAlbum);
 
         return redirect()->route('front.photoalbums.index');
     }

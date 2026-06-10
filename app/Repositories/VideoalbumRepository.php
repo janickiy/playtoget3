@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\DTO\Album\AlbumData;
+use App\DTO\Video\VideoData;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Share;
@@ -176,16 +178,16 @@ class VideoalbumRepository extends BaseRepository
         return $album;
     }
 
-    public function createUserAlbum(User $user, string $name): Videoalbum
+    public function createUserAlbum(User $user, AlbumData $data): Videoalbum
     {
-        return $this->createAlbumForOwner($user->id, 'user', $name);
+        return $this->createAlbumForOwner($user->id, 'user', $data);
     }
 
-    public function createAlbumForOwner(int $ownerId, string $type, string $name): Videoalbum
+    public function createAlbumForOwner(int $ownerId, string $type, AlbumData $data): Videoalbum
     {
         /** @var Videoalbum $album */
         $album = $this->model->newQuery()->create([
-            'name' => $name,
+            'name' => $data->name,
             'videoalbumable_type' => $type,
             'owner_id' => $ownerId,
         ]);
@@ -193,9 +195,9 @@ class VideoalbumRepository extends BaseRepository
         return $album;
     }
 
-    public function updateUserAlbum(Videoalbum $album, string $name): bool
+    public function updateUserAlbum(Videoalbum $album, AlbumData $data): bool
     {
-        return $album->fill(['name' => $name])->save();
+        return $album->fill($data->toArray())->save();
     }
 
     public function nameExists(User $user, string $name, ?int $exceptId = null): bool
@@ -218,18 +220,18 @@ class VideoalbumRepository extends BaseRepository
         return $user && (int) $album->owner_id === (int) $user->id;
     }
 
-    public function addUserVideo(User $user, Videoalbum $album, string $link, string $description = ''): Video
+    public function addUserVideo(User $user, Videoalbum $album, VideoData $data): Video
     {
         if (! $this->isOwner($album, $user) || $album->videoalbumable_type !== 'user') {
             throw new RuntimeException('Нет доступа к выбранному альбому.');
         }
 
-        return $this->addVideoToAlbum($user, $album, $link, $description);
+        return $this->addVideoToAlbum($user, $album, $data);
     }
 
-    public function addVideoToAlbum(User $user, Videoalbum $album, string $link, string $description = ''): Video
+    public function addVideoToAlbum(User $user, Videoalbum $album, VideoData $data): Video
     {
-        $videoData = $this->detectVideo($link);
+        $videoData = $this->detectVideo($data->link);
 
         if (! $videoData) {
             throw new RuntimeException('Укажите корректную ссылку на YouTube-видео.');
@@ -240,7 +242,7 @@ class VideoalbumRepository extends BaseRepository
             'videoalbum_id' => $album->id,
             'provider' => $videoData['provider'],
             'video' => $videoData['video'],
-            'description' => $description,
+            'description' => $data->description,
             'owner_id' => in_array($album->videoalbumable_type, ['team', 'group', 'event'], true) ? $album->owner_id : $user->id,
             'banned' => false,
         ])->load('album');

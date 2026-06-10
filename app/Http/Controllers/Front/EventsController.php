@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Front\Album\AlbumRequest;
+use App\Http\Requests\Front\Event\EventRequest;
+use App\Http\Requests\Front\Video\StoreVideoRequest;
 use App\Models\Event;
 use App\Models\Photoalbum;
 use App\Models\Videoalbum;
@@ -99,11 +102,11 @@ class EventsController extends Controller
     /**
      * Валидирует данные формы, создает мероприятие и перенаправляет на его карточку.
      *
-     * @param Request $request
+     * @param EventRequest $request
      * @param EventRepository $events
      * @return RedirectResponse
      */
-    public function store(Request $request, EventRepository $events): RedirectResponse
+    public function store(EventRequest $request, EventRepository $events): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
 
@@ -111,7 +114,7 @@ class EventsController extends Controller
             return redirect()->route('front.home');
         }
 
-        $event = $events->createEvent($viewer, $this->validateEvent($request, $events));
+        $event = $events->createEvent($viewer, $request->toDto());
 
         return redirect()->route('front.events.show', ['event' => $event->id]);
     }
@@ -141,17 +144,17 @@ class EventsController extends Controller
      * Проверяет права участника, сохраняет изменения мероприятия и возвращает на карточку.
      *
      * @param int $event
-     * @param Request $request
+     * @param EventRequest $request
      * @param EventRepository $events
      * @return RedirectResponse
      */
-    public function update(int $event, Request $request, EventRepository $events): RedirectResponse
+    public function update(int $event, EventRequest $request, EventRepository $events): RedirectResponse
     {
         $eventModel = $this->eventOrFail($event, $events);
 
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
-        $events->updateEvent($eventModel, $this->validateEvent($request, $events));
+        $events->updateEvent($eventModel, $request->toDto());
 
         return redirect()->route('front.events.show', ['event' => $eventModel->id]);
     }
@@ -212,13 +215,13 @@ class EventsController extends Controller
     public function showPhotoalbum(int $event, int $album, EventRepository $events, PhotoalbumRepository $photoalbums): View
     {
         $eventModel = $this->eventOrFail($event, $events);
-        $photoalbum = $this->eventPhotoalbumOrFail($album, $eventModel, $photoalbums);
+        $photoAlbum = $this->eventPhotoalbumOrFail($album, $eventModel, $photoalbums);
 
         return view('front.teams.photoalbums.show', $this->eventPayload($eventModel, $events, 'photoalbums') + [
-            'photoalbum' => $photoalbum,
-            'photos' => $photoalbums->albumPhotos($photoalbum, self::ALBUM_PHOTOS_LIMIT, 0),
+            'photoalbum' => $photoAlbum,
+            'photos' => $photoalbums->albumPhotos($photoAlbum, self::ALBUM_PHOTOS_LIMIT, 0),
             'photosPageSize' => self::ALBUM_PHOTOS_LIMIT,
-            'hasMorePhotos' => $photoalbums->hasMoreAlbumPhotos($photoalbum, self::ALBUM_PHOTOS_LIMIT, 0),
+            'hasMorePhotos' => $photoalbums->hasMoreAlbumPhotos($photoAlbum, self::ALBUM_PHOTOS_LIMIT, 0),
             'canManage' => $events->canManage($eventModel, Auth::guard('web')->user()),
             'openPhotoId' => null,
         ]);
@@ -257,9 +260,9 @@ class EventsController extends Controller
         $photoModel = $photoalbums->photo($photo, ['event']);
         abort_if(! $photoModel, 404);
 
-        $photoalbum = $this->eventPhotoalbumOrFail((int) $photoModel->photoalbum_id, $eventModel, $photoalbums);
+        $photoAlbum = $this->eventPhotoalbumOrFail((int) $photoModel->photoalbum_id, $eventModel, $photoalbums);
 
-        return $this->photo($event, $photoalbum->id, $photo, $events, $photoalbums);
+        return $this->photo($event, $photoAlbum->id, $photo, $events, $photoalbums);
     }
 
     /**
@@ -307,23 +310,23 @@ class EventsController extends Controller
      * Создает фотоальбом мероприятия из валидированных данных формы.
      *
      * @param int $event
-     * @param Request $request
+     * @param AlbumRequest $request
      * @param EventRepository $events
      * @param PhotoalbumRepository $photoalbums
      * @return RedirectResponse
      */
-    public function storePhotoAlbum(int $event, Request $request, EventRepository $events, PhotoalbumRepository $photoalbums): RedirectResponse
+    public function storePhotoAlbum(int $event, AlbumRequest $request, EventRepository $events, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $eventModel = $this->eventOrFail($event, $events);
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
-        $name = $this->validateAlbumName($request);
+        $albumData = $request->toDto();
 
-        if ($photoalbums->nameExistsForOwner($eventModel->id, 'event', $name)) {
+        if ($photoalbums->nameExistsForOwner($eventModel->id, 'event', $albumData->name)) {
             return back()->withErrors(['name' => 'Альбом с таким названием уже существует.'])->withInput();
         }
 
-        $photoalbums->createAlbumForOwner($eventModel->id, 'event', $name);
+        $photoalbums->createAlbumForOwner($eventModel->id, 'event', $albumData);
 
         return redirect()->route('front.events.photoalbums', ['event' => $eventModel->id]);
     }
@@ -342,14 +345,14 @@ class EventsController extends Controller
     public function editPhotoalbum(int $event, int $album, EventRepository $events, PhotoalbumRepository $photoalbums): View
     {
         $eventModel = $this->eventOrFail($event, $events);
-        $photoalbum = $this->eventPhotoalbumOrFail($album, $eventModel, $photoalbums);
+        $photoAlbum = $this->eventPhotoalbumOrFail($album, $eventModel, $photoalbums);
 
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->eventPayload($eventModel, $events, 'photoalbums') + [
             'title' => 'Редактирование фотоальбома',
-            'action' => route('front.events.photoalbum.update', ['event' => $eventModel->id, 'album' => $photoalbum->id]),
-            'name' => old('name', $photoalbum->name),
+            'action' => route('front.events.photoalbum.update', ['event' => $eventModel->id, 'album' => $photoAlbum->id]),
+            'name' => old('name', $photoAlbum->name),
             'button' => 'Редактировать',
         ]);
     }
@@ -357,14 +360,14 @@ class EventsController extends Controller
     /**
      * Проверяет доступ и сохраняет изменения фотоальбома мероприятия.
      */
-    public function updatePhotoalbum(int $event, int $album, Request $request, EventRepository $events, PhotoalbumRepository $photoalbums): RedirectResponse
+    public function updatePhotoalbum(int $event, int $album, AlbumRequest $request, EventRepository $events, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $eventModel = $this->eventOrFail($event, $events);
-        $photoalbum = $this->eventPhotoalbumOrFail($album, $eventModel, $photoalbums);
+        $photoAlbum = $this->eventPhotoalbumOrFail($album, $eventModel, $photoalbums);
 
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
-        $photoalbums->updateUserAlbum($photoalbum, $this->validateAlbumName($request));
+        $photoalbums->updateUserAlbum($photoAlbum, $request->toDto());
 
         return redirect()->route('front.events.photoalbums', ['event' => $eventModel->id]);
     }
@@ -375,11 +378,11 @@ class EventsController extends Controller
     public function destroyPhotoalbum(int $event, int $album, EventRepository $events, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $eventModel = $this->eventOrFail($event, $events);
-        $photoalbum = $this->eventPhotoalbumOrFail($album, $eventModel, $photoalbums);
+        $photoAlbum = $this->eventPhotoalbumOrFail($album, $eventModel, $photoalbums);
 
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
-        $photoalbums->deleteAlbum($photoalbum);
+        $photoalbums->deleteAlbum($photoAlbum);
 
         return redirect()->route('front.events.photoalbums', ['event' => $eventModel->id]);
     }
@@ -387,33 +390,33 @@ class EventsController extends Controller
     /**
      * Показывает видеоальбомы мероприятия.
      */
-    public function videoAlbums(int $event, EventRepository $events, VideoalbumRepository $videoalbums): View
+    public function videoAlbums(int $event, EventRepository $events, VideoalbumRepository $videoAlbums): View
     {
         $eventModel = $this->eventOrFail($event, $events);
 
         return view('front.teams.videoalbums.index', $this->eventPayload($eventModel, $events, 'videoalbums') + [
             'canManage' => $events->canManage($eventModel, Auth::guard('web')->user()),
-            'albums' => $videoalbums->albumsForOwner($eventModel->id, 'event'),
-            'videos' => $videoalbums->videosForOwner($eventModel->id, 'event', self::VIDEOS_LIMIT, 0),
+            'albums' => $videoAlbums->albumsForOwner($eventModel->id, 'event'),
+            'videos' => $videoAlbums->videosForOwner($eventModel->id, 'event', self::VIDEOS_LIMIT, 0),
             'videosPageSize' => self::VIDEOS_LIMIT,
-            'hasMoreVideos' => $videoalbums->hasMoreOwnerVideos($eventModel->id, 'event', self::VIDEOS_LIMIT, 0),
-            'popularVideos' => $videoalbums->popularVideos(6, 0, 'event'),
+            'hasMoreVideos' => $videoAlbums->hasMoreOwnerVideos($eventModel->id, 'event', self::VIDEOS_LIMIT, 0),
+            'popularVideos' => $videoAlbums->popularVideos(6, 0, 'event'),
         ]);
     }
 
     /**
      * Показывает видео выбранного видеоальбома мероприятия.
      */
-    public function showVideoAlbum(int $event, int $album, EventRepository $events, VideoalbumRepository $videoalbums): View
+    public function showVideoAlbum(int $event, int $album, EventRepository $events, VideoalbumRepository $videoAlbums): View
     {
         $eventModel = $this->eventOrFail($event, $events);
-        $videoalbum = $this->eventVideoalbumOrFail($album, $eventModel, $videoalbums);
+        $videoalbum = $this->eventVideoalbumOrFail($album, $eventModel, $videoAlbums);
 
         return view('front.teams.videoalbums.show', $this->eventPayload($eventModel, $events, 'videoalbums') + [
             'videoalbum' => $videoalbum,
-            'videos' => $videoalbums->albumVideos($videoalbum, self::VIDEOS_LIMIT, 0),
+            'videos' => $videoAlbums->albumVideos($videoalbum, self::VIDEOS_LIMIT, 0),
             'videosPageSize' => self::VIDEOS_LIMIT,
-            'hasMoreVideos' => $videoalbums->hasMoreAlbumVideos($videoalbum, self::VIDEOS_LIMIT, 0),
+            'hasMoreVideos' => $videoAlbums->hasMoreAlbumVideos($videoalbum, self::VIDEOS_LIMIT, 0),
             'canManage' => $events->canManage($eventModel, Auth::guard('web')->user()),
         ]);
     }
@@ -421,35 +424,30 @@ class EventsController extends Controller
     /**
      * Показывает форму добавления видео в видеоальбом мероприятия.
      */
-    public function addVideo(int $event, EventRepository $events, VideoalbumRepository $videoalbums): View
+    public function addVideo(int $event, EventRepository $events, VideoalbumRepository $videoAlbums): View
     {
         $eventModel = $this->eventOrFail($event, $events);
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
-        $videoalbums->ensureDefaultAlbumForOwner($eventModel->id, 'event', 'Альбом мероприятия');
+        $videoAlbums->ensureDefaultAlbumForOwner($eventModel->id, 'event', 'Альбом мероприятия');
 
         return view('front.teams.videoalbums.add-video', $this->eventPayload($eventModel, $events, 'videoalbums') + [
             'title' => 'Добавление видеозаписи',
-            'albums' => $videoalbums->editableAlbumsForOwner($eventModel->id, 'event'),
+            'albums' => $videoAlbums->editableAlbumsForOwner($eventModel->id, 'event'),
         ]);
     }
 
     /**
      * Валидирует ссылку и добавляет видео в видеоальбом мероприятия.
      */
-    public function storeVideo(int $event, Request $request, EventRepository $events, VideoalbumRepository $videoalbums): RedirectResponse
+    public function storeVideo(int $event, StoreVideoRequest $request, EventRepository $events, VideoalbumRepository $videoAlbums): RedirectResponse
     {
         $eventModel = $this->eventOrFail($event, $events);
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
-        $validated = $request->validate([
-            'video' => ['required', 'string', 'max:1000'],
-            'description' => ['nullable', 'string', 'max:2000'],
-            'videoalbum_id' => ['required', 'integer', 'min:1'],
-        ]);
-
-        $album = $this->eventVideoalbumOrFail((int) $validated['videoalbum_id'], $eventModel, $videoalbums);
-        $videoalbums->addVideoToAlbum(Auth::guard('web')->user(), $album, $validated['video'], trim((string) ($validated['description'] ?? '')));
+        $videoData = $request->toDto();
+        $album = $this->eventVideoalbumOrFail($videoData->albumId, $eventModel, $videoAlbums);
+        $videoAlbums->addVideoToAlbum(Auth::guard('web')->user(), $album, $videoData);
 
         return redirect()->route('front.events.videoalbums', ['event' => $eventModel->id]);
     }
@@ -473,18 +471,18 @@ class EventsController extends Controller
     /**
      * Создает видеоальбом мероприятия из валидированных данных формы.
      */
-    public function storeVideoAlbum(int $event, Request $request, EventRepository $events, VideoalbumRepository $videoalbums): RedirectResponse
+    public function storeVideoAlbum(int $event, AlbumRequest $request, EventRepository $events, VideoalbumRepository $videoAlbums): RedirectResponse
     {
         $eventModel = $this->eventOrFail($event, $events);
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
-        $name = $this->validateAlbumName($request);
+        $albumData = $request->toDto();
 
-        if ($videoalbums->nameExistsForOwner($eventModel->id, 'event', $name)) {
+        if ($videoAlbums->nameExistsForOwner($eventModel->id, 'event', $albumData->name)) {
             return back()->withErrors(['name' => 'Альбом с таким названием уже существует.'])->withInput();
         }
 
-        $videoalbums->createAlbumForOwner($eventModel->id, 'event', $name);
+        $videoAlbums->createAlbumForOwner($eventModel->id, 'event', $albumData);
 
         return redirect()->route('front.events.videoalbums', ['event' => $eventModel->id]);
     }
@@ -492,10 +490,10 @@ class EventsController extends Controller
     /**
      * Проверяет доступ и показывает форму редактирования видеоальбома мероприятия.
      */
-    public function editVideoalbum(int $event, int $album, EventRepository $events, VideoalbumRepository $videoalbums): View
+    public function editVideoalbum(int $event, int $album, EventRepository $events, VideoalbumRepository $videoAlbums): View
     {
         $eventModel = $this->eventOrFail($event, $events);
-        $videoalbum = $this->eventVideoalbumOrFail($album, $eventModel, $videoalbums);
+        $videoalbum = $this->eventVideoalbumOrFail($album, $eventModel, $videoAlbums);
 
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
@@ -510,14 +508,14 @@ class EventsController extends Controller
     /**
      * Проверяет доступ и сохраняет изменения видеоальбома мероприятия.
      */
-    public function updateVideoalbum(int $event, int $album, Request $request, EventRepository $events, VideoalbumRepository $videoalbums): RedirectResponse
+    public function updateVideoalbum(int $event, int $album, AlbumRequest $request, EventRepository $events, VideoalbumRepository $videoAlbums): RedirectResponse
     {
         $eventModel = $this->eventOrFail($event, $events);
-        $videoalbum = $this->eventVideoalbumOrFail($album, $eventModel, $videoalbums);
+        $videoalbum = $this->eventVideoalbumOrFail($album, $eventModel, $videoAlbums);
 
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
-        $videoalbums->updateUserAlbum($videoalbum, $this->validateAlbumName($request));
+        $videoAlbums->updateUserAlbum($videoalbum, $request->toDto());
 
         return redirect()->route('front.events.videoalbums', ['event' => $eventModel->id]);
     }
@@ -525,14 +523,14 @@ class EventsController extends Controller
     /**
      * Проверяет доступ и удаляет видеоальбом мероприятия.
      */
-    public function destroyVideoalbum(int $event, int $album, EventRepository $events, VideoalbumRepository $videoalbums): RedirectResponse
+    public function destroyVideoalbum(int $event, int $album, EventRepository $events, VideoalbumRepository $videoAlbums): RedirectResponse
     {
         $eventModel = $this->eventOrFail($event, $events);
-        $videoalbum = $this->eventVideoalbumOrFail($album, $eventModel, $videoalbums);
+        $videoalbum = $this->eventVideoalbumOrFail($album, $eventModel, $videoAlbums);
 
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
-        $videoalbums->deleteAlbum($videoalbum);
+        $videoAlbums->deleteAlbum($videoalbum);
 
         return redirect()->route('front.events.videoalbums', ['event' => $eventModel->id]);
     }
@@ -575,54 +573,6 @@ class EventsController extends Controller
     }
 
     /**
-     * Валидирует форму мероприятия и нормализует город, спорт и даты.
-     */
-    private function validateEvent(Request $request, EventRepository $events): array
-    {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:5000'],
-            'place' => ['nullable', 'string', 'max:100'],
-            'address' => ['nullable', 'string', 'max:1000'],
-            'id_place' => ['nullable', 'integer'],
-            'sport' => ['nullable', 'string', 'max:255'],
-            'date_from' => ['nullable', 'date'],
-            'date_to' => ['nullable', 'date'],
-            'cover_file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif', 'max:8192'],
-        ], [
-            'name.required' => 'Укажите название мероприятия.',
-        ]);
-
-        $cityId = (int) ($validated['id_place'] ?? 0);
-
-        return [
-            'name' => trim($validated['name']),
-            'description' => trim((string) ($validated['description'] ?? '')),
-            'place' => trim((string) ($validated['place'] ?? '')) ?: $events->cityName($cityId),
-            'address' => trim((string) ($validated['address'] ?? '')),
-            'city_id' => $cityId,
-            'sport_type' => trim((string) ($validated['sport'] ?? '')),
-            'date_from' => $validated['date_from'] ?? null,
-            'date_to' => $validated['date_to'] ?? null,
-            'cover_file' => $request->file('cover_file'),
-        ];
-    }
-
-    /**
-     * Валидирует название альбома и возвращает очищенную строку.
-     */
-    private function validateAlbumName(Request $request): string
-    {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-        ], [
-            'name.required' => 'Укажите название альбома.',
-        ]);
-
-        return trim($validated['name']);
-    }
-
-    /**
      * Собирает фильтры списка мероприятий из query-параметров.
      */
     private function eventFilters(Request $request): array
@@ -658,19 +608,19 @@ class EventsController extends Controller
      */
     private function eventPhotoalbumOrFail(int $album, Event $event, PhotoalbumRepository $photoalbums): Photoalbum
     {
-        $photoalbum = $photoalbums->album($album, ['event']);
+        $photoAlbum = $photoalbums->album($album, ['event']);
 
-        abort_if(! $photoalbum || (int) $photoalbum->owner_id !== (int) $event->id, 404);
+        abort_if(! $photoAlbum || (int) $photoAlbum->owner_id !== (int) $event->id, 404);
 
-        return $photoalbum;
+        return $photoAlbum;
     }
 
     /**
      * Находит видеоальбом, принадлежащий мероприятию, или завершает запрос ошибкой 404.
      */
-    private function eventVideoalbumOrFail(int $album, Event $event, VideoalbumRepository $videoalbums): Videoalbum
+    private function eventVideoalbumOrFail(int $album, Event $event, VideoalbumRepository $videoAlbums): Videoalbum
     {
-        $videoalbum = $videoalbums->album($album, ['event']);
+        $videoalbum = $videoAlbums->album($album, ['event']);
 
         abort_if(! $videoalbum || (int) $videoalbum->owner_id !== (int) $event->id, 404);
 

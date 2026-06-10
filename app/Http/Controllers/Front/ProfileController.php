@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Front\Profile\ProfileSettingsRequest;
 use App\Repositories\FriendRepository;
 use App\Repositories\MessageRepository;
 use App\Repositories\ProfileRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
@@ -158,12 +158,12 @@ class ProfileController extends Controller
     /**
      * Валидирует и сохраняет настройки профиля текущего пользователя.
      *
-     * @param Request $request
+     * @param ProfileSettingsRequest $request
      * @param ProfileRepository $profiles
      * @return RedirectResponse
      * @throws \Throwable
      */
-    public function update(Request $request, ProfileRepository $profiles): RedirectResponse
+    public function update(ProfileSettingsRequest $request, ProfileRepository $profiles): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
 
@@ -171,40 +171,7 @@ class ProfileController extends Controller
             return redirect()->route('front.home');
         }
 
-        $validated = $request->validate([
-            'user.contact_email' => ['nullable', 'email', 'max:100'],
-            'user.phone' => ['nullable', 'string', 'max:255'],
-            'user.skype' => ['nullable', 'string', 'max:255'],
-            'user.website' => ['nullable', 'string', 'max:255'],
-            'user.permission_send_message' => ['nullable', 'integer', 'in:0,1,2'],
-            'user.permission_view_profile' => ['nullable', 'integer', 'in:0,1,2'],
-            'user.permission_view_friends' => ['nullable', 'integer', 'in:0,1,2'],
-            'user.permission_view_photo' => ['nullable', 'integer', 'in:0,1,2'],
-            'user.permission_view_video' => ['nullable', 'integer', 'in:0,1,2'],
-            'user.permission_view_wall' => ['nullable', 'integer', 'in:0,1,2'],
-            'user.permission_comment_photo' => ['nullable', 'integer', 'in:0,1,2'],
-            'user.permission_comment_video' => ['nullable', 'integer', 'in:0,1,2'],
-            'user.permission_comment_wall' => ['nullable', 'integer', 'in:0,1,2'],
-            'user.notification_friends_request' => ['nullable', 'in:yes'],
-            'user.notification_private_messages' => ['nullable', 'in:yes'],
-            'user.notification_wall_comments' => ['nullable', 'in:yes'],
-            'user.notification_picture_comments' => ['nullable', 'in:yes'],
-            'user.notification_video_comments' => ['nullable', 'in:yes'],
-            'user.notification_answers_in_comments' => ['nullable', 'in:yes'],
-            'user.notification_events' => ['nullable', 'in:yes'],
-            'user.notification_birthdays' => ['nullable', 'in:yes'],
-            'file_ava' => ['nullable', 'string', 'max:255', 'regex:/^[A-Za-z0-9_.-]+$/'],
-            'file_cover' => ['nullable', 'string', 'max:255', 'regex:/^[A-Za-z0-9_.-]+$/'],
-            'cover' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:10240'],
-        ]);
-
-        $profiles->updateProfileSettings(
-            $viewer,
-            $validated['user'] ?? [],
-            $validated['file_ava'] ?? null,
-            $validated['file_cover'] ?? null,
-            $request->file('cover'),
-        );
+        $profiles->updateProfileSettings($viewer, $request->toDto());
 
         return redirect()
             ->route('front.profile.edit')
