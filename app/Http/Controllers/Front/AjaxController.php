@@ -54,6 +54,8 @@ class AjaxController extends Controller
             'get_usernews_list' => $this->getUserNewsList($request),
             'get_communities_list' => $this->getCommunitiesList($request),
             'get_pop_communities_list' => $this->getPopCommunitiesList($request),
+            'get_events_list' => $this->getEventsList($request),
+            'get_pop_events_list' => $this->getPopEventsList($request),
             'getpossiblefriends' => $this->getPossibleFriends($request),
             'get_friends_list' => $this->getFriendsList($request),
             'add_as_friend' => $this->addAsFriend($request),
@@ -186,6 +188,53 @@ class AjaxController extends Controller
             'html' => $this->renderCommunities($this->communitiesForViewer($items, $viewer), $type),
             'count' => $items->count(),
             'has_more' => $nextItems->isNotEmpty(),
+        ]);
+    }
+
+    private function getEventsList(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+
+        if (!$viewer) {
+            return response()->json(['status' => 0, 'html' => '', 'count' => 0, 'has_more' => false], 401);
+        }
+
+        $limit = min(max((int)$request->input('number', 5), 1), 25);
+        $offset = max((int)$request->input('offset', 0), 0);
+        $userId = max((int)$request->input('user_id', $request->input('member_id', $viewer->id)), 1);
+        $feed = (string)$request->input('feed', 'mygroups');
+        $filters = $this->eventFilters($request);
+
+        if ($feed === 'invited') {
+            $events = $this->events->invitedEvents($userId, $limit, $offset, $filters);
+            $total = $this->events->invitedEventsCount($userId, $filters);
+        } else {
+            $events = $this->events->myEvents($userId, $limit, $offset, $filters);
+            $total = $this->events->myEventsCount($userId, $filters);
+        }
+
+        return response()->json([
+            'status' => 1,
+            'html' => $this->renderEvents($events),
+            'count' => $events->count(),
+            'has_more' => $total > $offset + $events->count(),
+        ]);
+    }
+
+    private function getPopEventsList(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $limit = min(max((int)$request->input('number', 5), 1), 25);
+        $offset = max((int)$request->input('offset', 0), 0);
+        $filters = $this->eventFilters($request);
+        $events = $this->events->popularEvents($limit, $offset, $filters, $viewer);
+        $total = $this->events->popularEventsCount($filters);
+
+        return response()->json([
+            'status' => 1,
+            'html' => $this->renderEvents($events),
+            'count' => $events->count(),
+            'has_more' => $total > $offset + $events->count(),
         ]);
     }
 
@@ -1311,7 +1360,25 @@ class AjaxController extends Controller
             ->implode('');
     }
 
+    private function renderEvents(Collection $items): string
+    {
+        return $items
+            ->map(fn(array $event): string => view('front.events._event-card', ['event' => $event])->render())
+            ->implode('');
+    }
+
     private function communityFilters(Request $request): array
+    {
+        return [
+            'place' => trim((string)$request->input('place', '')),
+            'sport' => trim((string)$request->input('sport', '')),
+            'search' => trim((string)$request->input('search', '')),
+            'id_place' => (int)$request->input('id_place', 0),
+            'id_sport' => (int)$request->input('id_sport', 0),
+        ];
+    }
+
+    private function eventFilters(Request $request): array
     {
         return [
             'place' => trim((string)$request->input('place', '')),

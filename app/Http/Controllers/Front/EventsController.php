@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Auth;
 
 class EventsController extends Controller
 {
-    private const EVENTS_LIMIT = 30;
     private const EVENTS_PAGE_SIZE = 5;
     private const PHOTOS_LIMIT = 6;
     private const ALBUM_PHOTOS_LIMIT = 9;
