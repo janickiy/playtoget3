@@ -6413,6 +6413,19 @@ color: #afafaf;
 {
 	margin-left: -100%!important;
 }
+.content-groups .event-container .event-item .img > img.event-card-image,
+.content-groups .event-container .event-item .img > img.marginLeft-100
+{
+	display: block!important;
+	width: 100%!important;
+	min-width: 100%!important;
+	max-width: none!important;
+	height: 100%!important;
+	min-height: 100%!important;
+	margin-left: 0!important;
+	object-fit: cover!important;
+	object-position: center!important;
+}
 
 .width32
 {
