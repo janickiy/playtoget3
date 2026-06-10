@@ -34,9 +34,7 @@ class PhotoalbumsPageTest extends TestCase
                 $this->photoPayload(10),
             ]));
             $mock->shouldReceive('hasMoreUserPhotos')->with($viewer->id, 6, 0)->andReturn(true);
-            $mock->shouldReceive('popularPhotos')->with(9, 0)->andReturn(collect([
-                $this->photoPayload(11),
-            ]));
+            $mock->shouldNotReceive('popularPhotos');
             $mock->shouldReceive('albumsForUser')->with($viewer->id)->andReturn(collect([
                 ['id' => 64, 'name' => 'Мой альбом', 'image' => 'http://site3.local/uploads/images/album.jpg'],
             ]));
@@ -47,7 +45,7 @@ class PhotoalbumsPageTest extends TestCase
             ->assertSee('Добавить фото')
             ->assertSee('/photoalbums/add-photo', false)
             ->assertSee('/photoalbums/create', false)
-            ->assertSee('Популярные фото')
+            ->assertDontSee('Популярные фото')
             ->assertSee('Мои альбомы')
             ->assertSee('Мои фото')
             ->assertSee('/photoalbums/64', false)

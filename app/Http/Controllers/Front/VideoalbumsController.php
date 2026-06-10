@@ -33,7 +33,7 @@ class VideoalbumsController extends Controller
             return redirect()->route('front.home');
         }
 
-        return $this->listing($viewer->id, $videoAlbums, $profiles, $friends, true);
+        return $this->listing($viewer->id, $videoAlbums, $profiles, $friends, false);
     }
 
     /**

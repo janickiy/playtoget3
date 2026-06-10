@@ -1420,7 +1420,7 @@ class AjaxController extends Controller
         $contentId = (int)$request->input('id');
         $type = (string)$request->input('likeable_type', 'comment');
 
-        if (!$viewer || $contentId < 1 || $type === '') {
+        if (!$viewer || $contentId < 1 || !in_array($type, ['photo', 'video', 'comment'], true)) {
             return response()->json(['result' => ''], 422);
         }
 
@@ -1431,6 +1431,7 @@ class AjaxController extends Controller
 
         if ($query->exists()) {
             $query->delete();
+            $liked = false;
         } else {
             Like::query()->create([
                 'user_id' => $viewer->id,
@@ -1438,6 +1439,7 @@ class AjaxController extends Controller
                 'likeable_type' => $type,
                 'time' => now(),
             ]);
+            $liked = true;
         }
 
         return response()->json([
@@ -1445,6 +1447,7 @@ class AjaxController extends Controller
                 ->where('content_id', $contentId)
                 ->where('likeable_type', $type)
                 ->count(),
+            'liked' => $liked,
         ]);
     }
 

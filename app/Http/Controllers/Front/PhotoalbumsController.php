@@ -31,7 +31,7 @@ class PhotoalbumsController extends Controller
             return redirect()->route('front.home');
         }
 
-        return $this->listing($viewer->id, $photoAlbums, $profiles, $friends, true);
+        return $this->listing($viewer->id, $photoAlbums, $profiles, $friends, false);
     }
 
     /**

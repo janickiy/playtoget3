@@ -910,9 +910,11 @@ $(document).ready(function () {
                 //console.log(data);
                 const Result = data.result;
 
-                if (Result != '') {
+                if (Result !== '' && typeof Result !== 'undefined') {
                     //console.log(IdComment);
-                    $('.liked[data-type=' + type + '][data-item=' + IdComment + ']').text(Result);
+                    $('.liked[data-type="' + type + '"][data-item="' + IdComment + '"]')
+                        .text(Result)
+                        .toggleClass('active', Boolean(data.liked));
                 }
             }
         });

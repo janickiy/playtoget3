@@ -41,6 +41,6 @@ class PhotoAlbums extends Model
      */
     public function photos(): HasMany
     {
-        return $this->hasMany(Photo::class);
+        return $this->hasMany(Photo::class, 'photoalbum_id');
     }
 }

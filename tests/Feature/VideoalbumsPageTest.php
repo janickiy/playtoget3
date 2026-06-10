@@ -29,9 +29,7 @@ class VideoalbumsPageTest extends TestCase
                 $this->videoPayload(10),
             ]));
             $mock->shouldReceive('hasMoreUserVideos')->with($viewer->id, 6, 0)->andReturn(true);
-            $mock->shouldReceive('popularVideos')->with(6, 0)->andReturn(collect([
-                $this->videoPayload(11),
-            ]));
+            $mock->shouldNotReceive('popularVideos');
             $mock->shouldReceive('albumsForUser')->with($viewer->id)->andReturn(collect([
                 ['id' => 19, 'name' => 'Мой альбом', 'image' => 'https://img.youtube.com/vi/test/hqdefault.jpg'],
             ]));
@@ -42,7 +40,7 @@ class VideoalbumsPageTest extends TestCase
             ->assertSee('Добавить видео')
             ->assertSee('/videoalbums/add-video', false)
             ->assertSee('/videoalbums/create', false)
-            ->assertSee('Популярные видео')
+            ->assertDontSee('Популярные видео')
             ->assertSee('Мои альбомы')
             ->assertSee('Мои видео')
             ->assertSee('/videoalbums/19', false)

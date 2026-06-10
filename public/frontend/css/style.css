@@ -1238,6 +1238,14 @@ ul.attach_image li .photo_big, ul.attach_image li .video_prev, ul.attach_image l
 	background: url(../images/liked-hover.png)no-repeat;
 	
 }
+.liked.active:before
+{
+	background: url(../images/liked-hover.png)no-repeat;
+}
+.liked.active
+{
+	color: #435a9a !important;
+}
 .tell:hover:before
 {
 	background: url(../images/tell-hover.png)no-repeat;
