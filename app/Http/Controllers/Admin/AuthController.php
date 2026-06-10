@@ -10,12 +10,17 @@ use Illuminate\Contracts\View\View;
 
 class AuthController extends Controller
 {
+    /**
+     * Ограничивает доступ к страницам авторизации для уже авторизованных администраторов.
+     */
     public function __construct()
     {
         $this->middleware('guest:admin', ['except' => ['logout']]);
     }
 
     /**
+     * Показывает форму входа в админку.
+     *
      * @return View
      */
     public function showLoginForm(): View
@@ -24,6 +29,8 @@ class AuthController extends Controller
     }
 
     /**
+     * Проверяет учетные данные администратора и выполняет вход в админку.
+     *
      * @param Request $request
      * @return RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
@@ -46,6 +53,8 @@ class AuthController extends Controller
     }
 
     /**
+     * Перенаправляет администратора на дашборд после успешной авторизации.
+     *
      * @param $request
      * @param $user
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
@@ -56,6 +65,8 @@ class AuthController extends Controller
     }
 
     /**
+     * Завершает админскую сессию и возвращает на страницу входа.
+     *
      * @return RedirectResponse
      */
     public function logout(): RedirectResponse

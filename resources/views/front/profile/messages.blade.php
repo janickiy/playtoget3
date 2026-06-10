@@ -8,7 +8,7 @@
 
     <div
         class="mess_list"
-        data-endpoint="{{ route('front.ajax.handle', ['action' => 'getmessages']) }}"
+        data-endpoint="{{ route('front.ajax.handle', ['action' => 'get_messages']) }}"
         data-number="{{ $messagesPageSize }}"
         data-offset="{{ $messagesPageSize }}"
         data-has-more="{{ $hasMoreMessages ? 1 : 0 }}"

@@ -32,21 +32,27 @@ use Illuminate\Support\Str;
 
 class AjaxController extends Controller
 {
+    /**
+     * Подключает репозитории, нужные AJAX-обработчикам фронта.
+     */
     public function __construct(
-        private readonly NewsRepository    $news,
-        private readonly FriendRepository  $friends,
-        private readonly UserRepository    $users,
-        private readonly ProfileRepository $profiles,
-        private readonly MessageRepository $messages,
+        private readonly NewsRepository       $news,
+        private readonly FriendRepository     $friends,
+        private readonly UserRepository       $users,
+        private readonly ProfileRepository    $profiles,
+        private readonly MessageRepository    $messages,
         private readonly PhotoalbumRepository $photoalbums,
         private readonly VideoalbumRepository $videoalbums,
-        private readonly CommunityRepository $communities,
-        private readonly EventRepository $events,
+        private readonly CommunityRepository  $communities,
+        private readonly EventRepository      $events,
         private readonly SportBlockRepository $sportBlocks,
     )
     {
     }
 
+    /**
+     * Маршрутизирует AJAX-запрос по имени действия и возвращает JSON-ответ.
+     */
     public function handle(Request $request, string $action): JsonResponse
     {
         return match ($action) {
@@ -56,36 +62,36 @@ class AjaxController extends Controller
             'get_sport_blocks_list' => $this->getSportBlocksList($request),
             'get_events_list' => $this->getEventsList($request),
             'get_pop_events_list' => $this->getPopEventsList($request),
-            'getpossiblefriends' => $this->getPossibleFriends($request),
+            'get_possible_friends' => $this->getPossibleFriends($request),
             'get_friends_list' => $this->getFriendsList($request),
             'add_as_friend' => $this->addAsFriend($request),
             'accept_friendship' => $this->acceptFriendship($request),
             'remove_friend' => $this->removeFriend($request),
             'block_user' => $this->blockUser($request),
             'unblock_user' => $this->unblockUser($request),
-            'changememberstatus' => $this->changeCommunityMemberStatus($request),
+            'change_member_status' => $this->changeCommunityMemberStatus($request),
             'send_community_invitation' => $this->sendCommunityInvitation($request),
             'search_event' => $this->searchEvent($request),
             'change_event_community_status' => $this->changeEventCommunityStatus($request),
             'change_event_memberstatus' => $this->changeEventMemberStatus($request),
             'send_event_invitation' => $this->sendEventInvitation($request),
-            'getcomments' => $this->getComments($request),
-            'getphotoinfo' => $this->getPhotoInfo($request),
+            'get_comments' => $this->getComments($request),
+            'get_photoinfo' => $this->getPhotoInfo($request),
             'add_photo_ajax' => $this->addPhotoAjax($request),
             'add_photo_ajax_attach' => $this->addPhotoAjaxAttach($request),
             'get_photos_list' => $this->getPhotosList($request),
             'get_album_photos' => $this->getAlbumPhotos($request),
-            'removepic' => $this->removePic($request),
-            'getvideoinfo' => $this->getVideoInfo($request),
+            'remove_pic' => $this->removePic($request),
+            'get_video_info' => $this->getVideoInfo($request),
             'get_videos_list' => $this->getVideosList($request),
             'get_album_videos' => $this->getAlbumVideos($request),
-            'removevideo' => $this->removeVideo($request),
-            'uploadavatar' => $this->uploadAvatar($request),
-            'uploadcover' => $this->uploadCover($request),
-            'addcomment' => $this->addComment($request),
-            'removecomment' => $this->removeComment($request),
-            'addmessage' => $this->addMessage($request),
-            'getmessages' => $this->getMessages($request),
+            'remove_video' => $this->removeVideo($request),
+            'upload_avatar' => $this->uploadAvatar($request),
+            'upload_cover' => $this->uploadCover($request),
+            'add_comment' => $this->addComment($request),
+            'remove_comment' => $this->removeComment($request),
+            'add_message' => $this->addMessage($request),
+            'get_messages' => $this->getMessages($request),
             'get_new_messages' => $this->getNewMessages($request),
             'remove_message' => $this->removeMessage($request),
             'remove_dialog' => $this->removeDialog($request),
@@ -101,6 +107,9 @@ class AjaxController extends Controller
         };
     }
 
+    /**
+     * Возвращает следующую страницу новостей пользователя для бесконечной прокрутки.
+     */
     private function getUserNewsList(Request $request): JsonResponse
     {
         $limit = min(max((int)$request->input('number', 5), 1), 25);
@@ -116,6 +125,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Возвращает список моих или приглашенных команд/групп с фильтрами.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function getCommunitiesList(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -159,6 +174,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Возвращает популярные команды или группы с фильтрами.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function getPopCommunitiesList(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -191,11 +212,17 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Возвращает карточки площадок, магазинов или фитнеса для AJAX-подгрузки.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function getSportBlocksList(Request $request): JsonResponse
     {
-        $limit = min(max((int) $request->input('number', 5), 1), 25);
-        $offset = max((int) $request->input('offset', 0), 0);
-        $type = (string) $request->input('type', 'playground');
+        $limit = min(max((int)$request->input('number', 5), 1), 25);
+        $offset = max((int)$request->input('offset', 0), 0);
+        $type = (string)$request->input('type', 'playground');
         $routePrefix = match ($type) {
             'playground' => 'front.playgrounds',
             'shop' => 'front.shops',
@@ -203,7 +230,7 @@ class AjaxController extends Controller
             default => null,
         };
 
-        if (! $routePrefix) {
+        if (!$routePrefix) {
             return response()->json(['status' => 0, 'html' => '', 'count' => 0, 'has_more' => false], 422);
         }
 
@@ -219,6 +246,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Возвращает мои или приглашенные мероприятия для AJAX-подгрузки.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function getEventsList(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -249,6 +282,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Возвращает популярные мероприятия для AJAX-подгрузки.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function getPopEventsList(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -266,6 +305,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Возвращает рекомендации возможных друзей для текущего пользователя.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function getPossibleFriends(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -282,6 +327,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Возвращает страницу списка друзей выбранного пользователя.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function getFriendsList(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -300,6 +351,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Создает заявку в друзья от текущего пользователя.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function addAsFriend(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -314,6 +371,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Принимает входящую заявку в друзья.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function acceptFriendship(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -328,6 +391,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Удаляет друга или отклоняет заявку в друзья.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function removeFriend(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -345,6 +414,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Блокирует выбранного пользователя для текущего профиля.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function blockUser(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -362,6 +437,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Снимает блокировку с выбранного пользователя.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function unblockUser(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -379,6 +460,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Меняет статус участия пользователя в команде или группе.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function changeCommunityMemberStatus(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -401,6 +488,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Отправляет пользователю приглашение в команду или группу.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function sendCommunityInvitation(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -422,6 +515,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Ищет мероприятия, которые можно привязать к команде или группе.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function searchEvent(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -458,6 +557,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Меняет статус участия команды или группы в мероприятии.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function changeEventCommunityStatus(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -483,6 +588,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Меняет статус участия пользователя в мероприятии.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function changeEventMemberStatus(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -503,6 +614,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Отправляет пользователю приглашение в мероприятие.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function sendEventInvitation(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -520,6 +637,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Возвращает страницу комментариев для профиля, события или сущности.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function getComments(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -545,6 +668,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Возвращает данные фотографии и соседние элементы галереи.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function getPhotoInfo(Request $request): JsonResponse
     {
         $photoId = (int)$request->input('photo_id', $request->input('id', 0));
@@ -587,10 +716,16 @@ class AjaxController extends Controller
             'tell' => Share::query()
                 ->where('shareable_type', 'photo')
                 ->where('content_id', $photo->id)
-            ->count(),
+                ->count(),
         ]);
     }
 
+    /**
+     * Загружает фотографию через AJAX в выбранный альбом или сущность.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function addPhotoAjax(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -661,6 +796,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Возвращает страницу фотографий для владельца или текущего пользователя.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function getPhotosList(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -692,6 +833,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Возвращает страницу фотографий конкретного альбома.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function getAlbumPhotos(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -718,6 +865,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Удаляет фотографию после проверки прав текущего пользователя.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function removePic(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -749,6 +902,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Возвращает данные видео и соседние элементы видеоальбома.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function getVideoInfo(Request $request): JsonResponse
     {
         $videoId = (int)$request->input('video_id', $request->input('id', 0));
@@ -803,6 +962,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Возвращает страницу видео для владельца или текущего пользователя.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function getVideosList(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -834,6 +999,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Возвращает страницу видео конкретного альбома.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function getAlbumVideos(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -860,6 +1031,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Удаляет видео после проверки прав текущего пользователя.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function removeVideo(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -892,6 +1069,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Загружает вложение-фотографию для комментария или сообщения.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function addPhotoAjaxAttach(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -960,6 +1143,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Принимает файл аватара, создает временную обрезку и возвращает данные предпросмотра.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function uploadAvatar(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -996,6 +1185,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Принимает файл обложки, создает временную обрезку и возвращает данные предпросмотра.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function uploadCover(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -1032,6 +1227,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Создает комментарий к профилю, событию или другой поддержанной сущности.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function addComment(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -1099,6 +1300,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Удаляет комментарий после проверки прав.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function removeComment(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -1115,6 +1322,12 @@ class AjaxController extends Controller
         return response()->json(['result' => 'success']);
     }
 
+    /**
+     * Создает сообщение в диалоге текущего пользователя.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function addMessage(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -1138,11 +1351,17 @@ class AjaxController extends Controller
         $created = $this->messages->createMessage($viewer, $receiver, $message, $attach);
 
         return response()->json($this->messages->serializeMessage($created) + [
-            'status' => 1,
-            'count' => $this->messages->unreadCount($viewer),
-        ]);
+                'status' => 1,
+                'count' => $this->messages->unreadCount($viewer),
+            ]);
     }
 
+    /**
+     * Возвращает страницу сообщений выбранного диалога.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function getMessages(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -1163,6 +1382,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Возвращает новые сообщения диалога после указанного идентификатора.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function getNewMessages(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -1181,6 +1406,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Удаляет сообщение текущего пользователя.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function removeMessage(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -1195,6 +1426,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Удаляет диалог для текущего пользователя.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function removeDialog(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -1210,6 +1447,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Переключает лайк для поддержанной сущности и возвращает новое количество.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function liked(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -1244,6 +1487,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Создает репост поддержанной сущности от имени пользователя или сообщества.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function shared(Request $request): JsonResponse
     {
         $viewer = $this->viewer();
@@ -1270,6 +1519,12 @@ class AjaxController extends Controller
         ]);
     }
 
+    /**
+     * Ищет города для живого поиска в формах.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function searchCity(Request $request): JsonResponse
     {
         $city = trim((string)$request->query('city', ''));
@@ -1296,6 +1551,12 @@ class AjaxController extends Controller
         return response()->json(['item' => $items]);
     }
 
+    /**
+     * Ищет виды спорта для живого поиска в формах.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function searchSportTypes(Request $request): JsonResponse
     {
         $sportTypes = trim((string)$request->query('sport_types', ''));
@@ -1317,6 +1578,12 @@ class AjaxController extends Controller
         return response()->json(['item' => $items]);
     }
 
+    /**
+     * Возвращает текущего авторизованного пользователя фронта.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function viewer(): ?User
     {
         /** @var User|null $user */
@@ -1325,6 +1592,9 @@ class AjaxController extends Controller
         return $user;
     }
 
+    /**
+     * Нормализует входящий список идентификаторов вложений.
+     */
     private function attachmentIds(mixed $attach): array
     {
         if (is_string($attach)) {
@@ -1344,6 +1614,12 @@ class AjaxController extends Controller
             ->all();
     }
 
+    /**
+     * Рендерит HTML-карточки фотографий для AJAX-ответа.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function renderPhotos($photos, ?User $viewer, bool $canManage = false): string
     {
         return $photos
@@ -1355,6 +1631,12 @@ class AjaxController extends Controller
             ->implode('');
     }
 
+    /**
+     * Рендерит HTML-карточки видео для AJAX-ответа.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function renderVideos($videos, ?User $viewer, bool $canManage = false): string
     {
         return $videos
@@ -1366,6 +1648,12 @@ class AjaxController extends Controller
             ->implode('');
     }
 
+    /**
+     * Добавляет к списку сообществ данные о правах и статусе текущего пользователя.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function communitiesForViewer(Collection $items, User $viewer): Collection
     {
         return $items->map(function (array $item) use ($viewer): array {
@@ -1378,6 +1666,12 @@ class AjaxController extends Controller
         });
     }
 
+    /**
+     * Рендерит HTML-карточки команд или групп для AJAX-ответа.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function renderCommunities(Collection $items, string $type): string
     {
         $view = $type === 'team' ? 'front.teams._team-card' : 'front.groups._group-card';
@@ -1388,6 +1682,11 @@ class AjaxController extends Controller
             ->implode('');
     }
 
+    /**
+     * Рендерит HTML-карточки мероприятий для AJAX-ответа.
+     *
+     * @return JsonResponse
+     */
     private function renderEvents(Collection $items): string
     {
         return $items
@@ -1395,6 +1694,10 @@ class AjaxController extends Controller
             ->implode('');
     }
 
+    /**
+     * Рендерит HTML-карточки спорт-блоков для AJAX-ответа.
+     *
+     */
     private function renderSportBlocks(Collection $items, string $routePrefix, string $type): string
     {
         return view('front.sport-blocks._cards', [
@@ -1405,6 +1708,9 @@ class AjaxController extends Controller
         ])->render();
     }
 
+    /**
+     * Собирает фильтры команд и групп из AJAX-запроса.
+     */
     private function communityFilters(Request $request): array
     {
         return [
@@ -1416,11 +1722,14 @@ class AjaxController extends Controller
         ];
     }
 
+    /**
+     * Собирает фильтры мероприятий из AJAX-запроса.
+     */
     private function eventFilters(Request $request): array
     {
-        $date = (string) $request->input('date', '');
+        $date = (string)$request->input('date', '');
         $validDate = preg_match('/^\d{4}-\d{2}-\d{2}$/', $date) === 1
-            && checkdate((int) substr($date, 5, 2), (int) substr($date, 8, 2), (int) substr($date, 0, 4));
+            && checkdate((int)substr($date, 5, 2), (int)substr($date, 8, 2), (int)substr($date, 0, 4));
 
         return [
             'place' => trim((string)$request->input('place', '')),
@@ -1432,12 +1741,15 @@ class AjaxController extends Controller
         ];
     }
 
+    /**
+     * Собирает фильтры спорт-блоков из AJAX-запроса.
+     */
     private function sportBlockFilters(Request $request): array
     {
         return [
-            'place' => trim((string) $request->input('place', '')),
-            'search' => trim((string) $request->input('search', '')),
-            'id_place' => (int) $request->input('id_place', 0),
+            'place' => trim((string)$request->input('place', '')),
+            'search' => trim((string)$request->input('search', '')),
+            'id_place' => (int)$request->input('id_place', 0),
         ];
     }
 }

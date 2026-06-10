@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    /**
+     * Проверяет пользователя, обновляет legacy-пароль при необходимости и авторизует на сайт
+     *
+     * @param LoginRequest $request
+     * @param UserRepository $users
+     * @return RedirectResponse
+     */
     public function login(LoginRequest $request, UserRepository $users): RedirectResponse
     {
         $user = $users->findForLogin($request->email());
@@ -36,6 +43,11 @@ class AuthController extends Controller
         return redirect()->intended(route('front.news.index'));
     }
 
+    /**
+     * Завершает пользовательскую сессию и возвращает на главную страницу
+     *
+     * @return RedirectResponse
+     */
     public function logout(): RedirectResponse
     {
         Auth::guard('web')->logout();

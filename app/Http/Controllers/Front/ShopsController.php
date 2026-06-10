@@ -15,6 +15,15 @@ class ShopsController extends Controller
 {
     private const TYPE = 'shop';
 
+    /**
+     * Показывает список магазина с фильтрами или открывает карточку конкретного объекта.
+     *
+     * @param Request $request
+     * @param SportBlockRepository $sportBlocks
+     * @param PhotoalbumRepository $photoalbums
+     * @param int|null $sportBlock
+     * @return View
+     */
     public function index(Request $request, SportBlockRepository $sportBlocks, PhotoalbumRepository $photoalbums, ?int $sportBlock = null): View
     {
         if ($sportBlock) {
@@ -27,6 +36,11 @@ class ShopsController extends Controller
         ]);
     }
 
+    /**
+     * Проверяет авторизацию и показывает форму создания магазина.
+     *
+     * @return View|RedirectResponse
+     */
     public function create(): View|RedirectResponse
     {
         if (! Auth::guard('web')->check()) {
@@ -41,6 +55,13 @@ class ShopsController extends Controller
         ]);
     }
 
+    /**
+     * Валидирует данные формы, создает магазин и перенаправляет на его карточку.
+     *
+     * @param Request $request
+     * @param SportBlockRepository $sportBlocks
+     * @return RedirectResponse
+     */
     public function store(Request $request, SportBlockRepository $sportBlocks): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
@@ -54,6 +75,13 @@ class ShopsController extends Controller
         return redirect()->route('front.shops.index', ['sportBlock' => $sportBlock->id]);
     }
 
+    /**
+     * Проверяет владельца и показывает форму редактирования магазина.
+     *
+     * @param int $sportBlock
+     * @param SportBlockRepository $sportBlocks
+     * @return View
+     */
     public function edit(int $sportBlock, SportBlockRepository $sportBlocks): View
     {
         $entity = $this->sportBlockOrFail($sportBlocks, $sportBlock);
@@ -67,6 +95,14 @@ class ShopsController extends Controller
         ]);
     }
 
+    /**
+     * Проверяет владельца, сохраняет изменения магазина и возвращает на карточку.
+     *
+     * @param int $sportBlock
+     * @param Request $request
+     * @param SportBlockRepository $sportBlocks
+     * @return RedirectResponse
+     */
     public function update(int $sportBlock, Request $request, SportBlockRepository $sportBlocks): RedirectResponse
     {
         $entity = $this->sportBlockOrFail($sportBlocks, $sportBlock);
@@ -77,6 +113,14 @@ class ShopsController extends Controller
         return redirect()->route('front.shops.index', ['sportBlock' => $entity->id]);
     }
 
+    /**
+     * Показывает карточку магазина, фотографии и права текущего пользователя.
+     *
+     * @param int $sportBlock
+     * @param SportBlockRepository $sportBlocks
+     * @param PhotoalbumRepository $photoalbums
+     * @return View
+     */
     private function show(int $sportBlock, SportBlockRepository $sportBlocks, PhotoalbumRepository $photoalbums): View
     {
         $entity = $this->sportBlockOrFail($sportBlocks, $sportBlock);
@@ -93,6 +137,13 @@ class ShopsController extends Controller
         ]);
     }
 
+    /**
+     * Находит объект нужного типа или завершает запрос ошибкой 404.
+     *
+     * @param SportBlockRepository $sportBlocks
+     * @param int $id
+     * @return SportBlock
+     */
     private function sportBlockOrFail(SportBlockRepository $sportBlocks, int $id): SportBlock
     {
         $sportBlock = $sportBlocks->findByType($id, self::TYPE);
@@ -102,6 +153,11 @@ class ShopsController extends Controller
         return $sportBlock;
     }
 
+    /**
+     * Готовит общие параметры шаблонов для раздела магазина
+     *
+     * @return array
+     */
     private function basePayload(): array
     {
         return [
@@ -116,6 +172,12 @@ class ShopsController extends Controller
         ];
     }
 
+    /**
+     * Собирает фильтры поиска магазина из query-параметров
+     *
+     * @param Request $request
+     * @return array
+     */
     private function filters(Request $request): array
     {
         return [
@@ -124,6 +186,13 @@ class ShopsController extends Controller
         ];
     }
 
+    /**
+     * Валидирует форму магазина и нормализует данные для репозитория.
+     *
+     * @param Request $request
+     * @param SportBlockRepository $sportBlocks
+     * @return array
+     */
     private function validated(Request $request, SportBlockRepository $sportBlocks): array
     {
         $validated = $request->validate([

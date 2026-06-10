@@ -23,6 +23,14 @@ class EventsController extends Controller
     private const VIDEOS_LIMIT = 6;
     private const COMMENTS_LIMIT = 10;
 
+
+    /**
+     * Показывает раздел мероприятий с фильтрами, вкладками и первой страницей списков.
+     *
+     * @param Request $request
+     * @param EventRepository $events
+     * @return View
+     */
     public function index(Request $request, EventRepository $events): View
     {
         $viewer = Auth::guard('web')->user();
@@ -42,6 +50,14 @@ class EventsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает карточку мероприятия, профильный верхний блок и комментарии.
+     *
+     * @param int $event
+     * @param EventRepository $events
+     * @param ProfileRepository $profiles
+     * @return View
+     */
     public function show(int $event, EventRepository $events, ProfileRepository $profiles): View
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -58,6 +74,11 @@ class EventsController extends Controller
         ]);
     }
 
+    /**
+     * Проверяет авторизацию и показывает форму создания
+     *
+     * @return View|RedirectResponse
+     */
     public function create(): View|RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
@@ -75,6 +96,13 @@ class EventsController extends Controller
         ]);
     }
 
+    /**
+     * Валидирует данные формы, создает мероприятие и перенаправляет на его карточку.
+     *
+     * @param Request $request
+     * @param EventRepository $events
+     * @return RedirectResponse
+     */
     public function store(Request $request, EventRepository $events): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
@@ -88,6 +116,13 @@ class EventsController extends Controller
         return redirect()->route('front.events.show', ['event' => $event->id]);
     }
 
+    /**
+     * Проверяет права участника и показывает форму редактирования мероприятия.
+     *
+     * @param int $event
+     * @param EventRepository $events
+     * @return View
+     */
     public function edit(int $event, EventRepository $events): View
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -102,6 +137,14 @@ class EventsController extends Controller
         ]);
     }
 
+    /**
+     * Проверяет права участника, сохраняет изменения мероприятия и возвращает на карточку.
+     *
+     * @param int $event
+     * @param Request $request
+     * @param EventRepository $events
+     * @return RedirectResponse
+     */
     public function update(int $event, Request $request, EventRepository $events): RedirectResponse
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -113,6 +156,13 @@ class EventsController extends Controller
         return redirect()->route('front.events.show', ['event' => $eventModel->id]);
     }
 
+    /**
+     * Показывает участников мероприятия: пользователей, команды и группы.
+     *
+     * @param int $event
+     * @param EventRepository $events
+     * @return View
+     */
     public function members(int $event, EventRepository $events): View
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -127,6 +177,14 @@ class EventsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает фотоальбомы мероприятия.
+     *
+     * @param int $event
+     * @param EventRepository $events
+     * @param PhotoalbumRepository $photoalbums
+     * @return View
+     */
     public function photoAlbums(int $event, EventRepository $events, PhotoalbumRepository $photoalbums): View
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -142,6 +200,15 @@ class EventsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает фотографии выбранного фотоальбома мероприятия.
+     *
+     * @param int $event
+     * @param int $album
+     * @param EventRepository $events
+     * @param PhotoalbumRepository $photoalbums
+     * @return View
+     */
     public function showPhotoalbum(int $event, int $album, EventRepository $events, PhotoalbumRepository $photoalbums): View
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -157,6 +224,16 @@ class EventsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает конкретную фотографию из фотоальбома мероприятия.
+     *
+     * @param int $event
+     * @param int $album
+     * @param int $photo
+     * @param EventRepository $events
+     * @param PhotoalbumRepository $photoalbums
+     * @return View
+     */
     public function photo(int $event, int $album, int $photo, EventRepository $events, PhotoalbumRepository $photoalbums): View
     {
         $view = $this->showPhotoalbum($event, $album, $events, $photoalbums);
@@ -165,6 +242,15 @@ class EventsController extends Controller
         return $view;
     }
 
+    /**
+     * Показывает фотографию мероприятия без привязки к выбранному альбому.
+     *
+     * @param int $event
+     * @param int $photo
+     * @param EventRepository $events
+     * @param PhotoalbumRepository $photoalbums
+     * @return View
+     */
     public function photoWithoutAlbum(int $event, int $photo, EventRepository $events, PhotoalbumRepository $photoalbums): View
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -176,6 +262,14 @@ class EventsController extends Controller
         return $this->photo($event, $photoalbum->id, $photo, $events, $photoalbums);
     }
 
+    /**
+     * Показывает форму добавления фотографии в фотоальбом мероприятия.
+     *
+     * @param int $event
+     * @param EventRepository $events
+     * @param PhotoalbumRepository $photoalbums
+     * @return View
+     */
     public function addPhoto(int $event, EventRepository $events, PhotoalbumRepository $photoalbums): View
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -189,6 +283,13 @@ class EventsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает форму создания фотоальбома мероприятия.
+     *
+     * @param int $event
+     * @param EventRepository $events
+     * @return View
+     */
     public function createPhotoAlbum(int $event, EventRepository $events): View
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -202,6 +303,15 @@ class EventsController extends Controller
         ]);
     }
 
+    /**
+     * Создает фотоальбом мероприятия из валидированных данных формы.
+     *
+     * @param int $event
+     * @param Request $request
+     * @param EventRepository $events
+     * @param PhotoalbumRepository $photoalbums
+     * @return RedirectResponse
+     */
     public function storePhotoAlbum(int $event, Request $request, EventRepository $events, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -218,6 +328,17 @@ class EventsController extends Controller
         return redirect()->route('front.events.photoalbums', ['event' => $eventModel->id]);
     }
 
+    /**
+     * Проверяет доступ и показывает форму редактирования фотоальбома мероприятия.
+     */
+
+    /**
+     * @param int $event
+     * @param int $album
+     * @param EventRepository $events
+     * @param PhotoalbumRepository $photoalbums
+     * @return View
+     */
     public function editPhotoalbum(int $event, int $album, EventRepository $events, PhotoalbumRepository $photoalbums): View
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -233,6 +354,9 @@ class EventsController extends Controller
         ]);
     }
 
+    /**
+     * Проверяет доступ и сохраняет изменения фотоальбома мероприятия.
+     */
     public function updatePhotoalbum(int $event, int $album, Request $request, EventRepository $events, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -245,6 +369,9 @@ class EventsController extends Controller
         return redirect()->route('front.events.photoalbums', ['event' => $eventModel->id]);
     }
 
+    /**
+     * Проверяет доступ и удаляет фотоальбом мероприятия.
+     */
     public function destroyPhotoalbum(int $event, int $album, EventRepository $events, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -257,6 +384,9 @@ class EventsController extends Controller
         return redirect()->route('front.events.photoalbums', ['event' => $eventModel->id]);
     }
 
+    /**
+     * Показывает видеоальбомы мероприятия.
+     */
     public function videoAlbums(int $event, EventRepository $events, VideoalbumRepository $videoalbums): View
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -271,6 +401,9 @@ class EventsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает видео выбранного видеоальбома мероприятия.
+     */
     public function showVideoAlbum(int $event, int $album, EventRepository $events, VideoalbumRepository $videoalbums): View
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -285,6 +418,9 @@ class EventsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает форму добавления видео в видеоальбом мероприятия.
+     */
     public function addVideo(int $event, EventRepository $events, VideoalbumRepository $videoalbums): View
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -298,6 +434,9 @@ class EventsController extends Controller
         ]);
     }
 
+    /**
+     * Валидирует ссылку и добавляет видео в видеоальбом мероприятия.
+     */
     public function storeVideo(int $event, Request $request, EventRepository $events, VideoalbumRepository $videoalbums): RedirectResponse
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -315,6 +454,9 @@ class EventsController extends Controller
         return redirect()->route('front.events.videoalbums', ['event' => $eventModel->id]);
     }
 
+    /**
+     * Показывает форму создания видеоальбома мероприятия.
+     */
     public function createVideoAlbum(int $event, EventRepository $events): View
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -328,6 +470,9 @@ class EventsController extends Controller
         ]);
     }
 
+    /**
+     * Создает видеоальбом мероприятия из валидированных данных формы.
+     */
     public function storeVideoAlbum(int $event, Request $request, EventRepository $events, VideoalbumRepository $videoalbums): RedirectResponse
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -344,6 +489,9 @@ class EventsController extends Controller
         return redirect()->route('front.events.videoalbums', ['event' => $eventModel->id]);
     }
 
+    /**
+     * Проверяет доступ и показывает форму редактирования видеоальбома мероприятия.
+     */
     public function editVideoalbum(int $event, int $album, EventRepository $events, VideoalbumRepository $videoalbums): View
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -359,6 +507,9 @@ class EventsController extends Controller
         ]);
     }
 
+    /**
+     * Проверяет доступ и сохраняет изменения видеоальбома мероприятия.
+     */
     public function updateVideoalbum(int $event, int $album, Request $request, EventRepository $events, VideoalbumRepository $videoalbums): RedirectResponse
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -371,6 +522,9 @@ class EventsController extends Controller
         return redirect()->route('front.events.videoalbums', ['event' => $eventModel->id]);
     }
 
+    /**
+     * Проверяет доступ и удаляет видеоальбом мероприятия.
+     */
     public function destroyVideoalbum(int $event, int $album, EventRepository $events, VideoalbumRepository $videoalbums): RedirectResponse
     {
         $eventModel = $this->eventOrFail($event, $events);
@@ -383,6 +537,9 @@ class EventsController extends Controller
         return redirect()->route('front.events.videoalbums', ['event' => $eventModel->id]);
     }
 
+    /**
+     * Готовит общие данные мероприятия для страниц вложенных разделов.
+     */
     private function eventPayload(Event $event, EventRepository $events, string $section): array
     {
         $viewer = Auth::guard('web')->user();
@@ -417,6 +574,9 @@ class EventsController extends Controller
         ];
     }
 
+    /**
+     * Валидирует форму мероприятия и нормализует город, спорт и даты.
+     */
     private function validateEvent(Request $request, EventRepository $events): array
     {
         $validated = $request->validate([
@@ -448,6 +608,9 @@ class EventsController extends Controller
         ];
     }
 
+    /**
+     * Валидирует название альбома и возвращает очищенную строку.
+     */
     private function validateAlbumName(Request $request): string
     {
         $validated = $request->validate([
@@ -459,6 +622,9 @@ class EventsController extends Controller
         return trim($validated['name']);
     }
 
+    /**
+     * Собирает фильтры списка мероприятий из query-параметров.
+     */
     private function eventFilters(Request $request): array
     {
         $date = (string) $request->input('date', '');
@@ -475,6 +641,9 @@ class EventsController extends Controller
         ];
     }
 
+    /**
+     * Находит активное мероприятие или завершает запрос ошибкой 404.
+     */
     private function eventOrFail(int $event, EventRepository $events): Event
     {
         $eventModel = $events->findActive($event);
@@ -484,6 +653,9 @@ class EventsController extends Controller
         return $eventModel;
     }
 
+    /**
+     * Находит фотоальбом, принадлежащий мероприятию, или завершает запрос ошибкой 404.
+     */
     private function eventPhotoalbumOrFail(int $album, Event $event, PhotoalbumRepository $photoalbums): Photoalbum
     {
         $photoalbum = $photoalbums->album($album, ['event']);
@@ -493,6 +665,9 @@ class EventsController extends Controller
         return $photoalbum;
     }
 
+    /**
+     * Находит видеоальбом, принадлежащий мероприятию, или завершает запрос ошибкой 404.
+     */
     private function eventVideoalbumOrFail(int $album, Event $event, VideoalbumRepository $videoalbums): Videoalbum
     {
         $videoalbum = $videoalbums->album($album, ['event']);

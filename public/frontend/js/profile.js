@@ -146,7 +146,7 @@ $(document).ready(function () {
                 formData.push({'name': 'attach', 'value': attach});
             //console.log(formData);
             $.ajax({
-                url: ajaxActionUrl('addmessage'),
+                url: ajaxActionUrl('add_message'),
                 data: formData,
                 type: 'POST',
                 dataType: 'json',
@@ -202,7 +202,7 @@ $(document).ready(function () {
                 messLoad = false;
                 $.ajax({
                     type: 'POST',
-                    url: ajaxActionUrl('getmessages'),
+                    url: ajaxActionUrl('get_messages'),
                     dataType: 'json',
                     data: {
                         _token: csrfToken(),
@@ -309,7 +309,7 @@ $(document).scroll(function () {
             $('#comment-list').append('<div class="loading-bar"><img border="0" src="./frontend/images/select2-spinner.gif" width=20px></div>')
             $.ajax({
                 type: 'POST',
-                url: window.profileCommentsEndpoint || '/ajax/getcomments',
+                url: window.profileCommentsEndpoint || '/ajax/get_comments',
                 data: {
                     _token: $('meta[name="csrf-token"]').attr('content') || '',
                     number: settComments.number,

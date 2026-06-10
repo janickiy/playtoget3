@@ -11,7 +11,7 @@ $(document).ready(function () {
         working = true;
         $('span.error').remove();
 
-        $.post('/ajax/addmessage', $(this).serialize(), function (data) {
+        $.post('/ajax/add_message', $(this).serialize(), function (data) {
 
             working = false;
             $('#submit').val('Submit');
@@ -67,7 +67,7 @@ $(document).ready(function () {
 
             function getData() {
 
-                $.post('/ajax/getmessages', {
+                $.post('/ajax/get_messages', {
                     number: $settings.nop,
                     offset: offset,
                     sender_id: idSender,

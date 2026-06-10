@@ -16,6 +16,9 @@ use Exception;
 
 class CatalogController extends Controller
 {
+    /**
+     * Подключает репозиторий категорий и базовые настройки админ-контроллера.
+     */
     public function __construct(
         private CatalogRepository $categoryRepository,
     )
@@ -24,6 +27,8 @@ class CatalogController extends Controller
     }
 
     /**
+     * Показывает страницу со списком категорий.
+     *
      * @return View
      */
     public function index(): View
@@ -32,6 +37,8 @@ class CatalogController extends Controller
     }
 
     /**
+     * Показывает форму добавления категории.
+     *
      * @return View
      */
     public function create(): View
@@ -40,6 +47,8 @@ class CatalogController extends Controller
     }
 
     /**
+     * Создает категорию из валидированных данных формы.
+     *
      * @param StoreRequest $request
      * @return RedirectResponse
      */
@@ -60,6 +69,8 @@ class CatalogController extends Controller
     }
 
     /**
+     * Показывает форму редактирования выбранной категории.
+     *
      * @param int $id
      * @return View
      */
@@ -73,6 +84,8 @@ class CatalogController extends Controller
     }
 
     /**
+     * Обновляет категорию из валидированных данных формы.
+     *
      * @param EditRequest $request
      * @return RedirectResponse
      */
@@ -93,6 +106,8 @@ class CatalogController extends Controller
     }
 
     /**
+     * Удаляет категорию и возвращает JSON-ответ для интерфейса админки.
+     *
      * @param DeleteRequest $request
      * @return JsonResponse
      */

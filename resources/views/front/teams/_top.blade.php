@@ -137,7 +137,7 @@
                     const communityId = button.data('community-id');
                     const root = button.closest('.team-profile-top');
 
-                    memberAjax('changememberstatus', {id: communityId, status: 1})
+                    memberAjax('change_member_status', {id: communityId, status: 1})
                         .done(function (response) {
                             if (response.result === 'success') {
                                 if (response.member === 'applied') {
@@ -168,7 +168,7 @@
                         return;
                     }
 
-                    memberAjax('changememberstatus', {id: communityId, status: 0})
+                    memberAjax('change_member_status', {id: communityId, status: 0})
                         .done(function (response) {
                             if (response.result === 'success') {
                                 setLeftState(root, communityId);

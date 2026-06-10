@@ -14,33 +14,56 @@ use Illuminate\Support\Facades\Auth;
 
 class FriendsController extends Controller
 {
+    /**
+     * Подключает репозиторий друзей для всех действий контроллера.
+     */
     public function __construct(
         private readonly FriendRepository $friends,
-        private readonly UserRepository $users,
-    ) {
+        private readonly UserRepository   $users,
+    )
+    {
     }
 
+    /**
+     * Показывает страницу друзей текущего пользователя.
+     *
+     * @param Request $request
+     * @return View|RedirectResponse
+     */
     public function index(Request $request): View|RedirectResponse
     {
         $viewer = $this->viewer();
 
-        if (! $viewer) {
+        if (!$viewer) {
             return redirect()->route('front.home');
         }
 
         return view('front.friends.index', $this->pageData($request, $viewer, $viewer, true));
     }
 
+    /**
+     * Показывает страницу друзей выбранного пользователя.
+     *
+     * @param int $user
+     * @param Request $request
+     * @return View
+     */
     public function user(int $user, Request $request): View
     {
         $targetUser = $this->users->findActive($user);
-        abort_if(! $targetUser, 404);
+        abort_if(!$targetUser, 404);
 
         return view('front.friends.index', $this->pageData($request, $this->viewer(), $targetUser, false));
     }
 
     /**
-     * @return array<string, mixed>
+     * Готовит списки друзей, заявок, рекомендаций и данные профиля для страницы друзей.
+     *
+     * @param Request $request
+     * @param User|null $viewer
+     * @param User $targetUser
+     * @param bool $isOwnPage
+     * @return array
      */
     private function pageData(Request $request, ?User $viewer, User $targetUser, bool $isOwnPage): array
     {
@@ -79,24 +102,32 @@ class FriendsController extends Controller
     }
 
     /**
-     * @return array<string, string|int|null>
+     * Собирает фильтры поиска друзей из query-параметров.
+     *
+     * @param Request $request
+     * @return array
      */
     private function filters(Request $request): array
     {
-        $sex = (string) $request->query('sex', '');
-        $minAge = (int) $request->query('min_age', 0);
-        $maxAge = (int) $request->query('max_age', 0);
+        $sex = (string)$request->query('sex', '');
+        $minAge = (int)$request->query('min_age', 0);
+        $maxAge = (int)$request->query('max_age', 0);
 
         return [
-            'search' => trim((string) $request->query('search', '')),
+            'search' => trim((string)$request->query('search', '')),
             'sex' => in_array($sex, ['male', 'female'], true) ? $sex : '',
-            'city' => trim((string) $request->query('city', $request->query('place', ''))),
-            'sport' => trim((string) $request->query('sport', '')),
+            'city' => trim((string)$request->query('city', $request->query('place', ''))),
+            'sport' => trim((string)$request->query('sport', '')),
             'min_age' => $minAge > 0 ? min($minAge, 99) : null,
             'max_age' => $maxAge > 0 ? min($maxAge, 99) : null,
         ];
     }
 
+    /**
+     * Возвращает текущего авторизованного пользователя фронта.
+     *
+     * @return User|null
+     */
     private function viewer(): ?User
     {
         /** @var User|null $user */
@@ -106,14 +137,17 @@ class FriendsController extends Controller
     }
 
     /**
-     * @return array<string, mixed>
+     * Готовит данные верхнего блока профиля для страниц друзей.
+     *
+     * @param User $user
+     * @return array
      */
     private function profileLayout(User $user): array
     {
         return [
             'user' => $user,
             'firstname' => $user->firstname ?: $user->displayName(),
-            'lastname' => $user->firstname ? (string) $user->lastname : '',
+            'lastname' => $user->firstname ? (string)$user->lastname : '',
             'about' => $user->about ?: '',
             'avatar' => FrontAssets::userAvatar($user),
             'cover' => FrontAssets::userCover($user),

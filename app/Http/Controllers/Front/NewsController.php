@@ -8,6 +8,13 @@ use Illuminate\Contracts\View\View;
 
 class NewsController extends Controller
 {
+
+    /**
+     * Показывает ленту новостей пользователя с первой страницей записей.
+     *
+     * @param NewsRepository $news
+     * @return View
+     */
     public function index(NewsRepository $news): View
     {
         $pageSize = 5;

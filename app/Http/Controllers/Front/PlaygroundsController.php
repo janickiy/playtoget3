@@ -15,6 +15,15 @@ class PlaygroundsController extends Controller
 {
     private const TYPE = 'playground';
 
+    /**
+     * Показывает список площадки с фильтрами или открывает карточку конкретного объекта
+     *
+     * @param Request $request
+     * @param SportBlockRepository $sportBlocks
+     * @param PhotoalbumRepository $photoalbums
+     * @param int|null $sportBlock
+     * @return View
+     */
     public function index(Request $request, SportBlockRepository $sportBlocks, PhotoalbumRepository $photoalbums, ?int $sportBlock = null): View
     {
         if ($sportBlock) {
@@ -32,6 +41,11 @@ class PlaygroundsController extends Controller
         ]);
     }
 
+    /**
+     * Проверяет авторизацию и показывает форму создания площадки.
+     *
+     * @return View|RedirectResponse
+     */
     public function create(): View|RedirectResponse
     {
         if (! Auth::guard('web')->check()) {
@@ -46,6 +60,13 @@ class PlaygroundsController extends Controller
         ]);
     }
 
+    /**
+     * Валидирует данные формы, создает площадку и перенаправляет на его карточку
+     *
+     * @param Request $request
+     * @param SportBlockRepository $sportBlocks
+     * @return RedirectResponse
+     */
     public function store(Request $request, SportBlockRepository $sportBlocks): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
@@ -59,6 +80,13 @@ class PlaygroundsController extends Controller
         return redirect()->route('front.playgrounds.index', ['sportBlock' => $sportBlock->id]);
     }
 
+    /**
+     * Проверяет владельца и показывает форму редактирования площадки.
+     *
+     * @param int $sportBlock
+     * @param SportBlockRepository $sportBlocks
+     * @return View
+     */
     public function edit(int $sportBlock, SportBlockRepository $sportBlocks): View
     {
         $entity = $this->sportBlockOrFail($sportBlocks, $sportBlock);
@@ -72,6 +100,14 @@ class PlaygroundsController extends Controller
         ]);
     }
 
+    /**
+     * Проверяет владельца, сохраняет изменения площадки и возвращает на карточку.
+     *
+     * @param int $sportBlock
+     * @param Request $request
+     * @param SportBlockRepository $sportBlocks
+     * @return RedirectResponse
+     */
     public function update(int $sportBlock, Request $request, SportBlockRepository $sportBlocks): RedirectResponse
     {
         $entity = $this->sportBlockOrFail($sportBlocks, $sportBlock);
@@ -82,6 +118,14 @@ class PlaygroundsController extends Controller
         return redirect()->route('front.playgrounds.index', ['sportBlock' => $entity->id]);
     }
 
+    /**
+     * Показывает карточку площадки, фотографии и права текущего пользователя.
+     *
+     * @param int $sportBlock
+     * @param SportBlockRepository $sportBlocks
+     * @param PhotoalbumRepository $photoalbums
+     * @return View
+     */
     private function show(int $sportBlock, SportBlockRepository $sportBlocks, PhotoalbumRepository $photoalbums): View
     {
         $entity = $this->sportBlockOrFail($sportBlocks, $sportBlock);
@@ -98,6 +142,9 @@ class PlaygroundsController extends Controller
         ]);
     }
 
+    /**
+     * Находит объект нужного типа или завершает запрос ошибкой 404.
+     */
     private function sportBlockOrFail(SportBlockRepository $sportBlocks, int $id): SportBlock
     {
         $sportBlock = $sportBlocks->findByType($id, self::TYPE);
@@ -107,6 +154,9 @@ class PlaygroundsController extends Controller
         return $sportBlock;
     }
 
+    /**
+     * Готовит общие параметры шаблонов для раздела площадки.
+     */
     private function basePayload(): array
     {
         return [
@@ -122,6 +172,9 @@ class PlaygroundsController extends Controller
         ];
     }
 
+    /**
+     * Собирает фильтры поиска площадки из query-параметров.
+     */
     private function filters(Request $request): array
     {
         return [
@@ -131,6 +184,9 @@ class PlaygroundsController extends Controller
         ];
     }
 
+    /**
+     * Валидирует форму площадки и нормализует данные для репозитория.
+     */
     private function validated(Request $request, SportBlockRepository $sportBlocks): array
     {
         $validated = $request->validate([

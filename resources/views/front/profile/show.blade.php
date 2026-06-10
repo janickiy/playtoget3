@@ -38,7 +38,7 @@
 
         <div
             id="comment-list"
-            data-endpoint="{{ route('front.ajax.handle', ['action' => 'getcomments']) }}"
+            data-endpoint="{{ route('front.ajax.handle', ['action' => 'get_comments']) }}"
             data-number="{{ $commentsPageSize }}"
             data-offset="{{ $commentsPageSize }}"
             data-has-more="{{ $hasMoreComments ? 1 : 0 }}"
@@ -56,7 +56,7 @@
         window.content_id = '{{ $profileUser->id }}';
         window.id_profile = '{{ $profileUser->id }}';
         window.placeholder = 'Ваш комментарий';
-        window.profileCommentsEndpoint = '{{ route('front.ajax.handle', ['action' => 'getcomments']) }}';
+        window.profileCommentsEndpoint = '{{ route('front.ajax.handle', ['action' => 'get_comments']) }}';
         window.profileCommentsHasMore = {{ $hasMoreComments ? 'true' : 'false' }};
     </script>
     <script src="{{ asset('frontend/js/autoresize.js') }}"></script>

@@ -15,6 +15,16 @@ class FitnessController extends Controller
 {
     private const TYPE = 'fitness';
 
+
+    /**
+     * Показывает список фитнеса с фильтрами или открывает карточку конкретного объекта.
+     *
+     * @param Request $request
+     * @param SportBlockRepository $sportBlocks
+     * @param PhotoalbumRepository $photoalbums
+     * @param int|null $sportBlock
+     * @return View
+     */
     public function index(Request $request, SportBlockRepository $sportBlocks, PhotoalbumRepository $photoalbums, ?int $sportBlock = null): View
     {
         if ($sportBlock) {
@@ -25,33 +35,45 @@ class FitnessController extends Controller
         $pageSize = 5;
 
         return view('front.sport-blocks.index', $this->basePayload() + [
-            'title' => 'Фитнес',
-            'items' => $sportBlocks->serializedByType(self::TYPE, $filters, $pageSize, 0),
-            'itemsPageSize' => $pageSize,
-            'itemsTotal' => $sportBlocks->countByType(self::TYPE, $filters),
-            'filters' => $filters,
-        ]);
+                'title' => 'Фитнес',
+                'items' => $sportBlocks->serializedByType(self::TYPE, $filters, $pageSize, 0),
+                'itemsPageSize' => $pageSize,
+                'itemsTotal' => $sportBlocks->countByType(self::TYPE, $filters),
+                'filters' => $filters,
+            ]);
     }
 
+    /**
+     * Проверяет авторизацию и показывает форму создания фитнеса.
+     *
+     * @return View|RedirectResponse
+     */
     public function create(): View|RedirectResponse
     {
-        if (! Auth::guard('web')->check()) {
+        if (!Auth::guard('web')->check()) {
             return redirect()->route('front.home');
         }
 
         return view('front.sport-blocks.form', $this->basePayload() + [
-            'title' => 'Добавление фитнеса',
-            'button' => 'Создать',
-            'action' => route('front.fitness.store'),
-            'sportBlock' => null,
-        ]);
+                'title' => 'Добавление фитнеса',
+                'button' => 'Создать',
+                'action' => route('front.fitness.store'),
+                'sportBlock' => null,
+            ]);
     }
 
+    /**
+     * Валидирует данные формы, создает фитнес и перенаправляет на его карточку
+     *
+     * @param Request $request
+     * @param SportBlockRepository $sportBlocks
+     * @return RedirectResponse
+     */
     public function store(Request $request, SportBlockRepository $sportBlocks): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
 
-        if (! $viewer) {
+        if (!$viewer) {
             return redirect()->route('front.home');
         }
 
@@ -60,19 +82,30 @@ class FitnessController extends Controller
         return redirect()->route('front.fitness.index', ['sportBlock' => $sportBlock->id]);
     }
 
+    /**
+     * Проверяет владельца и показывает форму редактирования фитнеса.
+     */
     public function edit(int $sportBlock, SportBlockRepository $sportBlocks): View
     {
         $entity = $this->sportBlockOrFail($sportBlocks, $sportBlock);
         abort_unless($sportBlocks->isOwner($entity, Auth::guard('web')->user()), 403);
 
         return view('front.sport-blocks.form', $this->basePayload() + [
-            'title' => 'Редактирование фитнеса',
-            'button' => 'Сохранить',
-            'action' => route('front.fitness.update', ['sportBlock' => $entity->id]),
-            'sportBlock' => $entity,
-        ]);
+                'title' => 'Редактирование фитнеса',
+                'button' => 'Сохранить',
+                'action' => route('front.fitness.update', ['sportBlock' => $entity->id]),
+                'sportBlock' => $entity,
+            ]);
     }
 
+    /**
+     * Проверяет владельца, сохраняет изменения фитнеса и возвращает на карточку.
+     *
+     * @param int $sportBlock
+     * @param Request $request
+     * @param SportBlockRepository $sportBlocks
+     * @return RedirectResponse
+     */
     public function update(int $sportBlock, Request $request, SportBlockRepository $sportBlocks): RedirectResponse
     {
         $entity = $this->sportBlockOrFail($sportBlocks, $sportBlock);
@@ -83,6 +116,14 @@ class FitnessController extends Controller
         return redirect()->route('front.fitness.index', ['sportBlock' => $entity->id]);
     }
 
+    /**
+     * Показывает карточку фитнеса, фотографии и права текущего пользователя.
+     *
+     * @param int $sportBlock
+     * @param SportBlockRepository $sportBlocks
+     * @param PhotoalbumRepository $photoalbums
+     * @return View
+     */
     private function show(int $sportBlock, SportBlockRepository $sportBlocks, PhotoalbumRepository $photoalbums): View
     {
         $entity = $this->sportBlockOrFail($sportBlocks, $sportBlock);
@@ -90,15 +131,22 @@ class FitnessController extends Controller
         $canEdit = $sportBlocks->isOwner($entity, $viewer);
 
         return view('front.sport-blocks.show', $this->basePayload() + [
-            'title' => $entity->name ?: 'Фитнес',
-            'sportBlock' => $entity,
-            'data' => $sportBlocks->serialize($entity),
-            'photos' => $photoalbums->photosForOwner($entity->id, self::TYPE, 20, 0),
-            'uploadAlbum' => $canEdit && $viewer ? $photoalbums->ensureDefaultAlbumForOwner($entity->id, self::TYPE, 'Фото фитнеса') : null,
-            'canEdit' => $canEdit,
-        ]);
+                'title' => $entity->name ?: 'Фитнес',
+                'sportBlock' => $entity,
+                'data' => $sportBlocks->serialize($entity),
+                'photos' => $photoalbums->photosForOwner($entity->id, self::TYPE, 20, 0),
+                'uploadAlbum' => $canEdit && $viewer ? $photoalbums->ensureDefaultAlbumForOwner($entity->id, self::TYPE, 'Фото фитнеса') : null,
+                'canEdit' => $canEdit,
+            ]);
     }
 
+    /**
+     * Находит объект нужного типа или завершает запрос ошибкой 404.
+     *
+     * @param SportBlockRepository $sportBlocks
+     * @param int $id
+     * @return SportBlock
+     */
     private function sportBlockOrFail(SportBlockRepository $sportBlocks, int $id): SportBlock
     {
         $sportBlock = $sportBlocks->findByType($id, self::TYPE);
@@ -108,6 +156,11 @@ class FitnessController extends Controller
         return $sportBlock;
     }
 
+    /**
+     * Готовит общие параметры шаблонов для раздела фитнеса.
+     *
+     * @return array
+     */
     private function basePayload(): array
     {
         return [
@@ -122,15 +175,28 @@ class FitnessController extends Controller
         ];
     }
 
+    /**
+     * Собирает фильтры поиска фитнеса из query-параметров.
+     *
+     * @param Request $request
+     * @return array
+     */
     private function filters(Request $request): array
     {
         return [
-            'search' => trim((string) $request->query('search', '')),
-            'place' => trim((string) $request->query('place', '')),
-            'id_place' => (int) $request->query('id_place', 0),
+            'search' => trim((string)$request->query('search', '')),
+            'place' => trim((string)$request->query('place', '')),
+            'id_place' => (int)$request->query('id_place', 0),
         ];
     }
 
+    /**
+     * Валидирует форму фитнеса и нормализует данные для репозитория.
+     *
+     * @param Request $request
+     * @param SportBlockRepository $sportBlocks
+     * @return array
+     */
     private function validated(Request $request, SportBlockRepository $sportBlocks): array
     {
         $validated = $request->validate([
@@ -147,17 +213,17 @@ class FitnessController extends Controller
             'name.required' => 'Укажите название фитнеса.',
         ]);
 
-        $cityId = (int) ($validated['id_place'] ?? 0);
+        $cityId = (int)($validated['id_place'] ?? 0);
 
         return [
             'name' => trim($validated['name']),
-            'about' => trim((string) ($validated['about'] ?? '')),
+            'about' => trim((string)($validated['about'] ?? '')),
             'city_id' => $cityId,
-            'place' => trim((string) ($validated['place'] ?? '')) ?: $sportBlocks->cityName($cityId),
-            'address' => trim((string) ($validated['address'] ?? '')),
-            'phone' => trim((string) ($validated['phone'] ?? '')),
-            'email' => trim((string) ($validated['email'] ?? '')),
-            'website' => trim((string) ($validated['website'] ?? '')),
+            'place' => trim((string)($validated['place'] ?? '')) ?: $sportBlocks->cityName($cityId),
+            'address' => trim((string)($validated['address'] ?? '')),
+            'phone' => trim((string)($validated['phone'] ?? '')),
+            'email' => trim((string)($validated['email'] ?? '')),
+            'website' => trim((string)($validated['website'] ?? '')),
             'avatar_file' => $request->file('avatar_file'),
         ];
     }

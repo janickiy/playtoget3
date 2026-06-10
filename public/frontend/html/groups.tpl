@@ -585,7 +585,7 @@ $(document).scroll(function() {
 			$('#comment-list').append('<div class="loading-bar"><img border="0" src="./frontend/images/select2-spinner.gif" width=20px></div>')
 			$.ajax({
 				type:'POST',
-				url:'/?task=ajax_action&action=getcomments',
+				url:'/?task=ajax_action&action=get_comments',
 				data:{
 					number:settComments.number,
 					offset:settComments.offset,

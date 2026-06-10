@@ -380,7 +380,7 @@ function community_leave(type, id) {
                 'action': function () {
                     $.ajax({
                         type: 'POST',
-                        url: '/?task=ajax_action&action=changememberstatus',
+                        url: '/?task=ajax_action&action=change_member_status',
                         data: {
                             id: id,
                             status: 0,
@@ -412,7 +412,7 @@ function community_leave(type, id) {
 function community_add(id) {
     $.ajax({
         type: 'POST',
-        url: '/?task=ajax_action&action=changememberstatus',
+        url: '/?task=ajax_action&action=change_member_status',
         data: {
             id: id,
             status: 1,
@@ -962,7 +962,7 @@ $(document).ready(function () {
                     'action': function () {
                         $.ajax({
                             type: 'POST',
-                            url: '/ajax/removecomment',
+                            url: '/ajax/remove_comment',
                             data: {
                                 _token: csrfToken(),
                                 id_comment: id
@@ -1086,7 +1086,7 @@ $(document).ready(function () {
                 formData.push({'name': '_token', 'value': csrfToken()});
             }
             $.ajax({
-                url: '/ajax/addcomment',
+                url: '/ajax/add_comment',
                 data: formData,
                 type: 'POST',
                 success: function (data) {
@@ -1132,7 +1132,7 @@ $(document).ready(function () {
             }
             $.ajax({
                 type: 'POST',
-                url: '/ajax/addcomment',
+                url: '/ajax/add_comment',
                 data: formData,
                 success: function (data) {
                     //console.log(data);

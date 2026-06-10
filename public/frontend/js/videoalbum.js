@@ -29,7 +29,7 @@ $(document).ready(function () {
                     'action': function () {
                         $.ajax({
                             type: 'POST',
-                            url: '/ajax/removevideo?id=' + encodeURIComponent(IdVideo),
+                            url: '/ajax/remove_video?id=' + encodeURIComponent(IdVideo),
                             data: {
                                 _token: videoCsrfToken(),
                             },
@@ -60,7 +60,7 @@ $(document).ready(function () {
 function getVideoInfo(id) {
     $.ajax({
         type: 'GET',
-        url: '/ajax/getvideoinfo',
+        url: '/ajax/get_video_info',
         data: {
             video_id: id,
         },
@@ -235,7 +235,7 @@ $(document).on('click', '#video_big .reply', function () {
 });
 
 function getVideoComments(id) {
-    $.get('/ajax/getcomments', {
+    $.get('/ajax/get_comments', {
         number: 100,
         offset: 0,
         commentable_type: 'video',

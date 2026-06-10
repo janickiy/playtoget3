@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+    /**
+     * Показывает главную страницу или перенаправляет legacy-запросы по параметру task
+     *
+     * @param Request $request
+     * @return View|RedirectResponse
+     */
     public function index(Request $request): View|RedirectResponse
     {
         if ($request->has('task')) {
@@ -26,6 +32,13 @@ class HomeController extends Controller
         ]);
     }
 
+
+    /**
+     * Определяет старый task/action и перенаправляет его на новый фронтовый маршрут.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
     private function redirectLegacyTask(Request $request): RedirectResponse
     {
         $task = (string) $request->query('task', 'news');
@@ -54,6 +67,13 @@ class HomeController extends Controller
         };
     }
 
+    /**
+     * Преобразует legacy-ссылки мероприятий в новые маршруты мероприятий.
+     *
+     * @param Request $request
+     * @param array $actions
+     * @return RedirectResponse
+     */
     private function redirectLegacyEvents(Request $request, array $actions): RedirectResponse
     {
         if ($this->hasLegacyAction($actions, 'create')) {
@@ -113,6 +133,14 @@ class HomeController extends Controller
         return redirect()->route('front.events.show', ['event' => $request->query('event_id')]);
     }
 
+    /**
+     * Преобразует legacy-ссылки спорт-блоков в новые маршруты площадок, магазинов или фитнеса.
+     *
+     * @param Request $request
+     * @param array $actions
+     * @param string $routePrefix
+     * @return RedirectResponse
+     */
     private function redirectLegacySportBlocks(Request $request, array $actions, string $routePrefix): RedirectResponse
     {
         if ($this->hasLegacyAction($actions, 'create')) {
@@ -130,6 +158,13 @@ class HomeController extends Controller
         return redirect()->route($routePrefix . '.index', ['sportBlock' => $request->query('id_sport_block')]);
     }
 
+    /**
+     * Преобразует legacy-ссылки групп в новые маршруты групп.
+     *
+     * @param Request $request
+     * @param array $actions
+     * @return RedirectResponse
+     */
     private function redirectLegacyGroups(Request $request, array $actions): RedirectResponse
     {
         if ($this->hasLegacyAction($actions, 'create')) {
@@ -151,6 +186,13 @@ class HomeController extends Controller
         return redirect()->route('front.groups.show', ['community' => $request->query('community_id')]);
     }
 
+    /**
+     * Преобразует legacy-ссылки профиля, друзей и сообщений в новые маршруты.
+     *
+     * @param Request $request
+     * @param array $actions
+     * @return RedirectResponse
+     */
     private function redirectLegacyProfile(Request $request, array $actions): RedirectResponse
     {
         if ($this->hasLegacyAction($actions, 'messages') && $request->filled('sel')) {
@@ -167,6 +209,13 @@ class HomeController extends Controller
         return redirect()->route('front.profile.show', ['user' => $request->query('user_id')]);
     }
 
+    /**
+     * Преобразует legacy-ссылки фотоальбомов в новые маршруты фотоальбомов.
+     *
+     * @param Request $request
+     * @param array $actions
+     * @return RedirectResponse
+     */
     private function redirectLegacyPhotoalbums(Request $request, array $actions): RedirectResponse
     {
         if ($this->hasLegacyAction($actions, 'add_photo')) {
@@ -190,6 +239,13 @@ class HomeController extends Controller
             : redirect()->route('front.photoalbums.index');
     }
 
+    /**
+     * Преобразует legacy-ссылки видеоальбомов в новые маршруты видеоальбомов.
+     *
+     * @param Request $request
+     * @param array $actions
+     * @return RedirectResponse
+     */
     private function redirectLegacyVideoalbums(Request $request, array $actions): RedirectResponse
     {
         if ($this->hasLegacyAction($actions, 'add_video')) {
@@ -213,6 +269,9 @@ class HomeController extends Controller
             : redirect()->route('front.videoalbums.index');
     }
 
+    /**
+     * Преобразует legacy-ссылки команд в новые маршруты команд.
+     */
     private function redirectLegacyTeams(Request $request, array $actions): RedirectResponse
     {
         if ($this->hasLegacyAction($actions, 'create')) {
@@ -310,11 +369,17 @@ class HomeController extends Controller
         return redirect()->route('front.teams.show', ['community' => $communityId]);
     }
 
+    /**
+     * Проверяет наличие legacy-action в нормализованном списке действий.
+     */
     private function hasLegacyAction(array $actions, string $action): bool
     {
         return in_array($action, $actions, true);
     }
 
+    /**
+     * Возвращает все значения legacy query-параметра с учетом дублей в URL.
+     */
     private function legacyQueryValues(Request $request, string $key): array
     {
         $values = [];

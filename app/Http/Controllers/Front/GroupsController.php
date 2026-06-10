@@ -25,6 +25,14 @@ class GroupsController extends Controller
     private const VIDEOS_LIMIT = 6;
     private const COMMENTS_LIMIT = 10;
 
+
+    /**
+     * Показывает список групп с фильтрами и вкладками текущего пользователя.
+     *
+     * @param Request $request
+     * @param CommunityRepository $communities
+     * @return View|RedirectResponse
+     */
     public function index(Request $request, CommunityRepository $communities): View|RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
@@ -48,6 +56,13 @@ class GroupsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает групп выбранного пользователя.
+     *
+     * @param int $user
+     * @param CommunityRepository $communities
+     * @return View
+     */
     public function user(int $user, CommunityRepository $communities): View
     {
         return view('front.groups.index', [
@@ -60,6 +75,11 @@ class GroupsController extends Controller
         ]);
     }
 
+    /**
+     * Проверяет авторизацию и показывает форму создания группы.
+     *
+     * @return View|RedirectResponse
+     */
     public function create(): View|RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
@@ -78,6 +98,13 @@ class GroupsController extends Controller
         ]);
     }
 
+    /**
+     * Валидирует данные формы и создает группу.
+     *
+     * @param Request $request
+     * @param CommunityRepository $communities
+     * @return RedirectResponse
+     */
     public function store(Request $request, CommunityRepository $communities): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
@@ -91,6 +118,14 @@ class GroupsController extends Controller
         return redirect()->route('front.groups.show', ['community' => $group->id]);
     }
 
+    /**
+     * Показывает карточку группы, верхний блок и комментарии.
+     *
+     * @param int $community
+     * @param CommunityRepository $communities
+     * @param ProfileRepository $profiles
+     * @return View
+     */
     public function show(int $community, CommunityRepository $communities, ProfileRepository $profiles): View
     {
         $group = $this->groupOrFail($community, $communities);
@@ -107,6 +142,13 @@ class GroupsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает участников группы и их роли.
+     *
+     * @param int $community
+     * @param CommunityRepository $communities
+     * @return View
+     */
     public function members(int $community, CommunityRepository $communities): View
     {
         $group = $this->groupOrFail($community, $communities);
@@ -119,6 +161,13 @@ class GroupsController extends Controller
         ]);
     }
 
+    /**
+     * Проверяет права и показывает форму редактирования группы.
+     *
+     * @param int $community
+     * @param CommunityRepository $communities
+     * @return View
+     */
     public function edit(int $community, CommunityRepository $communities): View
     {
         $group = $this->groupOrFail($community, $communities);
@@ -138,6 +187,14 @@ class GroupsController extends Controller
         ]));
     }
 
+    /**
+     * Проверяет права и сохраняет изменения группы
+     *
+     * @param int $community
+     * @param Request $request
+     * @param CommunityRepository $communities
+     * @return RedirectResponse
+     */
     public function update(int $community, Request $request, CommunityRepository $communities): RedirectResponse
     {
         $group = $this->groupOrFail($community, $communities);
@@ -150,6 +207,14 @@ class GroupsController extends Controller
         return redirect()->route('front.groups.show', ['community' => $group->id]);
     }
 
+    /**
+     * Показывает фотоальбомы группы или текущей группы.
+     *
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoalbums
+     * @param int|null $community
+     * @return View
+     */
     public function photoAlbums(CommunityRepository $communities, PhotoalbumRepository $photoalbums, ?int $community = null): View
     {
         $group = $this->resolveGroup($community, $communities);
@@ -166,6 +231,15 @@ class GroupsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает фотографии выбранного фотоальбома группы.
+     *
+     * @param int $community
+     * @param int $album
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoalbums
+     * @return View
+     */
     public function showPhotoalbum(int $community, int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums): View
     {
         $group = $this->groupOrFail($community, $communities);
@@ -183,6 +257,14 @@ class GroupsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает форму добавления фотографии в фотоальбом группы.
+     *
+     * @param int $community
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoalbums
+     * @return View
+     */
     public function addPhoto(int $community, CommunityRepository $communities, PhotoalbumRepository $photoalbums): View
     {
         $group = $this->groupOrFail($community, $communities);
@@ -196,6 +278,13 @@ class GroupsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает форму создания фотоальбома группы.
+     *
+     * @param int $community
+     * @param CommunityRepository $communities
+     * @return View
+     */
     public function createPhotoAlbum(int $community, CommunityRepository $communities): View
     {
         $group = $this->groupOrFail($community, $communities);
@@ -209,6 +298,15 @@ class GroupsController extends Controller
         ]);
     }
 
+    /**
+     * Создает фотоальбом группы из валидированных данных формы.
+     *
+     * @param int $community
+     * @param Request $request
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoalbums
+     * @return RedirectResponse
+     */
     public function storePhotoAlbum(int $community, Request $request, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $group = $this->groupOrFail($community, $communities);
@@ -225,6 +323,9 @@ class GroupsController extends Controller
         return redirect()->route('front.groups.photoalbums', ['community' => $group->id]);
     }
 
+    /**
+     * Проверяет права и показывает форму редактирования фотоальбома группы.
+     */
     public function editPhotoalbum(int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums, ?int $community = null): View
     {
         $photoalbum = $photoalbums->album($album, ['group']);
@@ -242,6 +343,9 @@ class GroupsController extends Controller
         ]);
     }
 
+    /**
+     * Проверяет права и сохраняет изменения фотоальбома группы.
+     */
     public function updatePhotoalbum(int $album, Request $request, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $photoalbum = $photoalbums->album($album, ['group']);
@@ -254,6 +358,9 @@ class GroupsController extends Controller
         return redirect()->route('front.groups.photoalbums', ['community' => $group->id]);
     }
 
+    /**
+     * Проверяет права и удаляет фотоальбом группы.
+     */
     public function destroyPhotoalbum(int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $photoalbum = $photoalbums->album($album, ['group']);
@@ -267,6 +374,9 @@ class GroupsController extends Controller
         return redirect()->route('front.groups.photoalbums', ['community' => $group->id]);
     }
 
+    /**
+     * Проверяет группу в URL и удаляет ее фотоальбом.
+     */
     public function destroyPhotoalbumForGroup(int $community, int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $group = $this->groupOrFail($community, $communities);
@@ -279,11 +389,17 @@ class GroupsController extends Controller
         return redirect()->route('front.groups.photoalbums', ['community' => $group->id]);
     }
 
+    /**
+     * Показывает форму редактирования фотоальбома конкретной группы.
+     */
     public function editPhotoalbumForGroup(int $community, int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums): View
     {
         return $this->editPhotoalbum($album, $communities, $photoalbums, $community);
     }
 
+    /**
+     * Сохраняет изменения фотоальбома конкретной группы.
+     */
     public function updatePhotoalbumForGroup(int $community, int $album, Request $request, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $group = $this->groupOrFail($community, $communities);
@@ -296,6 +412,9 @@ class GroupsController extends Controller
         return redirect()->route('front.groups.photoalbums', ['community' => $group->id]);
     }
 
+    /**
+     * Показывает конкретную фотографию из фотоальбома группы.
+     */
     public function photo(int $community, int $album, int $photo, CommunityRepository $communities, PhotoalbumRepository $photoalbums): View
     {
         $view = $this->showPhotoalbum($community, $album, $communities, $photoalbums);
@@ -304,6 +423,9 @@ class GroupsController extends Controller
         return $view;
     }
 
+    /**
+     * Показывает фотографию группы без привязки к выбранному альбому.
+     */
     public function photoWithoutAlbum(int $community, int $photo, CommunityRepository $communities, PhotoalbumRepository $photoalbums): View
     {
         $group = $this->groupOrFail($community, $communities);
@@ -315,6 +437,9 @@ class GroupsController extends Controller
         return $this->photo($community, $photoalbum->id, $photo, $communities, $photoalbums);
     }
 
+    /**
+     * Показывает видеоальбомы группы или текущей группы.
+     */
     public function videoAlbums(CommunityRepository $communities, VideoalbumRepository $videoalbums, ?int $community = null): View
     {
         $group = $this->resolveGroup($community, $communities);
@@ -331,6 +456,9 @@ class GroupsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает видео выбранного видеоальбома группы.
+     */
     public function showVideoAlbum(int $community, int $album, CommunityRepository $communities, VideoalbumRepository $videoalbums): View
     {
         $group = $this->groupOrFail($community, $communities);
@@ -347,6 +475,9 @@ class GroupsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает форму добавления видео в видеоальбом группы.
+     */
     public function addVideo(int $community, CommunityRepository $communities, VideoalbumRepository $videoalbums): View
     {
         $group = $this->groupOrFail($community, $communities);
@@ -360,6 +491,9 @@ class GroupsController extends Controller
         ]);
     }
 
+    /**
+     * Валидирует ссылку и добавляет видео в видеоальбом группы.
+     */
     public function storeVideo(int $community, Request $request, CommunityRepository $communities, VideoalbumRepository $videoalbums): RedirectResponse
     {
         $group = $this->groupOrFail($community, $communities);
@@ -377,6 +511,9 @@ class GroupsController extends Controller
         return redirect()->route('front.groups.videoalbums', ['community' => $group->id]);
     }
 
+    /**
+     * Показывает форму создания видеоальбома группы.
+     */
     public function createVideoAlbum(int $community, CommunityRepository $communities): View
     {
         $group = $this->groupOrFail($community, $communities);
@@ -390,6 +527,9 @@ class GroupsController extends Controller
         ]);
     }
 
+    /**
+     * Создает видеоальбом группы из валидированных данных формы.
+     */
     public function storeVideoAlbum(int $community, Request $request, CommunityRepository $communities, VideoalbumRepository $videoalbums): RedirectResponse
     {
         $group = $this->groupOrFail($community, $communities);
@@ -406,6 +546,9 @@ class GroupsController extends Controller
         return redirect()->route('front.groups.videoalbums', ['community' => $group->id]);
     }
 
+    /**
+     * Проверяет права и показывает форму редактирования видеоальбома группы.
+     */
     public function editVideoalbum(int $album, CommunityRepository $communities, VideoalbumRepository $videoalbums, ?int $community = null): View
     {
         $videoalbum = $videoalbums->album($album, ['group']);
@@ -423,6 +566,9 @@ class GroupsController extends Controller
         ]);
     }
 
+    /**
+     * Проверяет права и сохраняет изменения видеоальбома группы.
+     */
     public function updateVideoalbum(int $album, Request $request, CommunityRepository $communities, VideoalbumRepository $videoalbums): RedirectResponse
     {
         $videoalbum = $videoalbums->album($album, ['group']);
@@ -435,6 +581,9 @@ class GroupsController extends Controller
         return redirect()->route('front.groups.videoalbums', ['community' => $group->id]);
     }
 
+    /**
+     * Проверяет права и удаляет видеоальбом группы.
+     */
     public function destroyVideoalbum(int $album, CommunityRepository $communities, VideoalbumRepository $videoalbums): RedirectResponse
     {
         $videoalbum = $videoalbums->album($album, ['group']);
@@ -448,6 +597,9 @@ class GroupsController extends Controller
         return redirect()->route('front.groups.videoalbums', ['community' => $group->id]);
     }
 
+    /**
+     * Проверяет группу в URL и удаляет ее видеоальбом.
+     */
     public function destroyVideoalbumForGroup(int $community, int $album, CommunityRepository $communities, VideoalbumRepository $videoalbums): RedirectResponse
     {
         $group = $this->groupOrFail($community, $communities);
@@ -460,6 +612,9 @@ class GroupsController extends Controller
         return redirect()->route('front.groups.videoalbums', ['community' => $group->id]);
     }
 
+    /**
+     * Показывает мероприятия группы.
+     */
     public function events(int $community, CommunityRepository $communities): View
     {
         $group = $this->groupOrFail($community, $communities);
@@ -470,6 +625,9 @@ class GroupsController extends Controller
         ]);
     }
 
+    /**
+     * Готовит общие данные группы для страниц вложенных разделов.
+     */
     private function groupPayload(Community $group, CommunityRepository $communities, string $section): array
     {
         $viewer = Auth::guard('web')->user();
@@ -505,6 +663,9 @@ class GroupsController extends Controller
         ];
     }
 
+    /**
+     * Добавляет к списку групп данные о правах и статусе текущего пользователя.
+     */
     private function groupsForViewer(Collection $groups, CommunityRepository $communities, ?User $viewer): Collection
     {
         return $groups->map(function (array $group) use ($communities, $viewer): array {
@@ -517,6 +678,9 @@ class GroupsController extends Controller
         });
     }
 
+    /**
+     * Собирает фильтры списка групп из query-параметров.
+     */
     private function groupFilters(Request $request): array
     {
         return [
@@ -528,6 +692,9 @@ class GroupsController extends Controller
         ];
     }
 
+    /**
+     * Валидирует форму группы и нормализует настройки, город и спорт.
+     */
     private function validateGroup(Request $request, CommunityRepository $communities, bool $withSettings = false): array
     {
         $validated = $request->validate([
@@ -567,6 +734,9 @@ class GroupsController extends Controller
         ];
     }
 
+    /**
+     * Валидирует название альбома и возвращает очищенную строку.
+     */
     private function validateAlbumName(Request $request): string
     {
         $validated = $request->validate([
@@ -578,6 +748,9 @@ class GroupsController extends Controller
         return trim($validated['name']);
     }
 
+    /**
+     * Определяет группу из параметра маршрута или из текущего пользователя.
+     */
     private function resolveGroup(?int $community, CommunityRepository $communities): Community
     {
         if ($community) {
@@ -591,6 +764,9 @@ class GroupsController extends Controller
         return $group;
     }
 
+    /**
+     * Находит активную группу или завершает запрос ошибкой 404.
+     */
     private function groupOrFail(int $community, CommunityRepository $communities): Community
     {
         $group = $communities->findGroup($community);
@@ -600,6 +776,9 @@ class GroupsController extends Controller
         return $group;
     }
 
+    /**
+     * Находит фотоальбом, принадлежащий группе, или завершает запрос ошибкой 404.
+     */
     private function groupPhotoalbumOrFail(int $album, Community $group, PhotoalbumRepository $photoalbums): Photoalbum
     {
         $photoalbum = $photoalbums->album($album, ['group']);
@@ -609,6 +788,9 @@ class GroupsController extends Controller
         return $photoalbum;
     }
 
+    /**
+     * Находит видеоальбом, принадлежащий группе, или завершает запрос ошибкой 404.
+     */
     private function groupVideoalbumOrFail(int $album, Community $group, VideoalbumRepository $videoalbums): Videoalbum
     {
         $videoalbum = $videoalbums->album($album, ['group']);

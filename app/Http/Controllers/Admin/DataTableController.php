@@ -11,6 +11,8 @@ use Yajra\DataTables\Facades\DataTables;
 class DataTableController extends Controller
 {
     /**
+     * Возвращает JSON-данные пользователей админки для таблицы DataTables.
+     *
      * @return JsonResponse
      * @throws \Exception
      */
@@ -36,6 +38,8 @@ class DataTableController extends Controller
     }
 
     /**
+     * Возвращает JSON-данные категорий для таблицы DataTables.
+     *
      * @return JsonResponse
      * @throws \Exception
      */

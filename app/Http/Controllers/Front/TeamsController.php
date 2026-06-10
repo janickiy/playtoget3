@@ -25,6 +25,14 @@ class TeamsController extends Controller
     private const VIDEOS_LIMIT = 6;
     private const COMMENTS_LIMIT = 10;
 
+
+    /**
+     * Показывает список команд с фильтрами и вкладками текущего пользователя.
+     *
+     * @param Request $request
+     * @param CommunityRepository $communities
+     * @return View|RedirectResponse
+     */
     public function index(Request $request, CommunityRepository $communities): View|RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
@@ -48,6 +56,13 @@ class TeamsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает команд выбранного пользователя.
+     *
+     * @param int $user
+     * @param CommunityRepository $communities
+     * @return View
+     */
     public function user(int $user, CommunityRepository $communities): View
     {
         return view('front.teams.index', [
@@ -60,6 +75,11 @@ class TeamsController extends Controller
         ]);
     }
 
+    /**
+     * Проверяет авторизацию и показывает форму создания команды.
+     *
+     * @return View|RedirectResponse
+     */
     public function create(): View|RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
@@ -78,6 +98,13 @@ class TeamsController extends Controller
         ]);
     }
 
+    /**
+     * Валидирует данные формы и создает команду.
+     *
+     * @param Request $request
+     * @param CommunityRepository $communities
+     * @return RedirectResponse
+     */
     public function store(Request $request, CommunityRepository $communities): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
@@ -92,6 +119,14 @@ class TeamsController extends Controller
         return redirect()->route('front.teams.show', ['community' => $team->id]);
     }
 
+    /**
+     * Показывает карточку команды, верхний блок и комментарии.
+     *
+     * @param int $community
+     * @param CommunityRepository $communities
+     * @param ProfileRepository $profiles
+     * @return View
+     */
     public function show(int $community, CommunityRepository $communities, ProfileRepository $profiles): View
     {
         $team = $this->teamOrFail($community, $communities);
@@ -108,6 +143,13 @@ class TeamsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает участников команды и их роли.
+     *
+     * @param int $community
+     * @param CommunityRepository $communities
+     * @return View
+     */
     public function members(int $community, CommunityRepository $communities): View
     {
         $team = $this->teamOrFail($community, $communities);
@@ -120,6 +162,13 @@ class TeamsController extends Controller
         ]);
     }
 
+    /**
+     * Проверяет права и показывает форму редактирования команды.
+     *
+     * @param int $community
+     * @param CommunityRepository $communities
+     * @return View
+     */
     public function edit(int $community, CommunityRepository $communities): View
     {
         $team = $this->teamOrFail($community, $communities);
@@ -139,6 +188,14 @@ class TeamsController extends Controller
         ]));
     }
 
+    /**
+     * Проверяет права и сохраняет изменения команды.
+     *
+     * @param int $community
+     * @param Request $request
+     * @param CommunityRepository $communities
+     * @return RedirectResponse
+     */
     public function update(int $community, Request $request, CommunityRepository $communities): RedirectResponse
     {
         $team = $this->teamOrFail($community, $communities);
@@ -151,6 +208,14 @@ class TeamsController extends Controller
         return redirect()->route('front.teams.show', ['community' => $team->id]);
     }
 
+    /**
+     * Показывает фотоальбомы команды или текущей команды.
+     *
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoalbums
+     * @param int|null $community
+     * @return View
+     */
     public function photoAlbums(CommunityRepository $communities, PhotoalbumRepository $photoalbums, ?int $community = null): View
     {
         $team = $this->resolveTeam($community, $communities);
@@ -167,6 +232,15 @@ class TeamsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает фотографии выбранного фотоальбома команды.
+     *
+     * @param int $community
+     * @param int $album
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoalbums
+     * @return View
+     */
     public function showPhotoalbum(int $community, int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums): View
     {
         $team = $this->teamOrFail($community, $communities);
@@ -184,6 +258,14 @@ class TeamsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает форму добавления фотографии в фотоальбом команды.
+     *
+     * @param int $community
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoalbums
+     * @return View
+     */
     public function addPhoto(int $community, CommunityRepository $communities, PhotoalbumRepository $photoalbums): View
     {
         $team = $this->teamOrFail($community, $communities);
@@ -197,6 +279,13 @@ class TeamsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает форму создания фотоальбома команды.
+     *
+     * @param int $community
+     * @param CommunityRepository $communities
+     * @return View
+     */
     public function createPhotoAlbum(int $community, CommunityRepository $communities): View
     {
         $team = $this->teamOrFail($community, $communities);
@@ -210,6 +299,15 @@ class TeamsController extends Controller
         ]);
     }
 
+    /**
+     * Создает фотоальбом команды из валидированных данных формы.
+     *
+     * @param int $community
+     * @param Request $request
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoalbums
+     * @return RedirectResponse
+     */
     public function storePhotoAlbum(int $community, Request $request, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $team = $this->teamOrFail($community, $communities);
@@ -226,6 +324,15 @@ class TeamsController extends Controller
         return redirect()->route('front.teams.photoalbums', ['community' => $team->id]);
     }
 
+    /**
+     * Проверяет права и показывает форму редактирования фотоальбома команды.
+     *
+     * @param int $album
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoalbums
+     * @param int|null $community
+     * @return View
+     */
     public function editPhotoalbum(int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums, ?int $community = null): View
     {
         $photoalbum = $photoalbums->album($album, ['team']);
@@ -243,6 +350,15 @@ class TeamsController extends Controller
         ]);
     }
 
+    /**
+     * Проверяет права и сохраняет изменения фотоальбома команды.
+     *
+     * @param int $album
+     * @param Request $request
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoalbums
+     * @return RedirectResponse
+     */
     public function updatePhotoalbum(int $album, Request $request, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $photoalbum = $photoalbums->album($album, ['team']);
@@ -256,6 +372,14 @@ class TeamsController extends Controller
         return redirect()->route('front.teams.photoalbums', ['community' => $team->id]);
     }
 
+    /**
+     * Проверяет права и удаляет фотоальбом команды.
+     *
+     * @param int $album
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoalbums
+     * @return RedirectResponse
+     */
     public function destroyPhotoalbum(int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $photoalbum = $photoalbums->album($album, ['team']);
@@ -269,11 +393,30 @@ class TeamsController extends Controller
         return redirect()->route('front.teams.photoalbums', ['community' => $team->id]);
     }
 
+    /**
+     * Показывает форму редактирования фотоальбома конкретной команды
+     *
+     * @param int $community
+     * @param int $album
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoalbums
+     * @return View
+     */
     public function editPhotoalbumForTeam(int $community, int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums): View
     {
         return $this->editPhotoalbum($album, $communities, $photoalbums, $community);
     }
 
+    /**
+     * Сохраняет изменения фотоальбома конкретной команды.
+     *
+     * @param int $community
+     * @param int $album
+     * @param Request $request
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoalbums
+     * @return RedirectResponse
+     */
     public function updatePhotoalbumForTeam(int $community, int $album, Request $request, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
     {
         $team = $this->teamOrFail($community, $communities);
@@ -286,6 +429,16 @@ class TeamsController extends Controller
         return redirect()->route('front.teams.photoalbums', ['community' => $team->id]);
     }
 
+    /**
+     * Показывает конкретную фотографию из фотоальбома команды.
+     *
+     * @param int $community
+     * @param int $album
+     * @param int $photo
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoalbums
+     * @return View
+     */
     public function photo(int $community, int $album, int $photo, CommunityRepository $communities, PhotoalbumRepository $photoalbums): View
     {
         $view = $this->showPhotoalbum($community, $album, $communities, $photoalbums);
@@ -294,6 +447,15 @@ class TeamsController extends Controller
         return $view;
     }
 
+    /**
+     * Показывает фотографию команды без привязки к выбранному альбому.
+     *
+     * @param int $community
+     * @param int $photo
+     * @param CommunityRepository $communities
+     * @param PhotoalbumRepository $photoalbums
+     * @return View
+     */
     public function photoWithoutAlbum(int $community, int $photo, CommunityRepository $communities, PhotoalbumRepository $photoalbums): View
     {
         $team = $this->teamOrFail($community, $communities);
@@ -305,6 +467,14 @@ class TeamsController extends Controller
         return $this->photo($community, $photoalbum->id, $photo, $communities, $photoalbums);
     }
 
+    /**
+     * Показывает видеоальбомы команды или текущей команды.
+     *
+     * @param CommunityRepository $communities
+     * @param VideoalbumRepository $videoalbums
+     * @param int|null $community
+     * @return View
+     */
     public function videoAlbums(CommunityRepository $communities, VideoalbumRepository $videoalbums, ?int $community = null): View
     {
         $team = $this->resolveTeam($community, $communities);
@@ -321,6 +491,15 @@ class TeamsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает видео выбранного видеоальбома команды.
+     *
+     * @param int $community
+     * @param int $album
+     * @param CommunityRepository $communities
+     * @param VideoalbumRepository $videoalbums
+     * @return View
+     */
     public function showVideoAlbum(int $community, int $album, CommunityRepository $communities, VideoalbumRepository $videoalbums): View
     {
         $team = $this->teamOrFail($community, $communities);
@@ -337,6 +516,14 @@ class TeamsController extends Controller
         ]);
     }
 
+    /**
+     * Показывает форму добавления видео в видеоальбом команды.
+     *
+     * @param int $community
+     * @param CommunityRepository $communities
+     * @param VideoalbumRepository $videoalbums
+     * @return View
+     */
     public function addVideo(int $community, CommunityRepository $communities, VideoalbumRepository $videoalbums): View
     {
         $team = $this->teamOrFail($community, $communities);
@@ -350,6 +537,15 @@ class TeamsController extends Controller
         ]);
     }
 
+    /**
+     * Валидирует ссылку и добавляет видео в видеоальбом команды.
+     *
+     * @param int $community
+     * @param Request $request
+     * @param CommunityRepository $communities
+     * @param VideoalbumRepository $videoalbums
+     * @return RedirectResponse
+     */
     public function storeVideo(int $community, Request $request, CommunityRepository $communities, VideoalbumRepository $videoalbums): RedirectResponse
     {
         $team = $this->teamOrFail($community, $communities);
@@ -367,6 +563,13 @@ class TeamsController extends Controller
         return redirect()->route('front.teams.videoalbums', ['community' => $team->id]);
     }
 
+    /**
+     * Показывает форму создания видеоальбома команды.
+     *
+     * @param int $community
+     * @param CommunityRepository $communities
+     * @return View
+     */
     public function createVideoAlbum(int $community, CommunityRepository $communities): View
     {
         $team = $this->teamOrFail($community, $communities);
@@ -380,6 +583,15 @@ class TeamsController extends Controller
         ]);
     }
 
+    /**
+     * Создает видеоальбом команды из валидированных данных формы.
+     *
+     * @param int $community
+     * @param Request $request
+     * @param CommunityRepository $communities
+     * @param VideoalbumRepository $videoalbums
+     * @return RedirectResponse
+     */
     public function storeVideoAlbum(int $community, Request $request, CommunityRepository $communities, VideoalbumRepository $videoalbums): RedirectResponse
     {
         $team = $this->teamOrFail($community, $communities);
@@ -396,6 +608,15 @@ class TeamsController extends Controller
         return redirect()->route('front.teams.videoalbums', ['community' => $team->id]);
     }
 
+    /**
+     * Проверяет права и показывает форму редактирования видеоальбома команды.
+     *
+     * @param int $album
+     * @param CommunityRepository $communities
+     * @param VideoalbumRepository $videoalbums
+     * @param int|null $community
+     * @return View
+     */
     public function editVideoalbum(int $album, CommunityRepository $communities, VideoalbumRepository $videoalbums, ?int $community = null): View
     {
         $videoalbum = $videoalbums->album($album, ['team']);
@@ -413,6 +634,15 @@ class TeamsController extends Controller
         ]);
     }
 
+    /**
+     * Проверяет права и сохраняет изменения видеоальбома команды
+     *
+     * @param int $album
+     * @param Request $request
+     * @param CommunityRepository $communities
+     * @param VideoalbumRepository $videoalbums
+     * @return RedirectResponse
+     */
     public function updateVideoalbum(int $album, Request $request, CommunityRepository $communities, VideoalbumRepository $videoalbums): RedirectResponse
     {
         $videoalbum = $videoalbums->album($album, ['team']);
@@ -425,6 +655,14 @@ class TeamsController extends Controller
         return redirect()->route('front.teams.videoalbums', ['community' => $team->id]);
     }
 
+    /**
+     * Проверяет права и удаляет видеоальбом команды.
+     *
+     * @param int $album
+     * @param CommunityRepository $communities
+     * @param VideoalbumRepository $videoalbums
+     * @return RedirectResponse
+     */
     public function destroyVideoalbum(int $album, CommunityRepository $communities, VideoalbumRepository $videoalbums): RedirectResponse
     {
         $videoalbum = $videoalbums->album($album, ['team']);
@@ -438,6 +676,13 @@ class TeamsController extends Controller
         return redirect()->route('front.teams.videoalbums', ['community' => $team->id]);
     }
 
+    /**
+     * Показывает мероприятия команды.
+     *
+     * @param int $community
+     * @param CommunityRepository $communities
+     * @return View
+     */
     public function events(int $community, CommunityRepository $communities): View
     {
         $team = $this->teamOrFail($community, $communities);
@@ -448,6 +693,14 @@ class TeamsController extends Controller
         ]);
     }
 
+    /**
+     * Готовит общие данные команды для страниц вложенных разделов.
+     *
+     * @param Community $team
+     * @param CommunityRepository $communities
+     * @param string $section
+     * @return array
+     */
     private function teamPayload(Community $team, CommunityRepository $communities, string $section): array
     {
         $viewer = Auth::guard('web')->user();
@@ -467,6 +720,14 @@ class TeamsController extends Controller
         ];
     }
 
+    /**
+     * Добавляет к списку команд данные о правах и статусе текущего пользователя.
+     *
+     * @param Collection $teams
+     * @param CommunityRepository $communities
+     * @param User|null $viewer
+     * @return Collection
+     */
     private function teamsForViewer(Collection $teams, CommunityRepository $communities, ?User $viewer): Collection
     {
         return $teams->map(function (array $team) use ($communities, $viewer): array {
@@ -479,6 +740,12 @@ class TeamsController extends Controller
         });
     }
 
+    /**
+     * Собирает фильтры списка команд из query-параметров.
+     *
+     * @param Request $request
+     * @return array
+     */
     private function teamFilters(Request $request): array
     {
         return [
@@ -490,6 +757,14 @@ class TeamsController extends Controller
         ];
     }
 
+    /**
+     * Валидирует форму команды и нормализует настройки, город и спорт.
+     *
+     * @param Request $request
+     * @param CommunityRepository $communities
+     * @param bool $withSettings
+     * @return array
+     */
     private function validateTeam(Request $request, CommunityRepository $communities, bool $withSettings = false): array
     {
         $validated = $request->validate([
@@ -529,6 +804,12 @@ class TeamsController extends Controller
         ];
     }
 
+    /**
+     * Валидирует название альбома и возвращает очищенную строку.
+     *
+     * @param Request $request
+     * @return string
+     */
     private function validateAlbumName(Request $request): string
     {
         $validated = $request->validate([
@@ -540,6 +821,9 @@ class TeamsController extends Controller
         return trim($validated['name']);
     }
 
+    /**
+     * Определяет команду из параметра маршрута или из текущего пользователя.
+     */
     private function resolveTeam(?int $community, CommunityRepository $communities): Community
     {
         if ($community) {
@@ -553,6 +837,13 @@ class TeamsController extends Controller
         return $team;
     }
 
+    /**
+     * Находит активную команду или завершает запрос ошибкой 404.
+     *
+     * @param int $community
+     * @param CommunityRepository $communities
+     * @return Community
+     */
     private function teamOrFail(int $community, CommunityRepository $communities): Community
     {
         $team = $communities->findTeam($community);
@@ -562,6 +853,14 @@ class TeamsController extends Controller
         return $team;
     }
 
+    /**
+     * Находит фотоальбом, принадлежащий команде, или завершает запрос ошибкой 404
+     *
+     * @param int $album
+     * @param Community $team
+     * @param PhotoalbumRepository $photoalbums
+     * @return Photoalbum
+     */
     private function teamPhotoalbumOrFail(int $album, Community $team, PhotoalbumRepository $photoalbums): Photoalbum
     {
         $photoalbum = $photoalbums->album($album, ['team']);
@@ -571,6 +870,14 @@ class TeamsController extends Controller
         return $photoalbum;
     }
 
+    /**
+     * Находит видеоальбом, принадлежащий команде, или завершает запрос ошибкой 404
+     *
+     * @param int $album
+     * @param Community $team
+     * @param VideoalbumRepository $videoalbums
+     * @return Videoalbum
+     */
     private function teamVideoalbumOrFail(int $album, Community $team, VideoalbumRepository $videoalbums): Videoalbum
     {
         $videoalbum = $videoalbums->album($album, ['team']);

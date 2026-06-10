@@ -14,6 +14,9 @@ use Illuminate\Http\Response;
 
 class AdminController extends Controller
 {
+    /**
+     * Подключает репозиторий администраторов и базовые настройки админ-контроллера.
+     */
     public function __construct(
         private AdminRepository $adminRepository,
     )
@@ -22,6 +25,8 @@ class AdminController extends Controller
     }
 
     /**
+     * Показывает страницу со списком пользователей админки.
+     *
      * @return View
      */
     public function index(): View
@@ -30,6 +35,8 @@ class AdminController extends Controller
     }
 
     /**
+     * Показывает форму добавления пользователя админки.
+     *
      * @return View
      */
     public function create(): View
@@ -40,6 +47,8 @@ class AdminController extends Controller
     }
 
     /**
+     * Создает нового пользователя админки из валидированных данных формы.
+     *
      * @param StoreRequest $request
      * @return RedirectResponse
      */
@@ -51,6 +60,8 @@ class AdminController extends Controller
     }
 
     /**
+     * Показывает форму редактирования выбранного пользователя админки.
+     *
      * @param int $id
      * @return View
      */
@@ -66,6 +77,8 @@ class AdminController extends Controller
     }
 
     /**
+     * Обновляет данные пользователя админки из валидированных данных формы.
+     *
      * @param EditRequest $request
      * @return RedirectResponse
      */
@@ -77,6 +90,8 @@ class AdminController extends Controller
     }
 
     /**
+     * Удаляет пользователя админки и запрещает удалить текущего авторизованного пользователя.
+     *
      * @param DeleteRequest $request
      * @return JsonResponse
      */

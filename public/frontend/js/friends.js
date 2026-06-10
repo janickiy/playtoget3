@@ -72,7 +72,7 @@
 
     function loadPossibleFriends(replaceList) {
         $.ajax({
-            url: ajaxUrl('getpossiblefriends'),
+            url: ajaxUrl('get_possible_friends'),
             dataType: 'json',
             data: {
                 number: 6,

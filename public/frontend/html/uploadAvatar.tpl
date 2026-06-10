@@ -338,7 +338,7 @@ function showCoordsCover(c)
 
             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="${TEAM_AVATAR}" id="target" alt=""/>
 
-          <form autocomplete="off" action="/?task=ajax_action&action=uploadavatar" method="post" id="uploadAva" enctype="multipart/form-data">
+          <form autocomplete="off" action="/?task=ajax_action&action=upload_avatar" method="post" id="uploadAva" enctype="multipart/form-data">
             <div class="file_upload2">
               <button type="button" id='load'>Выберите файл</button>
                <input type="file" name="avatar" id='avatar'>
@@ -379,7 +379,7 @@ function showCoordsCover(c)
           <div class="loading-bar"><img border="0" src="./frontend/images/select2-spinner.gif" width=20px></div>
           <p class='text-show'>Выберите область, которую хотите использовать</p>
             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="${TEAM_COVER_PAGE}" id="target-cover" alt=""/>
-          <form action="/?task=ajax_action&action=uploadcover" method="post" id="uploadCover" enctype="multipart/form-data">
+          <form action="/?task=ajax_action&action=upload_cover" method="post" id="uploadCover" enctype="multipart/form-data">
             <div class="file_upload2">
               <button type="button" id='load-cover'>Выберите файл</button>
                <input type="file" name="cover" id='cover'>

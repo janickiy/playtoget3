@@ -30,7 +30,7 @@ $(document).ready(function () {
                     'action': function () {
                         $.ajax({
                             type: 'POST',
-                            url: "/ajax/removepic?id=" + encodeURIComponent(IdPic),
+                            url: "/ajax/remove_pic?id=" + encodeURIComponent(IdPic),
                             data: {
                                 _token: photoCsrfToken(),
                             },
@@ -60,7 +60,7 @@ $(document).ready(function () {
     function getPhotoInfo(id) {
         $.ajax({
             type: 'GET',
-            url: '/ajax/getphotoinfo',
+            url: '/ajax/get_photoinfo',
             data: 'photo_id=' + encodeURIComponent(id),
             success: function (data) {
                 //console.log(data);
@@ -246,7 +246,7 @@ $(document).on("click", ".photo_big_wrap .reply", function () {
 
 
 function getCommentsPhoto(id) {
-    $.get('/ajax/getcomments', {
+    $.get('/ajax/get_comments', {
         number: 100,
         offset: 0,
         commentable_type: 'photo',

@@ -11,6 +11,14 @@ use Illuminate\Http\Request;
 
 class CalendarController extends Controller
 {
+
+    /**
+     * Показывает календарь выбранного месяца с отметками дней, где есть мероприятия.
+     *
+     * @param Request $request
+     * @param EventRepository $events
+     * @return View
+     */
     public function index(Request $request, EventRepository $events): View
     {
         $month = $this->month($request);
@@ -33,6 +41,12 @@ class CalendarController extends Controller
         ]);
     }
 
+    /**
+     * Определяет месяц календаря из query-параметра или возвращает текущий месяц.
+     *
+     * @param Request $request
+     * @return CarbonImmutable
+     */
     private function month(Request $request): CarbonImmutable
     {
         $month = (string) $request->query('month', '');

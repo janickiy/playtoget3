@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
+
+    /**
+     * Показывает профиль пользователя, его данные и ленту комментариев.
+     *
+     * @param int $user
+     * @param ProfileRepository $profiles
+     * @param FriendRepository $friends
+     * @return View
+     */
     public function show(int $user, ProfileRepository $profiles, FriendRepository $friends): View
     {
         $profile = $profiles->profile($user);
@@ -42,6 +51,12 @@ class ProfileController extends Controller
         ]);
     }
 
+    /**
+     * Показывает форму редактирования профиля текущего пользователя.
+     *
+     * @param ProfileRepository $profiles
+     * @return View|RedirectResponse
+     */
     public function edit(ProfileRepository $profiles): View|RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
@@ -63,6 +78,14 @@ class ProfileController extends Controller
         ]);
     }
 
+    /**
+     * Показывает список диалогов текущего пользователя.
+     *
+     * @param int $user
+     * @param FriendRepository $friends
+     * @param MessageRepository $messages
+     * @return View|RedirectResponse
+     */
     public function dialogues(
         int $user,
         FriendRepository $friends,
@@ -87,6 +110,15 @@ class ProfileController extends Controller
         ]);
     }
 
+    /**
+     * Показывает переписку текущего пользователя с выбранным собеседником.
+     *
+     * @param int $user
+     * @param int $recipient
+     * @param UserRepository $users
+     * @param MessageRepository $messages
+     * @return View|RedirectResponse
+     */
     public function messages(
         int $user,
         int $recipient,
@@ -123,6 +155,14 @@ class ProfileController extends Controller
         ]);
     }
 
+    /**
+     * Валидирует и сохраняет настройки профиля текущего пользователя.
+     *
+     * @param Request $request
+     * @param ProfileRepository $profiles
+     * @return RedirectResponse
+     * @throws \Throwable
+     */
     public function update(Request $request, ProfileRepository $profiles): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
