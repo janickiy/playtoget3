@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\DTO\Album\AlbumData;
 use App\DTO\Photo\PhotoUploadData;
-use App\Models\Photoalbum;
+use App\Models\PhotoAlbums;
 use App\Models\Photo;
 use App\Models\User;
 use App\Repositories\FriendRepository;
@@ -54,7 +54,7 @@ class PhotoalbumsPageTest extends TestCase
     public function test_add_photo_page_renders_upload_queue(): void
     {
         $viewer = $this->user(1, 'Александр', 'Яницкий');
-        $album = new Photoalbum(['name' => 'Мой альбом', 'owner_id' => $viewer->id, 'photoalbumable_type' => 'user']);
+        $album = new PhotoAlbums(['name' => 'Мой альбом', 'owner_id' => $viewer->id, 'photoalbumable_type' => 'user']);
         $album->id = 64;
         $album->exists = true;
 
@@ -94,7 +94,7 @@ class PhotoalbumsPageTest extends TestCase
     public function test_album_page_renders_photos_and_lazy_load_marker(): void
     {
         $viewer = $this->user(1, 'Александр', 'Яницкий');
-        $album = new Photoalbum(['name' => 'Мой альбом', 'owner_id' => $viewer->id, 'photoalbumable_type' => 'user']);
+        $album = new PhotoAlbums(['name' => 'Мой альбом', 'owner_id' => $viewer->id, 'photoalbumable_type' => 'user']);
         $album->id = 64;
         $album->exists = true;
         $album->setRelation('owner', $viewer);
@@ -125,7 +125,7 @@ class PhotoalbumsPageTest extends TestCase
     public function test_add_photo_ajax_uses_repository(): void
     {
         $viewer = $this->user(1, 'Александр', 'Яницкий');
-        $album = new Photoalbum(['name' => 'Мой альбом', 'owner_id' => $viewer->id, 'photoalbumable_type' => 'user']);
+        $album = new PhotoAlbums(['name' => 'Мой альбом', 'owner_id' => $viewer->id, 'photoalbumable_type' => 'user']);
         $album->id = 64;
         $album->exists = true;
 
@@ -140,7 +140,7 @@ class PhotoalbumsPageTest extends TestCase
             $mock->shouldReceive('isOwner')->with($album, $viewer)->andReturn(true);
             $mock->shouldReceive('storePhoto')
                 ->once()
-                ->withArgs(fn (User $user, Photoalbum $receivedAlbum, PhotoUploadData $data): bool => $user === $viewer
+                ->withArgs(fn (User $user, PhotoAlbums $receivedAlbum, PhotoUploadData $data): bool => $user === $viewer
                     && $receivedAlbum === $album
                     && $data->file->getClientOriginalName() === 'photo.jpg'
                     && $data->description === 'Описание')

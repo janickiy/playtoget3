@@ -7,9 +7,9 @@ use App\Http\Requests\Front\Album\AlbumRequest;
 use App\Http\Requests\Front\Community\CommunityRequest;
 use App\Http\Requests\Front\Video\StoreVideoRequest;
 use App\Models\Community;
-use App\Models\Photoalbum;
+use App\Models\PhotoAlbums;
 use App\Models\User;
-use App\Models\Videoalbum;
+use App\Models\VideoAlbums;
 use App\Repositories\CommunityRepository;
 use App\Repositories\PhotoalbumRepository;
 use App\Repositories\ProfileRepository;
@@ -214,11 +214,11 @@ class GroupsController extends Controller
      * Показывает фотоальбомы группы или текущей группы.
      *
      * @param CommunityRepository $communities
-     * @param PhotoalbumRepository $photoalbums
+     * @param PhotoalbumRepository $photoAlbums
      * @param int|null $community
      * @return View
      */
-    public function photoAlbums(CommunityRepository $communities, PhotoalbumRepository $photoalbums, ?int $community = null): View
+    public function photoAlbums(CommunityRepository $communities, PhotoalbumRepository $photoAlbums, ?int $community = null): View
     {
         $group = $this->resolveGroup($community, $communities);
         $payload = $this->groupPayload($group, $communities, 'photoalbums');
@@ -226,11 +226,11 @@ class GroupsController extends Controller
 
         return view('front.teams.photoalbums.index', $payload + [
             'canManage' => $communities->canManage($group, Auth::guard('web')->user()),
-            'albums' => $photoalbums->albumsForOwner($group->id, 'group'),
-            'photos' => $photoalbums->photosForOwner($group->id, 'group', self::PHOTOS_LIMIT, 0),
+            'albums' => $photoAlbums->albumsForOwner($group->id, 'group'),
+            'photos' => $photoAlbums->photosForOwner($group->id, 'group', self::PHOTOS_LIMIT, 0),
             'photosPageSize' => self::PHOTOS_LIMIT,
-            'hasMorePhotos' => $photoalbums->hasMoreOwnerPhotos($group->id, 'group', self::PHOTOS_LIMIT, 0),
-            'popularPhotos' => $photoalbums->popularPhotos(9, 0, 'group'),
+            'hasMorePhotos' => $photoAlbums->hasMoreOwnerPhotos($group->id, 'group', self::PHOTOS_LIMIT, 0),
+            'popularPhotos' => $photoAlbums->popularPhotos(9, 0, 'group'),
         ]);
     }
 
@@ -240,21 +240,21 @@ class GroupsController extends Controller
      * @param int $community
      * @param int $album
      * @param CommunityRepository $communities
-     * @param PhotoalbumRepository $photoalbums
+     * @param PhotoalbumRepository $photoAlbums
      * @return View
      */
-    public function showPhotoalbum(int $community, int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums): View
+    public function showPhotoalbum(int $community, int $album, CommunityRepository $communities, PhotoalbumRepository $photoAlbums): View
     {
         $group = $this->groupOrFail($community, $communities);
-        $photoAlbum = $this->groupPhotoalbumOrFail($album, $group, $photoalbums);
+        $photoAlbum = $this->groupPhotoalbumOrFail($album, $group, $photoAlbums);
         $payload = $this->groupPayload($group, $communities, 'photoalbums');
         abort_unless($payload['permissions']['photo'], 404);
 
         return view('front.teams.photoalbums.show', $payload + [
             'photoalbum' => $photoAlbum,
-            'photos' => $photoalbums->albumPhotos($photoAlbum, self::ALBUM_PHOTOS_LIMIT, 0),
+            'photos' => $photoAlbums->albumPhotos($photoAlbum, self::ALBUM_PHOTOS_LIMIT, 0),
             'photosPageSize' => self::ALBUM_PHOTOS_LIMIT,
-            'hasMorePhotos' => $photoalbums->hasMoreAlbumPhotos($photoAlbum, self::ALBUM_PHOTOS_LIMIT, 0),
+            'hasMorePhotos' => $photoAlbums->hasMoreAlbumPhotos($photoAlbum, self::ALBUM_PHOTOS_LIMIT, 0),
             'canManage' => $communities->canManage($group, Auth::guard('web')->user()),
             'openPhotoId' => null,
         ]);
@@ -265,19 +265,19 @@ class GroupsController extends Controller
      *
      * @param int $community
      * @param CommunityRepository $communities
-     * @param PhotoalbumRepository $photoalbums
+     * @param PhotoalbumRepository $photoAlbums
      * @return View
      */
-    public function addPhoto(int $community, CommunityRepository $communities, PhotoalbumRepository $photoalbums): View
+    public function addPhoto(int $community, CommunityRepository $communities, PhotoalbumRepository $photoAlbums): View
     {
         $group = $this->groupOrFail($community, $communities);
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
-        $photoalbums->ensureDefaultAlbumForOwner($group->id, 'group', 'Альбом сообщества');
+        $photoAlbums->ensureDefaultAlbumForOwner($group->id, 'group', 'Альбом сообщества');
 
         return view('front.teams.photoalbums.add-photo', $this->groupPayload($group, $communities, 'photoalbums') + [
             'title' => 'Добавление фотографий',
-            'albums' => $photoalbums->editableAlbumsForOwner($group->id, 'group'),
+            'albums' => $photoAlbums->editableAlbumsForOwner($group->id, 'group'),
         ]);
     }
 
@@ -307,21 +307,21 @@ class GroupsController extends Controller
      * @param int $community
      * @param AlbumRequest $request
      * @param CommunityRepository $communities
-     * @param PhotoalbumRepository $photoalbums
+     * @param PhotoalbumRepository $photoAlbums
      * @return RedirectResponse
      */
-    public function storePhotoAlbum(int $community, AlbumRequest $request, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
+    public function storePhotoAlbum(int $community, AlbumRequest $request, CommunityRepository $communities, PhotoalbumRepository $photoAlbums): RedirectResponse
     {
         $group = $this->groupOrFail($community, $communities);
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
         $albumData = $request->toDto();
 
-        if ($photoalbums->nameExistsForOwner($group->id, 'group', $albumData->name)) {
+        if ($photoAlbums->nameExistsForOwner($group->id, 'group', $albumData->name)) {
             return back()->withErrors(['name' => 'Альбом с таким названием уже существует.'])->withInput();
         }
 
-        $photoalbums->createAlbumForOwner($group->id, 'group', $albumData);
+        $photoAlbums->createAlbumForOwner($group->id, 'group', $albumData);
 
         return redirect()->route('front.groups.photoalbums', ['community' => $group->id]);
     }
@@ -329,13 +329,13 @@ class GroupsController extends Controller
     /**
      * Проверяет права и показывает форму редактирования фотоальбома группы.
      */
-    public function editPhotoalbum(int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums, ?int $community = null): View
+    public function editPhotoalbum(int $album, CommunityRepository $communities, PhotoalbumRepository $photoAlbums, ?int $community = null): View
     {
-        $photoAlbum = $photoalbums->album($album, ['group']);
+        $photoAlbum = $photoAlbums->album($album, ['group']);
         abort_if(! $photoAlbum, 404);
 
         $group = $community ? $this->groupOrFail($community, $communities) : $this->groupOrFail((int) $photoAlbum->owner_id, $communities);
-        $this->groupPhotoalbumOrFail($album, $group, $photoalbums);
+        $this->groupPhotoalbumOrFail($album, $group, $photoAlbums);
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->groupPayload($group, $communities, 'photoalbums') + [
@@ -349,14 +349,14 @@ class GroupsController extends Controller
     /**
      * Проверяет права и сохраняет изменения фотоальбома группы.
      */
-    public function updatePhotoalbum(int $album, AlbumRequest $request, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
+    public function updatePhotoalbum(int $album, AlbumRequest $request, CommunityRepository $communities, PhotoalbumRepository $photoAlbums): RedirectResponse
     {
-        $photoAlbum = $photoalbums->album($album, ['group']);
+        $photoAlbum = $photoAlbums->album($album, ['group']);
         abort_if(! $photoAlbum, 404);
         $group = $this->groupOrFail((int) $photoAlbum->owner_id, $communities);
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
-        $photoalbums->updateUserAlbum($photoAlbum, $request->toDto());
+        $photoAlbums->updateUserAlbum($photoAlbum, $request->toDto());
 
         return redirect()->route('front.groups.photoalbums', ['community' => $group->id]);
     }
@@ -364,15 +364,15 @@ class GroupsController extends Controller
     /**
      * Проверяет права и удаляет фотоальбом группы.
      */
-    public function destroyPhotoalbum(int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
+    public function destroyPhotoalbum(int $album, CommunityRepository $communities, PhotoalbumRepository $photoAlbums): RedirectResponse
     {
-        $photoAlbum = $photoalbums->album($album, ['group']);
+        $photoAlbum = $photoAlbums->album($album, ['group']);
         abort_if(! $photoAlbum, 404);
 
         $group = $this->groupOrFail((int) $photoAlbum->owner_id, $communities);
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
-        $photoalbums->deleteAlbum($photoAlbum);
+        $photoAlbums->deleteAlbum($photoAlbum);
 
         return redirect()->route('front.groups.photoalbums', ['community' => $group->id]);
     }
@@ -380,14 +380,14 @@ class GroupsController extends Controller
     /**
      * Проверяет группу в URL и удаляет ее фотоальбом.
      */
-    public function destroyPhotoalbumForGroup(int $community, int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
+    public function destroyPhotoalbumForGroup(int $community, int $album, CommunityRepository $communities, PhotoalbumRepository $photoAlbums): RedirectResponse
     {
         $group = $this->groupOrFail($community, $communities);
-        $photoAlbum = $this->groupPhotoalbumOrFail($album, $group, $photoalbums);
+        $photoAlbum = $this->groupPhotoalbumOrFail($album, $group, $photoAlbums);
 
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
-        $photoalbums->deleteAlbum($photoAlbum);
+        $photoAlbums->deleteAlbum($photoAlbum);
 
         return redirect()->route('front.groups.photoalbums', ['community' => $group->id]);
     }
@@ -395,22 +395,22 @@ class GroupsController extends Controller
     /**
      * Показывает форму редактирования фотоальбома конкретной группы.
      */
-    public function editPhotoalbumForGroup(int $community, int $album, CommunityRepository $communities, PhotoalbumRepository $photoalbums): View
+    public function editPhotoalbumForGroup(int $community, int $album, CommunityRepository $communities, PhotoalbumRepository $photoAlbums): View
     {
-        return $this->editPhotoalbum($album, $communities, $photoalbums, $community);
+        return $this->editPhotoalbum($album, $communities, $photoAlbums, $community);
     }
 
     /**
      * Сохраняет изменения фотоальбома конкретной группы.
      */
-    public function updatePhotoalbumForGroup(int $community, int $album, AlbumRequest $request, CommunityRepository $communities, PhotoalbumRepository $photoalbums): RedirectResponse
+    public function updatePhotoalbumForGroup(int $community, int $album, AlbumRequest $request, CommunityRepository $communities, PhotoalbumRepository $photoAlbums): RedirectResponse
     {
         $group = $this->groupOrFail($community, $communities);
-        $photoAlbum = $this->groupPhotoalbumOrFail($album, $group, $photoalbums);
+        $photoAlbum = $this->groupPhotoalbumOrFail($album, $group, $photoAlbums);
 
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
-        $photoalbums->updateUserAlbum($photoAlbum, $request->toDto());
+        $photoAlbums->updateUserAlbum($photoAlbum, $request->toDto());
 
         return redirect()->route('front.groups.photoalbums', ['community' => $group->id]);
     }
@@ -418,9 +418,9 @@ class GroupsController extends Controller
     /**
      * Показывает конкретную фотографию из фотоальбома группы.
      */
-    public function photo(int $community, int $album, int $photo, CommunityRepository $communities, PhotoalbumRepository $photoalbums): View
+    public function photo(int $community, int $album, int $photo, CommunityRepository $communities, PhotoalbumRepository $photoAlbums): View
     {
-        $view = $this->showPhotoalbum($community, $album, $communities, $photoalbums);
+        $view = $this->showPhotoalbum($community, $album, $communities, $photoAlbums);
         $view->with('openPhotoId', $photo);
 
         return $view;
@@ -429,15 +429,15 @@ class GroupsController extends Controller
     /**
      * Показывает фотографию группы без привязки к выбранному альбому.
      */
-    public function photoWithoutAlbum(int $community, int $photo, CommunityRepository $communities, PhotoalbumRepository $photoalbums): View
+    public function photoWithoutAlbum(int $community, int $photo, CommunityRepository $communities, PhotoalbumRepository $photoAlbums): View
     {
         $group = $this->groupOrFail($community, $communities);
-        $photoModel = $photoalbums->photo($photo, ['group']);
+        $photoModel = $photoAlbums->photo($photo, ['group']);
         abort_if(! $photoModel, 404);
 
-        $photoAlbum = $this->groupPhotoalbumOrFail((int) $photoModel->photoalbum_id, $group, $photoalbums);
+        $photoAlbum = $this->groupPhotoalbumOrFail((int) $photoModel->photoalbum_id, $group, $photoAlbums);
 
-        return $this->photo($community, $photoAlbum->id, $photo, $communities, $photoalbums);
+        return $this->photo($community, $photoAlbum->id, $photo, $communities, $photoAlbums);
     }
 
     /**
@@ -721,9 +721,9 @@ class GroupsController extends Controller
     /**
      * Находит фотоальбом, принадлежащий группе, или завершает запрос ошибкой 404.
      */
-    private function groupPhotoalbumOrFail(int $album, Community $group, PhotoalbumRepository $photoalbums): Photoalbum
+    private function groupPhotoalbumOrFail(int $album, Community $group, PhotoalbumRepository $photoAlbums): PhotoAlbums
     {
-        $photoAlbum = $photoalbums->album($album, ['group']);
+        $photoAlbum = $photoAlbums->album($album, ['group']);
 
         abort_if(! $photoAlbum || (int) $photoAlbum->owner_id !== (int) $group->id, 404);
 
@@ -733,7 +733,7 @@ class GroupsController extends Controller
     /**
      * Находит видеоальбом, принадлежащий группе, или завершает запрос ошибкой 404.
      */
-    private function groupVideoalbumOrFail(int $album, Community $group, VideoalbumRepository $videoAlbums): Videoalbum
+    private function groupVideoalbumOrFail(int $album, Community $group, VideoalbumRepository $videoAlbums): VideoAlbums
     {
         $videoalbum = $videoAlbums->album($album, ['group']);
 

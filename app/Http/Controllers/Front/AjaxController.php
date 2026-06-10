@@ -49,7 +49,7 @@ class AjaxController extends Controller
         private readonly UserRepository       $users,
         private readonly ProfileRepository    $profiles,
         private readonly MessageRepository    $messages,
-        private readonly PhotoalbumRepository $photoalbums,
+        private readonly PhotoalbumRepository $photoAlbums,
         private readonly VideoalbumRepository $videoAlbums,
         private readonly CommunityRepository  $communities,
         private readonly EventRepository      $events,

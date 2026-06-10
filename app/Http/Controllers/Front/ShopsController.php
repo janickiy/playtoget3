@@ -21,14 +21,14 @@ class ShopsController extends Controller
      *
      * @param Request $request
      * @param SportBlockRepository $sportBlocks
-     * @param PhotoalbumRepository $photoalbums
+     * @param PhotoalbumRepository $photoAlbums
      * @param int|null $sportBlock
      * @return View
      */
-    public function index(Request $request, SportBlockRepository $sportBlocks, PhotoalbumRepository $photoalbums, ?int $sportBlock = null): View
+    public function index(Request $request, SportBlockRepository $sportBlocks, PhotoalbumRepository $photoAlbums, ?int $sportBlock = null): View
     {
         if ($sportBlock) {
-            return $this->show($sportBlock, $sportBlocks, $photoalbums);
+            return $this->show($sportBlock, $sportBlocks, $photoAlbums);
         }
 
         return view('front.sport-blocks.index', $this->basePayload() + [
@@ -119,10 +119,10 @@ class ShopsController extends Controller
      *
      * @param int $sportBlock
      * @param SportBlockRepository $sportBlocks
-     * @param PhotoalbumRepository $photoalbums
+     * @param PhotoalbumRepository $photoAlbums
      * @return View
      */
-    private function show(int $sportBlock, SportBlockRepository $sportBlocks, PhotoalbumRepository $photoalbums): View
+    private function show(int $sportBlock, SportBlockRepository $sportBlocks, PhotoalbumRepository $photoAlbums): View
     {
         $entity = $this->sportBlockOrFail($sportBlocks, $sportBlock);
         $viewer = Auth::guard('web')->user();
@@ -132,8 +132,8 @@ class ShopsController extends Controller
             'title' => $entity->name ?: 'Магазин',
             'sportBlock' => $entity,
             'data' => $sportBlocks->serialize($entity),
-            'photos' => $photoalbums->photosForOwner($entity->id, self::TYPE, 20, 0),
-            'uploadAlbum' => $canEdit && $viewer ? $photoalbums->ensureDefaultAlbumForOwner($entity->id, self::TYPE, 'Фото магазина') : null,
+            'photos' => $photoAlbums->photosForOwner($entity->id, self::TYPE, 20, 0),
+            'uploadAlbum' => $canEdit && $viewer ? $photoAlbums->ensureDefaultAlbumForOwner($entity->id, self::TYPE, 'Фото магазина') : null,
             'canEdit' => $canEdit,
         ]);
     }

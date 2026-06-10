@@ -9,7 +9,7 @@ use App\Models\Attachment;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Photo;
-use App\Models\Photoalbum;
+use App\Models\PhotoAlbums;
 use App\Models\Share;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
@@ -23,7 +23,7 @@ class PhotoalbumRepository extends BaseRepository
 {
     private const USER_TYPES = ['user', 'user_attach'];
 
-    public function __construct(Photoalbum $model)
+    public function __construct(PhotoAlbums $model)
     {
         parent::__construct($model);
     }
@@ -44,7 +44,7 @@ class PhotoalbumRepository extends BaseRepository
             ->where('photoalbumable_type', $type)
             ->orderByDesc('id')
             ->get()
-            ->map(fn (Photoalbum $album): array => $this->serializeAlbum($album));
+            ->map(fn (PhotoAlbums $album): array => $this->serializeAlbum($album));
     }
 
     public function photosForUser(int $userId, int $limit = 6, int $offset = 0): Collection
@@ -117,9 +117,9 @@ class PhotoalbumRepository extends BaseRepository
             ->map(fn (Photo $photo): array => $this->serializePhoto($photo));
     }
 
-    public function album(int $albumId, ?array $types = null): ?Photoalbum
+    public function album(int $albumId, ?array $types = null): ?PhotoAlbums
     {
-        /** @var Photoalbum|null $album */
+        /** @var PhotoAlbums|null $album */
         $album = $this->model->newQuery()
             ->with('owner.settings')
             ->whereKey($albumId)
@@ -129,7 +129,7 @@ class PhotoalbumRepository extends BaseRepository
         return $album;
     }
 
-    public function albumPhotos(Photoalbum $album, int $limit = 9, int $offset = 0): Collection
+    public function albumPhotos(PhotoAlbums $album, int $limit = 9, int $offset = 0): Collection
     {
         return $album->photos()
             ->with('album')
@@ -141,7 +141,7 @@ class PhotoalbumRepository extends BaseRepository
             ->map(fn (Photo $photo): array => $this->serializePhoto($photo));
     }
 
-    public function hasMoreAlbumPhotos(Photoalbum $album, int $limit, int $offset): bool
+    public function hasMoreAlbumPhotos(PhotoAlbums $album, int $limit, int $offset): bool
     {
         return $album->photos()
             ->where('banned', false)
@@ -165,14 +165,14 @@ class PhotoalbumRepository extends BaseRepository
             ->get();
     }
 
-    public function ensureDefaultAlbum(User $user): Photoalbum
+    public function ensureDefaultAlbum(User $user): PhotoAlbums
     {
         return $this->ensureDefaultAlbumForOwner($user->id, 'user', 'Мой альбом');
     }
 
-    public function ensureDefaultAlbumForOwner(int $ownerId, string $type, string $name = 'Мой альбом'): Photoalbum
+    public function ensureDefaultAlbumForOwner(int $ownerId, string $type, string $name = 'Мой альбом'): PhotoAlbums
     {
-        /** @var Photoalbum $album */
+        /** @var PhotoAlbums $album */
         $album = $this->model->newQuery()->firstOrCreate([
             'owner_id' => $ownerId,
             'photoalbumable_type' => $type,
@@ -183,14 +183,14 @@ class PhotoalbumRepository extends BaseRepository
         return $album;
     }
 
-    public function createUserAlbum(User $user, AlbumData $data): Photoalbum
+    public function createUserAlbum(User $user, AlbumData $data): PhotoAlbums
     {
         return $this->createAlbumForOwner($user->id, 'user', $data);
     }
 
-    public function createAlbumForOwner(int $ownerId, string $type, AlbumData $data): Photoalbum
+    public function createAlbumForOwner(int $ownerId, string $type, AlbumData $data): PhotoAlbums
     {
-        /** @var Photoalbum $album */
+        /** @var PhotoAlbums $album */
         $album = $this->model->newQuery()->create([
             'name' => $data->name,
             'photoalbumable_type' => $type,
@@ -200,7 +200,7 @@ class PhotoalbumRepository extends BaseRepository
         return $album;
     }
 
-    public function updateUserAlbum(Photoalbum $album, AlbumData $data): bool
+    public function updateUserAlbum(PhotoAlbums $album, AlbumData $data): bool
     {
         return $album->fill($data->toArray())->save();
     }
@@ -220,12 +220,12 @@ class PhotoalbumRepository extends BaseRepository
             ->exists();
     }
 
-    public function isOwner(Photoalbum $album, ?User $user): bool
+    public function isOwner(PhotoAlbums $album, ?User $user): bool
     {
         return $user && (int) $album->owner_id === (int) $user->id;
     }
 
-    public function storePhoto(User $user, Photoalbum $album, PhotoUploadData $data): Photo
+    public function storePhoto(User $user, PhotoAlbums $album, PhotoUploadData $data): Photo
     {
         if (! $this->isOwner($album, $user) || $album->photoalbumable_type !== 'user') {
             throw new RuntimeException('Нет доступа к выбранному альбому.');
@@ -234,7 +234,7 @@ class PhotoalbumRepository extends BaseRepository
         return $this->storePhotoForAlbum($user, $album, $data);
     }
 
-    public function storePhotoForAlbum(User $user, Photoalbum $album, PhotoUploadData $data): Photo
+    public function storePhotoForAlbum(User $user, PhotoAlbums $album, PhotoUploadData $data): Photo
     {
         $file = $data->file;
         $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
@@ -274,7 +274,7 @@ class PhotoalbumRepository extends BaseRepository
 
     public function storeAttachmentPhoto(User $user, PhotoUploadData $data): Photo
     {
-        /** @var Photoalbum $album */
+        /** @var PhotoAlbums $album */
         $album = $this->model->newQuery()->firstOrCreate([
             'owner_id' => $user->id,
             'photoalbumable_type' => 'user_attach',
@@ -341,7 +341,7 @@ class PhotoalbumRepository extends BaseRepository
         });
     }
 
-    public function deleteAlbum(Photoalbum $album): bool
+    public function deleteAlbum(PhotoAlbums $album): bool
     {
         return DB::transaction(function () use ($album): bool {
             $album->loadMissing('photos.album');
@@ -385,7 +385,7 @@ class PhotoalbumRepository extends BaseRepository
         ];
     }
 
-    public function serializeAlbum(Photoalbum $album): array
+    public function serializeAlbum(PhotoAlbums $album): array
     {
         $album->loadMissing(['photos' => fn ($query) => $query
             ->where('banned', false)

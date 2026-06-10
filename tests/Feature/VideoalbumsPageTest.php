@@ -6,7 +6,7 @@ use App\DTO\Album\AlbumData;
 use App\DTO\Video\VideoData;
 use App\Models\User;
 use App\Models\Video;
-use App\Models\Videoalbum;
+use App\Models\VideoAlbums;
 use App\Repositories\FriendRepository;
 use App\Repositories\ProfileRepository;
 use App\Repositories\VideoalbumRepository;
@@ -53,7 +53,7 @@ class VideoalbumsPageTest extends TestCase
     public function test_add_video_page_renders_form(): void
     {
         $viewer = $this->user(1, 'Александр', 'Яницкий');
-        $album = new Videoalbum(['name' => 'Мой альбом', 'owner_id' => $viewer->id, 'videoalbumable_type' => 'user']);
+        $album = new VideoAlbums(['name' => 'Мой альбом', 'owner_id' => $viewer->id, 'videoalbumable_type' => 'user']);
         $album->id = 19;
         $album->exists = true;
 
@@ -83,7 +83,7 @@ class VideoalbumsPageTest extends TestCase
             $mock->shouldReceive('createUserAlbum')
                 ->once()
                 ->withArgs(fn (User $user, AlbumData $data): bool => $user === $viewer && $data->name === 'Новый альбом')
-                ->andReturn(new Videoalbum());
+                ->andReturn(new VideoAlbums());
         });
 
         $this->post('/videoalbums/create', ['name' => 'Новый альбом'])
@@ -93,7 +93,7 @@ class VideoalbumsPageTest extends TestCase
     public function test_add_video_post_uses_repository(): void
     {
         $viewer = $this->user(1, 'Александр', 'Яницкий');
-        $album = new Videoalbum(['name' => 'Мой альбом', 'owner_id' => $viewer->id, 'videoalbumable_type' => 'user']);
+        $album = new VideoAlbums(['name' => 'Мой альбом', 'owner_id' => $viewer->id, 'videoalbumable_type' => 'user']);
         $album->id = 19;
         $album->exists = true;
 
@@ -108,7 +108,7 @@ class VideoalbumsPageTest extends TestCase
             $mock->shouldReceive('isOwner')->with($album, $viewer)->andReturn(true);
             $mock->shouldReceive('addUserVideo')
                 ->once()
-                ->withArgs(fn (User $user, Videoalbum $receivedAlbum, VideoData $data): bool => $user === $viewer
+                ->withArgs(fn (User $user, VideoAlbums $receivedAlbum, VideoData $data): bool => $user === $viewer
                     && $receivedAlbum === $album
                     && $data->link === 'https://youtu.be/abc123'
                     && $data->description === 'Описание'
@@ -127,7 +127,7 @@ class VideoalbumsPageTest extends TestCase
     public function test_album_page_renders_videos_and_lazy_load_marker(): void
     {
         $viewer = $this->user(1, 'Александр', 'Яницкий');
-        $album = new Videoalbum(['name' => 'Мой альбом', 'owner_id' => $viewer->id, 'videoalbumable_type' => 'user']);
+        $album = new VideoAlbums(['name' => 'Мой альбом', 'owner_id' => $viewer->id, 'videoalbumable_type' => 'user']);
         $album->id = 19;
         $album->exists = true;
         $album->setRelation('owner', $viewer);
