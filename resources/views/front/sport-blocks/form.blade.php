@@ -89,7 +89,12 @@
 @endsection
 
 @push('scripts')
+    <script src="{{ asset('frontend/js/search.js') }}"></script>
     <script>
+        if (typeof selectAction === 'function') {
+            selectAction();
+        }
+
         (function () {
             const fileInput = document.getElementById('avatar_file');
             const button = document.getElementById('avatar');

@@ -21,9 +21,14 @@ class PlaygroundsController extends Controller
             return $this->show($sportBlock, $sportBlocks, $photoalbums);
         }
 
+        $filters = $this->filters($request);
+        $pageSize = 5;
+
         return view('front.sport-blocks.index', $this->basePayload() + [
-            'items' => $sportBlocks->serializedByType(self::TYPE, $this->filters($request)),
-            'filters' => $this->filters($request),
+            'items' => $sportBlocks->serializedByType(self::TYPE, $filters, $pageSize, 0),
+            'itemsPageSize' => $pageSize,
+            'itemsTotal' => $sportBlocks->countByType(self::TYPE, $filters),
+            'filters' => $filters,
         ]);
     }
 
@@ -111,7 +116,8 @@ class PlaygroundsController extends Controller
             'createRoute' => route('front.playgrounds.create'),
             'listTitle' => 'Площадки',
             'createButton' => 'Создать площадку',
-            'searchPlaceholder' => 'Искать площадку в городе',
+            'searchPlaceholder' => 'Ищу площадку в городе',
+            'editLabel' => 'редактирование площадки',
             'viewer' => Auth::guard('web')->user(),
         ];
     }
@@ -121,6 +127,7 @@ class PlaygroundsController extends Controller
         return [
             'search' => trim((string) $request->query('search', '')),
             'place' => trim((string) $request->query('place', '')),
+            'id_place' => (int) $request->query('id_place', 0),
         ];
     }
 

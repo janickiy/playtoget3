@@ -59,6 +59,10 @@ Route::prefix('shops')->name('front.shops.')->controller(ShopsController::class)
 });
 
 Route::prefix('fitness')->name('front.fitness.')->controller(FitnessController::class)->group(function () {
+    Route::get('create', 'create')->name('create');
+    Route::post('create', 'store')->name('store');
+    Route::get('{sportBlock}/edit', 'edit')->where('sportBlock', '[0-9]+')->name('edit');
+    Route::post('{sportBlock}/edit', 'update')->where('sportBlock', '[0-9]+')->name('update');
     Route::get('{sportBlock?}', 'index')->where('sportBlock', '[0-9]+')->name('index');
 });
 

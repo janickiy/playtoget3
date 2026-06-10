@@ -1,7 +1,7 @@
 @extends('front.layouts.app')
 
 @section('content')
-    <div class="sport-block-show">
+    <div class="content-groups friends sport-block-show">
         <div class="container_in_swiper">
             <div class="swiper-container gallery-top">
                 <div class="swiper-wrapper">
@@ -47,7 +47,7 @@
                     <p class="phone">{{ $data['phone'] }}</p>
                 @endif
                 @if ($data['email'])
-                    <p class="email">{{ $data['email'] }}</p>
+                    <p class="mail email">{{ $data['email'] }}</p>
                 @endif
                 @if ($data['website'])
                     @php

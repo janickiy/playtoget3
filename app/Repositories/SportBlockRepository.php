@@ -7,6 +7,7 @@ use App\Models\GeoCity;
 use App\Models\GeoTarget;
 use App\Models\SportBlock;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -19,29 +20,26 @@ class SportBlockRepository extends BaseRepository
         parent::__construct($model);
     }
 
-    public function byType(string $type, array $filters = []): Collection
+    public function byType(string $type, array $filters = [], ?int $limit = null, int $offset = 0): Collection
     {
-        return $this->model->newQuery()
-            ->where('type', $type)
-            ->where('banned', false)
-            ->when(($filters['search'] ?? '') !== '', function ($query) use ($filters): void {
-                $search = trim((string) $filters['search']);
+        $query = $this->queryByType($type, $filters)->orderBy('name');
 
-                $query->where(function ($query) use ($search): void {
-                    $query->where('name', 'like', '%' . $search . '%')
-                        ->orWhere('about', 'like', '%' . $search . '%')
-                        ->orWhere('address', 'like', '%' . $search . '%');
-                });
-            })
-            ->when(($filters['place'] ?? '') !== '', fn ($query) => $query->where('place', 'like', '%' . trim((string) $filters['place']) . '%'))
-            ->orderBy('name')
-            ->get();
+        if ($limit !== null) {
+            $query->offset(max($offset, 0))->limit($limit);
+        }
+
+        return $query->get();
     }
 
-    public function serializedByType(string $type, array $filters = []): Collection
+    public function serializedByType(string $type, array $filters = [], ?int $limit = null, int $offset = 0): Collection
     {
-        return $this->byType($type, $filters)
+        return $this->byType($type, $filters, $limit, $offset)
             ->map(fn (SportBlock $sportBlock): array => $this->serialize($sportBlock));
+    }
+
+    public function countByType(string $type, array $filters = []): int
+    {
+        return (int) $this->queryByType($type, $filters)->count();
     }
 
     public function findByType(int $id, string $type): ?SportBlock
@@ -139,6 +137,28 @@ class SportBlockRepository extends BaseRepository
     public function isOwner(?SportBlock $sportBlock, ?User $viewer): bool
     {
         return $sportBlock && $viewer && (int) $sportBlock->owner_id === (int) $viewer->id;
+    }
+
+    private function queryByType(string $type, array $filters = []): Builder
+    {
+        $search = trim((string) ($filters['search'] ?? ''));
+        $place = trim((string) ($filters['place'] ?? ''));
+
+        if ($place === '' && (int) ($filters['id_place'] ?? 0) > 0) {
+            $place = $this->cityName((int) $filters['id_place']);
+        }
+
+        return $this->model->newQuery()
+            ->where('type', $type)
+            ->where('banned', false)
+            ->when($search !== '', function (Builder $query) use ($search): void {
+                $query->where(function (Builder $query) use ($search): void {
+                    $query->where('name', 'like', '%' . $search . '%')
+                        ->orWhere('about', 'like', '%' . $search . '%')
+                        ->orWhere('address', 'like', '%' . $search . '%');
+                });
+            })
+            ->when($place !== '', fn (Builder $query) => $query->where('place', 'like', '%' . $place . '%'));
     }
 
     private function syncGeoTarget(SportBlock $sportBlock, int $cityId): void

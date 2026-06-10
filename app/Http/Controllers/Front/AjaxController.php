@@ -54,6 +54,7 @@ class AjaxController extends Controller
             'get_usernews_list' => $this->getUserNewsList($request),
             'get_communities_list' => $this->getCommunitiesList($request),
             'get_pop_communities_list' => $this->getPopCommunitiesList($request),
+            'get_sport_blocks_list' => $this->getSportBlocksList($request),
             'get_events_list' => $this->getEventsList($request),
             'get_pop_events_list' => $this->getPopEventsList($request),
             'getpossiblefriends' => $this->getPossibleFriends($request),
@@ -188,6 +189,34 @@ class AjaxController extends Controller
             'html' => $this->renderCommunities($this->communitiesForViewer($items, $viewer), $type),
             'count' => $items->count(),
             'has_more' => $nextItems->isNotEmpty(),
+        ]);
+    }
+
+    private function getSportBlocksList(Request $request): JsonResponse
+    {
+        $limit = min(max((int) $request->input('number', 5), 1), 25);
+        $offset = max((int) $request->input('offset', 0), 0);
+        $type = (string) $request->input('type', 'playground');
+        $routePrefix = match ($type) {
+            'playground' => 'front.playgrounds',
+            'shop' => 'front.shops',
+            'fitness' => 'front.fitness',
+            default => null,
+        };
+
+        if (! $routePrefix) {
+            return response()->json(['status' => 0, 'html' => '', 'count' => 0, 'has_more' => false], 422);
+        }
+
+        $filters = $this->sportBlockFilters($request);
+        $items = $this->sportBlocks->serializedByType($type, $filters, $limit, $offset);
+        $total = $this->sportBlocks->countByType($type, $filters);
+
+        return response()->json([
+            'status' => 1,
+            'html' => $this->renderSportBlocks($items, $routePrefix, $type),
+            'count' => $items->count(),
+            'has_more' => $total > $offset + $items->count(),
         ]);
     }
 
@@ -1367,6 +1396,16 @@ class AjaxController extends Controller
             ->implode('');
     }
 
+    private function renderSportBlocks(Collection $items, string $routePrefix, string $type): string
+    {
+        return view('front.sport-blocks._cards', [
+            'items' => $items,
+            'routePrefix' => $routePrefix,
+            'viewer' => $this->viewer(),
+            'editLabel' => $type === 'playground' ? 'редактирование площадки' : 'Редактировать',
+        ])->render();
+    }
+
     private function communityFilters(Request $request): array
     {
         return [
@@ -1386,6 +1425,15 @@ class AjaxController extends Controller
             'search' => trim((string)$request->input('search', '')),
             'id_place' => (int)$request->input('id_place', 0),
             'id_sport' => (int)$request->input('id_sport', 0),
+        ];
+    }
+
+    private function sportBlockFilters(Request $request): array
+    {
+        return [
+            'place' => trim((string) $request->input('place', '')),
+            'search' => trim((string) $request->input('search', '')),
+            'id_place' => (int) $request->input('id_place', 0),
         ];
     }
 }

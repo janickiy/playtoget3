@@ -37,9 +37,7 @@ class HomeController extends Controller
             'profile' => $this->redirectLegacyProfile($request, $actions),
             'playgrounds' => $this->redirectLegacySportBlocks($request, $actions, 'front.playgrounds'),
             'shops' => $this->redirectLegacySportBlocks($request, $actions, 'front.shops'),
-            'fitness' => $request->filled('id_sport_block')
-                ? redirect()->route('front.fitness.index', ['sportBlock' => $request->query('id_sport_block')])
-                : redirect()->route('front.fitness.index'),
+            'fitness' => $this->redirectLegacySportBlocks($request, $actions, 'front.fitness'),
             'calendar' => redirect()->route('front.calendar.index'),
             'events' => $this->redirectLegacyEvents($request, $actions),
             'edit_profile' => redirect()->route('front.profile.edit'),
