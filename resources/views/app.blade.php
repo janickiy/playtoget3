@@ -112,36 +112,77 @@
                          with font-awesome or any other icon font library -->
 
                     <li class="nav-item">
-                        <a href="{{ route('admin.dashboard.index') }}" class="nav-link{{ Request::is('dashboard*') ? ' active' : '' }}"
+                        <a href="{{ route('admin.dashboard.index') }}" class="nav-link{{ Request::is('cp') ? ' active' : '' }}"
                            title="dashboard">
                             <i class="nav-icon fas fa-envelope"></i>
                             <p>dashboard</p>
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a href="{{ route('admin.catalog.index') }}" class="nav-link{{ Request::is('catalog*') ? ' active' : '' }}"
-                           title="Каталог">
-                            <i class="nav-icon fas fa-list"></i>
-                            <p>каталог</p>
-                        </a>
-                    </li>
+
+
+                    <!-- Sidebar Menu -->
+                    <nav class="mt-2">
+                        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                            data-accordion="true">
+                            <!-- Add icons to the links using the .nav-icon class
+                                 with font-awesome or any other icon font library -->
+
+                            <li class="nav-item">
+                                <a href="{{ route('admin.dashboard.index') }}"
+                                   class="nav-link{{ Request::is('cp') ? ' active' : '' }}"
+                                   title="Главная">
+                                    <i class="nav-icon fas fa-home"></i>
+                                    <p>Главная</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item{{ Request::is('cp/content*') ? ' menu-open' : '' }}">
+                                <a href="#" class="nav-link{{ Request::is('cp/content*') ? ' active' : '' }}">
+                                    <i class="nav-icon fas fa-book"></i>
+                                    <p>
+                                        Контент
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.menu.index') }}"
+                                           class="nav-link{{ Request::is('cp/content/manage-menus*') ? ' active' : '' }}"
+                                           title="Меню">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Меню</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.content.index') }}"
+                                           class="nav-link{{ Request::is('cp/content/content*') ? ' active' : '' }}"
+                                           title="Страницы и разделы">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Страницы и разделы</p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
 
                     @if(PermissionsHelper::has_permission('admin'))
 
                         <li class="nav-item">
-                            <a href="{{ route('admin.admin.index') }}" class="nav-link{{ Request::is('admin*') ? ' active' : '' }}"
-                               title="пользователи">
+                            <a href="{{ route('admin.admin.index') }}" class="nav-link{{ Request::is('cp/admin*') ? ' active' : '' }}"
+                               title="Администраторы">
                                 <i class="nav-icon fas fa-users"></i>
-                                <p>пользователи</p>
+                                <p>Администраторы</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a href="{{ route('admin.settings.index') }}" class="nav-link{{ Request::is('cp/settings*') ? ' active' : '' }}"
-                               title="настройки">
+                               title="Настройки">
                                 <i class="nav-icon fas fa-cogs"></i>
-                                <p>настройки</p>
+                                <p>Настройки</p>
                             </a>
                         </li>
 
@@ -185,7 +226,7 @@
         <div class="float-right d-none d-sm-block">
             <b></b>
         </div>
-        <strong>&copy; {{ date('Y') }}</strong>
+        <strong>&copy; {{ date('Y') }} {{ config('app.name') }}</strong>
     </footer>
 
     <!-- Control Sidebar -->

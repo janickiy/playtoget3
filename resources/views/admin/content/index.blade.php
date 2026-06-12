@@ -29,17 +29,9 @@
                                 <div class="pb-3">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <a href="{{ route('admin.settings.create', ['type' => 'TEXT']) }}"
+                                            <a href="{{ route('admin.content.create') }}"
                                                class="btn btn-info btn-sm pull-left">
-                                                <span class="fa fa-plus"> &nbsp;</span> Добавить Text параметр
-                                            </a><br><br>
-                                            <a href="{{ route('admin.settings.create', ['type' => 'HTML']) }}"
-                                               class="btn btn-info btn-sm pull-left">
-                                                <span class="fa fa-plus"> &nbsp;</span> Добавить HTML параметр
-                                            </a><br><br>
-                                            <a href="{{ route('admin.settings.create', ['type' => 'FILE']) }}"
-                                               class="btn btn-info btn-sm pull-left">
-                                                <span class="fa fa-plus"> &nbsp;</span> Добавить File параметр
+                                                <span class="fa fa-plus"> &nbsp;</span> Добавить
                                             </a>
                                         </div>
                                     </div>
@@ -48,12 +40,12 @@
                                 <table id="itemList" class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
-                                        <th>Параметр</th>
+                                        <th>ID</th>
                                         <th>Название</th>
-                                        <th>Значение</th>
-                                        <th>Описание</th>
-                                        <th>Тип</th>
-                                        <th>Публиковать</th>
+                                        <th>Содержание</th>
+                                        <th>ЧПУ</th>
+                                        <th>Опубликовано</th>
+                                        <th>Создан</th>
                                         <th style="width: 10%">Действия</th>
                                     </tr>
                                     </thead>
@@ -94,7 +86,7 @@
 
             <script>
 
-                $(function () {
+                $(function (){
 
                     $("#itemList").DataTable({
                         "oLanguage": {
@@ -119,15 +111,15 @@
                         "autoWidth": true,
                         'serverSide': true,
                         'ajax': {
-                            url: '{{ route('admin.datatable.settings') }}'
+                            url: '{{ route('admin.datatable.content') }}'
                         },
                         'columns': [
-                            {data: 'key_cd', name: 'key_cd'},
-                            {data: 'name', name: 'name'},
-                            {data: 'value', name: 'value'},
-                            {data: 'display_value', name: 'display_value'},
-                            {data: 'type', name: 'type'},
-                            {data: 'published', name: 'published', searchable: false},
+                            {data: 'id', name: 'id'},
+                            {data: 'title', name: 'title'},
+                            {data: 'text', name: 'text'},
+                            {data: 'slug', name: 'slug'},
+                            {data: 'published', name: 'published'},
+                            {data: 'created_at', name: 'created_at'},
                             {data: 'actions', name: 'actions', orderable: false, searchable: false},
                         ]
                     });

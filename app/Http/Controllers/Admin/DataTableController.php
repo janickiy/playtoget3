@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Admin;
-use App\Models\Catalog;
+use App\Models\Content;
 use App\Models\Settings;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -46,15 +46,26 @@ class DataTableController extends Controller
      * @return JsonResponse
      * @throws \Exception
      */
-    public function catalogs(): JsonResponse
+    public function content(): JsonResponse
     {
-        $row = Catalog::query();
+        $row = Content::query();
+
         return Datatables::of($row)
             ->addColumn('actions', function ($row) {
-                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . route('admin.catalog.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
-                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.catalog.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
+                $showBtn = '<a title="просмотр" class="btn btn-xs btn-info" href="' . route('admin.content.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
+                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . route('admin.content.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.content.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
 
-                return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
+                return '<div class="nobr"> ' . $showBtn . $editBtn . $deleteBtn . '</div>';
+            })
+            ->editColumn('text', function ($row) {
+                return Str::limit(strip_tags((string) $row->text), 120);
+            })
+            ->editColumn('published', function ($row) {
+                return $row->published == 1 ? 'да' : 'нет';
+            })
+            ->editColumn('created_at', function ($row) {
+                return Carbon::parse($row->created_at)->format('d/m/Y H:i');
             })
             ->rawColumns(['actions'])->make(true);
     }
@@ -69,8 +80,8 @@ class DataTableController extends Controller
 
         return Datatables::of($row)
             ->addColumn('actions', function ($row) {
-                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . URL::route('admin.settings.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
-                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
+                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . route('admin.settings.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.settings.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
 
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
             })

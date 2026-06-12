@@ -12,9 +12,9 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('text')->nullable();
-            $table->enum('hide', ['show', 'hide'])->default('show');
-
-            $table->index('hide');
+            $table->boolean('published')->default(true);
+            $table->string('slug')->unique();
+            $table->timestamps();
         });
     }
 

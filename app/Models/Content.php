@@ -13,6 +13,7 @@ class Content extends BaseModel
     protected $fillable = [
         'title',
         'text',
-        'hide',
+        'published',
+        'slug',
     ];
 }
