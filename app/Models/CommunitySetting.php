@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Http\Traits\StaticTableName;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CommunitySetting extends BaseModel
 {
+    use StaticTableName;
+
     protected $table = 'communities_settings';
 
     protected $fillable = [

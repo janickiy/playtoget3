@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Http\Traits\StaticTableName;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Video extends BaseModel
 {
+    use StaticTableName;
+
     protected $table = 'videos';
 
     public $timestamps = true;

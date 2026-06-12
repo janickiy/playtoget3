@@ -14,6 +14,7 @@ use App\Models\Photo;
 use App\Models\SportBlock;
 use App\Models\User;
 use App\Models\Video;
+use App\Helpers\SettingsHelper;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
@@ -29,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $loader = \Illuminate\Foundation\AliasLoader::getInstance();
         $loader->alias('PermissionsHelper', PermissionsHelper::class);
+        $loader->alias('SettingsHelper', SettingsHelper::class);
     }
 
     /**

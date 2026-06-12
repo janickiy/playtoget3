@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Http\Traits\StaticTableName;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Share extends BaseModel
 {
+    use StaticTableName;
+
     protected $table = 'share';
 
     protected $fillable = [

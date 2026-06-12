@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Http\Traits\StaticTableName;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Log extends BaseModel
 {
+    use StaticTableName;
+
     protected $table = 'log';
 
     protected $fillable = [

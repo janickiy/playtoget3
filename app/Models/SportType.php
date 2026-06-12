@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Http\Traits\StaticTableName;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SportType extends BaseModel
 {
+    use StaticTableName;
+
     protected $table = 'sport_types';
 
     protected $fillable = [

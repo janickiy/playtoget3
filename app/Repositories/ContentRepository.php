@@ -2,18 +2,18 @@
 
 namespace App\Repositories;
 
-use App\Models\ContentPage;
+use App\Models\Content;
 
 class ContentRepository extends BaseRepository
 {
-    public function __construct(ContentPage $model)
+    public function __construct(Content $model)
     {
         parent::__construct($model);
     }
 
-    public function visible(int $id): ?ContentPage
+    public function visible(int $id): ?Content
     {
-        /** @var ContentPage|null $page */
+        /** @var Content|null $page */
         $page = $this->model->newQuery()
             ->whereKey($id)
             ->where('hide', 'show')
