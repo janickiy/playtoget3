@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-
 use App\Helpers\FrontAssets;
 use App\Helpers\PermissionsHelper;
+use App\Helpers\MenuHelper;
 use App\Models\Comment;
 use App\Models\Community;
 use App\Models\Event;
@@ -56,6 +56,7 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('front.*', function ($view) {
             $user = Auth::guard('web')->user();
+            $menu = MenuHelper::getMenuList();
 
             $events = Schema::hasTable('events')
                 ? Event::query()->where('banned', false)->orderByDesc('date_from')->limit(3)->get()
@@ -75,6 +76,7 @@ class AppServiceProvider extends ServiceProvider
                 'cover' => FrontAssets::userCover($user),
                 'events' => $events,
                 'eventCount' => $events->count(),
+                'menu' => $menu,
                 'playgrounds' => $sportBlocks->where('type', 'playground')->take(3)->values(),
                 'playgroundsCount' => $sportBlocks->where('type', 'playground')->count(),
                 'shops' => $sportBlocks->where('type', 'shop')->take(3)->values(),
@@ -82,6 +84,7 @@ class AppServiceProvider extends ServiceProvider
                 'fitness' => $sportBlocks->where('type', 'fitness')->take(3)->values(),
                 'fitnessCount' => $sportBlocks->where('type', 'fitness')->count(),
             ]);
+            $view->with('menu', $menu);
         });
     }
 }

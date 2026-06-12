@@ -2,20 +2,19 @@
     <div class="container">
         <div class="col-xs-12">
             <div class="row">
+
+                @if(!empty($menu['bottom']))
                 <ul class="menu-footer">
-                    <li><a href="{{ route('front.content.show', ['slug' => 'o-servise']) }}">О сервисе</a></li>
-                    <li><a href="{{ route('front.content.show', ['slug' => 'vozmojnosti']) }}">Возможности</a></li>
-                    <li><a href="{{ route('front.content.show', ['slug' => 'reklama-na-sayte']) }}">Реклама на сайте</a></li>
-                    <li><a href="{{ route('front.content.show', ['slug' => 'user-agreement']) }}">Пользовательское соглашение</a></li>
-                    <li><a href="{{ route('front.content.show', ['slug' => 'terms-use']) }}">Правила пользования</a></li>
-                    <li><a href="{{ route('front.feedback.create') }}">Обратная связь</a></li>
+                    @foreach($menu['bottom'] ?? [] as $item)
+                    <li><a href="{{ $item['link'] ?? '#' }}">{{ $item['label'] ?? '' }}</a></li>
+                    @endforeach
                 </ul>
+                @endif
+
                 <ul class="soc-menu">
                     <li><a target="_blank" rel="noopener" href="https://twitter.com/playtoget_com"><img src="{{ asset('frontend/images/tw.png') }}" alt=""></a></li>
-                    <li><a target="_blank" rel="noopener" href="https://vk.com/playtoget"><img src="{{ asset('frontend/images/vk.png') }}" alt=""></a></li>
                     <li><a target="_blank" rel="noopener" href="https://www.facebook.com/playtoget.ru/"><img src="{{ asset('frontend/images/fb.png') }}" alt=""></a></li>
                     <li><a target="_blank" rel="noopener" href="https://www.instagram.com/playtoget_com/"><img src="{{ asset('frontend/images/ins.png') }}" alt=""></a></li>
-                    <li><a target="_blank" rel="noopener" href="http://www.ok.ru/group/52832209666136"><img src="{{ asset('frontend/images/ok.png') }}" alt=""></a></li>
                     <li><a target="_blank" rel="noopener" href="https://www.linkedin.com/groups/8510609"><img src="{{ asset('frontend/images/in.png') }}" alt=""></a></li>
                     <li><a target="_blank" rel="noopener" href="https://www.youtube.com/channel/UC44vVK3JlHCIBBpIY16Ok2g"><img src="{{ asset('frontend/images/youtube.png') }}" alt=""></a></li>
                 </ul>

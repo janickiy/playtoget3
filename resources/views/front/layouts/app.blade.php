@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="content-type" content="no-cache">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta property="og:image" content="{{ asset('frontend/images/left-sitebar-img-2.png') }}">
@@ -158,6 +158,7 @@
     </section>
 
     <script src="{{ asset('frontend/js/script_all.js') }}"></script>
+
     @include('front.partials.video-window')
     @include('front.partials.photo-window')
 
@@ -179,6 +180,7 @@
     </section>
 
     @include('front.partials.footer')
+
     @stack('scripts')
 </div>
 </body>
