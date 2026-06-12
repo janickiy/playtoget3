@@ -21,8 +21,6 @@
 
     {!! Html::style('/plugins/toastr/toastr.min.css') !!}
 
-    {!! Html::style('/plugins/flag-icon-css/css/flag-icon.min.css') !!}
-
     @yield('css')
 
     <script type="text/javascript">
@@ -50,28 +48,6 @@
 
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item dropdown">
-
-                @if( Config::get('app.locale') == 'ru')
-                    <a class="nav-link" data-toggle="dropdown" href="javascript:void(0);">
-                        <i class="flag-icon flag-icon-ru"></i>
-                    </a>
-                @else
-                    <a class="nav-link" data-toggle="dropdown" href="javascript:void(0);">
-                        <i class="flag-icon flag-icon-us"></i>
-                    </a>
-                @endif
-
-                <div class="dropdown-menu dropdown-menu-right p-0">
-                    <a data-id="en" href="javascript:void(0);" class="dropdown-item select-lang ">
-                        <i class="flag-icon flag-icon-us mr-2"></i> English
-                    </a>
-                    <a data-id="ru" href="javascript:void(0);" class="dropdown-item select-lang " alt="Русский (Russian)">
-                        <i class="flag-icon flag-icon-ru mr-2"></i> Русский (Russian)
-                    </a>
-                </div>
-            </li>
-
             <!-- Notifications Dropdown Menu -->
             <li class="nav-item">
                 <a class="nav-link" title="выйти" href="{{ route('logout') }}"
@@ -85,13 +61,6 @@
 
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <!-- Brand Logo -->
-        <a href="{{ route('admin.dashboard.index') }}" class="brand-link">
-            <img src="../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-                 style="opacity: .8">
-            <span class="brand-text font-weight-light">AdminLTE 3</span>
-        </a>
-
         <!-- Sidebar -->
         <div class="sidebar">
             <!-- Sidebar user (optional) -->
@@ -110,16 +79,6 @@
                     data-accordion="false">
                     <!-- Add icons to the links using the .nav-icon class
                          with font-awesome or any other icon font library -->
-
-                    <li class="nav-item">
-                        <a href="{{ route('admin.dashboard.index') }}" class="nav-link{{ Request::is('cp') ? ' active' : '' }}"
-                           title="dashboard">
-                            <i class="nav-icon fas fa-envelope"></i>
-                            <p>dashboard</p>
-                        </a>
-                    </li>
-
-
 
                     <!-- Sidebar Menu -->
                     <nav class="mt-2">

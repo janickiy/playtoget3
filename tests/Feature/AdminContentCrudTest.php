@@ -88,6 +88,22 @@ class AdminContentCrudTest extends TestCase
             ->assertSee('Описание');
     }
 
+    public function test_admin_layout_does_not_render_brand_logo_and_language_selector(): void
+    {
+        $this->actingAs($this->admin, 'admin')
+            ->get(route('admin.dashboard.index'))
+            ->assertOk()
+            ->assertDontSee('AdminLTELogo', false)
+            ->assertDontSee('brand-link', false)
+            ->assertDontSee('brand-image', false)
+            ->assertDontSee('brand-text', false)
+            ->assertDontSee('flag-icon', false)
+            ->assertDontSee('select-lang', false)
+            ->assertDontSee('English')
+            ->assertDontSee('Русский (Russian)')
+            ->assertSee('title="выйти"', false);
+    }
+
     public function test_content_edit_page_does_not_auto_update_slug(): void
     {
         $page = Content::query()->create([
