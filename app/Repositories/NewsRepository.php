@@ -16,6 +16,9 @@ use Illuminate\Support\Collection;
 
 class NewsRepository extends BaseRepository
 {
+    /**
+     * Подключает модель и зависимости, с которыми работает репозиторий.
+     */
     public function __construct(
         NewsRssSport $model,
         private readonly NewsFeedFormatterService $formatter
@@ -24,17 +27,28 @@ class NewsRepository extends BaseRepository
         parent::__construct($model);
     }
 
+    /**
+     * Возвращает последние новости RSS.
+     *
+     * @param int $limit
+     * @return Collection
+     */
     public function latest(int $limit = 20): Collection
     {
         return $this->feed($limit);
     }
 
+    /**
+     * Собирает общую ленту новостей.
+     */
     public function feed(int $limit = 25): Collection
     {
         return $this->feedPage($limit);
     }
 
     /**
+     * Возвращает страницу ленты новостей с учетом лимита и смещения.
+     *
      * @param int $limit
      * @param int $offset
      * @return Collection
@@ -55,6 +69,8 @@ class NewsRepository extends BaseRepository
     }
 
     /**
+     * Возвращает элементы ленты по новым фотографиям.
+     *
      * @param int $limit
      * @param int $offset
      * @return Collection
@@ -109,6 +125,8 @@ class NewsRepository extends BaseRepository
     }
 
     /**
+     * Возвращает элементы ленты по новым видео.
+     *
      * @param int $limit
      * @param int $offset
      * @return Collection
@@ -155,6 +173,8 @@ class NewsRepository extends BaseRepository
     }
 
     /**
+     * Возвращает элементы ленты по комментариям к стене.
+     *
      * @param int $limit
      * @param int $offset
      * @return Collection
@@ -204,6 +224,8 @@ class NewsRepository extends BaseRepository
     }
 
     /**
+     * Возвращает элементы ленты по комментариям к фотографиям.
+     *
      * @param int $limit
      * @param int $offset
      * @return Collection
@@ -269,6 +291,8 @@ class NewsRepository extends BaseRepository
     }
 
     /**
+     * Возвращает элементы ленты по комментариям к видео.
+     *
      * @param int $limit
      * @param int $offset
      * @return Collection
@@ -332,6 +356,8 @@ class NewsRepository extends BaseRepository
     }
 
     /**
+     * Формирует элемент ленты от имени пользователя.
+     *
      * @param object $row
      * @param array $data
      * @return array
@@ -358,6 +384,8 @@ class NewsRepository extends BaseRepository
     }
 
     /**
+     * Добавляет к элементам ленты счетчики лайков и комментариев.
+     *
      * @param Collection $items
      * @return Collection
      */
@@ -382,6 +410,8 @@ class NewsRepository extends BaseRepository
     }
 
     /**
+     * Считает связанные действия по типам и идентификаторам сущностей.
+     *
      * @param string $modelClass
      * @param string $typeColumn
      * @param Collection $keys
@@ -408,6 +438,9 @@ class NewsRepository extends BaseRepository
             ->mapWithKeys(fn ($row) => [$row->type . ':' . $row->content_id => (int) $row->total]);
     }
 
+    /**
+     * Возвращает отображаемое имя пользователя из строки выборки.
+     */
     private function userName(object $row): string
     {
         $name = trim(sprintf('%s %s', (string) $row->firstname, (string) $row->lastname));
@@ -416,6 +449,8 @@ class NewsRepository extends BaseRepository
     }
 
     /**
+     * Формирует HTML вложений комментария для ленты новостей.
+     *
      * @param int $commentId
      * @return string
      */

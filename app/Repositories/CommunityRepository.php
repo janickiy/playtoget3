@@ -25,11 +25,17 @@ class CommunityRepository extends BaseRepository
 {
     use SyncsGeoTargets;
 
+    /**
+     * Подключает модель и зависимости, с которыми работает репозиторий.
+     */
     public function __construct(Community $model, private readonly CommunityImageService $images)
     {
         parent::__construct($model);
     }
 
+    /**
+     * Возвращает список команд.
+     */
     public function teams(): Collection
     {
         return $this->model->newQuery()
@@ -42,6 +48,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Находит команду по идентификатору.
+     *
      * @param int $id
      * @return Community|null
      */
@@ -59,6 +67,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Находит группу по идентификатору.
+     *
      * @param int $id
      * @return Community|null
      */
@@ -76,6 +86,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Возвращает команду по умолчанию для текущего контекста.
+     *
      * @param User|null $viewer
      * @return Community|null
      */
@@ -105,6 +117,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Возвращает группу по умолчанию для текущего контекста.
+     *
      * @param User|null $viewer
      * @return Community|null
      */
@@ -133,12 +147,17 @@ class CommunityRepository extends BaseRepository
             ->first();
     }
 
+    /**
+     * Находит команду, которой принадлежит альбом.
+     */
     public function teamForAlbumOwner(int $ownerId): ?Community
     {
         return $this->findTeam($ownerId);
     }
 
     /**
+     * Возвращает команды пользователя.
+     *
      * @param int $userId
      * @param int $limit
      * @param int $offset
@@ -169,6 +188,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Считает команды пользователя.
+     *
      * @param int $userId
      * @param array $filters
      * @return int
@@ -188,6 +209,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Возвращает популярные команды с фильтрами и пагинацией.
+     *
      * @param int $limit
      * @param int $offset
      * @param array $filters
@@ -212,6 +235,9 @@ class CommunityRepository extends BaseRepository
             ->map(fn (Community $team): array => $this->serializeTeam($team));
     }
 
+    /**
+     * Считает популярные команды с учетом фильтров.
+     */
     public function popularTeamsCount(array $filters = []): int
     {
         $query = $this->model->newQuery()
@@ -224,6 +250,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Возвращает команды, куда пользователь приглашен.
+     *
      * @param int $userId
      * @param int $limit
      * @param int $offset
@@ -253,6 +281,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Считает команды, куда пользователь приглашен.
+     *
      * @param int $userId
      * @param array $filters
      * @return int
@@ -272,6 +302,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Возвращает группы пользователя.
+     *
      * @param int $userId
      * @param int $limit
      * @param int $offset
@@ -302,6 +334,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Считает группы пользователя.
+     *
      * @param int $userId
      * @param array $filters
      * @return int
@@ -321,6 +355,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Возвращает популярные группы с фильтрами и пагинацией.
+     *
      * @param int $limit
      * @param int $offset
      * @param array $filters
@@ -346,6 +382,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Считает популярные группы с учетом фильтров.
+     *
      * @param array $filters
      * @return int
      */
@@ -361,6 +399,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Возвращает группы, куда пользователь приглашен.
+     *
      * @param int $userId
      * @param int $limit
      * @param int $offset
@@ -390,6 +430,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Считает группы, куда пользователь приглашен.
+     *
      * @param int $userId
      * @param array $filters
      * @return int
@@ -409,6 +451,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Возвращает участников сущности.
+     *
      * @param int $teamId
      * @return Collection
      */
@@ -426,6 +470,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Возвращает заявки на участие для выбранной сущности.
+     *
      * @param int $teamId
      * @return Collection
      */
@@ -442,6 +488,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Возвращает администраторов сообщества.
+     *
      * @param int $teamId
      * @return Collection
      */
@@ -458,6 +506,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Возвращает заблокированных участников сообщества.
+     *
      * @param int $teamId
      * @return Collection
      */
@@ -474,6 +524,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Возвращает мероприятия сообщества.
+     *
      * @param int $communityId
      * @param string $eventableType
      * @return Collection
@@ -491,12 +543,17 @@ class CommunityRepository extends BaseRepository
             ->map(fn (Event $event): array => $this->serializeEvent($event, $eventableType));
     }
 
+    /**
+     * Ищет мероприятия для привязки к команде.
+     */
     public function searchEventsForTeam(int $teamId, string $search = '', int $limit = 10, int $offset = 0, array $filters = []): Collection
     {
         return $this->searchEventsForCommunity($teamId, 'team', $search, $limit, $offset, $filters);
     }
 
     /**
+     * Ищет мероприятия для привязки к сообществу.
+     *
      * @param int $communityId
      * @param string $eventableType
      * @param string $search
@@ -558,6 +615,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Меняет участие сообщества в мероприятии.
+     *
      * @param Community $team
      * @param int $eventId
      * @param int $status
@@ -597,6 +656,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Возвращает числовую роль пользователя в сущности.
+     *
      * @param int $teamId
      * @param int|null $userId
      * @return int|null
@@ -614,6 +675,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Возвращает русское название роли по ее коду.
+     *
      * @param int|null $role
      * @return string
      */
@@ -623,6 +686,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Проверяет, является ли пользователь владельцем сущности.
+     *
      * @param Community|null $team
      * @param User|null $viewer
      * @return bool
@@ -637,6 +702,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Проверяет, может ли пользователь управлять сущностью.
+     *
      * @param Community|null $team
      * @param User|null $viewer
      * @return bool
@@ -651,6 +718,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Проверяет, может ли пользователь приглашать участников.
+     *
      * @param Community|null $team
      * @param User|null $viewer
      * @return bool
@@ -665,6 +734,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Возвращает строковый тип участия пользователя.
+     *
      * @param Community $team
      * @param User|null $viewer
      * @return string
@@ -675,6 +746,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Меняет статус участия пользователя в сущности.
+     *
      * @param Community $team
      * @param User $viewer
      * @param int $status
@@ -728,6 +801,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Приглашает друзей пользователя в выбранную сущность.
+     *
      * @param Community $team
      * @param User $viewer
      * @return int
@@ -785,6 +860,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Возвращает набор прав пользователя для текущей сущности.
+     *
      * @param Community $team
      * @param User|null $viewer
      * @return array
@@ -801,6 +878,9 @@ class CommunityRepository extends BaseRepository
         ];
     }
 
+    /**
+     * Возвращает или создает настройки сообщества.
+     */
     public function settings(Community $team): CommunitySetting
     {
         /** @var CommunitySetting $settings */
@@ -817,6 +897,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Создает команду и ее настройки для владельца.
+     *
      * @param User $owner
      * @param CommunityData $data
      * @return Community
@@ -862,6 +944,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Создает группу и ее настройки для владельца.
+     *
      * @param User $owner
      * @param CommunityData $data
      * @return Community
@@ -907,6 +991,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Обновляет команду, настройки и изображения.
+     *
      * @param Community $team
      * @param CommunityData $data
      * @return bool
@@ -958,6 +1044,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Обновляет группу, настройки и изображения.
+     *
      * @param Community $group
      * @param CommunityData $data
      * @return bool
@@ -1008,6 +1096,9 @@ class CommunityRepository extends BaseRepository
         });
     }
 
+    /**
+     * Возвращает название города по его идентификатору.
+     */
     public function cityName(?int $cityId): string
     {
         if (! $cityId) {
@@ -1017,6 +1108,9 @@ class CommunityRepository extends BaseRepository
         return (string) (GeoCity::query()->find($cityId)?->name_ru ?? '');
     }
 
+    /**
+     * Возвращает название вида спорта по идентификатору.
+     */
     public function sportName(?int $sportId): string
     {
         if (! $sportId) {
@@ -1026,6 +1120,9 @@ class CommunityRepository extends BaseRepository
         return (string) (SportType::query()->find($sportId)?->name ?? '');
     }
 
+    /**
+     * Преобразует команду в массив данных для карточки.
+     */
     public function serializeTeam(Community $team): array
     {
         return [
@@ -1043,6 +1140,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Преобразует группу в массив данных для карточки.
+     *
      * @param Community $group
      * @return array
      */
@@ -1063,6 +1162,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Преобразует участника сообщества в массив данных.
+     *
      * @param CommunityRole $role
      * @return array|null
      */
@@ -1088,6 +1189,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Преобразует мероприятие в массив данных для вывода.
+     *
      * @param Event $event
      * @param string $participantType
      * @return array
@@ -1115,6 +1218,9 @@ class CommunityRepository extends BaseRepository
         ];
     }
 
+    /**
+     * Проверяет, разрешает ли настройка приватности выбранное действие.
+     */
     private function permissionAllows(int $permission, ?int $role, bool $isWall): bool
     {
         if ($role === 4 || $permission === 1) {
@@ -1133,6 +1239,8 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Применяет фильтры поиска к запросу сообществ.
+     *
      * @param Builder $query
      * @param array $filters
      * @return void

@@ -6,6 +6,9 @@ use App\Models\GeoTarget;
 
 trait SyncsGeoTargets
 {
+    /**
+     * Синхронизирует связь сущности с городом в geo_target.
+     */
     private function syncGeoTarget(string $targetType, int $targetId, int $cityId): void
     {
         if ($cityId < 1) {

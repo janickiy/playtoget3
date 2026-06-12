@@ -137,6 +137,14 @@
                             </a>
                         </li>
 
+                        <li class="nav-item">
+                            <a href="{{ route('admin.settings.index') }}" class="nav-link{{ Request::is('cp/settings*') ? ' active' : '' }}"
+                               title="настройки">
+                                <i class="nav-icon fas fa-cogs"></i>
+                                <p>настройки</p>
+                            </a>
+                        </li>
+
                     @endif
 
                 </ul>

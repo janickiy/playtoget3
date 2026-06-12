@@ -17,12 +17,17 @@ class SportBlockRepository extends BaseRepository
 {
     use SyncsGeoTargets;
 
+    /**
+     * Подключает модель и зависимости, с которыми работает репозиторий.
+     */
     public function __construct(SportBlock $model, private readonly SportBlockAvatarService $avatars)
     {
         parent::__construct($model);
     }
 
     /**
+     * Возвращает спортивные объекты указанного типа с фильтрами и пагинацией.
+     *
      * @param string $type
      * @param array $filters
      * @param int|null $limit
@@ -41,6 +46,8 @@ class SportBlockRepository extends BaseRepository
     }
 
     /**
+     * Возвращает спортивные объекты указанного типа уже подготовленными для вывода.
+     *
      * @param string $type
      * @param array $filters
      * @param int|null $limit
@@ -54,6 +61,8 @@ class SportBlockRepository extends BaseRepository
     }
 
     /**
+     * Считает спортивные объекты указанного типа с учетом фильтров.
+     *
      * @param string $type
      * @param array $filters
      * @return int
@@ -64,6 +73,8 @@ class SportBlockRepository extends BaseRepository
     }
 
     /**
+     * Находит спортивный объект по id и типу.
+     *
      * @param int $id
      * @param string $type
      * @return SportBlock|null
@@ -81,6 +92,8 @@ class SportBlockRepository extends BaseRepository
     }
 
     /**
+     * Преобразует модель в массив данных для вывода.
+     *
      * @param SportBlock $sportBlock
      * @return array
      */
@@ -103,6 +116,8 @@ class SportBlockRepository extends BaseRepository
     }
 
     /**
+     * Создает спортивный объект от имени владельца.
+     *
      * @param User $owner
      * @param string $type
      * @param SportBlockData $data
@@ -137,6 +152,8 @@ class SportBlockRepository extends BaseRepository
     }
 
     /**
+     * Обновляет спортивный объект и связанные данные.
+     *
      * @param SportBlock $sportBlock
      * @param SportBlockData $data
      * @return bool
@@ -168,6 +185,9 @@ class SportBlockRepository extends BaseRepository
         });
     }
 
+    /**
+     * Возвращает название города по его идентификатору.
+     */
     public function cityName(?int $cityId): string
     {
         if (! $cityId) {
@@ -177,12 +197,17 @@ class SportBlockRepository extends BaseRepository
         return (string) (GeoCity::query()->find($cityId)?->name_ru ?? '');
     }
 
+    /**
+     * Проверяет, является ли пользователь владельцем сущности.
+     */
     public function isOwner(?SportBlock $sportBlock, ?User $viewer): bool
     {
         return $sportBlock && $viewer && (int) $sportBlock->owner_id === (int) $viewer->id;
     }
 
     /**
+     * Готовит запрос спортивных объектов по типу и фильтрам.
+     *
      * @param string $type
      * @param array $filters
      * @return Builder

@@ -7,25 +7,34 @@ use App\Models\User;
 use GdImage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use RuntimeException;
 
 class AlbumPhotoStorageService
 {
+    private ImageFileService $images;
+
     /**
+     * Подключает сервис для работы с загруженными изображениями.
+     */
+    public function __construct(?ImageFileService $images = null)
+    {
+        $this->images = $images ?? new ImageFileService();
+    }
+
+    /**
+     * Сохраняет фотографию и уменьшенную копию в публичном хранилище.
+     *
      * @param UploadedFile $file
      * @param string|null $albumType
      * @return string[]
      */
     public function storePhoto(UploadedFile $file, ?string $albumType): array
     {
-        $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
-        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
-        $filename = Str::lower(md5(microtime(true) . $file->getClientOriginalName() . Str::random(8))) . '.' . $extension;
+        $filename = $this->images->hashedFilename($file);
         $smallFilename = 's_' . $filename;
         $directory = 'images/photogallery/' . ($albumType ?: 'user');
 
-        $source = $this->imageResource($file);
+        $source = $this->images->imageResource($file, true);
         $original = $this->resizedImageContents($source, $file->getMimeType(), 800, null);
         $thumb = $this->resizedImageContents($source, $file->getMimeType(), null, 300);
         imagedestroy($source);
@@ -47,6 +56,8 @@ class AlbumPhotoStorageService
     }
 
     /**
+     * Сохраняет прикрепленную фотографию пользователя и возвращает данные для записи.
+     *
      * @param User $user
      * @param UploadedFile $file
      * @return array
@@ -61,9 +72,7 @@ class AlbumPhotoStorageService
             'name' => 'Мои прикрепленные фотографии',
         ]);
 
-        $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
-        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
-        $filename = Str::lower(Str::random(32)) . '.' . $extension;
+        $filename = $this->images->randomFilename($file);
         $smallFilename = 's_' . $filename;
         $directory = 'images/photogallery/user_attach';
         $contents = file_get_contents($file->getRealPath());
@@ -90,29 +99,8 @@ class AlbumPhotoStorageService
     }
 
     /**
-     * @param UploadedFile $file
-     * @return GdImage
-     */
-    private function imageResource(UploadedFile $file): GdImage
-    {
-        $path = $file->getRealPath();
-        $image = match ($file->getMimeType()) {
-            'image/jpeg', 'image/jpg' => imagecreatefromjpeg($path),
-            'image/png' => imagecreatefrompng($path),
-            'image/gif' => imagecreatefromgif($path),
-            default => false,
-        };
-
-        if (! $image instanceof GdImage) {
-            throw new RuntimeException('Неверный формат изображения.');
-        }
-
-        return $file->getMimeType() === 'image/jpeg' || $file->getMimeType() === 'image/jpg'
-            ? $this->orientJpeg($image, $path)
-            : $image;
-    }
-
-    /**
+     * Готовит содержимое уменьшенного изображения с сохранением пропорций.
+     *
      * @param GdImage $source
      * @param string|null $mime
      * @param int|null $maxWidth
@@ -165,32 +153,4 @@ class AlbumPhotoStorageService
         return $contents;
     }
 
-    /**
-     * @param GdImage $image
-     * @param string $path
-     * @return GdImage
-     */
-    private function orientJpeg(GdImage $image, string $path): GdImage
-    {
-        if (! function_exists('exif_read_data')) {
-            return $image;
-        }
-
-        $exif = @exif_read_data($path);
-        $orientation = is_array($exif) ? (int) ($exif['Orientation'] ?? 0) : 0;
-        $rotated = match ($orientation) {
-            3 => imagerotate($image, 180, 0),
-            6 => imagerotate($image, -90, 0),
-            8 => imagerotate($image, 90, 0),
-            default => false,
-        };
-
-        if (! $rotated instanceof GdImage) {
-            return $image;
-        }
-
-        imagedestroy($image);
-
-        return $rotated;
-    }
 }

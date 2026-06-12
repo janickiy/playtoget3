@@ -4,11 +4,22 @@ namespace App\Service;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class EventCoverService
 {
+    private ImageFileService $images;
+
     /**
+     * Подключает сервис для генерации имен загруженных изображений.
+     */
+    public function __construct(?ImageFileService $images = null)
+    {
+        $this->images = $images ?? new ImageFileService();
+    }
+
+    /**
+     * Сохраняет обложку мероприятия и возвращает имя файла.
+     *
      * @param UploadedFile|null $file
      * @return string|null
      */
@@ -18,9 +29,7 @@ class EventCoverService
             return null;
         }
 
-        $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
-        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
-        $filename = Str::lower(md5(microtime(true) . $file->getClientOriginalName() . Str::random(8))) . '.' . $extension;
+        $filename = $this->images->hashedFilename($file);
 
         return Storage::disk('public')->putFileAs('images/events/cover_page', $file, $filename)
             ? $filename
@@ -28,6 +37,8 @@ class EventCoverService
     }
 
     /**
+     * Удаляет обложку мероприятия из нового и legacy-хранилища.
+     *
      * @param string $filename
      * @return void
      */

@@ -32,7 +32,7 @@ Route::prefix('catalog')->name('admin.catalog.')->group(function () {
     Route::delete('destroy/{id}', [CatalogController::class, 'destroy'])->where('id', '[0-9]+')->name('destroy');
 });
 
-Route::middleware(['permission:admin'])->group(function () {
+Route::prefix('cp')->middleware(['auth:admin', 'permission:admin'])->group(function () {
     Route::group(['prefix' => 'settings'], function () {
         Route::get('', [SettingsController::class, 'index'])->name('admin.settings.index');
         Route::get('create/{type}', [SettingsController::class, 'create'])->name('admin.settings.create');
@@ -46,4 +46,8 @@ Route::middleware(['permission:admin'])->group(function () {
 Route::prefix('datatable')->name('admin.datatable.')->group(function () {
     Route::any('admin', [DataTableController::class, 'admin'])->middleware('permission:admin|moderator')->name('admin');
     Route::any('catalogs', [DataTableController::class, 'catalogs'])->name('catalogs');
+});
+
+Route::prefix('cp/datatable')->name('admin.datatable.')->middleware(['auth:admin', 'permission:admin'])->group(function () {
+    Route::any('settings', [DataTableController::class, 'settings'])->name('settings');
 });

@@ -10,12 +10,17 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminRepository extends BaseRepository
 {
+    /**
+     * Подключает модель и зависимости, с которыми работает репозиторий.
+     */
     public function __construct(Admin $model)
     {
         parent::__construct($model);
     }
 
     /**
+     * Возвращает доступные роли администраторов для формы.
+     *
      * @return array<string, string>
      */
     public function roleOptions(): array
@@ -23,6 +28,9 @@ class AdminRepository extends BaseRepository
         return Admin::$role_name;
     }
 
+    /**
+     * Создает запись из DTO с подготовленными данными.
+     */
     public function createFromData(AdminData $data): Builder|Model
     {
         $payload = $data->toArray();
@@ -32,6 +40,8 @@ class AdminRepository extends BaseRepository
     }
 
     /**
+     * Создает запись из массива данных, преобразуя его в DTO.
+     *
      * @param array<string, mixed> $data
      */
     public function createFromArray(array $data): Builder|Model
@@ -39,6 +49,9 @@ class AdminRepository extends BaseRepository
         return $this->createFromData(AdminData::fromArray($data));
     }
 
+    /**
+     * Обновляет запись из DTO с подготовленными данными.
+     */
     public function updateFromData(AdminData $data): bool
     {
         $payload = $data->toArray();
@@ -51,6 +64,8 @@ class AdminRepository extends BaseRepository
     }
 
     /**
+     * Обновляет запись из массива данных, преобразуя его в DTO.
+     *
      * @param array<string, mixed> $data
      */
     public function updateFromArray(array $data): bool

@@ -4,11 +4,22 @@ namespace App\Service;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class CommunityImageService
 {
+    private ImageFileService $images;
+
     /**
+     * Подключает сервис для генерации имен загруженных изображений.
+     */
+    public function __construct(?ImageFileService $images = null)
+    {
+        $this->images = $images ?? new ImageFileService();
+    }
+
+    /**
+     * Сохраняет изображение сообщества и возвращает имя файла.
+     *
      * @param UploadedFile|null $file
      * @param string $directory
      * @param string $kind
@@ -20,9 +31,7 @@ class CommunityImageService
             return null;
         }
 
-        $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
-        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
-        $filename = Str::lower(md5(microtime(true) . $file->getClientOriginalName() . Str::random(8))) . '.' . $extension;
+        $filename = $this->images->hashedFilename($file);
 
         return Storage::disk('public')->putFileAs('images/' . $kind . 'content/' . $directory, $file, $filename)
             ? $filename
@@ -30,6 +39,8 @@ class CommunityImageService
     }
 
     /**
+     * Удаляет изображение сообщества из нового и legacy-хранилища.
+     *
      * @param string $filename
      * @param string $directory
      * @param string $kind

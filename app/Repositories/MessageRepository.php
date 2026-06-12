@@ -17,12 +17,17 @@ class MessageRepository extends BaseRepository
     private const SENDER_VISIBLE_STATUSES = [0, 1, 3];
     private const RECEIVER_VISIBLE_STATUSES = [0, 1, 2];
 
+    /**
+     * Подключает модель и зависимости, с которыми работает репозиторий.
+     */
     public function __construct(Message $model)
     {
         parent::__construct($model);
     }
 
     /**
+     * Возвращает сообщения диалога между двумя пользователями.
+     *
      * @param User $viewer
      * @param User $receiver
      * @param int $limit
@@ -44,6 +49,8 @@ class MessageRepository extends BaseRepository
     }
 
     /**
+     * Проверяет, есть ли еще сообщения в диалоге после текущей страницы.
+     *
      * @param User $viewer
      * @param User $receiver
      * @param int $limit
@@ -59,6 +66,8 @@ class MessageRepository extends BaseRepository
     }
 
     /**
+     * Возвращает список диалогов пользователя.
+     *
      * @param User $viewer
      * @param int $limit
      * @return Collection
@@ -106,6 +115,8 @@ class MessageRepository extends BaseRepository
     }
 
     /**
+     * Создает сообщение, если отправка разрешена настройками приватности.
+     *
      * @param User $sender
      * @param User $receiver
      * @param MessageData $data
@@ -139,6 +150,8 @@ class MessageRepository extends BaseRepository
     }
 
     /**
+     * Возвращает новые сообщения пользователя после указанного id.
+     *
      * @param User $viewer
      * @param int $lastId
      * @param User|null $receiver
@@ -168,6 +181,8 @@ class MessageRepository extends BaseRepository
     }
 
     /**
+     * Помечает сообщения диалога прочитанными для пользователя.
+     *
      * @param User $viewer
      * @param User $sender
      * @return void
@@ -182,6 +197,8 @@ class MessageRepository extends BaseRepository
     }
 
     /**
+     * Считает непрочитанные сообщения пользователя.
+     *
      * @param User $viewer
      * @return int
      */
@@ -194,6 +211,8 @@ class MessageRepository extends BaseRepository
     }
 
     /**
+     * Проверяет, может ли отправитель написать получателю.
+     *
      * @param User $sender
      * @param User $receiver
      * @return bool
@@ -218,6 +237,8 @@ class MessageRepository extends BaseRepository
     }
 
     /**
+     * Скрывает сообщение для выбранного пользователя.
+     *
      * @param User $viewer
      * @param int $messageId
      * @return bool
@@ -252,6 +273,8 @@ class MessageRepository extends BaseRepository
     }
 
     /**
+     * Скрывает диалог для выбранного пользователя.
+     *
      * @param User $viewer
      * @param User $partner
      * @return bool
@@ -268,6 +291,8 @@ class MessageRepository extends BaseRepository
     }
 
     /**
+     * Преобразует сообщение в массив данных для диалога.
+     *
      * @param Message $message
      * @return array
      */
@@ -293,6 +318,8 @@ class MessageRepository extends BaseRepository
     }
 
     /**
+     * Готовит запрос видимых сообщений между двумя пользователями.
+     *
      * @param int $viewerId
      * @param int $otherId
      * @return Builder
@@ -322,6 +349,8 @@ class MessageRepository extends BaseRepository
     }
 
     /**
+     * Готовит запрос сообщений, видимых выбранному пользователю.
+     *
      * @param int $viewerId
      * @return Builder
      */
@@ -348,6 +377,8 @@ class MessageRepository extends BaseRepository
     }
 
     /**
+     * Проверяет, есть ли блокировка между пользователями.
+     *
      * @param int $userId
      * @param int $friendId
      * @return bool
@@ -369,6 +400,8 @@ class MessageRepository extends BaseRepository
     }
 
     /**
+     * Проверяет, являются ли пользователи друзьями.
+     *
      * @param int $userId
      * @param int $friendId
      * @return bool
@@ -390,6 +423,8 @@ class MessageRepository extends BaseRepository
     }
 
     /**
+     * Нормализует список идентификаторов вложений из входных данных.
+     *
      * @param array|string|null $attach
      * @return array
      */
@@ -413,6 +448,8 @@ class MessageRepository extends BaseRepository
     }
 
     /**
+     * Подготавливает текст сообщения для безопасного вывода.
+     *
      * @param string $content
      * @return string
      */
@@ -429,6 +466,8 @@ class MessageRepository extends BaseRepository
     }
 
     /**
+     * Формирует HTML вложений сообщения.
+     *
      * @param Collection $attachments
      * @return string
      */

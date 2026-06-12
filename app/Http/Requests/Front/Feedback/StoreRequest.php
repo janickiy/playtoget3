@@ -7,6 +7,14 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRequest extends FormRequest
 {
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
     public function rules(): array
     {
         return [
@@ -19,11 +27,6 @@ class StoreRequest extends FormRequest
 
     public function toDto(): FeedbackData
     {
-        return new FeedbackData(
-            $this->input('subject'),
-            (string) $this->input('name'),
-            (string) $this->input('email'),
-            (string) $this->input('message'),
-        );
+        return FeedbackData::fromArray($this->validated());
     }
 }

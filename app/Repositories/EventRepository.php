@@ -24,6 +24,9 @@ class EventRepository extends BaseRepository
 {
     use SyncsGeoTargets;
 
+    /**
+     * Подключает модель и зависимости, с которыми работает репозиторий.
+     */
     public function __construct(
         Event $model,
         private readonly EventCoverService $covers
@@ -32,6 +35,12 @@ class EventRepository extends BaseRepository
         parent::__construct($model);
     }
 
+    /**
+     * Возвращает ближайшие мероприятия для календаря.
+     *
+     * @param int $limit
+     * @return Collection
+     */
     public function upcoming(int $limit = 30): Collection
     {
         return $this->model->newQuery()
@@ -43,6 +52,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Возвращает дни месяца, на которые назначены мероприятия.
+     *
      * @param CarbonImmutable $monthStart
      * @param CarbonImmutable $monthEnd
      * @return Collection
@@ -100,6 +111,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Возвращает популярные мероприятия с фильтрами и пагинацией.
+     *
      * @param int $limit
      * @param int $offset
      * @param array $filters
@@ -124,12 +137,17 @@ class EventRepository extends BaseRepository
             ->map(fn (Event $event): array => $this->serializeListEvent($event, $viewer));
     }
 
+    /**
+     * Считает популярные мероприятия с учетом фильтров.
+     */
     public function popularEventsCount(array $filters = []): int
     {
         return (int) $this->eventListQuery($filters)->count();
     }
 
     /**
+     * Возвращает мероприятия пользователя.
+     *
      * @param int $userId
      * @param int $limit
      * @param int $offset
@@ -159,6 +177,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Считает мероприятия пользователя.
+     *
      * @param int $userId
      * @param array $filters
      * @return int
@@ -175,6 +195,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Возвращает мероприятия, на которые пользователь приглашен.
+     *
      * @param int $userId
      * @param int $limit
      * @param int $offset
@@ -203,6 +225,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Считает мероприятия, на которые пользователь приглашен.
+     *
      * @param int $userId
      * @param array $filters
      * @return int
@@ -218,6 +242,9 @@ class EventRepository extends BaseRepository
         return (int) $query->count(DB::raw('distinct events.id'));
     }
 
+    /**
+     * Находит активную запись по идентификатору.
+     */
     public function findActive(int $eventId): ?Event
     {
         /** @var Event|null $event */
@@ -229,6 +256,9 @@ class EventRepository extends BaseRepository
         return $event;
     }
 
+    /**
+     * Преобразует модель в массив данных для вывода.
+     */
     public function serialize(Event $event): array
     {
         return [
@@ -248,6 +278,9 @@ class EventRepository extends BaseRepository
         ];
     }
 
+    /**
+     * Преобразует мероприятие в массив данных для списка.
+     */
     public function serializeListEvent(Event $event, ?User $viewer = null, ?int $viewerRole = null): array
     {
         $role = $viewerRole ?? $this->role((int) $event->id, $viewer?->id);
@@ -273,6 +306,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Возвращает числовую роль пользователя в сущности.
+     *
      * @param int $eventId
      * @param int|null $userId
      * @return int|null
@@ -292,12 +327,17 @@ class EventRepository extends BaseRepository
         return $role === null ? null : (int) $role;
     }
 
+    /**
+     * Возвращает русское название роли по ее коду.
+     */
     public function roleLabel(?int $role): string
     {
         return MembershipRole::labelFor($role);
     }
 
     /**
+     * Возвращает строковый тип участия пользователя.
+     *
      * @param Event $event
      * @param User|null $viewer
      * @return string
@@ -308,6 +348,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Проверяет, может ли пользователь управлять сущностью.
+     *
      * @param Event|null $event
      * @param User|null $viewer
      * @return bool
@@ -322,6 +364,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Проверяет, может ли пользователь приглашать участников.
+     *
      * @param Event|null $event
      * @param User|null $viewer
      * @return bool
@@ -336,6 +380,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Возвращает набор прав пользователя для текущей сущности.
+     *
      * @param Event $event
      * @param User|null $viewer
      * @return bool[]
@@ -352,6 +398,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Возвращает участников сущности.
+     *
      * @param int $eventId
      * @return Collection
      */
@@ -370,6 +418,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Возвращает заявки на участие для выбранной сущности.
+     *
      * @param int $eventId
      * @return Collection
      */
@@ -387,6 +437,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Возвращает сообщества, привязанные к мероприятию.
+     *
      * @param int $eventId
      * @param string $type
      * @return Collection
@@ -425,6 +477,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Считает участников указанного типа.
+     *
      * @param int $eventId
      * @param string $type
      * @return int
@@ -439,6 +493,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Меняет статус участия пользователя в сущности.
+     *
      * @param Event $event
      * @param User $viewer
      * @param int $status
@@ -490,6 +546,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Приглашает друзей пользователя в выбранную сущность.
+     *
      * @param Event $event
      * @param User $viewer
      * @return int
@@ -547,6 +605,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Создает мероприятие и связанные данные владельца.
+     *
      * @param User $owner
      * @param EventData $data
      * @return Event
@@ -583,6 +643,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Обновляет мероприятие и связанные данные.
+     *
      * @param Event $event
      * @param EventData $data
      * @return bool
@@ -619,6 +681,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Возвращает название города по его идентификатору.
+     *
      * @param int|null $cityId
      * @return string
      */
@@ -632,6 +696,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Готовит базовый запрос списка мероприятий.
+     *
      * @param array $filters
      * @return Builder
      */
@@ -646,6 +712,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Применяет фильтры поиска к запросу мероприятий.
+     *
      * @param Builder $query
      * @param array $filters
      * @return void
@@ -695,6 +763,9 @@ class EventRepository extends BaseRepository
         }
     }
 
+    /**
+     * Возвращает название вида спорта по идентификатору.
+     */
     private function sportName(int $sportId): string
     {
         if ($sportId < 1) {
@@ -705,6 +776,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Преобразует участника мероприятия-пользователя в массив данных.
+     *
      * @param AcceptedEventMember $member
      * @return array|null
      */
@@ -730,6 +803,8 @@ class EventRepository extends BaseRepository
     }
 
     /**
+     * Подбирает правильную форму слова для количества участников.
+     *
      * @param int $count
      * @return string
      */

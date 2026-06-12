@@ -70,6 +70,9 @@ class ProfileRepository extends BaseRepository
         'notification_birthdays' => 'Дни рождения',
     ];
 
+    /**
+     * Подключает модель и зависимости, с которыми работает репозиторий.
+     */
     public function __construct(
         User $model,
         private readonly ProfileImageService $images
@@ -78,6 +81,9 @@ class ProfileRepository extends BaseRepository
         parent::__construct($model);
     }
 
+    /**
+     * Находит профиль пользователя для просмотра.
+     */
     public function profile(int $id): ?User
     {
         /** @var User|null $user */
@@ -96,6 +102,9 @@ class ProfileRepository extends BaseRepository
         return $user;
     }
 
+    /**
+     * Формирует основные данные профиля для страницы пользователя.
+     */
     public function profileData(User $profile): array
     {
         return [
@@ -129,6 +138,9 @@ class ProfileRepository extends BaseRepository
         ];
     }
 
+    /**
+     * Формирует данные верхнего блока профиля пользователя.
+     */
     public function topProfileData(User $user): array
     {
         return [
@@ -141,6 +153,9 @@ class ProfileRepository extends BaseRepository
         ];
     }
 
+    /**
+     * Возвращает настройки профиля или создает их со значениями по умолчанию.
+     */
     public function profileSettings(User $user): UserSetting
     {
         /** @var UserSetting $settings */
@@ -157,6 +172,9 @@ class ProfileRepository extends BaseRepository
         return $settings;
     }
 
+    /**
+     * Возвращает пользователей, заблокированных текущим профилем.
+     */
     public function blockedUsers(User $user): Collection
     {
         return Friend::query()
@@ -178,6 +196,8 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
+     * Возвращает последние записи журнала безопасности пользователя.
+     *
      * @param User $user
      * @param int $limit
      * @return Collection
@@ -197,22 +217,33 @@ class ProfileRepository extends BaseRepository
             ]);
     }
 
+    /**
+     * Возвращает список полей прав доступа профиля.
+     */
     public function permissionFields(): array
     {
         return self::PERMISSION_FIELDS;
     }
 
+    /**
+     * Возвращает список полей уведомлений профиля.
+     */
     public function notificationFields(): array
     {
         return self::NOTIFICATION_FIELDS;
     }
 
+    /**
+     * Обрезает загруженный аватар во временный квадратный файл.
+     */
     public function cropTemporaryAvatar(User $user, ImageCropData $data): array
     {
         return $this->images->cropTemporaryAvatar($user, $data);
     }
 
     /**
+     * Обновляет профиль, настройки приватности и изображения пользователя.
+     *
      * @param User $user
      * @param ProfileSettingsData $data
      * @return void
@@ -274,6 +305,8 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
+     * Возвращает набор прав пользователя для текущей сущности.
+     *
      * @param User $profile
      * @param User|null $viewer
      * @param string $friendshipStatus
@@ -313,6 +346,8 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
+     * Возвращает комментарии стены профиля.
+     *
      * @param int $profileId
      * @param int $limit
      * @param int $offset
@@ -324,6 +359,9 @@ class ProfileRepository extends BaseRepository
         return $this->comments('user', $profileId, $limit, $offset, $viewer);
     }
 
+    /**
+     * Возвращает комментарии сущности с древовидными ответами.
+     */
     public function comments(
         string $commentableType,
         int    $contentId,
@@ -340,6 +378,8 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
+     * Проверяет, есть ли еще комментарии стены после текущей страницы.
+     *
      * @param int $profileId
      * @param int $limit
      * @param int $offset
@@ -351,6 +391,8 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
+     * Проверяет, есть ли еще комментарии у сущности после текущей страницы.
+     *
      * @param string $commentableType
      * @param int $contentId
      * @param int $limit
@@ -366,6 +408,8 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
+     * Создает комментарий на стене или у связанной сущности.
+     *
      * @param User $author
      * @param CommentData $data
      * @return Comment
@@ -400,6 +444,8 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
+     * Удаляет комментарий, если у пользователя есть права.
+     *
      * @param User $viewer
      * @param int $commentId
      * @return bool
@@ -444,6 +490,8 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
+     * Преобразует комментарий и ответы в массив данных для вывода.
+     *
      * @param Comment $comment
      * @param User|null $viewer
      * @param bool $includeReplies
@@ -493,6 +541,8 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
+     * Готовит базовый запрос комментариев для указанной сущности.
+     *
      * @param string $commentableType
      * @param int $contentId
      * @return Builder
@@ -518,6 +568,8 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
+     * Проверяет, может ли пользователь удалить комментарий.
+     *
      * @param User $viewer
      * @param Comment $comment
      * @return bool
@@ -553,6 +605,8 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
+     * Собирает идентификаторы комментария и всех его дочерних ответов.
+     *
      * @param Comment $comment
      * @return Collection
      */
@@ -582,6 +636,8 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
+     * Возвращает занятия пользователя указанного типа.
+     *
      * @param User $profile
      * @param int $kind
      * @return Collection
@@ -603,6 +659,8 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
+     * Преобразует вложение комментария в массив данных для вывода.
+     *
      * @param Attachment $attachment
      * @return array|null
      */
@@ -625,6 +683,8 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
+     * Проверяет, разрешает ли настройка приватности выбранное действие.
+     *
      * @param mixed $permission
      * @param bool $isOwnPage
      * @param bool $isFriend
@@ -640,6 +700,8 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
+     * Нормализует список идентификаторов вложений из входных данных.
+     *
      * @param mixed $attach
      * @return array
      */
@@ -662,6 +724,9 @@ class ProfileRepository extends BaseRepository
             ->all();
     }
 
+    /**
+     * Определяет операционную систему по строке User-Agent.
+     */
     private function detectOs(string $userAgent): string
     {
         return match (true) {
@@ -674,6 +739,9 @@ class ProfileRepository extends BaseRepository
         };
     }
 
+    /**
+     * Определяет браузер по строке User-Agent.
+     */
     private function detectBrowser(string $userAgent): string
     {
         return match (true) {
@@ -686,6 +754,9 @@ class ProfileRepository extends BaseRepository
         };
     }
 
+    /**
+     * Форматирует дату и время для вывода в интерфейсе.
+     */
     private function dateTime(?CarbonInterface $date): string
     {
         return $date
@@ -693,6 +764,9 @@ class ProfileRepository extends BaseRepository
             : '';
     }
 
+    /**
+     * Форматирует дату для вывода в интерфейсе.
+     */
     private function date(?CarbonInterface $date): string
     {
         return $date

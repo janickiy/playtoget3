@@ -7,6 +7,12 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class DeleteRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'id' => $this->route('id'),
+        ]);
+    }
 
     /**
      * Determine if the user is authorized to make this request.

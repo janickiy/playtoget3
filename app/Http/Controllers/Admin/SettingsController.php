@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\DTO\Settings\SettingsData;
 use App\Http\Requests\Admin\Settings\DeleteRequest;
 use App\Http\Requests\Admin\Settings\EditRequest;
 use App\Http\Requests\Admin\Settings\StoreRequest;
+use App\Models\Settings;
 use App\Repositories\SettingsRepository;
-use App\Services\SettingsService;
+use App\Service\SettingsService;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+
 class SettingsController extends Controller
 {
     public function __construct(
@@ -19,21 +23,32 @@ class SettingsController extends Controller
         parent::__construct();
     }
 
+    /**
+     * @return View
+     */
     public function index(): View
     {
-        return view('cp.settings.index', [
+        return view('admin.settings.index', [
             'title' => 'Настройки',
         ]);
     }
 
+    /**
+     * @param string $type
+     * @return View
+     */
     public function create(string $type): View
     {
-        return view('cp.settings.create_edit', [
+        return view('admin.settings.create_edit', [
             'type' => $type,
             'title' => 'Добавление настроек',
         ]);
     }
 
+    /**
+     * @param StoreRequest $request
+     * @return RedirectResponse
+     */
     public function store(StoreRequest $request): RedirectResponse
     {
         try {
@@ -43,8 +58,8 @@ class SettingsController extends Controller
                 $value = $this->settingsService->storeFile($request);
             }
 
-            $this->settingsRepository->create(
-                ArrayData::from([
+            $this->settingsRepository->createFromData(
+                SettingsData::fromArray([
                     ...$request->validated(),
                     'value' => $value,
                     'published' => $request->boolean('published'),
@@ -63,13 +78,17 @@ class SettingsController extends Controller
             ->with('success', 'Информация успешно добавлена');
     }
 
+    /**
+     * @param int $id
+     * @return View
+     */
     public function edit(int $id): View
     {
         $row = $this->settingsRepository->find($id);
 
         abort_if($row === null, 404);
 
-        return view('cp.settings.create_edit', [
+        return view('admin.settings.create_edit', [
             'row' => $row,
             'type' => $row->type,
             'title' => 'Редактирование настроек',
@@ -79,11 +98,12 @@ class SettingsController extends Controller
     public function update(EditRequest $request): RedirectResponse
     {
         try {
+            /** @var Settings|null $settings */
             $settings = $this->settingsRepository->find((int) $request->id);
 
             abort_if($settings === null, 404);
 
-            $value = $request->input('value');
+            $value = $request->input('value', $settings->filePath());
 
             if ($request->hasFile('value')) {
                 $value = $this->settingsService->updateFile($settings, $request);
@@ -95,10 +115,10 @@ class SettingsController extends Controller
                 }
             }
 
-            $this->settingsRepository->updateWithMapping(
-                (int) $request->id,
-                ArrayData::from([
+            $this->settingsRepository->updateFromData(
+                SettingsData::fromArray([
                     ...$request->validated(),
+                    'id' => (int) $request->id,
                     'value' => $value,
                     'published' => $request->boolean('published'),
                 ]),
@@ -116,8 +136,15 @@ class SettingsController extends Controller
             ->with('success', 'Данные обновлены');
     }
 
-    public function destroy(DeleteRequest $request, int $id): void
+    /**
+     * @param DeleteRequest $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function destroy(DeleteRequest $request, int $id): JsonResponse
     {
         $this->settingsRepository->remove($id);
+
+        return response()->json(['message' => 'Данные успешно удалены.']);
     }
 }

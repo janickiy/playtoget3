@@ -4,15 +4,25 @@ namespace App\Service;
 
 use App\DTO\Profile\ImageCropData;
 use App\Models\User;
-use GdImage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use RuntimeException;
 
 class ProfileImageService
 {
+    private ImageFileService $images;
+
     /**
+     * Подключает сервис для работы с загруженными изображениями.
+     */
+    public function __construct(?ImageFileService $images = null)
+    {
+        $this->images = $images ?? new ImageFileService();
+    }
+
+    /**
+     * Обрезает загруженный аватар во временный квадратный файл.
+     *
      * @param User $user
      * @param ImageCropData $data
      * @return array
@@ -20,7 +30,7 @@ class ProfileImageService
     public function cropTemporaryAvatar(User $user, ImageCropData $data): array
     {
         $file = $data->file;
-        $source = $this->imageResource($file);
+        $source = $this->images->imageResource($file);
         $sourceWidth = imagesx($source);
         $sourceHeight = imagesy($source);
 
@@ -64,7 +74,7 @@ class ProfileImageService
             throw new RuntimeException('Не удалось обработать изображение.');
         }
 
-        $filename = sprintf('%d_%s.jpg', $user->id, Str::lower(Str::random(32)));
+        $filename = $this->images->temporaryProfileFilename((int) $user->id);
         $path = 'images/tmp/profile/avatar/' . $filename;
 
         if (! Storage::disk('public')->put($path, $contents)) {
@@ -78,6 +88,8 @@ class ProfileImageService
     }
 
     /**
+     * Сохраняет изображение профиля в указанную директорию.
+     *
      * @param UploadedFile $file
      * @param string $directory
      * @param int $userId
@@ -85,9 +97,7 @@ class ProfileImageService
      */
     public function storeUserImage(UploadedFile $file, string $directory, int $userId): string
     {
-        $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
-        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
-        $filename = sprintf('%d_%s.%s', $userId, Str::lower(Str::random(32)), $extension);
+        $filename = $this->images->userScopedFilename($file, $userId);
         $path = 'images/' . trim($directory, '/') . '/' . $filename;
         $contents = file_get_contents($file->getRealPath());
 
@@ -99,6 +109,8 @@ class ProfileImageService
     }
 
     /**
+     * Переносит временный аватар в постоянное хранилище пользователя.
+     *
      * @param string|null $temporaryAvatar
      * @param int $userId
      * @return string|null
@@ -121,6 +133,8 @@ class ProfileImageService
     }
 
     /**
+     * Переносит временную обложку в постоянное хранилище пользователя.
+     *
      * @param string|null $temporaryCover
      * @param int $userId
      * @return string|null
@@ -143,29 +157,8 @@ class ProfileImageService
     }
 
     /**
-     * @param UploadedFile $file
-     * @return GdImage
-     */
-    public function imageResource(UploadedFile $file): GdImage
-    {
-        $path = $file->getRealPath();
-        $mime = $file->getMimeType();
-        $image = match ($mime) {
-            'image/jpeg', 'image/jpg' => imagecreatefromjpeg($path),
-            'image/png' => imagecreatefrompng($path),
-            default => false,
-        };
-
-        if (! $image instanceof GdImage) {
-            throw new RuntimeException('Неверный формат изображения.');
-        }
-
-        return $mime === 'image/jpeg' || $mime === 'image/jpg'
-            ? $this->orientJpeg($image, $path)
-            : $image;
-    }
-
-    /**
+     * Удаляет изображение профиля из указанной директории.
+     *
      * @param string $directory
      * @param string|null $filename
      * @return void
@@ -180,6 +173,8 @@ class ProfileImageService
     }
 
     /**
+     * Переносит временное изображение в постоянную директорию профиля.
+     *
      * @param string $temporaryImage
      * @param int $userId
      * @param string $sourceDirectory
@@ -223,32 +218,4 @@ class ProfileImageService
         return $targetFilename;
     }
 
-    /**
-     * @param GdImage $image
-     * @param string $path
-     * @return GdImage
-     */
-    private function orientJpeg(GdImage $image, string $path): GdImage
-    {
-        if (! function_exists('exif_read_data')) {
-            return $image;
-        }
-
-        $exif = @exif_read_data($path);
-        $orientation = is_array($exif) ? (int) ($exif['Orientation'] ?? 0) : 0;
-        $rotated = match ($orientation) {
-            3 => imagerotate($image, 180, 0),
-            6 => imagerotate($image, -90, 0),
-            8 => imagerotate($image, 90, 0),
-            default => false,
-        };
-
-        if (! $rotated instanceof GdImage) {
-            return $image;
-        }
-
-        imagedestroy($image);
-
-        return $rotated;
-    }
 }

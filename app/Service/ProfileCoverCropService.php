@@ -4,10 +4,7 @@ namespace App\Service;
 
 use App\DTO\Profile\ImageCropData;
 use App\Models\User;
-use GdImage;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use RuntimeException;
 
 class ProfileCoverCropService
@@ -15,7 +12,19 @@ class ProfileCoverCropService
     private const COVER_WIDTH = 1200;
     private const COVER_HEIGHT = 350;
 
+    private ImageFileService $images;
+
     /**
+     * Подключает сервис для работы с загруженными изображениями.
+     */
+    public function __construct(?ImageFileService $images = null)
+    {
+        $this->images = $images ?? new ImageFileService();
+    }
+
+    /**
+     * Обрезает загруженную обложку профиля во временный файл нужного размера.
+     *
      * @param User $user
      * @param ImageCropData $data
      * @return array
@@ -23,7 +32,7 @@ class ProfileCoverCropService
     public function cropTemporaryCover(User $user, ImageCropData $data): array
     {
         $file = $data->file;
-        $source = $this->imageResource($file);
+        $source = $this->images->imageResource($file);
         $sourceWidth = imagesx($source);
         $sourceHeight = imagesy($source);
 
@@ -79,7 +88,7 @@ class ProfileCoverCropService
             throw new RuntimeException('Не удалось обработать изображение.');
         }
 
-        $filename = sprintf('%d_%s.jpg', $user->id, Str::lower(Str::random(32)));
+        $filename = $this->images->temporaryProfileFilename((int) $user->id);
         $path = 'images/tmp/profile/cover_page/' . $filename;
 
         if (! Storage::disk('public')->put($path, $contents)) {
@@ -93,6 +102,8 @@ class ProfileCoverCropService
     }
 
     /**
+     * Нормализует область обрезки обложки под целевые пропорции.
+     *
      * @param int $x
      * @param int $y
      * @param int $width
@@ -121,55 +132,4 @@ class ProfileCoverCropService
         return [$x, $y, $width, $height];
     }
 
-    /**
-     * @param UploadedFile $file
-     * @return GdImage
-     */
-    private function imageResource(UploadedFile $file): GdImage
-    {
-        $path = $file->getRealPath();
-        $mime = $file->getMimeType();
-        $image = match ($mime) {
-            'image/jpeg', 'image/jpg' => imagecreatefromjpeg($path),
-            'image/png' => imagecreatefrompng($path),
-            default => false,
-        };
-
-        if (! $image instanceof GdImage) {
-            throw new RuntimeException('Неверный формат изображения.');
-        }
-
-        return $mime === 'image/jpeg' || $mime === 'image/jpg'
-            ? $this->orientJpeg($image, $path)
-            : $image;
-    }
-
-    /**
-     * @param GdImage $image
-     * @param string $path
-     * @return GdImage
-     */
-    private function orientJpeg(GdImage $image, string $path): GdImage
-    {
-        if (! function_exists('exif_read_data')) {
-            return $image;
-        }
-
-        $exif = @exif_read_data($path);
-        $orientation = is_array($exif) ? (int) ($exif['Orientation'] ?? 0) : 0;
-        $rotated = match ($orientation) {
-            3 => imagerotate($image, 180, 0),
-            6 => imagerotate($image, -90, 0),
-            8 => imagerotate($image, 90, 0),
-            default => false,
-        };
-
-        if (! $rotated instanceof GdImage) {
-            return $image;
-        }
-
-        imagedestroy($image);
-
-        return $rotated;
-    }
 }

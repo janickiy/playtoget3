@@ -4,6 +4,9 @@ namespace App\Service;
 
 class VideoService
 {
+    /**
+     * Формирует HTML-плеер для поддерживаемого видео.
+     */
     public function playerHtml(string $provider, string $video): string
     {
         if ($provider === 'youtube' && $video !== '') {
@@ -13,6 +16,9 @@ class VideoService
         return '';
     }
 
+    /**
+     * Определяет провайдера и идентификатор видео по ссылке.
+     */
     public function detectVideo(string $link): ?array
     {
         $link = trim($link);

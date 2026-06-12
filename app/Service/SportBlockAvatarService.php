@@ -3,11 +3,22 @@
 namespace App\Service;
 
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Str;
 
 class SportBlockAvatarService
 {
+    private ImageFileService $images;
+
     /**
+     * Подключает сервис для генерации имен загруженных изображений.
+     */
+    public function __construct(?ImageFileService $images = null)
+    {
+        $this->images = $images ?? new ImageFileService();
+    }
+
+    /**
+     * Сохраняет аватар спортивного объекта и возвращает имя файла.
+     *
      * @param UploadedFile|null $file
      * @return string|null
      */
@@ -17,9 +28,7 @@ class SportBlockAvatarService
             return null;
         }
 
-        $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'jpg');
-        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
-        $filename = Str::lower(md5(microtime(true) . $file->getClientOriginalName() . Str::random(8))) . '.' . $extension;
+        $filename = $this->images->hashedFilename($file);
 
         return $file->storeAs('images/sportblocks/avatar', $filename, 'public') ? $filename : null;
     }
