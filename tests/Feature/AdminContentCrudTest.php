@@ -135,7 +135,7 @@ class AdminContentCrudTest extends TestCase
         $this->get('/page/1')
             ->assertOk()
             ->assertSee('Страница не найдена')
-            ->assertDontSee('О сервисе');
+            ->assertDontSee('Опубликовано');
     }
 
     public function test_content_admin_store_update_and_delete(): void
