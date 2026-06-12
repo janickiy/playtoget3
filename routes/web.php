@@ -273,6 +273,7 @@ Route::prefix('page')->name('front.content.')->controller(ContentController::cla
 });
 
 Route::prefix('feedback')->name('front.feedback.')->controller(FeedbackController::class)->group(function () {
+    Route::get('captcha', 'captcha')->name('captcha');
     Route::get('', 'create')->name('create');
     Route::post('', 'store')->name('store');
 });

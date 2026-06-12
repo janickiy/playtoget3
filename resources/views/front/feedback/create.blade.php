@@ -52,6 +52,17 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label class="control-label col-lg-3" for="captcha">Проверочный код:</label>
+                    <label class="control-label col-lg-6 left-text" for="captcha">
+                        <a href="#" id="feedback-captcha-refresh">Не можете прочитать? Изменить текст.</a><br><br>
+                        <img src="{{ route('front.feedback.captcha') }}?{{ time() }}" alt="защитный код" id="feedback-captcha">
+                    </label>
+                    <div class="col-lg-6">
+                        <input type="text" class="form-control" name="captcha" id="captcha" value="" placeholder="Введите защитный код" autocomplete="off">
+                    </div>
+                </div>
+
                 <br>
 
                 <div class="form-group">
@@ -63,3 +74,26 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var link = document.getElementById('feedback-captcha-refresh');
+            var image = document.getElementById('feedback-captcha');
+            var input = document.getElementById('captcha');
+
+            if (! link || ! image) {
+                return;
+            }
+
+            link.addEventListener('click', function (event) {
+                event.preventDefault();
+                image.src = '{{ route('front.feedback.captcha') }}?' + Date.now();
+
+                if (input) {
+                    input.focus();
+                }
+            });
+        });
+    </script>
+@endpush

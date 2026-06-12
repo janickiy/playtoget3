@@ -45,6 +45,9 @@ class FeedbackPageTest extends TestCase
             ->assertSee('Укажите ваше имя')
             ->assertSee('Введите Ваш адрес электронной почты')
             ->assertSee('Введите сообщение')
+            ->assertSee('Проверочный код')
+            ->assertSee('id="feedback-captcha"', false)
+            ->assertSee(route('front.feedback.captcha'), false)
             ->assertSee('btn-form save-button', false);
     }
 
@@ -52,11 +55,12 @@ class FeedbackPageTest extends TestCase
     {
         Mail::fake();
 
-        $response = $this->post('/feedback', [
+        $response = $this->withSession(['feedback_captcha_code' => 'ABCDE'])->post('/feedback', [
             'subject' => 'Вопрос по сайту',
             'name' => 'Иван',
             'email' => 'ivan@example.test',
             'message' => 'Текст сообщения',
+            'captcha' => 'abcde',
         ]);
 
         $response->assertRedirect(route('front.feedback.create'));
@@ -74,5 +78,55 @@ class FeedbackPageTest extends TestCase
             return $mail->hasTo('ivan@example.test')
                 && $mail->feedback->message() === 'Текст сообщения';
         });
+    }
+
+    public function test_feedback_form_requires_all_fields_and_captcha(): void
+    {
+        Mail::fake();
+
+        $this
+            ->from('/feedback')
+            ->post('/feedback', [
+                'subject' => '',
+                'name' => '',
+                'email' => '',
+                'message' => '',
+                'captcha' => '',
+            ])
+            ->assertRedirect('/feedback')
+            ->assertSessionHasErrors(['subject', 'name', 'email', 'message', 'captcha']);
+
+        $this->assertDatabaseCount('feedback', 0);
+        Mail::assertNothingSent();
+    }
+
+    public function test_feedback_message_is_not_saved_with_invalid_captcha(): void
+    {
+        Mail::fake();
+
+        $this
+            ->withSession(['feedback_captcha_code' => 'ABCDE'])
+            ->from('/feedback')
+            ->post('/feedback', [
+                'subject' => 'Вопрос по сайту',
+                'name' => 'Иван',
+                'email' => 'ivan@example.test',
+                'message' => 'Текст сообщения',
+                'captcha' => 'WRONG',
+            ])
+            ->assertRedirect('/feedback')
+            ->assertSessionHasErrors(['captcha']);
+
+        $this->assertDatabaseCount('feedback', 0);
+        Mail::assertNothingSent();
+    }
+
+    public function test_feedback_captcha_image_sets_session_code(): void
+    {
+        $this
+            ->get('/feedback/captcha')
+            ->assertOk()
+            ->assertHeader('Content-Type', 'image/png')
+            ->assertSessionHas('feedback_captcha_code');
     }
 }
