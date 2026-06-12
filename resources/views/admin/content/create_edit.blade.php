@@ -14,7 +14,7 @@
         .content-text-field textarea,
         .content-text-field .note-editable {
             height: 120px;
-            max-height: 120px;
+            min-height: 120px;
             overflow-y: auto;
             resize: vertical;
         }

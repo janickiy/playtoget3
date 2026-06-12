@@ -35,13 +35,13 @@ class ContentRepository extends BaseRepository
     }
 
     /**
-     * Возвращает опубликованную контентную страницу по id.
+     * Возвращает опубликованную контентную страницу по slug.
      */
-    public function visible(int $id): ?Content
+    public function visibleBySlug(string $slug): ?Content
     {
         /** @var Content|null $page */
         $page = $this->model->newQuery()
-            ->whereKey($id)
+            ->where('slug', $slug)
             ->where('published', true)
             ->first();
 

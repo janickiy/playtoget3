@@ -38,7 +38,7 @@
                             <a class="btn btn-primary" href="{{ route('admin.content.edit', ['id' => $row->id]) }}">
                                 редактировать
                             </a>
-                            <a class="btn btn-info" href="{{ route('front.content.show', ['content' => $row->id]) }}" target="_blank">
+                            <a class="btn btn-info" href="{{ route('front.content.show', ['slug' => $row->slug]) }}" target="_blank">
                                 открыть на сайте
                             </a>
                             <a class="btn btn-default float-sm-right" href="{{ route('admin.content.index') }}">

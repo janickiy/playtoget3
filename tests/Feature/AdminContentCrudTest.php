@@ -77,6 +77,8 @@ class AdminContentCrudTest extends TestCase
             ->assertSee('name="slug"', false)
             ->assertSee('rows="5"', false)
             ->assertSee('height: 120', false)
+            ->assertSee('min-height: 120', false)
+            ->assertSee('resize: vertical', false)
             ->assertSee('get_page_slug', false);
 
         $this->actingAs($this->admin, 'admin')
@@ -100,6 +102,40 @@ class AdminContentCrudTest extends TestCase
             ->assertOk()
             ->assertDontSee('get_page_slug', false)
             ->assertDontSee('$("#title").on("change keyup input"', false);
+    }
+
+    public function test_front_content_page_is_loaded_by_slug_only_when_published(): void
+    {
+        Content::query()->create([
+            'title' => 'О сервисе',
+            'text' => '<p>Опубликовано</p>',
+            'slug' => 'o-servise',
+            'published' => true,
+        ]);
+
+        Content::query()->create([
+            'title' => 'Черновик',
+            'text' => '<p>Скрытый текст</p>',
+            'slug' => 'draft-page',
+            'published' => false,
+        ]);
+
+        $this->assertSame('/page/o-servise', route('front.content.show', ['slug' => 'o-servise'], false));
+
+        $this->get(route('front.content.show', ['slug' => 'o-servise']))
+            ->assertOk()
+            ->assertSee('О сервисе')
+            ->assertSee('Опубликовано');
+
+        $this->get(route('front.content.show', ['slug' => 'draft-page']))
+            ->assertOk()
+            ->assertSee('Страница не найдена')
+            ->assertDontSee('Скрытый текст');
+
+        $this->get('/page/1')
+            ->assertOk()
+            ->assertSee('Страница не найдена')
+            ->assertDontSee('О сервисе');
     }
 
     public function test_content_admin_store_update_and_delete(): void

@@ -3,11 +3,11 @@
         <div class="col-xs-12">
             <div class="row">
                 <ul class="menu-footer">
-                    <li><a href="{{ route('front.content.show', ['content' => 1]) }}">О сервисе</a></li>
-                    <li><a href="{{ route('front.content.show', ['content' => 2]) }}">Возможности</a></li>
-                    <li><a href="{{ route('front.content.show', ['content' => 3]) }}">Реклама на сайте</a></li>
-                    <li><a href="{{ route('front.content.show', ['content' => 4]) }}">Пользовательское соглашение</a></li>
-                    <li><a href="{{ route('front.content.show', ['content' => 5]) }}">Правила пользования</a></li>
+                    <li><a href="{{ route('front.content.show', ['slug' => 'o-servise']) }}">О сервисе</a></li>
+                    <li><a href="{{ route('front.content.show', ['slug' => 'vozmojnosti']) }}">Возможности</a></li>
+                    <li><a href="{{ route('front.content.show', ['slug' => 'reklama-na-sayte']) }}">Реклама на сайте</a></li>
+                    <li><a href="{{ route('front.content.show', ['slug' => 'user-agreement']) }}">Пользовательское соглашение</a></li>
+                    <li><a href="{{ route('front.content.show', ['slug' => 'terms-use']) }}">Правила пользования</a></li>
                     <li><a href="{{ route('front.feedback.create') }}">Обратная связь</a></li>
                 </ul>
                 <ul class="soc-menu">

@@ -269,7 +269,7 @@ Route::prefix('teams')->name('front.teams.')->controller(TeamsController::class)
 });
 
 Route::prefix('page')->name('front.content.')->controller(ContentController::class)->group(function () {
-    Route::get('{content}', 'show')->where('content', '[0-9]+')->name('show');
+    Route::get('{slug}', 'show')->where('slug', '[A-Za-z0-9-]+')->name('show');
 });
 
 Route::prefix('feedback')->name('front.feedback.')->controller(FeedbackController::class)->group(function () {

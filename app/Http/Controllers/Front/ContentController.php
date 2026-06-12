@@ -11,14 +11,14 @@ class ContentController extends Controller
     /**
      * Показывает доступную статическую страницу контента.
      *
-     * @param int $content
+     * @param string $slug
      * @param ContentRepository $pages
      * @return View
      */
-    public function show(int $content, ContentRepository $pages): View
+    public function show(string $slug, ContentRepository $pages): View
     {
         return view('front.content.show', [
-            'page' => $pages->visible($content),
+            'page' => $pages->visibleBySlug($slug),
         ]);
     }
 }
