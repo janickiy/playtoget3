@@ -12,9 +12,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('text')->nullable();
-            $table->enum('hide', ['show', 'hide'])->default('show');
-
-            $table->index('hide');
+            $table->boolean('show')->default(true);
+            $table->timestamps();
         });
     }
 

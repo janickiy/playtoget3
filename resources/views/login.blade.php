@@ -32,7 +32,7 @@
         <div class="card-body">
             <p class="login-box-msg">Sign in to start your session</p>
 
-            <form action="{{ route('login') }}" method="post">
+            <form action="{{ route('login.submit') }}" method="post">
                 @csrf
 
 
@@ -91,16 +91,16 @@
 
 
 
-<script src="plugins/jquery/jquery.min.js"></script>
+<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 
 
 <!-- Bootstrap 4 -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
 
 
 <!-- AdminLTE App -->
-<script src="dist/js/adminlte.min.js"></script>
+<script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
 
 </body>
 </html>

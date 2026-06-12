@@ -45,8 +45,7 @@ class AuthController extends Controller
 
         // Attempt to log the user in
         if (Auth::guard('admin')->attempt(['login' => $request->login, 'password' => $request->password], $request->remember)) {
-            // if successful, then redirect to their intended location
-            return redirect()->intended(route('admin.dashboard.index'));
+            return redirect()->route('admin.dashboard.index');
         }
         // if unsuccessful, then redirect back to the login with the form data
         return redirect()->route('login')->with('error', "Неверный логин или пароль!");
