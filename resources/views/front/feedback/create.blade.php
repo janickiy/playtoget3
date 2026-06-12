@@ -54,11 +54,9 @@
 
                 <div class="form-group">
                     <label class="control-label col-lg-3" for="captcha">Проверочный код:</label>
-                    <label class="control-label col-lg-6 left-text" for="captcha">
-                        <a href="#" id="feedback-captcha-refresh">Не можете прочитать? Изменить текст.</a><br><br>
+                    <div class="col-lg-6 feedback-captcha-field">
+                        <a href="#" id="feedback-captcha-refresh">Не можете прочитать? Изменить текст.</a>
                         <img src="{{ route('front.feedback.captcha') }}?{{ time() }}" alt="защитный код" id="feedback-captcha">
-                    </label>
-                    <div class="col-lg-6">
                         <input type="text" class="form-control" name="captcha" id="captcha" value="" placeholder="Введите защитный код" autocomplete="off">
                     </div>
                 </div>
@@ -74,6 +72,19 @@
         </div>
     </div>
 @endsection
+
+@push('styles')
+    <style>
+        .feedback-captcha-field #feedback-captcha-refresh,
+        .feedback-captcha-field #feedback-captcha {
+            display: block;
+        }
+
+        .feedback-captcha-field #feedback-captcha {
+            margin-bottom: 10px;
+        }
+    </style>
+@endpush
 
 @push('scripts')
     <script>
