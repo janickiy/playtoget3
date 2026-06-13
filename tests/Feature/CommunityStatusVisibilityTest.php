@@ -22,7 +22,29 @@ class CommunityStatusVisibilityTest extends TestCase
         Schema::dropIfExists('community_roles');
         Schema::dropIfExists('communities_settings');
         Schema::dropIfExists('communities');
+        Schema::dropIfExists('user_activity');
+        Schema::dropIfExists('users');
         Schema::enableForeignKeyConstraints();
+
+        Schema::create('users', function (Blueprint $table): void {
+            $table->id();
+            $table->string('email')->unique();
+            $table->string('password')->default('');
+            $table->rememberToken();
+            $table->timestamps();
+            $table->string('firstname')->nullable();
+            $table->string('lastname')->nullable();
+            $table->string('sex')->nullable();
+            $table->string('avatar')->nullable();
+            $table->string('city')->nullable();
+            $table->tinyInteger('status')->default(0);
+        });
+
+        Schema::create('user_activity', function (Blueprint $table): void {
+            $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->dateTime('last_activity')->nullable();
+        });
 
         Schema::create('communities', function (Blueprint $table): void {
             $table->id();
@@ -61,6 +83,8 @@ class CommunityStatusVisibilityTest extends TestCase
         Schema::dropIfExists('community_roles');
         Schema::dropIfExists('communities_settings');
         Schema::dropIfExists('communities');
+        Schema::dropIfExists('user_activity');
+        Schema::dropIfExists('users');
         Schema::enableForeignKeyConstraints();
 
         parent::tearDown();
@@ -200,6 +224,41 @@ class CommunityStatusVisibilityTest extends TestCase
             'community_id' => $community->id,
             'user_id' => $viewer->id,
         ]);
+    }
+
+    public function test_members_skip_blocked_users_without_error(): void
+    {
+        $community = $this->community('group', CommunityStatus::Confirmed, 'Группа с заблокированным участником');
+        $activeUser = User::query()->create([
+            'firstname' => 'Active',
+            'lastname' => 'Member',
+            'email' => 'active-member@example.test',
+            'status' => 1,
+        ]);
+        $blockedUser = User::query()->create([
+            'firstname' => 'Blocked',
+            'lastname' => 'Member',
+            'email' => 'blocked-member@example.test',
+            'status' => 2,
+        ]);
+
+        CommunityRole::query()->create([
+            'community_id' => $community->id,
+            'user_id' => $activeUser->id,
+            'role' => 3,
+        ]);
+        CommunityRole::query()->create([
+            'community_id' => $community->id,
+            'user_id' => $blockedUser->id,
+            'role' => 3,
+        ]);
+
+        /** @var CommunityRepository $repository */
+        $repository = app(CommunityRepository::class);
+        $members = $repository->members((int) $community->id);
+
+        $this->assertCount(1, $members);
+        $this->assertSame((int) $activeUser->id, $members->first()['id']);
     }
 
     private function community(string $type, CommunityStatus $status, string $name): Community

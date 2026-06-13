@@ -469,7 +469,7 @@ class CommunityRepository extends BaseRepository
             ->whereIn('role', [1, 2, 3])
             ->orderBy('role')
             ->get()
-            ->map(fn (CommunityRole $role): array => $this->serializeMember($role))
+            ->map(fn (CommunityRole $role): ?array => $this->serializeMember($role))
             ->filter(fn (?array $member): bool => (bool) $member)
             ->values();
     }
@@ -487,7 +487,7 @@ class CommunityRepository extends BaseRepository
             ->where('community_id', $teamId)
             ->where('role', 0)
             ->get()
-            ->map(fn (CommunityRole $role): array => $this->serializeMember($role))
+            ->map(fn (CommunityRole $role): ?array => $this->serializeMember($role))
             ->filter(fn (?array $member): bool => (bool) $member)
             ->values();
     }
@@ -505,7 +505,7 @@ class CommunityRepository extends BaseRepository
             ->where('community_id', $teamId)
             ->where('role', 2)
             ->get()
-            ->map(fn (CommunityRole $role): array => $this->serializeMember($role))
+            ->map(fn (CommunityRole $role): ?array => $this->serializeMember($role))
             ->filter(fn (?array $member): bool => (bool) $member)
             ->values();
     }
@@ -523,7 +523,7 @@ class CommunityRepository extends BaseRepository
             ->where('community_id', $teamId)
             ->where('role', 4)
             ->get()
-            ->map(fn (CommunityRole $role): array => $this->serializeMember($role))
+            ->map(fn (CommunityRole $role): ?array => $this->serializeMember($role))
             ->filter(fn (?array $member): bool => (bool) $member)
             ->values();
     }
