@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\CommunityStatus;
 use App\Enums\EventStatus;
+use App\Enums\SportBlockStatus;
 use App\Enums\UserStatus;
 use App\Models\Admin;
+use App\Models\Announcement;
 use App\Models\Community;
 use App\Models\Content;
 use App\Models\Event;
 use App\Models\Settings;
+use App\Models\SportBlock;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -190,6 +193,79 @@ class DataTableController extends Controller
             })
             ->editColumn('date_to', function ($row) {
                 return $row->date_to ? Carbon::parse($row->date_to)->format('d/m/Y H:i') : '';
+            })
+            ->editColumn('created_at', function ($row) {
+                return Carbon::parse($row->created_at)->format('d/m/Y H:i');
+            })
+            ->rawColumns(['actions'])
+            ->make(true);
+    }
+
+    /**
+     * Возвращает JSON-данные объявлений для таблицы DataTables.
+     *
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function announcements(): JsonResponse
+    {
+        $row = Announcement::query();
+
+        return Datatables::of($row)
+            ->addColumn('actions', function ($row) {
+                $showBtn = '<a title="просмотр" class="btn btn-xs btn-info" href="' . route('admin.announcements.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
+                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary" href="' . route('admin.announcements.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.announcements.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
+
+                return '<div class="nobr"> ' . $showBtn . $editBtn . $deleteBtn . '</div>';
+            })
+            ->editColumn('text', function ($row) {
+                return Str::limit(strip_tags((string) $row->text), 120);
+            })
+            ->editColumn('published', function ($row) {
+                return $row->published == 1 ? 'да' : 'нет';
+            })
+            ->editColumn('created_at', function ($row) {
+                return Carbon::parse($row->created_at)->format('d/m/Y H:i');
+            })
+            ->rawColumns(['actions'])
+            ->make(true);
+    }
+
+    /**
+     * Возвращает JSON-данные спортивных блоков для таблицы DataTables.
+     *
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function sportBlocks(): JsonResponse
+    {
+        $row = SportBlock::query();
+
+        return Datatables::of($row)
+            ->addColumn('actions', function ($row) {
+                $showBtn = '<a title="просмотр" class="btn btn-xs btn-info" href="' . route('admin.sport-blocks.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
+                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary" href="' . route('admin.sport-blocks.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.sport-blocks.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
+
+                return '<div class="nobr"> ' . $showBtn . $editBtn . $deleteBtn . '</div>';
+            })
+            ->addColumn('status_css', function ($row) {
+                return SportBlockStatus::cssColorFor((int) $row->status);
+            })
+            ->editColumn('type', function ($row) {
+                return match ((string) $row->type) {
+                    'playground' => 'Площадка',
+                    'shop' => 'Магазин',
+                    'fitness' => 'Фитнес',
+                    default => (string) $row->type,
+                };
+            })
+            ->editColumn('active', function ($row) {
+                return (bool) $row->active ? 'да' : 'нет';
+            })
+            ->editColumn('status', function ($row) {
+                return SportBlockStatus::labelFor((int) $row->status);
             })
             ->editColumn('created_at', function ($row) {
                 return Carbon::parse($row->created_at)->format('d/m/Y H:i');

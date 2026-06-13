@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\DTO\SportBlock\SportBlockData;
+use App\Enums\SportBlockStatus;
 use App\Helpers\FrontAssets;
 use App\Models\GeoCity;
 use App\Models\SportBlock;
@@ -84,7 +85,7 @@ class SportBlockRepository extends BaseRepository
         /** @var SportBlock|null $sportBlock */
         $sportBlock = $this->model->newQuery()
             ->where('type', $type)
-            ->where('banned', false)
+            ->whereIn('status', SportBlockStatus::visibleValues())
             ->whereKey($id)
             ->first();
 
@@ -142,7 +143,7 @@ class SportBlockRepository extends BaseRepository
                 'website' => $data->website,
                 'avatar' => $avatar ?? '',
                 'active' => true,
-                'banned' => false,
+                'status' => SportBlockStatus::Confirmed->value,
             ]);
 
             $this->syncGeoTarget($sportBlock->type, (int) $sportBlock->id, $data->cityId);
@@ -223,7 +224,7 @@ class SportBlockRepository extends BaseRepository
 
         return $this->model->newQuery()
             ->where('type', $type)
-            ->where('banned', false)
+            ->whereIn('status', SportBlockStatus::visibleValues())
             ->when($search !== '', function (Builder $query) use ($search): void {
                 $query->where(function (Builder $query) use ($search): void {
                     $query->where('name', 'like', '%' . $search . '%')

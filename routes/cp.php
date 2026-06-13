@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AnnouncementsController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\ContentController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DataTableController;
 use App\Http\Controllers\Admin\AjaxController;
 use App\Http\Controllers\Admin\EventsController;
+use App\Http\Controllers\Admin\SportBlocksController;
 use App\Http\Controllers\Admin\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -73,12 +75,28 @@ Route::prefix('cp')->group(function () {
 
         Route::prefix('events')->name('admin.events.')->middleware('permission:admin')->group(function () {
             Route::get('', [EventsController::class, 'index'])->name('index');
-            Route::get('create', [EventsController::class, 'create'])->name('create');
-            Route::post('store', [EventsController::class, 'store'])->name('store');
             Route::get('show/{id}', [EventsController::class, 'show'])->where('id', '[0-9]+')->name('show');
             Route::get('edit/{id}', [EventsController::class, 'edit'])->where('id', '[0-9]+')->name('edit');
             Route::put('update', [EventsController::class, 'update'])->name('update');
             Route::delete('destroy/{id}', [EventsController::class, 'destroy'])->where('id', '[0-9]+')->name('destroy');
+        });
+
+        Route::prefix('announcements')->name('admin.announcements.')->middleware('permission:admin')->group(function () {
+            Route::get('', [AnnouncementsController::class, 'index'])->name('index');
+            Route::get('create', [AnnouncementsController::class, 'create'])->name('create');
+            Route::post('store', [AnnouncementsController::class, 'store'])->name('store');
+            Route::get('show/{id}', [AnnouncementsController::class, 'show'])->where('id', '[0-9]+')->name('show');
+            Route::get('edit/{id}', [AnnouncementsController::class, 'edit'])->where('id', '[0-9]+')->name('edit');
+            Route::put('update', [AnnouncementsController::class, 'update'])->name('update');
+            Route::delete('destroy/{id}', [AnnouncementsController::class, 'destroy'])->where('id', '[0-9]+')->name('destroy');
+        });
+
+        Route::prefix('sport-blocks')->name('admin.sport-blocks.')->middleware('permission:admin')->group(function () {
+            Route::get('', [SportBlocksController::class, 'index'])->name('index');
+            Route::get('show/{id}', [SportBlocksController::class, 'show'])->where('id', '[0-9]+')->name('show');
+            Route::get('edit/{id}', [SportBlocksController::class, 'edit'])->where('id', '[0-9]+')->name('edit');
+            Route::put('update', [SportBlocksController::class, 'update'])->name('update');
+            Route::delete('destroy/{id}', [SportBlocksController::class, 'destroy'])->where('id', '[0-9]+')->name('destroy');
         });
 
         Route::prefix('settings')->middleware('permission:admin')->group(function () {
@@ -95,6 +113,8 @@ Route::prefix('cp')->group(function () {
             Route::any('users', [DataTableController::class, 'users'])->middleware('permission:admin|moderator')->name('users');
             Route::any('communities', [DataTableController::class, 'communities'])->middleware('permission:admin')->name('communities');
             Route::any('events', [DataTableController::class, 'events'])->middleware('permission:admin')->name('events');
+            Route::any('announcements', [DataTableController::class, 'announcements'])->middleware('permission:admin')->name('announcements');
+            Route::any('sport-blocks', [DataTableController::class, 'sportBlocks'])->middleware('permission:admin')->name('sport-blocks');
             Route::any('content', [DataTableController::class, 'content'])->name('content');
             Route::any('settings', [DataTableController::class, 'settings'])->middleware('permission:admin')->name('settings');
         });

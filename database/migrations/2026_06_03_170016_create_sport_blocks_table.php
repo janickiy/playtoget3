@@ -21,12 +21,12 @@ return new class extends Migration
             $table->string('type', 20)->nullable();
             $table->foreignId('owner_id')->nullable()->constrained('users')->nullOnDelete();
             $table->boolean('active')->default(false);
-            $table->boolean('banned')->default(false);
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
 
             $table->index(['type', 'owner_id', 'active']);
             $table->index('name');
-            $table->index(['banned', 'type']);
+            $table->index(['status', 'type']);
         });
     }
 

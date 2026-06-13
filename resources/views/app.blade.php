@@ -162,6 +162,22 @@
                         </li>
 
                         <li class="nav-item">
+                            <a href="{{ route('admin.announcements.index') }}" class="nav-link{{ Request::is('cp/announcements*') ? ' active' : '' }}"
+                               title="Объявления">
+                                <i class="nav-icon fas fa-bullhorn"></i>
+                                <p>Объявления</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('admin.sport-blocks.index') }}" class="nav-link{{ Request::is('cp/sport-blocks*') ? ' active' : '' }}"
+                               title="Спортивные блоки">
+                                <i class="nav-icon fas fa-running"></i>
+                                <p>Спортивные блоки</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a href="{{ route('admin.settings.index') }}" class="nav-link{{ Request::is('cp/settings*') ? ' active' : '' }}"
                                title="Настройки">
                                 <i class="nav-icon fas fa-cogs"></i>

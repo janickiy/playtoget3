@@ -6,7 +6,6 @@ use App\DTO\Admin\EventData;
 use App\Helpers\FrontAssets;
 use App\Http\Requests\Admin\Events\DeleteRequest;
 use App\Http\Requests\Admin\Events\EditRequest;
-use App\Http\Requests\Admin\Events\StoreRequest;
 use App\Repositories\AdminEventRepository;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -32,37 +31,6 @@ class EventsController extends Controller
         return view('admin.events.index', [
             'title' => 'Мероприятия',
         ]);
-    }
-
-    /**
-     * Показывает форму добавления мероприятия.
-     */
-    public function create(): View
-    {
-        return view('admin.events.create_edit', [
-            'title' => 'Добавление мероприятия',
-            'statusOptions' => $this->eventRepository->statusOptions(),
-        ]);
-    }
-
-    /**
-     * Создает мероприятие из валидированных данных формы.
-     */
-    public function store(StoreRequest $request): RedirectResponse
-    {
-        try {
-            $this->eventRepository->createFromData(EventData::fromArray($request->validated()));
-        } catch (Exception $exception) {
-            report($exception);
-
-            return back()
-                ->withInput()
-                ->with('error', $exception->getMessage());
-        }
-
-        return redirect()
-            ->route('admin.events.index')
-            ->with('success', 'Данные успешно добавлены');
     }
 
     /**

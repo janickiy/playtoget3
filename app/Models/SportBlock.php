@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\SportBlockStatus;
 use App\Http\Traits\StaticTableName;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,15 +24,25 @@ class SportBlock extends Model
         'type',
         'owner_id',
         'active',
-        'banned',
+        'status',
     ];
 
     protected function casts(): array
     {
         return [
             'active' => 'boolean',
-            'banned' => 'boolean',
+            'status' => 'integer',
         ];
+    }
+
+    public function statusEnum(): SportBlockStatus
+    {
+        return SportBlockStatus::tryFrom((int) $this->status) ?? SportBlockStatus::New;
+    }
+
+    public function isVisible(): bool
+    {
+        return $this->statusEnum()->isVisible();
     }
 
     /**

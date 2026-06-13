@@ -1,0 +1,57 @@
+<?php
+
+namespace App\Http\Requests\Admin\SportBlocks;
+
+use App\Enums\SportBlockStatus;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class StoreRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function rules(): array
+    {
+        return [
+            'type' => ['required', 'string', Rule::in(['playground', 'shop', 'fitness'])],
+            'name' => ['required', 'string', 'max:255'],
+            'about' => ['nullable', 'string', 'max:5000'],
+            'place' => ['nullable', 'string', 'max:100'],
+            'address' => ['nullable', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:255'],
+            'email' => ['nullable', 'email', 'max:100'],
+            'avatar' => ['nullable', 'string', 'max:255'],
+            'website' => ['nullable', 'string', 'max:255'],
+            'owner_id' => ['nullable', 'integer', 'exists:users,id'],
+            'active' => ['nullable', 'boolean'],
+            'status' => ['required', 'integer', Rule::in(array_keys(SportBlockStatus::options()))],
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'type' => 'тип',
+            'name' => 'название',
+            'about' => 'описание',
+            'place' => 'место',
+            'address' => 'адрес',
+            'phone' => 'телефон',
+            'email' => 'email',
+            'avatar' => 'аватар',
+            'website' => 'сайт',
+            'owner_id' => 'владелец',
+            'active' => 'активность',
+            'status' => 'статус',
+        ];
+    }
+}

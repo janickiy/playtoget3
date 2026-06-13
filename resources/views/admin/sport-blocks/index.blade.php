@@ -23,11 +23,12 @@
                                 <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Тип</th>
                                     <th>Название</th>
                                     <th>Место</th>
-                                    <th>Вид спорта</th>
-                                    <th>Начало</th>
-                                    <th>Окончание</th>
+                                    <th>Email</th>
+                                    <th>Телефон</th>
+                                    <th>Активен</th>
                                     <th>Статус</th>
                                     <th>Создано</th>
                                     <th style="width: 12%">Действия</th>
@@ -90,15 +91,16 @@
                 "autoWidth": true,
                 "serverSide": true,
                 "ajax": {
-                    url: '{{ route('admin.datatable.events') }}'
+                    url: '{{ route('admin.datatable.sport-blocks') }}'
                 },
                 "columns": [
                     {data: 'id', name: 'id'},
+                    {data: 'type', name: 'type'},
                     {data: 'name', name: 'name'},
                     {data: 'place', name: 'place'},
-                    {data: 'sport_type', name: 'sport_type'},
-                    {data: 'date_from', name: 'date_from'},
-                    {data: 'date_to', name: 'date_to'},
+                    {data: 'email', name: 'email'},
+                    {data: 'phone', name: 'phone'},
+                    {data: 'active', name: 'active'},
                     {data: 'status', name: 'status'},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'actions', name: 'actions', orderable: false, searchable: false}

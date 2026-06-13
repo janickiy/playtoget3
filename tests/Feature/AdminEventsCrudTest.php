@@ -75,15 +75,13 @@ class AdminEventsCrudTest extends TestCase
             ->get(route('admin.events.index'))
             ->assertOk()
             ->assertSee('Мероприятия')
-            ->assertSee(route('admin.events.create'), false)
+            ->assertDontSee('/cp/events/create', false)
+            ->assertDontSee('Добавить')
             ->assertSee(route('admin.datatable.events'), false);
 
         $this->actingAs($this->admin, 'admin')
-            ->get(route('admin.events.create'))
-            ->assertOk()
-            ->assertSee('Добавление мероприятия')
-            ->assertSee('name="name"', false)
-            ->assertSee('name="status"', false);
+            ->get('/cp/events/create')
+            ->assertNotFound();
 
         $this->actingAs($this->admin, 'admin')
             ->get(route('admin.events.show', ['id' => $event->id]))
@@ -126,30 +124,13 @@ class AdminEventsCrudTest extends TestCase
         $this->assertStringContainsString('deleteRow', $row['actions']);
     }
 
-    public function test_event_admin_store_update_and_delete(): void
+    public function test_event_admin_update_and_delete(): void
     {
-        $this->actingAs($this->admin, 'admin')
-            ->post(route('admin.events.store'), [
-                'name' => 'Новое мероприятие',
-                'date_from' => '2026-06-13T10:00',
-                'date_to' => '2026-06-13T12:00',
-                'description' => 'Описание',
-                'sport_type' => 'Футбол',
-                'cover_page' => 'event.jpg',
-                'place' => 'Москва',
-                'address' => 'Стадион',
-                'status' => EventStatus::Confirmed->value,
-            ])
-            ->assertRedirect(route('admin.events.index'));
-
-        $this->assertDatabaseHas('events', [
+        $event = $this->event([
             'name' => 'Новое мероприятие',
             'date_from' => '2026-06-13 10:00:00',
             'date_to' => '2026-06-13 12:00:00',
-            'status' => EventStatus::Confirmed->value,
         ]);
-
-        $event = Event::query()->firstOrFail();
 
         $this->actingAs($this->admin, 'admin')
             ->put(route('admin.events.update'), [
@@ -184,21 +165,27 @@ class AdminEventsCrudTest extends TestCase
         ]);
     }
 
-    public function test_event_admin_validation_requires_name_and_valid_status(): void
+    public function test_event_admin_validation_requires_name_and_valid_status_on_update(): void
     {
+        $event = $this->event();
+
         $this->actingAs($this->admin, 'admin')
-            ->from(route('admin.events.create'))
-            ->post(route('admin.events.store'), [
+            ->from(route('admin.events.edit', ['id' => $event->id]))
+            ->put(route('admin.events.update'), [
+                'id' => $event->id,
                 'name' => '',
                 'date_from' => '2026-06-14T10:00',
                 'date_to' => '2026-06-13T10:00',
                 'place' => str_repeat('a', 101),
                 'status' => 9,
             ])
-            ->assertRedirect(route('admin.events.create'))
+            ->assertRedirect(route('admin.events.edit', ['id' => $event->id]))
             ->assertSessionHasErrors(['name', 'date_to', 'place', 'status']);
 
-        $this->assertDatabaseCount('events', 0);
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
+            'name' => 'Мероприятие',
+        ]);
     }
 
     /**

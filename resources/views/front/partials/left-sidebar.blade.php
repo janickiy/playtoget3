@@ -32,10 +32,25 @@
             </ul>
         </li>
         <li class="ads">
-            <a href="#">Объявления</a>
+            <a href="{{ route('front.announcements.index') }}">Объявления@if ($frontLayout['announcementsCount'] > 0)<span>{{ $frontLayout['announcementsCount'] }}</span>@endif</a>
             <ul class="sub-menu">
                 <li>
-                    <div class="sub-content"><h5>Раздел находится в разработке</h5></div>
+                    <div class="sub-content">
+                        @forelse ($frontLayout['announcements'] as $announcement)
+                            <div class="block_right">
+                                <div class="wrap_img_right">
+                                    <img src="{{ asset('frontend/images/noimage.png') }}" alt="">
+                                </div>
+                                <div class="text-right-block">
+                                    <a href="{{ route('front.announcements.show', ['slug' => $announcement->slug]) }}"><h5>{{ $announcement->title }}</h5></a>
+                                    <p>{{ $announcement->created_at?->format('d.m.Y') }}</p>
+                                </div>
+                                <div class="crearfix"></div>
+                            </div>
+                        @empty
+                            <h5>Объявлений пока нет</h5>
+                        @endforelse
+                    </div>
                 </li>
             </ul>
         </li>

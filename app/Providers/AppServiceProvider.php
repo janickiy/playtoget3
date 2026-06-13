@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Enums\EventStatus;
+use App\Enums\SportBlockStatus;
 use App\Helpers\FrontAssets;
 use App\Helpers\PermissionsHelper;
 use App\Helpers\MenuHelper;
+use App\Models\Announcement;
 use App\Models\Comment;
 use App\Models\Community;
 use App\Models\Event;
@@ -64,8 +66,21 @@ class AppServiceProvider extends ServiceProvider
                 : collect();
 
             $sportBlocks = Schema::hasTable('sport_blocks')
-                ? SportBlock::query()->where('banned', false)->orderByDesc('id')->get()
+                ? SportBlock::query()->whereIn('status', SportBlockStatus::visibleValues())->orderByDesc('id')->get()
                 : collect();
+
+            if (Schema::hasTable('announcements')) {
+                $announcementsQuery = Announcement::query()->where('published', true);
+                $announcementsCount = (clone $announcementsQuery)->count();
+                $announcements = $announcementsQuery
+                    ->orderByDesc('created_at')
+                    ->orderByDesc('id')
+                    ->limit(3)
+                    ->get();
+            } else {
+                $announcements = collect();
+                $announcementsCount = 0;
+            }
 
             $view->with('frontLayout', [
                 'user' => $user,
@@ -77,6 +92,8 @@ class AppServiceProvider extends ServiceProvider
                 'cover' => FrontAssets::userCover($user),
                 'events' => $events,
                 'eventCount' => $events->count(),
+                'announcements' => $announcements,
+                'announcementsCount' => $announcementsCount,
                 'menu' => $menu,
                 'playgrounds' => $sportBlocks->where('type', 'playground')->take(3)->values(),
                 'playgroundsCount' => $sportBlocks->where('type', 'playground')->count(),

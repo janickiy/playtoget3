@@ -4,30 +4,24 @@
 
 @section('content')
 
-    @php($isEdit = isset($row))
-
     <section class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
                     <header class="card card-primary">
-                        {!! Form::open(['url' => $isEdit ? route('admin.events.update') : route('admin.events.store'), 'method' => $isEdit ? 'put' : 'post']) !!}
+                        {!! Form::open(['url' => route('admin.events.update'), 'method' => 'put']) !!}
 
-                        @if ($isEdit)
-                            {!! Form::hidden('id', $row->id) !!}
-                        @endif
+                        {!! Form::hidden('id', $row->id) !!}
 
                         <div class="card-body">
                             <p>*-обязательные поля</p>
 
-                            @if ($isEdit)
-                                <div class="form-group">
-                                    {!! Form::label('current_cover', 'Текущая обложка') !!}
-                                    <div>
-                                        <img src="{{ $coverUrl }}" alt="Обложка мероприятия" class="img-thumbnail" style="width: 180px; height: 120px; object-fit: cover;">
-                                    </div>
+                            <div class="form-group">
+                                {!! Form::label('current_cover', 'Текущая обложка') !!}
+                                <div>
+                                    <img src="{{ $coverUrl }}" alt="Обложка мероприятия" class="img-thumbnail" style="width: 180px; height: 120px; object-fit: cover;">
                                 </div>
-                            @endif
+                            </div>
 
                             <div class="row">
                                 <div class="col-md-6">
@@ -55,7 +49,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         {!! Form::label('date_from', 'Начало') !!}
-                                        {!! Form::input('datetime-local', 'date_from', old('date_from', $isEdit && $row->date_from ? $row->date_from->format('Y-m-d\TH:i') : null), ['class' => 'form-control']) !!}
+                                        {!! Form::input('datetime-local', 'date_from', old('date_from', $row->date_from ? $row->date_from->format('Y-m-d\TH:i') : null), ['class' => 'form-control']) !!}
                                         @if ($errors->has('date_from'))
                                             <p class="text-danger">{{ $errors->first('date_from') }}</p>
                                         @endif
@@ -65,7 +59,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         {!! Form::label('date_to', 'Окончание') !!}
-                                        {!! Form::input('datetime-local', 'date_to', old('date_to', $isEdit && $row->date_to ? $row->date_to->format('Y-m-d\TH:i') : null), ['class' => 'form-control']) !!}
+                                        {!! Form::input('datetime-local', 'date_to', old('date_to', $row->date_to ? $row->date_to->format('Y-m-d\TH:i') : null), ['class' => 'form-control']) !!}
                                         @if ($errors->has('date_to'))
                                             <p class="text-danger">{{ $errors->first('date_to') }}</p>
                                         @endif
@@ -122,7 +116,7 @@
 
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">
-                                {{ $isEdit ? 'редактировать' : 'добавить' }}
+                                редактировать
                             </button>
                             <a class="btn btn-default float-sm-right" href="{{ route('admin.events.index') }}">
                                 назад

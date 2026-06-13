@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Front\AjaxController;
+use App\Http\Controllers\Front\AnnouncementsController;
 use App\Http\Controllers\Front\AuthController as FrontAuthController;
 use App\Http\Controllers\Front\CalendarController;
 use App\Http\Controllers\Front\ContentController;
@@ -118,6 +119,11 @@ Route::prefix('events')->name('front.events.')->controller(EventsController::cla
 
     Route::get('{event}', 'show')->where('event', '[0-9]+')->name('show');
     Route::get('', 'index')->name('index');
+});
+
+Route::prefix('announcements')->name('front.announcements.')->controller(AnnouncementsController::class)->group(function () {
+    Route::get('', 'index')->name('index');
+    Route::get('{slug}', 'show')->where('slug', '[A-Za-z0-9-]+')->name('show');
 });
 
 Route::prefix('friends')->name('front.friends.')->controller(FriendsController::class)->group(function () {

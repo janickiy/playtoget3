@@ -3,39 +3,40 @@
 @section('title', $title)
 
 @section('css')
-
-    <!-- DataTables -->
     {!! Html::style('/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') !!}
     {!! Html::style('/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') !!}
     {!! Html::style('/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') !!}
-
 @endsection
 
 @section('content')
-
     <section class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
+                            <div class="pb-3">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <a href="{{ route('admin.announcements.create') }}" class="btn btn-info btn-sm pull-left">
+                                            <span class="fa fa-plus"> &nbsp;</span> Добавить
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
                             <table id="itemList" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
                                     <th>Название</th>
-                                    <th>Место</th>
-                                    <th>Вид спорта</th>
-                                    <th>Начало</th>
-                                    <th>Окончание</th>
-                                    <th>Статус</th>
+                                    <th>Содержание</th>
+                                    <th>ЧПУ</th>
+                                    <th>Опубликовано</th>
                                     <th>Создано</th>
-                                    <th style="width: 12%">Действия</th>
+                                    <th style="width: 10%">Действия</th>
                                 </tr>
                                 </thead>
-                                <tfoot>
-
-                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -43,12 +44,9 @@
             </div>
         </div>
     </section>
-
 @endsection
 
 @section('js')
-
-    <!-- DataTables  & Plugins -->
     {!! Html::script('/plugins/datatables/jquery.dataTables.min.js') !!}
     {!! Html::script('/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') !!}
     {!! Html::script('/plugins/datatables-responsive/js/dataTables.responsive.min.js') !!}
@@ -63,7 +61,7 @@
 
     <script>
         $(function () {
-            let table = $("#itemList").DataTable({
+            $("#itemList").DataTable({
                 "oLanguage": {
                     "sLengthMenu": "Отображено _MENU_ записей на страницу",
                     "sZeroRecords": "Ничего не найдено - извините",
@@ -78,28 +76,22 @@
                     },
                     "sSearch": ' <i class="fas fa-search" aria-hidden="true"></i>'
                 },
-                "createdRow": function (row, data) {
+                'createdRow': function (row, data) {
                     $(row).attr('id', 'rowid_' + data['id']);
-
-                    if (data['status_css']) {
-                        $(row).addClass(data['status_css']);
-                    }
                 },
                 "processing": true,
                 "responsive": true,
                 "autoWidth": true,
-                "serverSide": true,
-                "ajax": {
-                    url: '{{ route('admin.datatable.events') }}'
+                'serverSide': true,
+                'ajax': {
+                    url: '{{ route('admin.datatable.announcements') }}'
                 },
-                "columns": [
+                'columns': [
                     {data: 'id', name: 'id'},
-                    {data: 'name', name: 'name'},
-                    {data: 'place', name: 'place'},
-                    {data: 'sport_type', name: 'sport_type'},
-                    {data: 'date_from', name: 'date_from'},
-                    {data: 'date_to', name: 'date_to'},
-                    {data: 'status', name: 'status'},
+                    {data: 'title', name: 'title'},
+                    {data: 'text', name: 'text'},
+                    {data: 'slug', name: 'slug'},
+                    {data: 'published', name: 'published'},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'actions', name: 'actions', orderable: false, searchable: false}
                 ]
@@ -108,6 +100,7 @@
             $('#itemList').on('click', 'a.deleteRow', function (event) {
                 event.preventDefault();
 
+                let rowid = $(this).data('id');
                 let deleteUrl = $(this).attr('href');
 
                 Swal.fire({
@@ -118,7 +111,11 @@
                     cancelButtonText: "Отмена",
                     confirmButtonText: "Да, удалить!",
                     reverseButtons: true,
-                    confirmButtonColor: "#DD6B55"
+                    confirmButtonColor: "#DD6B55",
+                    customClass: {
+                        actions: 'my-actions',
+                        cancelButton: 'order-1'
+                    }
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
@@ -126,12 +123,14 @@
                             type: "DELETE",
                             dataType: "json",
                             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                            success: function (response) {
-                                table.ajax.reload(null, false);
-                                Swal.fire("Сделано!", response.message || "Данные успешно удалены!", 'success');
+                            success: function () {
+                                $("#rowid_" + rowid).remove();
+                                Swal.fire("Сделано!", "Данные успешно удалены!", 'success');
                             },
-                            error: function (xhr) {
+                            error: function (xhr, ajaxOptions, thrownError) {
                                 Swal.fire("Ошибка при удалении!", (xhr.responseJSON && xhr.responseJSON.message) || "Попробуйте еще раз", 'error');
+                                console.log(ajaxOptions);
+                                console.log(thrownError);
                             }
                         });
                     }
@@ -139,5 +138,4 @@
             });
         });
     </script>
-
 @endsection
