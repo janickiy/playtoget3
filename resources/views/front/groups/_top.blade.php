@@ -18,7 +18,9 @@
             @elseif ($membershipType === 'invited')
                 <a href="#" class="groups_button js-group-join" data-community-id="{{ $group->id }}"><span>Принять приглашение</span></a>
                 <a href="#" class="groups_button_leave red js-group-leave" data-community-id="{{ $group->id }}" data-message="{{ $leaveMessage }}"></a>
-            @elseif (in_array($membershipType, ['owner', 'admin', 'member'], true))
+            @elseif ($membershipType === 'owner')
+                <a href="#" class="groups_button leave_fr js-group-invite" data-community-id="{{ $group->id }}">Пригласить друзей</a>
+            @elseif (in_array($membershipType, ['admin', 'member'], true))
                 <a href="#" class="groups_button leave_fr js-group-invite" data-community-id="{{ $group->id }}">Пригласить друзей</a>
                 <a href="#" class="groups_button_leave js-group-leave" data-community-id="{{ $group->id }}" data-message="{{ $leaveMessage }}"></a>
             @elseif ($membershipType === 'applied')

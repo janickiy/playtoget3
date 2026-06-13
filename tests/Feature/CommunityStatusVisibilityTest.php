@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use App\Enums\CommunityStatus;
 use App\Models\Community;
+use App\Models\CommunityRole;
+use App\Models\User;
 use App\Repositories\CommunityRepository;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -98,6 +100,39 @@ class CommunityStatusVisibilityTest extends TestCase
         );
     }
 
+    public function test_owner_cannot_leave_own_community_but_member_can_leave(): void
+    {
+        $community = $this->community('team', CommunityStatus::Confirmed, 'Команда владельца');
+        $owner = $this->user(10);
+        $member = $this->user(11);
+
+        CommunityRole::query()->create([
+            'community_id' => $community->id,
+            'user_id' => $owner->id,
+            'role' => 1,
+        ]);
+        CommunityRole::query()->create([
+            'community_id' => $community->id,
+            'user_id' => $member->id,
+            'role' => 3,
+        ]);
+
+        /** @var CommunityRepository $repository */
+        $repository = app(CommunityRepository::class);
+
+        $this->assertFalse($repository->changeMembership($community, $owner, 0));
+        $this->assertSame(1, CommunityRole::query()
+            ->where('community_id', $community->id)
+            ->where('user_id', $owner->id)
+            ->value('role'));
+
+        $this->assertTrue($repository->changeMembership($community, $member, 0));
+        $this->assertDatabaseMissing('community_roles', [
+            'community_id' => $community->id,
+            'user_id' => $member->id,
+        ]);
+    }
+
     private function community(string $type, CommunityStatus $status, string $name): Community
     {
         /** @var Community $community */
@@ -113,5 +148,19 @@ class CommunityStatusVisibilityTest extends TestCase
         ]);
 
         return $community;
+    }
+
+    private function user(int $id): User
+    {
+        $user = new User([
+            'firstname' => 'User',
+            'lastname' => (string) $id,
+            'email' => 'user' . $id . '@example.test',
+            'status' => 1,
+        ]);
+        $user->id = $id;
+        $user->exists = true;
+
+        return $user;
     }
 }

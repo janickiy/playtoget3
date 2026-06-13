@@ -120,6 +120,10 @@ class TeamsPageTest extends TestCase
             ->assertSee('name="about"', false)
             ->assertSee('name="place"', false)
             ->assertSee('name="sport"', false)
+            ->assertSee('frontend/js/search.js', false)
+            ->assertSee('data-type="search_city"', false)
+            ->assertSee('data-type="search_sport"', false)
+            ->assertSee('class="select-place"', false)
             ->assertSee('id="preview_ava"', false)
             ->assertSee('id="preview_cover"', false)
             ->assertSee('class="file_upload team-file-upload"', false)
@@ -154,7 +158,7 @@ class TeamsPageTest extends TestCase
             ->assertOk()
             ->assertSee('Редактирование команды')
             ->assertSee('Пригласить друзей')
-            ->assertSee('class="groups_button_leave js-team-leave"', false)
+            ->assertDontSee('class="groups_button_leave js-team-leave" data-community-id="18"', false)
             ->assertSee('Администраторы')
             ->assertSee('Приватность')
             ->assertSee('Черный список')
@@ -200,6 +204,7 @@ class TeamsPageTest extends TestCase
             ->assertSee('подпись')
             ->assertSee('Запись команды')
             ->assertSee('active-link', false)
+            ->assertDontSee('class="groups_button_leave js-team-leave" data-community-id="18"', false)
             ->assertSee('Лента');
     }
 
@@ -291,6 +296,27 @@ class TeamsPageTest extends TestCase
             ->assertOk()
             ->assertJsonPath('result', 'success')
             ->assertJsonPath('member', 'none');
+    }
+
+    public function test_team_owner_membership_ajax_cannot_leave(): void
+    {
+        $viewer = $this->user(1);
+        $team = $this->community(18);
+
+        $this->actingAs($viewer, 'web');
+
+        $this->mock(CommunityRepository::class, function (MockInterface $mock) use ($viewer, $team): void {
+            $mock->shouldReceive('findTeam')->with(18)->andReturn($team);
+            $mock->shouldReceive('changeMembership')->with($team, $viewer, 0)->andReturn(false);
+        });
+
+        $this->post('/ajax/change_member_status', [
+            'id' => 18,
+            'status' => 0,
+        ])
+            ->assertOk()
+            ->assertJsonPath('result', 'error')
+            ->assertJsonPath('member', null);
     }
 
     public function test_team_event_search_ajax_uses_repository(): void

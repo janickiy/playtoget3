@@ -190,6 +190,29 @@
             padding-top: 10px;
         }
 
+        .group-form-tabs .form-group .col-lg-6,
+        .community-create-form-panel .form-group .col-lg-6 {
+            position: relative;
+        }
+
+        .group-form-tabs .form-group .select-place,
+        .community-create-form-panel .form-group .select-place {
+            border-radius: 0 0 5px 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .18);
+            left: 0;
+            max-height: 240px;
+            top: 36px;
+            width: 100%;
+            z-index: 200;
+        }
+
+        .group-form-tabs .form-group .select-place .place-item,
+        .community-create-form-panel .form-group .select-place .place-item {
+            font-size: 18px;
+            line-height: 30px;
+            padding: 6px 10px;
+        }
+
         .group-form-images {
             margin-top: 18px;
         }
@@ -224,6 +247,7 @@
 @endpush
 
 @push('scripts')
+    <script src="{{ asset('frontend/js/search.js') }}"></script>
     <script>
         if (typeof selectAction === 'function') {
             selectAction();

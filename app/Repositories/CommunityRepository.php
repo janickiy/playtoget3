@@ -774,6 +774,10 @@ class CommunityRepository extends BaseRepository
                 ->first();
 
             if ($status === 0) {
+                if ($role && (int) $role->role === 1) {
+                    return false;
+                }
+
                 return $role ? (bool) $role->delete() : false;
             }
 
