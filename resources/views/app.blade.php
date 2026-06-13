@@ -170,6 +170,14 @@
                         </li>
 
                         <li class="nav-item">
+                            <a href="{{ route('admin.feedback.index') }}" class="nav-link{{ Request::is('cp/feedback*') ? ' active' : '' }}"
+                               title="Обратная связь">
+                                <i class="nav-icon fas fa-envelope"></i>
+                                <p>Обратная связь</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a href="{{ route('admin.sport-blocks.index') }}" class="nav-link{{ Request::is('cp/sport-blocks*') ? ' active' : '' }}"
                                title="Спортивные блоки">
                                 <i class="nav-icon fas fa-running"></i>

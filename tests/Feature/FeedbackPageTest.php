@@ -22,6 +22,8 @@ class FeedbackPageTest extends TestCase
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->text('message')->nullable();
+            $table->tinyInteger('status')->default(0);
+            $table->text('answer')->nullable();
             $table->dateTime('time')->nullable();
         });
     }
@@ -70,6 +72,8 @@ class FeedbackPageTest extends TestCase
             'name' => 'Иван',
             'email' => 'ivan@example.test',
             'message' => 'Текст сообщения',
+            'status' => 0,
+            'answer' => null,
         ]);
 
         $this->assertNotNull(Feedback::query()->first()?->time);

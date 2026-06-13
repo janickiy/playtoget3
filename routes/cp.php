@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DataTableController;
 use App\Http\Controllers\Admin\AjaxController;
 use App\Http\Controllers\Admin\EventsController;
+use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\SportBlocksController;
 use App\Http\Controllers\Admin\UsersController;
 use Illuminate\Support\Facades\Route;
@@ -91,6 +92,13 @@ Route::prefix('cp')->group(function () {
             Route::delete('destroy/{id}', [AnnouncementsController::class, 'destroy'])->where('id', '[0-9]+')->name('destroy');
         });
 
+        Route::prefix('feedback')->name('admin.feedback.')->middleware('permission:admin')->group(function () {
+            Route::get('', [FeedbackController::class, 'index'])->name('index');
+            Route::get('show/{id}', [FeedbackController::class, 'show'])->where('id', '[0-9]+')->name('show');
+            Route::get('edit/{id}', [FeedbackController::class, 'edit'])->where('id', '[0-9]+')->name('edit');
+            Route::put('update', [FeedbackController::class, 'update'])->name('update');
+        });
+
         Route::prefix('sport-blocks')->name('admin.sport-blocks.')->middleware('permission:admin')->group(function () {
             Route::get('', [SportBlocksController::class, 'index'])->name('index');
             Route::get('show/{id}', [SportBlocksController::class, 'show'])->where('id', '[0-9]+')->name('show');
@@ -114,6 +122,7 @@ Route::prefix('cp')->group(function () {
             Route::any('communities', [DataTableController::class, 'communities'])->middleware('permission:admin')->name('communities');
             Route::any('events', [DataTableController::class, 'events'])->middleware('permission:admin')->name('events');
             Route::any('announcements', [DataTableController::class, 'announcements'])->middleware('permission:admin')->name('announcements');
+            Route::any('feedback', [DataTableController::class, 'feedback'])->middleware('permission:admin')->name('feedback');
             Route::any('sport-blocks', [DataTableController::class, 'sportBlocks'])->middleware('permission:admin')->name('sport-blocks');
             Route::any('content', [DataTableController::class, 'content'])->name('content');
             Route::any('settings', [DataTableController::class, 'settings'])->middleware('permission:admin')->name('settings');

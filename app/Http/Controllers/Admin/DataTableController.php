@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\CommunityStatus;
 use App\Enums\EventStatus;
+use App\Enums\FeedbackStatus;
 use App\Enums\SportBlockStatus;
 use App\Enums\UserStatus;
 use App\Models\Admin;
@@ -11,6 +12,7 @@ use App\Models\Announcement;
 use App\Models\Community;
 use App\Models\Content;
 use App\Models\Event;
+use App\Models\Feedback;
 use App\Models\Settings;
 use App\Models\SportBlock;
 use App\Models\User;
@@ -227,6 +229,42 @@ class DataTableController extends Controller
             })
             ->editColumn('created_at', function ($row) {
                 return Carbon::parse($row->created_at)->format('d/m/Y H:i');
+            })
+            ->rawColumns(['actions'])
+            ->make(true);
+    }
+
+    /**
+     * Возвращает JSON-данные обращений обратной связи для таблицы DataTables.
+     *
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function feedback(): JsonResponse
+    {
+        $row = Feedback::query();
+
+        return Datatables::of($row)
+            ->addColumn('actions', function ($row) {
+                $showBtn = '<a title="просмотр" class="btn btn-xs btn-info" href="' . route('admin.feedback.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
+                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary" href="' . route('admin.feedback.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a>';
+
+                return '<div class="nobr"> ' . $showBtn . $editBtn . '</div>';
+            })
+            ->addColumn('status_css', function ($row) {
+                return FeedbackStatus::cssColorFor((int) $row->status);
+            })
+            ->editColumn('message', function ($row) {
+                return Str::limit(strip_tags((string) $row->message), 120);
+            })
+            ->editColumn('answer', function ($row) {
+                return Str::limit(strip_tags((string) $row->answer), 120);
+            })
+            ->editColumn('status', function ($row) {
+                return FeedbackStatus::labelFor((int) $row->status);
+            })
+            ->editColumn('time', function ($row) {
+                return $row->time ? Carbon::parse($row->time)->format('d/m/Y H:i') : '';
             })
             ->rawColumns(['actions'])
             ->make(true);
