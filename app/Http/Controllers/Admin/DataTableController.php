@@ -19,6 +19,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -190,6 +191,15 @@ class DataTableController extends Controller
             ->editColumn('status', function ($row) {
                 return EventStatus::labelFor((int) $row->status);
             })
+            ->filterColumn('date_from', function ($query, string $keyword): void {
+                $this->filterFormattedDateColumn($query, 'events.date_from', $keyword);
+            })
+            ->filterColumn('date_to', function ($query, string $keyword): void {
+                $this->filterFormattedDateColumn($query, 'events.date_to', $keyword);
+            })
+            ->filterColumn('created_at', function ($query, string $keyword): void {
+                $this->filterFormattedDateColumn($query, 'events.created_at', $keyword);
+            })
             ->editColumn('date_from', function ($row) {
                 return $row->date_from ? Carbon::parse($row->date_from)->format('d/m/Y H:i') : '';
             })
@@ -331,6 +341,24 @@ class DataTableController extends Controller
                 return Carbon::parse($row->created_at)->format('d/m/Y H:i');
             })
             ->rawColumns(['actions'])->make(true);
+    }
+
+    /**
+     * Добавляет поиск по дате в том же формате, который отображается в таблице.
+     */
+    private function filterFormattedDateColumn($query, string $column, string $keyword): void
+    {
+        $keyword = trim($keyword);
+
+        if ($keyword === '') {
+            return;
+        }
+
+        $expression = DB::getDriverName() === 'sqlite'
+            ? "strftime('%d/%m/%Y %H:%M', {$column})"
+            : "DATE_FORMAT({$column}, '%d/%m/%Y %H:%i')";
+
+        $query->whereRaw($expression . ' LIKE ?', ['%' . $keyword . '%']);
     }
 
 }
