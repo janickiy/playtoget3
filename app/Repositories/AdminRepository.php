@@ -29,7 +29,10 @@ class AdminRepository extends BaseRepository
     }
 
     /**
-     * Создает запись из DTO с подготовленными данными.
+     * Создает запись из DTO с подготовленными данными
+     *
+     * @param AdminData $data
+     * @return Builder|Model
      */
     public function createFromData(AdminData $data): Builder|Model
     {
@@ -42,7 +45,8 @@ class AdminRepository extends BaseRepository
     /**
      * Создает запись из массива данных, преобразуя его в DTO.
      *
-     * @param array<string, mixed> $data
+     * @param array $data
+     * @return Builder|Model
      */
     public function createFromArray(array $data): Builder|Model
     {
@@ -51,6 +55,9 @@ class AdminRepository extends BaseRepository
 
     /**
      * Обновляет запись из DTO с подготовленными данными.
+     *
+     * @param AdminData $data
+     * @return bool
      */
     public function updateFromData(AdminData $data): bool
     {

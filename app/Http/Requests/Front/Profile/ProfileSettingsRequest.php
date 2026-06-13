@@ -17,7 +17,9 @@ class ProfileSettingsRequest extends FormRequest
         return [
             'user.contact_email' => ['nullable', 'email', 'max:100'],
             'user.phone' => ['nullable', 'string', 'max:255'],
-            'user.skype' => ['nullable', 'string', 'max:255'],
+            'user.telegram' => ['nullable', 'string', 'max:255'],
+            'user.whatsapp' => ['nullable', 'string', 'max:1000'],
+            'user.viber' => ['nullable', 'string', 'max:1000'],
             'user.website' => ['nullable', 'string', 'max:255'],
             'user.permission_send_message' => ['nullable', 'integer', 'in:0,1,2'],
             'user.permission_view_profile' => ['nullable', 'integer', 'in:0,1,2'],

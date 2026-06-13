@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DataTableController;
 use App\Http\Controllers\Admin\AjaxController;
+use App\Http\Controllers\Admin\UsersController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('cp')->group(function () {
@@ -47,6 +48,17 @@ Route::prefix('cp')->group(function () {
             Route::get('edit/{id}', [AdminController::class, 'edit'])->where('id', '[0-9]+')->name('edit');
             Route::put('update', [AdminController::class, 'update'])->name('update');
             Route::delete('destroy/{id}', [AdminController::class, 'destroy'])->where('id', '[0-9]+')->name('destroy');
+        });
+
+        Route::prefix('users')->name('admin.users.')->middleware('permission:admin|moderator')->group(function () {
+            Route::get('', [UsersController::class, 'index'])->name('index');
+            Route::get('show/{id}', [UsersController::class, 'show'])->where('id', '[0-9]+')->name('show');
+            Route::get('edit/{id}', [UsersController::class, 'edit'])->where('id', '[0-9]+')->name('edit');
+            Route::put('update', [UsersController::class, 'update'])->name('update');
+            Route::patch('block/{id}', [UsersController::class, 'block'])->where('id', '[0-9]+')->name('block');
+            Route::patch('unblock/{id}', [UsersController::class, 'unblock'])->where('id', '[0-9]+')->name('unblock');
+            Route::delete('destroy/{id}', [UsersController::class, 'destroy'])->where('id', '[0-9]+')->name('destroy');
+            Route::post('bulk', [UsersController::class, 'bulk'])->name('bulk');
         });
 
         Route::prefix('settings')->middleware('permission:admin')->group(function () {

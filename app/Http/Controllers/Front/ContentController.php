@@ -18,6 +18,7 @@ class ContentController extends Controller
     public function show(string $slug, ContentRepository $pages): View
     {
         return view('front.content.show', [
+            'hideTopProfile' => true,
             'page' => $pages->visibleBySlug($slug),
         ]);
     }

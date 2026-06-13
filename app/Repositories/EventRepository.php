@@ -243,7 +243,10 @@ class EventRepository extends BaseRepository
     }
 
     /**
-     * Находит активную запись по идентификатору.
+     * Находит активную запись по идентификатору
+     *
+     * @param int $eventId
+     * @return Event|null
      */
     public function findActive(int $eventId): ?Event
     {
@@ -257,7 +260,10 @@ class EventRepository extends BaseRepository
     }
 
     /**
-     * Преобразует модель в массив данных для вывода.
+     * Преобразует модель в массив данных для вывода
+     *
+     * @param Event $event
+     * @return array
      */
     public function serialize(Event $event): array
     {
@@ -280,6 +286,11 @@ class EventRepository extends BaseRepository
 
     /**
      * Преобразует мероприятие в массив данных для списка.
+     *
+     * @param Event $event
+     * @param User|null $viewer
+     * @param int|null $viewerRole
+     * @return array
      */
     public function serializeListEvent(Event $event, ?User $viewer = null, ?int $viewerRole = null): array
     {
@@ -329,6 +340,9 @@ class EventRepository extends BaseRepository
 
     /**
      * Возвращает русское название роли по ее коду.
+     *
+     * @param int|null $role
+     * @return string
      */
     public function roleLabel(?int $role): string
     {

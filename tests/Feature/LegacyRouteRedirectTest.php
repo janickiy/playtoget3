@@ -23,11 +23,13 @@ class LegacyRouteRedirectTest extends TestCase
         $this->assertSame('/cp/login', route('login', [], false));
         $this->assertSame('/cp', route('admin.dashboard.index', [], false));
         $this->assertSame('/cp/admin', route('admin.admin.index', [], false));
+        $this->assertSame('/cp/users', route('admin.users.index', [], false));
         $this->assertSame('/cp/content/manage-menus', route('admin.menu.index', [], false));
         $this->assertSame('/cp/content/content', route('admin.content.index', [], false));
         $this->assertSame('/cp/content/content/show/1', route('admin.content.show', ['id' => 1], false));
         $this->assertSame('/cp/settings', route('admin.settings.index', [], false));
         $this->assertSame('/cp/datatable/admin', route('admin.datatable.admin', [], false));
+        $this->assertSame('/cp/datatable/users', route('admin.datatable.users', [], false));
         $this->assertSame('/cp/datatable/content', route('admin.datatable.content', [], false));
         $this->assertSame('/cp/datatable/settings', route('admin.datatable.settings', [], false));
     }

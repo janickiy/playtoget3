@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Admin;
 use App\Models\Content;
 use App\Models\Settings;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -38,6 +39,50 @@ class DataTableController extends Controller
                 return Admin::$role_name[$row->role];
             })
             ->rawColumns(['action', 'id'])->make(true);
+    }
+
+    /**
+     * Возвращает JSON-данные пользователей сайта для таблицы DataTables.
+     *
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function users(): JsonResponse
+    {
+        $row = User::query()->where('deleted', false);
+
+        return Datatables::of($row)
+            ->addColumn('checkbox', function ($row) {
+                return '<input type="checkbox" class="js-user-checkbox" value="' . $row->id . '">';
+            })
+            ->addColumn('name', function ($row) {
+                return e($row->displayName());
+            })
+            ->addColumn('actions', function ($row) {
+                $showBtn = '<a title="просмотр" class="btn btn-xs btn-info" href="' . route('admin.users.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
+                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary" href="' . route('admin.users.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a> &nbsp;';
+
+                if ((bool) $row->banned) {
+                    $statusBtn = '<a title="разблокировать" class="btn btn-xs btn-success statusRow" href="' . route('admin.users.unblock', ['id' => $row->id]) . '" data-id="' . $row->id . '" data-action="unblock"><span class="fa fa-unlock"></span></a> &nbsp;';
+                } else {
+                    $statusBtn = '<a title="заблокировать" class="btn btn-xs btn-warning statusRow" href="' . route('admin.users.block', ['id' => $row->id]) . '" data-id="' . $row->id . '" data-action="block"><span class="fa fa-lock"></span></a> &nbsp;';
+                }
+
+                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.users.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
+
+                return '<div class="nobr"> ' . $showBtn . $editBtn . $statusBtn . $deleteBtn . '</div>';
+            })
+            ->editColumn('confirmed', function ($row) {
+                return $row->confirmed ? 'да' : 'нет';
+            })
+            ->editColumn('banned', function ($row) {
+                return $row->banned ? 'заблокирован' : 'активен';
+            })
+            ->editColumn('created_at', function ($row) {
+                return Carbon::parse($row->created_at)->format('d/m/Y H:i');
+            })
+            ->rawColumns(['checkbox', 'actions'])
+            ->make(true);
     }
 
     /**

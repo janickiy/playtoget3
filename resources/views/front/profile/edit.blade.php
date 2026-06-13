@@ -10,7 +10,9 @@
     $contactFields = [
         'contact_email' => ['label' => 'Email', 'type' => 'email'],
         'phone' => ['label' => 'Телефон', 'type' => 'text'],
-        'skype' => ['label' => 'Skype', 'type' => 'text'],
+        'telegram' => ['label' => 'Telegram', 'type' => 'text'],
+        'whatsapp' => ['label' => 'WhatsApp', 'type' => 'text'],
+        'viber' => ['label' => 'Viber', 'type' => 'text'],
         'website' => ['label' => 'Сайт', 'type' => 'text'],
     ];
 

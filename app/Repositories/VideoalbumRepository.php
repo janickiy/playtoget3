@@ -29,6 +29,9 @@ class VideoalbumRepository extends BaseRepository
 
     /**
      * Возвращает альбомы пользователя.
+     *
+     * @param int $userId
+     * @return Collection
      */
     public function albumsForUser(int $userId): Collection
     {

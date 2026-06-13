@@ -1220,6 +1220,11 @@ class CommunityRepository extends BaseRepository
 
     /**
      * Проверяет, разрешает ли настройка приватности выбранное действие.
+     *
+     * @param int $permission
+     * @param int|null $role
+     * @param bool $isWall
+     * @return bool
      */
     private function permissionAllows(int $permission, ?int $role, bool $isWall): bool
     {

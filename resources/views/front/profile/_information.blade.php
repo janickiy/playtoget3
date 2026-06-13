@@ -38,8 +38,14 @@
             @if ($profileData['contact_email'] !== '')
                 <li><span>Email</span><div>{{ $profileData['contact_email'] }}</div></li>
             @endif
-            @if ($profileData['skype'] !== '')
-                <li><span>Skype</span><div>{{ $profileData['skype'] }}</div></li>
+            @if ($profileData['telegram'] !== '')
+                <li><span>Telegram</span><div>{{ $profileData['telegram'] }}</div></li>
+            @endif
+            @if ($profileData['whatsapp'] !== '')
+                <li><span>WhatsApp</span><div>{{ $profileData['whatsapp'] }}</div></li>
+            @endif
+            @if ($profileData['viber'] !== '')
+                <li><span>Viber</span><div>{{ $profileData['viber'] }}</div></li>
             @endif
             @if ($profileData['website'] !== '')
                 <li><span>Личный сайт</span><div>{{ $profileData['website'] }}</div></li>

@@ -141,7 +141,10 @@ class AdminContentCrudTest extends TestCase
         $this->get(route('front.content.show', ['slug' => 'o-servise']))
             ->assertOk()
             ->assertSee('О сервисе')
-            ->assertSee('Опубликовано');
+            ->assertSee('Опубликовано')
+            ->assertDontSee('class="cover_page', false)
+            ->assertDontSee('class="cover-photo', false)
+            ->assertDontSee('id="top-top"', false);
 
         $this->get(route('front.content.show', ['slug' => 'draft-page']))
             ->assertOk()

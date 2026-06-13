@@ -20,6 +20,9 @@ class ContentRepository extends BaseRepository
 
     /**
      * Создает страницу или раздел из DTO с подготовленным уникальным slug.
+     *
+     * @param ContentData $data
+     * @return Builder|Model
      */
     public function createFromData(ContentData $data): Builder|Model
     {
@@ -28,6 +31,9 @@ class ContentRepository extends BaseRepository
 
     /**
      * Обновляет страницу или раздел из DTO с подготовленным уникальным slug.
+     *
+     * @param ContentData $data
+     * @return bool
      */
     public function updateFromData(ContentData $data): bool
     {
@@ -36,6 +42,9 @@ class ContentRepository extends BaseRepository
 
     /**
      * Возвращает опубликованную контентную страницу по slug.
+     *
+     * @param string $slug
+     * @return Content|null
      */
     public function visibleBySlug(string $slug): ?Content
     {
@@ -51,7 +60,9 @@ class ContentRepository extends BaseRepository
     /**
      * Готовит массив полей для сохранения страницы.
      *
-     * @return array<string, mixed>
+     * @param ContentData $data
+     * @param int|null $ignoreId
+     * @return array
      */
     private function payload(ContentData $data, ?int $ignoreId = null): array
     {
@@ -61,8 +72,13 @@ class ContentRepository extends BaseRepository
         return $payload;
     }
 
+
     /**
-     * Формирует уникальный slug для страницы, игнорируя текущую запись при редактировании.
+     * Формирует уникальный slug для страницы, игнорируя текущую запись при редактировании
+     *
+     * @param string $source
+     * @param int|null $ignoreId
+     * @return string
      */
     private function uniqueSlug(string $source, ?int $ignoreId = null): string
     {
@@ -81,6 +97,10 @@ class ContentRepository extends BaseRepository
 
     /**
      * Проверяет, занят ли slug другой страницей.
+     *
+     * @param string $slug
+     * @param int|null $ignoreId
+     * @return bool
      */
     private function slugExists(string $slug, ?int $ignoreId = null): bool
     {

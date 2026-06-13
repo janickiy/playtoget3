@@ -43,7 +43,9 @@ class ProfileRepository extends BaseRepository
     private const CONTACT_FIELDS = [
         'contact_email',
         'phone',
-        'skype',
+        'telegram',
+        'whatsapp',
+        'viber',
         'website',
     ];
 
@@ -119,7 +121,9 @@ class ProfileRepository extends BaseRepository
             'city' => (string)$profile->city,
             'phone' => (string)$profile->phone,
             'contact_email' => (string)$profile->contact_email,
-            'skype' => (string)$profile->skype,
+            'telegram' => (string)$profile->telegram,
+            'whatsapp' => (string)$profile->whatsapp,
+            'viber' => (string)$profile->viber,
             'website' => (string)$profile->website,
             'about_sport' => (string)$profile->about_sport,
             'is_online' => $profile->activity?->last_activity
@@ -741,6 +745,9 @@ class ProfileRepository extends BaseRepository
 
     /**
      * Определяет браузер по строке User-Agent.
+     *
+     * @param string $userAgent
+     * @return string
      */
     private function detectBrowser(string $userAgent): string
     {
@@ -756,6 +763,9 @@ class ProfileRepository extends BaseRepository
 
     /**
      * Форматирует дату и время для вывода в интерфейсе.
+     *
+     * @param CarbonInterface|null $date
+     * @return string
      */
     private function dateTime(?CarbonInterface $date): string
     {
@@ -766,6 +776,9 @@ class ProfileRepository extends BaseRepository
 
     /**
      * Форматирует дату для вывода в интерфейсе.
+     *
+     * @param CarbonInterface|null $date
+     * @return string
      */
     private function date(?CarbonInterface $date): string
     {

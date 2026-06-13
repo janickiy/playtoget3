@@ -236,6 +236,9 @@ class PhotoalbumRepository extends BaseRepository
 
     /**
      * Возвращает альбомы, доступные пользователю для редактирования.
+     *
+     * @param User $user
+     * @return Collection
      */
     public function editableAlbumsFor(User $user): Collection
     {
@@ -244,6 +247,10 @@ class PhotoalbumRepository extends BaseRepository
 
     /**
      * Возвращает альбомы владельца, доступные для редактирования.
+     *
+     * @param int $ownerId
+     * @param string $type
+     * @return Collection
      */
     public function editableAlbumsForOwner(int $ownerId, string $type): Collection
     {
@@ -498,6 +505,11 @@ class PhotoalbumRepository extends BaseRepository
 
     /**
      * Удаляет фотографию пользователя, если он является владельцем.
+     *
+     * @param User $user
+     * @param int $photoId
+     * @return bool
+     * @throws \Throwable
      */
     public function deletePhotoFor(User $user, int $photoId): bool
     {
@@ -516,6 +528,9 @@ class PhotoalbumRepository extends BaseRepository
 
     /**
      * Преобразует фотографию в массив данных для вывода.
+     *
+     * @param Photo $photo
+     * @return array
      */
     public function serializePhoto(Photo $photo): array
     {
@@ -533,6 +548,9 @@ class PhotoalbumRepository extends BaseRepository
 
     /**
      * Преобразует альбом в массив данных для вывода.
+     *
+     * @param PhotoAlbums $album
+     * @return array
      */
     public function serializeAlbum(PhotoAlbums $album): array
     {
@@ -555,6 +573,9 @@ class PhotoalbumRepository extends BaseRepository
 
     /**
      * Удаляет реакции, комментарии и вложения фотографии.
+     *
+     * @param Photo $photo
+     * @return void
      */
     private function deletePhotoRelations(Photo $photo): void
     {
@@ -567,6 +588,9 @@ class PhotoalbumRepository extends BaseRepository
 
     /**
      * Удаляет файлы фотографии из публичного хранилища.
+     *
+     * @param Photo $photo
+     * @return void
      */
     private function deletePhotoFiles(Photo $photo): void
     {

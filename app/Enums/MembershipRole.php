@@ -26,12 +26,21 @@ enum MembershipRole: int
     public function membershipType(): string
     {
         return match ($this) {
-            self::Owner => 'owner',
-            self::Admin => 'admin',
+            self::Owner  => 'owner',
+            self::Admin  => 'admin',
             self::Member => 'member',
             self::Applied => 'applied',
             self::Blocked => 'blocked',
             self::Invited => 'invited',
+        };
+    }
+
+    public function cssColor(): string
+    {
+        return match ($this) {
+            self::Blocked  => 'text-danger',
+            self::Applied  => 'text-info',
+            self::Invited  => 'text-success',
         };
     }
 

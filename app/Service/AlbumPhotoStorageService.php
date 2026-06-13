@@ -13,8 +13,12 @@ class AlbumPhotoStorageService
 {
     private ImageFileService $images;
 
+
+
     /**
      * Подключает сервис для работы с загруженными изображениями.
+     *
+     * @param ImageFileService|null $images
      */
     public function __construct(?ImageFileService $images = null)
     {

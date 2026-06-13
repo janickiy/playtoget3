@@ -21,7 +21,9 @@ return new class extends Migration
             $table->date('birthday')->nullable();
             $table->string('phone')->nullable();
             $table->string('contact_email', 100)->nullable();
-            $table->string('skype')->nullable();
+            $table->string('telegram')->nullable();
+            $table->text('whatsapp')->nullable();
+            $table->text('viber')->nullable();
             $table->string('website')->nullable();
             $table->text('about')->nullable();
             $table->text('about_sport')->nullable();

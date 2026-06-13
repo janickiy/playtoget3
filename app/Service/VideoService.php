@@ -4,8 +4,13 @@ namespace App\Service;
 
 class VideoService
 {
+
     /**
      * Формирует HTML-плеер для поддерживаемого видео.
+     *
+     * @param string $provider
+     * @param string $video
+     * @return string
      */
     public function playerHtml(string $provider, string $video): string
     {
@@ -18,6 +23,9 @@ class VideoService
 
     /**
      * Определяет провайдера и идентификатор видео по ссылке.
+     *
+     * @param string $link
+     * @return array|null
      */
     public function detectVideo(string $link): ?array
     {

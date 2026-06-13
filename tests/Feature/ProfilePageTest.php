@@ -89,6 +89,9 @@ class ProfilePageTest extends TestCase
             ->assertSee('Кто может писать мне сообщения')
             ->assertSee('Заявки в друзья')
             ->assertSee('Дмитрий Панкратов')
+            ->assertSee('id="profile-telegram"', false)
+            ->assertSee('id="profile-whatsapp"', false)
+            ->assertSee('id="profile-viber"', false)
             ->assertSee('frontend/css/jquery.Jcrop.css', false)
             ->assertSee('frontend/js/jquery.Jcrop.min.js', false)
             ->assertSee('frontend/js/profile-settings.js', false);
@@ -105,6 +108,9 @@ class ProfilePageTest extends TestCase
                 ->once()
                 ->withArgs(fn (User $user, ProfileSettingsData $data): bool => $user === $viewer
                     && $data->user['contact_email'] === 'new@example.test'
+                    && $data->user['telegram'] === '@alex'
+                    && $data->user['whatsapp'] === '+7 999 000-00-00'
+                    && $data->user['viber'] === '+7 999 000-00-01'
                     && (int) $data->user['permission_send_message'] === 1
                     && $data->user['notification_friends_request'] === 'yes'
                     && $data->temporaryAvatar === '1_cropped.jpg'
@@ -115,7 +121,9 @@ class ProfilePageTest extends TestCase
             'user' => [
                 'contact_email' => 'new@example.test',
                 'phone' => '+7 999 000-00-00',
-                'skype' => 'alex',
+                'telegram' => '@alex',
+                'whatsapp' => '+7 999 000-00-00',
+                'viber' => '+7 999 000-00-01',
                 'website' => 'https://example.test',
                 'permission_send_message' => 1,
                 'permission_view_profile' => 0,
@@ -275,7 +283,9 @@ class ProfilePageTest extends TestCase
                 'city' => 'Москва',
                 'phone' => '+7 (966) 105-52-72',
                 'contact_email' => '',
-                'skype' => '',
+                'telegram' => '@pankratov',
+                'whatsapp' => '+7 (966) 105-52-72',
+                'viber' => 'viber-pankratov',
                 'website' => '',
                 'about_sport' => '',
                 'is_online' => false,
@@ -326,6 +336,12 @@ class ProfilePageTest extends TestCase
             ->assertSee('id="block_user" data-item="2"', false)
             ->assertSee('Был(a) на сайте')
             ->assertSee('18 апреля 2016 в 00:52')
+            ->assertSee('Telegram')
+            ->assertSee('@pankratov')
+            ->assertSee('WhatsApp')
+            ->assertSee('+7 (966) 105-52-72')
+            ->assertSee('Viber')
+            ->assertSee('viber-pankratov')
             ->assertSee('Playtoget')
             ->assertDontSee('Web-developer')
             ->assertSee('id="addCommentForm"', false)
@@ -375,7 +391,9 @@ class ProfilePageTest extends TestCase
                 'city' => '',
                 'phone' => '',
                 'contact_email' => '',
-                'skype' => '',
+                'telegram' => '',
+                'whatsapp' => '',
+                'viber' => '',
                 'website' => '',
                 'about_sport' => 'gh',
                 'is_online' => false,
@@ -427,7 +445,9 @@ class ProfilePageTest extends TestCase
                 'city' => '',
                 'phone' => '',
                 'contact_email' => '',
-                'skype' => '',
+                'telegram' => '',
+                'whatsapp' => '',
+                'viber' => '',
                 'website' => '',
                 'about_sport' => '',
                 'is_online' => false,

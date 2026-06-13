@@ -27,6 +27,9 @@ class SettingsRepository extends BaseRepository
 
     /**
      * Обновляет запись из DTO с подготовленными данными.
+     *
+     * @param SettingsData $data
+     * @return bool
      */
     public function updateFromData(SettingsData $data): bool
     {
@@ -35,6 +38,9 @@ class SettingsRepository extends BaseRepository
 
     /**
      * Удаляет запись настроек и связанный файл при необходимости.
+     *
+     * @param int $id
+     * @return bool
      */
     public function remove(int $id): bool
     {

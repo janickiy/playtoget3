@@ -31,6 +31,9 @@ class ImageFileService
 
     /**
      * Генерирует короткое случайное имя файла с расширением исходного изображения.
+     *
+     * @param UploadedFile $file
+     * @return string
      */
     public function randomFilename(UploadedFile $file): string
     {
@@ -39,6 +42,10 @@ class ImageFileService
 
     /**
      * Генерирует имя изображения профиля с префиксом пользователя.
+     *
+     * @param UploadedFile $file
+     * @param int $userId
+     * @return string
      */
     public function userScopedFilename(UploadedFile $file, int $userId): string
     {
@@ -47,6 +54,9 @@ class ImageFileService
 
     /**
      * Генерирует имя временного JPG-файла профиля с префиксом пользователя.
+     *
+     * @param int $userId
+     * @return string
      */
     public function temporaryProfileFilename(int $userId): string
     {
@@ -55,6 +65,10 @@ class ImageFileService
 
     /**
      * Открывает загруженный файл как GD-изображение и учитывает ориентацию JPEG.
+     *
+     * @param UploadedFile $file
+     * @param bool $allowGif
+     * @return GdImage
      */
     public function imageResource(UploadedFile $file, bool $allowGif = false): GdImage
     {
@@ -83,6 +97,10 @@ class ImageFileService
 
     /**
      * Поворачивает JPEG-изображение по EXIF-ориентации, если она задана.
+     *
+     * @param GdImage $image
+     * @param string $path
+     * @return GdImage
      */
     private function orientJpeg(GdImage $image, string $path): GdImage
     {
