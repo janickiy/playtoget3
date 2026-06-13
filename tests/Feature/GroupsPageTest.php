@@ -139,6 +139,84 @@ class GroupsPageTest extends TestCase
             ->assertSee('commentable_type" value="group', false);
     }
 
+    public function test_group_invited_header_renders_accept_and_decline_buttons(): void
+    {
+        $viewer = $this->user(1);
+        $group = $this->community(16);
+
+        $this->actingAs($viewer, 'web');
+
+        $groupData = [
+            'id' => 16,
+            'name' => 'Закрытая группа',
+            'about' => 'Описание',
+            'place' => 'Москва',
+            'sport_type' => 'Футбол',
+            'avatar' => 'http://site3.local/frontend/images/noimage.png',
+            'cover' => 'http://site3.local/frontend/images/default_group.png',
+        ];
+
+        $this->mock(CommunityRepository::class, function (MockInterface $mock) use ($viewer, $group, $groupData): void {
+            $mock->shouldReceive('findGroup')->with(16)->andReturn($group);
+            $mock->shouldReceive('serializeGroup')->with($group)->andReturn($groupData);
+            $mock->shouldReceive('permissions')->with($group, $viewer)->andReturn(['wall' => true, 'photo' => true, 'video' => true]);
+            $mock->shouldReceive('role')->with(16, $viewer->id)->andReturn(5);
+            $mock->shouldReceive('membershipType')->with($group, $viewer)->andReturn('invited');
+            $mock->shouldReceive('canManage')->with($group, $viewer)->andReturn(false);
+            $mock->shouldReceive('canInvite')->with($group, $viewer)->andReturn(false);
+        });
+        $this->mock(ProfileRepository::class, function (MockInterface $mock) use ($viewer): void {
+            $mock->shouldReceive('comments')->with('group', 16, 10, 0, $viewer)->andReturn(collect());
+            $mock->shouldReceive('hasMoreComments')->with('group', 16, 10, 0)->andReturn(false);
+        });
+
+        $this->get('/groups/16')
+            ->assertOk()
+            ->assertSee('Принять')
+            ->assertSee('Отклонить')
+            ->assertSee('js-group-join', false)
+            ->assertSee('js-group-leave', false)
+            ->assertDontSee('Принять приглашение');
+    }
+
+    public function test_group_applied_header_renders_pending_cancel_button(): void
+    {
+        $viewer = $this->user(1);
+        $group = $this->community(16);
+
+        $this->actingAs($viewer, 'web');
+
+        $groupData = [
+            'id' => 16,
+            'name' => 'Закрытая группа',
+            'about' => 'Описание',
+            'place' => 'Москва',
+            'sport_type' => 'Футбол',
+            'avatar' => 'http://site3.local/frontend/images/noimage.png',
+            'cover' => 'http://site3.local/frontend/images/default_group.png',
+        ];
+
+        $this->mock(CommunityRepository::class, function (MockInterface $mock) use ($viewer, $group, $groupData): void {
+            $mock->shouldReceive('findGroup')->with(16)->andReturn($group);
+            $mock->shouldReceive('serializeGroup')->with($group)->andReturn($groupData);
+            $mock->shouldReceive('permissions')->with($group, $viewer)->andReturn(['wall' => true, 'photo' => true, 'video' => true]);
+            $mock->shouldReceive('role')->with(16, $viewer->id)->andReturn(0);
+            $mock->shouldReceive('membershipType')->with($group, $viewer)->andReturn('applied');
+            $mock->shouldReceive('canManage')->with($group, $viewer)->andReturn(false);
+            $mock->shouldReceive('canInvite')->with($group, $viewer)->andReturn(false);
+        });
+        $this->mock(ProfileRepository::class, function (MockInterface $mock) use ($viewer): void {
+            $mock->shouldReceive('comments')->with('group', 16, 10, 0, $viewer)->andReturn(collect());
+            $mock->shouldReceive('hasMoreComments')->with('group', 16, 10, 0)->andReturn(false);
+        });
+
+        $this->get('/groups/16')
+            ->assertOk()
+            ->assertSee('На рассмотрении')
+            ->assertSee('class="groups_button applied pending js-group-leave"', false)
+            ->assertDontSee('Вы отправили заявку');
+    }
+
     public function test_group_create_page_renders_form_without_profile_top_and_tabs(): void
     {
         $this->actingAs($this->user(1), 'web');

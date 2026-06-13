@@ -8,6 +8,7 @@ use App\Models\CommunityRole;
 use App\Models\User;
 use App\Repositories\CommunityRepository;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
@@ -133,6 +134,74 @@ class CommunityStatusVisibilityTest extends TestCase
         ]);
     }
 
+    public function test_membership_changes_handle_invitations_applications_and_open_join(): void
+    {
+        $openCommunity = $this->community('group', CommunityStatus::Confirmed, 'Открытая группа');
+        $closedCommunity = $this->community('group', CommunityStatus::Confirmed, 'Закрытая группа');
+        $invitedCommunity = $this->community('group', CommunityStatus::Confirmed, 'Группа с приглашением');
+        $openUser = $this->user(21);
+        $closedUser = $this->user(22);
+        $invitedUser = $this->user(23);
+
+        $this->setting($openCommunity, 0);
+        $this->setting($closedCommunity, 1);
+        $this->setting($invitedCommunity, 2);
+
+        CommunityRole::query()->create([
+            'community_id' => $invitedCommunity->id,
+            'user_id' => $invitedUser->id,
+            'role' => 5,
+        ]);
+
+        /** @var CommunityRepository $repository */
+        $repository = app(CommunityRepository::class);
+
+        $this->assertTrue($repository->changeMembership($openCommunity, $openUser, 1));
+        $this->assertSame(3, CommunityRole::query()
+            ->where('community_id', $openCommunity->id)
+            ->where('user_id', $openUser->id)
+            ->value('role'));
+
+        $this->assertTrue($repository->changeMembership($closedCommunity, $closedUser, 1));
+        $this->assertSame(0, CommunityRole::query()
+            ->where('community_id', $closedCommunity->id)
+            ->where('user_id', $closedUser->id)
+            ->value('role'));
+
+        $this->assertTrue($repository->changeMembership($closedCommunity, $closedUser, 0));
+        $this->assertDatabaseMissing('community_roles', [
+            'community_id' => $closedCommunity->id,
+            'user_id' => $closedUser->id,
+        ]);
+
+        $this->assertTrue($repository->changeMembership($invitedCommunity, $invitedUser, 1));
+        $this->assertSame(3, CommunityRole::query()
+            ->where('community_id', $invitedCommunity->id)
+            ->where('user_id', $invitedUser->id)
+            ->value('role'));
+    }
+
+    public function test_invited_user_can_decline_invitation(): void
+    {
+        $community = $this->community('group', CommunityStatus::Confirmed, 'Группа с приглашением');
+        $viewer = $this->user(24);
+
+        CommunityRole::query()->create([
+            'community_id' => $community->id,
+            'user_id' => $viewer->id,
+            'role' => 5,
+        ]);
+
+        /** @var CommunityRepository $repository */
+        $repository = app(CommunityRepository::class);
+
+        $this->assertTrue($repository->changeMembership($community, $viewer, 0));
+        $this->assertDatabaseMissing('community_roles', [
+            'community_id' => $community->id,
+            'user_id' => $viewer->id,
+        ]);
+    }
+
     private function community(string $type, CommunityStatus $status, string $name): Community
     {
         /** @var Community $community */
@@ -148,6 +217,17 @@ class CommunityStatusVisibilityTest extends TestCase
         ]);
 
         return $community;
+    }
+
+    private function setting(Community $community, int $type): void
+    {
+        DB::table('communities_settings')->insert([
+            'community_id' => $community->id,
+            'permission_wall' => 0,
+            'permission_photo' => 0,
+            'permission_video' => 0,
+            'type' => $type,
+        ]);
     }
 
     private function user(int $id): User

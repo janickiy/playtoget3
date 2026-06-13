@@ -208,6 +208,37 @@ class TeamsPageTest extends TestCase
             ->assertSee('Лента');
     }
 
+    public function test_team_invited_header_renders_accept_and_decline_buttons(): void
+    {
+        $viewer = $this->user(1);
+        $team = $this->community(18);
+
+        $this->actingAs($viewer, 'web');
+
+        $this->mock(CommunityRepository::class, function (MockInterface $mock) use ($viewer, $team): void {
+            $mock->shouldReceive('findTeam')->with(18)->andReturn($team);
+            $mock->shouldReceive('serializeTeam')->with($team)->andReturn($this->teamData(18, 'выпы'));
+            $mock->shouldReceive('permissions')->with($team, $viewer)->andReturn(['wall' => true, 'photo' => true, 'video' => true]);
+            $mock->shouldReceive('role')->with(18, $viewer->id)->andReturn(5);
+            $mock->shouldReceive('membershipType')->with($team, $viewer)->andReturn('invited');
+            $mock->shouldReceive('canManage')->with($team, $viewer)->andReturn(false);
+            $mock->shouldReceive('canInvite')->with($team, $viewer)->andReturn(false);
+        });
+
+        $this->mock(ProfileRepository::class, function (MockInterface $mock) use ($viewer): void {
+            $mock->shouldReceive('comments')->with('team', 18, 10, 0, $viewer)->andReturn(collect());
+            $mock->shouldReceive('hasMoreComments')->with('team', 18, 10, 0)->andReturn(false);
+        });
+
+        $this->get('/teams/18')
+            ->assertOk()
+            ->assertSee('Принять')
+            ->assertSee('Отклонить')
+            ->assertSee('js-team-join', false)
+            ->assertSee('js-team-leave', false)
+            ->assertDontSee('Принять приглашение');
+    }
+
     public function test_team_members_page_still_renders_members(): void
     {
         $viewer = $this->user(1);

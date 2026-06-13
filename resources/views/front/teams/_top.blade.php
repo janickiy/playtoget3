@@ -14,18 +14,16 @@
         @if ($viewer && $membershipType !== 'blocked')
             @if ($membershipType === 'none')
                 <a href="#" class="groups_button js-team-join" data-community-id="{{ $team->id }}"><span>Присоединиться</span></a>
-                <a href="#" class="groups_button_leave hide js-team-leave" data-community-id="{{ $team->id }}" data-message="{{ $leaveMessage }}"></a>
             @elseif ($membershipType === 'invited')
-                <a href="#" class="groups_button js-team-join" data-community-id="{{ $team->id }}"><span>Принять приглашение</span></a>
-                <a href="#" class="groups_button_leave red js-team-leave" data-community-id="{{ $team->id }}" data-message="{{ $leaveMessage }}"></a>
+                <a href="#" class="groups_button team-invite-action team-invite-accept js-team-join" data-community-id="{{ $team->id }}">Принять</a>
+                <a href="#" class="groups_button team-invite-action team-invite-decline js-team-leave" data-community-id="{{ $team->id }}" data-message="{{ $leaveMessage }}" data-silent="1" data-success-message="Приглашение отклонено">Отклонить</a>
             @elseif ($membershipType === 'owner')
                 <a href="#" class="groups_button leave_fr js-team-invite" data-community-id="{{ $team->id }}">Пригласить друзей</a>
             @elseif (in_array($membershipType, ['admin', 'member'], true))
                 <a href="#" class="groups_button leave_fr js-team-invite" data-community-id="{{ $team->id }}">Пригласить друзей</a>
                 <a href="#" class="groups_button_leave js-team-leave" data-community-id="{{ $team->id }}" data-message="{{ $leaveMessage }}"></a>
             @elseif ($membershipType === 'applied')
-                <span class="groups_button applied"><span>Вы отправили заявку</span></span>
-                <a href="#" class="groups_button_leave js-team-leave" data-community-id="{{ $team->id }}" data-message="{{ $leaveMessage }}"></a>
+                <a href="#" class="groups_button applied pending js-team-leave" data-community-id="{{ $team->id }}" data-message="{{ $leaveMessage }}" data-silent="1" data-success-message="Заявка отменена">На рассмотрении</a>
             @endif
         @endif
 
@@ -82,6 +80,37 @@
                 text-align: center;
             }
 
+            .team-profile-top .team-invite-action {
+                bottom: auto;
+                border-radius: 8em;
+                min-width: 100px;
+                padding: 0 18px;
+            }
+
+            .team-profile-top .team-invite-action:after,
+            .team-profile-top .groups_button.pending:after {
+                content: none;
+            }
+
+            .team-profile-top .team-invite-accept {
+                top: 30px;
+                right: 180px;
+                background: #49afa2;
+            }
+
+            .team-profile-top .team-invite-decline {
+                top: 30px;
+                right: 50px;
+                background: #cc0000;
+            }
+
+            .team-profile-top .groups_button.pending {
+                background: #f0ad4e;
+                border-radius: 8em;
+                padding: 0 18px;
+                right: 65px;
+            }
+
             .team-top-edit {
                 display: inline-block;
                 margin-left: 12px;
@@ -128,8 +157,15 @@
                     root.find('.groups_button').remove();
                     root.find('.groups_button_leave').remove();
                     root.find('.cover_page').prepend(
-                        '<a href="#" class="groups_button js-team-join" data-community-id="' + communityId + '"><span>Присоединиться</span></a>' +
-                        '<a href="#" class="groups_button_leave hide js-team-leave" data-community-id="' + communityId + '" data-message="Вы действительно хотите выйти из команды?"></a>'
+                        '<a href="#" class="groups_button js-team-join" data-community-id="' + communityId + '"><span>Присоединиться</span></a>'
+                    );
+                }
+
+                function setPendingState(root, communityId) {
+                    root.find('.groups_button').remove();
+                    root.find('.groups_button_leave').remove();
+                    root.find('.cover_page').prepend(
+                        '<a href="#" class="groups_button applied pending js-team-leave" data-community-id="' + communityId + '" data-message="Вы действительно хотите отменить заявку?" data-silent="1" data-success-message="Заявка отменена">На рассмотрении</a>'
                     );
                 }
 
@@ -143,8 +179,7 @@
                         .done(function (response) {
                             if (response.result === 'success') {
                                 if (response.member === 'applied') {
-                                    button.replaceWith('<span class="groups_button applied"><span>Вы отправили заявку</span></span>');
-                                    root.find('.groups_button_leave').removeClass('hide red');
+                                    setPendingState(root, communityId);
                                     teamNotice('Заявка отправлена', true);
                                 } else {
                                     setJoinedState(root, communityId);
@@ -165,8 +200,9 @@
                     const communityId = button.data('community-id');
                     const root = button.closest('.team-profile-top');
                     const message = button.data('message') || 'Вы действительно хотите выйти из команды?';
+                    const silent = String(button.data('silent')) === '1';
 
-                    if (!window.confirm(message)) {
+                    if (!silent && !window.confirm(message)) {
                         return;
                     }
 
@@ -174,7 +210,7 @@
                         .done(function (response) {
                             if (response.result === 'success') {
                                 setLeftState(root, communityId);
-                                teamNotice('Статус обновлен', true);
+                                teamNotice(button.data('success-message') || 'Статус обновлен', true);
                             } else {
                                 teamNotice('Не удалось изменить статус', false);
                             }
