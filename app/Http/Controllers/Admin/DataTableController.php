@@ -299,9 +299,6 @@ class DataTableController extends Controller
                     default => (string) $row->type,
                 };
             })
-            ->editColumn('active', function ($row) {
-                return (bool) $row->active ? 'да' : 'нет';
-            })
             ->editColumn('status', function ($row) {
                 return SportBlockStatus::labelFor((int) $row->status);
             })

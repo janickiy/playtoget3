@@ -112,7 +112,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         {!! Form::label('owner_id', 'ID владельца') !!}
                                         {!! Form::number('owner_id', old('owner_id', $row->owner_id ?? null), ['class' => 'form-control']) !!}
@@ -122,26 +122,12 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         {!! Form::label('status', 'Статус*') !!}
                                         {!! Form::select('status', $statusOptions, old('status', $row->status ?? \App\Enums\SportBlockStatus::New->value), ['class' => 'custom-select']) !!}
                                         @if ($errors->has('status'))
                                             <p class="text-danger">{{ $errors->first('status') }}</p>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        {!! Form::label('active', 'Активен') !!}
-                                        <div class="custom-control custom-checkbox mt-2">
-                                            {!! Form::hidden('active', 0) !!}
-                                            {!! Form::checkbox('active', 1, (bool) old('active', $row->active ?? true), ['class' => 'custom-control-input', 'id' => 'active']) !!}
-                                            {!! Form::label('active', 'Да', ['class' => 'custom-control-label']) !!}
-                                        </div>
-                                        @if ($errors->has('active'))
-                                            <p class="text-danger">{{ $errors->first('active') }}</p>
                                         @endif
                                     </div>
                                 </div>

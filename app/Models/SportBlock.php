@@ -23,14 +23,12 @@ class SportBlock extends Model
         'website',
         'type',
         'owner_id',
-        'active',
         'status',
     ];
 
     protected function casts(): array
     {
         return [
-            'active' => 'boolean',
             'status' => 'integer',
         ];
     }

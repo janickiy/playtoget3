@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Enums\EventStatus;
 use App\Enums\SportBlockStatus;
+use App\Enums\UserStatus;
 use App\Helpers\FrontAssets;
 use App\Helpers\PermissionsHelper;
 use App\Helpers\MenuHelper;
@@ -66,7 +67,16 @@ class AppServiceProvider extends ServiceProvider
                 : collect();
 
             $sportBlocks = Schema::hasTable('sport_blocks')
-                ? SportBlock::query()->whereIn('status', SportBlockStatus::visibleValues())->orderByDesc('id')->get()
+                ? SportBlock::query()
+                    ->whereIn('status', SportBlockStatus::visibleValues())
+                    ->whereDoesntHave('owner', function ($query): void {
+                        $query->whereIn('status', [
+                            UserStatus::Blocked->value,
+                            UserStatus::Deleted->value,
+                        ]);
+                    })
+                    ->orderByDesc('id')
+                    ->get()
                 : collect();
 
             if (Schema::hasTable('announcements')) {

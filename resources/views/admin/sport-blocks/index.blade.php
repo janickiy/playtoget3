@@ -28,7 +28,6 @@
                                     <th>Место</th>
                                     <th>Email</th>
                                     <th>Телефон</th>
-                                    <th>Активен</th>
                                     <th>Статус</th>
                                     <th>Создано</th>
                                     <th style="width: 12%">Действия</th>
@@ -100,7 +99,6 @@
                     {data: 'place', name: 'place'},
                     {data: 'email', name: 'email'},
                     {data: 'phone', name: 'phone'},
-                    {data: 'active', name: 'active'},
                     {data: 'status', name: 'status'},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'actions', name: 'actions', orderable: false, searchable: false}

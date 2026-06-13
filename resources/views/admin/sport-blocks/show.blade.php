@@ -46,9 +46,6 @@
                                 <dt class="col-sm-3">ID владельца</dt>
                                 <dd class="col-sm-9">{{ $row->owner_id }}</dd>
 
-                                <dt class="col-sm-3">Активен</dt>
-                                <dd class="col-sm-9">{{ $row->active ? 'да' : 'нет' }}</dd>
-
                                 <dt class="col-sm-3">Статус</dt>
                                 <dd class="col-sm-9">{{ $statusLabel }}</dd>
 

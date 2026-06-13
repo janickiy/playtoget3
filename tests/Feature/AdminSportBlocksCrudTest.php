@@ -44,7 +44,6 @@ class AdminSportBlocksCrudTest extends TestCase
             $table->string('website')->nullable();
             $table->string('type', 20)->nullable();
             $table->unsignedBigInteger('owner_id')->nullable();
-            $table->boolean('active')->default(false);
             $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });
@@ -147,7 +146,6 @@ class AdminSportBlocksCrudTest extends TestCase
                 'email' => 'shop@example.test',
                 'avatar' => '',
                 'website' => '',
-                'active' => 0,
                 'status' => SportBlockStatus::Blocked->value,
             ])
             ->assertRedirect(route('admin.sport-blocks.index'));
@@ -158,7 +156,6 @@ class AdminSportBlocksCrudTest extends TestCase
             'name' => 'Обновленный магазин',
             'place' => 'Казань',
             'status' => SportBlockStatus::Blocked->value,
-            'active' => 0,
         ]);
 
         $this->actingAs($this->admin, 'admin')
@@ -213,7 +210,6 @@ class AdminSportBlocksCrudTest extends TestCase
             'avatar' => '',
             'website' => '',
             'owner_id' => null,
-            'active' => true,
             'status' => SportBlockStatus::Confirmed->value,
         ], $attributes));
 

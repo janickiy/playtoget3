@@ -29,7 +29,6 @@ class StoreRequest extends FormRequest
             'avatar' => ['nullable', 'string', 'max:255'],
             'website' => ['nullable', 'string', 'max:255'],
             'owner_id' => ['nullable', 'integer', 'exists:users,id'],
-            'active' => ['nullable', 'boolean'],
             'status' => ['required', 'integer', Rule::in(array_keys(SportBlockStatus::options()))],
         ];
     }
@@ -50,7 +49,6 @@ class StoreRequest extends FormRequest
             'avatar' => 'аватар',
             'website' => 'сайт',
             'owner_id' => 'владелец',
-            'active' => 'активность',
             'status' => 'статус',
         ];
     }

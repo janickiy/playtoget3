@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\DTO\SportBlock\SportBlockData;
 use App\Enums\SportBlockStatus;
+use App\Enums\UserStatus;
 use App\Helpers\FrontAssets;
 use App\Models\GeoCity;
 use App\Models\SportBlock;
@@ -86,6 +87,12 @@ class SportBlockRepository extends BaseRepository
         $sportBlock = $this->model->newQuery()
             ->where('type', $type)
             ->whereIn('status', SportBlockStatus::visibleValues())
+            ->whereDoesntHave('owner', function (Builder $query): void {
+                $query->whereIn('status', [
+                    UserStatus::Blocked->value,
+                    UserStatus::Deleted->value,
+                ]);
+            })
             ->whereKey($id)
             ->first();
 
@@ -111,7 +118,6 @@ class SportBlockRepository extends BaseRepository
             'website' => (string) $sportBlock->website,
             'avatar' => FrontAssets::sportBlockAvatar($sportBlock),
             'owner_id' => (int) $sportBlock->owner_id,
-            'active' => (bool) $sportBlock->active,
             'type' => (string) $sportBlock->type,
         ];
     }
@@ -142,7 +148,6 @@ class SportBlockRepository extends BaseRepository
                 'email' => $data->email,
                 'website' => $data->website,
                 'avatar' => $avatar ?? '',
-                'active' => true,
                 'status' => SportBlockStatus::Confirmed->value,
             ]);
 
@@ -225,6 +230,12 @@ class SportBlockRepository extends BaseRepository
         return $this->model->newQuery()
             ->where('type', $type)
             ->whereIn('status', SportBlockStatus::visibleValues())
+            ->whereDoesntHave('owner', function (Builder $query): void {
+                $query->whereIn('status', [
+                    UserStatus::Blocked->value,
+                    UserStatus::Deleted->value,
+                ]);
+            })
             ->when($search !== '', function (Builder $query) use ($search): void {
                 $query->where(function (Builder $query) use ($search): void {
                     $query->where('name', 'like', '%' . $search . '%')

@@ -11,7 +11,7 @@ return new class extends Migration
     {
         Schema::table('sport_blocks', function (Blueprint $table): void {
             if (! Schema::hasColumn('sport_blocks', 'status')) {
-                $table->tinyInteger('status')->default(0)->after('active');
+                $table->tinyInteger('status')->default(0)->after('owner_id');
             }
         });
 
@@ -42,7 +42,7 @@ return new class extends Migration
     {
         Schema::table('sport_blocks', function (Blueprint $table): void {
             if (! Schema::hasColumn('sport_blocks', 'banned')) {
-                $table->boolean('banned')->default(false)->after('active');
+                $table->boolean('banned')->default(false)->after('owner_id');
             }
         });
 
