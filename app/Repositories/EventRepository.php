@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\DTO\Event\EventData;
+use App\Enums\CommunityStatus;
 use App\Enums\MembershipRole;
 use App\Enums\UserStatus;
 use App\Helpers\FrontAssets;
@@ -477,7 +478,7 @@ class EventRepository extends BaseRepository
                 return Community::query()
                     ->whereIn('id', $ids)
                     ->where('type', $type)
-                    ->where('banned', false)
+                    ->where('status', CommunityStatus::Confirmed->value)
                     ->orderBy('name')
                     ->get()
                     ->map(fn (Community $community): array => [

@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('communities', function (Blueprint $table) {
             $table->id();
             $table->string('type')->nullable();
-            $table->boolean('banned')->default(false);
+            $table->tinyInteger('status')->default(0);
             $table->string('name')->nullable();
             $table->text('about')->nullable();
             $table->timestamps();
@@ -19,11 +19,10 @@ return new class extends Migration
             $table->string('cover_page')->nullable();
             $table->string('place', 100)->nullable();
             $table->string('sport_type')->nullable();
-            $table->boolean('moderate')->default(true);
 
-            $table->index(['type', 'moderate']);
+            $table->index(['type', 'status']);
             $table->index('name');
-            $table->index(['banned', 'type']);
+            $table->index('status');
         });
     }
 

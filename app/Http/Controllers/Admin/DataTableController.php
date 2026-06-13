@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\CommunityStatus;
 use App\Enums\UserStatus;
 use App\Models\Admin;
+use App\Models\Community;
 use App\Models\Content;
 use App\Models\Settings;
 use App\Models\User;
@@ -114,6 +116,44 @@ class DataTableController extends Controller
                 return Carbon::parse($row->created_at)->format('d/m/Y H:i');
             })
             ->rawColumns(['actions'])->make(true);
+    }
+
+    /**
+     * Возвращает JSON-данные комьюнити для таблицы DataTables.
+     *
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function communities(): JsonResponse
+    {
+        $row = Community::query();
+
+        return Datatables::of($row)
+            ->addColumn('actions', function ($row) {
+                $showBtn = '<a title="просмотр" class="btn btn-xs btn-info" href="' . route('admin.communities.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
+                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary" href="' . route('admin.communities.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.communities.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
+
+                return '<div class="nobr"> ' . $showBtn . $editBtn . $deleteBtn . '</div>';
+            })
+            ->editColumn('type', function ($row) {
+                return match ((string) $row->type) {
+                    'team' => 'Команда',
+                    'group' => 'Группа',
+                    default => (string) $row->type,
+                };
+            })
+            ->addColumn('status_css', function ($row) {
+                return CommunityStatus::cssColorFor((int) $row->status);
+            })
+            ->editColumn('status', function ($row) {
+                return CommunityStatus::labelFor((int) $row->status);
+            })
+            ->editColumn('created_at', function ($row) {
+                return Carbon::parse($row->created_at)->format('d/m/Y H:i');
+            })
+            ->rawColumns(['actions'])
+            ->make(true);
     }
 
     /**

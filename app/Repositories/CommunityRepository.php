@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\DTO\Community\CommunityData;
 use App\Enums\CommunityPrivacyType;
+use App\Enums\CommunityStatus;
 use App\Enums\MembershipRole;
 use App\Enums\UserStatus;
 use App\Helpers\FrontAssets;
@@ -42,7 +43,7 @@ class CommunityRepository extends BaseRepository
         return $this->model->newQuery()
             ->withCount(['roles as members_count' => fn ($query) => $query->whereIn('role', [1, 2, 3])])
             ->where('type', 'team')
-            ->where('banned', false)
+            ->where('status', CommunityStatus::Confirmed->value)
             ->orderBy('name')
             ->get()
             ->map(fn (Community $team): array => $this->serializeTeam($team));
@@ -61,6 +62,7 @@ class CommunityRepository extends BaseRepository
             ->with(['settings', 'roles.user'])
             ->withCount(['roles as members_count' => fn ($query) => $query->whereIn('role', [1, 2, 3])])
             ->where('type', 'team')
+            ->where('status', CommunityStatus::Confirmed->value)
             ->whereKey($id)
             ->first();
 
@@ -80,6 +82,7 @@ class CommunityRepository extends BaseRepository
             ->with(['settings', 'roles.user'])
             ->withCount(['roles as members_count' => fn ($query) => $query->whereIn('role', [1, 2, 3])])
             ->where('type', 'group')
+            ->where('status', CommunityStatus::Confirmed->value)
             ->whereKey($id)
             ->first();
 
@@ -97,7 +100,7 @@ class CommunityRepository extends BaseRepository
         if ($viewer) {
             $team = $this->model->newQuery()
                 ->where('communities.type', 'team')
-                ->where('communities.banned', false)
+                ->where('communities.status', CommunityStatus::Confirmed->value)
                 ->join('community_roles', 'community_roles.community_id', '=', 'communities.id')
                 ->where('community_roles.user_id', $viewer->id)
                 ->whereIn('community_roles.role', [1, 2, 3])
@@ -112,7 +115,7 @@ class CommunityRepository extends BaseRepository
 
         return $this->findTeam(18) ?: $this->model->newQuery()
             ->where('type', 'team')
-            ->where('banned', false)
+            ->where('status', CommunityStatus::Confirmed->value)
             ->orderBy('id')
             ->first();
     }
@@ -128,7 +131,7 @@ class CommunityRepository extends BaseRepository
         if ($viewer) {
             $group = $this->model->newQuery()
                 ->where('communities.type', 'group')
-                ->where('communities.banned', false)
+                ->where('communities.status', CommunityStatus::Confirmed->value)
                 ->join('community_roles', 'community_roles.community_id', '=', 'communities.id')
                 ->where('community_roles.user_id', $viewer->id)
                 ->whereIn('community_roles.role', [1, 2, 3])
@@ -143,7 +146,7 @@ class CommunityRepository extends BaseRepository
 
         return $this->model->newQuery()
             ->where('type', 'group')
-            ->where('banned', false)
+            ->where('status', CommunityStatus::Confirmed->value)
             ->orderBy('id')
             ->first();
     }
@@ -174,7 +177,7 @@ class CommunityRepository extends BaseRepository
             ->where('community_roles.user_id', $userId)
             ->whereIn('community_roles.role', [1, 2, 3])
             ->where('communities.type', 'team')
-            ->where('communities.banned', false);
+            ->where('communities.status', CommunityStatus::Confirmed->value);
 
         $this->applyCommunityFilters($query, $filters);
 
@@ -202,7 +205,7 @@ class CommunityRepository extends BaseRepository
             ->where('community_roles.user_id', $userId)
             ->whereIn('community_roles.role', [1, 2, 3])
             ->where('communities.type', 'team')
-            ->where('communities.banned', false);
+            ->where('communities.status', CommunityStatus::Confirmed->value);
 
         $this->applyCommunityFilters($query, $filters);
 
@@ -223,7 +226,7 @@ class CommunityRepository extends BaseRepository
             ->with(['settings'])
             ->withCount(['roles as members_count' => fn ($query) => $query->whereIn('role', [1, 2, 3])])
             ->where('type', 'team')
-            ->where('banned', false);
+            ->where('status', CommunityStatus::Confirmed->value);
 
         $this->applyCommunityFilters($query, $filters);
 
@@ -243,7 +246,7 @@ class CommunityRepository extends BaseRepository
     {
         $query = $this->model->newQuery()
             ->where('type', 'team')
-            ->where('banned', false);
+            ->where('status', CommunityStatus::Confirmed->value);
 
         $this->applyCommunityFilters($query, $filters);
 
@@ -268,7 +271,7 @@ class CommunityRepository extends BaseRepository
             ->where('community_roles.user_id', $userId)
             ->where('community_roles.role', 5)
             ->where('communities.type', 'team')
-            ->where('communities.banned', false);
+            ->where('communities.status', CommunityStatus::Confirmed->value);
 
         $this->applyCommunityFilters($query, $filters);
 
@@ -295,7 +298,7 @@ class CommunityRepository extends BaseRepository
             ->where('community_roles.user_id', $userId)
             ->where('community_roles.role', 5)
             ->where('communities.type', 'team')
-            ->where('communities.banned', false);
+            ->where('communities.status', CommunityStatus::Confirmed->value);
 
         $this->applyCommunityFilters($query, $filters);
 
@@ -320,7 +323,7 @@ class CommunityRepository extends BaseRepository
             ->where('community_roles.user_id', $userId)
             ->whereIn('community_roles.role', [1, 2, 3])
             ->where('communities.type', 'group')
-            ->where('communities.banned', false);
+            ->where('communities.status', CommunityStatus::Confirmed->value);
 
         $this->applyCommunityFilters($query, $filters);
 
@@ -348,7 +351,7 @@ class CommunityRepository extends BaseRepository
             ->where('community_roles.user_id', $userId)
             ->whereIn('community_roles.role', [1, 2, 3])
             ->where('communities.type', 'group')
-            ->where('communities.banned', false);
+            ->where('communities.status', CommunityStatus::Confirmed->value);
 
         $this->applyCommunityFilters($query, $filters);
 
@@ -369,7 +372,7 @@ class CommunityRepository extends BaseRepository
             ->with(['settings'])
             ->withCount(['roles as members_count' => fn ($query) => $query->whereIn('role', [1, 2, 3])])
             ->where('type', 'group')
-            ->where('banned', false);
+            ->where('status', CommunityStatus::Confirmed->value);
 
         $this->applyCommunityFilters($query, $filters);
 
@@ -392,7 +395,7 @@ class CommunityRepository extends BaseRepository
     {
         $query = $this->model->newQuery()
             ->where('type', 'group')
-            ->where('banned', false);
+            ->where('status', CommunityStatus::Confirmed->value);
 
         $this->applyCommunityFilters($query, $filters);
 
@@ -417,7 +420,7 @@ class CommunityRepository extends BaseRepository
             ->where('community_roles.user_id', $userId)
             ->where('community_roles.role', 5)
             ->where('communities.type', 'group')
-            ->where('communities.banned', false);
+            ->where('communities.status', CommunityStatus::Confirmed->value);
 
         $this->applyCommunityFilters($query, $filters);
 
@@ -444,7 +447,7 @@ class CommunityRepository extends BaseRepository
             ->where('community_roles.user_id', $userId)
             ->where('community_roles.role', 5)
             ->where('communities.type', 'group')
-            ->where('communities.banned', false);
+            ->where('communities.status', CommunityStatus::Confirmed->value);
 
         $this->applyCommunityFilters($query, $filters);
 
@@ -918,8 +921,7 @@ class CommunityRepository extends BaseRepository
                 'sport_type' => $data->sportType ?: $this->sportName($data->sportId),
                 'avatar' => $avatar ?? '',
                 'cover_page' => $cover ?? '',
-                'banned' => false,
-                'moderate' => true,
+                'status' => CommunityStatus::Confirmed->value,
             ]);
 
             CommunityRole::query()->create([
@@ -965,8 +967,7 @@ class CommunityRepository extends BaseRepository
                 'sport_type' => $data->sportType ?: $this->sportName($data->sportId),
                 'avatar' => $avatar ?? '',
                 'cover_page' => $cover ?? '',
-                'banned' => false,
-                'moderate' => true,
+                'status' => CommunityStatus::Confirmed->value,
             ]);
 
             CommunityRole::query()->create([

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\CommunityStatus;
 use App\Models\Community;
 use App\Models\CommunitySetting;
 use App\Models\User;
@@ -384,8 +385,7 @@ class TeamsPageTest extends TestCase
             'sport_type' => 'Радиоспорт',
             'avatar' => '',
             'cover_page' => '',
-            'banned' => false,
-            'moderate' => true,
+            'status' => CommunityStatus::Confirmed->value,
         ]);
         $team->id = $id;
         $team->exists = true;

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\CommunityStatus;
 use App\Http\Traits\StaticTableName;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,22 +18,30 @@ class Community extends Model
 
     protected $fillable = [
         'type',
-        'banned',
         'name',
         'about',
         'avatar',
         'cover_page',
         'place',
         'sport_type',
-        'moderate',
+        'status',
     ];
 
     protected function casts(): array
     {
         return [
-            'banned' => 'boolean',
-            'moderate' => 'boolean',
+            'status' => 'integer',
         ];
+    }
+
+    public function statusEnum(): CommunityStatus
+    {
+        return CommunityStatus::tryFrom((int) $this->status) ?? CommunityStatus::New;
+    }
+
+    public function isVisible(): bool
+    {
+        return $this->statusEnum()->isVisible();
     }
 
     /**

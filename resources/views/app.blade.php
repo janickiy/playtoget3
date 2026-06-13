@@ -146,6 +146,14 @@
                         </li>
 
                         <li class="nav-item">
+                            <a href="{{ route('admin.communities.index') }}" class="nav-link{{ Request::is('cp/communities*') ? ' active' : '' }}"
+                               title="Комьюнити">
+                                <i class="nav-icon fas fa-users-cog"></i>
+                                <p>Комьюнити</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a href="{{ route('admin.settings.index') }}" class="nav-link{{ Request::is('cp/settings*') ? ' active' : '' }}"
                                title="Настройки">
                                 <i class="nav-icon fas fa-cogs"></i>

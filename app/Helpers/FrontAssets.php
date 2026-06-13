@@ -66,7 +66,16 @@ class FrontAssets
 
     public static function communityAvatar(?Community $community): string
     {
-        if ($community && ! $community->banned && $community->avatar) {
+        if (! $community || ! $community->isVisible()) {
+            return asset('frontend/images/noimage.png');
+        }
+
+        return self::adminCommunityAvatar($community);
+    }
+
+    public static function adminCommunityAvatar(?Community $community): string
+    {
+        if ($community && $community->avatar) {
             $paths = match ($community->type) {
                 'team' => [
                     'groupcontent/avatar/' . $community->avatar,
@@ -92,7 +101,7 @@ class FrontAssets
 
     public static function communityCover(?Community $community): string
     {
-        if ($community && ! $community->banned && $community->cover_page && ($url = self::publicImageUrl($community->type . 'content/cover_page/' . $community->cover_page))) {
+        if ($community && $community->isVisible() && $community->cover_page && ($url = self::publicImageUrl($community->type . 'content/cover_page/' . $community->cover_page))) {
             return $url;
         }
 

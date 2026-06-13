@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\ContentController;
+use App\Http\Controllers\Admin\CommunitiesController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DataTableController;
@@ -61,6 +62,14 @@ Route::prefix('cp')->group(function () {
             Route::post('bulk', [UsersController::class, 'bulk'])->name('bulk');
         });
 
+        Route::prefix('communities')->name('admin.communities.')->middleware('permission:admin')->group(function () {
+            Route::get('', [CommunitiesController::class, 'index'])->name('index');
+            Route::get('show/{id}', [CommunitiesController::class, 'show'])->where('id', '[0-9]+')->name('show');
+            Route::get('edit/{id}', [CommunitiesController::class, 'edit'])->where('id', '[0-9]+')->name('edit');
+            Route::put('update', [CommunitiesController::class, 'update'])->name('update');
+            Route::delete('destroy/{id}', [CommunitiesController::class, 'destroy'])->where('id', '[0-9]+')->name('destroy');
+        });
+
         Route::prefix('settings')->middleware('permission:admin')->group(function () {
             Route::get('', [SettingsController::class, 'index'])->name('admin.settings.index');
             Route::get('create/{type}', [SettingsController::class, 'create'])->name('admin.settings.create');
@@ -73,6 +82,7 @@ Route::prefix('cp')->group(function () {
         Route::prefix('datatable')->name('admin.datatable.')->group(function () {
             Route::any('admin', [DataTableController::class, 'admin'])->middleware('permission:admin|moderator')->name('admin');
             Route::any('users', [DataTableController::class, 'users'])->middleware('permission:admin|moderator')->name('users');
+            Route::any('communities', [DataTableController::class, 'communities'])->middleware('permission:admin')->name('communities');
             Route::any('content', [DataTableController::class, 'content'])->name('content');
             Route::any('settings', [DataTableController::class, 'settings'])->middleware('permission:admin')->name('settings');
         });
