@@ -9,6 +9,26 @@
     {!! Html::style('/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') !!}
     {!! Html::style('/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') !!}
 
+    <style>
+        #itemList thead th.users-checkbox-column {
+            background-image: none !important;
+            cursor: default;
+            text-align: center;
+        }
+
+        #itemList thead th.users-checkbox-column::before,
+        #itemList thead th.users-checkbox-column::after {
+            display: none !important;
+            content: '' !important;
+        }
+
+        #itemList .users-checkbox-column,
+        #itemList .users-checkbox-cell {
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+
 @endsection
 
 @section('content')
@@ -22,8 +42,8 @@
                             <table id="itemList" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
-                                    <th style="width: 3%">
-                                        <input type="checkbox" id="checkAllUsers">
+                                    <th class="users-checkbox-column" style="width: 3%">
+                                        <input type="checkbox" id="checkAllUsers" title="Отметить / снять отметку у всех">
                                     </th>
                                     <th>ID</th>
                                     <th>Email</th>
@@ -106,33 +126,57 @@
                 "responsive": true,
                 "autoWidth": true,
                 "serverSide": true,
+                "order": [[1, 'desc']],
                 "ajax": {
                     url: '{{ route('admin.datatable.users') }}'
                 },
+                "columnDefs": [
+                    {
+                        targets: 0,
+                        orderable: false,
+                        searchable: false,
+                        className: 'users-checkbox-cell'
+                    },
+                    {
+                        targets: -1,
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
                 "columns": [
-                    {data: 'checkbox', name: 'id', orderable: false, searchable: false},
+                    {data: 'checkbox', name: 'checkbox'},
                     {data: 'id', name: 'id'},
                     {data: 'email', name: 'email'},
                     {data: 'name', name: 'firstname'},
                     {data: 'city', name: 'city'},
                     {data: 'status', name: 'status'},
                     {data: 'created_at', name: 'created_at'},
-                    {data: 'actions', name: 'actions', orderable: false, searchable: false}
+                    {data: 'actions', name: 'actions'}
                 ]
             });
 
+            function updateCheckAllUsersState() {
+                let all = $('.js-user-checkbox').length;
+                let checked = $('.js-user-checkbox:checked').length;
+
+                $('#checkAllUsers')
+                    .prop('checked', all > 0 && all === checked)
+                    .prop('indeterminate', checked > 0 && checked < all);
+            }
+
             table.on('draw', function () {
-                $('#checkAllUsers').prop('checked', false);
+                $('#checkAllUsers').prop('checked', false).prop('indeterminate', false);
             });
 
-            $('#checkAllUsers').on('change', function () {
+            $('#checkAllUsers').on('click', function (event) {
+                event.stopPropagation();
+            }).on('change', function () {
                 $('.js-user-checkbox').prop('checked', this.checked);
+                updateCheckAllUsersState();
             });
 
             $('#itemList').on('change', '.js-user-checkbox', function () {
-                let all = $('.js-user-checkbox').length;
-                let checked = $('.js-user-checkbox:checked').length;
-                $('#checkAllUsers').prop('checked', all > 0 && all === checked);
+                updateCheckAllUsersState();
             });
 
             $('#itemList').on('click', 'a.statusRow', function (event) {

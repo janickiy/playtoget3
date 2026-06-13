@@ -90,6 +90,8 @@ class AdminUsersCrudTest extends TestCase
             ->assertSee('Пользователи')
             ->assertSee(route('admin.datatable.users'), false)
             ->assertSee('id="checkAllUsers"', false)
+            ->assertSee('users-checkbox-column')
+            ->assertSee('"order": [[1, \'desc\']]', false)
             ->assertSee('id="bulkAction"', false)
             ->assertSee('Применить');
 
