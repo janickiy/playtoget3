@@ -166,9 +166,7 @@ class ProfileMessagesTest extends TestCase
             'firstname' => $firstname,
             'lastname' => $lastname,
             'sex' => 'male',
-            'confirmed' => true,
-            'banned' => false,
-            'deleted' => false,
+            'status' => 1,
         ]);
         $user->id = $id;
         $user->exists = true;

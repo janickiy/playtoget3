@@ -219,7 +219,7 @@ class MessageRepository extends BaseRepository
      */
     public function canSendMessage(User $sender, User $receiver): bool
     {
-        if ((int) $sender->id === (int) $receiver->id || $receiver->banned || $receiver->deleted) {
+        if ((int) $sender->id === (int) $receiver->id || ! $receiver->isActive()) {
             return false;
         }
 

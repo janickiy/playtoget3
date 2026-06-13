@@ -11,12 +11,21 @@
                     <header class="card card-primary">
                         {!! Form::open(['url' => route('admin.users.update'), 'method' => 'put']) !!}
                         {!! Form::hidden('id', $row->id) !!}
-                        {!! Form::hidden('confirmed', 0) !!}
-                        {!! Form::hidden('banned', 0) !!}
-                        {!! Form::hidden('deleted', 0) !!}
 
                         <div class="card-body">
                             <p>*-обязательные поля</p>
+
+                            <div class="form-group">
+                                <label>Текущая аватарка</label>
+                                <div>
+                                    <img
+                                        src="{{ \App\Helpers\FrontAssets::adminUserAvatar($row) }}"
+                                        alt="Аватар пользователя"
+                                        class="img-thumbnail"
+                                        style="width: 120px; height: 120px; object-fit: cover;"
+                                    >
+                                </div>
+                            </div>
 
                             <div class="form-group">
                                 {!! Form::label('email', 'Email*') !!}
@@ -88,15 +97,6 @@
                                         {!! Form::date('birthday', old('birthday', $row->birthday ? $row->birthday->format('Y-m-d') : null), ['class' => 'form-control']) !!}
                                         @if ($errors->has('birthday'))
                                             <p class="text-danger">{{ $errors->first('birthday') }}</p>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        {!! Form::label('language', 'Язык') !!}
-                                        {!! Form::text('language', old('language', $row->language), ['class' => 'form-control']) !!}
-                                        @if ($errors->has('language'))
-                                            <p class="text-danger">{{ $errors->first('language') }}</p>
                                         @endif
                                     </div>
                                 </div>
@@ -209,30 +209,21 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-check">
-                                        {!! Form::checkbox('confirmed', 1, (bool) old('confirmed', $row->confirmed), ['id' => 'confirmed', 'class' => 'form-check-input']) !!}
-                                        {!! Form::label('confirmed', 'Подтвержден', ['class' => 'form-check-label']) !!}
-                                        @if ($errors->has('confirmed'))
-                                            <p class="text-danger">{{ $errors->first('confirmed') }}</p>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {!! Form::label('status', 'Статус*') !!}
+                                        {!! Form::select('status', $statusOptions, old('status', $row->status), ['class' => 'custom-select']) !!}
+                                        @if ($errors->has('status'))
+                                            <p class="text-danger">{{ $errors->first('status') }}</p>
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-check">
-                                        {!! Form::checkbox('banned', 1, (bool) old('banned', $row->banned), ['id' => 'banned', 'class' => 'form-check-input']) !!}
-                                        {!! Form::label('banned', 'Заблокирован', ['class' => 'form-check-label']) !!}
-                                        @if ($errors->has('banned'))
-                                            <p class="text-danger">{{ $errors->first('banned') }}</p>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-check">
-                                        {!! Form::checkbox('deleted', 1, (bool) old('deleted', $row->deleted), ['id' => 'deleted', 'class' => 'form-check-input']) !!}
-                                        {!! Form::label('deleted', 'Удален', ['class' => 'form-check-label']) !!}
-                                        @if ($errors->has('deleted'))
-                                            <p class="text-danger">{{ $errors->first('deleted') }}</p>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {!! Form::label('confirmed_at', 'Дата подтверждения') !!}
+                                        {!! Form::datetimeLocal('confirmed_at', old('confirmed_at', $row->confirmed_at ? $row->confirmed_at->format('Y-m-d\TH:i') : null), ['class' => 'form-control']) !!}
+                                        @if ($errors->has('confirmed_at'))
+                                            <p class="text-danger">{{ $errors->first('confirmed_at') }}</p>
                                         @endif
                                     </div>
                                 </div>

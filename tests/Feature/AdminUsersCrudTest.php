@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\UserStatus;
 use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Database\Schema\Blueprint;
@@ -53,10 +54,8 @@ class AdminUsersCrudTest extends TestCase
             $table->string('country')->nullable();
             $table->string('region')->nullable();
             $table->string('city')->nullable();
-            $table->string('language')->default('ru');
-            $table->boolean('confirmed')->default(false);
-            $table->boolean('banned')->default(false);
-            $table->boolean('deleted')->default(false);
+            $table->tinyInteger('status')->default(UserStatus::New->value);
+            $table->dateTime('confirmed_at')->nullable();
             $table->timestamps();
         });
 
@@ -105,6 +104,8 @@ class AdminUsersCrudTest extends TestCase
             ->get(route('admin.users.edit', ['id' => $user->id]))
             ->assertOk()
             ->assertSee('Редактирование пользователя')
+            ->assertSee('Текущая аватарка')
+            ->assertSee('Аватар пользователя')
             ->assertSee('name="telegram"', false)
             ->assertSee('name="whatsapp"', false)
             ->assertSee('name="viber"', false);
@@ -116,6 +117,7 @@ class AdminUsersCrudTest extends TestCase
             'email' => 'petr@example.com',
             'firstname' => 'Петр',
             'city' => 'Казань',
+            'status' => UserStatus::New->value,
         ]);
 
         $response = $this->actingAs($this->admin, 'admin')
@@ -129,6 +131,8 @@ class AdminUsersCrudTest extends TestCase
         $this->assertStringContainsString((string) route('admin.users.edit', ['id' => $user->id]), $row['actions']);
         $this->assertStringContainsString('js-user-checkbox', $row['checkbox']);
         $this->assertStringContainsString('deleteRow', $row['actions']);
+        $this->assertSame(UserStatus::New->label(), $row['status']);
+        $this->assertSame(UserStatus::New->cssColor(), $row['status_css']);
     }
 
     public function test_user_admin_update_changes_profile_fields(): void
@@ -161,10 +165,8 @@ class AdminUsersCrudTest extends TestCase
                 'country' => 'Россия',
                 'region' => 'Москва',
                 'city' => 'Москва',
-                'language' => 'ru',
-                'confirmed' => 1,
-                'banned' => 0,
-                'deleted' => 0,
+                'status' => UserStatus::Confirmed->value,
+                'confirmed_at' => '2026-06-13 10:00:00',
             ])
             ->assertRedirect(route('admin.users.index'));
 
@@ -175,9 +177,8 @@ class AdminUsersCrudTest extends TestCase
         $this->assertSame('@alexey', $user->telegram);
         $this->assertSame('+78888888888', $user->whatsapp);
         $this->assertSame('+77777777777', $user->viber);
-        $this->assertTrue((bool) $user->confirmed);
-        $this->assertFalse((bool) $user->banned);
-        $this->assertFalse((bool) $user->deleted);
+        $this->assertSame(UserStatus::Confirmed->value, (int) $user->status);
+        $this->assertSame('2026-06-13 10:00:00', $user->confirmed_at->format('Y-m-d H:i:s'));
         $this->assertTrue(Hash::check('new-password', $user->password));
     }
 
@@ -192,7 +193,7 @@ class AdminUsersCrudTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
-            'banned' => 1,
+            'status' => UserStatus::Blocked->value,
         ]);
 
         $this->actingAs($this->admin, 'admin')
@@ -202,7 +203,7 @@ class AdminUsersCrudTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
-            'banned' => 0,
+            'status' => UserStatus::Confirmed->value,
         ]);
 
         $this->actingAs($this->admin, 'admin')
@@ -212,7 +213,7 @@ class AdminUsersCrudTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
-            'deleted' => 1,
+            'status' => UserStatus::Deleted->value,
         ]);
     }
 
@@ -229,8 +230,8 @@ class AdminUsersCrudTest extends TestCase
             ->assertOk()
             ->assertJson(['count' => 2]);
 
-        $this->assertDatabaseHas('users', ['id' => $first->id, 'banned' => 1]);
-        $this->assertDatabaseHas('users', ['id' => $second->id, 'banned' => 1]);
+        $this->assertDatabaseHas('users', ['id' => $first->id, 'status' => UserStatus::Blocked->value]);
+        $this->assertDatabaseHas('users', ['id' => $second->id, 'status' => UserStatus::Blocked->value]);
 
         $this->actingAs($this->admin, 'admin')
             ->postJson(route('admin.users.bulk'), [
@@ -240,8 +241,8 @@ class AdminUsersCrudTest extends TestCase
             ->assertOk()
             ->assertJson(['count' => 2]);
 
-        $this->assertDatabaseHas('users', ['id' => $first->id, 'banned' => 0]);
-        $this->assertDatabaseHas('users', ['id' => $second->id, 'banned' => 0]);
+        $this->assertDatabaseHas('users', ['id' => $first->id, 'status' => UserStatus::Confirmed->value]);
+        $this->assertDatabaseHas('users', ['id' => $second->id, 'status' => UserStatus::Confirmed->value]);
 
         $this->actingAs($this->admin, 'admin')
             ->postJson(route('admin.users.bulk'), [
@@ -251,8 +252,8 @@ class AdminUsersCrudTest extends TestCase
             ->assertOk()
             ->assertJson(['count' => 2]);
 
-        $this->assertDatabaseHas('users', ['id' => $first->id, 'deleted' => 1]);
-        $this->assertDatabaseHas('users', ['id' => $second->id, 'deleted' => 1]);
+        $this->assertDatabaseHas('users', ['id' => $first->id, 'status' => UserStatus::Deleted->value]);
+        $this->assertDatabaseHas('users', ['id' => $second->id, 'status' => UserStatus::Deleted->value]);
     }
 
     public function test_user_admin_validation_requires_valid_email(): void
@@ -285,10 +286,8 @@ class AdminUsersCrudTest extends TestCase
             'password' => Hash::make('password'),
             'firstname' => null,
             'lastname' => null,
-            'language' => 'ru',
-            'confirmed' => true,
-            'banned' => false,
-            'deleted' => false,
+            'status' => UserStatus::Confirmed->value,
+            'confirmed_at' => now(),
         ], $attributes));
 
         return $user;

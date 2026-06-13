@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin\Users;
 
+use App\Enums\UserStatus;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -49,10 +50,8 @@ class EditRequest extends FormRequest
             'country' => ['nullable', 'string', 'max:255'],
             'region' => ['nullable', 'string', 'max:255'],
             'city' => ['nullable', 'string', 'max:255'],
-            'language' => ['nullable', 'string', 'max:16'],
-            'confirmed' => ['nullable', 'boolean'],
-            'banned' => ['nullable', 'boolean'],
-            'deleted' => ['nullable', 'boolean'],
+            'status' => ['required', 'integer', Rule::in(array_keys(UserStatus::options()))],
+            'confirmed_at' => ['nullable', 'date'],
         ];
     }
 }

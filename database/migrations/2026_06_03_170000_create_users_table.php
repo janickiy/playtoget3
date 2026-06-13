@@ -32,12 +32,10 @@ return new class extends Migration
             $table->string('country', 100)->nullable();
             $table->string('region', 100)->nullable();
             $table->string('city', 100)->nullable();
-            $table->enum('language', ['ru', 'en'])->default('ru');
-            $table->boolean('confirmed')->default(false);
-            $table->boolean('banned')->default(false);
-            $table->boolean('deleted')->default(false);
+            $table->tinyInteger('status')->default(0);
+            $table->dateTime('confirmed_at')->nullable();
 
-            $table->index(['confirmed', 'banned', 'deleted']);
+            $table->index('status');
             $table->index(['lastname', 'firstname']);
         });
     }

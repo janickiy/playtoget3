@@ -13,7 +13,20 @@ class FrontAssets
 {
     public static function userAvatar(?User $user): string
     {
-        if (! $user || $user->banned || $user->deleted) {
+        if (! $user || ! $user->isActive()) {
+            return asset('frontend/images/noimage.png');
+        }
+
+        if ($user->avatar && ($url = self::publicImageUrl('user/avatar/' . $user->avatar))) {
+            return $url;
+        }
+
+        return asset($user->sex === 'female' ? 'frontend/images/default_female.png' : 'frontend/images/default_male.png');
+    }
+
+    public static function adminUserAvatar(?User $user): string
+    {
+        if (! $user) {
             return asset('frontend/images/noimage.png');
         }
 

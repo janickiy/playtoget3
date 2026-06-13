@@ -74,9 +74,7 @@ class ProfileFriendActionsTest extends TestCase
             'firstname' => 'Test',
             'lastname' => 'User',
             'sex' => 'male',
-            'confirmed' => true,
-            'banned' => false,
-            'deleted' => false,
+            'status' => 1,
         ]);
         $user->id = $id;
         $user->exists = true;

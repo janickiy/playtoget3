@@ -3,6 +3,7 @@
 namespace App\DTO\Admin;
 
 use App\DTO\DataTransferObject;
+use App\Enums\UserStatus;
 
 final readonly class UserData implements DataTransferObject
 {
@@ -26,10 +27,8 @@ final readonly class UserData implements DataTransferObject
         public ?string $country = null,
         public ?string $region = null,
         public ?string $city = null,
-        public ?string $language = null,
-        public bool $confirmed = false,
-        public bool $banned = false,
-        public bool $deleted = false,
+        public int $status = 0,
+        public ?string $confirmedAt = null,
     ) {
     }
 
@@ -60,10 +59,8 @@ final readonly class UserData implements DataTransferObject
             country: self::nullableString($data['country'] ?? null),
             region: self::nullableString($data['region'] ?? null),
             city: self::nullableString($data['city'] ?? null),
-            language: self::nullableString($data['language'] ?? null),
-            confirmed: self::boolean($data['confirmed'] ?? false),
-            banned: self::boolean($data['banned'] ?? false),
-            deleted: self::boolean($data['deleted'] ?? false),
+            status: (int) ($data['status'] ?? UserStatus::New->value),
+            confirmedAt: self::nullableString($data['confirmed_at'] ?? null),
         );
     }
 
@@ -92,10 +89,8 @@ final readonly class UserData implements DataTransferObject
             'country' => $this->country,
             'region' => $this->region,
             'city' => $this->city,
-            'language' => $this->language,
-            'confirmed' => $this->confirmed,
-            'banned' => $this->banned,
-            'deleted' => $this->deleted,
+            'status' => $this->status,
+            'confirmed_at' => $this->confirmedAt,
         ];
     }
 
@@ -113,11 +108,4 @@ final readonly class UserData implements DataTransferObject
         return $value !== '' ? $value : null;
     }
 
-    /**
-     * Приводит чекбоксы формы к boolean-значению.
-     */
-    private static function boolean(mixed $value): bool
-    {
-        return in_array($value, [true, 1, '1', 'true', 'on'], true);
-    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Enums\UserStatus;
 use Illuminate\Support\Facades\Storage;
 
 class NewsFeedFormatterService
@@ -14,7 +15,7 @@ class NewsFeedFormatterService
      */
     public function userAvatar(object $row): string
     {
-        if ((bool) $row->banned || (bool) $row->deleted) {
+        if ((int) $row->status !== UserStatus::Confirmed->value) {
             return asset('frontend/images/noimage.png');
         }
 
@@ -46,7 +47,7 @@ class NewsFeedFormatterService
      */
     public function ownerAvatar(object $row): string
     {
-        if ((bool) $row->owner_banned || (bool) $row->owner_deleted) {
+        if ((int) $row->owner_status !== UserStatus::Confirmed->value) {
             return asset('frontend/images/noimage.png');
         }
 

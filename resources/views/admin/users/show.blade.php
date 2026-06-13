@@ -47,14 +47,11 @@
                                 <dt class="col-sm-3">Город</dt>
                                 <dd class="col-sm-9">{{ $row->city }}</dd>
 
-                                <dt class="col-sm-3">Подтвержден</dt>
-                                <dd class="col-sm-9">{{ $row->confirmed ? 'да' : 'нет' }}</dd>
+                                <dt class="col-sm-3">Статус</dt>
+                                <dd class="col-sm-9">{{ $row->statusEnum()->label() }}</dd>
 
-                                <dt class="col-sm-3">Заблокирован</dt>
-                                <dd class="col-sm-9">{{ $row->banned ? 'да' : 'нет' }}</dd>
-
-                                <dt class="col-sm-3">Удален</dt>
-                                <dd class="col-sm-9">{{ $row->deleted ? 'да' : 'нет' }}</dd>
+                                <dt class="col-sm-3">Дата подтверждения</dt>
+                                <dd class="col-sm-9">{{ optional($row->confirmed_at)->format('d/m/Y H:i') }}</dd>
 
                                 <dt class="col-sm-3">Создан</dt>
                                 <dd class="col-sm-9">{{ optional($row->created_at)->format('d/m/Y H:i') }}</dd>

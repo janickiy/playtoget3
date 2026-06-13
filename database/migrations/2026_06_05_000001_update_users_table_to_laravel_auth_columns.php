@@ -9,7 +9,6 @@ return new class extends Migration
 {
     private const LEGACY_COLUMNS = [
         'confirmation_token',
-        'confirmed_at',
         'confirmation_sent_at',
         'reset_password_token',
         'reset_password_sent_at',
@@ -56,7 +55,6 @@ return new class extends Migration
                     foreach ($columnsToAdd as $column) {
                         match ($column) {
                             'confirmation_token' => $table->string($column)->nullable()->after('password'),
-                            'confirmed_at',
                             'confirmation_sent_at',
                             'reset_password_sent_at',
                             'remember_created_at' => $table->dateTime($column)->nullable()->after('password'),

@@ -29,7 +29,6 @@
                                     <th>Email</th>
                                     <th>Имя</th>
                                     <th>Город</th>
-                                    <th>Подтвержден</th>
                                     <th>Статус</th>
                                     <th>Создан</th>
                                     <th style="width: 14%">Действия</th>
@@ -98,6 +97,10 @@
                 },
                 "createdRow": function (row, data) {
                     $(row).attr('id', 'rowid_' + data['id']);
+
+                    if (data['status_css']) {
+                        $(row).addClass(data['status_css']);
+                    }
                 },
                 "processing": true,
                 "responsive": true,
@@ -112,8 +115,7 @@
                     {data: 'email', name: 'email'},
                     {data: 'name', name: 'firstname'},
                     {data: 'city', name: 'city'},
-                    {data: 'confirmed', name: 'confirmed'},
-                    {data: 'banned', name: 'banned'},
+                    {data: 'status', name: 'status'},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'actions', name: 'actions', orderable: false, searchable: false}
                 ]

@@ -3,7 +3,9 @@
 namespace App\Repositories;
 
 use App\DTO\Admin\UserData;
+use App\Enums\UserStatus;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
@@ -48,7 +50,15 @@ class AdminUserRepository extends BaseRepository
      */
     public function setBlocked(int $id, bool $blocked): bool
     {
-        return $this->update($id, ['banned' => $blocked]);
+        $payload = [
+            'status' => $blocked ? UserStatus::Blocked->value : UserStatus::Confirmed->value,
+        ];
+
+        if (! $blocked) {
+            $payload['confirmed_at'] = Carbon::now();
+        }
+
+        return $this->update($id, $payload);
     }
 
     /**
@@ -56,7 +66,7 @@ class AdminUserRepository extends BaseRepository
      */
     public function markDeleted(int $id): bool
     {
-        return $this->update($id, ['deleted' => true]);
+        return $this->update($id, ['status' => UserStatus::Deleted->value]);
     }
 
     /**
@@ -83,9 +93,17 @@ class AdminUserRepository extends BaseRepository
      */
     public function bulkSetBlocked(array $ids, bool $blocked): int
     {
+        $payload = [
+            'status' => $blocked ? UserStatus::Blocked->value : UserStatus::Confirmed->value,
+        ];
+
+        if (! $blocked) {
+            $payload['confirmed_at'] = Carbon::now();
+        }
+
         return $this->model->newQuery()
             ->whereKey($ids)
-            ->update(['banned' => $blocked]);
+            ->update($payload);
     }
 
     /**
@@ -97,7 +115,7 @@ class AdminUserRepository extends BaseRepository
     {
         return $this->model->newQuery()
             ->whereKey($ids)
-            ->update(['deleted' => true]);
+            ->update(['status' => UserStatus::Deleted->value]);
     }
 
     /**
@@ -107,7 +125,17 @@ class AdminUserRepository extends BaseRepository
      */
     private function payload(UserData $data): array
     {
-        return $data->toArray();
+        $payload = $data->toArray();
+
+        if ((int) $payload['status'] === UserStatus::Confirmed->value && empty($payload['confirmed_at'])) {
+            $payload['confirmed_at'] = Carbon::now();
+        }
+
+        if ((int) $payload['status'] !== UserStatus::Confirmed->value) {
+            $payload['confirmed_at'] = null;
+        }
+
+        return $payload;
     }
 
     /**

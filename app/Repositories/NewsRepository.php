@@ -93,8 +93,7 @@ class NewsRepository extends BaseRepository
                 'u.email',
                 'u.sex',
                 'u.avatar',
-                'u.banned',
-                'u.deleted',
+                'u.status',
             ])
             ->where('p.banned', false)
             ->where('p.moderate', false)
@@ -149,8 +148,7 @@ class NewsRepository extends BaseRepository
                 'u.email',
                 'u.sex',
                 'u.avatar',
-                'u.banned',
-                'u.deleted',
+                'u.status',
             ])
             ->where('v.banned', false)
             ->whereNotNull('v.owner_id')
@@ -194,8 +192,7 @@ class NewsRepository extends BaseRepository
                 'u.email',
                 'u.sex',
                 'u.avatar',
-                'u.banned',
-                'u.deleted',
+                'u.status',
             ])
             ->where('c.commentable_type', 'user')
             ->whereNotNull('c.user_id')
@@ -253,16 +250,14 @@ class NewsRepository extends BaseRepository
                 'owner.email as owner_email',
                 'owner.sex as owner_sex',
                 'owner.avatar as owner_avatar',
-                'owner.banned as owner_banned',
-                'owner.deleted as owner_deleted',
+                'owner.status as owner_status',
                 'u.id as author_id',
                 'u.firstname',
                 'u.lastname',
                 'u.email',
                 'u.sex',
                 'u.avatar',
-                'u.banned',
-                'u.deleted',
+                'u.status',
             ])
             ->where('c.commentable_type', 'photo')
             ->where('p.banned', false)
@@ -318,16 +313,14 @@ class NewsRepository extends BaseRepository
                 'owner.email as owner_email',
                 'owner.sex as owner_sex',
                 'owner.avatar as owner_avatar',
-                'owner.banned as owner_banned',
-                'owner.deleted as owner_deleted',
+                'owner.status as owner_status',
                 'u.id as author_id',
                 'u.firstname',
                 'u.lastname',
                 'u.email',
                 'u.sex',
                 'u.avatar',
-                'u.banned',
-                'u.deleted',
+                'u.status',
             ])
             ->where('c.commentable_type', 'video')
             ->where('v.banned', false)

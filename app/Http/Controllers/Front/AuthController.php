@@ -21,17 +21,18 @@ class AuthController extends Controller
     public function login(LoginRequest $request, UserRepository $users): RedirectResponse
     {
         $user = $users->findForLogin($request->email());
+        $loginError = ['username' => 'Неверный email или пароль.'];
 
-        if (!$user) {
+        if (! $user || ! $user->isConfirmed()) {
             return back()
                 ->withInput($request->only('username'))
-                ->withErrors(['username' => 'Пользователь не найден или доступ к аккаунту ограничен.']);
+                ->withErrors($loginError);
         }
 
-        if (!$users->passwordUsesBcrypt($user) || !Hash::check($request->password(), $user->password)) {
+        if (! $users->passwordUsesBcrypt($user) || ! Hash::check($request->password(), $user->password)) {
             return back()
                 ->withInput($request->only('username'))
-                ->withErrors(['username' => 'Неверный email или пароль.']);
+                ->withErrors($loginError);
         }
 
         Auth::guard('web')->login($user, $request->remember());

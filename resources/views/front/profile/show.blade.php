@@ -3,9 +3,9 @@
 @section('content')
     @include('front.profile._top')
 
-    @if ($profileUser->banned)
+    @if ($profileUser->isBlocked())
         <p class="no_message">Пользователь заблокирован.</p>
-    @elseif ($profileUser->deleted)
+    @elseif ($profileUser->isDeleted())
         <p class="no_message">Пользователь удален.</p>
     @elseif ($permissions['wall'])
         @if ($viewer)

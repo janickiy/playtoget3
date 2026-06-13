@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\UserStatus;
 use App\Models\User;
 use Illuminate\Support\Facades\Schema;
 
@@ -25,9 +26,7 @@ class UserRepository extends BaseRepository
         }
 
         return $this->model->newQuery()
-            ->where('confirmed', true)
-            ->where('banned', false)
-            ->where('deleted', false)
+            ->where('status', UserStatus::Confirmed->value)
             ->count();
     }
 
@@ -42,9 +41,6 @@ class UserRepository extends BaseRepository
         /** @var User|null $user */
         $user = $this->model->newQuery()
             ->where('email', $email)
-            ->where('confirmed', true)
-            ->where('banned', false)
-            ->where('deleted', false)
             ->first();
 
         return $user;
@@ -61,9 +57,7 @@ class UserRepository extends BaseRepository
         /** @var User|null $user */
         $user = $this->model->newQuery()
             ->whereKey($id)
-            ->where('confirmed', true)
-            ->where('banned', false)
-            ->where('deleted', false)
+            ->where('status', UserStatus::Confirmed->value)
             ->first();
 
         return $user;

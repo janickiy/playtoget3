@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\DTO\Event\EventData;
 use App\Enums\MembershipRole;
+use App\Enums\UserStatus;
 use App\Helpers\FrontAssets;
 use App\Models\AcceptedEventMember;
 use App\Models\Community;
@@ -598,9 +599,7 @@ class EventRepository extends BaseRepository
 
         $inviteIds = User::query()
             ->whereIn('id', $friendIds->diff($existingIds)->values())
-            ->where('confirmed', true)
-            ->where('banned', false)
-            ->where('deleted', false)
+            ->where('status', UserStatus::Confirmed->value)
             ->pluck('id')
             ->map(fn ($id): int => (int) $id);
 
@@ -799,7 +798,7 @@ class EventRepository extends BaseRepository
     {
         $user = $member->member;
 
-        if (! $user instanceof User || $user->banned || $user->deleted) {
+        if (! $user instanceof User || ! $user->isActive()) {
             return null;
         }
 

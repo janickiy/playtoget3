@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\UserStatus;
 use App\Http\Traits\StaticTableName;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -37,10 +38,8 @@ class User extends Authenticatable
         'country',
         'region',
         'city',
-        'language',
-        'confirmed',
-        'banned',
-        'deleted',
+        'status',
+        'confirmed_at',
     ];
 
     protected $hidden = [
@@ -52,10 +51,34 @@ class User extends Authenticatable
     {
         return [
             'birthday' => 'date',
-            'confirmed' => 'boolean',
-            'banned' => 'boolean',
-            'deleted' => 'boolean',
+            'status' => 'integer',
+            'confirmed_at' => 'datetime',
         ];
+    }
+
+    public function statusEnum(): UserStatus
+    {
+        return UserStatus::tryFrom((int) $this->status) ?? UserStatus::New;
+    }
+
+    public function isConfirmed(): bool
+    {
+        return $this->statusEnum() === UserStatus::Confirmed;
+    }
+
+    public function isBlocked(): bool
+    {
+        return $this->statusEnum() === UserStatus::Blocked;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->statusEnum() === UserStatus::Deleted;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->statusEnum()->isActive();
     }
 
     /**

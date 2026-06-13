@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\DTO\Profile\ProfileSettingsData;
 use App\DTO\Profile\CommentData;
 use App\DTO\Profile\ImageCropData;
+use App\Enums\UserStatus;
 use App\Helpers\FrontAssets;
 use App\Models\AcceptedEventMember;
 use App\Models\Attachment;
@@ -98,7 +99,11 @@ class ProfileRepository extends BaseRepository
                 'sportTypes.sportLevel',
             ])
             ->whereKey($id)
-            ->where('confirmed', true)
+            ->whereIn('status', [
+                UserStatus::Confirmed->value,
+                UserStatus::Blocked->value,
+                UserStatus::Deleted->value,
+            ])
             ->first();
 
         return $user;
@@ -321,7 +326,7 @@ class ProfileRepository extends BaseRepository
         $isOwnPage = $viewer && (int)$viewer->id === (int)$profile->id;
         $isFriend = $friendshipStatus === 'friend';
 
-        if ((bool)$profile->banned || (bool)$profile->deleted) {
+        if (! $profile->isActive()) {
             return [
                 'send_message' => false,
                 'wall' => false,

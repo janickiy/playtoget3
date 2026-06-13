@@ -49,9 +49,7 @@ class FriendsPageTest extends TestCase
             'email' => 'user' . $id . '@example.test',
             'sex' => 'male',
             'city' => $city,
-            'confirmed' => true,
-            'banned' => false,
-            'deleted' => false,
+            'status' => 1,
         ]);
         $user->id = $id;
         $user->exists = true;

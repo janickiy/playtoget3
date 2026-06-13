@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\UserStatus;
 use App\Models\Admin;
 use App\Models\Content;
 use App\Models\Settings;
@@ -49,7 +50,7 @@ class DataTableController extends Controller
      */
     public function users(): JsonResponse
     {
-        $row = User::query()->where('deleted', false);
+        $row = User::query()->where('status', '<>', UserStatus::Deleted->value);
 
         return Datatables::of($row)
             ->addColumn('checkbox', function ($row) {
@@ -58,11 +59,14 @@ class DataTableController extends Controller
             ->addColumn('name', function ($row) {
                 return e($row->displayName());
             })
+            ->addColumn('status_css', function ($row) {
+                return UserStatus::cssColorFor((int) $row->status);
+            })
             ->addColumn('actions', function ($row) {
                 $showBtn = '<a title="просмотр" class="btn btn-xs btn-info" href="' . route('admin.users.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
                 $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary" href="' . route('admin.users.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a> &nbsp;';
 
-                if ((bool) $row->banned) {
+                if ((int) $row->status === UserStatus::Blocked->value) {
                     $statusBtn = '<a title="разблокировать" class="btn btn-xs btn-success statusRow" href="' . route('admin.users.unblock', ['id' => $row->id]) . '" data-id="' . $row->id . '" data-action="unblock"><span class="fa fa-unlock"></span></a> &nbsp;';
                 } else {
                     $statusBtn = '<a title="заблокировать" class="btn btn-xs btn-warning statusRow" href="' . route('admin.users.block', ['id' => $row->id]) . '" data-id="' . $row->id . '" data-action="block"><span class="fa fa-lock"></span></a> &nbsp;';
@@ -72,11 +76,8 @@ class DataTableController extends Controller
 
                 return '<div class="nobr"> ' . $showBtn . $editBtn . $statusBtn . $deleteBtn . '</div>';
             })
-            ->editColumn('confirmed', function ($row) {
-                return $row->confirmed ? 'да' : 'нет';
-            })
-            ->editColumn('banned', function ($row) {
-                return $row->banned ? 'заблокирован' : 'активен';
+            ->editColumn('status', function ($row) {
+                return UserStatus::labelFor((int) $row->status);
             })
             ->editColumn('created_at', function ($row) {
                 return Carbon::parse($row->created_at)->format('d/m/Y H:i');

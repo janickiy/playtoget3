@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\UserStatus;
 use App\Helpers\FrontAssets;
 use App\Models\Friend;
 use App\Models\User;
@@ -424,9 +425,7 @@ class FriendRepository extends BaseRepository
     private function activeUsersQuery(array $filters = []): Builder
     {
         return User::query()
-            ->where('confirmed', true)
-            ->where('banned', false)
-            ->where('deleted', false)
+            ->where('status', UserStatus::Confirmed->value)
             ->when($filters['search'] ?? null, function (Builder $query, string $search): void {
                 foreach (preg_split('/\s+/', $search) ?: [] as $term) {
                     $term = trim($term);

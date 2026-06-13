@@ -1,4 +1,4 @@
-@if (! $profileUser->banned && ! $profileUser->deleted)
+@if ($profileUser->isActive())
     @php
         $isOwnPage = $viewer && (int) $viewer->id === (int) $profileUser->id;
     @endphp

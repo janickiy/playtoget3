@@ -506,9 +506,7 @@ class ProfilePageTest extends TestCase
             'lastname' => $lastname,
             'email' => 'user' . $id . '@example.test',
             'sex' => 'male',
-            'confirmed' => true,
-            'banned' => false,
-            'deleted' => false,
+            'status' => 1,
         ]);
         $user->id = $id;
         $user->exists = true;

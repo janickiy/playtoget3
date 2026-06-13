@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\DTO\Admin\UserData;
+use App\Enums\UserStatus;
 use App\Http\Requests\Admin\Users\BulkActionRequest;
 use App\Http\Requests\Admin\Users\DeleteRequest;
 use App\Http\Requests\Admin\Users\EditRequest;
@@ -69,6 +70,7 @@ class UsersController extends Controller
 
         return view('admin.users.create_edit', [
             'row' => $row,
+            'statusOptions' => UserStatus::options(),
             'title' => 'Редактирование пользователя',
         ]);
     }
