@@ -39,7 +39,7 @@
     </div>
 
     <script src="{{ asset('frontend/js/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/jquery-migrate-3.5.2.min.js') }}"></script>
+    <script src="{{ asset('frontend/js/jquery-migrate-3.6.0.min.js') }}"></script>
     <script src="{{ asset('frontend/js/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('frontend/js/bootstrap.min.js') }}"></script>
 </body>

@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-390.css') }}" media="(max-width: 390px)">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800&subset=latin,cyrillic" rel="stylesheet" type="text/css">
     <script src="{{ asset('frontend/js/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/jquery-migrate-3.5.2.min.js') }}"></script>
+    <script src="{{ asset('frontend/js/jquery-migrate-3.6.0.min.js') }}"></script>
     <script src="{{ asset('frontend/js/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('frontend/js/main_page.js') }}"></script>
 </head>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="content-type" content="no-cache">
@@ -30,7 +30,7 @@
     @stack('styles')
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800&subset=latin,cyrillic" rel="stylesheet" type="text/css">
     <script src="{{ asset('frontend/js/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/jquery-migrate-3.5.2.min.js') }}"></script>
+    <script src="{{ asset('frontend/js/jquery-migrate-3.6.0.min.js') }}"></script>
     <script src="{{ asset('frontend/js/header.js') }}"></script>
     <script src="{{ asset('frontend/js/show-hidden.js') }}"></script>
     <script>
