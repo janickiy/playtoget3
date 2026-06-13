@@ -40,9 +40,6 @@
                                 <dt class="col-sm-3">Сайт</dt>
                                 <dd class="col-sm-9">{{ $row->website }}</dd>
 
-                                <dt class="col-sm-3">Аватар</dt>
-                                <dd class="col-sm-9">{{ $row->avatar }}</dd>
-
                                 <dt class="col-sm-3">ID владельца</dt>
                                 <dd class="col-sm-9">{{ $row->owner_id }}</dd>
 
