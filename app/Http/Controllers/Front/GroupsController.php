@@ -98,6 +98,7 @@ class GroupsController extends Controller
             'group' => null,
             'settings' => null,
             'canEditSettings' => false,
+            'hideTopProfile' => true,
         ]);
     }
 

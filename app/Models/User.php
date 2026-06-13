@@ -100,14 +100,6 @@ class User extends Authenticatable
     /**
      * @return HasMany
      */
-    public function roles(): HasMany
-    {
-        return $this->hasMany(UserRole::class);
-    }
-
-    /**
-     * @return HasMany
-     */
     public function sportTypes(): HasMany
     {
         return $this->hasMany(UserSportType::class);

@@ -8,7 +8,12 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('users_roles', function (Blueprint $table) {
+        Schema::dropIfExists('users_roles');
+    }
+
+    public function down(): void
+    {
+        Schema::create('users_roles', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->unsignedBigInteger('role_id');
@@ -16,10 +21,5 @@ return new class extends Migration
 
             $table->index(['user_id', 'role_id']);
         });
-    }
-
-    public function down(): void
-    {
-        Schema::dropIfExists('users_roles');
     }
 };

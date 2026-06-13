@@ -98,6 +98,7 @@ class TeamsController extends Controller
             'team' => null,
             'settings' => null,
             'canEditSettings' => false,
+            'hideTopProfile' => true,
         ]);
     }
 

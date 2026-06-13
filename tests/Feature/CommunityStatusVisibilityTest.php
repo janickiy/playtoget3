@@ -63,33 +63,39 @@ class CommunityStatusVisibilityTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_front_repository_finds_only_confirmed_teams_and_groups(): void
+    public function test_front_repository_hides_blocked_and_hidden_teams_and_groups(): void
     {
         $confirmedTeam = $this->community('team', CommunityStatus::Confirmed, 'Подтвержденная команда');
         $newTeam = $this->community('team', CommunityStatus::New, 'Новая команда');
         $blockedGroup = $this->community('group', CommunityStatus::Blocked, 'Заблокированная группа');
+        $hiddenTeam = $this->community('team', CommunityStatus::Hidden, 'Скрытая команда');
         $confirmedGroup = $this->community('group', CommunityStatus::Confirmed, 'Подтвержденная группа');
 
         /** @var CommunityRepository $repository */
         $repository = app(CommunityRepository::class);
 
         $this->assertNotNull($repository->findTeam((int) $confirmedTeam->id));
-        $this->assertNull($repository->findTeam((int) $newTeam->id));
+        $this->assertNotNull($repository->findTeam((int) $newTeam->id));
+        $this->assertNull($repository->findTeam((int) $hiddenTeam->id));
         $this->assertNull($repository->findGroup((int) $blockedGroup->id));
         $this->assertNotNull($repository->findGroup((int) $confirmedGroup->id));
     }
 
-    public function test_front_repository_lists_only_confirmed_communities(): void
+    public function test_front_repository_lists_only_visible_communities(): void
     {
         $confirmedTeam = $this->community('team', CommunityStatus::Confirmed, 'Подтвержденная команда');
-        $this->community('team', CommunityStatus::New, 'Новая команда');
+        $newTeam = $this->community('team', CommunityStatus::New, 'Новая команда');
         $this->community('team', CommunityStatus::Blocked, 'Заблокированная команда');
+        $this->community('team', CommunityStatus::Hidden, 'Скрытая команда');
 
         /** @var CommunityRepository $repository */
         $repository = app(CommunityRepository::class);
 
-        $this->assertSame(1, $repository->popularTeamsCount());
-        $this->assertSame([(int) $confirmedTeam->id], $repository->popularTeams(10)->pluck('id')->all());
+        $this->assertSame(2, $repository->popularTeamsCount());
+        $this->assertEqualsCanonicalizing(
+            [(int) $confirmedTeam->id, (int) $newTeam->id],
+            $repository->popularTeams(10)->pluck('id')->all()
+        );
     }
 
     private function community(string $type, CommunityStatus $status, string $name): Community

@@ -1,6 +1,8 @@
 @extends('front.layouts.app')
 
 @section('content')
+    @php($showFormTabs = (bool) ($canEditSettings ?? false))
+
     <div class="content-groups friends">
         @if ($team)
             @include('front.teams._top')
@@ -20,15 +22,15 @@
         <div class="job_form">
             <form class="form-horizontal create_form" method="POST" action="{{ $action }}" enctype="multipart/form-data" autocomplete="off">
                 @csrf
-                <div id="tabs" @class(['team-form-tabs', 'team-form-tabs-single' => ! $canEditSettings])>
-                    <ul>
-                        <li><a href="#info">Информация</a></li>
-                        @if ($canEditSettings)
+                <div @if($showFormTabs) id="tabs" @endif @class(['community-form-tabs' => $showFormTabs, 'team-form-tabs' => $showFormTabs, 'community-create-form-panel' => ! $showFormTabs])>
+                    @if ($showFormTabs)
+                        <ul>
+                            <li><a href="#info">Информация</a></li>
                             <li><a href="#administrators">Администраторы</a></li>
                             <li><a href="#privacy">Приватность</a></li>
                             <li><a href="#blacklist">Черный список</a></li>
-                        @endif
-                    </ul>
+                        </ul>
+                    @endif
 
                     <div id="info">
                         <center><h2>Информация</h2></center>
@@ -79,7 +81,7 @@
                         </div>
                     </div>
 
-                    @if ($canEditSettings)
+                    @if ($showFormTabs)
                         <div id="administrators">
                             <center><h2>Администраторы</h2></center>
                             <div class="possible-friend">
@@ -178,13 +180,13 @@
     </div>
 @endsection
 
+@if ($canEditSettings)
+    @include('front.communities._form-tabs-assets')
+@endif
+
 @push('styles')
     <style>
-        .team-form-tabs-single > ul {
-            display: none;
-        }
-
-        .team-form-tabs-single #info {
+        .community-create-form-panel {
             padding-top: 10px;
         }
 

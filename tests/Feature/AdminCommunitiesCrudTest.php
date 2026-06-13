@@ -119,6 +119,20 @@ class AdminCommunitiesCrudTest extends TestCase
         $this->assertStringContainsString('deleteRow', $row['actions']);
     }
 
+    public function test_communities_datatable_returns_hidden_status_color(): void
+    {
+        $this->community([
+            'name' => 'Скрытая команда',
+            'status' => CommunityStatus::Hidden->value,
+        ]);
+
+        $this->actingAs($this->admin, 'admin')
+            ->getJson(route('admin.datatable.communities', ['draw' => 1, 'start' => 0, 'length' => 10]))
+            ->assertOk()
+            ->assertJsonPath('data.0.status', 'Скрытый')
+            ->assertJsonPath('data.0.status_css', 'bg-warning');
+    }
+
     public function test_communities_datatable_searches_by_displayed_created_date(): void
     {
         $target = $this->community(['name' => 'Нужное комьюнити']);

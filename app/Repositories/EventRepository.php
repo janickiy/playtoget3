@@ -479,7 +479,7 @@ class EventRepository extends BaseRepository
                 return Community::query()
                     ->whereIn('id', $ids)
                     ->where('type', $type)
-                    ->where('status', CommunityStatus::Confirmed->value)
+                    ->whereIn('status', CommunityStatus::visibleValues())
                     ->orderBy('name')
                     ->get()
                     ->map(fn (Community $community): array => [
