@@ -20,6 +20,24 @@
         @if ($group['can_edit'] ?? false)
             <a href="{{ route('front.groups.edit', ['community' => $group['id']]) }}">Редактировать</a>
         @endif
+        @if ($inviteActions ?? false)
+            <div class="community-invite-actions">
+                <a href="#"
+                   class="community-invite-list-action community-invite-list-accept js-community-invite-list-action"
+                   data-community-id="{{ $group['id'] }}"
+                   data-status="1"
+                   data-tooltip="Вступить">
+                    <img src="{{ asset('frontend/images/icon-ok.png') }}" alt="">
+                </a>
+                <a href="#"
+                   class="community-invite-list-action community-invite-list-decline js-community-invite-list-action"
+                   data-community-id="{{ $group['id'] }}"
+                   data-status="0"
+                   data-tooltip="Отклонить">
+                    <img src="{{ asset('frontend/images/icon-krest.png') }}" alt="">
+                </a>
+            </div>
+        @endif
         <div class="transparent"></div>
     </div>
 </div>

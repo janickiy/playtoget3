@@ -66,6 +66,10 @@
     <li><a href="{{ route('front.teams.events', ['community' => $team->id]) }}" @class(['active-link' => $section === 'events'])><i class="icon_list icon-1"></i><span>Мероприятия</span></a></li>
 </ul>
 
+@if ($viewer)
+    @include('front.communities._invite-modal')
+@endif
+
 @once
     @push('styles')
         <style>
@@ -223,6 +227,11 @@
                 $(document).on('click', '.js-team-invite', function (event) {
                     event.preventDefault();
                     const button = $(this);
+
+                    if (window.openCommunityInviteModal) {
+                        window.openCommunityInviteModal(button.data('community-id'));
+                        return;
+                    }
 
                     memberAjax('send_community_invitation', {community_id: button.data('community-id')})
                         .done(function (response) {

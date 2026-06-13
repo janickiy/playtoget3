@@ -93,7 +93,7 @@
                                  data-has-more="{{ $invitedTeamsTotal > $invitedTeams->count() ? 1 : 0 }}"
                                  data-user-id="{{ $viewer->id }}">
                                 @foreach ($invitedTeams as $team)
-                                    @include('front.teams._team-card', ['team' => $team])
+                                    @include('front.teams._team-card', ['team' => $team, 'inviteActions' => true])
                                 @endforeach
                             </div>
                             <a href="#" class="show-more js-teams-load-more" data-feed="invited" @style(['display: none' => $invitedTeamsTotal <= $invitedTeams->count()])>
@@ -122,6 +122,8 @@
         @endempty
     </div>
 @endsection
+
+@include('front.communities._invite-list-actions-assets')
 
 @push('styles')
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend/css/select2.css') }}">

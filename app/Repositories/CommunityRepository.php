@@ -818,10 +818,102 @@ class CommunityRepository extends BaseRepository
      */
     public function inviteFriends(Community $team, User $viewer): int
     {
+        return $this->inviteFriendUsers($team, $viewer)->count();
+    }
+
+    /**
+     * Возвращает друзей пользователя, которых можно пригласить в выбранную сущность.
+     *
+     * @param Community $team
+     * @param User $viewer
+     * @return Collection
+     */
+    public function invitableFriends(Community $team, User $viewer): Collection
+    {
         if (! $this->canInvite($team, $viewer)) {
-            return 0;
+            return collect();
         }
 
+        $friendIds = $this->availableFriendIds($team, $viewer);
+
+        if ($friendIds->isEmpty()) {
+            return collect();
+        }
+
+        return User::query()
+            ->whereIn('id', $friendIds)
+            ->where('status', UserStatus::Confirmed->value)
+            ->orderBy('firstname')
+            ->orderBy('lastname')
+            ->orderBy('email')
+            ->get()
+            ->map(fn (User $user): array => [
+                'id' => (int) $user->id,
+                'name' => $user->displayName(),
+                'city' => (string) $user->city,
+                'avatar' => FrontAssets::userAvatar($user),
+            ]);
+    }
+
+    /**
+     * Приглашает выбранных друзей пользователя и возвращает список приглашенных пользователей.
+     *
+     * @param Community $team
+     * @param User $viewer
+     * @param array $friendIds
+     * @return Collection
+     */
+    public function inviteFriendUsers(Community $team, User $viewer, array $friendIds = []): Collection
+    {
+        if (! $this->canInvite($team, $viewer)) {
+            return collect();
+        }
+
+        $availableIds = $this->availableFriendIds($team, $viewer);
+        $selectedIds = collect($friendIds)
+            ->map(fn ($id): int => (int) $id)
+            ->filter(fn (int $id): bool => $id > 0)
+            ->unique()
+            ->values();
+
+        $inviteIds = $selectedIds->isNotEmpty()
+            ? $availableIds->intersect($selectedIds)->values()
+            : $availableIds;
+
+        if ($inviteIds->isEmpty()) {
+            return collect();
+        }
+
+        $invitees = User::query()
+            ->whereIn('id', $inviteIds)
+            ->where('status', UserStatus::Confirmed->value)
+            ->get()
+            ->keyBy('id');
+
+        if ($invitees->isEmpty()) {
+            return collect();
+        }
+
+        $rows = $invitees->keys()->map(fn (int $id): array => [
+            'community_id' => $team->id,
+            'user_id' => $id,
+            'role' => 5,
+        ])->all();
+
+        CommunityRole::query()->insert($rows);
+
+        return $invitees->values();
+    }
+
+    /**
+     * Возвращает id друзей, у которых еще нет роли в выбранной сущности.
+     *
+     * @param Community $team
+     * @param User $viewer
+     * @return Collection
+     */
+    private function availableFriendIds(Community $team, User $viewer): Collection
+    {
         $friendIds = Friend::query()
             ->where('status', 1)
             ->where(function (Builder $query) use ($viewer): void {
@@ -836,7 +928,7 @@ class CommunityRepository extends BaseRepository
             ->values();
 
         if ($friendIds->isEmpty()) {
-            return 0;
+            return collect();
         }
 
         $existingIds = CommunityRole::query()
@@ -845,25 +937,7 @@ class CommunityRepository extends BaseRepository
             ->pluck('user_id')
             ->map(fn ($id): int => (int) $id);
 
-        $inviteIds = User::query()
-            ->whereIn('id', $friendIds->diff($existingIds)->values())
-            ->where('status', UserStatus::Confirmed->value)
-            ->pluck('id')
-            ->map(fn ($id): int => (int) $id);
-
-        if ($inviteIds->isEmpty()) {
-            return 0;
-        }
-
-        $rows = $inviteIds->map(fn (int $id): array => [
-            'community_id' => $team->id,
-            'user_id' => $id,
-            'role' => 5,
-        ])->all();
-
-        CommunityRole::query()->insert($rows);
-
-        return count($rows);
+        return $friendIds->diff($existingIds)->values();
     }
 
     /**

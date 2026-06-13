@@ -8,6 +8,7 @@ use App\Models\CommunitySetting;
 use App\Models\User;
 use App\Repositories\CommunityRepository;
 use App\Repositories\ProfileRepository;
+use App\Service\CommunityInvitationNotificationService;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
@@ -101,6 +102,7 @@ class TeamsPageTest extends TestCase
 
         $this->assertStringContainsString('PlayToGet приглашает', $response->json('html'));
         $this->assertStringContainsString('Приглашен', $response->json('html'));
+        $this->assertStringContainsString('js-community-invite-list-action', $response->json('html'));
     }
 
     public function test_team_create_page_renders_legacy_form_controls(): void
@@ -409,6 +411,34 @@ class TeamsPageTest extends TestCase
     public function test_team_invitation_ajax_invites_friends(): void
     {
         $viewer = $this->user(1);
+        $invitee = $this->user(2);
+        $team = $this->community(18);
+        $invitees = collect([$invitee]);
+
+        $this->actingAs($viewer, 'web');
+
+        $this->mock(CommunityRepository::class, function (MockInterface $mock) use ($viewer, $team, $invitees): void {
+            $mock->shouldReceive('findTeam')->with(18)->andReturn($team);
+            $mock->shouldReceive('canInvite')->with($team, $viewer)->andReturn(true);
+            $mock->shouldReceive('inviteFriendUsers')->with($team, $viewer, [2, 3])->andReturn($invitees);
+        });
+
+        $this->mock(CommunityInvitationNotificationService::class, function (MockInterface $mock) use ($viewer, $team, $invitees): void {
+            $mock->shouldReceive('sendInvitations')->with($team, $viewer, $invitees)->once();
+        });
+
+        $this->post('/ajax/send_community_invitation', [
+            'community_id' => 18,
+            'user_ids' => [2, 3],
+        ])
+            ->assertOk()
+            ->assertJsonPath('result', 'success')
+            ->assertJsonPath('count', 1);
+    }
+
+    public function test_team_invite_friends_ajax_returns_modal_list(): void
+    {
+        $viewer = $this->user(1);
         $team = $this->community(18);
 
         $this->actingAs($viewer, 'web');
@@ -416,15 +446,25 @@ class TeamsPageTest extends TestCase
         $this->mock(CommunityRepository::class, function (MockInterface $mock) use ($viewer, $team): void {
             $mock->shouldReceive('findTeam')->with(18)->andReturn($team);
             $mock->shouldReceive('canInvite')->with($team, $viewer)->andReturn(true);
-            $mock->shouldReceive('inviteFriends')->with($team, $viewer)->andReturn(4);
+            $mock->shouldReceive('invitableFriends')->with($team, $viewer)->andReturn(collect([
+                [
+                    'id' => 2,
+                    'name' => 'Иван Петров',
+                    'city' => 'Москва',
+                    'avatar' => 'http://site3.local/frontend/images/default_male.png',
+                ],
+            ]));
         });
 
-        $this->post('/ajax/send_community_invitation', [
+        $response = $this->post('/ajax/get_community_invite_friends', [
             'community_id' => 18,
         ])
             ->assertOk()
             ->assertJsonPath('result', 'success')
-            ->assertJsonPath('count', 4);
+            ->assertJsonPath('count', 1);
+
+        $this->assertStringContainsString('Иван Петров', $response->json('html'));
+        $this->assertStringContainsString('name="user_ids[]"', $response->json('html'));
     }
 
     private function team(int $id, string $name): array

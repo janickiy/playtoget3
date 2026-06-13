@@ -33,6 +33,7 @@ use App\Repositories\ProfileRepository;
 use App\Repositories\SportBlockRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\VideoalbumRepository;
+use App\Service\CommunityInvitationNotificationService;
 use App\Service\ProfileCoverCropService;
 use App\Service\VideoService;
 use Illuminate\Http\JsonResponse;
@@ -58,6 +59,7 @@ class AjaxController extends Controller
         private readonly EventRepository      $events,
         private readonly SportBlockRepository $sportBlocks,
         private readonly ProfileCoverCropService $profileCovers,
+        private readonly CommunityInvitationNotificationService $communityInvitations,
         private readonly VideoService         $videos,
     )
     {
@@ -83,6 +85,7 @@ class AjaxController extends Controller
             'block_user' => $this->blockUser($request),
             'unblock_user' => $this->unblockUser($request),
             'change_member_status' => $this->changeCommunityMemberStatus($request),
+            'get_community_invite_friends' => $this->getCommunityInviteFriends($request),
             'send_community_invitation' => $this->sendCommunityInvitation($request),
             'search_event' => $this->searchEvent($request),
             'change_event_community_status' => $this->changeEventCommunityStatus($request),
@@ -181,7 +184,7 @@ class AjaxController extends Controller
 
         return response()->json([
             'status' => 1,
-            'html' => $this->renderCommunities($this->communitiesForViewer($items, $viewer), $type),
+            'html' => $this->renderCommunities($this->communitiesForViewer($items, $viewer), $type, $feed === 'invited'),
             'count' => $items->count(),
             'has_more' => $nextItems->isNotEmpty(),
         ]);
@@ -519,12 +522,47 @@ class AjaxController extends Controller
             return response()->json(['status' => 0, 'result' => 'error', 'count' => 0], 422);
         }
 
-        $count = $this->communities->inviteFriends($community, $viewer);
+        $userIds = collect((array)$request->input('user_ids', []))
+            ->map(fn ($id): int => (int)$id)
+            ->filter(fn (int $id): bool => $id > 0)
+            ->unique()
+            ->values()
+            ->all();
+        $invitees = $this->communities->inviteFriendUsers($community, $viewer, $userIds);
+        $this->communityInvitations->sendInvitations($community, $viewer, $invitees);
 
         return response()->json([
             'status' => 1,
             'result' => 'success',
-            'count' => $count,
+            'count' => $invitees->count(),
+        ]);
+    }
+
+    /**
+     * Возвращает список друзей, которых можно пригласить в команду или группу.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    private function getCommunityInviteFriends(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $communityId = (int)$request->input('community_id', $request->input('id', 0));
+        $community = $communityId > 0
+            ? ($this->communities->findTeam($communityId) ?: $this->communities->findGroup($communityId))
+            : null;
+
+        if (!$viewer || !$community || !$this->communities->canInvite($community, $viewer)) {
+            return response()->json(['status' => 0, 'result' => 'error', 'html' => '', 'count' => 0], 422);
+        }
+
+        $friends = $this->communities->invitableFriends($community, $viewer);
+
+        return response()->json([
+            'status' => 1,
+            'result' => 'success',
+            'html' => view('front.communities._invite-friends-list', ['friends' => $friends])->render(),
+            'count' => $friends->count(),
         ]);
     }
 
@@ -1636,13 +1674,16 @@ class AjaxController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    private function renderCommunities(Collection $items, string $type): string
+    private function renderCommunities(Collection $items, string $type, bool $inviteActions = false): string
     {
         $view = $type === 'team' ? 'front.teams._team-card' : 'front.groups._group-card';
         $key = $type === 'team' ? 'team' : 'group';
 
         return $items
-            ->map(fn(array $item): string => view($view, [$key => $item])->render())
+            ->map(fn(array $item): string => view($view, [
+                $key => $item,
+                'inviteActions' => $inviteActions,
+            ])->render())
             ->implode('');
     }
 

@@ -20,7 +20,7 @@
         @if ($permissions['wall'])
             @if ($viewer)
                 <div class="message-content">
-                    <form autocomplete="off" id="wallCommentForm" class="js-wall-comment-form" method="POST" action="" enctype="multipart/form-data">
+                    <form autocomplete="off" id="wallCommentForm" class="js-wall-comment-form wall-comment-form" method="POST" action="" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="commentable_type" value="{{ $communityKind }}">
                         <input type="hidden" name="content_id" value="{{ $community->id }}">
@@ -83,6 +83,54 @@
             color: #777;
             font-size: 12px;
             padding-left: 8px;
+        }
+
+        .message-content .wall-comment-form {
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .message-content .wall-comment-form .ahref_input {
+            flex: 1 1 auto;
+            width: auto;
+            min-width: 0;
+            margin-bottom: 15px;
+            padding-right: 100px;
+        }
+
+        .message-content .wall-comment-form .smile-files {
+            top: 8px;
+            right: 70px;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .message-content .wall-comment-form .smile {
+            margin-right: 0;
+        }
+
+        .message-content .wall-comment-form .smile-files a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+        }
+
+        .message-content .wall-comment-form input[type="submit"] {
+            flex: 0 0 52px;
+            width: 52px;
+            margin-left: -1px;
+        }
+
+        .message-content .wall-comment-form .team-signature,
+        .message-content .wall-comment-form .link_attach,
+        .message-content .wall-comment-form .files_block {
+            flex-basis: 100%;
         }
     </style>
 @endpush
