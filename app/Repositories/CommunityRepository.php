@@ -539,7 +539,7 @@ class CommunityRepository extends BaseRepository
     {
         return Event::query()
             ->with('sportType')
-            ->where('status', EventStatus::Confirmed->value)
+            ->whereIn('status', EventStatus::visibleValues())
             ->whereHas('acceptedMembers', fn ($query) => $query
                 ->where('eventable_type', $eventableType)
                 ->where('member_id', $communityId))
@@ -571,7 +571,7 @@ class CommunityRepository extends BaseRepository
     {
         $query = Event::query()
             ->with('sportType')
-            ->where('status', EventStatus::Confirmed->value)
+            ->whereIn('status', EventStatus::visibleValues())
             ->whereDoesntHave('acceptedMembers', fn ($query) => $query
                 ->where('eventable_type', $eventableType)
                 ->where('member_id', $communityId));
@@ -636,7 +636,7 @@ class CommunityRepository extends BaseRepository
         /** @var Event|null $event */
         $event = Event::query()
             ->whereKey($eventId)
-            ->where('status', EventStatus::Confirmed->value)
+            ->whereIn('status', EventStatus::visibleValues())
             ->first();
 
         if (! $event) {

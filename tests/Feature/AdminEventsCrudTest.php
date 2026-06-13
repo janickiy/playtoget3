@@ -102,20 +102,20 @@ class AdminEventsCrudTest extends TestCase
     public function test_events_datatable_returns_actions_and_row_status_color(): void
     {
         $event = $this->event([
-            'name' => 'Новый забег',
+            'name' => 'Скрытый забег',
             'place' => 'Москва',
             'sport_type' => 'Бег',
-            'status' => EventStatus::New->value,
+            'status' => EventStatus::Hidden->value,
         ]);
 
         $response = $this->actingAs($this->admin, 'admin')
             ->getJson(route('admin.datatable.events', ['draw' => 1, 'start' => 0, 'length' => 10]))
             ->assertOk()
-            ->assertJsonPath('data.0.name', 'Новый забег')
+            ->assertJsonPath('data.0.name', 'Скрытый забег')
             ->assertJsonPath('data.0.place', 'Москва')
             ->assertJsonPath('data.0.sport_type', 'Бег')
-            ->assertJsonPath('data.0.status', 'Новый')
-            ->assertJsonPath('data.0.status_css', 'bg-success');
+            ->assertJsonPath('data.0.status', 'Скрытый')
+            ->assertJsonPath('data.0.status_css', 'bg-warning');
 
         $row = $response->json('data.0');
 

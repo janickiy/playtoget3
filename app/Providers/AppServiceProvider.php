@@ -63,7 +63,11 @@ class AppServiceProvider extends ServiceProvider
             $menu = MenuHelper::getMenuList();
 
             $events = Schema::hasTable('events')
-                ? Event::query()->where('status', EventStatus::Confirmed->value)->orderByDesc('date_from')->limit(3)->get()
+                ? Event::query()
+                    ->whereIn('status', EventStatus::visibleValues())
+                    ->orderByDesc('date_from')
+                    ->limit(3)
+                    ->get()
                 : collect();
 
             $sportBlocks = Schema::hasTable('sport_blocks')

@@ -47,7 +47,7 @@ class EventRepository extends BaseRepository
     public function upcoming(int $limit = 30): Collection
     {
         return $this->model->newQuery()
-            ->where('status', EventStatus::Confirmed->value)
+            ->whereIn('status', EventStatus::visibleValues())
             ->orderByRaw('date_from IS NULL')
             ->orderBy('date_from')
             ->limit($limit)
@@ -64,7 +64,7 @@ class EventRepository extends BaseRepository
     public function calendarDays(CarbonImmutable $monthStart, CarbonImmutable $monthEnd): Collection
     {
         $events = $this->model->newQuery()
-            ->where('events.status', EventStatus::Confirmed->value)
+            ->whereIn('events.status', EventStatus::visibleValues())
             ->whereNotNull('events.date_from')
             ->whereDate('events.date_from', '<=', $monthEnd->toDateString())
             ->where(function (Builder $query) use ($monthStart): void {
@@ -256,7 +256,7 @@ class EventRepository extends BaseRepository
         /** @var Event|null $event */
         $event = $this->model->newQuery()
             ->whereKey($eventId)
-            ->where('status', EventStatus::Confirmed->value)
+            ->whereIn('status', EventStatus::visibleValues())
             ->first();
 
         return $event;
@@ -718,7 +718,7 @@ class EventRepository extends BaseRepository
     private function eventListQuery(array $filters = []): Builder
     {
         $query = $this->model->newQuery()
-            ->where('events.status', EventStatus::Confirmed->value);
+            ->whereIn('events.status', EventStatus::visibleValues());
 
         $this->applyEventFilters($query, $filters);
 

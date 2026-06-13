@@ -53,31 +53,37 @@ class EventStatusVisibilityTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_front_repository_finds_only_confirmed_events(): void
+    public function test_front_repository_finds_only_visible_events(): void
     {
         $confirmed = $this->event(EventStatus::Confirmed, 'Подтвержденное мероприятие');
         $new = $this->event(EventStatus::New, 'Новое мероприятие');
         $blocked = $this->event(EventStatus::Blocked, 'Заблокированное мероприятие');
+        $hidden = $this->event(EventStatus::Hidden, 'Скрытое мероприятие');
 
         /** @var EventRepository $repository */
         $repository = app(EventRepository::class);
 
         $this->assertNotNull($repository->findActive((int) $confirmed->id));
-        $this->assertNull($repository->findActive((int) $new->id));
+        $this->assertNotNull($repository->findActive((int) $new->id));
         $this->assertNull($repository->findActive((int) $blocked->id));
+        $this->assertNull($repository->findActive((int) $hidden->id));
     }
 
-    public function test_front_repository_lists_only_confirmed_events(): void
+    public function test_front_repository_lists_only_visible_events(): void
     {
         $confirmed = $this->event(EventStatus::Confirmed, 'Подтвержденное мероприятие');
-        $this->event(EventStatus::New, 'Новое мероприятие');
+        $new = $this->event(EventStatus::New, 'Новое мероприятие');
         $this->event(EventStatus::Blocked, 'Заблокированное мероприятие');
+        $this->event(EventStatus::Hidden, 'Скрытое мероприятие');
 
         /** @var EventRepository $repository */
         $repository = app(EventRepository::class);
 
-        $this->assertSame(1, $repository->popularEventsCount());
-        $this->assertSame([(int) $confirmed->id], $repository->popularEvents(10)->pluck('id')->all());
+        $this->assertSame(2, $repository->popularEventsCount());
+        $this->assertSame(
+            [(int) $confirmed->id, (int) $new->id],
+            $repository->popularEvents(10)->pluck('id')->sort()->values()->all(),
+        );
     }
 
     private function event(EventStatus $status, string $name): Event

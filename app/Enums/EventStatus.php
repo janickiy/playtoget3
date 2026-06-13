@@ -7,6 +7,7 @@ enum EventStatus: int
     case New = 0;
     case Confirmed = 1;
     case Blocked = 2;
+    case Hidden = 3;
 
     public function label(): string
     {
@@ -14,6 +15,7 @@ enum EventStatus: int
             self::New => 'Новый',
             self::Confirmed => 'Подтвержденный',
             self::Blocked => 'Заблокирован',
+            self::Hidden => 'Скрытый',
         };
     }
 
@@ -23,12 +25,13 @@ enum EventStatus: int
             self::New => 'bg-success',
             self::Confirmed => '',
             self::Blocked => 'bg-danger',
+            self::Hidden => 'bg-warning',
         };
     }
 
     public function isVisible(): bool
     {
-        return $this === self::Confirmed;
+        return in_array($this, [self::New, self::Confirmed], true);
     }
 
     /**
@@ -58,6 +61,20 @@ enum EventStatus: int
             self::New->value => self::New->label(),
             self::Confirmed->value => self::Confirmed->label(),
             self::Blocked->value => self::Blocked->label(),
+            self::Hidden->value => self::Hidden->label(),
+        ];
+    }
+
+    /**
+     * Возвращает значения статусов, доступных на фронте.
+     *
+     * @return array<int, int>
+     */
+    public static function visibleValues(): array
+    {
+        return [
+            self::New->value,
+            self::Confirmed->value,
         ];
     }
 }
