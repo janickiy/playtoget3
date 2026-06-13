@@ -139,6 +139,37 @@ class AdminUsersCrudTest extends TestCase
         $this->assertSame(UserStatus::New->cssColor(), $row['status_css']);
     }
 
+    public function test_users_datatable_searches_by_displayed_created_date(): void
+    {
+        $target = $this->user(['email' => 'needed@example.com']);
+        $target->forceFill([
+            'created_at' => '2026-06-11 12:12:00',
+            'updated_at' => '2026-06-11 12:12:00',
+        ])->save();
+
+        $other = $this->user(['email' => 'other@example.com']);
+        $other->forceFill([
+            'created_at' => '2026-06-12 12:12:00',
+            'updated_at' => '2026-06-12 12:12:00',
+        ])->save();
+
+        $this->actingAs($this->admin, 'admin')
+            ->getJson(route('admin.datatable.users') . '?' . http_build_query($this->datatableParams([
+                'checkbox',
+                'id',
+                'email',
+                'firstname',
+                'city',
+                'status',
+                'created_at',
+                'actions',
+            ], '11/06/2026 12:12')))
+            ->assertOk()
+            ->assertJsonPath('recordsFiltered', 1)
+            ->assertJsonPath('data.0.email', 'needed@example.com')
+            ->assertJsonPath('data.0.created_at', '11/06/2026 12:12');
+    }
+
     public function test_user_admin_update_changes_profile_fields(): void
     {
         $user = $this->user([
@@ -295,5 +326,38 @@ class AdminUsersCrudTest extends TestCase
         ], $attributes));
 
         return $user;
+    }
+
+    /**
+     * @param array<int, string> $columns
+     * @return array<string, mixed>
+     */
+    private function datatableParams(array $columns, string $search = ''): array
+    {
+        return [
+            'draw' => 1,
+            'start' => 0,
+            'length' => 10,
+            'search' => [
+                'value' => $search,
+                'regex' => 'false',
+            ],
+            'columns' => array_map(fn (string $column): array => [
+                'data' => $column,
+                'name' => $column,
+                'searchable' => in_array($column, ['checkbox', 'actions'], true) ? 'false' : 'true',
+                'orderable' => in_array($column, ['checkbox', 'actions'], true) ? 'false' : 'true',
+                'search' => [
+                    'value' => '',
+                    'regex' => 'false',
+                ],
+            ], $columns),
+            'order' => [
+                [
+                    'column' => 1,
+                    'dir' => 'asc',
+                ],
+            ],
+        ];
     }
 }

@@ -89,6 +89,9 @@ class DataTableController extends Controller
             ->editColumn('status', function ($row) {
                 return UserStatus::labelFor((int) $row->status);
             })
+            ->filterColumn('created_at', function ($query, string $keyword): void {
+                $this->filterFormattedDateColumn($query, 'users.created_at', $keyword);
+            })
             ->editColumn('created_at', function ($row) {
                 return Carbon::parse($row->created_at)->format('d/m/Y H:i');
             })
@@ -156,6 +159,9 @@ class DataTableController extends Controller
             })
             ->editColumn('status', function ($row) {
                 return CommunityStatus::labelFor((int) $row->status);
+            })
+            ->filterColumn('created_at', function ($query, string $keyword): void {
+                $this->filterFormattedDateColumn($query, 'communities.created_at', $keyword);
             })
             ->editColumn('created_at', function ($row) {
                 return Carbon::parse($row->created_at)->format('d/m/Y H:i');
@@ -311,6 +317,9 @@ class DataTableController extends Controller
             })
             ->editColumn('status', function ($row) {
                 return SportBlockStatus::labelFor((int) $row->status);
+            })
+            ->filterColumn('created_at', function ($query, string $keyword): void {
+                $this->filterFormattedDateColumn($query, 'sport_blocks.created_at', $keyword);
             })
             ->editColumn('created_at', function ($row) {
                 return Carbon::parse($row->created_at)->format('d/m/Y H:i');

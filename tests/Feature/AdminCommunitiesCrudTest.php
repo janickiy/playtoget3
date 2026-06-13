@@ -119,6 +119,37 @@ class AdminCommunitiesCrudTest extends TestCase
         $this->assertStringContainsString('deleteRow', $row['actions']);
     }
 
+    public function test_communities_datatable_searches_by_displayed_created_date(): void
+    {
+        $target = $this->community(['name' => 'Нужное комьюнити']);
+        $target->forceFill([
+            'created_at' => '2026-06-11 12:12:00',
+            'updated_at' => '2026-06-11 12:12:00',
+        ])->save();
+
+        $other = $this->community(['name' => 'Другое комьюнити']);
+        $other->forceFill([
+            'created_at' => '2026-06-12 12:12:00',
+            'updated_at' => '2026-06-12 12:12:00',
+        ])->save();
+
+        $this->actingAs($this->admin, 'admin')
+            ->getJson(route('admin.datatable.communities') . '?' . http_build_query($this->datatableParams([
+                'id',
+                'type',
+                'name',
+                'place',
+                'sport_type',
+                'status',
+                'created_at',
+                'actions',
+            ], '11/06/2026 12:12')))
+            ->assertOk()
+            ->assertJsonPath('recordsFiltered', 1)
+            ->assertJsonPath('data.0.name', 'Нужное комьюнити')
+            ->assertJsonPath('data.0.created_at', '11/06/2026 12:12');
+    }
+
     public function test_community_admin_update_and_delete(): void
     {
         $community = $this->community([
@@ -206,5 +237,38 @@ class AdminCommunitiesCrudTest extends TestCase
         ], $attributes));
 
         return $community;
+    }
+
+    /**
+     * @param array<int, string> $columns
+     * @return array<string, mixed>
+     */
+    private function datatableParams(array $columns, string $search = ''): array
+    {
+        return [
+            'draw' => 1,
+            'start' => 0,
+            'length' => 10,
+            'search' => [
+                'value' => $search,
+                'regex' => 'false',
+            ],
+            'columns' => array_map(fn (string $column): array => [
+                'data' => $column,
+                'name' => $column,
+                'searchable' => $column === 'actions' ? 'false' : 'true',
+                'orderable' => $column === 'actions' ? 'false' : 'true',
+                'search' => [
+                    'value' => '',
+                    'regex' => 'false',
+                ],
+            ], $columns),
+            'order' => [
+                [
+                    'column' => 0,
+                    'dir' => 'asc',
+                ],
+            ],
+        ];
     }
 }
