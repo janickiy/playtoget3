@@ -97,6 +97,8 @@ class AdminUsersCrudTest extends TestCase
             ->get(route('admin.users.show', ['id' => $user->id]))
             ->assertOk()
             ->assertSee('Просмотр пользователя')
+            ->assertSee('Аватарка')
+            ->assertSee('Аватар пользователя')
             ->assertSee('ivan@example.com')
             ->assertSee('Иван Петров');
 

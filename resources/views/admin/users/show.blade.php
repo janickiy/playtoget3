@@ -11,6 +11,16 @@
                     <div class="card">
                         <div class="card-body">
                             <dl class="row">
+                                <dt class="col-sm-3">Аватарка</dt>
+                                <dd class="col-sm-9">
+                                    <img
+                                        src="{{ \App\Helpers\FrontAssets::adminUserAvatar($row) }}"
+                                        alt="Аватар пользователя"
+                                        class="img-thumbnail"
+                                        style="width: 120px; height: 120px; object-fit: cover;"
+                                    >
+                                </dd>
+
                                 <dt class="col-sm-3">ID</dt>
                                 <dd class="col-sm-9">{{ $row->id }}</dd>
 
