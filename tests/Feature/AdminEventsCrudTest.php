@@ -124,6 +124,27 @@ class AdminEventsCrudTest extends TestCase
         $this->assertStringContainsString('deleteRow', $row['actions']);
     }
 
+    public function test_events_datatable_searches_by_displayed_start_date(): void
+    {
+        $this->event([
+            'name' => 'Нужное мероприятие',
+            'date_from' => '2026-06-11 12:12:00',
+            'date_to' => '2026-06-11 13:12:00',
+        ]);
+        $this->event([
+            'name' => 'Другое мероприятие',
+            'date_from' => '2026-06-12 12:12:00',
+            'date_to' => '2026-06-12 13:12:00',
+        ]);
+
+        $this->actingAs($this->admin, 'admin')
+            ->getJson(route('admin.datatable.events') . '?' . http_build_query($this->datatableParams('11/06/2026 12:12')))
+            ->assertOk()
+            ->assertJsonPath('recordsFiltered', 1)
+            ->assertJsonPath('data.0.name', 'Нужное мероприятие')
+            ->assertJsonPath('data.0.date_from', '11/06/2026 12:12');
+    }
+
     public function test_event_admin_update_and_delete(): void
     {
         $event = $this->event([
@@ -209,5 +230,49 @@ class AdminEventsCrudTest extends TestCase
         ], $attributes));
 
         return $event;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function datatableParams(string $search = ''): array
+    {
+        $columns = collect([
+            'id',
+            'name',
+            'place',
+            'sport_type',
+            'date_from',
+            'date_to',
+            'status',
+            'created_at',
+            'actions',
+        ])->map(fn (string $column): array => [
+            'data' => $column,
+            'name' => $column,
+            'searchable' => $column === 'actions' ? 'false' : 'true',
+            'orderable' => $column === 'actions' ? 'false' : 'true',
+            'search' => [
+                'value' => '',
+                'regex' => 'false',
+            ],
+        ])->all();
+
+        return [
+            'draw' => 1,
+            'start' => 0,
+            'length' => 10,
+            'search' => [
+                'value' => $search,
+                'regex' => 'false',
+            ],
+            'columns' => $columns,
+            'order' => [
+                [
+                    'column' => 0,
+                    'dir' => 'asc',
+                ],
+            ],
+        ];
     }
 }
