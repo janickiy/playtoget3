@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\DTO\Community\CommunityData;
 use App\Enums\CommunityPrivacyType;
 use App\Enums\CommunityStatus;
+use App\Enums\EventStatus;
 use App\Enums\MembershipRole;
 use App\Enums\UserStatus;
 use App\Helpers\FrontAssets;
@@ -538,7 +539,7 @@ class CommunityRepository extends BaseRepository
     {
         return Event::query()
             ->with('sportType')
-            ->where('banned', false)
+            ->where('status', EventStatus::Confirmed->value)
             ->whereHas('acceptedMembers', fn ($query) => $query
                 ->where('eventable_type', $eventableType)
                 ->where('member_id', $communityId))
@@ -570,7 +571,7 @@ class CommunityRepository extends BaseRepository
     {
         $query = Event::query()
             ->with('sportType')
-            ->where('banned', false)
+            ->where('status', EventStatus::Confirmed->value)
             ->whereDoesntHave('acceptedMembers', fn ($query) => $query
                 ->where('eventable_type', $eventableType)
                 ->where('member_id', $communityId));
@@ -635,7 +636,7 @@ class CommunityRepository extends BaseRepository
         /** @var Event|null $event */
         $event = Event::query()
             ->whereKey($eventId)
-            ->where('banned', false)
+            ->where('status', EventStatus::Confirmed->value)
             ->first();
 
         if (! $event) {

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Enums\EventStatus;
 use App\Helpers\FrontAssets;
 use App\Helpers\PermissionsHelper;
 use App\Helpers\MenuHelper;
@@ -59,7 +60,7 @@ class AppServiceProvider extends ServiceProvider
             $menu = MenuHelper::getMenuList();
 
             $events = Schema::hasTable('events')
-                ? Event::query()->where('banned', false)->orderByDesc('date_from')->limit(3)->get()
+                ? Event::query()->where('status', EventStatus::Confirmed->value)->orderByDesc('date_from')->limit(3)->get()
                 : collect();
 
             $sportBlocks = Schema::hasTable('sport_blocks')

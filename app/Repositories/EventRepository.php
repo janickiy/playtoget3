@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\DTO\Event\EventData;
 use App\Enums\CommunityStatus;
+use App\Enums\EventStatus;
 use App\Enums\MembershipRole;
 use App\Enums\UserStatus;
 use App\Helpers\FrontAssets;
@@ -46,7 +47,7 @@ class EventRepository extends BaseRepository
     public function upcoming(int $limit = 30): Collection
     {
         return $this->model->newQuery()
-            ->where('banned', false)
+            ->where('status', EventStatus::Confirmed->value)
             ->orderByRaw('date_from IS NULL')
             ->orderBy('date_from')
             ->limit($limit)
@@ -63,7 +64,7 @@ class EventRepository extends BaseRepository
     public function calendarDays(CarbonImmutable $monthStart, CarbonImmutable $monthEnd): Collection
     {
         $events = $this->model->newQuery()
-            ->where('events.banned', false)
+            ->where('events.status', EventStatus::Confirmed->value)
             ->whereNotNull('events.date_from')
             ->whereDate('events.date_from', '<=', $monthEnd->toDateString())
             ->where(function (Builder $query) use ($monthStart): void {
@@ -255,7 +256,7 @@ class EventRepository extends BaseRepository
         /** @var Event|null $event */
         $event = $this->model->newQuery()
             ->whereKey($eventId)
-            ->where('banned', false)
+            ->where('status', EventStatus::Confirmed->value)
             ->first();
 
         return $event;
@@ -639,8 +640,7 @@ class EventRepository extends BaseRepository
                 'cover_page' => $this->covers->storeCover($data->coverFile) ?? '',
                 'place' => $data->place ?: $this->cityName($data->cityId),
                 'address' => $data->address,
-                'moderate' => true,
-                'banned' => false,
+                'status' => EventStatus::Confirmed->value,
             ]);
 
             AcceptedEventMember::query()->create([
@@ -718,7 +718,7 @@ class EventRepository extends BaseRepository
     private function eventListQuery(array $filters = []): Builder
     {
         $query = $this->model->newQuery()
-            ->where('events.banned', false);
+            ->where('events.status', EventStatus::Confirmed->value);
 
         $this->applyEventFilters($query, $filters);
 

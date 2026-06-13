@@ -154,6 +154,14 @@
                         </li>
 
                         <li class="nav-item">
+                            <a href="{{ route('admin.events.index') }}" class="nav-link{{ Request::is('cp/events*') ? ' active' : '' }}"
+                               title="Мероприятия">
+                                <i class="nav-icon fas fa-calendar-alt"></i>
+                                <p>Мероприятия</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a href="{{ route('admin.settings.index') }}" class="nav-link{{ Request::is('cp/settings*') ? ' active' : '' }}"
                                title="Настройки">
                                 <i class="nav-icon fas fa-cogs"></i>

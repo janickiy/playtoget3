@@ -18,13 +18,12 @@ return new class extends Migration
             $table->string('cover_page')->nullable();
             $table->string('place', 100)->nullable();
             $table->text('address')->nullable();
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
-            $table->boolean('moderate')->default(true);
-            $table->boolean('banned')->default(false);
 
-            $table->index(['moderate', 'date_from']);
+            $table->index('status');
             $table->index('name');
-            $table->index(['banned', 'date_from']);
+            $table->index(['status', 'date_from']);
         });
     }
 

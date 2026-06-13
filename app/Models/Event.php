@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\EventStatus;
 use App\Http\Traits\StaticTableName;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,8 +23,7 @@ class Event extends Model
         'cover_page',
         'place',
         'address',
-        'moderate',
-        'banned',
+        'status',
     ];
 
     protected function casts(): array
@@ -31,9 +31,18 @@ class Event extends Model
         return [
             'date_from' => 'datetime',
             'date_to' => 'datetime',
-            'moderate' => 'boolean',
-            'banned' => 'boolean',
+            'status' => 'integer',
         ];
+    }
+
+    public function statusEnum(): EventStatus
+    {
+        return EventStatus::tryFrom((int) $this->status) ?? EventStatus::New;
+    }
+
+    public function isVisible(): bool
+    {
+        return $this->statusEnum()->isVisible();
     }
 
     /**
