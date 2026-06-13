@@ -12,6 +12,8 @@
                         {!! Form::open(['url' => route('admin.sport-blocks.update'), 'method' => 'put']) !!}
 
                         {!! Form::hidden('id', $row->id) !!}
+                        {!! Form::hidden('avatar', $row->avatar ?? '') !!}
+                        {!! Form::hidden('owner_id', $row->owner_id ?? '') !!}
 
                         <div class="card-body">
                             <p>*-обязательные поля</p>
@@ -90,7 +92,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         {!! Form::label('website', 'Сайт') !!}
                                         {!! Form::text('website', old('website', $row->website ?? null), ['class' => 'form-control']) !!}
@@ -99,30 +101,10 @@
                                         @endif
                                     </div>
                                 </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        {!! Form::label('avatar', 'Аватар') !!}
-                                        {!! Form::text('avatar', old('avatar', $row->avatar ?? null), ['class' => 'form-control']) !!}
-                                        @if ($errors->has('avatar'))
-                                            <p class="text-danger">{{ $errors->first('avatar') }}</p>
-                                        @endif
-                                    </div>
-                                </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        {!! Form::label('owner_id', 'ID владельца') !!}
-                                        {!! Form::number('owner_id', old('owner_id', $row->owner_id ?? null), ['class' => 'form-control']) !!}
-                                        @if ($errors->has('owner_id'))
-                                            <p class="text-danger">{{ $errors->first('owner_id') }}</p>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         {!! Form::label('status', 'Статус*') !!}
                                         {!! Form::select('status', $statusOptions, old('status', $row->status ?? \App\Enums\SportBlockStatus::New->value), ['class' => 'custom-select']) !!}

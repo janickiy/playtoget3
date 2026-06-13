@@ -71,6 +71,7 @@ class AdminSportBlocksCrudTest extends TestCase
         $sportBlock = $this->sportBlock([
             'name' => 'Центральный стадион',
             'about' => 'Описание площадки',
+            'avatar' => 'stadium.jpg',
         ]);
 
         $this->actingAs($this->admin, 'admin')
@@ -92,14 +93,17 @@ class AdminSportBlocksCrudTest extends TestCase
             ->assertSee('Аватарка')
             ->assertSee('Центральный стадион')
             ->assertSee('Описание площадки')
-            ->assertSee('Подтвержденный');
+            ->assertSee('Подтвержденный')
+            ->assertDontSee('stadium.jpg');
 
         $this->actingAs($this->admin, 'admin')
             ->get(route('admin.sport-blocks.edit', ['id' => $sportBlock->id]))
             ->assertOk()
             ->assertSee('Редактирование спортивного блока')
             ->assertSee('Текущая аватарка')
-            ->assertSee('Центральный стадион');
+            ->assertSee('Центральный стадион')
+            ->assertDontSee('form-control" name="avatar"', false)
+            ->assertDontSee('form-control" name="owner_id"', false);
     }
 
     public function test_sport_blocks_datatable_returns_actions_and_row_status_color(): void
@@ -132,6 +136,7 @@ class AdminSportBlocksCrudTest extends TestCase
         $sportBlock = $this->sportBlock([
             'type' => 'playground',
             'name' => 'Новая площадка',
+            'avatar' => 'playground.jpg',
         ]);
 
         $this->actingAs($this->admin, 'admin')
@@ -144,7 +149,7 @@ class AdminSportBlocksCrudTest extends TestCase
                 'address' => 'Новый адрес',
                 'phone' => '123',
                 'email' => 'shop@example.test',
-                'avatar' => '',
+                'avatar' => 'playground.jpg',
                 'website' => '',
                 'status' => SportBlockStatus::Blocked->value,
             ])
@@ -155,6 +160,7 @@ class AdminSportBlocksCrudTest extends TestCase
             'type' => 'shop',
             'name' => 'Обновленный магазин',
             'place' => 'Казань',
+            'avatar' => 'playground.jpg',
             'status' => SportBlockStatus::Blocked->value,
         ]);
 
