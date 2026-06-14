@@ -110,16 +110,15 @@
             line-height: 0;
         }
 
-        .message-content .wall-comment-form .smile {
-            margin-right: 0;
-        }
-
-        .message-content .wall-comment-form .smile-files a {
+        .message-content .wall-comment-form #smilesBtn.smile,
+        .message-content .wall-comment-form .smile-files .files {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             width: 22px;
             height: 22px;
+            margin-left: 0;
+            margin-right: 0;
         }
 
         .message-content .wall-comment-form .smile-files img {
