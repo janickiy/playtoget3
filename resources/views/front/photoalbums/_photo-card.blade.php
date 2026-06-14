@@ -1,6 +1,6 @@
 @if ($photo['small'] && $photo['big'])
     <div class="hov" id="photo-block-{{ $photo['id'] }}">
-        <a class="photo_big" title="{{ $photo['description'] }}" href="{{ $photo['big'] }}" data-lightbox="roadtrip" data-num="{{ $photo['id'] }}">
+        <a class="photo_big" title="{{ $photo['description'] }}" href="{{ $photo['big'] }}" data-num="{{ $photo['id'] }}">
             <img src="{{ $photo['small'] }}" alt="">
             <div class="transparent"></div>
         </a>

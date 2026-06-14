@@ -5,6 +5,17 @@ function photoCsrfToken() {
     return $('meta[name="csrf-token"]').attr('content') || '';
 }
 
+function resetPhotoModalState() {
+    const $modal = $('#photo_big');
+
+    $modal.find('#addCommentContainers').html('');
+    $modal.find('.info_photo').text('');
+    $modal.find('.tell, .liked').removeClass('active').removeAttr('id data-item');
+    $modal.find('.file_name').val('');
+    $modal.find('textarea[name="comment"]').val('');
+    $modal.find('.files_block').html('');
+}
+
 window.registerPhotoItems = function ($scope) {
     $scope.find('.photo_big').each(function () {
         const id = $(this).attr('data-num');
@@ -67,11 +78,26 @@ $(document).ready(function () {
                 if (data.status === 1) {
                     //console.log(data);
                     $('#owner_id').val(data.owner_id);
-                    $('#name_foto').html('<a href="/profile/' + data.owner_id + '">' + data.firstname + ' ' + data.lastname + '</a>');
-                    $('#date_foto .data').html(data.created);
-                    $('.info_photo').html(data.description);
-                    $('#photo_big').find('.tell').html(data.tell).attr('data-item', id).attr('id', 'tell-photo-' + id).attr('data-type', 'photo');
-                    $('#photo_big').find('.liked').html(data.liked).attr('data-item', id).attr('id', 'like-photo-' + id).attr('data-type', 'photo');
+                    $('#name_foto')
+                        .empty()
+                        .append($('<a>', {
+                            href: '/profile/' + data.owner_id,
+                            text: $.trim((data.firstname || '') + ' ' + (data.lastname || '')),
+                        }));
+                    $('#date_foto .data').text(data.created);
+                    $('.info_photo').text(data.description || '');
+                    $('#photo_big').find('.tell')
+                        .text(data.tell)
+                        .attr('data-item', id)
+                        .attr('id', 'tell-photo-' + id)
+                        .attr('data-type', 'photo')
+                        .toggleClass('active', Boolean(data.shared_by_user));
+                    $('#photo_big').find('.liked')
+                        .text(data.liked)
+                        .attr('data-item', id)
+                        .attr('id', 'like-photo-' + id)
+                        .attr('data-type', 'photo')
+                        .toggleClass('active', Boolean(data.liked_by_user));
                     $('.photo_big_wrap').find('.photo_wrap').attr('src', data.photo);
                     getCommentsPhoto(id);
                     //window.location.hash="#photo"+id;
@@ -101,10 +127,13 @@ $(document).ready(function () {
     });
 
 
-    $(document).on('click', '.photo_big', function () {
+    $(document).on('click', '.photo_big', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
         $('.loading-bar').show();
         $('.photo_big_wrap').find('.photo_wrap').hide();
         const id = $(this).attr('data-num');
+        resetPhotoModalState();
         $('.photo_big_wrap').find('#content_id').val(id);
         $('body,html').css('overflow', 'hidden');
         $('#photo_big').show();
@@ -228,7 +257,7 @@ $(document).on("click", ".photo_big_wrap .reply", function () {
     ReplyForm += '<input type="hidden" name="user_id" value="' + user_id + '">';
     ReplyForm += '<input type="hidden" name="parent_id" value="' + IdComment + '">';
     ReplyForm += '<input type="file" class="file_name" name="file_name[]" data-num="' + IdComment + '" multiple/>';
-    ReplyForm += '<input id="comment" name="comment" type="text" data-num="' + IdComment + '" placeholder="' + placeholder + '">';
+    ReplyForm += '<input id="comment" name="comment" type="text" data-num="' + IdComment + '" placeholder="' + (window.placeholder || '') + '">';
     ReplyForm += '<div class="smile-files">';
     ReplyForm += '<a id="smilesBtn" class="smile smilesBtn" data-num="' + IdComment + '"><img src="./frontend/images/smile.png" alt=""></a>';
     ReplyForm += '<a href="#" class="files" data-num="' + IdComment + '" data-tooltip="Прикрепить изображение"><img src="./frontend/images/files.png" alt=""></a>';

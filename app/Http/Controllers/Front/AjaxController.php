@@ -904,6 +904,13 @@ class AjaxController extends Controller
         }
 
         $owner = $photo->owner;
+        $viewer = $this->viewer();
+        $likesQuery = Like::query()
+            ->where('likeable_type', 'photo')
+            ->where('content_id', $photo->id);
+        $sharesQuery = Share::query()
+            ->where('shareable_type', 'photo')
+            ->where('content_id', $photo->id);
 
         return response()->json([
             'status' => 1,
@@ -913,14 +920,10 @@ class AjaxController extends Controller
             'created' => $photo->created_at?->format('d.m.Y H:i') ?? '',
             'description' => (string)$photo->description,
             'photo' => $photoUrl,
-            'liked' => Like::query()
-                ->where('likeable_type', 'photo')
-                ->where('content_id', $photo->id)
-                ->count(),
-            'tell' => Share::query()
-                ->where('shareable_type', 'photo')
-                ->where('content_id', $photo->id)
-                ->count(),
+            'liked' => (clone $likesQuery)->count(),
+            'tell' => (clone $sharesQuery)->count(),
+            'liked_by_user' => $viewer ? (clone $likesQuery)->where('user_id', $viewer->id)->exists() : false,
+            'shared_by_user' => $viewer ? (clone $sharesQuery)->where('user_id', $viewer->id)->exists() : false,
         ]);
     }
 

@@ -3,7 +3,7 @@
 @section('content')
     <div class="content-groups friends sport-block-show">
         <div class="container_in_swiper">
-            <div class="swiper-container gallery-top">
+            <div class="swiper swiper-container gallery-top">
                 <div class="swiper-wrapper">
                     @forelse ($photos as $photo)
                         <div class="swiper-slide" style="background-image:url('{{ $photo['big'] ?: asset('frontend/images/default_group.png') }}')"></div>
@@ -14,7 +14,7 @@
                 <div class="swiper-button-next swiper-button-white"></div>
                 <div class="swiper-button-prev swiper-button-white"></div>
             </div>
-            <div class="swiper-container gallery-thumbs">
+            <div class="swiper swiper-container gallery-thumbs">
                 <div class="swiper-wrapper left220">
                     @forelse ($photos as $photo)
                         <div class="swiper-slide" style="background-image:url('{{ $photo['small'] ?: $photo['big'] ?: asset('frontend/images/default_group.png') }}')"></div>
@@ -94,7 +94,7 @@
 @endsection
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('frontend/css/swiper.min.css') }}?v=6.8.4">
+    <link rel="stylesheet" href="{{ asset('frontend/css/swiper.min.css') }}?v=9.4.1">
     <style>
         .sport-block-show #filelist {
             margin-top: 20px;
@@ -107,7 +107,7 @@
 @endpush
 
 @push('scripts')
-    <script src="{{ asset('frontend/js/swiper.js') }}?v=6.8.4"></script>
+    <script src="{{ asset('frontend/js/swiper.js') }}?v=9.4.1"></script>
     @if ($canEdit && $uploadAlbum)
         <script src="{{ asset('frontend/js/puupload/plupload.full.min.js') }}?v=3.1.5"></script>
     @endif
@@ -136,7 +136,9 @@
             const galleryThumbs = new Swiper('.gallery-thumbs', {
                 spaceBetween: 10,
                 slidesPerView: 4,
-                freeMode: true,
+                freeMode: {
+                    enabled: true
+                },
                 watchSlidesProgress: true,
                 touchRatio: 0.2,
                 loop: hasLoop,
