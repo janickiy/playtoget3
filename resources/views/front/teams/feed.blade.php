@@ -106,7 +106,8 @@
             z-index: 2;
             display: flex;
             align-items: center;
-            gap: 18px;
+            gap: 9px;
+            line-height: 0;
         }
 
         .message-content .wall-comment-form .smile {
@@ -119,6 +120,10 @@
             justify-content: center;
             width: 22px;
             height: 22px;
+        }
+
+        .message-content .wall-comment-form .smile-files img {
+            display: block;
         }
 
         .message-content .wall-comment-form input[type="submit"] {
