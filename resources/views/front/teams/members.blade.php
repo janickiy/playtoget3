@@ -1,6 +1,10 @@
 @extends('front.layouts.app')
 
 @section('content')
+    @php
+        $canManageCommunityMembers = (bool) ($canManageTeam ?? false);
+        $viewerRole = (int) ($role ?? 0);
+    @endphp
     <div class="content-groups friends">
         @include('front.teams._top')
 
@@ -11,7 +15,17 @@
         @if ($members->isNotEmpty())
             <div class="possible-friend">
                 @foreach ($members as $member)
-                    <div class="col-xs-6 possible-friend-cart">
+                    @php
+                        $canAffectMember = $canManageCommunityMembers
+                            && $viewer
+                            && (int) $member['id'] !== (int) $viewer->id
+                            && (int) $member['role'] !== 1
+                            && (
+                                ($viewerRole === 1 && in_array((int) $member['role'], [2, 3], true))
+                                || ($viewerRole === 2 && (int) $member['role'] === 3)
+                            );
+                    @endphp
+                    <div class="col-xs-6 possible-friend-cart" data-user-id="{{ $member['id'] }}">
                         <a class="possible-avatar" href="{{ route('front.profile.show', ['user' => $member['id']]) }}">
                             <img src="{{ $member['avatar'] }}" alt="">
                         </a>
@@ -22,6 +36,34 @@
                         <p>{{ $member['role_name'] }}</p>
                         @if ($viewer)
                             <a href="{{ route('front.profile.messages.show', ['user' => $viewer->id, 'recipient' => $member['id']]) }}"><b></b></a><br>
+                        @endif
+                        @if ($canAffectMember)
+                            <div class="control community-member-control">
+                                <span>
+                                    <a href="#"
+                                       class="community-member-icon-action js-community-member-action"
+                                       data-action="remove_community_member"
+                                       data-community-id="{{ $team->id }}"
+                                       data-user-id="{{ $member['id'] }}"
+                                       data-confirm="Удалить участника из команды?"
+                                       data-success="Участник удален"
+                                       data-tooltip="Удалить участника">
+                                        <img src="{{ asset('frontend/images/icon-krest.png') }}" alt="">
+                                    </a>
+                                </span>
+                                <span>
+                                    <a href="#"
+                                       class="community-member-icon-action js-community-member-action"
+                                       data-action="block_community_member"
+                                       data-community-id="{{ $team->id }}"
+                                       data-user-id="{{ $member['id'] }}"
+                                       data-confirm="Заблокировать участника в команде?"
+                                       data-success="Участник заблокирован"
+                                       data-tooltip="Заблокировать участника">
+                                        <img src="{{ asset('frontend/images/icon-block-member.svg') }}" alt="">
+                                    </a>
+                                </span>
+                            </div>
                         @endif
                     </div>
                 @endforeach
@@ -43,6 +85,10 @@
                     </div>
                 @endforeach
             </div>
+        @endif
+
+        @if ($canManageCommunityMembers)
+            @include('front.communities._manage-assets')
         @endif
     </div>
 @endsection

@@ -906,6 +906,252 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Удаляет участника из сообщества с учетом прав текущего пользователя.
+     *
+     * @param Community $team
+     * @param User $viewer
+     * @param int $userId
+     * @return bool
+     * @throws \Throwable
+     */
+    public function removeMember(Community $team, User $viewer, int $userId): bool
+    {
+        return $this->changeManagedMemberRole($team, $viewer, $userId, null);
+    }
+
+    /**
+     * Блокирует участника сообщества с учетом прав текущего пользователя.
+     *
+     * @param Community $team
+     * @param User $viewer
+     * @param int $userId
+     * @return bool
+     * @throws \Throwable
+     */
+    public function blockMember(Community $team, User $viewer, int $userId): bool
+    {
+        return $this->changeManagedMemberRole($team, $viewer, $userId, MembershipRole::Blocked);
+    }
+
+    /**
+     * Удаляет пользователя из черного списка сообщества.
+     *
+     * @param Community $team
+     * @param User $viewer
+     * @param int $userId
+     * @return bool
+     */
+    public function removeBlockedMember(Community $team, User $viewer, int $userId): bool
+    {
+        if (! $this->canManage($team, $viewer) || $userId < 1) {
+            return false;
+        }
+
+        return CommunityRole::query()
+            ->where('community_id', $team->id)
+            ->where('user_id', $userId)
+            ->where('role', MembershipRole::Blocked->value)
+            ->delete() > 0;
+    }
+
+    /**
+     * Назначает пользователя администратором сообщества.
+     *
+     * @param Community $team
+     * @param User $viewer
+     * @param int $userId
+     * @return bool
+     * @throws \Throwable
+     */
+    public function addAdmin(Community $team, User $viewer, int $userId): bool
+    {
+        if (! $this->isOwner($team, $viewer) || $userId < 1) {
+            return false;
+        }
+
+        /** @var User|null $user */
+        $user = User::query()
+            ->whereKey($userId)
+            ->where('status', UserStatus::Confirmed->value)
+            ->first();
+
+        if (! $user) {
+            return false;
+        }
+
+        return DB::transaction(function () use ($team, $userId): bool {
+            /** @var CommunityRole|null $role */
+            $role = CommunityRole::query()
+                ->where('community_id', $team->id)
+                ->where('user_id', $userId)
+                ->lockForUpdate()
+                ->first();
+
+            if ($role && in_array((int) $role->role, [MembershipRole::Owner->value, MembershipRole::Blocked->value], true)) {
+                return false;
+            }
+
+            CommunityRole::query()->updateOrCreate([
+                'community_id' => $team->id,
+                'user_id' => $userId,
+            ], [
+                'role' => MembershipRole::Admin->value,
+            ]);
+
+            return true;
+        });
+    }
+
+    /**
+     * Снимает с пользователя роль администратора и оставляет его участником.
+     *
+     * @param Community $team
+     * @param User $viewer
+     * @param int $userId
+     * @return bool
+     */
+    public function removeAdmin(Community $team, User $viewer, int $userId): bool
+    {
+        if (! $this->isOwner($team, $viewer) || $userId < 1) {
+            return false;
+        }
+
+        return CommunityRole::query()
+            ->where('community_id', $team->id)
+            ->where('user_id', $userId)
+            ->where('role', MembershipRole::Admin->value)
+            ->update(['role' => MembershipRole::Member->value]) > 0;
+    }
+
+    /**
+     * Ищет пользователей, которых владелец может назначить администраторами.
+     *
+     * @param Community $team
+     * @param User $viewer
+     * @param string $search
+     * @param int $limit
+     * @return Collection
+     */
+    public function searchAdminCandidates(Community $team, User $viewer, string $search, int $limit = 10): Collection
+    {
+        $search = trim($search);
+
+        if (! $this->isOwner($team, $viewer) || $search === '') {
+            return collect();
+        }
+
+        $query = User::query()
+            ->where('status', UserStatus::Confirmed->value)
+            ->whereNotIn('id', CommunityRole::query()
+                ->select('user_id')
+                ->where('community_id', $team->id)
+                ->whereNotNull('user_id')
+                ->whereIn('role', [
+                    MembershipRole::Owner->value,
+                    MembershipRole::Admin->value,
+                    MembershipRole::Blocked->value,
+                ]));
+
+        $query->where(function (Builder $query) use ($search): void {
+            if (ctype_digit($search)) {
+                $query->orWhere('id', (int) $search);
+            }
+
+            $query
+                ->orWhere('firstname', 'like', '%' . $search . '%')
+                ->orWhere('lastname', 'like', '%' . $search . '%')
+                ->orWhere('secondname', 'like', '%' . $search . '%')
+                ->orWhere('email', 'like', '%' . $search . '%')
+                ->orWhereRaw("CONCAT_WS(' ', firstname, lastname) LIKE ?", ['%' . $search . '%'])
+                ->orWhereRaw("CONCAT_WS(' ', lastname, firstname) LIKE ?", ['%' . $search . '%']);
+        });
+
+        $users = $query
+            ->orderBy('firstname')
+            ->orderBy('lastname')
+            ->limit(max(1, min($limit, 25)))
+            ->get();
+
+        if ($users->isEmpty()) {
+            return collect();
+        }
+
+        $roles = CommunityRole::query()
+            ->where('community_id', $team->id)
+            ->whereIn('user_id', $users->pluck('id'))
+            ->pluck('role', 'user_id');
+
+        return $users->map(fn (User $user): array => [
+            'id' => (int) $user->id,
+            'name' => $user->displayName(),
+            'email' => (string) $user->email,
+            'city' => (string) $user->city,
+            'avatar' => FrontAssets::userAvatar($user),
+            'role_name' => MembershipRole::labelFor($roles->has($user->id) ? (int) $roles->get($user->id) : null) ?: 'Не участник',
+        ]);
+    }
+
+    /**
+     * Меняет роль управляемого участника или удаляет его из сообщества.
+     *
+     * @param Community $team
+     * @param User $viewer
+     * @param int $userId
+     * @param MembershipRole|null $newRole
+     * @return bool
+     * @throws \Throwable
+     */
+    private function changeManagedMemberRole(Community $team, User $viewer, int $userId, ?MembershipRole $newRole): bool
+    {
+        if (! $this->canManage($team, $viewer) || $userId < 1 || (int) $viewer->id === $userId) {
+            return false;
+        }
+
+        return DB::transaction(function () use ($team, $viewer, $userId, $newRole): bool {
+            /** @var CommunityRole|null $viewerRole */
+            $viewerRole = CommunityRole::query()
+                ->where('community_id', $team->id)
+                ->where('user_id', $viewer->id)
+                ->lockForUpdate()
+                ->first();
+
+            /** @var CommunityRole|null $targetRole */
+            $targetRole = CommunityRole::query()
+                ->where('community_id', $team->id)
+                ->where('user_id', $userId)
+                ->lockForUpdate()
+                ->first();
+
+            if (! $viewerRole || ! $targetRole) {
+                return false;
+            }
+
+            $viewerRoleValue = (int) $viewerRole->role;
+            $targetRoleValue = (int) $targetRole->role;
+
+            if ($targetRoleValue === MembershipRole::Owner->value) {
+                return false;
+            }
+
+            if ($viewerRoleValue === MembershipRole::Admin->value && $targetRoleValue !== MembershipRole::Member->value) {
+                return false;
+            }
+
+            if (! in_array($targetRoleValue, [MembershipRole::Admin->value, MembershipRole::Member->value], true)) {
+                return false;
+            }
+
+            if ($newRole === null) {
+                return (bool) $targetRole->delete();
+            }
+
+            $targetRole->fill(['role' => $newRole->value])->save();
+
+            return true;
+        });
+    }
+
+    /**
      * Возвращает id друзей, у которых еще нет роли в выбранной сущности.
      *
      * @param Community $team

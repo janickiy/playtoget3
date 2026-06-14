@@ -2,6 +2,7 @@
 
 @section('content')
     @php($showFormTabs = (bool) ($canEditSettings ?? false))
+    @php($isCommunityOwner = (int) ($role ?? 0) === 1)
 
     <div class="content-groups friends">
         @if ($team)
@@ -84,12 +85,29 @@
                     @if ($showFormTabs)
                         <div id="administrators">
                             <center><h2>Администраторы</h2></center>
+                            @if ($isCommunityOwner)
+                                <button type="button" class="community-admin-add-open js-community-admin-open" data-community-id="{{ $team->id }}">
+                                    Добавить администратора
+                                </button>
+                            @endif
                             <div class="possible-friend">
                                 @forelse ($admins as $member)
-                                    <div class="col-xs-6 possible-friend-cart">
+                                    <div class="col-xs-6 possible-friend-cart" data-user-id="{{ $member['id'] }}">
                                         <a class="possible-avatar" href="{{ route('front.profile.show', ['user' => $member['id']]) }}"><img src="{{ $member['avatar'] }}" alt=""></a>
                                         <a href="{{ route('front.profile.show', ['user' => $member['id']]) }}"><h5><strong>{{ $member['name'] }}</strong></h5></a>
                                         <p>{{ $member['city'] }}</p>
+                                        @if ($isCommunityOwner)
+                                            <div class="community-card-actions">
+                                                <button type="button" class="community-card-action community-card-action-danger js-community-member-action"
+                                                        data-action="remove_community_admin"
+                                                        data-community-id="{{ $team->id }}"
+                                                        data-user-id="{{ $member['id'] }}"
+                                                        data-confirm="Удалить администратора команды?"
+                                                        data-success="Администратор удален">
+                                                    Удалить администратора
+                                                </button>
+                                            </div>
+                                        @endif
                                     </div>
                                 @empty
                                     <p class="no_message">Администраторов пока нет.</p>
@@ -159,10 +177,20 @@
                             <center><h2>Черный список</h2></center>
                             <div class="possible-friend">
                                 @forelse ($blocked as $member)
-                                    <div class="col-xs-6 possible-friend-cart">
+                                    <div class="col-xs-6 possible-friend-cart" data-user-id="{{ $member['id'] }}">
                                         <a class="possible-avatar" href="{{ route('front.profile.show', ['user' => $member['id']]) }}"><img src="{{ $member['avatar'] }}" alt=""></a>
                                         <a href="{{ route('front.profile.show', ['user' => $member['id']]) }}"><h5><strong>{{ $member['name'] }}</strong></h5></a>
                                         <p>{{ $member['city'] }}</p>
+                                        <div class="community-card-actions">
+                                            <button type="button" class="community-card-action js-community-member-action"
+                                                    data-action="unblock_community_member"
+                                                    data-community-id="{{ $team->id }}"
+                                                    data-user-id="{{ $member['id'] }}"
+                                                    data-confirm="Удалить пользователя из черного списка команды?"
+                                                    data-success="Пользователь удален из черного списка">
+                                                Удалить из списка
+                                            </button>
+                                        </div>
                                     </div>
                                 @empty
                                     <p class="no_message">Черный список пуст.</p>
@@ -177,6 +205,10 @@
                 </div>
             </form>
         </div>
+
+        @if ($showFormTabs)
+            @include('front.communities._manage-assets')
+        @endif
     </div>
 @endsection
 

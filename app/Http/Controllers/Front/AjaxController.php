@@ -15,6 +15,7 @@ use App\Http\Requests\Front\Ajax\AttachmentPhotoRequest;
 use App\Http\Requests\Front\Ajax\CropAvatarRequest;
 use App\Http\Requests\Front\Ajax\CropCoverRequest;
 use App\Http\Requests\Front\Ajax\PhotoUploadRequest;
+use App\Models\Community;
 use App\Models\GeoCity;
 use App\Models\Like;
 use App\Models\Photo;
@@ -87,6 +88,12 @@ class AjaxController extends Controller
             'change_member_status' => $this->changeCommunityMemberStatus($request),
             'get_community_invite_friends' => $this->getCommunityInviteFriends($request),
             'send_community_invitation' => $this->sendCommunityInvitation($request),
+            'remove_community_member' => $this->removeCommunityMember($request),
+            'block_community_member' => $this->blockCommunityMember($request),
+            'unblock_community_member' => $this->unblockCommunityMember($request),
+            'search_community_admin_candidates' => $this->searchCommunityAdminCandidates($request),
+            'add_community_admin' => $this->addCommunityAdmin($request),
+            'remove_community_admin' => $this->removeCommunityAdmin($request),
             'search_event' => $this->searchEvent($request),
             'change_event_community_status' => $this->changeEventCommunityStatus($request),
             'change_event_memberstatus' => $this->changeEventMemberStatus($request),
@@ -564,6 +571,152 @@ class AjaxController extends Controller
             'html' => view('front.communities._invite-friends-list', ['friends' => $friends])->render(),
             'count' => $friends->count(),
         ]);
+    }
+
+    /**
+     * Удаляет участника из команды или группы.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    private function removeCommunityMember(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $community = $this->communityFromRequest($request);
+        $userId = (int)$request->input('user_id');
+
+        if (!$viewer || !$community || $userId < 1) {
+            return response()->json(['status' => 0, 'result' => 'error'], 422);
+        }
+
+        $changed = $this->communities->removeMember($community, $viewer, $userId);
+
+        return response()->json([
+            'status' => $changed ? 1 : 0,
+            'result' => $changed ? 'success' : 'error',
+        ], $changed ? 200 : 403);
+    }
+
+    /**
+     * Блокирует участника команды или группы.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    private function blockCommunityMember(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $community = $this->communityFromRequest($request);
+        $userId = (int)$request->input('user_id');
+
+        if (!$viewer || !$community || $userId < 1) {
+            return response()->json(['status' => 0, 'result' => 'error'], 422);
+        }
+
+        $changed = $this->communities->blockMember($community, $viewer, $userId);
+
+        return response()->json([
+            'status' => $changed ? 1 : 0,
+            'result' => $changed ? 'success' : 'error',
+        ], $changed ? 200 : 403);
+    }
+
+    /**
+     * Удаляет пользователя из черного списка команды или группы.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    private function unblockCommunityMember(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $community = $this->communityFromRequest($request);
+        $userId = (int)$request->input('user_id');
+
+        if (!$viewer || !$community || $userId < 1) {
+            return response()->json(['status' => 0, 'result' => 'error'], 422);
+        }
+
+        $changed = $this->communities->removeBlockedMember($community, $viewer, $userId);
+
+        return response()->json([
+            'status' => $changed ? 1 : 0,
+            'result' => $changed ? 'success' : 'error',
+        ], $changed ? 200 : 403);
+    }
+
+    /**
+     * Ищет пользователей, которых можно назначить администраторами.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    private function searchCommunityAdminCandidates(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $community = $this->communityFromRequest($request);
+        $search = (string)$request->input('q', $request->input('search', ''));
+
+        if (!$viewer || !$community || !$this->communities->isOwner($community, $viewer)) {
+            return response()->json(['status' => 0, 'result' => 'error', 'html' => '', 'count' => 0], 403);
+        }
+
+        $users = $this->communities->searchAdminCandidates($community, $viewer, $search);
+
+        return response()->json([
+            'status' => 1,
+            'result' => 'success',
+            'html' => view('front.communities._admin-candidates-list', ['users' => $users])->render(),
+            'count' => $users->count(),
+        ]);
+    }
+
+    /**
+     * Назначает пользователя администратором команды или группы.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    private function addCommunityAdmin(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $community = $this->communityFromRequest($request);
+        $userId = (int)$request->input('user_id');
+
+        if (!$viewer || !$community || $userId < 1) {
+            return response()->json(['status' => 0, 'result' => 'error'], 422);
+        }
+
+        $changed = $this->communities->addAdmin($community, $viewer, $userId);
+
+        return response()->json([
+            'status' => $changed ? 1 : 0,
+            'result' => $changed ? 'success' : 'error',
+        ], $changed ? 200 : 403);
+    }
+
+    /**
+     * Снимает администратора команды или группы.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    private function removeCommunityAdmin(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $community = $this->communityFromRequest($request);
+        $userId = (int)$request->input('user_id');
+
+        if (!$viewer || !$community || $userId < 1) {
+            return response()->json(['status' => 0, 'result' => 'error'], 422);
+        }
+
+        $changed = $this->communities->removeAdmin($community, $viewer, $userId);
+
+        return response()->json([
+            'status' => $changed ? 1 : 0,
+            'result' => $changed ? 'success' : 'error',
+        ], $changed ? 200 : 403);
     }
 
     /**
@@ -1592,6 +1745,21 @@ class AjaxController extends Controller
         $user = Auth::guard('web')->user();
 
         return $user;
+    }
+
+    /**
+     * Возвращает команду или группу из AJAX-запроса по идентификатору.
+     *
+     * @param Request $request
+     * @return Community|null
+     */
+    private function communityFromRequest(Request $request): ?Community
+    {
+        $communityId = (int)$request->input('community_id', $request->input('id', 0));
+
+        return $communityId > 0
+            ? ($this->communities->findTeam($communityId) ?: $this->communities->findGroup($communityId))
+            : null;
     }
 
     /**
