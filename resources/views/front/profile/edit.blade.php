@@ -219,7 +219,7 @@
                     <h3>Загрузка аватара</h3>
                 </div>
                 <div class="loading-bar" id="avatar-crop-loading">
-                    <img border="0" src="{{ asset('frontend/images/select2-spinner.gif') }}" width="20" alt="">
+                    <img src="{{ asset('frontend/images/select2-spinner.gif') }}" width="20" alt="">
                 </div>
                 <div class="file_upload2 avatar-crop-file">
                     <button type="button" id="avatar-select-button">Выберите файл</button>
@@ -252,7 +252,7 @@
                     <h3>Загрузка Обложки</h3>
                 </div>
                 <div class="loading-bar" id="cover-crop-loading">
-                    <img border="0" src="{{ asset('frontend/images/select2-spinner.gif') }}" width="20" alt="">
+                    <img src="{{ asset('frontend/images/select2-spinner.gif') }}" width="20" alt="">
                 </div>
                 <div class="file_upload2 avatar-crop-file">
                     <button type="button" id="cover-select-button">Выберите файл</button>

@@ -72,7 +72,7 @@
             </div>
         </div>
     @else
-        <center><h4>Вы не можете написать сообщение пользователю</h4></center>
+        <div class="text-center"><h4>Вы не можете написать сообщение пользователю</h4></div>
     @endif
 @endsection
 

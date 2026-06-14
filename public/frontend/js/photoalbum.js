@@ -88,7 +88,7 @@ $(document).ready(function () {
                         window.history.pushState(null, null, str + url);
                     }
                 } else {
-                    $('.back_one').click();
+                    $('.back_one').trigger('click');
                 }
             }
         })
@@ -153,7 +153,7 @@ $(document).ready(function () {
 });
 
 let albumPhotoLoading = false;
-$(document).scroll(function() {
+$(document).on('scroll', function() {
     const $albumList = $('#album-photo-list');
 
     if (!$albumList.length || $albumList.attr('data-has-more') !== '1') {

@@ -24,6 +24,9 @@
                                 ($viewerRole === 1 && in_array((int) $member['role'], [2, 3], true))
                                 || ($viewerRole === 2 && (int) $member['role'] === 3)
                             );
+                        $canAddFriend = $viewer
+                            && (int) $member['id'] !== (int) $viewer->id
+                            && ($member['friendship_status'] ?? '') === 'nofriend';
                     @endphp
                     <div class="col-xs-6 possible-friend-cart" data-user-id="{{ $member['id'] }}">
                         <a class="possible-avatar" href="{{ route('front.profile.show', ['user' => $member['id']]) }}">
@@ -37,32 +40,44 @@
                         @if ($viewer)
                             <a href="{{ route('front.profile.messages.show', ['user' => $viewer->id, 'recipient' => $member['id']]) }}"><b></b></a><br>
                         @endif
-                        @if ($canAffectMember)
+                        @if ($canAddFriend || $canAffectMember)
                             <div class="control community-member-control">
-                                <span>
-                                    <a href="#"
-                                       class="community-member-icon-action js-community-member-action"
-                                       data-action="remove_community_member"
-                                       data-community-id="{{ $group->id }}"
-                                       data-user-id="{{ $member['id'] }}"
-                                       data-confirm="Удалить участника из группы?"
-                                       data-success="Участник удален"
-                                       data-tooltip="Удалить участника">
-                                        <img src="{{ asset('frontend/images/icon-krest.png') }}" alt="">
-                                    </a>
-                                </span>
-                                <span>
-                                    <a href="#"
-                                       class="community-member-icon-action js-community-member-action"
-                                       data-action="block_community_member"
-                                       data-community-id="{{ $group->id }}"
-                                       data-user-id="{{ $member['id'] }}"
-                                       data-confirm="Заблокировать участника в группе?"
-                                       data-success="Участник заблокирован"
-                                       data-tooltip="Заблокировать участника">
-                                        <img src="{{ asset('frontend/images/icon-block-member.svg') }}" alt="">
-                                    </a>
-                                </span>
+                                @if ($canAddFriend)
+                                    <span>
+                                        <a href="#"
+                                           class="community-member-icon-action js-add-as-friend"
+                                           data-user-id="{{ $member['id'] }}"
+                                           data-tooltip="Добавить в друзья">
+                                            <img src="{{ asset('frontend/images/icon-plus.svg') }}" alt="">
+                                        </a>
+                                    </span>
+                                @endif
+                                @if ($canAffectMember)
+                                    <span>
+                                        <a href="#"
+                                           class="community-member-icon-action js-community-member-action"
+                                           data-action="remove_community_member"
+                                           data-community-id="{{ $group->id }}"
+                                           data-user-id="{{ $member['id'] }}"
+                                           data-confirm="Удалить участника из группы?"
+                                           data-success="Участник удален"
+                                           data-tooltip="Удалить участника">
+                                            <img src="{{ asset('frontend/images/icon-krest.svg') }}" alt="">
+                                        </a>
+                                    </span>
+                                    <span>
+                                        <a href="#"
+                                           class="community-member-icon-action js-community-member-action"
+                                           data-action="block_community_member"
+                                           data-community-id="{{ $group->id }}"
+                                           data-user-id="{{ $member['id'] }}"
+                                           data-confirm="Заблокировать участника в группе?"
+                                           data-success="Участник заблокирован"
+                                           data-tooltip="Заблокировать участника">
+                                            <img src="{{ asset('frontend/images/icon-block-member.svg') }}" alt="">
+                                        </a>
+                                    </span>
+                                @endif
                             </div>
                         @endif
                     </div>

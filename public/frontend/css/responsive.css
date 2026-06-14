@@ -1,6 +1,6 @@
 body{
 	min-width: 300px;
-	word-wrap: break-word;
+	overflow-wrap: break-word;
 	font-size: 14px;
 }
 

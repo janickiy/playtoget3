@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserSetting extends BaseModel
 {
+    use StaticTableName;
+
     protected $table = 'usersettings';
 
     protected $fillable = [

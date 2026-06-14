@@ -9,7 +9,7 @@
     <div class="photo_big_wrap">
         <input type="hidden" id="owner_id">
         <input type="hidden" id="content_id" value="">
-        <div class="loading-bar"><img border="0" src="{{ asset('frontend/images/select2-spinner.gif') }}" width="20" alt=""></div>
+        <div class="loading-bar"><img src="{{ asset('frontend/images/select2-spinner.gif') }}" width="20" alt=""></div>
         <img id="prev_video" src="{{ asset('frontend/images/prev.png') }}" alt="">
         <img id="next_video" src="{{ asset('frontend/images/next.png') }}" alt="">
         <div class="video_wrap"></div>

@@ -12,7 +12,7 @@ function fieldScope(element) {
 }
 
 function select_place(val, type, element) {
-    const text = $.trim(val);
+    const text = String(val).trim();
     let url = '';
     if (type.match("^search_sport")) {
         url = '/ajax/search_sport_types?sport_types=';
@@ -57,7 +57,7 @@ $(document).ready(function () {
 
     })
 
-    $(document).mouseup(function (e) {
+    $(document).on('mouseup', function (e) {
         const div = $('.select-place');
         if (!$('.text-place').is(e.target) && !div.is(e.target) && div.has(e.target).length === 0) {
             div.hide();

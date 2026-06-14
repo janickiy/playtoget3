@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Photo extends BaseModel
 {
+    use StaticTableName;
+
     protected $table = 'photos';
 
     public $timestamps = true;

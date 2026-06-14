@@ -67,8 +67,8 @@
                 <form class="form-horizontal">
                     <div class="form-group">
                         <div id="container" class="center_text marginTop20">
-                            <a id="pickfiles" href="javascript:;" class="save-button">Добавить файлы</a>
-                            <a id="uploadfiles" href="javascript:;" class="save-button">Загрузить файлы</a>
+                            <button id="pickfiles" type="button" class="save-button">Добавить файлы</button>
+                            <button id="uploadfiles" type="button" class="save-button">Загрузить файлы</button>
                         </div>
                     </div>
                 </form>

@@ -2,7 +2,7 @@
 $(
     function () {
         $("body").addClass("closed-menu");
-        $(".menu-icon").click(
+        $(".menu-icon").on('click',
             function () {
                 $("body").toggleClass("opened-menu");
             }
@@ -13,7 +13,7 @@ $(
 $(
     function () {
         $("#information").addClass("hidden-achiv");
-        $(".show-all-achiv").click(
+        $(".show-all-achiv").on('click',
             function () {
                 $("#information").toggleClass("show-achiv");
             }
@@ -23,7 +23,7 @@ $(
 $(
     function () {
         $("#information").addClass("hidden-more-info");
-        $(".minimax").click(
+        $(".minimax").on('click',
             function () {
                 $("#information").toggleClass("show-more-info");
             }

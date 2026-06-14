@@ -125,13 +125,13 @@ $(document).on('click', '#next-step', function () {
     })
     switch (k) {
         case 'main':
-            $('#main-menu li[data-type=education] a').click();
+            $('#main-menu li[data-type=education] a').trigger('click');
             break;
         case 'education':
-            $('#main-menu li[data-type=job] a').click();
+            $('#main-menu li[data-type=job] a').trigger('click');
             break;
         case 'job':
-            $('#main-menu li[data-type=achivments] a').click();
+            $('#main-menu li[data-type=achivments] a').trigger('click');
             break;
     }
 
@@ -167,7 +167,7 @@ $(document).on('click', '.plus', function () {
 
         const $listItems = $list.children('li');
 
-        $styledSelect.click(function (e) {
+        $styledSelect.on('click', function (e) {
             e.stopPropagation();
             const par = $(this).hasClass('active');
             $('.education_form_new div.select-styled.active').each(function () {
@@ -177,7 +177,7 @@ $(document).on('click', '.plus', function () {
                 $(this).toggleClass('active').next('ul.select-options').toggle();
         });
 
-        $listItems.click(function (e) {
+        $listItems.on('click', function (e) {
             e.stopPropagation();
             $styledSelect.text($(this).text()).removeClass('active');
             $this.val($(this).attr('rel'));
@@ -185,7 +185,7 @@ $(document).on('click', '.plus', function () {
             //console.log($this.val());
         });
 
-        $(document).click(function () {
+        $(document).on('click', function () {
             $styledSelect.removeClass('active');
             $list.hide();
         });
@@ -217,7 +217,7 @@ $(document).on('click', '.plus_job', function () {
 
         const $listItems = $list.children('li');
 
-        $styledSelect.click(function (e) {
+        $styledSelect.on('click', function (e) {
             e.stopPropagation();
             const par = $(this).hasClass('active');
             $('.job_form_new div.select-styled.active').each(function () {
@@ -227,7 +227,7 @@ $(document).on('click', '.plus_job', function () {
                 $(this).toggleClass('active').next('ul.select-options').toggle();
         });
 
-        $listItems.click(function (e) {
+        $listItems.on('click', function (e) {
             e.stopPropagation();
             $styledSelect.text($(this).text()).removeClass('active');
             $this.val($(this).attr('rel'));
@@ -235,7 +235,7 @@ $(document).on('click', '.plus_job', function () {
             //console.log($this.val());
         });
 
-        $(document).click(function () {
+        $(document).on('click', function () {
             $styledSelect.removeClass('active');
             $list.hide();
         });
@@ -267,7 +267,7 @@ $(document).on('click', '.plus_sport_type', function () {
 
         const $listItems = $list.children('li');
 
-        $styledSelect.click(function (e) {
+        $styledSelect.on('click', function (e) {
             e.stopPropagation();
             const par = $(this).hasClass('active');
             $('.sport_type_form_new div.select-styled.active').each(function () {
@@ -277,7 +277,7 @@ $(document).on('click', '.plus_sport_type', function () {
                 $(this).toggleClass('active').next('ul.select-options').toggle();
         });
 
-        $listItems.click(function (e) {
+        $listItems.on('click', function (e) {
             e.stopPropagation();
             $styledSelect.text($(this).text()).removeClass('active');
             $this.val($(this).attr('rel'));
@@ -285,7 +285,7 @@ $(document).on('click', '.plus_sport_type', function () {
             //console.log($this.val());
         });
 
-        $(document).click(function () {
+        $(document).on('click', function () {
             $styledSelect.removeClass('active');
             $list.hide();
         });

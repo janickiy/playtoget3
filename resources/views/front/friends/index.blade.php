@@ -7,8 +7,9 @@
         data-csrf="{{ csrf_token() }}"
         data-profile-base="{{ url('/profile') }}"
         data-message-base="{{ $viewer ? url('/profile/' . $viewer->id . '/messages/user') : url('/profile/' . $targetUser->id) }}"
-        data-icon-ok="{{ asset('frontend/images/icon-ok.png') }}"
-        data-icon-remove="{{ asset('frontend/images/icon-krest.png') }}"
+        data-icon-add="{{ asset('frontend/images/icon-plus.svg') }}"
+        data-icon-ok="{{ asset('frontend/images/icon-ok.svg') }}"
+        data-icon-remove="{{ asset('frontend/images/icon-krest.svg') }}"
     >
         @if ($isOwnPage && $possibleFriends->isNotEmpty())
             <link rel="stylesheet" type="text/css" href="{{ asset('frontend/css/select2.css') }}">
@@ -83,14 +84,13 @@
                             <input id="checkbox-find-comand" type="checkbox" hidden @checked((string) request('photo', '1') === '1') name="photo" value="1">
                             <label for="checkbox-find-comand">фото</label>
                         </div>
-                        <input type="submit" class="displayNone">
-                        <button type="button" onclick="$('input[type=submit]').click()" class="btn btn-white">Поиск</button>
+                        <button type="submit" class="btn btn-white">Поиск</button>
                     </div>
                     <div class="clearfix"></div>
                 </div>
             </form>
             <script>selectAction();</script>
-            <script type="text/javascript" src="{{ asset('frontend/js/search.js') }}"></script>
+            <script src="{{ asset('frontend/js/search.js') }}"></script>
 
             <div class="photo-caption">
                 <h3>Возможные друзья

@@ -123,7 +123,7 @@ $(document).ready(function () {
     initLastDialogMessageId();
     setInterval(pollDialogMessages, 4000);
 
-    $('#addMessageForm').submit(function (e) {
+    $('#addMessageForm').on('submit', function (e) {
         $('.typing').removeClass('show')
         const then = $(this);
         const comment = then.find('[name=message]').val() || then.find('#comment').val() || '';
@@ -194,7 +194,7 @@ $(document).ready(function () {
     let hasMoreMessages = typeof window.dialogueMessagesHasMore === 'undefined' ? true : Boolean(window.dialogueMessagesHasMore);
     const receiver_id = $('[name=receiver_id]').val() || $('#message-list').attr('data-num');
 
-    $('.mess_list').scroll(function () {
+    $('.mess_list').on('scroll', function () {
 
         if ($(this).scrollTop() == 0) {
             if (messLoad && hasMoreMessages) {
@@ -231,7 +231,7 @@ $(document).ready(function () {
     });
 
 
-    $('.new_dialog').click(function () {
+    $('.new_dialog').on('click', function () {
         const status = $(this).attr('data-status');
         if (status == 'new') {
             $('#old_dialogue').addClass('hide');
@@ -301,7 +301,7 @@ const settComments = {
 };
 let profileCommentsHasMore = typeof window.profileCommentsHasMore === 'undefined' ? true : Boolean(window.profileCommentsHasMore);
 
-$(document).scroll(function () {
+$(document).on('scroll', function () {
 
     if ($(window).scrollTop() + $(window).height() >= $(document).height()) {
         if (evJob && profileCommentsHasMore) {

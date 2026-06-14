@@ -156,10 +156,11 @@ class TeamsController extends Controller
     public function members(int $community, CommunityRepository $communities): View
     {
         $team = $this->teamOrFail($community, $communities);
+        $viewer = Auth::guard('web')->user();
 
         return view('front.teams.members', $this->teamPayload($team, $communities, 'members') + [
-            'members' => $communities->members($team->id),
-            'applications' => $communities->canManage($team, Auth::guard('web')->user())
+            'members' => $communities->members($team->id, $viewer?->id),
+            'applications' => $communities->canManage($team, $viewer)
                 ? $communities->applications($team->id)
                 : collect(),
         ]);

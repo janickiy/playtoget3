@@ -30,7 +30,6 @@
     @stack('styles')
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800&subset=latin,cyrillic" rel="stylesheet" type="text/css">
     <script src="{{ asset('frontend/js/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/jquery-migrate-3.6.0.min.js') }}"></script>
     <script src="{{ asset('frontend/js/header.js') }}"></script>
     <script src="{{ asset('frontend/js/show-hidden.js') }}"></script>
     <script>
@@ -60,7 +59,7 @@
                         </div>
                         <div class="profile-user">
                             <a href="{{ $frontLayout['user'] ? route('front.profile.show', ['user' => $frontLayout['user']->id]) : route('front.home') }}">
-                                <div class="mini_thumb_avatar"><img width="50" height="50" border="0" src="{{ $frontLayout['avatar'] }}" alt=""></div>
+                                <div class="mini_thumb_avatar"><img width="50" height="50" src="{{ $frontLayout['avatar'] }}" alt=""></div>
                             </a>
                             <a href="{{ $frontLayout['user'] ? route('front.profile.show', ['user' => $frontLayout['user']->id]) : route('front.home') }}">
                                 {{ $frontLayout['firstname'] }}<br>{{ $frontLayout['lastname'] }}
@@ -71,19 +70,19 @@
                             <ul>
                                 <li>
                                     <a href="{{ $frontLayout['user'] ? route('front.profile.show', ['user' => $frontLayout['user']->id]) : route('front.home') }}">
-                                        <div class="mini_thumb_avatar"><img width="50" height="50" border="0" src="{{ $frontLayout['avatar'] }}" alt=""></div>
+                                        <div class="mini_thumb_avatar"><img width="50" height="50" src="{{ $frontLayout['avatar'] }}" alt=""></div>
                                     </a>
                                     <a href="{{ $frontLayout['user'] ? route('front.profile.show', ['user' => $frontLayout['user']->id]) : route('front.home') }}">{{ $frontLayout['firstname'] }}<span></span>{{ $frontLayout['lastname'] }}<span></span></a>
                                 </li>
-                                <li><a href="{{ route('front.news.index') }}"><img src="{{ asset('frontend/images/menu-home.png') }}" alt=""></a></li>
+                                <li><a href="{{ route('front.news.index') }}"><img src="{{ asset('frontend/images/menu-home.svg') }}" width="25" height="28" alt=""></a></li>
                                 <li>
                                     <a href="{{ $frontLayout['user'] ? route('front.profile.messages.index', ['user' => $frontLayout['user']->id]) : route('front.home') }}">
-                                        <img src="{{ asset('frontend/images/message.png') }}" alt="">
+                                        <img src="{{ asset('frontend/images/message.svg') }}" width="29" height="24" alt="">
                                     </a>
                                     <span id="message_count" class="displayNone">0</span>
                                 </li>
-                                <li><a href="{{ route('front.friends.index') }}"><img src="{{ asset('frontend/images/man.png') }}" alt=""></a></li>
-                                <li><a href="{{ route('front.profile.edit') }}"><img src="{{ asset('frontend/images/settings.png') }}" alt=""></a></li>
+                                <li><a href="{{ route('front.friends.index') }}"><img src="{{ asset('frontend/images/man.svg') }}" width="24" height="30" alt=""></a></li>
+                                <li><a href="{{ route('front.profile.edit') }}"><img src="{{ asset('frontend/images/settings.svg') }}" width="25" height="25" alt=""></a></li>
                                 <li>
                                     <form method="POST" action="{{ route('front.logout') }}">
                                         @csrf
@@ -157,7 +156,7 @@
         </div>
     </section>
 
-    <script src="{{ asset('frontend/js/script_all.js') }}"></script>
+    <script src="{{ asset('frontend/js/script_all.js') }}?v=2026061405"></script>
 
     @include('front.partials.video-window')
     @include('front.partials.photo-window')

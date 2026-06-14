@@ -51,7 +51,7 @@ function selectAction() {
 
         const $listItems = $list.children('li');
 
-        $styledSelect.click(function (e) {
+        $styledSelect.on('click', function (e) {
             e.stopPropagation();
             const par = $(this).hasClass('active');
             $('div.select-styled.active').each(function () {
@@ -61,7 +61,7 @@ function selectAction() {
                 $(this).toggleClass('active').next('ul.select-options').toggle();
         });
 
-        $listItems.click(function (e) {
+        $listItems.on('click', function (e) {
             e.stopPropagation();
             $styledSelect.text($(this).text()).removeClass('active');
             $this.val($(this).attr('rel'));
@@ -71,7 +71,7 @@ function selectAction() {
 
         });
 
-        $(document).click(function () {
+        $(document).on('click', function () {
             $styledSelect.removeClass('active');
             $list.hide();
         });
@@ -710,6 +710,11 @@ $(document).on("click", "#add_as_friend", function (event) {
     return add_as_friend($(this).attr('data-item'));
 });
 
+$(document).on('click', '.js-add-as-friend', function (event) {
+    event.preventDefault();
+    return add_as_friend($(this).data('user-id'));
+});
+
 function blockUserButtonHtml(id, label, action) {
     return '<button type="button" class="btn btn-danger" id="' + action + '" data-item="' + id + '">' + label + '</button>';
 }
@@ -754,18 +759,18 @@ $(document).on("click", "#unblock_user", function (event) {
     });
 });
 
-$(window).load(function () {
+$(window).on('load', function () {
 
     const get = parseGetParams();
 
 
     if (get['photo']) {
         $('body').append('<div class="photo_big" data-num=' + get['photo'] + '></div>');
-        $('.photo_big[data-num=' + get['photo'] + ']').click();
+        $('.photo_big[data-num=' + get['photo'] + ']').trigger('click');
     }
     if (get['video']) {
         $('body').append('<div class="video_prev" data-num=' + get['video'] + '></div>');
-        $('.video_prev[data-num=' + get['video'] + ']').click();
+        $('.video_prev[data-num=' + get['video'] + ']').trigger('click');
     }
 
 })
@@ -774,8 +779,8 @@ $(window).load(function () {
 $(document).ready(function () {
 
 
-    $('.lupa span').click(function () {
-        $('form[role=search]').submit();
+    $('.lupa span').on('click', function () {
+        $('form[role=search]').trigger('submit');
     })
 
 
@@ -1051,7 +1056,7 @@ $(document).ready(function () {
                                 if (msg.result == 'success') {
                                     $('.dialogues[data-num="' + id + '"]').remove();
                                     if (!$('#old_dialogue .dialogues').length) {
-                                        $('#old_dialogue').html('<center><h4 class="no_dialogues">У Вас пока нет диалогов</h4></center>');
+                                        $('#old_dialogue').html('<div class="text-center"><h4 class="no_dialogues">У Вас пока нет диалогов</h4></div>');
                                     }
                                 }
                             }
@@ -1171,7 +1176,7 @@ $(document).ready(function () {
     })
 
 
-    /*$('input[type=text]').keyup(function (event) {
+    /*$('input[type=text]').on('keyup', function (event) {
         if (event.ctrlKey && event.keyCode == 86) {
             const val = $(this).val();
             console.log(event);
@@ -1205,7 +1210,7 @@ $(document).ready(function () {
             }
         }
         if (!error) {
-            $('.create_form').submit();
+            $('.create_form').trigger('submit');
             console.log('form submit');
         } else {
             setTimeout(function () {
@@ -1219,14 +1224,11 @@ $(document).ready(function () {
     })
 
 
-    $('.search form').submit(function () {
+    $('.search form').on('submit', function (event) {
         const val = $('#main_search').val();
-        if (val != '') {
-            $(this).submit();
+        if (val == '') {
+            event.preventDefault();
         }
-
-
-        return false;
     })
 
 
@@ -1298,7 +1300,7 @@ $(document).ready(function () {
     })
 
 
-    $('.age').keydown(function (event) {
+    $('.age').on('keydown', function (event) {
         if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 ||
             // Разрешаем: Ctrl+A
             (event.keyCode == 65 && event.ctrlKey === true) ||

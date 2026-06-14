@@ -9,8 +9,9 @@
     const csrfToken = String($root.data('csrf') || '');
     const profileBase = String($root.data('profile-base') || '/profile').replace(/\/$/, '');
     const messageBase = String($root.data('message-base') || profileBase).replace(/\/$/, '');
-    const iconOk = String($root.data('icon-ok') || '/frontend/images/icon-ok.png');
-    const iconRemove = String($root.data('icon-remove') || '/frontend/images/icon-krest.png');
+    const iconAdd = String($root.data('icon-add') || '/frontend/images/icon-plus.svg');
+    const iconOk = String($root.data('icon-ok') || '/frontend/images/icon-ok.svg');
+    const iconRemove = String($root.data('icon-remove') || '/frontend/images/icon-krest.svg');
     const moreFriend = {
         number: 10,
         offset: 10,
@@ -52,7 +53,7 @@
 
         if (action === 'add') {
             html += '<div class="control">';
-            html += '<span><a onclick="add_as_friend(' + Number(user.user_id) + ');" data-tooltip="Добавить в друзья"><img src="' + iconOk + '" alt=""></a></span>';
+            html += '<span><a onclick="add_as_friend(' + Number(user.user_id) + ');" data-tooltip="Добавить в друзья"><img src="' + iconAdd + '" alt=""></a></span>';
             html += '<span><img src="' + iconRemove + '" alt="" class="js-hide-possible-friend" data-num="' + Number(user.user_id) + '" data-tooltip="Больше не показывать"></span>';
             html += '</div>';
         } else if (action === 'remove') {

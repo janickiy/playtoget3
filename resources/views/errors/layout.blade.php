@@ -24,7 +24,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <a href="{{ url('/') }}" class="entrance-logo">
-                        <img border="0" src="{{ asset('frontend/images/playtoget-logo-clean.svg') }}?v=2026061404" width="290" height="86" alt="logo">
+                        <img src="{{ asset('frontend/images/playtoget-logo-clean.svg') }}?v=2026061404" width="290" height="86" alt="logo">
                     </a>
                 </div>
             </div>
@@ -39,7 +39,6 @@
     </div>
 
     <script src="{{ asset('frontend/js/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/jquery-migrate-3.6.0.min.js') }}"></script>
     <script src="{{ asset('frontend/js/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('frontend/js/bootstrap.min.js') }}"></script>
 </body>

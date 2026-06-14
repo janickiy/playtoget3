@@ -54,13 +54,11 @@
 .fc-highlight { /* when user is selecting cells */
 	background: #bce8f1;
 	opacity: .3;
-	filter: alpha(opacity=30); /* for IE */
 }
 
 .fc-bgevent { /* default look for background events */
 	background: rgb(143, 223, 130);
 	opacity: .3;
-	filter: alpha(opacity=30); /* for IE */
 }
 
 .fc-nonbusiness { /* default look for non-business-hours areas */
@@ -197,7 +195,6 @@
   	cursor: default;
   	background-image: none;
   	opacity: 0.65;
-  	filter: alpha(opacity=65);
   	box-shadow: none;
   }
 
@@ -718,7 +715,6 @@ z-index: 1;
 
 .fc-day-number.fc-other-month {
 	opacity: 0.3;
-	filter: alpha(opacity=30); /* for IE */
 	/* opacity with small font can sometimes look too faded
 	   might want to set the 'color' property instead
 	   making day-numbers bold also fixes the problem */
@@ -1061,7 +1057,6 @@ be a descendant of the grid when it is being dragged.
 	z-index: 1;
 	background: #fff;
 	opacity: .25;
-	filter: alpha(opacity=25); /* for IE */
 }
 
 /* short mode, where time and title are on the same line */

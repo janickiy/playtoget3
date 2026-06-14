@@ -27,8 +27,8 @@
                     </div>
                 </div>
             @empty
-                <center><h4>У Вас пока нет друзей</h4></center>
-                <center><h5><a href="{{ route('front.friends.index') }}">Посмотреть возможных друзей</a></h5></center>
+                <div class="text-center"><h4>У Вас пока нет друзей</h4></div>
+                <div class="text-center"><h5><a href="{{ route('front.friends.index') }}">Посмотреть возможных друзей</a></h5></div>
             @endforelse
         </div>
 
@@ -60,7 +60,7 @@
                     <div class="del-dialog" data-item="{{ $dialogue['user_id'] }}" data-tooltip="Очистить диалог"></div>
                 </div>
             @empty
-                <center><h4 class="no_dialogues">У Вас пока нет диалогов</h4></center>
+                <div class="text-center"><h4 class="no_dialogues">У Вас пока нет диалогов</h4></div>
             @endforelse
         </div>
     </div>

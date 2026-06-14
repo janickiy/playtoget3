@@ -72,7 +72,7 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label" for="avatar_file"></label>
                 <div class="col-lg-6">
-                    <img id="preview_ava" border="0" width="200" src="{{ $sportBlock ? FrontAssets::sportBlockAvatar($sportBlock) : asset('frontend/images/default_group.png') }}" alt="">
+                    <img id="preview_ava" width="200" src="{{ $sportBlock ? FrontAssets::sportBlockAvatar($sportBlock) : asset('frontend/images/default_group.png') }}" alt="">
                     <div class="file_upload">
                         <button type="button" id="avatar">Редактировать фото</button>
                         <input type="file" name="avatar_file" id="avatar_file" accept="image/jpeg,image/png,image/gif">

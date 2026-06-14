@@ -1,7 +1,7 @@
 <div class="album">
     <a href="{{ route('front.videoalbums.show', ['album' => $album['id']]) }}">
         <div class="img-container">
-            <img border="0" src="{{ $album['image'] ?: asset('frontend/images/default_group.png') }}" alt="">
+            <img src="{{ $album['image'] ?: asset('frontend/images/default_group.png') }}" alt="">
         </div>
         <p>{{ $album['name'] }}</p>
     </a>

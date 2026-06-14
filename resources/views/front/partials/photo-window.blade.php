@@ -9,7 +9,7 @@
     <div class="photo_big_wrap">
         <input type="hidden" id="owner_id">
         <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" class="photo_wrap next" alt="">
-        <div class="loading-bar"><img border="0" src="{{ asset('frontend/images/select2-spinner.gif') }}" width="20" alt=""></div>
+        <div class="loading-bar"><img src="{{ asset('frontend/images/select2-spinner.gif') }}" width="20" alt=""></div>
         <div class="text">
             <div class="message">
                 <div class="text-block" id="name_foto">

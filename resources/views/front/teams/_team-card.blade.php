@@ -1,6 +1,6 @@
 <div class="event-item" id="community_{{ $team['id'] }}">
     <a href="{{ route('front.teams.show', ['community' => $team['id']]) }}" class="img">
-        <img border="0" src="{{ $team['avatar'] ?: asset('frontend/images/noimage.png') }}" alt="" onerror="this.onerror=null;this.src='{{ asset('frontend/images/noimage.png') }}';">
+        <img src="{{ $team['avatar'] ?: asset('frontend/images/noimage.png') }}" alt="" onerror="this.onerror=null;this.src='{{ asset('frontend/images/noimage.png') }}';">
     </a>
     <div class="teg">
         <p><a href="{{ route('front.teams.show', ['community' => $team['id']]) }}">{{ $team['name'] }}</a></p>

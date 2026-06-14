@@ -15,7 +15,7 @@
     <div class="content-groups friends">
         @include($communityView['top'])
 
-        <center><h2>{{ $title }}</h2></center>
+        <div class="text-center"><h2>{{ $title }}</h2></div>
 
         <br>
         <div class="job_form">
@@ -35,8 +35,8 @@
                 </div>
                 <div class="form-group">
                     <div id="photo-upload-actions" class="marginTop20 center_text" style="margin-bottom:30px">
-                        <a id="pickfiles" href="javascript:;" class="save-button">Добавить файлы</a>
-                        <a id="uploadfiles" href="javascript:;" class="save-button">Загрузить файлы</a>
+                        <button id="pickfiles" type="button" class="save-button">Добавить файлы</button>
+                        <button id="uploadfiles" type="button" class="save-button">Загрузить файлы</button>
                         <input id="photo-files" type="file" accept="image/jpeg,image/png,image/gif" multiple style="display:none">
                     </div>
                 </div>

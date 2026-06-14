@@ -36,7 +36,7 @@
                 ])
             </div>
             @if ($items->isEmpty())
-                <center><h5>Записей пока нет.</h5></center>
+                <div class="text-center"><h5>Записей пока нет.</h5></div>
             @endif
             <a href="#" class="show-more js-sport-blocks-load-more" @style(['display: none' => ($itemsTotal ?? $items->count()) <= $items->count()])>
                 <i></i><span>Показать еще</span>

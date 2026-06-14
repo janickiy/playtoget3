@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Occupation extends BaseModel
 {
+    use StaticTableName;
+
     protected $table = 'occupations';
 
     protected $fillable = [

@@ -45,8 +45,8 @@ $(document).ready(function () {
         $("#message").val($("#message").val() + " " + shortCode + " ");
 
         //  $(".smilesChoose[data-num='"+num+"']").toggle();
-        $("#comment[data-num='" + num + "']").focus();
-        $("#message").focus();
+        $("#comment[data-num='" + num + "']").trigger('focus');
+        $("#message").trigger('focus');
     });
 
 
@@ -97,14 +97,14 @@ $(document).ready(function () {
     })
 
 
-    $("#sendBtn").click(function () {
+    $("#sendBtn").on('click', function () {
         processMessage();
     });
 
 
     $(document).on("click", ".files", function () {
         const num = $(this).attr('data-num');
-        $('.file_name[data-num=' + num + ']').click();
+        $('.file_name[data-num=' + num + ']').trigger('click');
         return false;
     })
 
@@ -223,7 +223,7 @@ $(document).ready(function () {
     })
 
 
-    $(document).mouseup(function (e) { // событие клика по веб-документу
+    $(document).on('mouseup', function (e) { // событие клика по веб-документу
         const div = $('.smilesChoose'); // тут указываем ID элемента
         if (!div.is(e.target) // если клик был не по нашему блоку
             && div.has(e.target).length === 0) {
@@ -237,7 +237,7 @@ $(document).ready(function () {
         if ($('#message').is(":focus")) {
             e = e || window.event;
             if (e.keyCode === 13) {
-                $('#addMessageForm').submit();
+                $('#addMessageForm').trigger('submit');
             }
         }
     }

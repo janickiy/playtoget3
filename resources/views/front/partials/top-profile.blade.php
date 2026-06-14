@@ -20,7 +20,6 @@
     <div id="top-top" class="account top_thumb_avatar">
         <img
             @if ($editableProfileAssets) id="preview_ava" class="editable-avatar" @endif
-            border="0"
             src="{{ $topProfile['avatar'] }}"
             alt=""
         >

@@ -1,6 +1,6 @@
 <div class="event-item">
     <a href="{{ route($routePrefix . '.index', ['sportBlock' => $item['id']]) }}" class="img">
-        <img border="0" src="{{ $item['avatar'] }}" alt="">
+        <img src="{{ $item['avatar'] }}" alt="">
     </a>
     <div class="teg">
         <p><a href="{{ route($routePrefix . '.index', ['sportBlock' => $item['id']]) }}">{{ $item['name'] }}</a></p>

@@ -88,7 +88,7 @@
                 }
 
                 isLoading = true;
-                $list.append('<div class="loading-bar"><img border="0" src="' + spinner + '" width="20" alt=""></div>');
+                $list.append('<div class="loading-bar"><img src="' + spinner + '" width="20" alt=""></div>');
 
                 $.ajax({
                     type: 'POST',

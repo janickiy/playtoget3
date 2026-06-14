@@ -45,7 +45,7 @@
     <div class="clearfix"></div>
 
     <div id="top-top" class="account top_thumb_avatar">
-        <img border="0" src="{{ $profileData['avatar'] }}" alt="">
+        <img src="{{ $profileData['avatar'] }}" alt="">
         <h3 class="name">
             {{ $profileData['firstname'] }}
             <span class="status_user{{ $profileData['is_online'] ? ' online' : '' }}" data-num="{{ $profileUser->id }}"></span><br>

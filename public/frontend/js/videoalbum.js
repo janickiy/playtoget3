@@ -92,7 +92,7 @@ function getVideoInfo(id) {
                     window.history.pushState(null, null, str + url);
                 }
             } else {
-                $('.back_one').click();
+                $('.back_one').trigger('click');
             }
         }
     });
@@ -147,7 +147,7 @@ $(document).on('click', '#prev_video', function () {
 });
 
 let albumVideoLoading = false;
-$(document).scroll(function () {
+$(document).on('scroll', function () {
     const $albumList = $('#album-video-list');
 
     if (!$albumList.length || $albumList.attr('data-has-more') !== '1') {

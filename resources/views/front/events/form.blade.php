@@ -21,7 +21,7 @@
             <form class="form-horizontal create_form" method="POST" action="{{ $action }}" enctype="multipart/form-data" autocomplete="off">
                 @csrf
                 <div class="education_form">
-                    <center><h2>Информация</h2></center>
+                    <div class="text-center"><h2>Информация</h2></div>
                     <br>
                     <div class="form-group">
                         <label class="col-lg-3 control-label" for="name">Название</label>
@@ -72,7 +72,7 @@
                     <div class="form-group event-form-cover">
                         <label class="col-lg-3 control-label">Обложка</label>
                         <div class="col-lg-6">
-                            <img id="preview_cover" border="0" src="{{ $event ? $eventData['cover'] : asset('frontend/images/content-bg.png') }}" alt="">
+                            <img id="preview_cover" src="{{ $event ? $eventData['cover'] : asset('frontend/images/content-bg.png') }}" alt="">
                             <div class="file_upload team-file-upload">
                                 <button type="button">Загрузить обложку</button>
                                 <input class="event-cover-input" type="file" name="cover_file" accept="image/jpeg,image/png,image/gif">

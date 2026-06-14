@@ -34,7 +34,7 @@
     </div>
     <div class="clearfix"></div>
     <div id="top-top" class="account top_thumb_avatar">
-        <img border="0" src="{{ $teamData['avatar'] }}" alt="">
+        <img src="{{ $teamData['avatar'] }}" alt="">
         <h3 class="name">
             {{ $teamData['name'] }}
             <br>

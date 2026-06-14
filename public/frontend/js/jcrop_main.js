@@ -37,7 +37,7 @@ $(function () {
     };
 
     // Привязываем соответствующий обработчик события
-    for (i in ac) jQuery('#' + i).click(anim_handler(ac[i]));
+    for (i in ac) jQuery('#' + i).on('click', anim_handler(ac[i]));
 
     // Для примера 3
     $('#cropbox3').Jcrop({ // Привязываем плагин JСrop к изображению с id=cropbox3
@@ -71,7 +71,7 @@ function updateCoords(c) {
     });
 };
 
-jQuery(window).load(function () {
+jQuery(window).on('load', function () {
     $("#accordion").accordion({autoHeight: false, navigation: true});
 });
 

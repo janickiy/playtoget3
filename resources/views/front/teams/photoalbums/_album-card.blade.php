@@ -21,7 +21,7 @@
     @endphp
     <a href="{{ route($communityView['route'] . '.photoalbums.show', $routeParams) }}">
         <div class="img-container">
-            <img border="0" src="{{ $album['image'] ?: asset('frontend/images/default_group.png') }}" alt="">
+            <img src="{{ $album['image'] ?: asset('frontend/images/default_group.png') }}" alt="">
         </div>
         <p>{{ $album['name'] }}</p>
     </a>

@@ -3,7 +3,7 @@ $(document).ready(function () {
 
     let working = false;
 
-    $('#addMessageForm').submit(function (e) {
+    $('#addMessageForm').on('submit', function (e) {
 
         e.preventDefault();
         if (working) return false;
@@ -119,7 +119,7 @@ $(document).ready(function () {
             getData();
 
             if ($settings.scroll == true) {
-                $(window).scroll(function () {
+                $(window).on('scroll', function () {
                     if ($(window).scrollTop() + $(window).height() > $this.height() && !busy) {
                         busy = true;
 
@@ -132,7 +132,7 @@ $(document).ready(function () {
                 });
             }
 
-            $this.find('.loading-bar').click(function () {
+            $this.on('click', '.loading-bar', function () {
 
                 if (busy == false) {
                     busy = true;

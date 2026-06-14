@@ -31,7 +31,11 @@ class CommunityRepository extends BaseRepository
     /**
      * Подключает модель и зависимости, с которыми работает репозиторий.
      */
-    public function __construct(Community $model, private readonly CommunityImageService $images)
+    public function __construct(
+        Community $model,
+        private readonly CommunityImageService $images,
+        private readonly FriendRepository $friends,
+    )
     {
         parent::__construct($model);
     }
@@ -461,7 +465,7 @@ class CommunityRepository extends BaseRepository
      * @param int $teamId
      * @return Collection
      */
-    public function members(int $teamId): Collection
+    public function members(int $teamId, ?int $viewerId = null): Collection
     {
         return CommunityRole::query()
             ->with('user.activity')
@@ -469,7 +473,7 @@ class CommunityRepository extends BaseRepository
             ->whereIn('role', [1, 2, 3])
             ->orderBy('role')
             ->get()
-            ->map(fn (CommunityRole $role): ?array => $this->serializeMember($role))
+            ->map(fn (CommunityRole $role): ?array => $this->serializeMember($role, $viewerId))
             ->filter(fn (?array $member): bool => (bool) $member)
             ->values();
     }
@@ -1492,7 +1496,7 @@ class CommunityRepository extends BaseRepository
      * @param CommunityRole $role
      * @return array|null
      */
-    private function serializeMember(CommunityRole $role): ?array
+    private function serializeMember(CommunityRole $role, ?int $viewerId = null): ?array
     {
         $user = $role->user;
 
@@ -1509,6 +1513,7 @@ class CommunityRepository extends BaseRepository
             'city' => (string) $user->city,
             'role' => (int) $role->role,
             'role_name' => MembershipRole::labelFor((int) $role->role),
+            'friendship_status' => $this->friends->friendshipStatus($viewerId, (int) $user->id),
             'is_online' => false,
         ];
     }

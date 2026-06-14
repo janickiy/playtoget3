@@ -238,7 +238,7 @@
 
     $pickButton.on('click', function () {
         if (!$(this).hasClass('disabled')) {
-            $fileInput.click();
+            $fileInput.trigger('click');
         }
     });
 

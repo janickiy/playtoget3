@@ -18,7 +18,7 @@
                 {!! nl2br(e($comment['content'])) !!}<br>
                 <ul class="attach_image">
                     @foreach ($comment['attachments'] as $attachment)
-                        <li><img border="0" src="{{ $attachment['url'] }}" class="photo_big" data-num="{{ $attachment['photo_id'] }}" alt=""></li>
+                        <li><img src="{{ $attachment['url'] }}" class="photo_big" data-num="{{ $attachment['photo_id'] }}" alt=""></li>
                     @endforeach
                 </ul>
             </p>
@@ -45,7 +45,7 @@
             {!! nl2br(e($comment['content'])) !!}<br>
             <ul class="attach_image">
                 @foreach ($comment['attachments'] as $attachment)
-                    <li><img border="0" src="{{ $attachment['url'] }}" class="photo_big" data-num="{{ $attachment['photo_id'] }}" alt=""></li>
+                    <li><img src="{{ $attachment['url'] }}" class="photo_big" data-num="{{ $attachment['photo_id'] }}" alt=""></li>
                 @endforeach
             </ul>
         </p>

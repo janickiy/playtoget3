@@ -23,7 +23,7 @@
 
     @yield('css')
 
-    <script type="text/javascript">
+    <script>
         let SITE_URL = "{{ url('/') }}";
     </script>
 </head>

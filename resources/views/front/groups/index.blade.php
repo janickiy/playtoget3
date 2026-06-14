@@ -59,7 +59,7 @@
                         </a>
                     </div>
                 @else
-                    <center><h5>Популярные группы отсутствуют</h5></center>
+                    <div class="text-center"><h5>Популярные группы отсутствуют</h5></div>
                 @endif
             </div>
 
@@ -80,7 +80,7 @@
                         </a>
                     </div>
                 @else
-                    <center><h5>Вы пока не вступали в группы</h5></center>
+                    <div class="text-center"><h5>Вы пока не вступали в группы</h5></div>
                 @endif
             </div>
 
@@ -101,7 +101,7 @@
                         </a>
                     </div>
                 @else
-                    <center><h5>У вас нет приглашений.</h5></center>
+                    <div class="text-center"><h5>У вас нет приглашений.</h5></div>
                 @endif
             </div>
         </div>

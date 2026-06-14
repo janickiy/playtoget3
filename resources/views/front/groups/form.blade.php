@@ -34,7 +34,7 @@
                     @endif
 
                     <div id="info">
-                        <center><h2>Информация</h2></center>
+                        <div class="text-center"><h2>Информация</h2></div>
                         <br>
                         <div class="form-group">
                             <label class="col-lg-3 control-label" for="name">Название</label>
@@ -66,14 +66,14 @@
                         </div>
                         <div class="form-group group-form-images">
                             <div class="col-sm-6 group-form-image-field">
-                                <img id="preview_ava" border="0" src="{{ $group ? $groupData['avatar'] : asset('frontend/images/noimage.png') }}" alt="">
+                                <img id="preview_ava" src="{{ $group ? $groupData['avatar'] : asset('frontend/images/noimage.png') }}" alt="">
                                 <div class="file_upload group-file-upload">
                                     <button type="button">Загрузить аватар</button>
                                     <input class="group-avatar-input" type="file" name="avatar_file" accept="image/jpeg,image/png,image/gif">
                                 </div>
                             </div>
                             <div class="col-sm-6 group-form-image-field">
-                                <img id="preview_cover" border="0" src="{{ $group ? $groupData['cover'] : asset('frontend/images/default_group.png') }}" alt="">
+                                <img id="preview_cover" src="{{ $group ? $groupData['cover'] : asset('frontend/images/default_group.png') }}" alt="">
                                 <div class="file_upload group-file-upload">
                                     <button type="button">Загрузить обложку</button>
                                     <input class="group-cover-input" type="file" name="cover_file" accept="image/jpeg,image/png,image/gif">
@@ -84,7 +84,7 @@
 
                     @if ($showFormTabs)
                         <div id="administrators">
-                            <center><h2>Администраторы</h2></center>
+                            <div class="text-center"><h2>Администраторы</h2></div>
                             @if ($isCommunityOwner)
                                 <button type="button" class="community-admin-add-open js-community-admin-open" data-community-id="{{ $group->id }}">
                                     Добавить администратора
@@ -116,7 +116,7 @@
                         </div>
 
                         <div id="privacy">
-                            <center><h2>Приватность</h2></center>
+                            <div class="text-center"><h2>Приватность</h2></div>
                             <br>
                             @php($wall = old('community.permission_wall', $settings?->permission_wall ?? 0))
                             @php($photo = old('community.permission_photo', $settings?->permission_photo ?? 0))
@@ -174,7 +174,7 @@
                         </div>
 
                         <div id="blacklist">
-                            <center><h2>Черный список</h2></center>
+                            <div class="text-center"><h2>Черный список</h2></div>
                             <div class="possible-friend">
                                 @forelse ($blocked as $member)
                                     <div class="col-xs-6 possible-friend-cart" data-user-id="{{ $member['id'] }}">

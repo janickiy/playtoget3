@@ -227,7 +227,7 @@ $(document).ready(function () {
         });
     }
 
-    $(window).scroll(function () {
+    $(window).on('scroll', function () {
         if ($(window).scrollTop() == $(document).height() - $(window).height()) {
             if ($(".pagenum:last").val() <= $(".total-page").val()) {
                 const pagenum = parseInt($(".pagenum:last").val()) + 1;

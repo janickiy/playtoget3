@@ -34,7 +34,7 @@
     </div>
     <div class="clearfix"></div>
     <div id="top-top" class="account top_thumb_avatar">
-        <img border="0" src="{{ $groupData['avatar'] }}" alt="">
+        <img src="{{ $groupData['avatar'] }}" alt="">
         <h3 class="name">
             {{ $groupData['name'] }}
             <br>

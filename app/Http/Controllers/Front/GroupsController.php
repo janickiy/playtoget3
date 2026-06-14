@@ -156,10 +156,11 @@ class GroupsController extends Controller
     public function members(int $community, CommunityRepository $communities): View
     {
         $group = $this->groupOrFail($community, $communities);
+        $viewer = Auth::guard('web')->user();
 
         return view('front.groups.members', $this->groupPayload($group, $communities, 'members') + [
-            'members' => $communities->members($group->id),
-            'applications' => $communities->canManage($group, Auth::guard('web')->user())
+            'members' => $communities->members($group->id, $viewer?->id),
+            'applications' => $communities->canManage($group, $viewer)
                 ? $communities->applications($group->id)
                 : collect(),
         ]);
