@@ -7,12 +7,12 @@
     <meta name="description" content="Мы первый спортивный интернет-ресурс, объединивший приверженцев здорового образа жизни, любителей спорта и профессиональных спортсменов.">
     <title>{{ $title ?? 'PlayToGet' }}</title>
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
-    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061404">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-1440.css') }}" media="(max-width: 1440px)">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-1190.css') }}" media="(max-width: 1190px)">
-    <link rel="stylesheet" href="{{ asset('frontend/css/max-width-960.css') }}" media="(max-width: 960px)">
+    <link rel="stylesheet" href="{{ asset('frontend/css/max-width-960.css') }}?v=2026061404" media="(max-width: 960px)">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-768.css') }}" media="(max-width: 768px)">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-640.css') }}" media="(max-width: 640px)">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-480.css') }}" media="(max-width: 480px)">
@@ -34,7 +34,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <a href="{{ route('front.home') }}" class="entrance-logo">
-                                        <img src="{{ asset('frontend/images/logo-main.png') }}" alt="playtoget-logo">
+                                        <img src="{{ asset('frontend/images/playtoget-logo-clean.svg') }}?v=2026061404" width="290" height="86" alt="playtoget-logo">
                                     </a>
                                     <div class="col-md-6 col-md-offset-3"><hr></div>
                                     <div class="col-md-8 col-md-offset-2">

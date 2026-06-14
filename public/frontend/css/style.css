@@ -248,6 +248,17 @@ margin-top: 115px;
 	width: 145px;
 	display: inline-block;
 }
+.top-header .logo a,
+.top-header .logo img
+{
+	display: block;
+	line-height: 0;
+}
+.top-header .logo img
+{
+	width: 145px;
+	height: 43px;
+}
 .top-header .search
 {
 	display: inline-block;

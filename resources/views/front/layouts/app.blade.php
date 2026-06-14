@@ -11,7 +11,7 @@
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap-theme.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061404">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.carousel.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.theme.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.transitions.css') }}">
@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-1440.css') }}" media="(max-width: 1440px)">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-1190.css') }}" media="(max-width: 1190px)">
-    <link rel="stylesheet" href="{{ asset('frontend/css/max-width-960.css') }}" media="(max-width: 960px)">
+    <link rel="stylesheet" href="{{ asset('frontend/css/max-width-960.css') }}?v=2026061404" media="(max-width: 960px)">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-768.css') }}" media="(max-width: 768px)">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-640.css') }}" media="(max-width: 640px)">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-480.css') }}" media="(max-width: 480px)">
@@ -50,7 +50,7 @@
                     <div class="col-xs-12">
                         <div class="left-top-header">
                             <div class="logo">
-                                <a href="{{ route('front.news.index') }}"><img src="{{ asset('frontend/images/top-logo.png') }}" alt=""></a>
+                                <a href="{{ route('front.news.index') }}"><img src="{{ asset('frontend/images/playtoget-logo-clean.svg') }}?v=2026061404" width="145" height="43" alt=""></a>
                             </div>
                             <div class="search">
                                 <form autocomplete="off" action="{{ route('front.news.index') }}" method="GET">

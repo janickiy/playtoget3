@@ -11,7 +11,8 @@ body {
 	padding: 0;
 }
 .top-header .logo a {
-	background: url("../images/top-logo.png") no-repeat scroll 0 0;
+	background: url("../images/playtoget-logo-clean.svg?v=2026061404") no-repeat scroll 0 0;
+	background-size: 145px 43px;
     display: block;
     padding: 22px;
     cursor: pointer;

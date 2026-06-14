@@ -12,7 +12,7 @@
                 @endif
 
                 <ul class="soc-menu">
-                    <li><a target="_blank" rel="noopener" href="https://twitter.com/playtoget_com"><img src="{{ asset('frontend/images/tw.png') }}" alt=""></a></li>
+                    <li><a target="_blank" rel="noopener" href="https://x.com/playtoget_com"><img src="{{ asset('frontend/images/x.svg') }}" alt="X"></a></li>
                     <li><a target="_blank" rel="noopener" href="https://www.facebook.com/playtoget.ru/"><img src="{{ asset('frontend/images/fb.png') }}" alt=""></a></li>
                     <li><a target="_blank" rel="noopener" href="https://www.instagram.com/playtoget_com/"><img src="{{ asset('frontend/images/ins.png') }}" alt=""></a></li>
                     <li><a target="_blank" rel="noopener" href="https://www.linkedin.com/groups/8510609"><img src="{{ asset('frontend/images/in.png') }}" alt=""></a></li>

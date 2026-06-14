@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="290" height="86" viewBox="0 0 290 86" role="img" aria-label="playtoget logo">
+  <title>playtoget</title>
+  <defs>
+    <linearGradient id="playtoget-blue" x1="0" x2="0" y1="0" y2="86" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#13bddb"/>
+      <stop offset="1" stop-color="#0ba6cd"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="86" height="86" rx="22" ry="22" fill="url(#playtoget-blue)"/>
+  <svg x="10" y="10" width="66" height="68" viewBox="22 20 56 62" overflow="visible">
+    <image href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABlCAYAAAC7vkbxAAAC4UlEQVR42u3cga2zIBSG4RuH6A6u4Q5uwQqs0SkcwjEYgh24baIJIUUPovVYX5Mv98/NjU14inAA/78Qwh/RExoBEAIIIAQQQAgggBBAAKERACGAAEIAAYQAAggBBBACCAEEEAIIIAQQQAgg75hX3E4ZX7Gv9K80gGzLuyHDTiCfrh6QchC38z3bqafE1wMQWd7X88D79xpRtIPYgz/jEaEAspDmSyDvdNNnGUCWn/Vh+vmt3hgAqQexK5GCWkDWa5C1wdYE2eUU9sjLgdiogXIZBN9qKxwfABE2pOSSjA8OkPpZViuIpH5wgNRnFPYOSeHoAamPj+qQXMI0juxR8c/3awDZXqVL/mYUfvNHpr3L44QUxCW9ppvGlaHwsRYmlFuDuJXxwQRZdZ3WHDb6d1ewdNLfHWRutFwv2bpcX1p1OxYXj1nN9RGKL1xYtIDs3xDz/aQbW+qW3n8VRFJ3PNgxPLYQa6KJwBp0pxXjl0Di++VA+mRm99BYg50N4jOnRIygR7hkEA/Jtz934sQGncXwqSDNypGdtTHAZI4IzVV3+nsrrEnYoKpce+LkopLZ1wCILpAth+hqVwJuCSKdfXkhSJMsNKbXqA3nqiCScaZPGr6Peke3YUX4liBdAYgVYHhBvTEWbHbdDkQye2qjmmNpWcQXfO6g5fTilUHaleX00u1Yr2Hmpg1kqARpKsaEVsNG1RXfCWkWnvmSE4+qt3Kv+pLO8GEtzO5QwR/xktClQXxBg5gP61+AKHlraoymwoCc1ENyh6pDxcru6fWI1jdvt86QTEWj9pWYPwliKnYSQ4Sx5R6BOiTfML7isWU3bNN6DlvL1qHasK3a7oUnINvo725/clG6Ujs/hqwgY9LAPnOPZ3J/Ndu72nfQjOAM8NJex4z76X0TH5S8Cn0lEP43IAIIAQQQAgggBBBACCCAEEAIIIAQQAAhgABCAAGEAEIAAYQAAggBBBACCCDklPwDFA+HN2pQm4QAAAAASUVORK5CYII=" x="0" y="0" width="100" height="101" preserveAspectRatio="xMidYMid meet"/>
+  </svg>
+  <g transform="translate(101 54.5) skewX(-5)">
+    <text x="0" y="0" fill="#ffffff" font-family="'Cooper Black', 'Arial Rounded MT Bold', Arial, Helvetica, sans-serif" font-size="35.5" font-style="normal" font-weight="900" letter-spacing="0" text-rendering="geometricPrecision">playtoget</text>
+  </g>
+</svg>

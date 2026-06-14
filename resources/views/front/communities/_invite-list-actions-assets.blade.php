@@ -3,31 +3,77 @@
         <style>
             .community-invite-actions {
                 display: flex;
-                gap: 10px;
+                gap: 12px;
                 align-items: center;
-                margin-top: 8px;
+                margin-top: 10px;
             }
 
             .community-invite-list-action {
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                width: 30px;
-                height: 30px;
+                position: relative;
+                width: 32px;
+                height: 32px;
+                border: 2px solid #49afa2;
                 border-radius: 50%;
+                background: transparent;
+                transition: background-color .15s ease, border-color .15s ease, opacity .15s ease;
             }
 
-            .community-invite-list-accept {
+            .community-invite-list-action:hover {
                 background: #49afa2;
+                opacity: .9;
+            }
+
+            .community-invite-list-action:before,
+            .community-invite-list-action:after {
+                content: '';
+                position: absolute;
+                display: block;
+            }
+
+            .community-invite-list-accept:before {
+                width: 13px;
+                height: 8px;
+                margin-top: -3px;
+                border-left: 3px solid #49afa2;
+                border-bottom: 3px solid #49afa2;
+                transform: rotate(-45deg);
+            }
+
+            .community-invite-list-accept:hover:before {
+                border-color: #fff;
             }
 
             .community-invite-list-decline {
-                background: #cc0000;
+                border-color: #d95f65;
             }
 
-            .community-invite-list-action img {
-                max-width: 16px;
-                max-height: 16px;
+            .community-invite-list-decline:hover {
+                border-color: #cc0000;
+                background: #fff5f5;
+            }
+
+            .community-invite-list-decline:before,
+            .community-invite-list-decline:after {
+                width: 14px;
+                height: 3px;
+                border-radius: 2px;
+                background: #d95f65;
+            }
+
+            .community-invite-list-decline:before {
+                transform: rotate(45deg);
+            }
+
+            .community-invite-list-decline:after {
+                transform: rotate(-45deg);
+            }
+
+            .community-invite-list-decline:hover:before,
+            .community-invite-list-decline:hover:after {
+                background: #cc0000;
             }
         </style>
     @endpush
