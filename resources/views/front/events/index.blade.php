@@ -146,7 +146,7 @@
             clear: both;
             color: #337ab7;
             font-size: 14px;
-            margin: 0 0 14px;
+            margin: 14px 0;
             padding: 10px 14px;
         }
 

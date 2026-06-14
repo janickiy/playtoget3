@@ -11,12 +11,12 @@
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap-theme.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061404">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061410">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.carousel.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.theme.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.transitions.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/jquery.confirm.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/lightbox.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/lightbox.css') }}?v=2.12.0">
     <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-1440.css') }}" media="(max-width: 1440px)">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-1190.css') }}" media="(max-width: 1190px)">
@@ -156,7 +156,8 @@
         </div>
     </section>
 
-    <script src="{{ asset('frontend/js/script_all.js') }}?v=2026061405"></script>
+    <script src="{{ asset('frontend/js/script_all.js') }}?v=2026061407"></script>
+    <script src="{{ asset('frontend/js/lightbox.min.js') }}?v=2.12.0"></script>
 
     @include('front.partials.video-window')
     @include('front.partials.photo-window')

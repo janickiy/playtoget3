@@ -207,35 +207,6 @@ window.initHeaderPolling = initHeaderPolling;
 $(document).ready(function () {
     initHeaderPolling();
 
-
-    function getresult(url) {
-        $.ajax({
-            url: url,
-            type: "GET",
-            data: {rowcount: $("#rowcount").val()},
-            beforeSend: function () {
-                $('#loader-icon').show();
-            },
-            complete: function () {
-                $('#loader-icon').hide();
-            },
-            success: function (data) {
-                $("#faq-result").append(data);
-            },
-            error: function () {
-            }
-        });
-    }
-
-    $(window).on('scroll', function () {
-        if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-            if ($(".pagenum:last").val() <= $(".total-page").val()) {
-                const pagenum = parseInt($(".pagenum:last").val()) + 1;
-                getresult('./?task=ajax_action&action=getpopphotos&page=' + pagenum);
-            }
-        }
-    });
-
     $(document).on('keyup', '#main_search', function () {
         const text = $(this).val();
         if (text != '') {

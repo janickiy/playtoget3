@@ -7,7 +7,7 @@
     <meta name="description" content="Мы первый спортивный интернет-ресурс, объединивший приверженцев здорового образа жизни, любителей спорта и профессиональных спортсменов.">
     <title>{{ $title ?? 'PlayToGet' }}</title>
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
-    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061404">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061410">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-1440.css') }}" media="(max-width: 1440px)">

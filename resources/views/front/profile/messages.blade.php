@@ -83,5 +83,5 @@
         window.profileBase = '{{ url('/profile') }}';
         window.dialogueMessagesHasMore = {{ $hasMoreMessages ? 'true' : 'false' }};
     </script>
-    <script src="{{ asset('frontend/js/profile.js') }}"></script>
+    <script src="{{ asset('frontend/js/profile.js') }}?v=2026061410"></script>
 @endpush

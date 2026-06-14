@@ -139,7 +139,7 @@ $(document).ready(function () {
             const mess_h = window_h - 310;
             $('.mess_list').css('height', mess_h);
             $('span.error').remove();
-            $('.files_block').append('<div class="loading-mess"><img border="0" src="./frontend/images/select2-spinner.gif" width=20px></div>');
+            $('.files_block').append('<div class="loading-mess"><img border="0" src="/frontend/images/select2-spinner.gif" width=20px></div>');
             $('.files_block').html('');
             const formData = then.serializeArray();
             if (attach.length != 0)
@@ -198,7 +198,7 @@ $(document).ready(function () {
 
         if ($(this).scrollTop() == 0) {
             if (messLoad && hasMoreMessages) {
-                $('.mess_list').prepend('<div class="loading-bar"><img border="0" src="./frontend/images/select2-spinner.gif" width=20px></div>')
+                $('.mess_list').prepend('<div class="loading-bar"><img border="0" src="/frontend/images/select2-spinner.gif" width=20px></div>')
                 messLoad = false;
                 $.ajax({
                     type: 'POST',
@@ -237,12 +237,12 @@ $(document).ready(function () {
             $('#old_dialogue').addClass('hide');
             $('#new_dialogue').removeClass('hide');
             $(this).attr('data-status', 'old');
-            $(this).html("<h5><img src='./frontend/images/message-sitebar.png'/> Вернуться в диалоги</h5>");
+            $(this).html("<h5><img src='/frontend/images/message-sitebar.png'/> Вернуться в диалоги</h5>");
         } else {
             $('#old_dialogue').removeClass('hide');
             $('#new_dialogue').addClass('hide');
             $(this).attr('data-status', 'new');
-            $(this).html("<h5><img src='./frontend/images/pen.png'/> Начать новый диалог</h5>");
+            $(this).html("<h5><img src='/frontend/images/pen.png'/> Начать новый диалог</h5>");
         }
     })
 
@@ -271,7 +271,7 @@ $(document).on("click", ".reply", function () {
     ReplyForm += '<input type="file" class="file_name" name="file_name[]" data-num="' + IdComment + '" multiple/>';
     ReplyForm += '<input id="comment" name="comment" type="text" data-num="' + IdComment + '" placeholder="' + placeholder + '">';
     ReplyForm += '<div class="smile-files">';
-    ReplyForm += '<a id="smilesBtn" class="smile smilesBtn" data-num="' + IdComment + '"><img src="./frontend/images/smile.png" alt=""></a>';
+    ReplyForm += '<a id="smilesBtn" class="smile smilesBtn" data-num="' + IdComment + '"><img src="/frontend/images/smile.png" alt=""></a>';
     ReplyForm += '<a href="#" class="files" data-num="' + IdComment + '"  data-tooltip="Прикрепить изображение"><img src="./frontend/images/files.png" alt=""></a>';
     ReplyForm += "<div class='smilesChoose add' data-num='" + IdComment + "'></div>";
     ReplyForm += '</div>';
@@ -306,7 +306,7 @@ $(document).on('scroll', function () {
     if ($(window).scrollTop() + $(window).height() >= $(document).height()) {
         if (evJob && profileCommentsHasMore) {
             evJob = false;
-            $('#comment-list').append('<div class="loading-bar"><img border="0" src="./frontend/images/select2-spinner.gif" width=20px></div>')
+            $('#comment-list').append('<div class="loading-bar"><img border="0" src="/frontend/images/select2-spinner.gif" width=20px></div>')
             $.ajax({
                 type: 'POST',
                 url: window.profileCommentsEndpoint || '/ajax/get_comments',

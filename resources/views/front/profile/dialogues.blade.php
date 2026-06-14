@@ -6,7 +6,7 @@
     </div>
 
     <div class="row dialogues new_dialog" data-status="new">
-        <h5><img src="{{ asset('frontend/images/message-sitebar.png') }}" alt=""> Начать новый диалог</h5>
+        <h5><img src="{{ asset('frontend/images/message-sitebar.svg') }}" alt=""> Начать новый диалог</h5>
     </div>
 
     <div class="mess_list">
@@ -72,5 +72,5 @@
         window.dialoguesBase = '{{ url('/profile/' . $viewer->id . '/messages/user') }}';
         window.profileBase = '{{ url('/profile') }}';
     </script>
-    <script src="{{ asset('frontend/js/profile.js') }}"></script>
+    <script src="{{ asset('frontend/js/profile.js') }}?v=2026061410"></script>
 @endpush

@@ -1,87 +1,103 @@
-	$(document).ready(function() {
+(function () {
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendarEl = document.getElementById('calendar');
 
-		$('#calendar').fullCalendar({
+        if (!calendarEl || typeof FullCalendar === 'undefined') {
+            return;
+        }
 
-			header: {
-				left: 'year,month, prev',
-				center: 'title',
+        const eventDates = new Set([
+            '2015-11-07',
+            '2015-11-20',
+            '2015-10-07',
+        ]);
 
-				right: 'next today',
-			},
-			defaultView: 'year',
-			defaultDate: moment(),
-			yearColumns: 3,
-			selectable: true,
-			selectHelper: true,
-			lang: 'ru',
-			select: function(start, end, jsEvent, view) {
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            headerToolbar: {
+                left: 'multiMonthYear,dayGridMonth prev',
+                center: 'title',
+                right: 'next today',
+            },
+            initialView: 'multiMonthYear',
+            initialDate: new Date(),
+            locale: 'ru',
+            firstDay: 1,
+            selectable: true,
+            editable: true,
+            dayMaxEvents: true,
+            multiMonthMaxColumns: 3,
+            buttonText: {
+                today: 'Сегодня',
+                year: '',
+                month: '',
+            },
+            events: [
+                {
+                    title: 'Соревнования по стрельбе',
+                    start: '2015-11-07',
+                },
+                {
+                    title: 'Игорь \n Алексеев',
+                    start: '2015-11-20',
+                },
+                {
+                    title: 'Соревнования по стрельбе',
+                    start: '2015-10-07',
+                },
+            ],
+            select: function (info) {
+                if (info.view.type === 'multiMonthYear') {
+                    calendar.changeView('dayGridMonth', info.start);
+                    return;
+                }
 
-				if (view.name=='year') {
-					$('#calendar').fullCalendar('changeView', 'month');
-					$('#calendar').fullCalendar('gotoDate', start);
+                const title = prompt('Введите событие:');
 
-				} else {
-						
-						const title = prompt('Введите событие:');
-						let eventData;
-						if (title) {
-							eventData = {
-								title: title,
-								start: start,
-								end: end
-							};
-							$('#calendar').fullCalendar('renderEvent', eventData, true);
-						}
+                if (!title) {
+                    return;
+                }
 
-					}
-				
+                calendar.addEvent({
+                    title: title,
+                    start: info.start,
+                    end: info.end,
+                    allDay: info.allDay,
+                });
+                calendar.unselect();
+            },
+            dayCellClassNames: function (info) {
+                return eventDates.has(toDateString(info.date)) ? ['color_th'] : [];
+            },
+            eventDidMount: function (info) {
+                if (info.event.start) {
+                    eventDates.add(toDateString(info.event.start));
+                }
+            },
+            datesSet: function () {
+                decorateCalendarTitle(calendarEl);
+            },
+        });
 
+        calendar.render();
+        decorateCalendarTitle(calendarEl);
+    });
 
-				},
+    function toDateString(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
 
+        return year + '-' + month + '-' + day;
+    }
 
-				firstDay: 1,
-				editable: true,
-			eventLimit: true, // allow "more" link when too many events
-			events: [
+    function decorateCalendarTitle(calendarEl) {
+        const title = calendarEl.querySelector('.fc-toolbar-title');
 
+        if (!title || title.dataset.decorated === '1') {
+            return;
+        }
 
-			{
-				title: 'Соревнования по стрельбе',
-				start: '2015-11-07'
-			},
-
-			{
-				title: 'Игорь \n Алексеев',
-				start: '2015-11-20',
-
-			},
-
-			{
-				title: 'Соревнования по стрельбе',
-				start: '2015-10-07'
-
-
-			},
-
-			]
-		});
-
-	
-	$(".fc-year-button, .fc-prev-button,.fc-next-button , .fc-today-button").click(function () {
-		cgahge_color ();
-	});
-	cgahge_color ();
-});
-
-	function cgahge_color () {
-
-		$(".fc-content-skeleton table tbody tr td").each(function() {	
-			if ( $(this).hasClass("fc-event-container") ) {
-				const tdIndex = $(this).index() + 1;
-				const $th = $(this).closest("table").find('thead td:nth-child(' + tdIndex + ')');
-				$th.addClass("color_th");
-
-			}
-		});
-	}
+        title.dataset.decorated = '1';
+        title.textContent = 'Календарь ' + title.textContent;
+    }
+}());

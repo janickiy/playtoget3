@@ -94,7 +94,7 @@
 @endsection
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('frontend/css/swiper.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/swiper.min.css') }}?v=6.8.4">
     <style>
         .sport-block-show #filelist {
             margin-top: 20px;
@@ -107,9 +107,9 @@
 @endpush
 
 @push('scripts')
-    <script src="{{ asset('frontend/js/swiper.js') }}"></script>
+    <script src="{{ asset('frontend/js/swiper.js') }}?v=6.8.4"></script>
     @if ($canEdit && $uploadAlbum)
-        <script src="{{ asset('frontend/js/puupload/plupload.full.min.js') }}"></script>
+        <script src="{{ asset('frontend/js/puupload/plupload.full.min.js') }}?v=3.1.5"></script>
     @endif
     <script>
         (function () {
@@ -133,27 +133,36 @@
             });
 
             const hasLoop = {{ $photos->count() > 1 ? 'true' : 'false' }};
-            const galleryTop = new Swiper('.gallery-top', {
-                nextButton: '.swiper-button-next',
-                prevButton: '.swiper-button-prev',
-                spaceBetween: 10,
-                loop: hasLoop,
-                loopedSlides: 5,
-                autoplay: 5000,
-                autoplayDisableOnInteraction: false
-            });
             const galleryThumbs = new Swiper('.gallery-thumbs', {
                 spaceBetween: 10,
                 slidesPerView: 4,
+                freeMode: true,
+                watchSlidesProgress: true,
                 touchRatio: 0.2,
                 loop: hasLoop,
                 loopedSlides: 5,
                 slideToClickedSlide: true,
-                autoplay: 5000,
-                autoplayDisableOnInteraction: false
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false
+                }
             });
-            galleryTop.params.control = galleryThumbs;
-            galleryThumbs.params.control = galleryTop;
+            const galleryTop = new Swiper('.gallery-top', {
+                spaceBetween: 10,
+                loop: hasLoop,
+                loopedSlides: 5,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev'
+                },
+                thumbs: {
+                    swiper: galleryThumbs
+                }
+            });
         })();
     </script>
     @if ($canEdit && $uploadAlbum)
