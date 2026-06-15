@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.carousel.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.theme.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.transitions.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/jquery.confirm.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/jquery.confirm.css') }}?v=2026061501">
     <link rel="stylesheet" href="{{ asset('frontend/css/lightbox.css') }}?v=2.12.0">
     <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}?v=2026061504">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-1440.css') }}" media="(max-width: 1440px)">

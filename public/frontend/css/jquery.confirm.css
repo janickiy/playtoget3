@@ -26,7 +26,7 @@
 
 #confirmBox h1,
 #confirmBox p{
-	font:26px/1 'Cuprum','Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+	font:24px/1 'Cuprum','Lucida Sans Unicode', 'Lucida Grande', sans-serif;
 	background:url('../images/confirm/header_bg.jpg') repeat-x left bottom #f5f5f5;
 	padding: 18px 25px;
 	text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.6);
@@ -41,7 +41,7 @@
 
 #confirmBox p{
 	background:none;
-	font-size:16px;
+	font-size:15px;
 	line-height:1.4;
 	padding-top: 35px;
 }
@@ -58,7 +58,7 @@
 	position:relative;
 	height: 33px;
 	
-	font:17px/33px 'Cuprum','Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+	font:16px/33px 'Cuprum','Lucida Sans Unicode', 'Lucida Grande', sans-serif;
 	
 	margin-right: 15px;
 	padding: 0 35px 0 40px;
