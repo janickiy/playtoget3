@@ -1,9 +1,16 @@
 @extends('front.layouts.app')
 
 @section('content')
+    @php
+        $eventFormCommunityView = $communityView ?? null;
+        $eventFormCommunity = $eventFormCommunityView['entity'] ?? ($team ?? $group ?? null);
+    @endphp
+
     <div class="content-groups friends">
         @if ($event)
             @include('front.events._top')
+        @elseif ($eventFormCommunityView && $eventFormCommunity)
+            @include($eventFormCommunityView['top'])
         @endif
 
         <div class="photo-caption">
@@ -37,7 +44,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label" for="place">Город</label>
-                        <div class="col-lg-6">
+                        <div class="col-lg-6 event-form-autocomplete">
                             <input type="hidden" name="id_place" value="{{ old('id_place') }}" class="id_place" data-type="search_city">
                             <input autocomplete="off" class="form-control search_word text-place border-top-none" type="text" value="{{ old('place', $event?->place) }}" name="place" data-type="search_city">
                             <div class="select-place" data-type="search_city"></div>
@@ -51,7 +58,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label" for="sport">Вид спорта</label>
-                        <div class="col-lg-6">
+                        <div class="col-lg-6 event-form-autocomplete">
                             <input type="hidden" name="id_sport" class="id_place" value="{{ old('id_sport') }}" data-type="search_sport">
                             <input autocomplete="off" class="form-control search_word text-place border-top-none" type="text" value="{{ old('sport', $event?->sport_type) }}" name="sport" data-type="search_sport">
                             <div class="select-place" data-type="search_sport"></div>
@@ -101,10 +108,31 @@
             border: 1px solid #eaebed;
             background: #eef5f5;
         }
+
+        .event-form-autocomplete {
+            position: relative;
+        }
+
+        .event-form-autocomplete .select-place {
+            border-radius: 0 0 5px 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .18);
+            left: 0;
+            max-height: 240px;
+            top: 36px;
+            width: 100%;
+            z-index: 200;
+        }
+
+        .event-form-autocomplete .select-place .place-item {
+            font-size: 18px;
+            line-height: 30px;
+            padding: 6px 10px;
+        }
     </style>
 @endpush
 
 @push('scripts')
+    <script src="{{ asset('frontend/js/search.js') }}"></script>
     <script>
         if (typeof selectAction === 'function') {
             selectAction();

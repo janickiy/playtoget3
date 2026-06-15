@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Front\Album\AlbumRequest;
 use App\Http\Requests\Front\Community\CommunityRequest;
+use App\Http\Requests\Front\Event\EventRequest;
 use App\Http\Requests\Front\Video\StoreVideoRequest;
 use App\Models\Community;
 use App\Models\PhotoAlbums;
 use App\Models\User;
 use App\Models\VideoAlbums;
 use App\Repositories\CommunityRepository;
+use App\Repositories\EventRepository;
 use App\Repositories\PhotoalbumRepository;
 use App\Repositories\ProfileRepository;
 use App\Repositories\VideoalbumRepository;
@@ -716,6 +718,52 @@ class GroupsController extends Controller
             'events' => $communities->events($group->id, 'group'),
             'canManage' => $communities->canManage($group, Auth::guard('web')->user()),
         ]);
+    }
+
+    /**
+     * Показывает форму создания мероприятия для группы.
+     *
+     * @param int $community
+     * @param CommunityRepository $communities
+     * @return View
+     */
+    public function createEvent(int $community, CommunityRepository $communities): View
+    {
+        $group = $this->groupOrFail($community, $communities);
+        $viewer = Auth::guard('web')->user();
+
+        abort_unless($viewer && $communities->canViewCommunityContent($group, $viewer), 403);
+
+        return view('front.events.form', $this->groupPayload($group, $communities, 'events') + [
+            'title' => 'Создание мероприятия',
+            'action' => route('front.groups.events.store', ['community' => $group->id]),
+            'button' => 'Создать мероприятие',
+            'event' => null,
+            'eventData' => null,
+        ]);
+    }
+
+    /**
+     * Создает мероприятие и сразу привязывает его к группе.
+     *
+     * @param int $community
+     * @param EventRequest $request
+     * @param CommunityRepository $communities
+     * @param EventRepository $events
+     * @return RedirectResponse
+     * @throws \Throwable
+     */
+    public function storeEvent(int $community, EventRequest $request, CommunityRepository $communities, EventRepository $events): RedirectResponse
+    {
+        $group = $this->groupOrFail($community, $communities);
+        $viewer = Auth::guard('web')->user();
+
+        abort_unless($viewer && $communities->canViewCommunityContent($group, $viewer), 403);
+
+        $event = $events->createEvent($viewer, $request->toDto());
+        $communities->changeEventMembership($group, $event->id, 1);
+
+        return redirect()->route('front.groups.events', ['community' => $group->id]);
     }
 
     /**

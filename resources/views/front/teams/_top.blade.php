@@ -154,6 +154,28 @@
                     });
                 }
 
+                function confirmTeamLeave(message, action) {
+                    if (typeof $.confirm !== 'function') {
+                        return;
+                    }
+
+                    $.confirm({
+                        title: 'Подтверждение',
+                        message: message,
+                        buttons: {
+                            'Да': {
+                                class: 'blue',
+                                action: action,
+                            },
+                            'Нет': {
+                                class: 'gray',
+                                action: function () {
+                                },
+                            },
+                        },
+                    });
+                }
+
                 function setJoinedState(root, communityId) {
                     root.find('.groups_button').remove();
                     root.find('.groups_button_leave').remove();
@@ -212,22 +234,27 @@
                     const message = button.data('message') || 'Вы действительно хотите выйти из команды?';
                     const silent = String(button.data('silent')) === '1';
 
-                    if (!silent && !window.confirm(message)) {
+                    const leaveAction = function () {
+                        memberAjax('change_member_status', {id: communityId, status: 0})
+                            .done(function (response) {
+                                if (response.result === 'success') {
+                                    setLeftState(root, communityId);
+                                    teamNotice(button.data('success-message') || 'Статус обновлен', true);
+                                } else {
+                                    teamNotice('Не удалось изменить статус', false);
+                                }
+                            })
+                            .fail(function () {
+                                teamNotice('Не удалось изменить статус', false);
+                            });
+                    };
+
+                    if (silent) {
+                        leaveAction();
                         return;
                     }
 
-                    memberAjax('change_member_status', {id: communityId, status: 0})
-                        .done(function (response) {
-                            if (response.result === 'success') {
-                                setLeftState(root, communityId);
-                                teamNotice(button.data('success-message') || 'Статус обновлен', true);
-                            } else {
-                                teamNotice('Не удалось изменить статус', false);
-                            }
-                        })
-                        .fail(function () {
-                            teamNotice('Не удалось изменить статус', false);
-                        });
+                    confirmTeamLeave(message, leaveAction);
                 });
 
                 $(document).on('click', '.js-team-invite', function (event) {

@@ -133,7 +133,7 @@ class EventsController extends Controller
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
         return view('front.events.form', $this->eventPayload($eventModel, $events, 'edit') + [
-            'title' => 'Редактирование мероприятия',
+            'title' => 'Редактирование: ' . ($eventModel->name ?: 'мероприятие'),
             'action' => route('front.events.update', ['event' => $eventModel->id]),
             'button' => 'Сохранить',
             'event' => $eventModel,

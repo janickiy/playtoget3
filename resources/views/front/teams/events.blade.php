@@ -14,6 +14,9 @@
         ];
         $community = $communityView['entity'] ?? $team;
         $communityKind = $communityView['kind'];
+        $routeParam = $communityView['routeParam'] ?? 'community';
+        $routeParams = [$routeParam => $community->id];
+        $canCreateEvent = ! ($communityAccessDenied ?? false);
     @endphp
     <div class="content-groups friends">
         @include($communityView['top'])
@@ -21,6 +24,15 @@
         @if ($communityAccessDenied ?? false)
             @include('front.communities._closed-message', ['message' => $communityAccessMessage])
         @else
+        @if ($canCreateEvent)
+            <div class="add-photos-album community-event-create-link">
+                <span>
+                    <i class="eventicon"></i>
+                    <a href="{{ route($communityView['route'] . '.events.create', $routeParams) }}">Создать мероприятие</a>
+                </span>
+            </div>
+        @endif
+
         @if ($canManage)
             <div class="photo-caption">
                 <h3>Поиск</h3>
@@ -74,6 +86,34 @@
         @endif
     </div>
 @endsection
+
+@if ($canCreateEvent)
+    @push('styles')
+        <style>
+            .community-event-create-link {
+                padding-top: 7.5px;
+                padding-bottom: 7.5px;
+                text-align: center;
+            }
+
+            .community-event-create-link span {
+                display: inline-flex;
+                align-items: center;
+            }
+
+            .community-event-create-link span i.eventicon {
+                width: 22px;
+                height: 22px;
+                background: url('{{ asset('frontend/images/events-black.png') }}') no-repeat center;
+                background-size: contain;
+            }
+
+            .community-event-create-link span:hover i.eventicon {
+                background-image: url('{{ asset('frontend/images/Events.png') }}');
+            }
+        </style>
+    @endpush
+@endif
 
 @if ($canManage)
     @push('scripts')

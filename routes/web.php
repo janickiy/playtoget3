@@ -195,7 +195,11 @@ Route::prefix('groups')->name('front.groups.')->controller(GroupsController::cla
         ->where(['community' => '[0-9]+', 'album' => '[0-9]+'])
         ->name('videoalbum.destroy.with-community');
 
-    Route::get('{community}/events', 'events')->where('community', '[0-9]+')->name('events');
+    Route::prefix('{community}/events')->where(['community' => '[0-9]+'])->group(function () {
+        Route::get('create', 'createEvent')->name('events.create');
+        Route::post('create', 'storeEvent')->name('events.store');
+        Route::get('', 'events')->name('events');
+    });
     Route::get('{community}', 'show')->where('community', '[0-9]+')->name('show');
 });
 
@@ -276,7 +280,11 @@ Route::prefix('teams')->name('front.teams.')->controller(TeamsController::class)
         Route::get('', 'videoAlbums')->name('videoalbums');
     });
 
-    Route::get('{community}/events', 'events')->where('community', '[0-9]+')->name('events');
+    Route::prefix('{community}/events')->where(['community' => '[0-9]+'])->group(function () {
+        Route::get('create', 'createEvent')->name('events.create');
+        Route::post('create', 'storeEvent')->name('events.store');
+        Route::get('', 'events')->name('events');
+    });
     Route::get('{community}', 'show')->where('community', '[0-9]+')->name('show');
 });
 

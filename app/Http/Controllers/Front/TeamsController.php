@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Front\Album\AlbumRequest;
 use App\Http\Requests\Front\Community\CommunityRequest;
+use App\Http\Requests\Front\Event\EventRequest;
 use App\Http\Requests\Front\Video\StoreVideoRequest;
 use App\Models\Community;
 use App\Models\PhotoAlbums;
 use App\Models\User;
 use App\Models\VideoAlbums;
 use App\Repositories\CommunityRepository;
+use App\Repositories\EventRepository;
 use App\Repositories\PhotoalbumRepository;
 use App\Repositories\ProfileRepository;
 use App\Repositories\VideoalbumRepository;
@@ -691,6 +693,52 @@ class TeamsController extends Controller
             'events' => $communities->events($team->id),
             'canManage' => $communities->canManage($team, Auth::guard('web')->user()),
         ]);
+    }
+
+    /**
+     * Показывает форму создания мероприятия для команды.
+     *
+     * @param int $community
+     * @param CommunityRepository $communities
+     * @return View
+     */
+    public function createEvent(int $community, CommunityRepository $communities): View
+    {
+        $team = $this->teamOrFail($community, $communities);
+        $viewer = Auth::guard('web')->user();
+
+        abort_unless($viewer && $communities->canViewCommunityContent($team, $viewer), 403);
+
+        return view('front.events.form', $this->teamPayload($team, $communities, 'events') + [
+            'title' => 'Создание мероприятия',
+            'action' => route('front.teams.events.store', ['community' => $team->id]),
+            'button' => 'Создать мероприятие',
+            'event' => null,
+            'eventData' => null,
+        ]);
+    }
+
+    /**
+     * Создает мероприятие и сразу привязывает его к команде.
+     *
+     * @param int $community
+     * @param EventRequest $request
+     * @param CommunityRepository $communities
+     * @param EventRepository $events
+     * @return RedirectResponse
+     * @throws \Throwable
+     */
+    public function storeEvent(int $community, EventRequest $request, CommunityRepository $communities, EventRepository $events): RedirectResponse
+    {
+        $team = $this->teamOrFail($community, $communities);
+        $viewer = Auth::guard('web')->user();
+
+        abort_unless($viewer && $communities->canViewCommunityContent($team, $viewer), 403);
+
+        $event = $events->createEvent($viewer, $request->toDto());
+        $communities->changeEventMembership($team, $event->id, 1);
+
+        return redirect()->route('front.teams.events', ['community' => $team->id]);
     }
 
     /**
