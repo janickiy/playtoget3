@@ -11,11 +11,11 @@
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap-theme.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061517">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061520">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.carousel.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.theme.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.transitions.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/jquery.confirm.css') }}?v=2026061501">
+    <link rel="stylesheet" href="{{ asset('frontend/css/jquery.confirm.css') }}?v=2026061504">
     <link rel="stylesheet" href="{{ asset('frontend/css/lightbox.css') }}?v=2.12.0">
     <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}?v=2026061504">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-1440.css') }}" media="(max-width: 1440px)">
@@ -103,13 +103,9 @@
                 <div class="col-xs-12">
                     <ul class="menu">
                         <li>
-                            <a><img src="{{ asset('frontend/images/Profile.png') }}" alt=""></a>
+                            <a href="{{ route('front.profile.show', ['user' => $frontLayout['user']?->id ?? 1]) }}"><img src="{{ asset('frontend/images/Profile.png') }}" alt=""></a>
                             <span class="for-submenu">
-                                <a>Профиль</a>
-                                <ul class="top-mnu-submenu">
-                                    <li><a href="{{ route('front.profile.show', ['user' => $frontLayout['user']?->id ?? 1]) }}">Профиль</a></li>
-                                    <li><a href="{{ route('front.profile.edit') }}">Редактировать</a></li>
-                                </ul>
+                                <a title="Профиль" href="{{ route('front.profile.show', ['user' => $frontLayout['user']?->id ?? 1]) }}">Профиль</a>
                             </span>
                         </li>
                         <li><a href="{{ route('front.news.index') }}"><img src="{{ asset('frontend/images/news.png') }}" alt=""></a><span class="for-submenu"><a title="Новости" href="{{ route('front.news.index') }}">Новости</a></span></li>

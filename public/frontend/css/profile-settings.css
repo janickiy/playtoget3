@@ -295,6 +295,38 @@
     display: block;
 }
 
+.avatar-crop-modal .crop .save-button {
+    background: #435a9a !important;
+    border: 0 !important;
+    border-radius: 20px !important;
+    box-shadow: none !important;
+    color: #fff !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    min-width: 120px;
+    padding: 10px 24px !important;
+    text-shadow: none !important;
+    transition: background-color .18s ease, opacity .18s ease;
+}
+
+.avatar-crop-modal .crop .save-button:hover,
+.avatar-crop-modal .crop .save-button:focus {
+    background: #40aaa1 !important;
+    color: #fff !important;
+    outline: none;
+    opacity: 1;
+}
+
+.avatar-crop-modal .crop .save-button:active {
+    background: #358f88 !important;
+}
+
+.avatar-crop-modal .crop .save-button:disabled {
+    background: #c7cbd6 !important;
+    cursor: default;
+    opacity: .65;
+}
+
 .avatar-crop-modal .loading-bar {
     background: rgba(36, 38, 56, .82);
     border-radius: 4px;

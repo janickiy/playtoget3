@@ -765,9 +765,9 @@ li
 {
 	content: "";
     position: absolute;
-    width: 13px;
+    width: 16px;
     height: 17px;
-    background: url(../images/tell.png)no-repeat;
+    background: url(../images/tell.svg) center center / 16px 16px no-repeat;
     left: 0;
     top: 0px;
 }
@@ -777,7 +777,7 @@ li
 	position: absolute;
 	width: 18px;
 	height: 17px;
-	background: url(../images/liked.png)no-repeat;
+	background: url(../images/liked.svg) center center / 18px 18px no-repeat;
 	left: 0;
 }	
 .reply 
@@ -809,12 +809,12 @@ li
 }
 .liked:hover:before
 {
-	background: url(../images/liked-hover.png)no-repeat;
+	background: url(../images/liked-hover.svg) center center / 18px 18px no-repeat;
 	
 }
 .tell:hover:before
 {
-	background: url(../images/tell-hover.png)no-repeat;
+	background: url(../images/tell-hover.svg) center center / 16px 16px no-repeat;
 }
 .message-img
 {

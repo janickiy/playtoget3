@@ -150,16 +150,31 @@
                 border: 0;
                 border-radius: 8em;
                 background: #435a9a;
+                box-shadow: none;
                 color: #fff;
                 font-size: 14px;
                 font-weight: 700;
                 line-height: 44px;
+                text-shadow: none;
                 text-transform: uppercase;
+                transition: background-color .18s ease, opacity .18s ease;
+            }
+
+            .community-invite-submit:hover,
+            .community-invite-submit:focus {
+                background: #40aaa1;
+                color: #fff;
+                outline: none;
+            }
+
+            .community-invite-submit:active {
+                background: #358f88;
             }
 
             .community-invite-submit:disabled {
                 background: #c7cbd6;
                 cursor: default;
+                opacity: .65;
             }
         </style>
     @endpush
