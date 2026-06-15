@@ -19,6 +19,14 @@ class CommunitySetting extends BaseModel
         'community_id',
     ];
 
+    protected $casts = [
+        'permission_wall' => 'integer',
+        'permission_photo' => 'integer',
+        'permission_video' => 'integer',
+        'type' => 'integer',
+        'community_id' => 'integer',
+    ];
+
     /**
      * @return BelongsTo
      */

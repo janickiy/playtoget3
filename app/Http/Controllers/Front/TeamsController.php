@@ -49,10 +49,10 @@ class TeamsController extends Controller
         return view('front.teams.index', [
             'title' => 'Команды',
             'myTeams' => $this->teamsForViewer($communities->myTeams($viewer->id, self::PAGE_SIZE, 0, $filters), $communities, $viewer),
-            'popularTeams' => $this->teamsForViewer($communities->popularTeams(self::PAGE_SIZE, 0, $filters), $communities, $viewer),
+            'popularTeams' => $this->teamsForViewer($communities->popularTeams(self::PAGE_SIZE, 0, $filters, $viewer), $communities, $viewer),
             'invitedTeams' => $this->teamsForViewer($communities->invitedTeams($viewer->id, self::PAGE_SIZE, 0, $filters), $communities, $viewer),
             'myTeamsTotal' => $communities->myTeamsCount($viewer->id, $filters),
-            'popularTeamsTotal' => $communities->popularTeamsCount($filters),
+            'popularTeamsTotal' => $communities->popularTeamsCount($filters, $viewer),
             'invitedTeamsTotal' => $communities->invitedTeamsCount($viewer->id, $filters),
             'teamsPageSize' => self::PAGE_SIZE,
             'viewer' => $viewer,
@@ -224,15 +224,15 @@ class TeamsController extends Controller
     {
         $team = $this->resolveTeam($community, $communities);
         $payload = $this->teamPayload($team, $communities, 'photoalbums');
-        abort_unless($payload['permissions']['photo'], 404);
+        $canViewPhotos = $payload['permissions']['photo'];
 
         return view('front.teams.photoalbums.index', $payload + [
             'canManage' => $communities->canManage($team, Auth::guard('web')->user()),
-            'albums' => $photoAlbums->albumsForOwner($team->id, 'team'),
-            'photos' => $photoAlbums->photosForOwner($team->id, 'team', self::PHOTOS_LIMIT, 0),
+            'albums' => $canViewPhotos ? $photoAlbums->albumsForOwner($team->id, 'team') : collect(),
+            'photos' => $canViewPhotos ? $photoAlbums->photosForOwner($team->id, 'team', self::PHOTOS_LIMIT, 0) : collect(),
             'photosPageSize' => self::PHOTOS_LIMIT,
-            'hasMorePhotos' => $photoAlbums->hasMoreOwnerPhotos($team->id, 'team', self::PHOTOS_LIMIT, 0),
-            'popularPhotos' => $photoAlbums->popularPhotos(9, 0, 'team'),
+            'hasMorePhotos' => $canViewPhotos ? $photoAlbums->hasMoreOwnerPhotos($team->id, 'team', self::PHOTOS_LIMIT, 0) : false,
+            'popularPhotos' => $canViewPhotos ? $photoAlbums->popularPhotos(9, 0, 'team') : collect(),
         ]);
     }
 
@@ -250,13 +250,13 @@ class TeamsController extends Controller
         $team = $this->teamOrFail($community, $communities);
         $photoAlbum = $this->teamPhotoalbumOrFail($album, $team, $photoAlbums);
         $payload = $this->teamPayload($team, $communities, 'photoalbums');
-        abort_unless($payload['permissions']['photo'], 404);
+        $canViewPhotos = $payload['permissions']['photo'];
 
         return view('front.teams.photoalbums.show', $payload + [
             'photoalbum' => $photoAlbum,
-            'photos' => $photoAlbums->albumPhotos($photoAlbum, self::ALBUM_PHOTOS_LIMIT, 0),
+            'photos' => $canViewPhotos ? $photoAlbums->albumPhotos($photoAlbum, self::ALBUM_PHOTOS_LIMIT, 0) : collect(),
             'photosPageSize' => self::ALBUM_PHOTOS_LIMIT,
-            'hasMorePhotos' => $photoAlbums->hasMoreAlbumPhotos($photoAlbum, self::ALBUM_PHOTOS_LIMIT, 0),
+            'hasMorePhotos' => $canViewPhotos ? $photoAlbums->hasMoreAlbumPhotos($photoAlbum, self::ALBUM_PHOTOS_LIMIT, 0) : false,
             'canManage' => $communities->canManage($team, Auth::guard('web')->user()),
             'openPhotoId' => null,
         ]);
@@ -482,15 +482,15 @@ class TeamsController extends Controller
     {
         $team = $this->resolveTeam($community, $communities);
         $payload = $this->teamPayload($team, $communities, 'videoalbums');
-        abort_unless($payload['permissions']['video'], 404);
+        $canViewVideos = $payload['permissions']['video'];
 
         return view('front.teams.videoalbums.index', $payload + [
             'canManage' => $communities->canManage($team, Auth::guard('web')->user()),
-            'albums' => $videoAlbums->albumsForOwner($team->id, 'team'),
-            'videos' => $videoAlbums->videosForOwner($team->id, 'team', self::VIDEOS_LIMIT, 0),
+            'albums' => $canViewVideos ? $videoAlbums->albumsForOwner($team->id, 'team') : collect(),
+            'videos' => $canViewVideos ? $videoAlbums->videosForOwner($team->id, 'team', self::VIDEOS_LIMIT, 0) : collect(),
             'videosPageSize' => self::VIDEOS_LIMIT,
-            'hasMoreVideos' => $videoAlbums->hasMoreOwnerVideos($team->id, 'team', self::VIDEOS_LIMIT, 0),
-            'popularVideos' => $videoAlbums->popularVideos(6, 0, 'team'),
+            'hasMoreVideos' => $canViewVideos ? $videoAlbums->hasMoreOwnerVideos($team->id, 'team', self::VIDEOS_LIMIT, 0) : false,
+            'popularVideos' => $canViewVideos ? $videoAlbums->popularVideos(6, 0, 'team') : collect(),
         ]);
     }
 
@@ -508,13 +508,13 @@ class TeamsController extends Controller
         $team = $this->teamOrFail($community, $communities);
         $videoAlbum = $this->teamVideoalbumOrFail($album, $team, $videoAlbums);
         $payload = $this->teamPayload($team, $communities, 'videoalbums');
-        abort_unless($payload['permissions']['video'], 404);
+        $canViewVideos = $payload['permissions']['video'];
 
         return view('front.teams.videoalbums.show', $payload + [
             'videoAlbum' => $videoAlbum,
-            'videos' => $videoAlbums->albumVideos($videoAlbum, self::VIDEOS_LIMIT, 0),
+            'videos' => $canViewVideos ? $videoAlbums->albumVideos($videoAlbum, self::VIDEOS_LIMIT, 0) : collect(),
             'videosPageSize' => self::VIDEOS_LIMIT,
-            'hasMoreVideos' => $videoAlbums->hasMoreAlbumVideos($videoAlbum, self::VIDEOS_LIMIT, 0),
+            'hasMoreVideos' => $canViewVideos ? $videoAlbums->hasMoreAlbumVideos($videoAlbum, self::VIDEOS_LIMIT, 0) : false,
             'canManage' => $communities->canManage($team, Auth::guard('web')->user()),
         ]);
     }
@@ -535,7 +535,7 @@ class TeamsController extends Controller
         $videoAlbums->ensureDefaultAlbumForOwner($team->id, 'team', 'Альбом сообщества');
 
         return view('front.teams.videoalbums.add-video', $this->teamPayload($team, $communities, 'videoalbums') + [
-            'title' => 'Добавление видеозаписи',
+            'formTitle' => 'Добавление видеозаписи',
             'albums' => $videoAlbums->editableAlbumsForOwner($team->id, 'team'),
         ]);
     }
@@ -574,7 +574,8 @@ class TeamsController extends Controller
         abort_unless($communities->canManage($team, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->teamPayload($team, $communities, 'videoalbums') + [
-            'title' => 'Создание видеоальбома',
+            'formTitle' => 'Создание видеоальбома',
+            'formTitleClass' => 'video-form-title',
             'action' => route('front.teams.videoalbums.store', ['community' => $team->id]),
             'name' => old('name', ''),
             'button' => 'Создать',
@@ -625,7 +626,8 @@ class TeamsController extends Controller
         abort_unless($communities->canManage($team, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->teamPayload($team, $communities, 'videoalbums') + [
-            'title' => 'Редактирование видеоальбома',
+            'formTitle' => 'Редактирование видеоальбома',
+            'formTitleClass' => 'video-form-title',
             'action' => route('front.teams.videoalbum.update', ['album' => $videoAlbum->id]),
             'name' => old('name', $videoAlbum->name),
             'button' => 'Редактировать',
@@ -702,6 +704,21 @@ class TeamsController extends Controller
     private function teamPayload(Community $team, CommunityRepository $communities, string $section): array
     {
         $viewer = Auth::guard('web')->user();
+        $accessDenied = ! $communities->canViewCommunityContent($team, $viewer);
+        $permissions = $communities->permissions($team, $viewer);
+
+        if ($accessDenied) {
+            $permissions = [
+                'wall' => false,
+                'photo' => false,
+                'video' => false,
+            ];
+        }
+
+        $sectionPermission = $this->sectionPermissionKey($section);
+        $sectionAccessDenied = ! $accessDenied
+            && $sectionPermission !== null
+            && ! (bool) ($permissions[$sectionPermission] ?? true);
 
         return [
             'title' => $team->name ?: 'Команда',
@@ -709,13 +726,43 @@ class TeamsController extends Controller
             'viewer' => $viewer,
             'team' => $team,
             'teamData' => $communities->serializeTeam($team),
-            'permissions' => $communities->permissions($team, $viewer),
+            'permissions' => $permissions,
             'role' => $communities->role($team->id, $viewer?->id),
             'membershipType' => $communities->membershipType($team, $viewer),
             'canManageTeam' => $communities->canManage($team, $viewer),
             'canInviteTeam' => $communities->canInvite($team, $viewer),
+            'communityAccessDenied' => $accessDenied,
+            'communityAccessMessage' => 'Это закрытая команда',
+            'sectionAccessDenied' => $sectionAccessDenied,
+            'sectionAccessMessage' => $this->sectionAccessMessage($sectionPermission, 'команды'),
             'section' => $section,
         ];
+    }
+
+    /**
+     * Возвращает ключ настройки приватности для текущего раздела команды.
+     */
+    private function sectionPermissionKey(string $section): ?string
+    {
+        return match ($section) {
+            'feed' => 'wall',
+            'photoalbums' => 'photo',
+            'videoalbums' => 'video',
+            default => null,
+        };
+    }
+
+    /**
+     * Возвращает текст сообщения для закрытого раздела команды.
+     */
+    private function sectionAccessMessage(?string $sectionPermission, string $labelGenitive): string
+    {
+        return match ($sectionPermission) {
+            'wall' => 'Лента ' . $labelGenitive . ' скрыта настройками приватности.',
+            'photo' => 'Фотографии ' . $labelGenitive . ' скрыты настройками приватности.',
+            'video' => 'Видео ' . $labelGenitive . ' скрыто настройками приватности.',
+            default => 'Раздел скрыт настройками приватности.',
+        };
     }
 
     /**

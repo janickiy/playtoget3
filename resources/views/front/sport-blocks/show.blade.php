@@ -3,7 +3,7 @@
 @section('content')
     <div class="content-groups friends sport-block-show">
         <div class="container_in_swiper">
-            <div class="swiper swiper-container gallery-top">
+            <div class="swiper swiper-container gallery-top sport-block-slider">
                 <div class="swiper-wrapper">
                     @forelse ($photos as $photo)
                         <div class="swiper-slide" style="background-image:url('{{ $photo['big'] ?: asset('frontend/images/default_group.png') }}')"></div>
@@ -11,17 +11,10 @@
                         <div class="swiper-slide" style="background-image:url('{{ asset('frontend/images/default_group.png') }}')"></div>
                     @endforelse
                 </div>
-                <div class="swiper-button-next swiper-button-white"></div>
-                <div class="swiper-button-prev swiper-button-white"></div>
-            </div>
-            <div class="swiper swiper-container gallery-thumbs">
-                <div class="swiper-wrapper left220">
-                    @forelse ($photos as $photo)
-                        <div class="swiper-slide" style="background-image:url('{{ $photo['small'] ?: $photo['big'] ?: asset('frontend/images/default_group.png') }}')"></div>
-                    @empty
-                        <div class="swiper-slide" style="background-image:url('{{ asset('frontend/images/default_group.png') }}')"></div>
-                    @endforelse
-                </div>
+                @if ($photos->count() > 1)
+                    <div class="swiper-button-next sport-block-slider-next"></div>
+                    <div class="swiper-button-prev sport-block-slider-prev"></div>
+                @endif
             </div>
         </div>
 
@@ -67,29 +60,15 @@
                 <form class="form-horizontal">
                     <div class="form-group">
                         <div id="container" class="center_text marginTop20">
-                            <button id="pickfiles" type="button" class="save-button">Добавить файлы</button>
-                            <button id="uploadfiles" type="button" class="save-button">Загрузить файлы</button>
+                            <button id="pickfiles" type="button" class="save-button">Добавить фото</button>
+                            <button id="uploadfiles" type="button" class="save-button">Загрузить фото</button>
                         </div>
+                        <div id="photo-upload-error" class="photo-upload-error" style="display:none"></div>
                     </div>
                 </form>
             </div>
         @endif
 
-        @if ($photos->isNotEmpty())
-            <br><br>
-            <div class="photo-container pop-photos">
-                @foreach ($photos as $photo)
-                    @if ($photo['small'])
-                        <div class="hov" id="photo-block-{{ $photo['id'] }}">
-                            <a class="photo_big" title="{{ $photo['description'] }}" href="{{ $photo['big'] }}" data-lightbox="roadtrip" data-num="{{ $photo['id'] }}">
-                                <img src="{{ $photo['small'] }}" alt="">
-                                <div class="transparent"></div>
-                            </a>
-                        </div>
-                    @endif
-                @endforeach
-            </div>
-        @endif
     </div>
 @endsection
 
@@ -100,8 +79,97 @@
             margin-top: 20px;
         }
 
+        .sport-block-show .photo-upload-error {
+            width: 70%;
+            margin: 18px auto 0;
+            padding: 12px 18px;
+            border: 1px solid #f0c6c6;
+            border-radius: 4px;
+            background: #fff5f5;
+            color: #c03a3a;
+            font-size: 16px;
+            text-align: center;
+        }
+
         .sport-block-show .container_in_swiper {
+            height: 365px;
             margin-top: 0;
+            margin-bottom: 0;
+            overflow: hidden;
+            background: #eef4f4;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .sport-block-show .gallery-top,
+        .sport-block-show .sport-block-slider {
+            height: 365px;
+            width: 100%;
+        }
+
+        .sport-block-show .sport-block-slider .swiper-slide {
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .sport-block-show .sport-block-slider-next,
+        .sport-block-show .sport-block-slider-prev {
+            --swiper-navigation-size: 20px;
+            width: 44px !important;
+            height: 44px;
+            margin-top: -22px;
+            border-radius: 50%;
+            background: rgba(67, 86, 151, 0.92) !important;
+            background-image: none !important;
+            color: #ffffff;
+            box-shadow: 0 2px 10px rgba(37, 43, 68, 0.22);
+            transition: background 0.2s ease, opacity 0.2s ease;
+        }
+
+        .sport-block-show .sport-block-slider-next {
+            right: 18px !important;
+        }
+
+        .sport-block-show .sport-block-slider-prev {
+            left: 18px !important;
+        }
+
+        .sport-block-show .sport-block-slider-next:hover,
+        .sport-block-show .sport-block-slider-prev:hover {
+            background: #43aaa1 !important;
+        }
+
+        .sport-block-show .sport-block-slider-next::after,
+        .sport-block-show .sport-block-slider-prev::after {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .sport-block-show .description_shop {
+            border-radius: 0 0 4px 4px !important;
+        }
+
+        @media (max-width: 768px) {
+            .sport-block-show .container_in_swiper,
+            .sport-block-show .gallery-top,
+            .sport-block-show .sport-block-slider {
+                height: 250px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sport-block-show .container_in_swiper,
+            .sport-block-show .gallery-top,
+            .sport-block-show .sport-block-slider {
+                height: 200px !important;
+            }
+
+            .sport-block-show .sport-block-slider-next,
+            .sport-block-show .sport-block-slider-prev {
+                width: 38px !important;
+                height: 38px;
+                margin-top: -19px;
+            }
         }
     </style>
 @endpush
@@ -133,43 +201,68 @@
             });
 
             const hasLoop = {{ $photos->count() > 1 ? 'true' : 'false' }};
-            const galleryThumbs = new Swiper('.gallery-thumbs', {
-                spaceBetween: 10,
-                slidesPerView: 4,
-                freeMode: {
-                    enabled: true
-                },
-                watchSlidesProgress: true,
-                touchRatio: 0.2,
+            new Swiper('.sport-block-show .gallery-top', {
+                slidesPerView: 1,
+                spaceBetween: 0,
                 loop: hasLoop,
-                loopedSlides: 5,
-                slideToClickedSlide: true,
-                autoplay: {
+                autoplay: hasLoop ? {
                     delay: 5000,
                     disableOnInteraction: false
-                }
-            });
-            const galleryTop = new Swiper('.gallery-top', {
-                spaceBetween: 10,
-                loop: hasLoop,
-                loopedSlides: 5,
-                autoplay: {
-                    delay: 5000,
-                    disableOnInteraction: false
-                },
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev'
-                },
-                thumbs: {
-                    swiper: galleryThumbs
-                }
+                } : false,
+                navigation: hasLoop ? {
+                    nextEl: '.sport-block-show .sport-block-slider-next',
+                    prevEl: '.sport-block-show .sport-block-slider-prev'
+                } : false
             });
         })();
     </script>
     @if ($canEdit && $uploadAlbum)
         <script>
             (function () {
+                const allowedPhotoExtensions = 'jpg,jpeg,png,gif';
+                const uploadError = document.getElementById('photo-upload-error');
+                let uploadFailed = false;
+
+                function showUploadError(message) {
+                    if (!uploadError) {
+                        return;
+                    }
+
+                    uploadError.textContent = message;
+                    uploadError.style.display = 'block';
+                }
+
+                function hideUploadError() {
+                    if (!uploadError) {
+                        return;
+                    }
+
+                    uploadError.textContent = '';
+                    uploadError.style.display = 'none';
+                }
+
+                function ajaxErrorMessage(response) {
+                    if (!response) {
+                        return null;
+                    }
+
+                    try {
+                        const payload = JSON.parse(response);
+
+                        if (payload.error) {
+                            return payload.error;
+                        }
+
+                        if (payload.message) {
+                            return payload.message;
+                        }
+                    } catch (error) {
+                        return null;
+                    }
+
+                    return null;
+                }
+
                 const uploader = new plupload.Uploader({
                     runtimes: 'html5,flash,silverlight,html4',
                     browse_button: 'pickfiles',
@@ -180,7 +273,7 @@
                     filters: {
                         max_file_size: '10mb',
                         mime_types: [
-                            {title: 'Image files', extensions: 'jpg,gif,png,jpeg'}
+                            {title: 'Изображения', extensions: allowedPhotoExtensions}
                         ]
                     },
                     multipart_params: {
@@ -193,6 +286,8 @@
                         PostInit: function () {
                             document.getElementById('filelist').innerHTML = '';
                             document.getElementById('uploadfiles').onclick = function () {
+                                uploadFailed = false;
+                                hideUploadError();
                                 uploader.start();
                                 return false;
                             };
@@ -202,6 +297,7 @@
                             uploader.settings.multipart_params.description = description || '';
                         },
                         FilesAdded: function (up, files) {
+                            hideUploadError();
                             plupload.each(files, function (file) {
                                 const reader = new FileReader();
 
@@ -218,13 +314,42 @@
                             if (item) {
                                 item.getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + '%</span>';
                             }
+                        },
+                        FileUploaded: function (up, file, response) {
+                            const message = ajaxErrorMessage(response.response);
+
+                            if (message) {
+                                uploadFailed = true;
+                                showUploadError(message);
+                            }
+                        },
+                        Error: function (up, error) {
+                            uploadFailed = true;
+
+                            if (error.code === plupload.FILE_EXTENSION_ERROR) {
+                                showUploadError('Можно загружать только изображения: JPG, PNG или GIF.');
+                                return;
+                            }
+
+                            if (error.code === plupload.FILE_SIZE_ERROR) {
+                                showUploadError('Фото не загружено: размер файла больше 10 МБ.');
+                                return;
+                            }
+
+                            showUploadError(
+                                ajaxErrorMessage(error.response)
+                                    || error.message
+                                    || 'Не удалось загрузить фото.'
+                            );
                         }
                     }
                 });
 
                 uploader.init();
                 uploader.bind('UploadComplete', function () {
-                    location.reload();
+                    if (!uploadFailed) {
+                        location.reload();
+                    }
                 });
 
                 $(document).on('click', '.no_attach', function () {

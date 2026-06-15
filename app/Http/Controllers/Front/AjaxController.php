@@ -221,11 +221,11 @@ class AjaxController extends Controller
         }
 
         $items = $type === 'team'
-            ? $this->communities->popularTeams($limit, $offset, $filters)
-            : $this->communities->popularGroups($limit, $offset, $filters);
+            ? $this->communities->popularTeams($limit, $offset, $filters, $viewer)
+            : $this->communities->popularGroups($limit, $offset, $filters, $viewer);
         $nextItems = $type === 'team'
-            ? $this->communities->popularTeams(1, $offset + $limit, $filters)
-            : $this->communities->popularGroups(1, $offset + $limit, $filters);
+            ? $this->communities->popularTeams(1, $offset + $limit, $filters, $viewer)
+            : $this->communities->popularGroups(1, $offset + $limit, $filters, $viewer);
 
         return response()->json([
             'status' => 1,
@@ -859,6 +859,14 @@ class AjaxController extends Controller
             return response()->json(['status' => 0, 'html' => '', 'count' => 0, 'has_more' => false]);
         }
 
+        if (in_array($type, ['team', 'group'], true) && ! $this->canViewOwnerMedia($type, $profileId, 'wall', $viewer)) {
+            return response()->json(['status' => 0, 'html' => '', 'count' => 0, 'has_more' => false]);
+        }
+
+        if (in_array($type, ['photo', 'video'], true) && ! $this->canViewMediaEntity($type, $profileId, $viewer)) {
+            return response()->json(['status' => 0, 'html' => '', 'count' => 0, 'has_more' => false]);
+        }
+
         $comments = $this->profiles->comments($type, $profileId, $limit, $offset, $viewer);
 
         return response()->json([
@@ -905,6 +913,14 @@ class AjaxController extends Controller
 
         $owner = $photo->owner;
         $viewer = $this->viewer();
+
+        if (
+            $photo->album
+            && ! $this->canViewOwnerMedia((string) $photo->album->photoalbumable_type, (int) $photo->album->owner_id, 'photo', $viewer)
+        ) {
+            return response()->json(['status' => 0]);
+        }
+
         $likesQuery = Like::query()
             ->where('likeable_type', 'photo')
             ->where('content_id', $photo->id);
@@ -1016,6 +1032,10 @@ class AjaxController extends Controller
             return response()->json(['status' => 0, 'html' => '', 'has_more' => false]);
         }
 
+        if (! $this->canViewOwnerMedia($type, $ownerId, 'photo', $viewer)) {
+            return $this->emptyMediaResponse();
+        }
+
         $photos = $type === 'user'
             ? $this->photoAlbums->photosForUser($ownerId, $limit, $offset)
             : $this->photoAlbums->photosForOwner($ownerId, $type, $limit, $offset);
@@ -1050,6 +1070,10 @@ class AjaxController extends Controller
 
         if (!$album) {
             return response()->json(['status' => 0, 'html' => '', 'has_more' => false]);
+        }
+
+        if (! $this->canViewOwnerMedia((string) $album->photoalbumable_type, (int) $album->owner_id, 'photo', $viewer)) {
+            return $this->emptyMediaResponse();
         }
 
         $photos = $this->photoAlbums->albumPhotos($album, $limit, $offset);
@@ -1131,6 +1155,10 @@ class AjaxController extends Controller
 
         $viewer = $this->viewer();
 
+        if (! $this->canViewOwnerMedia((string) $video->album->videoalbumable_type, (int) $video->album->owner_id, 'video', $viewer)) {
+            return response()->json(['status' => 0]);
+        }
+
         if ($viewer) {
             VideoView::query()->create([
                 'user_id' => $viewer->id,
@@ -1140,24 +1168,27 @@ class AjaxController extends Controller
         }
 
         $owner = $video->owner;
+        $likesQuery = Like::query()
+            ->where('likeable_type', 'video')
+            ->where('content_id', $video->id);
+        $sharesQuery = Share::query()
+            ->where('shareable_type', 'video')
+            ->where('content_id', $video->id);
 
         return response()->json([
             'status' => 1,
             'owner_id' => (int)($owner?->id ?? $video->owner_id),
             'firstname' => (string)($owner?->firstname ?? ''),
             'lastname' => (string)($owner?->lastname ?? ''),
+            'owner_avatar' => FrontAssets::userAvatar($owner),
             'created' => $video->created_at?->format('d.m.Y H:i') ?? '',
             'description' => (string)$video->description,
             'thumb' => StringHelper::thumbUrl((string)$video->provider, (string)$video->video),
             'video' => $this->videos->playerHtml((string)$video->provider, (string)$video->video),
-            'liked' => Like::query()
-                ->where('likeable_type', 'video')
-                ->where('content_id', $video->id)
-                ->count(),
-            'tell' => Share::query()
-                ->where('shareable_type', 'video')
-                ->where('content_id', $video->id)
-                ->count(),
+            'liked' => (clone $likesQuery)->count(),
+            'tell' => (clone $sharesQuery)->count(),
+            'liked_by_user' => $viewer ? (clone $likesQuery)->where('user_id', $viewer->id)->exists() : false,
+            'shared_by_user' => $viewer ? (clone $sharesQuery)->where('user_id', $viewer->id)->exists() : false,
             'views' => VideoView::query()
                 ->where('video_id', $video->id)
                 ->count(),
@@ -1180,6 +1211,10 @@ class AjaxController extends Controller
 
         if ($ownerId < 1 || !in_array($type, ['user', 'team', 'group', 'event'], true)) {
             return response()->json(['status' => 0, 'html' => '', 'has_more' => false]);
+        }
+
+        if (! $this->canViewOwnerMedia($type, $ownerId, 'video', $viewer)) {
+            return $this->emptyMediaResponse();
         }
 
         $videos = $type === 'user'
@@ -1216,6 +1251,10 @@ class AjaxController extends Controller
 
         if (!$album) {
             return response()->json(['status' => 0, 'html' => '', 'has_more' => false]);
+        }
+
+        if (! $this->canViewOwnerMedia((string) $album->videoalbumable_type, (int) $album->owner_id, 'video', $viewer)) {
+            return $this->emptyMediaResponse();
         }
 
         $videos = $this->videoAlbums->albumVideos($album, $limit, $offset);
@@ -1402,6 +1441,13 @@ class AjaxController extends Controller
             ], 422);
         }
 
+        if (in_array($type, ['photo', 'video'], true) && ! $this->canViewMediaEntity($type, $profileId, $viewer)) {
+            return response()->json([
+                'status' => false,
+                'errors' => ['comment' => 'Нет доступа к разделу'],
+            ], 403);
+        }
+
         $behalfableType = '';
         $behalfId = 0;
 
@@ -1410,7 +1456,7 @@ class AjaxController extends Controller
                 ? $this->communities->findTeam($profileId)
                 : $this->communities->findGroup($profileId);
 
-            if (!$community || !$this->communities->permissions($community, $viewer)['wall']) {
+            if (!$this->communities->canViewSection($community, $viewer, 'wall')) {
                 return response()->json([
                     'status' => false,
                     'errors' => ['comment' => $type === 'team' ? 'Нет доступа к ленте команды' : 'Нет доступа к ленте группы'],
@@ -1618,6 +1664,10 @@ class AjaxController extends Controller
             return response()->json(['result' => ''], 422);
         }
 
+        if (in_array($type, ['photo', 'video'], true) && ! $this->canViewMediaEntity($type, $contentId, $viewer)) {
+            return response()->json(['result' => ''], 403);
+        }
+
         $query = Like::query()
             ->where('user_id', $viewer->id)
             ->where('content_id', $contentId)
@@ -1661,6 +1711,10 @@ class AjaxController extends Controller
             return response()->json(['result' => ''], 422);
         }
 
+        if (in_array($type, ['photo', 'video'], true) && ! $this->canViewMediaEntity($type, $contentId, $viewer)) {
+            return response()->json(['result' => ''], 403);
+        }
+
         Share::query()->firstOrCreate([
             'user_id' => $viewer->id,
             'content_id' => $contentId,
@@ -1674,6 +1728,7 @@ class AjaxController extends Controller
                 ->where('content_id', $contentId)
                 ->where('shareable_type', $type)
                 ->count(),
+            'shared' => true,
         ]);
     }
 
@@ -1788,10 +1843,66 @@ class AjaxController extends Controller
     }
 
     /**
+     * Проверяет доступ к медиа-разделу владельца перед AJAX-подгрузкой.
+     */
+    private function canViewOwnerMedia(string $type, int $ownerId, string $section, ?User $viewer): bool
+    {
+        return match ($type) {
+            'team' => $this->communities->canViewSection($this->communities->findTeam($ownerId), $viewer, $section),
+            'group' => $this->communities->canViewSection($this->communities->findGroup($ownerId), $viewer, $section),
+            default => true,
+        };
+    }
+
+    /**
+     * Проверяет доступ к конкретной фотографии или видео с учетом владельца альбома.
+     */
+    private function canViewMediaEntity(string $type, int $contentId, ?User $viewer): bool
+    {
+        if ($type === 'photo') {
+            /** @var Photo|null $photo */
+            $photo = Photo::query()->with('album')->whereKey($contentId)->first();
+
+            if (! $photo) {
+                return false;
+            }
+
+            return ! $photo->album
+                || $this->canViewOwnerMedia((string) $photo->album->photoalbumable_type, (int) $photo->album->owner_id, 'photo', $viewer);
+        }
+
+        if ($type === 'video') {
+            /** @var Video|null $video */
+            $video = Video::query()->with('album')->whereKey($contentId)->first();
+
+            if (! $video) {
+                return false;
+            }
+
+            return ! $video->album
+                || $this->canViewOwnerMedia((string) $video->album->videoalbumable_type, (int) $video->album->owner_id, 'video', $viewer);
+        }
+
+        return true;
+    }
+
+    /**
+     * Возвращает пустой ответ для закрытого медиа-раздела.
+     */
+    private function emptyMediaResponse(): JsonResponse
+    {
+        return response()->json(['status' => 0, 'html' => '', 'has_more' => false]);
+    }
+
+
+    /**
      * Рендерит HTML-карточки фотографий для AJAX-ответа.
      *
-     * @param Request $request
-     * @return JsonResponse
+     * @param $photos
+     * @param User|null $viewer
+     * @param bool $canManage
+     * @return string
+     * @throws \Throwable
      */
     private function renderPhotos($photos, ?User $viewer, bool $canManage = false): string
     {
@@ -1807,8 +1918,11 @@ class AjaxController extends Controller
     /**
      * Рендерит HTML-карточки видео для AJAX-ответа.
      *
-     * @param Request $request
-     * @return JsonResponse
+     * @param $videos
+     * @param User|null $viewer
+     * @param bool $canManage
+     * @return string
+     * @throws \Throwable
      */
     private function renderVideos($videos, ?User $viewer, bool $canManage = false): string
     {
@@ -1824,8 +1938,9 @@ class AjaxController extends Controller
     /**
      * Добавляет к списку сообществ данные о правах и статусе текущего пользователя.
      *
-     * @param Request $request
-     * @return JsonResponse
+     * @param Collection $items
+     * @param User $viewer
+     * @return Collection
      */
     private function communitiesForViewer(Collection $items, User $viewer): Collection
     {
@@ -1842,8 +1957,10 @@ class AjaxController extends Controller
     /**
      * Рендерит HTML-карточки команд или групп для AJAX-ответа.
      *
-     * @param Request $request
-     * @return JsonResponse
+     * @param Collection $items
+     * @param string $type
+     * @param bool $inviteActions
+     * @return string
      */
     private function renderCommunities(Collection $items, string $type, bool $inviteActions = false): string
     {
@@ -1859,9 +1976,10 @@ class AjaxController extends Controller
     }
 
     /**
-     * Рендерит HTML-карточки мероприятий для AJAX-ответа.
+     * Рендерит HTML-карточки мероприятий для AJAX-ответа
      *
-     * @return JsonResponse
+     * @param Collection $items
+     * @return string
      */
     private function renderEvents(Collection $items): string
     {
@@ -1870,9 +1988,15 @@ class AjaxController extends Controller
             ->implode('');
     }
 
+
     /**
      * Рендерит HTML-карточки спорт-блоков для AJAX-ответа.
      *
+     * @param Collection $items
+     * @param string $routePrefix
+     * @param string $type
+     * @return string
+     * @throws \Throwable
      */
     private function renderSportBlocks(Collection $items, string $routePrefix, string $type): string
     {
@@ -1884,8 +2008,12 @@ class AjaxController extends Controller
         ])->render();
     }
 
+
     /**
      * Собирает фильтры команд и групп из AJAX-запроса.
+     *
+     * @param Request $request
+     * @return array
      */
     private function communityFilters(Request $request): array
     {
@@ -1899,7 +2027,10 @@ class AjaxController extends Controller
     }
 
     /**
-     * Собирает фильтры мероприятий из AJAX-запроса.
+     * Собирает фильтры мероприятий из AJAX-запроса
+     *
+     * @param Request $request
+     * @return array
      */
     private function eventFilters(Request $request): array
     {
@@ -1919,6 +2050,9 @@ class AjaxController extends Controller
 
     /**
      * Собирает фильтры спорт-блоков из AJAX-запроса.
+     *
+     * @param Request $request
+     * @return array
      */
     private function sportBlockFilters(Request $request): array
     {
@@ -1931,6 +2065,10 @@ class AjaxController extends Controller
 
     /**
      * Валидирует AJAX-запрос правилами из FormRequest-класса.
+     *
+     * @param Request $request
+     * @param string $requestClass
+     * @return array
      */
     private function validateAjax(Request $request, string $requestClass): array
     {

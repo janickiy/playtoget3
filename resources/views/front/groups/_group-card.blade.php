@@ -1,6 +1,9 @@
 <div class="event-item" id="community_{{ $group['id'] }}">
-    <a href="{{ route('front.groups.show', ['community' => $group['id']]) }}" class="img">
+    <a href="{{ route('front.groups.show', ['community' => $group['id']]) }}" class="img community-card-avatar">
         <img src="{{ $group['avatar'] ?: asset('frontend/images/noimage.png') }}" alt="" onerror="this.onerror=null;this.src='{{ asset('frontend/images/noimage.png') }}';">
+        @if ($group['is_closed'] ?? false)
+            <span class="community-avatar-lock" aria-label="Закрытая группа"></span>
+        @endif
     </a>
     <div class="teg">
         <p><a href="{{ route('front.groups.show', ['community' => $group['id']]) }}">{{ $group['name'] }}</a></p>

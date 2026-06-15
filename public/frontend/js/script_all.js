@@ -533,7 +533,9 @@ $(document).ready(function () {
             success: function (data) {
                 const Result = data.result;
                 if (Result != '') {
-                    $('.tell[data-type=' + type + '][data-item=' + IdComment + ']').text(Result);
+                    $('.tell[data-type=' + type + '][data-item=' + IdComment + ']')
+                        .text(Result)
+                        .toggleClass('active', Boolean(data.shared));
                     $('body').append('<div id="ok_com_fr" class="save_window_ok hiden">Запись появится в новостях у Ваших друзей!</div>');
                     setTimeout(function () {
                         $('#ok_com_fr').removeClass('hiden');

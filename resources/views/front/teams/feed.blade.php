@@ -17,7 +17,11 @@
     <div class="content-groups friends">
         @include($communityView['top'])
 
-        @if ($permissions['wall'])
+        @if ($communityAccessDenied ?? false)
+            @include('front.communities._closed-message', ['message' => $communityAccessMessage])
+        @elseif ($sectionAccessDenied ?? false)
+            @include('front.communities._closed-message', ['message' => $sectionAccessMessage])
+        @elseif ($permissions['wall'])
             @if ($viewer)
                 <div class="message-content">
                     <form autocomplete="off" id="wallCommentForm" class="js-wall-comment-form wall-comment-form" method="POST" action="" enctype="multipart/form-data">
@@ -67,7 +71,7 @@
                 @include('front.profile._comments', ['comments' => $comments, 'viewer' => $viewer])
             </div>
         @else
-            <h4 class="blocking">{{ $communityView['label'] }} ограничила доступ к ленте</h4>
+            @include('front.communities._closed-message', ['message' => $sectionAccessMessage ?? ($communityView['label'] . ' ограничила доступ к ленте')])
         @endif
     </div>
 @endsection

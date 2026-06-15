@@ -1,130 +1,165 @@
 .emotions {
-    width: 25px;
-    margin-top:-10px;
-    height: 35px;
-    background: url("../images/emotions/blank.gif") no-repeat center center;
-    
-    display: inline-block;
-    vertical-align: top;
-}
-.smilesChoose .emotions
-{
-    margin-top:0;
-}
-.emo-blum {
-    background: url("../images/emotions/blum.gif");
-    background-repeat: no-repeat;
-    background-position:center center;
-    width: 25px;
-}
-.emo-bad {
-    background: url("../images/emotions/bad.gif");
-    background-repeat: no-repeat;
-    background-position:center center;
-    width: 25px;
-}
-.emo-beee {
-    background: url("../images/emotions/beee.gif");
-    background-repeat: no-repeat;
-    background-position:center center;
-    width: 25px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin: 0 2px;
+    border-radius: 50%;
+    background: transparent;
+    color: #2c2e45;
+    font: 400 18px / 1 Arial, sans-serif;
+    vertical-align: middle;
 }
 
-.emo-cray {
-    background: url("../images/emotions/cray.gif");
-    background-repeat: no-repeat;
-    background-position:center center;
-    width: 30px;
-}
-.emo-dirol {
-    background: url("../images/emotions/dirol.gif");
-    background-repeat: no-repeat;
-    background-position:center center;
-    width: 25px;
-}
-.emo-ireful {
-    background: url("../images/emotions/ireful.gif");
-    background-repeat: no-repeat;
-    background-position:center center;
-    width: 35px;
+.emotions:before {
+    display: block;
+    line-height: 1;
 }
 
-.emo-rofl {
-    background: url("../images/emotions/rofl.gif");
-    background-repeat: no-repeat;
-    background-position:center center;
+.smilesChoose .emotions {
     width: 30px;
+    height: 30px;
+    margin: 3px;
+    background: #f4f7f8;
+    box-shadow: inset 0 0 0 1px #e0e1e4;
+    transition: all 0.2s;
 }
-.emo-smile {
-    background: url("../images/emotions/smile.gif");
-    background-repeat: no-repeat;
-    background-position:center center;
-    width: 20px;
+
+.smilesChoose .emotions:hover {
+    background: #e7f7f6;
+    box-shadow: inset 0 0 0 1px #40aaa1;
+    transform: translateY(-1px);
 }
-.emo-grin {
-    background: url("../images/emotions/grin.gif");
-    background-repeat: no-repeat;
-    background-position:center center;
-    width: 20px;
+
+.emo-smile:before {
+    content: "🙂";
 }
-.emo-sad {
-    background: url("../images/emotions/sad.gif");
-    background-repeat: no-repeat;
-    background-position:center center;
-    width: 20px;
+
+.emo-grin:before {
+    content: "😄";
 }
-.emo-kiss {
-    background: url("../images/emotions/kiss.gif");
-    background-repeat: no-repeat;
-    background-position:center center;
-    width: 30px;
+
+.emo-sad:before {
+    content: "🙁";
 }
-.emo-aikido
-{
-    background: url("../images/emotions/aikido.gif");
-    background-repeat: no-repeat;
-    background-position:center center;
-    width: 50px; 
+
+.emo-kiss:before {
+    content: "😘";
 }
-.emo-banned
-{
-    background: url("../images/emotions/banned.gif");
-    background-repeat: no-repeat;
-    background-position:center center;
-    width: 35px; 
+
+.emo-blum:before {
+    content: "😋";
 }
-.emo-nhl
-{
-    background: url("../images/emotions/nhl.gif");
-    background-repeat: no-repeat;
-    background-position:center center;
-    width: 40px; 
+
+.emo-bad:before {
+    content: "😐";
 }
-.emo-rotest
-{
-    background: url("../images/emotions/protest.gif");
-    background-repeat: no-repeat;
-    background-position:center center;
-    width: 40px; 
+
+.emo-cray:before {
+    content: "😢";
 }
-.emo-training
-{
-    background: url("../images/emotions/training.gif");
-    background-repeat: no-repeat;
-    background-position:center center;
-    width: 50px; 
+
+.emo-beee:before {
+    content: "😕";
 }
-.emo-warning
-{
-    background: url("../images/emotions/warning.gif");
-    background-repeat: no-repeat;
-    background-position:center center;
-    width: 35px; 
+
+.emo-dirol:before {
+    content: "😎";
 }
-.emo-fan
-{
-    background: url("../images/emotions/fan.gif");
-    background-repeat: no-repeat;
-    background-position:center center;
-    width: 38px; 
+
+.emo-ireful:before {
+    content: "😠";
+}
+
+.emo-rofl:before {
+    content: "😂";
+}
+
+.emo-aikido:before {
+    content: "🥋";
+}
+
+.emo-banned:before {
+    content: "⛔";
+}
+
+.emo-nhl:before {
+    content: "🏒";
+}
+
+.emo-rotest:before {
+    content: "✊";
+}
+
+.emo-training:before {
+    content: "🏃";
+}
+
+.emo-warning:before {
+    content: "⚠";
+}
+
+.emo-fan:before {
+    content: "👏";
+}
+
+.emo-soccer:before {
+    content: "⚽";
+}
+
+.emo-basketball:before {
+    content: "🏀";
+}
+
+.emo-tennis:before {
+    content: "🎾";
+}
+
+.emo-medal:before {
+    content: "🏅";
+}
+
+.emo-cycling:before {
+    content: "🚴";
+}
+
+.emo-thumbsup:before {
+    content: "👍";
+}
+
+.emo-heart:before {
+    content: "❤️";
+}
+
+.emo-ok:before {
+    content: "👌";
+}
+
+.emo-fire:before {
+    content: "🔥";
+}
+
+.emo-party:before {
+    content: "🥳";
+}
+
+.emo-think:before {
+    content: "🤔";
+}
+
+.emo-wow:before {
+    content: "😮";
+}
+
+.emo-sleep:before {
+    content: "😴";
+}
+
+.emo-love:before {
+    content: "😍";
+}
+
+.emo-victory:before {
+    content: "✌️";
 }

@@ -21,9 +21,9 @@
             </div>
             <div class="form-group">
                 <div id="photo-upload-actions" class="marginTop20 center_text" style="margin-bottom:30px">
-                    <button id="pickfiles" type="button" class="save-button">Добавить файлы</button>
-                    <button id="uploadfiles" type="button" class="save-button">Загрузить файлы</button>
-                    <input id="photo-files" type="file" accept="image/jpeg,image/png,image/gif" multiple style="display:none">
+                    <button id="pickfiles" type="button" class="save-button">Добавить фото</button>
+                    <button id="uploadfiles" type="button" class="save-button">Загрузить фото</button>
+                    <input id="photo-files" type="file" accept="image/jpeg,image/png,image/gif,.jpg,.jpeg,.png,.gif" multiple style="display:none">
                 </div>
             </div>
         </form>

@@ -577,7 +577,7 @@ $language["button"]["join_to_community"] = "Присоединиться";
 $language["button"]["leave_community"] = "Выйти";
 $language["button"]["accept invitation"] = "Принять приглашение";
 
-$language["button"]["add_files"] = "Добавить файлы";
-$language["button"]["download_files"] = "Загрузить файлы";
+$language["button"]["add_files"] = "Добавить фото";
+$language["button"]["download_files"] = "Загрузить фото";
 
 ?>

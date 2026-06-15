@@ -253,6 +253,35 @@
 .photo-container div {
 	width: 31.5%;
 }
+
+.video-albums-page .photo-container.video-container
+{
+	gap:22px;
+	padding:16px;
+}
+
+.video-albums-page .photo-container.video-container .video-card
+{
+	flex:0 0 100%;
+	width:100%;
+	margin:0;
+	padding:0;
+}
+
+.video-albums-page .photo-container.video-container .video-box
+{
+	padding:0;
+	aspect-ratio:16 / 9;
+}
+
+.video-albums-page .photo-container.video-container .video-box .video_prev
+{
+	position:static;
+	width:100%;
+	height:100%;
+	max-width:none;
+	object-fit:cover;
+}
 /**/
 /*friends*/
 .friends .possible-friend {

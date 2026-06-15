@@ -15,8 +15,12 @@
     <div class="content-groups friends">
         @include($communityView['top'])
 
-        @if (! $permissions['photo'])
-            <h4 class="blocking">{{ $communityView['label'] }} ограничила доступ к этому разделу</h4>
+        @if ($communityAccessDenied ?? false)
+            @include('front.communities._closed-message', ['message' => $communityAccessMessage])
+        @elseif ($sectionAccessDenied ?? false)
+            @include('front.communities._closed-message', ['message' => $sectionAccessMessage])
+        @elseif (! $permissions['photo'])
+            @include('front.communities._closed-message', ['message' => $sectionAccessMessage ?? ($communityView['label'] . ' ограничила доступ к этому разделу')])
         @else
             <h2>{{ $photoalbum->name }}</h2>
             <p>

@@ -198,12 +198,12 @@
 
         $uploadButton.addClass('disabled').text('Загрузка...');
         $pickButton.addClass('disabled');
-        setStatus('Загрузка файлов...');
+        setStatus('Загрузка фото...');
 
         function next() {
             if (current >= queue.length) {
                 if (failed) {
-                    $uploadButton.removeClass('disabled').text('Загрузить файлы');
+                    $uploadButton.removeClass('disabled').text('Загрузить фото');
                     $pickButton.removeClass('disabled');
                     setStatus('Загрузка завершена с ошибками. Не загружено: ' + failed + '.', 'error');
                     return;

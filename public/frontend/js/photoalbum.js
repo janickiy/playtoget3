@@ -8,12 +8,26 @@ function photoCsrfToken() {
 function resetPhotoModalState() {
     const $modal = $('#photo_big');
 
+    $modal.removeClass('photo-message-viewer');
     $modal.find('#addCommentContainers').html('');
     $modal.find('.info_photo').text('');
     $modal.find('.tell, .liked').removeClass('active').removeAttr('id data-item');
     $modal.find('.file_name').val('');
     $modal.find('textarea[name="comment"]').val('');
     $modal.find('.files_block').html('');
+}
+
+function setPhotoModalContext($source) {
+    const $modal = $('#photo_big');
+    const isDialogPhoto = $source.data('context') === 'dialog'
+        || $source.closest('.mess_list').length > 0
+        || /\/messages\/user\//.test(window.location.pathname);
+
+    $modal.toggleClass('photo-message-viewer', isDialogPhoto);
+}
+
+function isMessagePhotoModal() {
+    return $('#photo_big').hasClass('photo-message-viewer');
 }
 
 window.registerPhotoItems = function ($scope) {
@@ -69,6 +83,8 @@ $(document).ready(function () {
 
 
     function getPhotoInfo(id) {
+        const $modal = $('#photo_big');
+
         $.ajax({
             type: 'GET',
             url: '/ajax/get_photoinfo',
@@ -77,29 +93,33 @@ $(document).ready(function () {
                 //console.log(data);
                 if (data.status === 1) {
                     //console.log(data);
-                    $('#owner_id').val(data.owner_id);
-                    $('#name_foto')
+                    $modal.find('#owner_id').val(data.owner_id);
+                    $modal.find('#name_foto')
                         .empty()
                         .append($('<a>', {
                             href: '/profile/' + data.owner_id,
                             text: $.trim((data.firstname || '') + ' ' + (data.lastname || '')),
                         }));
-                    $('#date_foto .data').text(data.created);
-                    $('.info_photo').text(data.description || '');
-                    $('#photo_big').find('.tell')
-                        .text(data.tell)
-                        .attr('data-item', id)
-                        .attr('id', 'tell-photo-' + id)
-                        .attr('data-type', 'photo')
-                        .toggleClass('active', Boolean(data.shared_by_user));
-                    $('#photo_big').find('.liked')
-                        .text(data.liked)
-                        .attr('data-item', id)
-                        .attr('id', 'like-photo-' + id)
-                        .attr('data-type', 'photo')
-                        .toggleClass('active', Boolean(data.liked_by_user));
-                    $('.photo_big_wrap').find('.photo_wrap').attr('src', data.photo);
-                    getCommentsPhoto(id);
+                    $modal.find('#date_foto .data').text(data.created);
+                    $modal.find('.info_photo').text(data.description || '');
+                    if (!isMessagePhotoModal()) {
+                        $modal.find('.tell')
+                            .text(data.tell)
+                            .attr('data-item', id)
+                            .attr('id', 'tell-photo-' + id)
+                            .attr('data-type', 'photo')
+                            .toggleClass('active', Boolean(data.shared_by_user));
+                        $modal.find('.liked')
+                            .text(data.liked)
+                            .attr('data-item', id)
+                            .attr('id', 'like-photo-' + id)
+                            .attr('data-type', 'photo')
+                            .toggleClass('active', Boolean(data.liked_by_user));
+                    }
+                    $modal.find('.photo_wrap').attr('src', data.photo);
+                    if (!isMessagePhotoModal()) {
+                        getCommentsPhoto(id);
+                    }
                     //window.location.hash="#photo"+id;
                     let url;
                     delParams('photo');
@@ -134,6 +154,7 @@ $(document).ready(function () {
         $('.photo_big_wrap').find('.photo_wrap').hide();
         const id = $(this).attr('data-num');
         resetPhotoModalState();
+        setPhotoModalContext($(this));
         $('.photo_big_wrap').find('#content_id').val(id);
         $('body,html').css('overflow', 'hidden');
         $('#photo_big').show();
@@ -143,11 +164,12 @@ $(document).ready(function () {
         return false;
     })
 
+    function showNextPhoto() {
+        const $modal = $('#photo_big');
 
-    $(document).on('click', '.next', function () {
-        $('.loading-bar').show();
-        $('.photo_big_wrap').find('.photo_wrap').hide();
-        const id = $('#content_id').val();
+        $modal.find('.loading-bar').show();
+        $modal.find('.photo_wrap').hide();
+        const id = $modal.find('#content_id').val();
         let index_new = 0;
         const index = parseInt($.inArray(id, mass_photo));
         //console.log(id+'-'+index);
@@ -157,15 +179,16 @@ $(document).ready(function () {
             index_new = index + 1;
         }
 
-        $('#content_id').val(mass_photo[index_new]);
+        $modal.find('#content_id').val(mass_photo[index_new]);
         getPhotoInfo(mass_photo[index_new]);
-    })
+    }
 
+    function showPrevPhoto() {
+        const $modal = $('#photo_big');
 
-    $(document).on('click', '.prev', function () {
-        $('.loading-bar').show();
-        $('.photo_big_wrap').find('.photo_wrap').hide();
-        const id = $('#content_id').val();
+        $modal.find('.loading-bar').show();
+        $modal.find('.photo_wrap').hide();
+        const id = $modal.find('#content_id').val();
         let index_new = 0;
         const index = parseInt($.inArray(id, mass_photo));
 
@@ -175,8 +198,21 @@ $(document).ready(function () {
             index_new = index - 1;
         }
 
-        $('#content_id').val(mass_photo[index_new]);
+        $modal.find('#content_id').val(mass_photo[index_new]);
         getPhotoInfo(mass_photo[index_new]);
+    }
+
+    $(document).on('click', '.next, #next_photo', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        showNextPhoto();
+    })
+
+
+    $(document).on('click', '.prev, #prev_photo', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        showPrevPhoto();
     })
 
 });

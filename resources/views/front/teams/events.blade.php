@@ -18,6 +18,9 @@
     <div class="content-groups friends">
         @include($communityView['top'])
 
+        @if ($communityAccessDenied ?? false)
+            @include('front.communities._closed-message', ['message' => $communityAccessMessage])
+        @else
         @if ($canManage)
             <div class="photo-caption">
                 <h3>Поиск</h3>
@@ -67,6 +70,7 @@
             <div class="photo-caption">
                 <h5 class="center_text">У {{ $communityView['labelGenitive'] }} пока нет мероприятий</h5>
             </div>
+        @endif
         @endif
     </div>
 @endsection

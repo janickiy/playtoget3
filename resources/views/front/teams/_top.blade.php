@@ -1,5 +1,6 @@
 @php
     $membershipType = $membershipType ?? 'none';
+    $closedAccessDenied = (bool) ($communityAccessDenied ?? false);
     $leaveMessage = match ($membershipType) {
         'owner' => 'Вы владелец команды. Покинув ее, вы лишитесь прав владельца. Выйти из команды?',
         'admin' => 'Вы администратор команды. Покинув ее, вы лишитесь административных прав. Выйти из команды?',
@@ -35,6 +36,9 @@
     <div class="clearfix"></div>
     <div id="top-top" class="account top_thumb_avatar">
         <img src="{{ $teamData['avatar'] }}" alt="">
+        @if ($teamData['is_closed'] ?? false)
+            <span class="community-avatar-lock community-avatar-lock--top" aria-label="Закрытая команда"></span>
+        @endif
         <h3 class="name">
             {{ $teamData['name'] }}
             <br>
@@ -50,21 +54,23 @@
 </div>
 <div class="clearfix"></div>
 
-@if ($teamData['about'])
+@if (! $closedAccessDenied && $teamData['about'])
     <div class="sport_group_title">{{ $teamData['about'] }}</div>
 @endif
 
-<ul class="sport_group_list">
-    <li><a href="{{ route('front.teams.show', ['community' => $team->id]) }}" @class(['active-link' => $section === 'feed'])><i class="icon_list icon-4"></i><span>Лента</span></a></li>
-    <li><a href="{{ route('front.teams.members', ['community' => $team->id]) }}" @class(['active-link' => $section === 'members'])><i class="icon_list icon-5"></i><span>Участники</span></a></li>
-    @if ($permissions['photo'])
-        <li><a href="{{ route('front.teams.photoalbums', ['community' => $team->id]) }}" @class(['active-link' => $section === 'photoalbums'])><i class="icon_list icon-2"></i><span>Фотографии</span></a></li>
-    @endif
-    @if ($permissions['video'])
-        <li><a href="{{ route('front.teams.videoalbums', ['community' => $team->id]) }}" @class(['active-link' => $section === 'videoalbums'])><i class="icon_list icon-3"></i><span>Видео</span></a></li>
-    @endif
-    <li><a href="{{ route('front.teams.events', ['community' => $team->id]) }}" @class(['active-link' => $section === 'events'])><i class="icon_list icon-1"></i><span>Мероприятия</span></a></li>
-</ul>
+@if (! $closedAccessDenied)
+    <ul class="sport_group_list">
+        <li><a href="{{ route('front.teams.show', ['community' => $team->id]) }}" @class(['active-link' => $section === 'feed'])><i class="icon_list icon-4"></i><span>Лента</span></a></li>
+        <li><a href="{{ route('front.teams.members', ['community' => $team->id]) }}" @class(['active-link' => $section === 'members'])><i class="icon_list icon-5"></i><span>Участники</span></a></li>
+        @if ($permissions['photo'])
+            <li><a href="{{ route('front.teams.photoalbums', ['community' => $team->id]) }}" @class(['active-link' => $section === 'photoalbums'])><i class="icon_list icon-2"></i><span>Фотографии</span></a></li>
+        @endif
+        @if ($permissions['video'])
+            <li><a href="{{ route('front.teams.videoalbums', ['community' => $team->id]) }}" @class(['active-link' => $section === 'videoalbums'])><i class="icon_list icon-3"></i><span>Видео</span></a></li>
+        @endif
+        <li><a href="{{ route('front.teams.events', ['community' => $team->id]) }}" @class(['active-link' => $section === 'events'])><i class="icon_list icon-1"></i><span>Мероприятия</span></a></li>
+    </ul>
+@endif
 
 @if ($viewer)
     @include('front.communities._invite-modal')

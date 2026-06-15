@@ -30,7 +30,7 @@
 
             .community-invite-modal-dialog {
                 position: relative;
-                width: min(560px, 100%);
+                width: min(520px, 100%);
                 max-height: 82vh;
                 overflow: hidden;
                 border-radius: 6px;
@@ -40,10 +40,11 @@
 
             .community-invite-modal h3 {
                 margin: 0;
-                padding: 22px 56px 18px 24px;
+                padding: 24px 54px 14px 24px;
                 color: #2b2d45;
-                font-size: 24px;
+                font-size: 20px;
                 font-weight: 700;
+                line-height: 1.25;
                 text-transform: uppercase;
             }
 
@@ -54,14 +55,15 @@
                 border: 0;
                 background: transparent;
                 color: #9a9a9a;
-                font-size: 32px;
+                font-size: 28px;
                 line-height: 1;
             }
 
             .community-invite-status {
                 padding: 0 24px 14px;
                 color: #929292;
-                font-size: 16px;
+                font-size: 14px;
+                line-height: 1.45;
             }
 
             .community-invite-content {
@@ -71,9 +73,10 @@
             }
 
             .community-invite-empty {
-                margin: 0 0 24px;
+                margin: 0 0 18px;
                 color: #929292;
-                font-size: 16px;
+                font-size: 14px;
+                line-height: 1.45;
             }
 
             .community-invite-friend {
@@ -125,7 +128,7 @@
 
             .community-invite-friend-name {
                 color: #2e7dbc;
-                font-size: 18px;
+                font-size: 16px;
                 font-weight: 700;
                 line-height: 1.2;
             }
@@ -137,19 +140,20 @@
             }
 
             .community-invite-footer {
-                padding: 18px 24px 24px;
+                padding: 16px 24px 26px;
                 text-align: center;
             }
 
             .community-invite-submit {
-                min-width: 260px;
-                height: 50px;
+                min-width: 230px;
+                height: 44px;
                 border: 0;
                 border-radius: 8em;
                 background: #435a9a;
                 color: #fff;
-                font-size: 17px;
+                font-size: 14px;
                 font-weight: 700;
+                line-height: 44px;
                 text-transform: uppercase;
             }
 

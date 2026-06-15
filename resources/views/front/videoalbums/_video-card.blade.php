@@ -1,4 +1,4 @@
-<div class="hov" id="video-block-{{ $video['id'] }}">
+<div class="hov video-card" id="video-block-{{ $video['id'] }}">
     <div class="video-box">
         <img
             class="video_prev"
@@ -7,7 +7,7 @@
             data-title="{{ $video['description'] }}"
             alt=""
         >
-        <div class="transparent"></div>
+        <div class="transparent" data-num="{{ $video['id'] }}"></div>
         @if (($canManage ?? false) || (($viewer?->id ?? null) && (int) $viewer->id === (int) $video['owner_id']))
             <span class="icons-hid">
                 <i

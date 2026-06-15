@@ -11,22 +11,22 @@
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap-theme.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061503">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061517">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.carousel.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.theme.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.transitions.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/jquery.confirm.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/lightbox.css') }}?v=2.12.0">
-    <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}?v=2026061504">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-1440.css') }}" media="(max-width: 1440px)">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-1190.css') }}" media="(max-width: 1190px)">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-960.css') }}?v=2026061404" media="(max-width: 960px)">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-768.css') }}" media="(max-width: 768px)">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-640.css') }}" media="(max-width: 640px)">
-    <link rel="stylesheet" href="{{ asset('frontend/css/max-width-480.css') }}" media="(max-width: 480px)">
-    <link rel="stylesheet" href="{{ asset('frontend/css/max-width-390.css') }}" media="(max-width: 390px)">
-    <link rel="stylesheet" href="{{ asset('frontend/css/emotions.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/jquery.emotions.fb.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/max-width-480.css') }}?v=2026061501" media="(max-width: 480px)">
+    <link rel="stylesheet" href="{{ asset('frontend/css/max-width-390.css') }}?v=2026061501" media="(max-width: 390px)">
+    <link rel="stylesheet" href="{{ asset('frontend/css/emotions.css') }}?v=2026061502">
+    <link rel="stylesheet" href="{{ asset('frontend/css/jquery.emotions.fb.css') }}?v=2026061502">
     @stack('styles')
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800&subset=latin,cyrillic" rel="stylesheet" type="text/css">
     <script src="{{ asset('frontend/js/jquery-3.7.1.min.js') }}"></script>
@@ -156,7 +156,7 @@
         </div>
     </section>
 
-    <script src="{{ asset('frontend/js/script_all.js') }}?v=2026061407"></script>
+    <script src="{{ asset('frontend/js/script_all.js') }}?v=2026061501"></script>
     <script src="{{ asset('frontend/js/lightbox.min.js') }}?v=2.12.0"></script>
 
     @include('front.partials.video-window')

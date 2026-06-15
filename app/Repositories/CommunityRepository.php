@@ -225,7 +225,7 @@ class CommunityRepository extends BaseRepository
      * @param array $filters
      * @return Collection
      */
-    public function popularTeams(int $limit = 5, int $offset = 0, array $filters = []): Collection
+    public function popularTeams(int $limit = 5, int $offset = 0, array $filters = [], ?User $viewer = null): Collection
     {
         $query = $this->model->newQuery()
             ->with(['settings'])
@@ -234,6 +234,7 @@ class CommunityRepository extends BaseRepository
             ->whereIn('status', CommunityStatus::visibleValues());
 
         $this->applyCommunityFilters($query, $filters);
+        $this->applyPrivateVisibility($query, $viewer);
 
         return $query
             ->orderByDesc('members_count')
@@ -247,13 +248,14 @@ class CommunityRepository extends BaseRepository
     /**
      * Считает популярные команды с учетом фильтров.
      */
-    public function popularTeamsCount(array $filters = []): int
+    public function popularTeamsCount(array $filters = [], ?User $viewer = null): int
     {
         $query = $this->model->newQuery()
             ->where('type', 'team')
             ->whereIn('status', CommunityStatus::visibleValues());
 
         $this->applyCommunityFilters($query, $filters);
+        $this->applyPrivateVisibility($query, $viewer);
 
         return (int) $query->count();
     }
@@ -371,7 +373,7 @@ class CommunityRepository extends BaseRepository
      * @param array $filters
      * @return Collection
      */
-    public function popularGroups(int $limit = 5, int $offset = 0, array $filters = []): Collection
+    public function popularGroups(int $limit = 5, int $offset = 0, array $filters = [], ?User $viewer = null): Collection
     {
         $query = $this->model->newQuery()
             ->with(['settings'])
@@ -380,6 +382,7 @@ class CommunityRepository extends BaseRepository
             ->whereIn('status', CommunityStatus::visibleValues());
 
         $this->applyCommunityFilters($query, $filters);
+        $this->applyPrivateVisibility($query, $viewer);
 
         return $query
             ->orderByDesc('members_count')
@@ -396,13 +399,14 @@ class CommunityRepository extends BaseRepository
      * @param array $filters
      * @return int
      */
-    public function popularGroupsCount(array $filters = []): int
+    public function popularGroupsCount(array $filters = [], ?User $viewer = null): int
     {
         $query = $this->model->newQuery()
             ->where('type', 'group')
             ->whereIn('status', CommunityStatus::visibleValues());
 
         $this->applyCommunityFilters($query, $filters);
+        $this->applyPrivateVisibility($query, $viewer);
 
         return (int) $query->count();
     }
@@ -752,6 +756,44 @@ class CommunityRepository extends BaseRepository
     public function membershipType(Community $team, ?User $viewer): string
     {
         return MembershipRole::membershipTypeFor($this->role((int) $team->id, $viewer?->id));
+    }
+
+    /**
+     * Проверяет, является ли сообщество закрытым.
+     *
+     * @param Community $team
+     * @return bool
+     */
+    public function isClosed(Community $team): bool
+    {
+        return (int) $this->settings($team)->type === CommunityPrivacyType::Closed->value;
+    }
+
+    /**
+     * Проверяет, является ли сообщество приватным.
+     *
+     * @param Community $team
+     * @return bool
+     */
+    public function isPrivate(Community $team): bool
+    {
+        return (int) $this->settings($team)->type === CommunityPrivacyType::Private->value;
+    }
+
+    /**
+     * Проверяет, можно ли пользователю видеть основной контент сообщества.
+     *
+     * @param Community $team
+     * @param User|null $viewer
+     * @return bool
+     */
+    public function canViewCommunityContent(Community $team, ?User $viewer): bool
+    {
+        if (! $this->isClosed($team)) {
+            return true;
+        }
+
+        return in_array($this->role((int) $team->id, $viewer?->id), [1, 2, 3], true);
     }
 
     /**
@@ -1210,6 +1252,25 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
+     * Проверяет, можно ли текущему пользователю видеть выбранный раздел сообщества.
+     *
+     * @param Community|null $team
+     * @param User|null $viewer
+     * @param string $section
+     * @return bool
+     */
+    public function canViewSection(?Community $team, ?User $viewer, string $section): bool
+    {
+        if (! $team || ! $this->canViewCommunityContent($team, $viewer)) {
+            return false;
+        }
+
+        $permissions = $this->permissions($team, $viewer);
+
+        return (bool) ($permissions[$section] ?? true);
+    }
+
+    /**
      * Возвращает или создает настройки сообщества.
      */
     public function settings(Community $team): CommunitySetting
@@ -1454,17 +1515,24 @@ class CommunityRepository extends BaseRepository
      */
     public function serializeTeam(Community $team): array
     {
+        $settings = $team->settings ?: $this->settings($team);
+        $privacyType = (int) $settings->type;
+        $membersCount = (int) ($team->members_count ?? $team->roles()->whereIn('role', [1, 2, 3])->count());
+
         return [
             'id' => (int) $team->id,
             'name' => (string) $team->name,
             'about' => (string) $team->about,
             'place' => (string) $team->place,
             'sport_type' => (string) $team->sport_type,
-            'type_label' => CommunityPrivacyType::labelFor((int) ($team->settings?->type ?? $this->settings($team)->type), 'team'),
+            'privacy_type' => $privacyType,
+            'is_private' => $privacyType === CommunityPrivacyType::Private->value,
+            'is_closed' => $privacyType === CommunityPrivacyType::Closed->value,
+            'type_label' => CommunityPrivacyType::labelFor($privacyType, 'team'),
             'avatar' => FrontAssets::communityAvatar($team),
             'cover' => FrontAssets::communityCover($team),
-            'members_count' => (int) ($team->members_count ?? $team->roles()->whereIn('role', [1, 2, 3])->count()),
-            'members_text' => ((int) ($team->members_count ?? $team->roles()->whereIn('role', [1, 2, 3])->count())) . ' участников',
+            'members_count' => $membersCount,
+            'members_text' => $membersCount . ' участников',
         ];
     }
 
@@ -1476,17 +1544,24 @@ class CommunityRepository extends BaseRepository
      */
     public function serializeGroup(Community $group): array
     {
+        $settings = $group->settings ?: $this->settings($group);
+        $privacyType = (int) $settings->type;
+        $membersCount = (int) ($group->members_count ?? $group->roles()->whereIn('role', [1, 2, 3])->count());
+
         return [
             'id' => (int) $group->id,
             'name' => (string) $group->name,
             'about' => (string) $group->about,
             'place' => (string) $group->place,
             'sport_type' => (string) $group->sport_type,
-            'type_label' => CommunityPrivacyType::labelFor((int) ($group->settings?->type ?? $this->settings($group)->type), 'group'),
+            'privacy_type' => $privacyType,
+            'is_private' => $privacyType === CommunityPrivacyType::Private->value,
+            'is_closed' => $privacyType === CommunityPrivacyType::Closed->value,
+            'type_label' => CommunityPrivacyType::labelFor($privacyType, 'group'),
             'avatar' => FrontAssets::communityAvatar($group),
             'cover' => FrontAssets::communityCover($group),
-            'members_count' => (int) ($group->members_count ?? $group->roles()->whereIn('role', [1, 2, 3])->count()),
-            'members_text' => ((int) ($group->members_count ?? $group->roles()->whereIn('role', [1, 2, 3])->count())) . ' участников',
+            'members_count' => $membersCount,
+            'members_text' => $membersCount . ' участников',
         ];
     }
 
@@ -1611,6 +1686,29 @@ class CommunityRepository extends BaseRepository
                     ->orWhere('communities.sport_type', 'like', '%' . $search . '%');
             });
         }
+    }
+
+    /**
+     * Скрывает приватные сообщества от пользователей, которые не являются их участниками.
+     *
+     * @param Builder $query
+     * @param User|null $viewer
+     * @return void
+     */
+    private function applyPrivateVisibility(Builder $query, ?User $viewer): void
+    {
+        $query->where(function (Builder $query) use ($viewer): void {
+            $query
+                ->whereDoesntHave('settings')
+                ->orWhereHas('settings', fn (Builder $settings): Builder => $settings
+                    ->where('type', '!=', CommunityPrivacyType::Private->value));
+
+            if ($viewer) {
+                $query->orWhereHas('roles', fn (Builder $roles): Builder => $roles
+                    ->where('user_id', $viewer->id)
+                    ->whereIn('role', [1, 2, 3]));
+            }
+        });
     }
 
 }

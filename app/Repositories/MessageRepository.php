@@ -482,7 +482,7 @@ class MessageRepository extends BaseRepository
                 }
 
                 return sprintf(
-                    '<li><img border="0" src="%s" class="photo_big" data-num="%d"></li>',
+                    '<li><img border="0" src="%s" class="photo_big" data-num="%d" data-context="dialog"></li>',
                     e($url),
                     (int) $attachment->photo->id
                 );

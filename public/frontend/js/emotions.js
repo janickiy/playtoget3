@@ -1,10 +1,9 @@
-const smile_string = ":-) :-( ;-) :-p :-* :-! :`( :-/ 8-) :ireful: :rofl: :banned: :nhl: :fan: :warning: :training: :aikido: :rotest:";
-const smile_string_static = ":-) :-( ;-) :-p :-* 8-)";
+const smile_string = ":-) :-( ;-) :-p :-* :-! :`( :-/ 8-) :ireful: :rofl: :banned: :nhl: :fan: :warning: :training: :aikido: :rotest: :soccer: :basketball: :tennis: :medal: :cycling: :thumbsup: :heart: :ok: :fire: :party: :think: :wow: :sleep: :love: :victory:";
 
 function readFile(file, num, a) {
     const FR = new FileReader();
     FR.onload = function (e) {
-        $('.files_block[data-num=' + num + ']').prepend('<div class="attach" data-num=' + a + '><img src="' + e.target.result + '" alt="" ><div class="percent"><p>0%</p></div></div>');
+        $('.files_block[data-num=' + num + ']').prepend('<div class="attach attach-preview" data-num=' + a + '><img src="' + e.target.result + '" alt=""><div class="percent"><p>0%</p></div></div>');
     };
     FR.readAsDataURL(file);
 }
@@ -16,12 +15,6 @@ $(document).ready(function () {
     const inputEl = $("#comment");
     const smilesBtn = $("#smilesBtn");
     const messages = $("div.chat-messages");
-    const static_smile = $('.static_smile');
-
-
-    static_smile.html(smile_string_static);
-    static_smile.emotions();
-    static_smile.toggle();
 
     $('div.chat-message').emotions();
 
@@ -114,7 +107,7 @@ $(document).ready(function () {
         if (input.length == 0) {
             input = $(this).closest('form').find('#comment')
         }
-        mess = input.val();
+        let mess = input.val();
         const then = $(this).closest('form');
         const form = then[0];
         const files = $(this)[0].files;
@@ -210,7 +203,7 @@ $(document).ready(function () {
         if (input.length == 0) {
             input = $(this).closest('form').find('#comment')
         }
-        mess = input.val();
+        let mess = input.val();
         const then = $(this).closest('form');
         const form = then[0];
         form.reset();

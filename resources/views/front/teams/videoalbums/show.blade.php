@@ -12,11 +12,15 @@
         $community = $communityView['entity'] ?? $team;
         $routeParam = $communityView['routeParam'] ?? 'community';
     @endphp
-    <div class="content-groups friends">
+    <div class="content-groups friends video-albums-page">
         @include($communityView['top'])
 
-        @if (! $permissions['video'])
-            <h4 class="blocking">{{ $communityView['label'] }} ограничила доступ к этому разделу</h4>
+        @if ($communityAccessDenied ?? false)
+            @include('front.communities._closed-message', ['message' => $communityAccessMessage])
+        @elseif ($sectionAccessDenied ?? false)
+            @include('front.communities._closed-message', ['message' => $sectionAccessMessage])
+        @elseif (! $permissions['video'])
+            @include('front.communities._closed-message', ['message' => $sectionAccessMessage ?? ($communityView['label'] . ' ограничила доступ к этому разделу')])
         @else
             <h2>{{ $videoAlbum->name }}</h2>
             <p>
@@ -26,7 +30,7 @@
             </p>
 
             <div
-                class="photo-container video-container vid-no-border"
+                class="photo-container video-container vid-no-border album-videos"
                 id="album-video-list"
                 data-album-id="{{ $videoAlbum->id }}"
                 data-number="{{ $videosPageSize }}"

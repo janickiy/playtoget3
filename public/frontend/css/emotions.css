@@ -7,38 +7,66 @@
 .smilesChoose {
     display: none;
     position: absolute;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 10px;
+    background: #fff;
+    padding: 8px;
     text-align:left;
-    z-index: 100;
+    z-index: 1000;
     right: 0;
-    top:-175px;
-    width: 185px;
-    border-radius:5px;
-    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    top:-255px;
+    width: 226px;
+    border: 1px solid #e0e1e4;
+    border-radius:4px;
+    box-shadow: 0 8px 24px rgba(47, 59, 101, 0.16);
 }
 .smilesChoose:after
 {
     content: ''; 
     position: absolute;
-    right: 30px; bottom: -20px;
+    right: 24px; bottom: -18px;
     border: 10px solid transparent;
-    border-top: 10px solid rgba(0, 0, 0, 0.3); 
+    border-top: 10px solid #fff;
+}
+.smilesChoose:before
+{
+    content: '';
+    position: absolute;
+    right: 23px;
+    bottom: -20px;
+    border: 11px solid transparent;
+    border-top: 11px solid #e0e1e4;
 }
 .smilesChoose span {
     cursor: pointer;
 }
 
-#smilesBtn {
-    display: inline-block;
+#smilesBtn,
+.smilesBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     opacity: 0.7;
-    width: 20px;
+    width: 22px;
+    height: 22px;
+    text-decoration: none;
 }
 
-#smilesBtn:hover {
+#smilesBtn img,
+.smilesBtn img,
+.smile-files .smilesBtn img {
+    display: none !important;
+}
+
+#smilesBtn:before,
+.smilesBtn:before {
+    content: "☺";
+    display: block;
+    color: #c8ccd6;
+    font: 700 22px / 22px Arial, sans-serif;
+}
+
+#smilesBtn:hover,
+.smilesBtn:hover {
     cursor: pointer;
     opacity: 1;
 }
@@ -80,7 +108,6 @@
     font-weight: bold;
     color: #444;
 }
-.files
-{
-        margin-left: 5px;
+.files {
+    margin-left: 5px;
 }

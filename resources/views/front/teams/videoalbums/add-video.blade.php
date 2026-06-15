@@ -14,7 +14,7 @@
     <div class="content-groups friends">
         @include($communityView['top'])
 
-        <h2>{{ $title }}</h2>
+        <h2 class="video-form-title">{{ $formTitle ?? $title }}</h2>
 
         @if ($errors->any())
             <div class="mutations-both">

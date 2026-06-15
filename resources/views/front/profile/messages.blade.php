@@ -1,10 +1,25 @@
 @extends('front.layouts.app')
 
 @section('content')
-    <a href="{{ route('front.profile.show', ['user' => $receiver->id]) }}">
-        {{ $receiver->firstname ?: $receiver->displayName() }} {{ $receiver->firstname ? $receiver->lastname : '' }}
-    </a>
-    <a href="{{ route('front.profile.messages.index', ['user' => $viewer->id]) }}" class="float_right">К списку диалогов</a>
+    @php
+        $receiverName = trim(($receiver->firstname ?: $receiver->displayName()) . ' ' . ($receiver->firstname ? $receiver->lastname : ''));
+    @endphp
+
+    <div class="dialogue-header">
+        <a class="dialogue-header-avatar" href="{{ route('front.profile.show', ['user' => $receiver->id]) }}">
+            <img src="{{ \App\Helpers\FrontAssets::userAvatar($receiver) }}" alt="">
+        </a>
+        <div class="dialogue-header-main">
+            <span class="dialogue-header-label">Диалог с пользователем</span>
+            <h1>
+                <a href="{{ route('front.profile.show', ['user' => $receiver->id]) }}">{{ $receiverName }}</a>
+            </h1>
+        </div>
+        <a href="{{ route('front.profile.messages.index', ['user' => $viewer->id]) }}" class="dialogue-back-link">
+            <span aria-hidden="true">&larr;</span>
+            К списку диалогов
+        </a>
+    </div>
 
     <div
         class="mess_list"
@@ -32,12 +47,7 @@
     </div>
 
     @if ($canSendMessage)
-        <div class="wrap_text_dialog">
-            <div class="ava_dialog">
-                <a href="{{ route('front.profile.show', ['user' => $viewer->id]) }}">
-                    <img src="{{ \App\Helpers\FrontAssets::userAvatar($viewer) }}" alt="">
-                </a>
-            </div>
+        <div class="wrap_text_dialog dialogue-compose">
             <div class="text_form">
                 <form id="addMessageForm" class="form-horizontal" method="POST" action="">
                     @csrf
@@ -59,16 +69,10 @@
                         </div>
                     </div>
                     <div class="control static_control">
-                        <div class="smilesChoose static_smile block_smile"></div>
                         <input class="btn btn-success" id="submit" type="submit" value="Отправить">
                     </div>
                     <div class="files_block" data-num="0"></div>
                 </form>
-            </div>
-            <div class="ava_dialog">
-                <a href="{{ route('front.profile.show', ['user' => $receiver->id]) }}">
-                    <img src="{{ \App\Helpers\FrontAssets::userAvatar($receiver) }}" alt="">
-                </a>
             </div>
         </div>
     @else

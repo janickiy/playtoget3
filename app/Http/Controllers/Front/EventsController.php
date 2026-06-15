@@ -432,7 +432,7 @@ class EventsController extends Controller
         $videoAlbums->ensureDefaultAlbumForOwner($eventModel->id, 'event', 'Альбом мероприятия');
 
         return view('front.teams.videoalbums.add-video', $this->eventPayload($eventModel, $events, 'videoalbums') + [
-            'title' => 'Добавление видеозаписи',
+            'formTitle' => 'Добавление видеозаписи',
             'albums' => $videoAlbums->editableAlbumsForOwner($eventModel->id, 'event'),
         ]);
     }
@@ -461,7 +461,8 @@ class EventsController extends Controller
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->eventPayload($eventModel, $events, 'videoalbums') + [
-            'title' => 'Создание видеоальбома',
+            'formTitle' => 'Создание видеоальбома',
+            'formTitleClass' => 'video-form-title',
             'action' => route('front.events.videoalbums.store', ['event' => $eventModel->id]),
             'name' => old('name', ''),
             'button' => 'Создать',
@@ -498,7 +499,8 @@ class EventsController extends Controller
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->eventPayload($eventModel, $events, 'videoalbums') + [
-            'title' => 'Редактирование видеоальбома',
+            'formTitle' => 'Редактирование видеоальбома',
+            'formTitleClass' => 'video-form-title',
             'action' => route('front.events.videoalbum.update', ['event' => $eventModel->id, 'album' => $videoAlbum->id]),
             'name' => old('name', $videoAlbum->name),
             'button' => 'Редактировать',

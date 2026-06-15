@@ -1,7 +1,7 @@
 @extends('front.layouts.app')
 
 @section('content')
-    <h2>{{ $title }}</h2>
+    <h2 class="video-form-title">{{ $title }}</h2>
 
     @if ($errors->any())
         <div class="mutations-both">

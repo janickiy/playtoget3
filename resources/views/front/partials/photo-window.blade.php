@@ -2,13 +2,15 @@
     $viewer = $frontLayout['user'] ?? null;
 @endphp
 
-<script src="{{ asset('frontend/js/photoalbum.js') }}?v=2026061501"></script>
+<script src="{{ asset('frontend/js/photoalbum.js') }}?v=2026061504"></script>
 <div class="overlay photo-viewer-overlay" id="photo_big">
     <div class="overlay-back back_one">Закрыть</div>
     <div class="prev">Предыдущая</div>
     <div class="photo_big_wrap" role="dialog" aria-modal="true" aria-label="Просмотр фотографии">
         <input type="hidden" id="owner_id">
         <button type="button" class="photo-modal-close back_one" aria-label="Закрыть"></button>
+        <img id="prev_photo" src="{{ asset('frontend/images/prev.png') }}" alt="Предыдущее фото">
+        <img id="next_photo" src="{{ asset('frontend/images/next.png') }}" alt="Следующее фото">
         <div class="photo-modal-image">
             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" class="photo_wrap next" alt="">
         </div>

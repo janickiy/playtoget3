@@ -8,13 +8,16 @@
     <div class="content-groups friends">
         @include('front.groups._top')
 
-        <div class="photo-caption">
-            <h3>Участники<sup>{{ $members->count() }}</sup></h3>
-        </div>
+        @if ($communityAccessDenied ?? false)
+            @include('front.communities._closed-message', ['message' => $communityAccessMessage])
+        @else
+            <div class="photo-caption">
+                <h3>Участники<sup>{{ $members->count() }}</sup></h3>
+            </div>
 
-        @if ($members->isNotEmpty())
-            <div class="possible-friend">
-                @foreach ($members as $member)
+            @if ($members->isNotEmpty())
+                <div class="possible-friend">
+                    @foreach ($members as $member)
                     @php
                         $canAffectMember = $canManageCommunityMembers
                             && $viewer
@@ -81,29 +84,30 @@
                             </div>
                         @endif
                     </div>
-                @endforeach
-            </div>
-        @else
-            <p class="no_message">Участников пока нет.</p>
-        @endif
+                    @endforeach
+                </div>
+            @else
+                <p class="no_message">Участников пока нет.</p>
+            @endif
 
-        @if ($applications->isNotEmpty())
-            <div class="photo-caption">
-                <h3>Заявки</h3>
-            </div>
-            <div class="possible-friend">
-                @foreach ($applications as $member)
-                    <div class="col-xs-6 possible-friend-cart">
-                        <a class="possible-avatar" href="{{ route('front.profile.show', ['user' => $member['id']]) }}"><img src="{{ $member['avatar'] }}" alt=""></a>
-                        <a href="{{ route('front.profile.show', ['user' => $member['id']]) }}"><h5><strong>{{ $member['name'] }}</strong></h5></a>
-                        <p>{{ $member['city'] }}</p>
-                    </div>
-                @endforeach
-            </div>
-        @endif
+            @if ($applications->isNotEmpty())
+                <div class="photo-caption">
+                    <h3>Заявки</h3>
+                </div>
+                <div class="possible-friend">
+                    @foreach ($applications as $member)
+                        <div class="col-xs-6 possible-friend-cart">
+                            <a class="possible-avatar" href="{{ route('front.profile.show', ['user' => $member['id']]) }}"><img src="{{ $member['avatar'] }}" alt=""></a>
+                            <a href="{{ route('front.profile.show', ['user' => $member['id']]) }}"><h5><strong>{{ $member['name'] }}</strong></h5></a>
+                            <p>{{ $member['city'] }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
 
-        @if ($canManageCommunityMembers)
-            @include('front.communities._manage-assets')
+            @if ($canManageCommunityMembers)
+                @include('front.communities._manage-assets')
+            @endif
         @endif
     </div>
 @endsection

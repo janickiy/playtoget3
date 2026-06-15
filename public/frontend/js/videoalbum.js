@@ -5,6 +5,18 @@ function videoCsrfToken() {
     return $('meta[name="csrf-token"]').attr('content') || '';
 }
 
+function resetVideoModalState() {
+    const $modal = $('#video_big');
+
+    $modal.find('#addCommentContainers').html('');
+    $modal.find('.info').text('');
+    $modal.find('.tell, .liked').removeClass('active').removeAttr('id data-item');
+    $modal.find('.file_name').val('');
+    $modal.find('textarea[name="comment"]').val('');
+    $modal.find('.files_block').html('');
+    $modal.find('.video_wrap').html('').hide();
+}
+
 window.registerVideoItems = function ($scope) {
     $scope.find('.video_prev').each(function () {
         const id = $(this).attr('data-num');
@@ -58,6 +70,8 @@ $(document).ready(function () {
 });
 
 function getVideoInfo(id) {
+    const $modal = $('#video_big');
+
     $.ajax({
         type: 'GET',
         url: '/ajax/get_video_info',
@@ -66,15 +80,31 @@ function getVideoInfo(id) {
         },
         success: function (data) {
             if (data.status === 1) {
-                $('#video_big').find('#owner_id').val(data.owner_id);
-                $('#name_video').html('<a href="/profile/' + data.owner_id + '">' + data.firstname + ' ' + data.lastname + '</a>');
-                $('#date_video .data').html(data.created);
-                $('#video_big').find('.tell').html(data.tell).attr('id', 'tell-video-' + id).attr('data-item', id).attr('data-type', 'video');
-                $('#video_big').find('.liked').html(data.liked).attr('id', 'like-video-' + id).attr('data-item', id).attr('data-type', 'video');
-                $('.info').html(data.description);
-                $('.video_wrap').html(data.video);
-                $('.loading-bar').hide();
-                $('#video_big').find('.video_wrap').show();
+                $modal.find('#owner_id').val(data.owner_id);
+                $modal.find('#owner_avatar_video').attr('src', data.owner_avatar || '/frontend/images/noimage.png');
+                $modal.find('#name_video')
+                    .empty()
+                    .append($('<a>', {
+                        href: '/profile/' + data.owner_id,
+                        text: $.trim((data.firstname || '') + ' ' + (data.lastname || '')),
+                    }));
+                $modal.find('#date_video .data').text(data.created);
+                $modal.find('.tell')
+                    .text(data.tell)
+                    .attr('id', 'tell-video-' + id)
+                    .attr('data-item', id)
+                    .attr('data-type', 'video')
+                    .toggleClass('active', Boolean(data.shared_by_user));
+                $modal.find('.liked')
+                    .text(data.liked)
+                    .attr('id', 'like-video-' + id)
+                    .attr('data-item', id)
+                    .attr('data-type', 'video')
+                    .toggleClass('active', Boolean(data.liked_by_user));
+                $modal.find('.info').text(data.description || '');
+                $modal.find('.video_wrap').html(data.video);
+                $modal.find('.loading-bar').hide();
+                $modal.find('.video_wrap').show();
                 getVideoComments(id);
 
                 let url;
@@ -98,22 +128,39 @@ function getVideoInfo(id) {
     });
 }
 
-$(document).on('click', '.video_prev', function () {
-    $('.loading-bar').show();
-    $('#video_big').find('.video_wrap').hide();
-    const num = $(this).attr('data-num');
-    $('#video_big').find('#content_id').val(num);
-    $('#video_big').find('input[name="content_id"]').val(num);
+function openVideoModal(num) {
+    const $modal = $('#video_big');
+
+    resetVideoModalState();
+    $modal.find('.loading-bar').show();
+    $modal.find('#content_id').val(num);
+    $modal.find('input[name="content_id"]').val(num);
     $('body,html').css('overflow', 'hidden');
-    $('#video_big').show();
-    $('#video_big').animate({scrollTop: 0}, 0);
+    $modal.show();
+    $modal.animate({scrollTop: 0}, 0);
     getVideoInfo(num);
+}
+
+$(document).on('click', '.video_prev, .video-card .transparent', function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const num = $(this).attr('data-num') || $(this).closest('.video-card').find('.video_prev').attr('data-num');
+
+    if (num) {
+        openVideoModal(num);
+    }
+});
+
+$(document).on('click', '.remove_video', function (event) {
+    event.stopPropagation();
 });
 
 $(document).on('click', '#next_video', function () {
-    $('.loading-bar').show();
-    $('#video_big').find('.video_wrap').hide();
-    const id = $('#video_big').find('#content_id').val();
+    const $modal = $('#video_big');
+    $modal.find('.loading-bar').show();
+    $modal.find('.video_wrap').hide();
+    const id = $modal.find('#content_id').val();
     let index_new = 0;
     const index = parseInt($.inArray(id, mass_video));
 
@@ -123,15 +170,18 @@ $(document).on('click', '#next_video', function () {
         index_new = index + 1;
     }
 
-    $('#video_big').find('#content_id').val(mass_video[index_new]);
-    $('#video_big').find('input[name="content_id"]').val(mass_video[index_new]);
+    resetVideoModalState();
+    $modal.find('.loading-bar').show();
+    $modal.find('#content_id').val(mass_video[index_new]);
+    $modal.find('input[name="content_id"]').val(mass_video[index_new]);
     getVideoInfo(mass_video[index_new]);
 });
 
 $(document).on('click', '#prev_video', function () {
-    $('.loading-bar').show();
-    $('#video_big').find('.video_wrap').hide();
-    const id = $('#video_big').find('#content_id').val();
+    const $modal = $('#video_big');
+    $modal.find('.loading-bar').show();
+    $modal.find('.video_wrap').hide();
+    const id = $modal.find('#content_id').val();
     let index_new = 0;
     const index = parseInt($.inArray(id, mass_video));
 
@@ -141,8 +191,10 @@ $(document).on('click', '#prev_video', function () {
         index_new = index - 1;
     }
 
-    $('#video_big').find('#content_id').val(mass_video[index_new]);
-    $('#video_big').find('input[name="content_id"]').val(mass_video[index_new]);
+    resetVideoModalState();
+    $modal.find('.loading-bar').show();
+    $modal.find('#content_id').val(mass_video[index_new]);
+    $modal.find('input[name="content_id"]').val(mass_video[index_new]);
     getVideoInfo(mass_video[index_new]);
 });
 
