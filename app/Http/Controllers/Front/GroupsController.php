@@ -297,12 +297,14 @@ class GroupsController extends Controller
         $group = $this->groupOrFail($community, $communities);
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
-        return view('front.teams.album-form', $this->groupPayload($group, $communities, 'photoalbums') + [
-            'title' => 'Создание фотоальбома',
+        return view('front.teams.album-form', array_merge($this->groupPayload($group, $communities, 'photoalbums'), [
+            'title' => 'Создание альбома',
+            'formTitle' => 'Создание альбома',
+            'formTitleClass' => 'form-section-title',
             'action' => route('front.groups.photoalbums.store', ['community' => $group->id]),
             'name' => old('name', ''),
             'button' => 'Создать',
-        ]);
+        ]));
     }
 
     /**
@@ -734,13 +736,13 @@ class GroupsController extends Controller
 
         abort_unless($viewer && $communities->canViewCommunityContent($group, $viewer), 403);
 
-        return view('front.events.form', $this->groupPayload($group, $communities, 'events') + [
+        return view('front.events.form', array_merge($this->groupPayload($group, $communities, 'events'), [
             'title' => 'Создание мероприятия',
             'action' => route('front.groups.events.store', ['community' => $group->id]),
             'button' => 'Создать мероприятие',
             'event' => null,
             'eventData' => null,
-        ]);
+        ]));
     }
 
     /**

@@ -756,9 +756,9 @@ li
 {
 	content: "";
 	position: absolute;
-	width: 13px;
+	width: 18px;
 	height: 17px;
-	background: url(../images/pen.png)no-repeat;
+	background: url(../images/reply.svg) center center / 18px 18px no-repeat;
 	left: 0;
 }
 .tell:before
@@ -805,7 +805,7 @@ li
 }
 .reply:hover:before
 {
-	
+	background: url(../images/reply-hover.svg) center center / 18px 18px no-repeat;
 }
 .liked:hover:before
 {

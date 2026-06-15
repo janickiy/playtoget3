@@ -297,12 +297,14 @@ class TeamsController extends Controller
         $team = $this->teamOrFail($community, $communities);
         abort_unless($communities->canManage($team, Auth::guard('web')->user()), 403);
 
-        return view('front.teams.album-form', $this->teamPayload($team, $communities, 'photoalbums') + [
-            'title' => 'Создание фотоальбома',
+        return view('front.teams.album-form', array_merge($this->teamPayload($team, $communities, 'photoalbums'), [
+            'title' => 'Создание альбома',
+            'formTitle' => 'Создание альбома',
+            'formTitleClass' => 'form-section-title',
             'action' => route('front.teams.photoalbums.store', ['community' => $team->id]),
             'name' => old('name', ''),
             'button' => 'Создать',
-        ]);
+        ]));
     }
 
     /**
@@ -709,13 +711,13 @@ class TeamsController extends Controller
 
         abort_unless($viewer && $communities->canViewCommunityContent($team, $viewer), 403);
 
-        return view('front.events.form', $this->teamPayload($team, $communities, 'events') + [
+        return view('front.events.form', array_merge($this->teamPayload($team, $communities, 'events'), [
             'title' => 'Создание мероприятия',
             'action' => route('front.teams.events.store', ['community' => $team->id]),
             'button' => 'Создать мероприятие',
             'event' => null,
             'eventData' => null,
-        ]);
+        ]));
     }
 
     /**

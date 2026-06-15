@@ -1447,9 +1447,9 @@ ul.attach_image li .photo_big, ul.attach_image li .video_prev, ul.attach_image l
 {
 	content: "";
 	position: absolute;
-	width: 13px;
+	width: 18px;
 	height: 17px;
-	background: url(../images/pen.png)no-repeat;
+	background: url(../images/reply.svg) center center / 18px 18px no-repeat;
 	left: 0;
 }
 .tell:before
@@ -1498,7 +1498,7 @@ ul.attach_image li .photo_big, ul.attach_image li .video_prev, ul.attach_image l
 }
 .reply:hover:before
 {
-	
+	background: url(../images/reply-hover.svg) center center / 18px 18px no-repeat;
 }
 .liked:hover:before
 {
@@ -2526,14 +2526,15 @@ a.show-more:hover i{background-image: url('../images/icon-load-active.png');}
 	margin-top: 30px;
 }
 
+.content .form-section-title,
 .content .video-form-title
 {
-    margin: 26px 0 24px !important;
+    margin: 25px 0 !important;
     color: #2c2e45 !important;
     font-family: Open Sans, sans-serif;
-    font-size: 22px;
+    font-size: 17px;
     font-weight: 700;
-    line-height: 1.25;
+    line-height: 1.35;
     text-align: center;
     text-transform: uppercase;
 }
