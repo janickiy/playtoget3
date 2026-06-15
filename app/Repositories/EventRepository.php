@@ -573,10 +573,101 @@ class EventRepository extends BaseRepository
      */
     public function inviteFriends(Event $event, User $viewer): int
     {
+        return $this->inviteFriendUsers($event, $viewer)->count();
+    }
+
+    /**
+     * Возвращает друзей пользователя, которых можно пригласить в мероприятие.
+     *
+     * @param Event $event
+     * @param User $viewer
+     * @return Collection
+     */
+    public function invitableFriends(Event $event, User $viewer): Collection
+    {
         if (! $this->canInvite($event, $viewer)) {
-            return 0;
+            return collect();
         }
 
+        $friendIds = $this->availableFriendIds($event, $viewer);
+
+        if ($friendIds->isEmpty()) {
+            return collect();
+        }
+
+        return User::query()
+            ->whereIn('id', $friendIds)
+            ->where('status', UserStatus::Confirmed->value)
+            ->orderBy('firstname')
+            ->orderBy('lastname')
+            ->orderBy('email')
+            ->get()
+            ->map(fn (User $user): array => [
+                'id' => (int) $user->id,
+                'name' => $user->displayName(),
+                'city' => (string) $user->city,
+                'avatar' => FrontAssets::userAvatar($user),
+            ]);
+    }
+
+    /**
+     * Приглашает выбранных друзей пользователя в мероприятие и возвращает приглашенных.
+     *
+     * @param Event $event
+     * @param User $viewer
+     * @param array $friendIds
+     * @return Collection
+     */
+    public function inviteFriendUsers(Event $event, User $viewer, array $friendIds = []): Collection
+    {
+        if (! $this->canInvite($event, $viewer)) {
+            return collect();
+        }
+
+        $availableIds = $this->availableFriendIds($event, $viewer);
+        $selectedIds = collect($friendIds)
+            ->map(fn ($id): int => (int) $id)
+            ->filter(fn (int $id): bool => $id > 0)
+            ->unique()
+            ->values();
+
+        $inviteIds = $selectedIds->isNotEmpty()
+            ? $availableIds->intersect($selectedIds)->values()
+            : $availableIds;
+
+        if ($inviteIds->isEmpty()) {
+            return collect();
+        }
+
+        $invitees = User::query()
+            ->whereIn('id', $inviteIds)
+            ->where('status', UserStatus::Confirmed->value)
+            ->get()
+            ->keyBy('id');
+
+        if ($invitees->isEmpty()) {
+            return collect();
+        }
+
+        AcceptedEventMember::query()->insert($invitees->keys()->map(fn (int $id): array => [
+            'event_id' => $event->id,
+            'eventable_type' => 'user',
+            'member_id' => $id,
+            'role' => MembershipRole::Invited->value,
+        ])->all());
+
+        return $invitees->values();
+    }
+
+    /**
+     * Возвращает id друзей, у которых еще нет роли в выбранном мероприятии.
+     *
+     * @param Event $event
+     * @param User $viewer
+     * @return Collection
+     */
+    private function availableFriendIds(Event $event, User $viewer): Collection
+    {
         $friendIds = Friend::query()
             ->where('status', 1)
             ->where(function (Builder $query) use ($viewer): void {
@@ -591,7 +682,7 @@ class EventRepository extends BaseRepository
             ->values();
 
         if ($friendIds->isEmpty()) {
-            return 0;
+            return collect();
         }
 
         $existingIds = AcceptedEventMember::query()
@@ -601,24 +692,7 @@ class EventRepository extends BaseRepository
             ->pluck('member_id')
             ->map(fn ($id): int => (int) $id);
 
-        $inviteIds = User::query()
-            ->whereIn('id', $friendIds->diff($existingIds)->values())
-            ->where('status', UserStatus::Confirmed->value)
-            ->pluck('id')
-            ->map(fn ($id): int => (int) $id);
-
-        if ($inviteIds->isEmpty()) {
-            return 0;
-        }
-
-        AcceptedEventMember::query()->insert($inviteIds->map(fn (int $id): array => [
-            'event_id' => $event->id,
-            'eventable_type' => 'user',
-            'member_id' => $id,
-            'role' => 5,
-        ])->all());
-
-        return $inviteIds->count();
+        return $friendIds->diff($existingIds)->values();
     }
 
     /**

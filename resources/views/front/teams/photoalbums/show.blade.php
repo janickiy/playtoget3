@@ -7,6 +7,7 @@
             'route' => 'front.teams',
             'top' => 'front.teams._top',
             'label' => 'Команда',
+            'labelGenitive' => 'команды',
             'entity' => $team,
         ];
         $community = $communityView['entity'] ?? $team;
@@ -22,8 +23,10 @@
         @elseif (! $permissions['photo'])
             @include('front.communities._closed-message', ['message' => $sectionAccessMessage ?? ($communityView['label'] . ' ограничила доступ к этому разделу')])
         @else
-            <h2>{{ $photoalbum->name }}</h2>
-            <p>
+            <div class="photo-caption album-show-title">
+                <h3>{{ $photoalbum->name }}</h3>
+            </div>
+            <p class="album-show-back">
                 <a href="{{ route($communityView['route'] . '.photoalbums', [$routeParam => $community->id]) }}">
                     Все фото
                 </a>
@@ -43,7 +46,9 @@
                     @endforeach
                 </div>
             @else
-                <p class="no_message">Фотографий пока нет.</p>
+                <div class="photo-caption">
+                    <h5 class="center_text">У {{ $communityView['labelGenitive'] ?? 'команды' }} пока нет фотографий</h5>
+                </div>
             @endif
         @endif
     </div>

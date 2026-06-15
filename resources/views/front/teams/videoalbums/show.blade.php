@@ -7,6 +7,7 @@
             'route' => 'front.teams',
             'top' => 'front.teams._top',
             'label' => 'Команда',
+            'labelGenitive' => 'команды',
             'entity' => $team,
         ];
         $community = $communityView['entity'] ?? $team;
@@ -22,8 +23,10 @@
         @elseif (! $permissions['video'])
             @include('front.communities._closed-message', ['message' => $sectionAccessMessage ?? ($communityView['label'] . ' ограничила доступ к этому разделу')])
         @else
-            <h2>{{ $videoAlbum->name }}</h2>
-            <p>
+            <div class="photo-caption album-show-title">
+                <h3>{{ $videoAlbum->name }}</h3>
+            </div>
+            <p class="album-show-back">
                 <a href="{{ route($communityView['route'] . '.videoalbums', [$routeParam => $community->id]) }}">
                     Все видео
                 </a>
@@ -40,7 +43,9 @@
                 @forelse ($videos as $video)
                     @include('front.videoalbums._video-card', ['video' => $video, 'canManage' => $canManage])
                 @empty
-                    <p class="no_message">Видео пока нет.</p>
+                    <div class="photo-caption album-show-empty">
+                        <h5 class="center_text">У {{ $communityView['labelGenitive'] ?? 'команды' }} пока нет видео</h5>
+                    </div>
                 @endforelse
             </div>
         @endif

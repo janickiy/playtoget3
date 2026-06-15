@@ -11,7 +11,7 @@
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap-theme.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061522">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061526">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.carousel.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.theme.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.transitions.css') }}">

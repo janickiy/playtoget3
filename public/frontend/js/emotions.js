@@ -43,51 +43,40 @@ $(document).ready(function () {
     });
 
 
-    let enter = 0;
-    let setT;
+    function smilesPanel(button) {
+        const localPanel = button.closest('.smile-files').find('.smilesChoose').first();
 
+        return localPanel.length
+            ? localPanel
+            : $(".smilesChoose[data-num='" + button.attr('data-num') + "']").first();
+    }
 
-    $(document).on("mouseover", ".smilesBtn", function () {
-        if (enter == 0) {
-            const num = $(this).attr('data-num');
-            $(".smilesChoose[data-num='" + num + "']").html(smile_string);
-            $(".smilesChoose[data-num='" + num + "']").emotions();
-            $(".smilesChoose[data-num='" + num + "']").fadeIn();
-            enter = 1;
+    function renderSmiles(panel) {
+        if (!panel.data('rendered')) {
+            panel.html(smile_string);
+            panel.emotions();
+            panel.data('rendered', true);
+        }
+    }
+
+    $(document).on("click", ".smilesBtn", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const panel = smilesPanel($(this));
+
+        if (!panel.length) {
+            return;
         }
 
-
+        renderSmiles(panel);
+        $(".smilesChoose").not(panel).removeClass('is-open').hide();
+        panel.toggleClass('is-open').stop(true, true).fadeToggle(120);
     });
 
-    $(document).on("mouseleave", ".smilesBtn", function () {
-        const num = $(this).attr('data-num');
-        setT = setTimeout(function () {
-            if (enter == 1) {
-
-                $(".smilesChoose[data-num='" + num + "']").html(smile_string);
-                $(".smilesChoose[data-num='" + num + "']").emotions();
-                $(".smilesChoose[data-num='" + num + "']").fadeOut();
-                enter = 0;
-            }
-        }, 500);
-
+    $(document).on("click", ".smilesChoose", function (event) {
+        event.stopPropagation();
     });
-
-    $(document).on("mouseover", ".smilesChoose", function () {
-        clearTimeout(setT);
-    });
-    $(document).on("mouseleave", ".smilesChoose", function () {
-        const num = $(this).attr('data-num');
-        setT = setTimeout(function () {
-            if (enter == 1) {
-
-                $(".smilesChoose[data-num='" + num + "']").html(smile_string);
-                $(".smilesChoose[data-num='" + num + "']").emotions();
-                $(".smilesChoose[data-num='" + num + "']").fadeOut();
-                enter = 0;
-            }
-        }, 500);
-    })
 
 
     $("#sendBtn").on('click', function () {
@@ -216,11 +205,11 @@ $(document).ready(function () {
     })
 
 
-    $(document).on('mouseup', function (e) { // событие клика по веб-документу
+    $(document).on('click', function (e) { // событие клика по веб-документу
         const div = $('.smilesChoose'); // тут указываем ID элемента
         if (!div.is(e.target) // если клик был не по нашему блоку
             && div.has(e.target).length === 0) {
-            div.hide();
+            div.removeClass('is-open').hide();
 
         }
     });

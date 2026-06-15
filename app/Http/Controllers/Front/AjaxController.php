@@ -35,6 +35,7 @@ use App\Repositories\SportBlockRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\VideoalbumRepository;
 use App\Service\CommunityInvitationNotificationService;
+use App\Service\EventInvitationNotificationService;
 use App\Service\ProfileCoverCropService;
 use App\Service\VideoService;
 use Illuminate\Http\JsonResponse;
@@ -61,6 +62,7 @@ class AjaxController extends Controller
         private readonly SportBlockRepository $sportBlocks,
         private readonly ProfileCoverCropService $profileCovers,
         private readonly CommunityInvitationNotificationService $communityInvitations,
+        private readonly EventInvitationNotificationService $eventInvitations,
         private readonly VideoService         $videos,
     )
     {
@@ -97,6 +99,7 @@ class AjaxController extends Controller
             'search_event' => $this->searchEvent($request),
             'change_event_community_status' => $this->changeEventCommunityStatus($request),
             'change_event_memberstatus' => $this->changeEventMemberStatus($request),
+            'get_event_invite_friends' => $this->getEventInviteFriends($request),
             'send_event_invitation' => $this->sendEventInvitation($request),
             'get_comments' => $this->getComments($request),
             'get_photoinfo' => $this->getPhotoInfo($request),
@@ -819,7 +822,33 @@ class AjaxController extends Controller
     }
 
     /**
-     * Отправляет пользователю приглашение в мероприятие.
+     * Возвращает список друзей, которых можно пригласить в мероприятие.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    private function getEventInviteFriends(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+        $eventId = (int)$request->input('event_id', $request->input('id', 0));
+        $event = $eventId > 0 ? $this->events->findActive($eventId) : null;
+
+        if (!$viewer || !$event || !$this->events->canInvite($event, $viewer)) {
+            return response()->json(['status' => 0, 'result' => 'error', 'html' => '', 'count' => 0], 422);
+        }
+
+        $friends = $this->events->invitableFriends($event, $viewer);
+
+        return response()->json([
+            'status' => 1,
+            'result' => 'success',
+            'html' => view('front.communities._invite-friends-list', ['friends' => $friends])->render(),
+            'count' => $friends->count(),
+        ]);
+    }
+
+    /**
+     * Отправляет выбранным друзьям приглашение в мероприятие.
      *
      * @param Request $request
      * @return JsonResponse
@@ -834,10 +863,19 @@ class AjaxController extends Controller
             return response()->json(['status' => 0, 'result' => 'error', 'count' => 0], 422);
         }
 
+        $userIds = collect((array)$request->input('user_ids', []))
+            ->map(fn ($id): int => (int)$id)
+            ->filter(fn (int $id): bool => $id > 0)
+            ->unique()
+            ->values()
+            ->all();
+        $invitees = $this->events->inviteFriendUsers($event, $viewer, $userIds);
+        $this->eventInvitations->sendInvitations($event, $viewer, $invitees);
+
         return response()->json([
             'status' => 1,
             'result' => 'success',
-            'count' => $this->events->inviteFriends($event, $viewer),
+            'count' => $invitees->count(),
         ]);
     }
 

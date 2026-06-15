@@ -25,4 +25,4 @@
 </section>
 <script src="{{ asset('frontend/js/jquery.confirm.js') }}?v=2026061501"></script>
 <script src="{{ asset('frontend/js/jquery.emotions.js') }}?v=2026061502"></script>
-<script src="{{ asset('frontend/js/emotions.js') }}?v=2026061502"></script>
+<script src="{{ asset('frontend/js/emotions.js') }}?v=2026061503"></script>

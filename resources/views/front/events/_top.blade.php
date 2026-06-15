@@ -64,6 +64,10 @@
     </ul>
 @endif
 
+@if ($viewer)
+    @include('front.events._invite-modal')
+@endif
+
 @once
     @push('scripts')
         <script>
@@ -87,6 +91,28 @@
                         type: 'POST',
                         url: ajaxUrl.replace('__ACTION__', action),
                         data: Object.assign({_token: token}, data),
+                    });
+                }
+
+                function confirmEventLeave(message, action) {
+                    if (typeof $.confirm !== 'function') {
+                        return;
+                    }
+
+                    $.confirm({
+                        title: 'Подтверждение',
+                        message: message,
+                        buttons: {
+                            'Да': {
+                                class: 'blue',
+                                action: action,
+                            },
+                            'Нет': {
+                                class: 'gray',
+                                action: function () {
+                                },
+                            },
+                        },
                     });
                 }
 
@@ -135,27 +161,30 @@
                     const root = button.closest('.event-profile-top');
                     const message = button.data('message') || 'Вы действительно хотите покинуть мероприятие?';
 
-                    if (!window.confirm(message)) {
-                        return;
-                    }
-
-                    eventAjax('change_event_memberstatus', {event_id: eventId, status: 0})
-                        .done(function (response) {
-                            if (response.result === 'success') {
-                                setLeftState(root, eventId);
-                                eventNotice('Статус обновлен', true);
-                            } else {
+                    confirmEventLeave(message, function () {
+                        eventAjax('change_event_memberstatus', {event_id: eventId, status: 0})
+                            .done(function (response) {
+                                if (response.result === 'success') {
+                                    setLeftState(root, eventId);
+                                    eventNotice('Статус обновлен', true);
+                                } else {
+                                    eventNotice('Не удалось изменить статус', false);
+                                }
+                            })
+                            .fail(function () {
                                 eventNotice('Не удалось изменить статус', false);
-                            }
-                        })
-                        .fail(function () {
-                            eventNotice('Не удалось изменить статус', false);
-                        });
+                            });
+                    });
                 });
 
                 $(document).on('click', '.js-event-invite', function (event) {
                     event.preventDefault();
                     const button = $(this);
+
+                    if (typeof window.openEventInviteModal === 'function') {
+                        window.openEventInviteModal(button.data('event-id'));
+                        return;
+                    }
 
                     eventAjax('send_event_invitation', {event_id: button.data('event-id')})
                         .done(function (response) {
