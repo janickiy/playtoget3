@@ -40,7 +40,7 @@
                                 <dt class="col-sm-3">Статус</dt>
                                 <dd class="col-sm-9">{{ $statusLabel }}</dd>
 
-                                <dt class="col-sm-3">Рекомендован</dt>
+                                <dt class="col-sm-3">Рекомендовано</dt>
                                 <dd class="col-sm-9">{{ (int) $row->recommended === 1 ? 'да' : 'нет' }}</dd>
 
                                 <dt class="col-sm-3">Создано</dt>

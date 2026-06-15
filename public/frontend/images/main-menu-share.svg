@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="34" viewBox="0 0 48 34" fill="none" role="img" aria-label="Поделиться">
+  <defs>
+    <linearGradient id="ptgShareGradient" x1="3" y1="31" x2="45" y2="3" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#168bd7"/>
+      <stop offset="1" stop-color="#35c4b6"/>
+    </linearGradient>
+  </defs>
+  <g stroke="url(#ptgShareGradient)" stroke-width="2.35" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3.5" y="4.5" width="25" height="17.5" rx="1.4"/>
+    <path d="M8.1 17.6 14 12l4.25 3.95 3.6-3.2 4.35 4.85"/>
+    <circle cx="22.5" cy="9.1" r="1.7"/>
+    <path d="M16.5 25.2h27.7v4.3H16.5z"/>
+    <path d="M30.2 11.4h14.3v17.9"/>
+    <path d="M32.8 15.3h7.7"/>
+  </g>
+</svg>

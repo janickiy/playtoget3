@@ -3,6 +3,10 @@
 @section('content')
     @include('front.profile._top')
 
+    <div class="photo-caption front-section-title">
+        <h3>Профиль</h3>
+    </div>
+
     @if ($profileUser->isBlocked())
         <p class="no_message">Пользователь заблокирован.</p>
     @elseif ($profileUser->isDeleted())

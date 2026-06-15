@@ -106,12 +106,13 @@
                                             <p class="text-danger">{{ $errors->first('status') }}</p>
                                         @endif
                                     </div>
-                                </div>
 
-                                <div class="col-md-6">
                                     <div class="form-group">
-                                        {!! Form::label('recommended', 'Рекомендован*') !!}
-                                        {!! Form::select('recommended', [0 => 'нет', 1 => 'да'], old('recommended', (int) ($row->recommended ?? 0)), ['class' => 'custom-select']) !!}
+                                        {!! Form::hidden('recommended', 0) !!}
+                                        <div class="custom-control custom-checkbox">
+                                            {!! Form::checkbox('recommended', 1, (int) old('recommended', (int) ($row->recommended ?? 0)) === 1, ['class' => 'custom-control-input', 'id' => 'recommended']) !!}
+                                            {!! Form::label('recommended', 'Рекомендовано', ['class' => 'custom-control-label']) !!}
+                                        </div>
                                         @if ($errors->has('recommended'))
                                             <p class="text-danger">{{ $errors->first('recommended') }}</p>
                                         @endif

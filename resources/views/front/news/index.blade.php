@@ -1,7 +1,7 @@
 @extends('front.layouts.app')
 
 @section('content')
-    <div class="photo-caption">
+    <div class="photo-caption front-section-title">
         <h3>
             {{ $title }}
             @if (! empty($newNewsCount))

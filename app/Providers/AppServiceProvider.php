@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Enums\EventStatus;
+use App\Enums\CommunityPrivacyType;
+use App\Enums\CommunityStatus;
 use App\Enums\SportBlockStatus;
 use App\Enums\UserStatus;
 use App\Helpers\FrontAssets;
@@ -96,6 +98,82 @@ class AppServiceProvider extends ServiceProvider
                 $announcementsCount = 0;
             }
 
+            $recommendedCommunities = Schema::hasTable('communities') && Schema::hasColumn('communities', 'recommended')
+                ? Community::query()
+                    ->with('settings')
+                    ->where('recommended', 1)
+                    ->whereIn('status', CommunityStatus::visibleValues())
+                    ->where(function ($query) use ($user): void {
+                        $query
+                            ->whereDoesntHave('settings')
+                            ->orWhereHas('settings', fn ($settings) => $settings
+                                ->where('type', '!=', CommunityPrivacyType::Private->value));
+
+                        if ($user) {
+                            $query->orWhereHas('roles', fn ($roles) => $roles
+                                ->where('user_id', $user->id)
+                                ->whereIn('role', [1, 2, 3]));
+                        }
+                    })
+                    ->orderByDesc('updated_at')
+                    ->orderByDesc('id')
+                    ->limit(5)
+                    ->get()
+                    ->map(function (Community $community): array {
+                        $typeLabel = $community->type === 'group' ? 'Группа' : 'Команда';
+
+                        return [
+                            'title' => (string) $community->name,
+                            'subtitle' => trim($typeLabel . ($community->place ? ' · ' . $community->place : '')),
+                            'url' => route($community->type === 'group' ? 'front.groups.show' : 'front.teams.show', ['community' => $community->id]),
+                            'image' => FrontAssets::communityAvatar($community),
+                            'sort' => ($community->updated_at ?? $community->created_at)?->timestamp ?? (int) $community->id,
+                        ];
+                    })
+                : collect();
+
+            $recommendedSportBlocks = Schema::hasTable('sport_blocks') && Schema::hasColumn('sport_blocks', 'recommended')
+                ? SportBlock::query()
+                    ->where('recommended', 1)
+                    ->whereIn('status', SportBlockStatus::visibleValues())
+                    ->whereDoesntHave('owner', function ($query): void {
+                        $query->whereIn('status', [
+                            UserStatus::Blocked->value,
+                            UserStatus::Deleted->value,
+                        ]);
+                    })
+                    ->orderByDesc('updated_at')
+                    ->orderByDesc('id')
+                    ->limit(5)
+                    ->get()
+                    ->map(function (SportBlock $sportBlock): array {
+                        $routePrefix = match ((string) $sportBlock->type) {
+                            'shop' => 'front.shops',
+                            'fitness' => 'front.fitness',
+                            default => 'front.playgrounds',
+                        };
+                        $typeLabel = match ((string) $sportBlock->type) {
+                            'shop' => 'Магазин',
+                            'fitness' => 'Фитнес',
+                            default => 'Площадка',
+                        };
+
+                        return [
+                            'title' => (string) $sportBlock->name,
+                            'subtitle' => trim($typeLabel . ($sportBlock->place ? ' · ' . $sportBlock->place : '')),
+                            'url' => route($routePrefix . '.index', ['sportBlock' => $sportBlock->id]),
+                            'image' => FrontAssets::sportBlockAvatar($sportBlock),
+                            'sort' => ($sportBlock->updated_at ?? $sportBlock->created_at)?->timestamp ?? (int) $sportBlock->id,
+                        ];
+                    })
+                : collect();
+
+            $recommended = $recommendedCommunities
+                ->concat($recommendedSportBlocks)
+                ->sortByDesc('sort')
+                ->take(5)
+                ->values();
+
             $view->with('frontLayout', [
                 'user' => $user,
                 'displayName' => $user?->displayName() ?? 'PlayToGet',
@@ -108,6 +186,7 @@ class AppServiceProvider extends ServiceProvider
                 'eventCount' => $events->count(),
                 'announcements' => $announcements,
                 'announcementsCount' => $announcementsCount,
+                'recommended' => $recommended,
                 'menu' => $menu,
                 'playgrounds' => $sportBlocks->where('type', 'playground')->take(3)->values(),
                 'playgroundsCount' => $sportBlocks->where('type', 'playground')->count(),

@@ -21,7 +21,7 @@ class NewsController extends Controller
         $items = $news->feedPage($pageSize);
 
         return view('front.news.index', [
-            'title' => 'Мои новости',
+            'title' => 'Главная',
             'news' => $items,
             'newsPageSize' => $pageSize,
             'newsOffset' => $pageSize,

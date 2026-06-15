@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="42" height="40" viewBox="0 0 42 40" fill="none" role="img" aria-label="Календарь">
+  <defs>
+    <linearGradient id="ptgCalendarGradient" x1="4" y1="37" x2="38" y2="3" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#168bd7"/>
+      <stop offset="1" stop-color="#35c4b6"/>
+    </linearGradient>
+  </defs>
+  <g stroke="url(#ptgCalendarGradient)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="5.2" y="7.2" width="31.6" height="28.2" rx="4"/>
+    <path d="M5.2 15.6h31.6"/>
+    <path d="M13.2 3.5v7.1"/>
+    <path d="M28.8 3.5v7.1"/>
+    <path d="M16.2 22.7v7.9"/>
+    <path d="m13.9 24.9 2.3-2.2h1.6"/>
+    <rect x="22.2" y="22.7" width="6.2" height="7.9" rx="2.5"/>
+  </g>
+</svg>

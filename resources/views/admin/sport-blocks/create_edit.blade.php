@@ -113,16 +113,6 @@
                                         @endif
                                     </div>
                                 </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        {!! Form::label('recommended', 'Рекомендован*') !!}
-                                        {!! Form::select('recommended', [0 => 'нет', 1 => 'да'], old('recommended', (int) ($row->recommended ?? 0)), ['class' => 'custom-select']) !!}
-                                        @if ($errors->has('recommended'))
-                                            <p class="text-danger">{{ $errors->first('recommended') }}</p>
-                                        @endif
-                                    </div>
-                                </div>
                             </div>
 
                             <div class="form-group">
@@ -130,6 +120,17 @@
                                 {!! Form::textarea('about', old('about', $row->about ?? null), ['class' => 'form-control', 'rows' => 5]) !!}
                                 @if ($errors->has('about'))
                                     <p class="text-danger">{{ $errors->first('about') }}</p>
+                                @endif
+                            </div>
+
+                            <div class="form-group">
+                                {!! Form::hidden('recommended', 0) !!}
+                                <div class="custom-control custom-checkbox">
+                                    {!! Form::checkbox('recommended', 1, (int) old('recommended', (int) ($row->recommended ?? 0)) === 1, ['class' => 'custom-control-input', 'id' => 'recommended']) !!}
+                                    {!! Form::label('recommended', 'Рекомендовано', ['class' => 'custom-control-label']) !!}
+                                </div>
+                                @if ($errors->has('recommended'))
+                                    <p class="text-danger">{{ $errors->first('recommended') }}</p>
                                 @endif
                             </div>
                         </div>

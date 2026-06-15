@@ -51,7 +51,7 @@ class StoreRequest extends FormRequest
             'website' => 'сайт',
             'owner_id' => 'владелец',
             'status' => 'статус',
-            'recommended' => 'рекомендация',
+            'recommended' => 'рекомендовано',
         ];
     }
 }

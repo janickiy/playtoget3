@@ -24,6 +24,10 @@
             </div>
         </form>
 
+        <div class="photo-caption front-section-title">
+            <h3>Группы</h3>
+        </div>
+
         <div id="tabs">
             <ul id="main-menu" class="marginBottom-40">
                 <li data-type="popular" class="active"><a href="#popular">Популярные группы</a></li>

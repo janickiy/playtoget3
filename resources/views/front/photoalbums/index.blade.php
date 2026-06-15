@@ -3,6 +3,10 @@
 @section('content')
     @include('front.profile._top')
 
+    <div class="photo-caption front-section-title">
+        <h3>Фотографии</h3>
+    </div>
+
     @if (! $permissions['photo'])
         <h4 class="blocking">Пользователь ограничил доступ к этому разделу</h4>
     @else

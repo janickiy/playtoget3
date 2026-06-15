@@ -500,6 +500,18 @@ margin-top: 115px;
 	vertical-align: 10px
 }
 
+.mnu .menu li.active a,
+.mnu .menu li.active span.for-submenu > a
+{
+	color: #16a6d8;
+}
+
+.mnu .menu>li.active>a:first-of-type:before
+{
+	background: #2f3b65;
+	opacity: 0.7;
+}
+
 
 .mnu .menu>li>a:nth-of-type(2)
 {
@@ -2314,6 +2326,11 @@ a.form-enter-link_reg:hover {
 	background: url('../images/icon-album.png');
 }
 .photo-caption{position: relative;}
+.front-section-title
+{
+	clear: both;
+}
+
 .photo-caption h3{
 	font-size: 17px;
 	color:#2c2e45;

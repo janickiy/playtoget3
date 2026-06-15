@@ -11,7 +11,7 @@
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap-theme.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061526">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061602">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.carousel.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.theme.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.transitions.css') }}">
@@ -49,7 +49,7 @@
                     <div class="col-xs-12">
                         <div class="left-top-header">
                             <div class="logo">
-                                <a href="{{ route('front.news.index') }}"><img src="{{ asset('frontend/images/playtoget-logo-clean.svg') }}?v=2026061404" width="145" height="43" alt=""></a>
+                                <a href="{{ route('front.home') }}"><img src="{{ asset('frontend/images/playtoget-logo-clean.svg') }}?v=2026061404" width="145" height="43" alt=""></a>
                             </div>
                             <div class="search">
                                 <form autocomplete="off" action="{{ route('front.news.index') }}" method="GET">
@@ -74,15 +74,15 @@
                                     </a>
                                     <a href="{{ $frontLayout['user'] ? route('front.profile.show', ['user' => $frontLayout['user']->id]) : route('front.home') }}">{{ $frontLayout['firstname'] }}<span></span>{{ $frontLayout['lastname'] }}<span></span></a>
                                 </li>
-                                <li><a href="{{ route('front.news.index') }}"><img src="{{ asset('frontend/images/menu-home.svg') }}" width="25" height="28" alt=""></a></li>
+                                <li><a href="{{ route('front.home') }}"><img src="{{ asset('frontend/images/menu-home.svg') }}" width="25" height="28" alt=""></a></li>
                                 <li>
                                     <a href="{{ $frontLayout['user'] ? route('front.profile.messages.index', ['user' => $frontLayout['user']->id]) : route('front.home') }}">
                                         <img src="{{ asset('frontend/images/message.svg') }}" width="29" height="24" alt="">
                                     </a>
                                     <span id="message_count" class="displayNone">0</span>
                                 </li>
-                                <li><a href="{{ route('front.friends.index') }}"><img src="{{ asset('frontend/images/man.svg') }}" width="24" height="30" alt=""></a></li>
-                                <li><a href="{{ route('front.profile.edit') }}"><img src="{{ asset('frontend/images/settings.svg') }}" width="25" height="25" alt=""></a></li>
+                                <li><a href="{{ route('front.friends.index') }}"><img src="{{ asset('frontend/images/man.svg') }}?v=2026061601" width="34" height="30" alt=""></a></li>
+                                <li><a href="{{ route('front.profile.edit') }}"><img src="{{ asset('frontend/images/settings.svg') }}?v=2026061601" width="28" height="28" alt=""></a></li>
                                 <li>
                                     <form method="POST" action="{{ route('front.logout') }}">
                                         @csrf
@@ -101,17 +101,33 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
+                    @php
+                        $profileUrl = route('front.profile.show', ['user' => $frontLayout['user']?->id ?? 1]);
+                        $isHomeActive = request()->routeIs('front.home') || request()->routeIs('front.news.*');
+                        $isProfileActive = request()->routeIs('front.profile.*');
+                        $isFriendsActive = request()->routeIs('front.friends.*');
+                        $isShareActive = request()->routeIs('front.photoalbums.*') || request()->routeIs('front.videoalbums.*');
+                        $isTeamsActive = request()->routeIs('front.teams.*');
+                        $isGroupsActive = request()->routeIs('front.groups.*') || request()->routeIs('front.playgrounds.*') || request()->routeIs('front.shops.*') || request()->routeIs('front.fitness.*');
+                        $isEventsActive = request()->routeIs('front.events.*');
+                        $isCalendarActive = request()->routeIs('front.calendar.*');
+                    @endphp
                     <ul class="menu">
-                        <li>
-                            <a href="{{ route('front.profile.show', ['user' => $frontLayout['user']?->id ?? 1]) }}"><img src="{{ asset('frontend/images/Profile.png') }}" alt=""></a>
+                        <li class="{{ $isHomeActive ? 'active' : '' }}">
+                            <a href="{{ route('front.home') }}"><img src="{{ asset('frontend/images/main-menu-home.svg') }}?v=2026061603" width="34" height="36" alt=""></a>
                             <span class="for-submenu">
-                                <a title="Профиль" href="{{ route('front.profile.show', ['user' => $frontLayout['user']?->id ?? 1]) }}">Профиль</a>
+                                <a title="Главная" href="{{ route('front.home') }}">Главная</a>
                             </span>
                         </li>
-                        <li><a href="{{ route('front.news.index') }}"><img src="{{ asset('frontend/images/news.png') }}" alt=""></a><span class="for-submenu"><a title="Новости" href="{{ route('front.news.index') }}">Новости</a></span></li>
-                        <li><a href="{{ route('front.friends.index') }}"><img src="{{ asset('frontend/images/friends.png') }}" alt=""></a><span class="for-submenu"><a title="Друзья" href="{{ route('front.friends.index') }}">Друзья</a></span></li>
-                        <li>
-                            <a><img src="{{ asset('frontend/images/Share.png') }}" alt=""></a>
+                        <li class="{{ $isProfileActive ? 'active' : '' }}">
+                            <a href="{{ $profileUrl }}"><img src="{{ asset('frontend/images/main-menu-profile.svg') }}?v=2026061603" width="32" height="38" alt=""></a>
+                            <span class="for-submenu">
+                                <a title="Профиль" href="{{ $profileUrl }}">Профиль</a>
+                            </span>
+                        </li>
+                        <li class="{{ $isFriendsActive ? 'active' : '' }}"><a href="{{ route('front.friends.index') }}"><img src="{{ asset('frontend/images/main-menu-friends.svg') }}?v=2026061603" width="52" height="38" alt=""></a><span class="for-submenu"><a title="Друзья" href="{{ route('front.friends.index') }}">Друзья</a></span></li>
+                        <li class="{{ $isShareActive ? 'active' : '' }}">
+                            <a><img src="{{ asset('frontend/images/main-menu-share.svg') }}?v=2026061603" width="48" height="34" alt=""></a>
                             <span class="for-submenu">
                                 <a>Поделиться</a>
                                 <ul class="top-mnu-submenu">
@@ -120,10 +136,10 @@
                                 </ul>
                             </span>
                         </li>
-                        <li><a href="{{ route('front.teams.index') }}"><img src="{{ asset('frontend/images/command.png') }}" alt=""></a><span class="for-submenu"><a title="Команды" href="{{ route('front.teams.index') }}">Команды</a></span></li>
-                        <li class="menu_groups_hide"><a href="{{ route('front.groups.index') }}"><img src="{{ asset('frontend/images/Group.png') }}" alt=""></a><span class="for-submenu"><a title="Группы" href="{{ route('front.groups.index') }}">Группы</a></span></li>
-                        <li class="menu_groups">
-                            <a><img src="{{ asset('frontend/images/Group.png') }}" alt=""></a>
+                        <li class="{{ $isTeamsActive ? 'active' : '' }}"><a href="{{ route('front.teams.index') }}"><img src="{{ asset('frontend/images/main-menu-teams.svg') }}?v=2026061603" width="40" height="34" alt=""></a><span class="for-submenu"><a title="Команды" href="{{ route('front.teams.index') }}">Команды</a></span></li>
+                        <li class="menu_groups_hide {{ $isGroupsActive ? 'active' : '' }}"><a href="{{ route('front.groups.index') }}"><img src="{{ asset('frontend/images/main-menu-groups.svg') }}?v=2026061603" width="56" height="34" alt=""></a><span class="for-submenu"><a title="Группы" href="{{ route('front.groups.index') }}">Группы</a></span></li>
+                        <li class="menu_groups {{ $isGroupsActive ? 'active' : '' }}">
+                            <a><img src="{{ asset('frontend/images/main-menu-groups.svg') }}?v=2026061603" width="56" height="34" alt=""></a>
                             <span class="for-submenu">
                                 <a title="Группы" href="{{ route('front.groups.index') }}">Группы</a>
                                 <ul class="top-mnu-submenu">
@@ -134,8 +150,8 @@
                                 </ul>
                             </span>
                         </li>
-                        <li><a href="{{ route('front.events.index') }}"><img src="{{ asset('frontend/images/Events.png') }}" alt=""></a><span class="for-submenu"><a title="Мероприятия" href="{{ route('front.events.index') }}">Мероприятия</a></span></li>
-                        <li><a href="{{ route('front.calendar.index') }}"><img src="{{ asset('frontend/images/Calendar.png') }}" alt=""></a><span class="for-submenu"><a title="Календарь" href="{{ route('front.calendar.index') }}">Календарь</a></span></li>
+                        <li class="{{ $isEventsActive ? 'active' : '' }}"><a href="{{ route('front.events.index') }}"><img src="{{ asset('frontend/images/main-menu-events.svg') }}?v=2026061603" width="36" height="40" alt=""></a><span class="for-submenu"><a title="Мероприятия" href="{{ route('front.events.index') }}">Мероприятия</a></span></li>
+                        <li class="{{ $isCalendarActive ? 'active' : '' }}"><a href="{{ route('front.calendar.index') }}"><img src="{{ asset('frontend/images/main-menu-calendar.svg') }}?v=2026061603" width="42" height="40" alt=""></a><span class="for-submenu"><a title="Календарь" href="{{ route('front.calendar.index') }}">Календарь</a></span></li>
                     </ul>
                 </div>
             </div>

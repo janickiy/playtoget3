@@ -6,7 +6,24 @@
             <a href="#">рекомендует</a>
             <ul class="sub-menu">
                 <li>
-                    <div class="sub-content"><h5 class="marginNone">Раздел находится в разработке</h5></div>
+                    <div class="sub-content">
+                        @forelse ($frontLayout['recommended'] as $item)
+                            <div class="block_right">
+                                <div class="wrap_img_right">
+                                    <img src="{{ $item['image'] }}" alt="">
+                                </div>
+                                <div class="text-right-block">
+                                    <a href="{{ $item['url'] }}"><h5>{{ $item['title'] }}</h5></a>
+                                    @if ($item['subtitle'])
+                                        <p>{{ $item['subtitle'] }}</p>
+                                    @endif
+                                </div>
+                                <div class="crearfix"></div>
+                            </div>
+                        @empty
+                            <h5 class="marginNone">Рекомендаций пока нет</h5>
+                        @endforelse
+                    </div>
                 </li>
             </ul>
         </li>

@@ -34,6 +34,10 @@
             </div>
         </form>
 
+        <div class="photo-caption front-section-title">
+            <h3>Мероприятия</h3>
+        </div>
+
         @if ($selectedDate)
             <div class="events-date-filter">
                 Мероприятия на {{ $selectedDate->format('d.m.Y') }}

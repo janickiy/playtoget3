@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="38" viewBox="0 0 32 38" fill="none" role="img" aria-label="Профиль">
+  <defs>
+    <linearGradient id="ptgProfileGradient" x1="2" y1="36" x2="30" y2="2" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#168bd7"/>
+      <stop offset="1" stop-color="#35c4b6"/>
+    </linearGradient>
+  </defs>
+  <g stroke="url(#ptgProfileGradient)" stroke-width="2.35" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 18.4c4.1 0 6.3-3.25 6.3-7.35C22.3 6.8 20.1 4.4 16 4.4S9.7 6.8 9.7 11.05c0 4.1 2.2 7.35 6.3 7.35Z"/>
+    <path d="M10.8 10.2c2.45-.35 4.1-1.35 5.45-3.25 1.05 1.85 2.85 2.9 5.05 3.15"/>
+    <path d="M5.1 35c.55-6.7 4.8-10.35 10.9-10.35S26.35 28.3 26.9 35"/>
+    <path d="M12.7 5.9 15.8 2l1.15 3.1 2.65-1.55"/>
+  </g>
+</svg>

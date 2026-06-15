@@ -42,7 +42,7 @@ class StoreRequest extends FormRequest
             'place' => 'место',
             'sport_type' => 'вид спорта',
             'status' => 'статус',
-            'recommended' => 'рекомендация',
+            'recommended' => 'рекомендовано',
         ];
     }
 }
