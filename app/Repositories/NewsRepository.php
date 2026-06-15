@@ -6,7 +6,6 @@ use App\Helpers\StringHelper;
 use App\Models\Attachment;
 use App\Models\Comment;
 use App\Models\Like;
-use App\Models\NewsRssSport;
 use App\Models\Photo;
 use App\Models\Share;
 use App\Models\Video;
@@ -20,7 +19,7 @@ class NewsRepository extends BaseRepository
      * Подключает модель и зависимости, с которыми работает репозиторий.
      */
     public function __construct(
-        NewsRssSport $model,
+        Comment $model,
         private readonly NewsFeedFormatterService $formatter
     )
     {

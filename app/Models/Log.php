@@ -9,7 +9,7 @@ class Log extends BaseModel
 {
     use StaticTableName;
 
-    protected $table = 'log';
+    protected $table = 'logs';
 
     protected $fillable = [
         'user_id',

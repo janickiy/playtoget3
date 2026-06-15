@@ -25,12 +25,14 @@ class Community extends Model
         'place',
         'sport_type',
         'status',
+        'recommended',
     ];
 
     protected function casts(): array
     {
         return [
             'status' => 'integer',
+            'recommended' => 'boolean',
         ];
     }
 

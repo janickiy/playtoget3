@@ -13,6 +13,7 @@ use App\Models\Community;
 use App\Models\Content;
 use App\Models\Event;
 use App\Models\Feedback;
+use App\Models\Log;
 use App\Models\Settings;
 use App\Models\SportBlock;
 use App\Models\User;
@@ -159,6 +160,9 @@ class DataTableController extends Controller
             })
             ->editColumn('status', function ($row) {
                 return CommunityStatus::labelFor((int) $row->status);
+            })
+            ->editColumn('recommended', function ($row) {
+                return (int) $row->recommended === 1 ? 'да' : 'нет';
             })
             ->filterColumn('created_at', function ($query, string $keyword): void {
                 $this->filterFormattedDateColumn($query, 'communities.created_at', $keyword);
@@ -318,6 +322,9 @@ class DataTableController extends Controller
             ->editColumn('status', function ($row) {
                 return SportBlockStatus::labelFor((int) $row->status);
             })
+            ->editColumn('recommended', function ($row) {
+                return (int) $row->recommended === 1 ? 'да' : 'нет';
+            })
             ->filterColumn('created_at', function ($query, string $keyword): void {
                 $this->filterFormattedDateColumn($query, 'sport_blocks.created_at', $keyword);
             })
@@ -350,6 +357,55 @@ class DataTableController extends Controller
                 return Carbon::parse($row->created_at)->format('d/m/Y H:i');
             })
             ->rawColumns(['actions'])->make(true);
+    }
+
+    /**
+     * Возвращает JSON-данные логов авторизации для таблицы DataTables.
+     *
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function logs(): JsonResponse
+    {
+        $row = Log::query()
+            ->with('user')
+            ->select('logs.*');
+
+        return Datatables::of($row)
+            ->addColumn('user', function (Log $row) {
+                if (! $row->user) {
+                    return $row->user_id ? 'Пользователь #' . $row->user_id : '';
+                }
+
+                return $row->user->displayName() . ' (#' . $row->user_id . ')';
+            })
+            ->editColumn('user_agent', function (Log $row) {
+                return Str::limit((string) $row->user_agent, 180);
+            })
+            ->editColumn('last_sign_in_at', function (Log $row) {
+                return $row->last_sign_in_at?->format('d/m/Y H:i') ?? '';
+            })
+            ->filterColumn('user', function ($query, string $keyword): void {
+                $keyword = trim($keyword);
+
+                if ($keyword === '') {
+                    return;
+                }
+
+                $query->where(function ($query) use ($keyword) {
+                    $query->where('logs.user_id', 'like', '%' . $keyword . '%')
+                        ->orWhereHas('user', function ($query) use ($keyword) {
+                            $query
+                                ->where('firstname', 'like', '%' . $keyword . '%')
+                                ->orWhere('lastname', 'like', '%' . $keyword . '%')
+                                ->orWhere('email', 'like', '%' . $keyword . '%');
+                        });
+                });
+            })
+            ->filterColumn('last_sign_in_at', function ($query, string $keyword): void {
+                $this->filterFormattedDateColumn($query, 'logs.last_sign_in_at', $keyword);
+            })
+            ->make(true);
     }
 
     /**

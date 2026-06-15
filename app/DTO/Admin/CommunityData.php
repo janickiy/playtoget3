@@ -17,6 +17,7 @@ final readonly class CommunityData implements DataTransferObject
         public string $place,
         public string $sportType,
         public int $status,
+        public int $recommended,
     ) {
     }
 
@@ -37,6 +38,7 @@ final readonly class CommunityData implements DataTransferObject
             place: trim((string) ($data['place'] ?? '')),
             sportType: trim((string) ($data['sport_type'] ?? '')),
             status: (int) ($data['status'] ?? CommunityStatus::New->value),
+            recommended: (int) ($data['recommended'] ?? 0),
         );
     }
 
@@ -56,6 +58,7 @@ final readonly class CommunityData implements DataTransferObject
             'place' => $this->place,
             'sport_type' => $this->sportType,
             'status' => $this->status,
+            'recommended' => $this->recommended,
         ];
     }
 }

@@ -27,6 +27,7 @@
                                     <th>Название</th>
                                     <th>Место</th>
                                     <th>Вид спорта</th>
+                                    <th>Рекомендован</th>
                                     <th>Статус</th>
                                     <th>Создано</th>
                                     <th style="width: 12%">Действия</th>
@@ -97,6 +98,7 @@
                     {data: 'name', name: 'name'},
                     {data: 'place', name: 'place'},
                     {data: 'sport_type', name: 'sport_type'},
+                    {data: 'recommended', name: 'recommended'},
                     {data: 'status', name: 'status'},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'actions', name: 'actions', orderable: false, searchable: false}

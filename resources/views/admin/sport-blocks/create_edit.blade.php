@@ -104,12 +104,22 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         {!! Form::label('status', 'Статус*') !!}
                                         {!! Form::select('status', $statusOptions, old('status', $row->status ?? \App\Enums\SportBlockStatus::New->value), ['class' => 'custom-select']) !!}
                                         @if ($errors->has('status'))
                                             <p class="text-danger">{{ $errors->first('status') }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {!! Form::label('recommended', 'Рекомендован*') !!}
+                                        {!! Form::select('recommended', [0 => 'нет', 1 => 'да'], old('recommended', (int) ($row->recommended ?? 0)), ['class' => 'custom-select']) !!}
+                                        @if ($errors->has('recommended'))
+                                            <p class="text-danger">{{ $errors->first('recommended') }}</p>
                                         @endif
                                     </div>
                                 </div>

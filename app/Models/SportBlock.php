@@ -24,12 +24,14 @@ class SportBlock extends Model
         'type',
         'owner_id',
         'status',
+        'recommended',
     ];
 
     protected function casts(): array
     {
         return [
             'status' => 'integer',
+            'recommended' => 'boolean',
         ];
     }
 

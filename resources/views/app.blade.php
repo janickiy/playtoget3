@@ -186,6 +186,14 @@
                         </li>
 
                         <li class="nav-item">
+                            <a href="{{ route('admin.logs.index') }}" class="nav-link{{ Request::is('cp/logs*') ? ' active' : '' }}"
+                               title="Логи">
+                                <i class="nav-icon fas fa-clipboard-list"></i>
+                                <p>Логи</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a href="{{ route('admin.settings.index') }}" class="nav-link{{ Request::is('cp/settings*') ? ' active' : '' }}"
                                title="Настройки">
                                 <i class="nav-icon fas fa-cogs"></i>

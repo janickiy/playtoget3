@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('type')->nullable();
             $table->tinyInteger('status')->default(0);
+            $table->tinyInteger('recommended')->default(0);
             $table->string('name')->nullable();
             $table->text('about')->nullable();
             $table->timestamps();
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->index(['type', 'status']);
             $table->index('name');
             $table->index('status');
+            $table->index(['recommended', 'type']);
         });
     }
 

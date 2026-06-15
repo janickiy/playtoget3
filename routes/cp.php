@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\DataTableController;
 use App\Http\Controllers\Admin\AjaxController;
 use App\Http\Controllers\Admin\EventsController;
 use App\Http\Controllers\Admin\FeedbackController;
+use App\Http\Controllers\Admin\LogsController;
 use App\Http\Controllers\Admin\SportBlocksController;
 use App\Http\Controllers\Admin\UsersController;
 use Illuminate\Support\Facades\Route;
@@ -107,6 +108,10 @@ Route::prefix('cp')->group(function () {
             Route::delete('destroy/{id}', [SportBlocksController::class, 'destroy'])->where('id', '[0-9]+')->name('destroy');
         });
 
+        Route::prefix('logs')->name('admin.logs.')->middleware('permission:admin')->group(function () {
+            Route::get('', [LogsController::class, 'index'])->name('index');
+        });
+
         Route::prefix('settings')->middleware('permission:admin')->group(function () {
             Route::get('', [SettingsController::class, 'index'])->name('admin.settings.index');
             Route::get('create/{type}', [SettingsController::class, 'create'])->name('admin.settings.create');
@@ -124,6 +129,7 @@ Route::prefix('cp')->group(function () {
             Route::any('announcements', [DataTableController::class, 'announcements'])->middleware('permission:admin')->name('announcements');
             Route::any('feedback', [DataTableController::class, 'feedback'])->middleware('permission:admin')->name('feedback');
             Route::any('sport-blocks', [DataTableController::class, 'sportBlocks'])->middleware('permission:admin')->name('sport-blocks');
+            Route::any('logs', [DataTableController::class, 'logs'])->middleware('permission:admin')->name('logs');
             Route::any('content', [DataTableController::class, 'content'])->name('content');
             Route::any('settings', [DataTableController::class, 'settings'])->middleware('permission:admin')->name('settings');
         });

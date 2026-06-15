@@ -27,6 +27,7 @@ class StoreRequest extends FormRequest
             'place' => ['nullable', 'string', 'max:100'],
             'sport_type' => ['nullable', 'string', 'max:255'],
             'status' => ['required', 'integer', Rule::in(array_keys(CommunityStatus::options()))],
+            'recommended' => ['required', 'integer', Rule::in([0, 1])],
         ];
     }
 
@@ -41,6 +42,7 @@ class StoreRequest extends FormRequest
             'place' => 'место',
             'sport_type' => 'вид спорта',
             'status' => 'статус',
+            'recommended' => 'рекомендация',
         ];
     }
 }

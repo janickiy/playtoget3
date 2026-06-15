@@ -20,6 +20,7 @@ final readonly class SportBlockData implements DataTransferObject
         public string $website,
         public ?int $ownerId,
         public int $status,
+        public int $recommended,
     ) {
     }
 
@@ -43,6 +44,7 @@ final readonly class SportBlockData implements DataTransferObject
             website: trim((string) ($data['website'] ?? '')),
             ownerId: isset($data['owner_id']) && (int) $data['owner_id'] > 0 ? (int) $data['owner_id'] : null,
             status: (int) ($data['status'] ?? SportBlockStatus::New->value),
+            recommended: (int) ($data['recommended'] ?? 0),
         );
     }
 
@@ -65,6 +67,7 @@ final readonly class SportBlockData implements DataTransferObject
             'website' => $this->website,
             'owner_id' => $this->ownerId,
             'status' => $this->status,
+            'recommended' => $this->recommended,
         ];
     }
 }

@@ -21,11 +21,13 @@ return new class extends Migration
             $table->string('type', 20)->nullable();
             $table->foreignId('owner_id')->nullable()->constrained('users')->nullOnDelete();
             $table->tinyInteger('status')->default(0);
+            $table->tinyInteger('recommended')->default(0);
             $table->timestamps();
 
             $table->index(['type', 'owner_id']);
             $table->index('name');
             $table->index(['status', 'type']);
+            $table->index(['recommended', 'type']);
         });
     }
 
