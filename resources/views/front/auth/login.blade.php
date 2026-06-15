@@ -7,7 +7,7 @@
     <meta name="description" content="Мы первый спортивный интернет-ресурс, объединивший приверженцев здорового образа жизни, любителей спорта и профессиональных спортсменов.">
     <title>{{ $title ?? 'PlayToGet' }}</title>
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
-    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061410">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061511">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-1440.css') }}" media="(max-width: 1440px)">
@@ -88,11 +88,18 @@
                             </form>
                             <div class="social">
                                 <h4>Войти через</h4>
-                                <a href="#" class="vk"></a>
-                                <a href="#" class="fb"></a>
-                                <a href="#" class="mail"></a>
-                                <a href="#" class="ya"></a>
-                                <a href="#" class="ok"></a>
+                                <a href="{{ route('front.social.redirect', ['provider' => 'google']) }}" class="social-auth-link" aria-label="Войти через Google" title="Google">
+                                    <img src="{{ asset('frontend/images/social-google.svg') }}" alt="">
+                                </a>
+                                <a href="{{ route('front.social.redirect', ['provider' => 'x']) }}" class="social-auth-link" aria-label="Войти через X" title="X">
+                                    <img src="{{ asset('frontend/images/social-x.svg') }}" alt="">
+                                </a>
+                                <a href="{{ route('front.social.redirect', ['provider' => 'facebook']) }}" class="social-auth-link" aria-label="Войти через Facebook" title="Facebook">
+                                    <img src="{{ asset('frontend/images/social-facebook.svg') }}" alt="">
+                                </a>
+                                <a href="{{ route('front.social.redirect', ['provider' => 'linkedin']) }}" class="social-auth-link" aria-label="Войти через LinkedIn" title="LinkedIn">
+                                    <img src="{{ asset('frontend/images/social-linkedin.svg') }}" alt="">
+                                </a>
                             </div>
                         </div>
                     </div>

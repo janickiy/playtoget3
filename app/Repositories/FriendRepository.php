@@ -164,6 +164,10 @@ class FriendRepository extends BaseRepository
             return 1;
         }
 
+        if ((int)$relation->status === 2) {
+            return null;
+        }
+
         if ((int)$relation->user_id === $friendId && (int)$relation->friend_id === $userId) {
             $relation->fill([
                 'status' => 1,
@@ -210,6 +214,10 @@ class FriendRepository extends BaseRepository
             return null;
         }
 
+        if ((int)$relation->status === 2) {
+            return null;
+        }
+
         $relation->fill([
             'status' => 1,
             'added' => now(),
@@ -227,7 +235,18 @@ class FriendRepository extends BaseRepository
      */
     public function removeFriendship(int $userId, int $friendId): bool
     {
-        return $this->relationBetween($userId, $friendId)->delete() > 0;
+        /** @var Friend|null $relation */
+        $relation = $this->relationBetween($userId, $friendId)->first();
+
+        if (! $relation) {
+            return false;
+        }
+
+        if ((int) $relation->status === 2 && (int) $relation->user_id !== $userId) {
+            return false;
+        }
+
+        return (bool) $relation->delete();
     }
 
     /**

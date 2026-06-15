@@ -725,6 +725,8 @@ class GroupsController extends Controller
     {
         $viewer = Auth::guard('web')->user();
         $groupData = $communities->serializeGroup($group);
+        $role = $communities->role($group->id, $viewer?->id);
+        $membershipType = $communities->membershipType($group, $viewer);
         $accessDenied = ! $communities->canViewCommunityContent($group, $viewer);
         $permissions = $communities->permissions($group, $viewer);
 
@@ -750,14 +752,14 @@ class GroupsController extends Controller
             'team' => $group,
             'teamData' => $groupData,
             'permissions' => $permissions,
-            'role' => $communities->role($group->id, $viewer?->id),
-            'membershipType' => $communities->membershipType($group, $viewer),
+            'role' => $role,
+            'membershipType' => $membershipType,
             'canManageGroup' => $communities->canManage($group, $viewer),
             'canManageTeam' => $communities->canManage($group, $viewer),
             'canInviteGroup' => $communities->canInvite($group, $viewer),
             'canInviteTeam' => $communities->canInvite($group, $viewer),
             'communityAccessDenied' => $accessDenied,
-            'communityAccessMessage' => 'Это закрытая группа',
+            'communityAccessMessage' => $membershipType === 'blocked' ? 'Доступ к странице ограничен' : 'Это закрытая группа',
             'sectionAccessDenied' => $sectionAccessDenied,
             'sectionAccessMessage' => $this->sectionAccessMessage($sectionPermission, 'группы'),
             'section' => $section,

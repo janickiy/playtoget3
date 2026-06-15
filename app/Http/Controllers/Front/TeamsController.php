@@ -704,6 +704,8 @@ class TeamsController extends Controller
     private function teamPayload(Community $team, CommunityRepository $communities, string $section): array
     {
         $viewer = Auth::guard('web')->user();
+        $role = $communities->role($team->id, $viewer?->id);
+        $membershipType = $communities->membershipType($team, $viewer);
         $accessDenied = ! $communities->canViewCommunityContent($team, $viewer);
         $permissions = $communities->permissions($team, $viewer);
 
@@ -727,12 +729,12 @@ class TeamsController extends Controller
             'team' => $team,
             'teamData' => $communities->serializeTeam($team),
             'permissions' => $permissions,
-            'role' => $communities->role($team->id, $viewer?->id),
-            'membershipType' => $communities->membershipType($team, $viewer),
+            'role' => $role,
+            'membershipType' => $membershipType,
             'canManageTeam' => $communities->canManage($team, $viewer),
             'canInviteTeam' => $communities->canInvite($team, $viewer),
             'communityAccessDenied' => $accessDenied,
-            'communityAccessMessage' => 'Это закрытая команда',
+            'communityAccessMessage' => $membershipType === 'blocked' ? 'Доступ к странице ограничен' : 'Это закрытая команда',
             'sectionAccessDenied' => $sectionAccessDenied,
             'sectionAccessMessage' => $this->sectionAccessMessage($sectionPermission, 'команды'),
             'section' => $section,

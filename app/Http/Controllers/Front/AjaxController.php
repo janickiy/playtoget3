@@ -863,6 +863,14 @@ class AjaxController extends Controller
             return response()->json(['status' => 0, 'html' => '', 'count' => 0, 'has_more' => false]);
         }
 
+        if ($type === 'event' && ! $this->canViewOwnerMedia($type, $profileId, 'wall', $viewer)) {
+            return response()->json(['status' => 0, 'html' => '', 'count' => 0, 'has_more' => false]);
+        }
+
+        if ($type === 'user' && ! $this->canViewUserSection($profileId, 'wall', $viewer)) {
+            return response()->json(['status' => 0, 'html' => '', 'count' => 0, 'has_more' => false]);
+        }
+
         if (in_array($type, ['photo', 'video'], true) && ! $this->canViewMediaEntity($type, $profileId, $viewer)) {
             return response()->json(['status' => 0, 'html' => '', 'count' => 0, 'has_more' => false]);
         }
@@ -1448,6 +1456,13 @@ class AjaxController extends Controller
             ], 403);
         }
 
+        if ($type === 'user' && ! $this->canViewUserSection($profileId, 'wall', $viewer)) {
+            return response()->json([
+                'status' => false,
+                'errors' => ['comment' => 'Нет доступа к стене пользователя'],
+            ], 403);
+        }
+
         $behalfableType = '';
         $behalfId = 0;
 
@@ -1668,6 +1683,10 @@ class AjaxController extends Controller
             return response()->json(['result' => ''], 403);
         }
 
+        if ($type === 'comment' && ! $this->canViewCommentEntity($contentId, $viewer)) {
+            return response()->json(['result' => ''], 403);
+        }
+
         $query = Like::query()
             ->where('user_id', $viewer->id)
             ->where('content_id', $contentId)
@@ -1712,6 +1731,10 @@ class AjaxController extends Controller
         }
 
         if (in_array($type, ['photo', 'video'], true) && ! $this->canViewMediaEntity($type, $contentId, $viewer)) {
+            return response()->json(['result' => ''], 403);
+        }
+
+        if ($type === 'comment' && ! $this->canViewCommentEntity($contentId, $viewer)) {
             return response()->json(['result' => ''], 403);
         }
 
@@ -1848,10 +1871,29 @@ class AjaxController extends Controller
     private function canViewOwnerMedia(string $type, int $ownerId, string $section, ?User $viewer): bool
     {
         return match ($type) {
+            'user' => $this->canViewUserSection($ownerId, $section, $viewer),
             'team' => $this->communities->canViewSection($this->communities->findTeam($ownerId), $viewer, $section),
             'group' => $this->communities->canViewSection($this->communities->findGroup($ownerId), $viewer, $section),
+            'event' => ($event = $this->events->findActive($ownerId)) && (bool) ($this->events->permissions($event, $viewer)[$section] ?? true),
             default => true,
         };
+    }
+
+    /**
+     * Проверяет доступ к разделу профиля пользователя для AJAX-сценариев.
+     */
+    private function canViewUserSection(int $userId, string $section, ?User $viewer): bool
+    {
+        $profile = $this->profiles->profile($userId);
+
+        if (! $profile) {
+            return false;
+        }
+
+        $friendshipStatus = $this->friends->friendshipStatus($viewer?->id, $profile->id);
+        $permissions = $this->profiles->permissions($profile, $viewer, $friendshipStatus);
+
+        return (bool) ($permissions[$section] ?? false);
     }
 
     /**
@@ -1884,6 +1926,29 @@ class AjaxController extends Controller
         }
 
         return true;
+    }
+
+    /**
+     * Проверяет доступ к комментарию через доступ к сущности, к которой он относится.
+     */
+    private function canViewCommentEntity(int $commentId, ?User $viewer): bool
+    {
+        /** @var Comment|null $comment */
+        $comment = Comment::query()->whereKey($commentId)->first();
+
+        if (! $comment) {
+            return false;
+        }
+
+        $type = (string) $comment->commentable_type;
+        $contentId = (int) $comment->content_id;
+
+        return match ($type) {
+            'user' => $this->canViewUserSection($contentId, 'wall', $viewer),
+            'team', 'group', 'event' => $this->canViewOwnerMedia($type, $contentId, 'wall', $viewer),
+            'photo', 'video' => $this->canViewMediaEntity($type, $contentId, $viewer),
+            default => true,
+        };
     }
 
     /**

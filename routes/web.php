@@ -26,6 +26,12 @@ Route::controller(HomeController::class)->group(function () {
 
 Route::controller(FrontAuthController::class)->name('front.')->group(function () {
     Route::post('/', 'login')->name('login');
+    Route::get('auth/{provider}/redirect', 'redirectToProvider')
+        ->where('provider', 'google|facebook|x|linkedin')
+        ->name('social.redirect');
+    Route::get('auth/{provider}/callback', 'handleProviderCallback')
+        ->where('provider', 'google|facebook|x|linkedin')
+        ->name('social.callback');
     Route::post('front/logout', 'logout')->name('logout');
 });
 

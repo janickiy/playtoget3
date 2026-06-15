@@ -59,4 +59,6 @@
 </div>
 <div class="clearfix"></div>
 
-@include('front.profile._information')
+@if (($permissions['profile'] ?? true) && ! ($permissions['blocked_by_profile'] ?? false))
+    @include('front.profile._information')
+@endif

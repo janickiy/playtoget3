@@ -6,6 +6,14 @@
         1 => 'Друзья',
         2 => 'Никто',
     ];
+    $limitedPermissionOptions = [
+        0 => 'Все',
+        1 => 'Друзья',
+    ];
+    $limitedPermissionFields = [
+        'permission_send_message' => true,
+        'permission_view_profile' => true,
+    ];
 
     $contactFields = [
         'contact_email' => ['label' => 'Email', 'type' => 'email'],
@@ -113,14 +121,20 @@
                         <p>Выберите, кому доступны разделы профиля и действия на вашей странице.</p>
 
                         @foreach ($permissionFields as $field => $label)
+                            @php
+                                $currentPermissionValue = old("user.{$field}", $settings->{$field} ?? 0);
+                                if (($limitedPermissionFields[$field] ?? false) && (int) $currentPermissionValue > 1) {
+                                    $currentPermissionValue = 1;
+                                }
+                            @endphp
                             <div class="form-group">
                                 <label for="profile-{{ $field }}" class="col-sm-7 control-label">{{ $label }}</label>
                                 <div class="col-sm-5">
                                     <select id="profile-{{ $field }}" class="form-control" name="user[{{ $field }}]">
-                                        @foreach ($permissionOptions as $value => $text)
+                                        @foreach (($limitedPermissionFields[$field] ?? false) ? $limitedPermissionOptions : $permissionOptions as $value => $text)
                                             <option
                                                 value="{{ $value }}"
-                                                @selected((string) old("user.{$field}", $settings->{$field} ?? 0) === (string) $value)
+                                                @selected((string) $currentPermissionValue === (string) $value)
                                             >
                                                 {{ $text }}
                                             </option>

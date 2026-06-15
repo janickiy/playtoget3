@@ -41,11 +41,11 @@ class ProfileController extends Controller
             'profileData' => $profiles->profileData($profile),
             'permissions' => $permissions,
             'friendshipStatus' => $friendshipStatus,
-            'comments' => $permissions['wall']
+            'comments' => $permissions['profile'] && $permissions['wall']
                 ? $profiles->wallComments($profile->id, 10, 0, $viewer)
                 : collect(),
             'commentsPageSize' => 10,
-            'hasMoreComments' => $permissions['wall']
+            'hasMoreComments' => $permissions['profile'] && $permissions['wall']
                 ? $profiles->hasMoreWallComments($profile->id, 10, 0)
                 : false,
         ]);

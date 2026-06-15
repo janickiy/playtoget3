@@ -1,5 +1,6 @@
 @php
     $membershipType = $membershipType ?? 'none';
+    $accessDenied = (bool) ($communityAccessDenied ?? false);
     $leaveMessage = match ($membershipType) {
         'owner' => 'Вы владелец мероприятия. Покинув его, вы лишитесь прав владельца. Покинуть мероприятие?',
         'admin' => 'Вы администратор мероприятия. Покинув его, вы лишитесь административных прав. Покинуть мероприятие?',
@@ -50,16 +51,18 @@
 </div>
 <div class="clearfix"></div>
 
-@if ($eventData['description'])
+@if (! $accessDenied && $eventData['description'])
     <div class="sport_group_title">{{ $eventData['description'] }}</div>
 @endif
 
-<ul class="sport_group_list">
-    <li><a href="{{ route('front.events.show', ['event' => $event->id]) }}" @class(['active-link' => $section === 'feed'])><i class="icon_list icon-4"></i><span>Лента</span></a></li>
-    <li><a href="{{ route('front.events.members', ['event' => $event->id]) }}" @class(['active-link' => $section === 'members'])><i class="icon_list icon-5"></i><span>Участники</span></a></li>
-    <li><a href="{{ route('front.events.photoalbums', ['event' => $event->id]) }}" @class(['active-link' => $section === 'photoalbums'])><i class="icon_list icon-2"></i><span>Фотографии</span></a></li>
-    <li><a href="{{ route('front.events.videoalbums', ['event' => $event->id]) }}" @class(['active-link' => $section === 'videoalbums'])><i class="icon_list icon-3"></i><span>Видео</span></a></li>
-</ul>
+@if (! $accessDenied)
+    <ul class="sport_group_list">
+        <li><a href="{{ route('front.events.show', ['event' => $event->id]) }}" @class(['active-link' => $section === 'feed'])><i class="icon_list icon-4"></i><span>Лента</span></a></li>
+        <li><a href="{{ route('front.events.members', ['event' => $event->id]) }}" @class(['active-link' => $section === 'members'])><i class="icon_list icon-5"></i><span>Участники</span></a></li>
+        <li><a href="{{ route('front.events.photoalbums', ['event' => $event->id]) }}" @class(['active-link' => $section === 'photoalbums'])><i class="icon_list icon-2"></i><span>Фотографии</span></a></li>
+        <li><a href="{{ route('front.events.videoalbums', ['event' => $event->id]) }}" @class(['active-link' => $section === 'videoalbums'])><i class="icon_list icon-3"></i><span>Видео</span></a></li>
+    </ul>
+@endif
 
 @once
     @push('scripts')

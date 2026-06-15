@@ -544,6 +544,8 @@ class EventsController extends Controller
     {
         $viewer = Auth::guard('web')->user();
         $eventData = $events->serialize($event);
+        $permissions = $events->permissions($event, $viewer);
+        $accessDenied = (bool) ($permissions['blocked_by_event'] ?? false);
 
         return [
             'title' => $event->name ?: 'Мероприятие',
@@ -553,10 +555,13 @@ class EventsController extends Controller
             'eventData' => $eventData,
             'team' => $event,
             'teamData' => $eventData,
-            'permissions' => $events->permissions($event, $viewer),
+            'permissions' => $permissions,
             'role' => $events->role($event->id, $viewer?->id),
             'membershipType' => $events->membershipType($event, $viewer),
             'canManageEvent' => $events->canManage($event, $viewer),
+            'communityAccessDenied' => $accessDenied,
+            'communityAccessMessage' => 'Доступ к странице ограничен',
+            'sectionAccessDenied' => false,
             'section' => $section,
             'communityView' => [
                 'kind' => 'event',

@@ -789,11 +789,17 @@ class CommunityRepository extends BaseRepository
      */
     public function canViewCommunityContent(Community $team, ?User $viewer): bool
     {
+        $role = $this->role((int) $team->id, $viewer?->id);
+
+        if ($role === MembershipRole::Blocked->value) {
+            return false;
+        }
+
         if (! $this->isClosed($team)) {
             return true;
         }
 
-        return in_array($this->role((int) $team->id, $viewer?->id), [1, 2, 3], true);
+        return in_array($role, [1, 2, 3], true);
     }
 
     /**

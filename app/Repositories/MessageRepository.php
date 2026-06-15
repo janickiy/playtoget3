@@ -230,8 +230,7 @@ class MessageRepository extends BaseRepository
         $receiver->loadMissing('settings');
 
         return match ((int) ($receiver->settings?->permission_send_message ?? 0)) {
-            1 => $this->isFriend($sender->id, $receiver->id),
-            2 => false,
+            1, 2 => $this->isFriend($sender->id, $receiver->id),
             default => true,
         };
     }

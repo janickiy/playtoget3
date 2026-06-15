@@ -177,6 +177,14 @@ class User extends Authenticatable
         return $this->hasMany(Message::class, 'receiver_id');
     }
 
+    /**
+     * @return HasMany
+     */
+    public function socialAccounts(): HasMany
+    {
+        return $this->hasMany(UserSocialAccount::class);
+    }
+
     public function friends(): HasMany
     {
         return $this->hasMany(Friend::class);

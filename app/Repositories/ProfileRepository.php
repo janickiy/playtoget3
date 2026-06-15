@@ -269,6 +269,11 @@ class ProfileRepository extends BaseRepository
         foreach (array_keys(self::PERMISSION_FIELDS) as $field) {
             $permissions[$field] = (int)($data->user[$field] ?? 0);
         }
+        foreach (['permission_send_message', 'permission_view_profile'] as $field) {
+            if (($permissions[$field] ?? 0) > 1) {
+                $permissions[$field] = 1;
+            }
+        }
 
         $notifications = [];
         foreach (array_keys(self::NOTIFICATION_FIELDS) as $field) {
@@ -325,32 +330,39 @@ class ProfileRepository extends BaseRepository
     {
         $isOwnPage = $viewer && (int)$viewer->id === (int)$profile->id;
         $isFriend = $friendshipStatus === 'friend';
+        $blockedByProfile = $friendshipStatus === 'blocked_by_user';
 
-        if (! $profile->isActive()) {
+        if (! $profile->isActive() || $blockedByProfile) {
             return [
+                'profile' => false,
                 'send_message' => false,
                 'wall' => false,
                 'photo' => false,
                 'video' => false,
                 'friends' => false,
                 'teams' => false,
+                'blocked_by_profile' => $blockedByProfile,
             ];
         }
 
         $settings = $profile->settings;
+        $canViewProfile = $this->limitedPermissionAllows($settings?->permission_view_profile, $isOwnPage, $isFriend);
 
         return [
+            'profile' => $canViewProfile,
             'send_message' => $viewer
                 && !$isOwnPage
-                && $this->permissionAllows($settings?->permission_send_message, $isOwnPage, $isFriend),
-            'wall' => $this->permissionAllows($settings?->permission_view_wall, $isOwnPage, $isFriend),
-            'photo' => $this->permissionAllows($settings?->permission_view_photo, $isOwnPage, $isFriend),
-            'video' => $this->permissionAllows($settings?->permission_view_video, $isOwnPage, $isFriend),
-            'friends' => $this->permissionAllows($settings?->permission_view_friends, $isOwnPage, $isFriend),
-            'teams' => (bool)$viewer
+                && $this->limitedPermissionAllows($settings?->permission_send_message, $isOwnPage, $isFriend),
+            'wall' => $canViewProfile && $this->permissionAllows($settings?->permission_view_wall, $isOwnPage, $isFriend),
+            'photo' => $canViewProfile && $this->permissionAllows($settings?->permission_view_photo, $isOwnPage, $isFriend),
+            'video' => $canViewProfile && $this->permissionAllows($settings?->permission_view_video, $isOwnPage, $isFriend),
+            'friends' => $canViewProfile && $this->permissionAllows($settings?->permission_view_friends, $isOwnPage, $isFriend),
+            'teams' => $canViewProfile
+                && (bool)$viewer
                 && $profile->communities()
                     ->where('communities.type', 'team')
                     ->exists(),
+            'blocked_by_profile' => false,
         ];
     }
 
@@ -704,6 +716,22 @@ class ProfileRepository extends BaseRepository
         return match ((int)($permission ?? 0)) {
             1 => $isOwnPage || $isFriend,
             2 => $isOwnPage,
+            default => true,
+        };
+    }
+
+    /**
+     * Проверяет настройки с доступными значениями «Все» и «Друзья».
+     *
+     * @param mixed $permission
+     * @param bool $isOwnPage
+     * @param bool $isFriend
+     * @return bool
+     */
+    private function limitedPermissionAllows(mixed $permission, bool $isOwnPage, bool $isFriend): bool
+    {
+        return match ((int)($permission ?? 0)) {
+            1, 2 => $isOwnPage || $isFriend,
             default => true,
         };
     }

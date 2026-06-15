@@ -7,6 +7,10 @@
         <p class="no_message">Пользователь заблокирован.</p>
     @elseif ($profileUser->isDeleted())
         <p class="no_message">Пользователь удален.</p>
+    @elseif ($permissions['blocked_by_profile'] ?? false)
+        <p class="no_message">Пользователь ограничил доступ к своей странице для вас.</p>
+    @elseif (! $permissions['profile'])
+        <p class="no_message">Профиль пользователя доступен только друзьям.</p>
     @elseif ($permissions['wall'])
         @if ($viewer)
             <div class="message-content">

@@ -11,6 +11,10 @@
         data-icon-ok="{{ asset('frontend/images/icon-ok.svg') }}"
         data-icon-remove="{{ asset('frontend/images/icon-krest.svg') }}"
     >
+        @if (! $canViewFriends)
+            <p class="no_message">Список друзей пользователя доступен только друзьям.</p>
+        @endif
+
         @if ($isOwnPage && $possibleFriends->isNotEmpty())
             <link rel="stylesheet" type="text/css" href="{{ asset('frontend/css/select2.css') }}">
             <form autocomplete="off" action="{{ $searchRoute }}" method="GET" role="search" class="search_friends">

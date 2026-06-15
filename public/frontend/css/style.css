@@ -2092,14 +2092,25 @@ a.form-enter-link_reg:hover {
 	color:#fff;
 }
 .main-entrance .social a{
-	display: inline-block;
-	width: 27px;
-	height: 25px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 34px;
+	height: 34px;
 	text-decoration: none;
-	background-position: center center;
-	margin:0 7px;
+	background: #fff;
+	border-radius: 50%;
+	margin:0 6px;
 	transition:all 0.5s;
-	opacity:0.7;
+	opacity:0.88;
+	box-shadow: 0 2px 8px rgba(17, 24, 39, 0.18);
+	vertical-align: middle;
+}
+.main-entrance .social a img {
+	display: block;
+	width: 20px;
+	height: 20px;
+	object-fit: contain;
 }
 .main-entrance .social a.tw
 	{
@@ -2137,9 +2148,13 @@ a.form-enter-link_reg:hover {
 	{
 	background: url('../images/social_in.png') no-repeat;
 	}
+.main-entrance .social a.social-auth-link {
+	background: #fff;
+}
 .main-entrance .social a:hover
 {
 	opacity:1;
+	transform: translateY(-1px);
 }
 
 /*************************************Left side-bar***************************************/

@@ -406,11 +406,13 @@ class EventRepository extends BaseRepository
     public function permissions(Event $event, ?User $viewer): array
     {
         $role = $this->role((int) $event->id, $viewer?->id);
+        $blocked = $role === MembershipRole::Blocked->value;
 
         return [
-            'wall' => $role !== 4,
-            'photo' => $role !== 4,
-            'video' => $role !== 4,
+            'wall' => ! $blocked,
+            'photo' => ! $blocked,
+            'video' => ! $blocked,
+            'blocked_by_event' => $blocked,
         ];
     }
 

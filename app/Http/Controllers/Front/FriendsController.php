@@ -6,6 +6,7 @@ use App\Helpers\FrontAssets;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Repositories\FriendRepository;
+use App\Repositories\ProfileRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -19,6 +20,7 @@ class FriendsController extends Controller
      */
     public function __construct(
         private readonly FriendRepository $friends,
+        private readonly ProfileRepository $profiles,
         private readonly UserRepository   $users,
     )
     {
@@ -68,13 +70,17 @@ class FriendsController extends Controller
     private function pageData(Request $request, ?User $viewer, User $targetUser, bool $isOwnPage): array
     {
         $filters = $this->filters($request);
-        $friendsCount = $this->friends->friendsCountFor($targetUser->id, $filters);
+        $friendshipStatus = $this->friends->friendshipStatus($viewer?->id, $targetUser->id);
+        $permissions = $this->profiles->permissions($targetUser, $viewer, $friendshipStatus);
+        $canViewFriends = $isOwnPage || (bool) ($permissions['friends'] ?? false);
+        $friendsCount = $canViewFriends ? $this->friends->friendsCountFor($targetUser->id, $filters) : 0;
 
         return [
             'title' => $isOwnPage ? 'Друзья' : 'Друзья пользователя',
             'viewer' => $viewer,
             'targetUser' => $targetUser,
             'isOwnPage' => $isOwnPage && $viewer?->is($targetUser),
+            'canViewFriends' => $canViewFriends,
             'filters' => $filters,
             'searchRoute' => $isOwnPage
                 ? route('front.friends.index')
@@ -83,9 +89,9 @@ class FriendsController extends Controller
             'possibleFriends' => $isOwnPage
                 ? $this->friends->possibleFriendsFor($targetUser->id, 6, $filters)
                 : collect(),
-            'friends' => $this->friends->friendsFor($targetUser->id, 10, 0, $filters),
+            'friends' => $canViewFriends ? $this->friends->friendsFor($targetUser->id, 10, 0, $filters) : collect(),
             'friendsCount' => $friendsCount,
-            'hasMoreFriends' => $friendsCount > 10,
+            'hasMoreFriends' => $canViewFriends && $friendsCount > 10,
             'incomingRequests' => $isOwnPage
                 ? $this->friends->incomingRequestsFor($targetUser->id, 10, 0, $filters)
                 : collect(),
