@@ -1606,7 +1606,7 @@ class AjaxController extends Controller
 
         return response()->json($this->messages->serializeMessage($created) + [
                 'status' => 1,
-                'count' => $this->messages->unreadCount($viewer),
+                'count' => $this->messages->unreadDialoguesCount($viewer),
             ]);
     }
 
@@ -1632,7 +1632,7 @@ class AjaxController extends Controller
         return response()->json([
             'item' => $this->messages->conversation($viewer, $receiver, $limit, $offset)->values(),
             'has_more' => $this->messages->hasMoreConversation($viewer, $receiver, $limit, $offset),
-            'count' => $this->messages->unreadCount($viewer),
+            'count' => $this->messages->unreadDialoguesCount($viewer),
         ]);
     }
 
@@ -1656,7 +1656,7 @@ class AjaxController extends Controller
 
         return response()->json([
             'item' => $this->messages->newMessages($viewer, $lastId, $receiver)->values(),
-            'count' => $this->messages->unreadCount($viewer),
+            'count' => $this->messages->unreadDialoguesCount($viewer),
         ]);
     }
 

@@ -211,6 +211,22 @@ class MessageRepository extends BaseRepository
     }
 
     /**
+     * Считает диалоги, в которых у пользователя есть непрочитанные сообщения.
+     *
+     * @param User $viewer
+     * @return int
+     */
+    public function unreadDialoguesCount(User $viewer): int
+    {
+        return $this->model->newQuery()
+            ->where('receiver_id', $viewer->id)
+            ->where('status', 0)
+            ->whereNotNull('sender_id')
+            ->distinct('sender_id')
+            ->count('sender_id');
+    }
+
+    /**
      * Проверяет, может ли отправитель написать получателю.
      *
      * @param User $sender

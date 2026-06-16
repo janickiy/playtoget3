@@ -11,7 +11,7 @@
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap-theme.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061602">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061604">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.carousel.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.theme.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.transitions.css') }}">
@@ -52,7 +52,7 @@
                                 <a href="{{ route('front.home') }}"><img src="{{ asset('frontend/images/playtoget-logo-clean.svg') }}?v=2026061404" width="145" height="43" alt=""></a>
                             </div>
                             <div class="search">
-                                <form autocomplete="off" action="{{ route('front.news.index') }}" method="GET">
+                                <form autocomplete="off" action="{{ route('front.home') }}" method="GET">
                                     <input type="text" name="search" id="main_search" value="{{ request('search') }}" placeholder="Найти">
                                 </form>
                             </div>
@@ -75,13 +75,16 @@
                                     <a href="{{ $frontLayout['user'] ? route('front.profile.show', ['user' => $frontLayout['user']->id]) : route('front.home') }}">{{ $frontLayout['firstname'] }}<span></span>{{ $frontLayout['lastname'] }}<span></span></a>
                                 </li>
                                 <li><a href="{{ route('front.home') }}"><img src="{{ asset('frontend/images/menu-home.svg') }}" width="25" height="28" alt=""></a></li>
-                                <li>
+                                <li class="header-counter-item">
                                     <a href="{{ $frontLayout['user'] ? route('front.profile.messages.index', ['user' => $frontLayout['user']->id]) : route('front.home') }}">
                                         <img src="{{ asset('frontend/images/message.svg') }}" width="29" height="24" alt="">
                                     </a>
-                                    <span id="message_count" class="displayNone">0</span>
+                                    <span id="message_count" class="header-counter {{ ($frontLayout['unreadDialoguesCount'] ?? 0) > 0 ? '' : 'displayNone' }}">{{ $frontLayout['unreadDialoguesCount'] ?? 0 }}</span>
                                 </li>
-                                <li><a href="{{ route('front.friends.index') }}"><img src="{{ asset('frontend/images/man.svg') }}?v=2026061601" width="34" height="30" alt=""></a></li>
+                                <li class="header-counter-item">
+                                    <a href="{{ route('front.friends.index') }}"><img src="{{ asset('frontend/images/man.svg') }}?v=2026061601" width="34" height="30" alt=""></a>
+                                    <span id="friend_request_count" class="header-counter {{ ($frontLayout['incomingFriendRequestsCount'] ?? 0) > 0 ? '' : 'displayNone' }}">{{ $frontLayout['incomingFriendRequestsCount'] ?? 0 }}</span>
+                                </li>
                                 <li><a href="{{ route('front.profile.edit') }}"><img src="{{ asset('frontend/images/settings.svg') }}?v=2026061601" width="28" height="28" alt=""></a></li>
                                 <li>
                                     <form method="POST" action="{{ route('front.logout') }}">

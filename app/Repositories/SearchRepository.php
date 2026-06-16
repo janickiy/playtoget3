@@ -1,0 +1,83 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Models\User;
+use Illuminate\Support\Collection;
+
+class SearchRepository
+{
+    /**
+     * Подключает репозитории сущностей, по которым выполняется общий поиск.
+     */
+    public function __construct(
+        private readonly CommunityRepository $communities,
+        private readonly EventRepository $events,
+        private readonly SportBlockRepository $sportBlocks,
+    ) {
+    }
+
+    /**
+     * Собирает результаты общего поиска по основным сущностям сайта.
+     *
+     * @return array<string, Collection>
+     */
+    public function results(string $query, ?User $viewer = null, int $limit = 20): array
+    {
+        $query = trim($query);
+
+        if ($query === '') {
+            return [
+                'teams' => collect(),
+                'groups' => collect(),
+                'events' => collect(),
+                'sportBlocks' => collect(),
+            ];
+        }
+
+        return [
+            'teams' => $this->communities
+                ->popularTeams($limit, 0, ['search' => $query], $viewer)
+                ->map(fn (array $team): array => $team + [
+                    'status' => '',
+                    'can_edit' => false,
+                ]),
+            'groups' => $this->communities
+                ->popularGroups($limit, 0, ['search' => $query], $viewer)
+                ->map(fn (array $group): array => $group + [
+                    'status' => '',
+                    'can_edit' => false,
+                ]),
+            'events' => $this->events->popularEvents($limit, 0, ['search' => $query], $viewer),
+            'sportBlocks' => $this->sportBlockResults($query, $limit),
+        ];
+    }
+
+    /**
+     * Ищет спортивные блоки всех типов и добавляет маршрут для каждой карточки.
+     */
+    private function sportBlockResults(string $query, int $limit): Collection
+    {
+        return collect([
+            'playground' => [
+                'routePrefix' => 'front.playgrounds',
+                'typeLabel' => 'Площадка',
+            ],
+            'shop' => [
+                'routePrefix' => 'front.shops',
+                'typeLabel' => 'Магазин',
+            ],
+            'fitness' => [
+                'routePrefix' => 'front.fitness',
+                'typeLabel' => 'Фитнес',
+            ],
+        ])->flatMap(function (array $meta, string $type) use ($query, $limit): Collection {
+            return $this->sportBlocks
+                ->serializedByType($type, ['search' => $query], $limit)
+                ->map(fn (array $item): array => $item + [
+                    'route_prefix' => $meta['routePrefix'],
+                    'type_label' => $meta['typeLabel'],
+                ]);
+        })->values();
+    }
+}

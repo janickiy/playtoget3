@@ -21,6 +21,8 @@ use App\Models\SportBlock;
 use App\Models\User;
 use App\Models\Video;
 use App\Helpers\SettingsHelper;
+use App\Repositories\FriendRepository;
+use App\Repositories\MessageRepository;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
@@ -174,6 +176,13 @@ class AppServiceProvider extends ServiceProvider
                 ->take(5)
                 ->values();
 
+            $unreadDialoguesCount = $user && Schema::hasTable('messages')
+                ? app(MessageRepository::class)->unreadDialoguesCount($user)
+                : 0;
+            $incomingFriendRequestsCount = $user && Schema::hasTable('friends')
+                ? app(FriendRepository::class)->incomingRequestsBadgeCountFor((int) $user->id)
+                : 0;
+
             $view->with('frontLayout', [
                 'user' => $user,
                 'displayName' => $user?->displayName() ?? 'PlayToGet',
@@ -194,6 +203,8 @@ class AppServiceProvider extends ServiceProvider
                 'shopsCount' => $sportBlocks->where('type', 'shop')->count(),
                 'fitness' => $sportBlocks->where('type', 'fitness')->take(3)->values(),
                 'fitnessCount' => $sportBlocks->where('type', 'fitness')->count(),
+                'unreadDialoguesCount' => $unreadDialoguesCount,
+                'incomingFriendRequestsCount' => $incomingFriendRequestsCount,
             ]);
             $view->with('menu', $menu);
         });

@@ -396,6 +396,28 @@ margin-top: 115px;
 	top: 7px;
 	right: -8px;
 }
+.top-header-menu .header-counter-item
+{
+	position: relative;
+}
+.top-header-menu .header-counter
+{
+	display: block;
+	position: absolute;
+	top: 6px;
+	right: -9px;
+	min-width: 18px;
+	height: 18px;
+	padding: 0 5px;
+	background: #d94d5d;
+	border-radius: 9px;
+	color: #fff;
+	font-size: 11px;
+	font-weight: 700;
+	line-height: 18px;
+	text-align: center;
+	z-index: 3;
+}
 .top-header-menu li:last-of-type a, .top-header-menu li:last-of-type button, .top-header-menu li p
 {
 	font-size: 14px;

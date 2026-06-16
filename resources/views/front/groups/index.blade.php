@@ -160,6 +160,7 @@
         }
 
         .content-groups #tabs #main-menu.marginBottom-40 {
+            column-gap: 3px;
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
             margin: 0 0 20px !important;

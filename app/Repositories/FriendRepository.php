@@ -103,6 +103,22 @@ class FriendRepository extends BaseRepository
     }
 
     /**
+     * Считает уникальные входящие заявки в друзья для счётчика в шапке.
+     *
+     * @param int $userId
+     * @return int
+     */
+    public function incomingRequestsBadgeCountFor(int $userId): int
+    {
+        return $this->model->newQuery()
+            ->where('status', 0)
+            ->where('friend_id', $userId)
+            ->whereNotNull('user_id')
+            ->distinct('user_id')
+            ->count('user_id');
+    }
+
+    /**
      * Возвращает исходящие заявки в друзья с пагинацией и фильтрами.
      *
      * @param int $userId
