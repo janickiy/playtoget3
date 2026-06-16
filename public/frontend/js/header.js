@@ -1,7 +1,14 @@
 let messagePollTimer = null;
 let messagePollPrimed = false;
 let lastInboxMessageId = 0;
-const messagePollInterval = 5000;
+let pushPollTimer = null;
+let pushPollPrimed = false;
+let pushToastTimer = null;
+let pushToastShowing = false;
+const pushToastQueue = [];
+const messagePollInterval = 10000;
+const pushPollInterval = 10000;
+const pushSeenLimit = 200;
 
 function csrfToken() {
     return $('meta[name="csrf-token"]').attr('content') || '';
@@ -23,6 +30,80 @@ function dialogueUrl(userId) {
     const base = String(window.dialoguesBase || (window.user ? '/profile/' + window.user + '/messages/user' : '/profile')).replace(/\/$/, '');
 
     return base + '/' + encodeURIComponent(userId);
+}
+
+function currentUserId() {
+    return parseInt(window.user, 10) || 0;
+}
+
+function pushSeenStorageKey() {
+    return 'playtoget_push_seen_' + currentUserId();
+}
+
+function escapeHtml(value) {
+    return $('<div>').text(value == null ? '' : String(value)).html();
+}
+
+function escapeAttribute(value) {
+    return escapeHtml(value).replace(/"/g, '&quot;');
+}
+
+function readPushSeenStore() {
+    try {
+        const parsed = JSON.parse(localStorage.getItem(pushSeenStorageKey()) || '{}');
+
+        return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+    } catch (error) {
+        return {};
+    }
+}
+
+function writePushSeenStore(store) {
+    try {
+        const entries = Object.entries(store || {})
+            .sort(function (left, right) {
+                return (right[1] || 0) - (left[1] || 0);
+            })
+            .slice(0, pushSeenLimit);
+        const limitedStore = {};
+
+        $.each(entries, function (_, entry) {
+            limitedStore[entry[0]] = entry[1];
+        });
+
+        localStorage.setItem(pushSeenStorageKey(), JSON.stringify(limitedStore));
+    } catch (error) {}
+}
+
+function isPushSeen(key) {
+    if (!key) {
+        return true;
+    }
+
+    return Object.prototype.hasOwnProperty.call(readPushSeenStore(), key);
+}
+
+function markPushSeen(key) {
+    if (!key) {
+        return;
+    }
+
+    const store = readPushSeenStore();
+    store[key] = Date.now();
+    writePushSeenStore(store);
+}
+
+function markPushItemsSeen(items) {
+    const store = readPushSeenStore();
+    const time = Date.now();
+
+    $.each(items || [], function (_, item) {
+        if (item && item.key) {
+            store[item.key] = time;
+        }
+    });
+
+    writePushSeenStore(store);
 }
 
 function messageId(row) {
@@ -65,12 +146,74 @@ function setMessageCount(count) {
 function playMessageSound() {
     const audio = new Audio();
     audio.preload = 'auto';
-    audio.src = './frontend/audio/message.mp3';
+    audio.src = '/frontend/audio/message.mp3';
 
     const result = audio.play();
     if (result && typeof result.catch === 'function') {
         result.catch(function () {});
     }
+}
+
+function showPushToast(text, url, complete) {
+    const toast = $('.window-message');
+
+    if (!toast.length) {
+        if (typeof complete === 'function') {
+            complete();
+        }
+
+        return;
+    }
+
+    const content = url
+        ? '<a href="' + escapeAttribute(url) + '">' + escapeHtml(text) + '</a>'
+        : '<span>' + escapeHtml(text) + '</span>';
+
+    clearTimeout(pushToastTimer);
+    toast.stop(true, true).html(content).addClass('is-visible').fadeIn(180);
+
+    pushToastTimer = setTimeout(function () {
+        toast.fadeOut(500, function () {
+            toast.removeClass('is-visible').empty();
+
+            if (typeof complete === 'function') {
+                complete();
+            }
+        });
+    }, 3000);
+}
+
+function showNextPushToast() {
+    if (pushToastShowing || !pushToastQueue.length) {
+        return;
+    }
+
+    const item = pushToastQueue.shift();
+    pushToastShowing = true;
+    playMessageSound();
+    showPushToast(item.text, item.url, function () {
+        pushToastShowing = false;
+        setTimeout(showNextPushToast, 250);
+    });
+}
+
+function enqueuePushNotification(item) {
+    if (!item || !item.text) {
+        return;
+    }
+
+    pushToastQueue.push(item);
+    showNextPushToast();
+}
+
+function messageSenderName(row) {
+    const name = $.trim([row.firstname, row.lastname].join(' '));
+
+    return name || 'Пользователь';
+}
+
+function messageNotificationText(row) {
+    return messageSenderName(row) + ' отправил(а) Вам новое личное сообщение';
 }
 
 function renderIncomingMessage(row) {
@@ -125,15 +268,12 @@ function updateDialogPreview(row) {
 }
 
 function showMessagePopup(row) {
-    let message = '<img src="' + row.avatar + '" width="50" alt="" class="img-account" style="float: left;">';
-    message += '<div class="fromwho">' + row.firstname + '<br>' + row.lastname + '<br>';
-    message += '<span>' + row.created + '</span></div>';
-    message += '<p>' + row.content + '</p>';
-    $('.window-message').html(message);
-    $('.window-message').fadeIn();
-    setTimeout(function () {
-        $('.window-message').fadeOut();
-    }, 2000);
+    enqueuePushNotification({
+        key: 'message:' + messageId(row),
+        type: 'message',
+        text: messageNotificationText(row),
+        url: dialogueUrl(row.sender_id)
+    });
 }
 
 function handleIncomingMessage(row, notify) {
@@ -149,12 +289,12 @@ function handleIncomingMessage(row, notify) {
         $('.mess_list').find('.no_message').remove();
         $('.mess_list').animate({scrollTop: 1000000}, 1100);
         applyMessageEmotions();
-    } else if (!updateDialogPreview(row) && notify) {
-        showMessagePopup(row);
+    } else {
+        updateDialogPreview(row);
     }
 
     if (notify) {
-        playMessageSound();
+        showMessagePopup(row);
     }
 }
 
@@ -192,16 +332,60 @@ function pollIncomingMessages() {
     });
 }
 
+function pollPushNotifications() {
+    if (!window.user) {
+        return;
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: ajaxActionUrl('get_push_notifications'),
+        dataType: 'json',
+        data: {
+            _token: csrfToken()
+        },
+        success: function (data) {
+            const items = data && data.items ? data.items : [];
+
+            if (!pushPollPrimed) {
+                markPushItemsSeen(items);
+                pushPollPrimed = true;
+                return;
+            }
+
+            $.each(items, function (_, item) {
+                if (!item || !item.key || isPushSeen(item.key)) {
+                    return;
+                }
+
+                markPushSeen(item.key);
+                enqueuePushNotification(item);
+            });
+        }
+    });
+}
+
+function initPushNotifications() {
+    if (pushPollTimer || !window.user) {
+        return;
+    }
+
+    pollPushNotifications();
+    pushPollTimer = setInterval(pollPushNotifications, pushPollInterval);
+}
+
 function initHeaderPolling() {
     if (messagePollTimer) {
         return;
     }
 
     pollIncomingMessages();
+    initPushNotifications();
     messagePollTimer = setInterval(pollIncomingMessages, messagePollInterval);
 }
 
 window.initHeaderPolling = initHeaderPolling;
+window.initPushNotifications = initPushNotifications;
 
 
 $(document).ready(function () {

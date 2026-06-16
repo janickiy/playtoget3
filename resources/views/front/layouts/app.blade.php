@@ -11,7 +11,7 @@
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap-theme.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061604">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061605">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.carousel.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.theme.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.transitions.css') }}">
@@ -30,7 +30,7 @@
     @stack('styles')
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800&subset=latin,cyrillic" rel="stylesheet" type="text/css">
     <script src="{{ asset('frontend/js/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/header.js') }}"></script>
+    <script src="{{ asset('frontend/js/header.js') }}?v=2026061601"></script>
     <script src="{{ asset('frontend/js/show-hidden.js') }}"></script>
     <script>
         window.user = '{{ $frontLayout['user']?->id ?? '' }}';

@@ -15,7 +15,10 @@ use App\Http\Requests\Front\Ajax\AttachmentPhotoRequest;
 use App\Http\Requests\Front\Ajax\CropAvatarRequest;
 use App\Http\Requests\Front\Ajax\CropCoverRequest;
 use App\Http\Requests\Front\Ajax\PhotoUploadRequest;
+use App\Models\AcceptedEventMember;
 use App\Models\Community;
+use App\Models\CommunityRole;
+use App\Models\Friend;
 use App\Models\GeoCity;
 use App\Models\Like;
 use App\Models\Photo;
@@ -119,6 +122,7 @@ class AjaxController extends Controller
             'add_message' => $this->addMessage($request),
             'get_messages' => $this->getMessages($request),
             'get_new_messages' => $this->getNewMessages($request),
+            'get_push_notifications' => $this->getPushNotifications($request),
             'remove_message' => $this->removeMessage($request),
             'remove_dialog' => $this->removeDialog($request),
             'liked' => $this->liked($request),
@@ -1658,6 +1662,150 @@ class AjaxController extends Controller
             'item' => $this->messages->newMessages($viewer, $lastId, $receiver)->values(),
             'count' => $this->messages->unreadDialoguesCount($viewer),
         ]);
+    }
+
+    /**
+     * Возвращает актуальные события для push-уведомлений текущего пользователя.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    private function getPushNotifications(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+
+        if (!$viewer) {
+            return response()->json(['status' => 0, 'items' => []], 401);
+        }
+
+        $items = collect()
+            ->merge($this->friendRequestPushNotifications($viewer))
+            ->merge($this->communityInvitePushNotifications($viewer))
+            ->merge($this->eventInvitePushNotifications($viewer))
+            ->sortByDesc(fn (array $item): int => (int) ($item['sort'] ?? 0))
+            ->map(function (array $item): array {
+                unset($item['sort']);
+
+                return $item;
+            })
+            ->values();
+
+        return response()->json([
+            'status' => 1,
+            'items' => $items,
+        ]);
+    }
+
+    /**
+     * Готовит уведомления о входящих заявках в друзья.
+     *
+     * @param User $viewer
+     * @return Collection
+     */
+    private function friendRequestPushNotifications(User $viewer): Collection
+    {
+        return Friend::query()
+            ->with(['user'])
+            ->where('friend_id', $viewer->id)
+            ->where('status', 0)
+            ->orderByDesc('added')
+            ->orderByDesc('id')
+            ->limit(10)
+            ->get()
+            ->map(function (Friend $friend): array {
+                $sender = $friend->user;
+                $name = $this->pushUserName($sender);
+
+                return [
+                    'key' => 'friend_request:' . $friend->id,
+                    'type' => 'friend_request',
+                    'text' => $name . ' отправил(а) Вам заявку в друзья',
+                    'url' => route('front.friends.index'),
+                    'sort' => $friend->added?->getTimestamp() ?? (int) $friend->id,
+                ];
+            });
+    }
+
+    /**
+     * Готовит уведомления о приглашениях в группы и команды.
+     *
+     * @param User $viewer
+     * @return Collection
+     */
+    private function communityInvitePushNotifications(User $viewer): Collection
+    {
+        return CommunityRole::query()
+            ->with(['community'])
+            ->where('user_id', $viewer->id)
+            ->where('role', 5)
+            ->orderByDesc('id')
+            ->limit(10)
+            ->get()
+            ->map(function (CommunityRole $role): ?array {
+                $community = $role->community;
+
+                if (!$community || !$community->isVisible()) {
+                    return null;
+                }
+
+                $isGroup = $community->type === 'group';
+
+                return [
+                    'key' => 'community_invite:' . $role->id,
+                    'type' => $isGroup ? 'group_invite' : 'team_invite',
+                    'text' => 'Вас пригласили в ' . ($isGroup ? 'группу ' : 'команду ') . $community->name,
+                    'url' => route($isGroup ? 'front.groups.show' : 'front.teams.show', ['community' => $community->id]),
+                    'sort' => (int) $role->id,
+                ];
+            })
+            ->filter()
+            ->values();
+    }
+
+    /**
+     * Готовит уведомления о приглашениях на мероприятия.
+     *
+     * @param User $viewer
+     * @return Collection
+     */
+    private function eventInvitePushNotifications(User $viewer): Collection
+    {
+        return AcceptedEventMember::query()
+            ->with(['event'])
+            ->where('eventable_type', 'user')
+            ->where('member_id', $viewer->id)
+            ->where('role', 5)
+            ->orderByDesc('id')
+            ->limit(10)
+            ->get()
+            ->map(function (AcceptedEventMember $member): ?array {
+                $event = $member->event;
+
+                if (!$event || !$event->isVisible()) {
+                    return null;
+                }
+
+                return [
+                    'key' => 'event_invite:' . $member->id,
+                    'type' => 'event_invite',
+                    'text' => 'Вас пригласили на мероприятие ' . $event->name,
+                    'url' => route('front.events.show', ['event' => $event->id]),
+                    'sort' => (int) $member->id,
+                ];
+            })
+            ->filter()
+            ->values();
+    }
+
+    /**
+     * Возвращает отображаемое имя пользователя для текста уведомления.
+     *
+     * @param User|null $user
+     * @return string
+     */
+    private function pushUserName(?User $user): string
+    {
+        return $user?->displayName() ?: 'Пользователь';
     }
 
     /**
