@@ -52,14 +52,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="control-label col-lg-3" for="captcha">Проверочный код:</label>
-                    <div class="col-lg-6 feedback-captcha-field">
-                        <a href="#" id="feedback-captcha-refresh">Не можете прочитать? Изменить текст.</a>
-                        <img src="{{ route('front.feedback.captcha') }}?{{ time() }}" alt="защитный код" id="feedback-captcha">
-                        <input type="text" class="form-control" name="captcha" id="captcha" value="" placeholder="Введите защитный код" autocomplete="off">
-                    </div>
-                </div>
+                <input type="hidden" name="g-recaptcha-response" id="feedback-recaptcha-token" value="">
 
                 <br>
 
@@ -73,38 +66,39 @@
     </div>
 @endsection
 
-@push('styles')
-    <style>
-        .feedback-captcha-field #feedback-captcha-refresh,
-        .feedback-captcha-field #feedback-captcha {
-            display: block;
-        }
-
-        .feedback-captcha-field #feedback-captcha {
-            margin-bottom: 10px;
-        }
-    </style>
-@endpush
-
 @push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var link = document.getElementById('feedback-captcha-refresh');
-            var image = document.getElementById('feedback-captcha');
-            var input = document.getElementById('captcha');
+    @if (config('recaptchav3.sitekey'))
+        {!! RecaptchaV3::initJs() !!}
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var form = document.getElementById('feedback-form');
+                var token = document.getElementById('feedback-recaptcha-token');
+                var siteKey = @json(config('recaptchav3.sitekey'));
+                var submitted = false;
 
-            if (! link || ! image) {
-                return;
-            }
-
-            link.addEventListener('click', function (event) {
-                event.preventDefault();
-                image.src = '{{ route('front.feedback.captcha') }}?' + Date.now();
-
-                if (input) {
-                    input.focus();
+                if (!form || !token || !siteKey) {
+                    return;
                 }
+
+                form.addEventListener('submit', function (event) {
+                    if (submitted || !window.grecaptcha) {
+                        return;
+                    }
+
+                    event.preventDefault();
+
+                    grecaptcha.ready(function () {
+                        grecaptcha.execute(siteKey, {action: 'feedback'}).then(function (value) {
+                            token.value = value;
+                            submitted = true;
+                            form.submit();
+                        }).catch(function () {
+                            submitted = true;
+                            form.submit();
+                        });
+                    });
+                });
             });
-        });
-    </script>
+        </script>
+    @endif
 @endpush

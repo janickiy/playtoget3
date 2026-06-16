@@ -3,9 +3,7 @@
 namespace App\Http\Requests\Front\Feedback;
 
 use App\DTO\Feedback\FeedbackData;
-use App\Service\FeedbackCaptchaService;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Validator;
 
 class StoreRequest extends FormRequest
 {
@@ -24,27 +22,7 @@ class StoreRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
             'message' => ['required', 'string'],
-            'captcha' => ['required', 'string'],
-        ];
-    }
-
-    /**
-     * Подключает проверку серверного кода CAPTCHA после базовой валидации.
-     */
-    public function after(): array
-    {
-        return [
-            function (Validator $validator): void {
-                $captcha = trim((string) $this->input('captcha'));
-
-                if ($captcha === '') {
-                    return;
-                }
-
-                if (! app(FeedbackCaptchaService::class)->isValid($captcha)) {
-                    $validator->errors()->add('captcha', 'Проверочный код указан неверно.');
-                }
-            },
+            'g-recaptcha-response' => ['required', 'recaptchav3:feedback,0.5'],
         ];
     }
 
@@ -59,7 +37,8 @@ class StoreRequest extends FormRequest
             'email.required' => 'Укажите адрес электронной почты.',
             'email.email' => 'Введите корректный адрес электронной почты.',
             'message.required' => 'Введите сообщение.',
-            'captcha.required' => 'Введите проверочный код.',
+            'g-recaptcha-response.required' => 'Подтвердите, что вы не робот.',
+            'g-recaptcha-response.recaptchav3' => 'Проверка reCAPTCHA не пройдена. Попробуйте отправить форму еще раз.',
         ];
     }
 

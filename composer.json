@@ -12,6 +12,7 @@
         "guzzlehttp/guzzle": "^7.10",
         "janickiy/html": "^1.0",
         "janickiy/laravel-menu": "^2.1",
+        "josiasmontag/laravel-recaptchav3": "^1.0",
         "laravel/framework": "^13.0",
         "laravel/socialite": "^5.27",
         "laravel/tinker": "^3.0",
