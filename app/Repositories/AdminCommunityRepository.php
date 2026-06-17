@@ -5,14 +5,17 @@ namespace App\Repositories;
 use App\DTO\Admin\CommunityData;
 use App\Enums\CommunityStatus;
 use App\Models\Community;
+use App\Service\ContentCascadeDeleteService;
 
 class AdminCommunityRepository extends BaseRepository
 {
     /**
      * Connects модель community, с которой работает админский репозиторий.
      */
-    public function __construct(Community $model)
-    {
+    public function __construct(
+        Community $model,
+        private readonly ContentCascadeDeleteService $cascadeDelete,
+    ) {
         parent::__construct($model);
     }
 
@@ -61,5 +64,16 @@ class AdminCommunityRepository extends BaseRepository
     public function updateFromData(CommunityData $data): bool
     {
         return $this->update($data->id, $data->toArray());
+    }
+
+    /**
+     * Deletes community together with all related content and media.
+     */
+    public function delete(int|string $id): bool
+    {
+        /** @var Community|null $community */
+        $community = $this->model->newQuery()->find($id);
+
+        return $community ? $this->cascadeDelete->deleteCommunity($community) : false;
     }
 }

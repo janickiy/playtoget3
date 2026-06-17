@@ -13,6 +13,7 @@ use App\Repositories\Concerns\DeletesContentRelations;
 use App\Service\AlbumPhotoStorageService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use RuntimeException;
 
@@ -581,9 +582,11 @@ class PhotoalbumRepository extends BaseRepository
     {
         $this->deleteContentRelations('photo', (int) $photo->id);
 
-        Attachment::query()
-            ->where('photo_id', $photo->id)
-            ->delete();
+        if (Schema::hasTable('attachment')) {
+            Attachment::query()
+                ->where('photo_id', $photo->id)
+                ->delete();
+        }
     }
 
     /**

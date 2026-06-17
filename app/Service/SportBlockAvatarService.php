@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class SportBlockAvatarService
 {
@@ -31,5 +32,21 @@ class SportBlockAvatarService
         $filename = $this->images->hashedFilename($file);
 
         return $file->storeAs('images/sportblocks/avatar', $filename, 'public') ? $filename : null;
+    }
+
+    /**
+     * Deletes avatar sport object из нового и legacy-storage.
+     *
+     * @param string $filename
+     * @return void
+     */
+    public function deleteAvatar(string $filename): void
+    {
+        Storage::disk('public')->delete('images/sportblocks/avatar/' . $filename);
+
+        $legacyPath = public_path('uploads/images/sportblocks/avatar/' . $filename);
+        if (is_file($legacyPath)) {
+            @unlink($legacyPath);
+        }
     }
 }

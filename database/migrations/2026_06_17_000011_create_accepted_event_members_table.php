@@ -19,6 +19,7 @@ return new class extends Migration
             $table->index(['member_id', 'role'], 'idx_aem_member_role');
 
             $table->foreign('member_id', 'fk_accepted_event_members_member_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('event_id', 'fk_accepted_event_members_event_id')->references('id')->on('events')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

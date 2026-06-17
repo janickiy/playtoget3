@@ -13,6 +13,7 @@ use App\Repositories\Concerns\DeletesContentRelations;
 use App\Service\VideoService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use RuntimeException;
 
 class VideoalbumRepository extends BaseRepository
@@ -538,8 +539,10 @@ class VideoalbumRepository extends BaseRepository
     {
         $this->deleteContentRelations('video', (int) $video->id);
 
-        VideoView::query()
-            ->where('video_id', $video->id)
-            ->delete();
+        if (Schema::hasTable('video_views')) {
+            VideoView::query()
+                ->where('video_id', $video->id)
+                ->delete();
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\DTO\Admin\SportBlockData;
 use App\Enums\SportBlockStatus;
 use App\Models\SportBlock;
+use App\Service\ContentCascadeDeleteService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,8 +14,10 @@ class AdminSportBlockRepository extends BaseRepository
     /**
      * Connects модель sport block, с которой работает админский репозиторий.
      */
-    public function __construct(SportBlock $model)
-    {
+    public function __construct(
+        SportBlock $model,
+        private readonly ContentCascadeDeleteService $cascadeDelete,
+    ) {
         parent::__construct($model);
     }
 
@@ -75,5 +78,16 @@ class AdminSportBlockRepository extends BaseRepository
     public function updateFromData(SportBlockData $data): bool
     {
         return $this->update($data->id, $data->toArray());
+    }
+
+    /**
+     * Deletes sport block together with albums, reactions and avatar file.
+     */
+    public function delete(int|string $id): bool
+    {
+        /** @var SportBlock|null $sportBlock */
+        $sportBlock = $this->model->newQuery()->find($id);
+
+        return $sportBlock ? $this->cascadeDelete->deleteSportBlock($sportBlock) : false;
     }
 }
