@@ -11,6 +11,7 @@ use App\Models\PhotoAlbums;
 use App\Models\User;
 use App\Repositories\Concerns\DeletesContentRelations;
 use App\Service\AlbumPhotoStorageService;
+use App\Support\MediaPath;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -601,9 +602,9 @@ class PhotoalbumRepository extends BaseRepository
         $disk = Storage::disk('public');
 
         foreach (array_filter([$photo->small_photo, $photo->photo]) as $filename) {
-            $disk->delete('images/photogallery/' . $type . '/' . $filename);
+            $disk->delete(MediaPath::gallery($type, $filename));
 
-            $legacyPath = public_path('uploads/images/photogallery/' . $type . '/' . $filename);
+            $legacyPath = public_path(MediaPath::galleryLegacy($type, $filename));
             if (is_file($legacyPath)) {
                 @unlink($legacyPath);
             }

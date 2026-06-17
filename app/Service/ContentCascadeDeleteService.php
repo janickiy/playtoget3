@@ -14,6 +14,7 @@ use App\Models\VideoAlbums;
 use App\Repositories\Concerns\DeletesContentRelations;
 use App\Repositories\PhotoalbumRepository;
 use App\Repositories\VideoalbumRepository;
+use App\Support\MediaPath;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -236,11 +237,11 @@ class ContentCascadeDeleteService
 
         foreach ($kinds as $kind) {
             if ($community->avatar) {
-                $this->communityImages->deleteCommunityImage((string) $community->avatar, 'avatar', $kind);
+                $this->communityImages->deleteCommunityImage((string) $community->avatar, MediaPath::communityAvatarDirectory(), $kind);
             }
 
             if ($community->cover_page) {
-                $this->communityImages->deleteCommunityImage((string) $community->cover_page, 'cover_page', $kind);
+                $this->communityImages->deleteCommunityImage((string) $community->cover_page, MediaPath::communityCoverDirectory(), $kind);
             }
         }
     }

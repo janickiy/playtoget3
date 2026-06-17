@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Support\MediaPath;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -31,7 +32,7 @@ class SportBlockAvatarService
 
         $filename = $this->images->hashedFilename($file);
 
-        return $file->storeAs('images/sportblocks/avatar', $filename, 'public') ? $filename : null;
+        return $file->storeAs(MediaPath::storage('sport_block_avatar'), $filename, 'public') ? $filename : null;
     }
 
     /**
@@ -42,9 +43,9 @@ class SportBlockAvatarService
      */
     public function deleteAvatar(string $filename): void
     {
-        Storage::disk('public')->delete('images/sportblocks/avatar/' . $filename);
+        Storage::disk('public')->delete(MediaPath::storage('sport_block_avatar', $filename));
 
-        $legacyPath = public_path('uploads/images/sportblocks/avatar/' . $filename);
+        $legacyPath = public_path(MediaPath::legacy('sport_block_avatar', $filename));
         if (is_file($legacyPath)) {
             @unlink($legacyPath);
         }

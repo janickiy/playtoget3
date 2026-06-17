@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\DTO\Profile\ImageCropData;
 use App\Models\User;
+use App\Support\MediaPath;
 use Illuminate\Support\Facades\Storage;
 use RuntimeException;
 
@@ -91,7 +92,7 @@ class ProfileCoverCropService
         }
 
         $filename = $this->images->temporaryProfileFilename((int) $user->id);
-        $path = 'images/tmp/profile/cover_page/' . $filename;
+        $path = MediaPath::storage('profile_tmp_cover', $filename);
 
         if (! Storage::disk('public')->put($path, $contents)) {
             throw new RuntimeException('Failed to save the image.');

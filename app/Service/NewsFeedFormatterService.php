@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Enums\UserStatus;
+use App\Support\MediaPath;
 use Illuminate\Support\Facades\Storage;
 
 class NewsFeedFormatterService
@@ -19,7 +20,7 @@ class NewsFeedFormatterService
             return asset('frontend/images/noimage.png');
         }
 
-        if ($row->avatar && ($url = $this->publicImageUrl('user/avatar/' . $row->avatar))) {
+        if ($row->avatar && ($url = $this->publicImageUrl(MediaPath::directory('user_avatar', $row->avatar)))) {
             return $url;
         }
 
@@ -51,7 +52,7 @@ class NewsFeedFormatterService
             return asset('frontend/images/noimage.png');
         }
 
-        if ($row->owner_avatar && ($url = $this->publicImageUrl('user/avatar/' . $row->owner_avatar))) {
+        if ($row->owner_avatar && ($url = $this->publicImageUrl(MediaPath::directory('user_avatar', $row->owner_avatar)))) {
             return $url;
         }
 
@@ -84,9 +85,9 @@ class NewsFeedFormatterService
 
         $type = $type ?: 'user';
         $paths = [
-            "photogallery/{$type}/{$file}",
-            "photogallery/user_attach/{$file}",
-            "photogallery/user/{$file}",
+            MediaPath::galleryRelative($type, $file),
+            MediaPath::directory('gallery_user_attach', $file),
+            MediaPath::directory('gallery_user', $file),
         ];
 
         foreach ($paths as $path) {
@@ -106,10 +107,17 @@ class NewsFeedFormatterService
      */
     public function publicImageUrl(string $path): ?string
     {
-        $path = 'images/' . ltrim($path, '/');
+        $relativePath = ltrim($path, '/');
+        $path = MediaPath::fromRelative($relativePath);
 
-        return Storage::disk('public')->exists($path)
-            ? Storage::disk('public')->url($path)
+        if (Storage::disk('public')->exists($path)) {
+            return Storage::disk('public')->url($path);
+        }
+
+        $legacyPath = MediaPath::legacyFromRelative($relativePath);
+
+        return is_file(public_path($legacyPath))
+            ? asset($legacyPath)
             : null;
     }
 

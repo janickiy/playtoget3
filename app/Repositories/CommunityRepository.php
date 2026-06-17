@@ -20,6 +20,7 @@ use App\Models\SportType;
 use App\Models\User;
 use App\Repositories\Concerns\SyncsGeoTargets;
 use App\Service\CommunityImageService;
+use App\Support\MediaPath;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -1305,8 +1306,8 @@ class CommunityRepository extends BaseRepository
     public function createTeam(User $owner, CommunityData $data): Community
     {
         return DB::transaction(function () use ($owner, $data): Community {
-            $avatar = $this->images->storeCommunityImage($data->avatarFile, 'avatar');
-            $cover = $this->images->storeCommunityImage($data->coverFile, 'cover_page');
+            $avatar = $this->images->storeCommunityImage($data->avatarFile, MediaPath::communityAvatarDirectory());
+            $cover = $this->images->storeCommunityImage($data->coverFile, MediaPath::communityCoverDirectory());
 
             /** @var Community $team */
             $team = $this->model->newQuery()->create([
@@ -1351,8 +1352,8 @@ class CommunityRepository extends BaseRepository
     public function createGroup(User $owner, CommunityData $data): Community
     {
         return DB::transaction(function () use ($owner, $data): Community {
-            $avatar = $this->images->storeCommunityImage($data->avatarFile, 'avatar', 'group');
-            $cover = $this->images->storeCommunityImage($data->coverFile, 'cover_page', 'group');
+            $avatar = $this->images->storeCommunityImage($data->avatarFile, MediaPath::communityAvatarDirectory(), 'group');
+            $cover = $this->images->storeCommunityImage($data->coverFile, MediaPath::communityCoverDirectory(), 'group');
 
             /** @var Community $group */
             $group = $this->model->newQuery()->create([
@@ -1399,8 +1400,8 @@ class CommunityRepository extends BaseRepository
         return DB::transaction(function () use ($team, $data): bool {
             $oldAvatar = (string) $team->avatar;
             $oldCover = (string) $team->cover_page;
-            $avatar = $this->images->storeCommunityImage($data->avatarFile, 'avatar');
-            $cover = $this->images->storeCommunityImage($data->coverFile, 'cover_page');
+            $avatar = $this->images->storeCommunityImage($data->avatarFile, MediaPath::communityAvatarDirectory());
+            $cover = $this->images->storeCommunityImage($data->coverFile, MediaPath::communityCoverDirectory());
             $fields = [
                 'name' => $data->name,
                 'about' => $data->about,
@@ -1419,11 +1420,11 @@ class CommunityRepository extends BaseRepository
             $team->fill($fields)->save();
 
             if ($avatar && $oldAvatar) {
-                $this->images->deleteCommunityImage($oldAvatar, 'avatar');
+                $this->images->deleteCommunityImage($oldAvatar, MediaPath::communityAvatarDirectory());
             }
 
             if ($cover && $oldCover) {
-                $this->images->deleteCommunityImage($oldCover, 'cover_page');
+                $this->images->deleteCommunityImage($oldCover, MediaPath::communityCoverDirectory());
             }
 
             $this->settings($team)->fill([
@@ -1452,8 +1453,8 @@ class CommunityRepository extends BaseRepository
         return DB::transaction(function () use ($group, $data): bool {
             $oldAvatar = (string) $group->avatar;
             $oldCover = (string) $group->cover_page;
-            $avatar = $this->images->storeCommunityImage($data->avatarFile, 'avatar', 'group');
-            $cover = $this->images->storeCommunityImage($data->coverFile, 'cover_page', 'group');
+            $avatar = $this->images->storeCommunityImage($data->avatarFile, MediaPath::communityAvatarDirectory(), 'group');
+            $cover = $this->images->storeCommunityImage($data->coverFile, MediaPath::communityCoverDirectory(), 'group');
             $fields = [
                 'name' => $data->name,
                 'about' => $data->about,
@@ -1472,11 +1473,11 @@ class CommunityRepository extends BaseRepository
             $group->fill($fields)->save();
 
             if ($avatar && $oldAvatar) {
-                $this->images->deleteCommunityImage($oldAvatar, 'avatar', 'group');
+                $this->images->deleteCommunityImage($oldAvatar, MediaPath::communityAvatarDirectory(), 'group');
             }
 
             if ($cover && $oldCover) {
-                $this->images->deleteCommunityImage($oldCover, 'cover_page', 'group');
+                $this->images->deleteCommunityImage($oldCover, MediaPath::communityCoverDirectory(), 'group');
             }
 
             $this->settings($group)->fill([

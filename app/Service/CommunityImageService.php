@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Support\MediaPath;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -33,7 +34,7 @@ class CommunityImageService
 
         $filename = $this->images->hashedFilename($file);
 
-        return Storage::disk('public')->putFileAs('images/' . $kind . 'content/' . $directory, $file, $filename)
+        return Storage::disk('public')->putFileAs(MediaPath::community($kind, $directory), $file, $filename)
             ? $filename
             : null;
     }
@@ -48,9 +49,9 @@ class CommunityImageService
      */
     public function deleteCommunityImage(string $filename, string $directory, string $kind = 'team'): void
     {
-        Storage::disk('public')->delete('images/' . $kind . 'content/' . $directory . '/' . $filename);
+        Storage::disk('public')->delete(MediaPath::community($kind, $directory, $filename));
 
-        $legacyPath = public_path('uploads/images/' . $kind . 'content/' . $directory . '/' . $filename);
+        $legacyPath = public_path(MediaPath::communityLegacy($kind, $directory, $filename));
         if (is_file($legacyPath)) {
             @unlink($legacyPath);
         }

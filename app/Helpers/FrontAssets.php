@@ -7,6 +7,7 @@ use App\Models\Photo;
 use App\Models\Community;
 use App\Models\SportBlock;
 use App\Models\User;
+use App\Support\MediaPath;
 use Illuminate\Support\Facades\Storage;
 
 class FrontAssets
@@ -17,7 +18,7 @@ class FrontAssets
             return asset('frontend/images/noimage.png');
         }
 
-        if ($user->avatar && ($url = self::publicImageUrl('user/avatar/' . $user->avatar))) {
+        if ($user->avatar && ($url = self::publicImageUrl(MediaPath::directory('user_avatar', $user->avatar)))) {
             return $url;
         }
 
@@ -30,7 +31,7 @@ class FrontAssets
             return asset('frontend/images/noimage.png');
         }
 
-        if ($user->avatar && ($url = self::publicImageUrl('user/avatar/' . $user->avatar))) {
+        if ($user->avatar && ($url = self::publicImageUrl(MediaPath::directory('user_avatar', $user->avatar)))) {
             return $url;
         }
 
@@ -39,7 +40,7 @@ class FrontAssets
 
     public static function userCover(?User $user): string
     {
-        if ($user && $user->cover_page && ($url = self::publicImageUrl('user/cover_page/' . $user->cover_page))) {
+        if ($user && $user->cover_page && ($url = self::publicImageUrl(MediaPath::directory('user_cover', $user->cover_page)))) {
             return $url;
         }
 
@@ -48,7 +49,7 @@ class FrontAssets
 
     public static function eventCover(?Event $event): string
     {
-        if ($event && $event->cover_page && ($url = self::publicImageUrl('events/cover_page/' . $event->cover_page))) {
+        if ($event && $event->cover_page && ($url = self::publicImageUrl(MediaPath::directory('event_cover', $event->cover_page)))) {
             return $url;
         }
 
@@ -57,7 +58,7 @@ class FrontAssets
 
     public static function eventAvatar(?Event $event): string
     {
-        if ($event && $event->cover_page && ($url = self::publicImageUrl('events/cover_page/' . $event->cover_page))) {
+        if ($event && $event->cover_page && ($url = self::publicImageUrl(MediaPath::directory('event_cover', $event->cover_page)))) {
             return $url;
         }
 
@@ -78,14 +79,14 @@ class FrontAssets
         if ($community && $community->avatar) {
             $paths = match ($community->type) {
                 'team' => [
-                    'groupcontent/avatar/' . $community->avatar,
-                    'teamcontent/avatar/' . $community->avatar,
+                    MediaPath::communityRelative('group', MediaPath::communityAvatarDirectory(), $community->avatar),
+                    MediaPath::communityRelative('team', MediaPath::communityAvatarDirectory(), $community->avatar),
                 ],
                 'group' => [
-                    'groupcontent/avatar/' . $community->avatar,
+                    MediaPath::communityRelative('group', MediaPath::communityAvatarDirectory(), $community->avatar),
                 ],
                 default => [
-                    $community->type . 'content/avatar/' . $community->avatar,
+                    MediaPath::communityRelative($community->type, MediaPath::communityAvatarDirectory(), $community->avatar),
                 ],
             };
 
@@ -101,7 +102,16 @@ class FrontAssets
 
     public static function communityCover(?Community $community): string
     {
-        if ($community && $community->isVisible() && $community->cover_page && ($url = self::publicImageUrl($community->type . 'content/cover_page/' . $community->cover_page))) {
+        if (
+            $community
+            && $community->isVisible()
+            && $community->cover_page
+            && ($url = self::publicImageUrl(MediaPath::communityRelative(
+                $community->type,
+                MediaPath::communityCoverDirectory(),
+                $community->cover_page,
+            )))
+        ) {
             return $url;
         }
 
@@ -110,7 +120,7 @@ class FrontAssets
 
     public static function sportBlockAvatar(?SportBlock $sportBlock): string
     {
-        if ($sportBlock && $sportBlock->avatar && ($url = self::publicImageUrl('sportblocks/avatar/' . $sportBlock->avatar))) {
+        if ($sportBlock && $sportBlock->avatar && ($url = self::publicImageUrl(MediaPath::directory('sport_block_avatar', $sportBlock->avatar)))) {
             return $url;
         }
 
@@ -131,11 +141,11 @@ class FrontAssets
 
         $type = $photo->album?->photoalbumable_type ?: 'user';
         $paths = [
-            "photogallery/{$type}/{$file}",
-            "photogallery/user_attach/{$file}",
-            "photogallery/user/{$file}",
-            "attachments/comment/{$file}",
-            "attachments/message/{$file}",
+            MediaPath::galleryRelative($type, $file),
+            MediaPath::directory('gallery_user_attach', $file),
+            MediaPath::directory('gallery_user', $file),
+            MediaPath::directory('attachment_comment', $file),
+            MediaPath::directory('attachment_message', $file),
         ];
 
         foreach ($paths as $path) {
@@ -149,13 +159,14 @@ class FrontAssets
 
     private static function publicImageUrl(string $path): ?string
     {
-        $path = 'images/' . ltrim($path, '/');
+        $relativePath = ltrim($path, '/');
+        $path = MediaPath::fromRelative($relativePath);
 
         if (Storage::disk('public')->exists($path)) {
             return Storage::disk('public')->url($path);
         }
 
-        $legacyPath = 'uploads/' . $path;
+        $legacyPath = MediaPath::legacyFromRelative($relativePath);
 
         return is_file(public_path($legacyPath))
             ? asset($legacyPath)

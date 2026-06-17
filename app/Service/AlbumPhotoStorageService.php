@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Models\PhotoAlbums;
 use App\Models\User;
+use App\Support\MediaPath;
 use GdImage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -36,7 +37,7 @@ class AlbumPhotoStorageService
     {
         $filename = $this->images->hashedFilename($file);
         $smallFilename = 's_' . $filename;
-        $directory = 'images/photogallery/' . ($albumType ?: 'user');
+        $directory = MediaPath::gallery($albumType);
 
         $source = $this->images->imageResource($file, true);
         $original = $this->resizedImageContents($source, $file->getMimeType(), 800, null);
@@ -78,7 +79,7 @@ class AlbumPhotoStorageService
 
         $filename = $this->images->randomFilename($file);
         $smallFilename = 's_' . $filename;
-        $directory = 'images/photogallery/user_attach';
+        $directory = MediaPath::storage('gallery_user_attach');
         $contents = file_get_contents($file->getRealPath());
 
         if ($contents === false) {

@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\DTO\Profile\ImageCropData;
 use App\Models\User;
+use App\Support\MediaPath;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use RuntimeException;
@@ -75,7 +76,7 @@ class ProfileImageService
         }
 
         $filename = $this->images->temporaryProfileFilename((int) $user->id);
-        $path = 'images/tmp/profile/avatar/' . $filename;
+        $path = MediaPath::storage('profile_tmp_avatar', $filename);
 
         if (! Storage::disk('public')->put($path, $contents)) {
             throw new RuntimeException('Failed to save the image.');
@@ -98,7 +99,7 @@ class ProfileImageService
     public function storeUserImage(UploadedFile $file, string $directory, int $userId): string
     {
         $filename = $this->images->userScopedFilename($file, $userId);
-        $path = 'images/' . trim($directory, '/') . '/' . $filename;
+        $path = MediaPath::fromRelative($directory, $filename);
         $contents = file_get_contents($file->getRealPath());
 
         if ($contents === false || ! Storage::disk('public')->put($path, $contents)) {
@@ -124,8 +125,8 @@ class ProfileImageService
         return $this->promoteTemporaryImage(
             $temporaryAvatar,
             $userId,
-            'images/tmp/profile/avatar/',
-            'images/user/avatar/',
+            MediaPath::storage('profile_tmp_avatar'),
+            MediaPath::storage('user_avatar'),
             'Invalid avatar filename.',
             'Avatar file not found.',
             'Failed to save avatar.',
@@ -148,8 +149,8 @@ class ProfileImageService
         return $this->promoteTemporaryImage(
             $temporaryCover,
             $userId,
-            'images/tmp/profile/cover_page/',
-            'images/user/cover_page/',
+            MediaPath::storage('profile_tmp_cover'),
+            MediaPath::storage('user_cover'),
             'Invalid cover filename.',
             'Cover file not found.',
             'Failed to save cover.',
@@ -169,7 +170,7 @@ class ProfileImageService
             return;
         }
 
-        Storage::disk('public')->delete('images/' . trim($directory, '/') . '/' . $filename);
+        Storage::disk('public')->delete(MediaPath::fromRelative($directory, $filename));
     }
 
     /**
@@ -200,14 +201,14 @@ class ProfileImageService
         }
 
         $disk = Storage::disk('public');
-        $source = $sourceDirectory . $filename;
+        $source = rtrim($sourceDirectory, '/') . '/' . $filename;
 
         if (! $disk->exists($source)) {
             throw new RuntimeException($missingFileMessage);
         }
 
         $targetFilename = sprintf('%d_%s', $userId, preg_replace('/^\d+_/', '', $filename));
-        $target = $targetDirectory . $targetFilename;
+        $target = rtrim($targetDirectory, '/') . '/' . $targetFilename;
 
         if (! $disk->copy($source, $target)) {
             throw new RuntimeException($copyFailedMessage);

@@ -19,6 +19,7 @@ use App\Models\Share;
 use App\Models\User;
 use App\Models\UserSetting;
 use App\Service\ProfileImageService;
+use App\Support\MediaPath;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -282,7 +283,7 @@ class ProfileRepository extends BaseRepository
 
         $newAvatar = $this->images->promoteTemporaryAvatar($data->temporaryAvatar, $user->id);
         $newCover = $this->images->promoteTemporaryCover($data->temporaryCover, $user->id)
-            ?? ($data->coverFile ? $this->images->storeUserImage($data->coverFile, 'user/cover_page', $user->id) : null);
+            ?? ($data->coverFile ? $this->images->storeUserImage($data->coverFile, MediaPath::directory('user_cover'), $user->id) : null);
         $oldAvatar = null;
         $oldCover = null;
 
@@ -308,14 +309,14 @@ class ProfileRepository extends BaseRepository
                 $settings->save();
             });
         } catch (\Throwable $exception) {
-            $this->images->deleteUserImage('user/avatar', $newAvatar);
-            $this->images->deleteUserImage('user/cover_page', $newCover);
+            $this->images->deleteUserImage(MediaPath::directory('user_avatar'), $newAvatar);
+            $this->images->deleteUserImage(MediaPath::directory('user_cover'), $newCover);
 
             throw $exception;
         }
 
-        $this->images->deleteUserImage('user/avatar', $oldAvatar);
-        $this->images->deleteUserImage('user/cover_page', $oldCover);
+        $this->images->deleteUserImage(MediaPath::directory('user_avatar'), $oldAvatar);
+        $this->images->deleteUserImage(MediaPath::directory('user_cover'), $oldCover);
     }
 
     /**

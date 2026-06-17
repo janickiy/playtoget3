@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Support\MediaPath;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -31,7 +32,7 @@ class EventCoverService
 
         $filename = $this->images->hashedFilename($file);
 
-        return Storage::disk('public')->putFileAs('images/events/cover_page', $file, $filename)
+        return Storage::disk('public')->putFileAs(MediaPath::storage('event_cover'), $file, $filename)
             ? $filename
             : null;
     }
@@ -44,9 +45,9 @@ class EventCoverService
      */
     public function deleteCover(string $filename): void
     {
-        Storage::disk('public')->delete('images/events/cover_page/' . $filename);
+        Storage::disk('public')->delete(MediaPath::storage('event_cover', $filename));
 
-        $legacyPath = public_path('uploads/images/events/cover_page/' . $filename);
+        $legacyPath = public_path(MediaPath::legacy('event_cover', $filename));
         if (is_file($legacyPath)) {
             @unlink($legacyPath);
         }
