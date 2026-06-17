@@ -90,9 +90,9 @@
                             <li class="nav-item">
                                 <a href="{{ route('admin.dashboard.index') }}"
                                    class="nav-link{{ Request::is('cp') ? ' active' : '' }}"
-                                   title="Home">
+                                   title="Dashboard">
                                     <i class="nav-icon fas fa-home"></i>
-                                    <p>Home</p>
+                                    <p>Dashboard</p>
                                 </a>
                             </li>
 

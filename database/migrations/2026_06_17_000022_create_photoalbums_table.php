@@ -15,7 +15,6 @@ return new class extends Migration
             $table->timestamp('updated_at')->nullable();
             $table->string('photoalbumable_type', 255)->nullable();
             $table->integer('owner_id');
-            $table->timestamps();
 
             $table->index('owner_id', 'id_owner');
             $table->index('owner_id', 'id_photoalbum_type');
