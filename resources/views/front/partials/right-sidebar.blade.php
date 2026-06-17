@@ -3,7 +3,12 @@
 <div class="right-sitebar">
     <ul>
         <li>
-            <a href="{{ route('front.playgrounds.index') }}">Playgrounds @if ($frontLayout['playgroundsCount'] > 0)<span>{{ $frontLayout['playgroundsCount'] }}</span>@endif</a>
+            <a href="{{ route('front.playgrounds.index') }}">
+                Playgrounds
+                @if ($frontLayout['playgroundsCount'] > 0)
+                    <span>{{ $frontLayout['playgroundsCount'] }}</span>
+                @endif
+            </a>
             <ul class="sub-menu">
                 <li>
                     <div class="sub-content">
@@ -12,7 +17,9 @@
                                 <div class="wrap_img_right"><img src="{{ FrontAssets::sportBlockAvatar($item) }}" alt=""></div>
                                 <div class="text-right-block">
                                     <a href="{{ route('front.playgrounds.index', ['sportBlock' => $item->id]) }}"><h5>{{ $item->name }}</h5></a>
-                                    @if ($item->place)<p>{{ $item->place }}</p>@endif
+                                    @if ($item->place)
+                                        <p>{{ $item->place }}</p>
+                                    @endif
                                 </div>
                                 <div class="crearfix"></div>
                             </div>
@@ -22,7 +29,12 @@
             </ul>
         </li>
         <li>
-            <a href="{{ route('front.shops.index') }}">Shops @if ($frontLayout['shopsCount'] > 0)<span>{{ $frontLayout['shopsCount'] }}</span>@endif</a>
+            <a href="{{ route('front.shops.index') }}">
+                Shops
+                @if ($frontLayout['shopsCount'] > 0)
+                    <span>{{ $frontLayout['shopsCount'] }}</span>
+                @endif
+            </a>
             <ul class="sub-menu">
                 <li>
                     <div class="sub-content">
@@ -31,7 +43,9 @@
                                 <div class="wrap_img_right"><img src="{{ FrontAssets::sportBlockAvatar($item) }}" alt=""></div>
                                 <div class="text-right-block">
                                     <a href="{{ route('front.shops.index', ['sportBlock' => $item->id]) }}"><h5>{{ $item->name }}</h5></a>
-                                    @if ($item->place)<p>{{ $item->place }}</p>@endif
+                                    @if ($item->place)
+                                        <p>{{ $item->place }}</p>
+                                    @endif
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -41,7 +55,12 @@
             </ul>
         </li>
         <li>
-            <a href="{{ route('front.fitness.index') }}">Fitness @if ($frontLayout['fitnessCount'] > 0)<span>{{ $frontLayout['fitnessCount'] }}</span>@endif</a>
+            <a href="{{ route('front.fitness.index') }}">
+                Fitness
+                @if ($frontLayout['fitnessCount'] > 0)
+                    <span>{{ $frontLayout['fitnessCount'] }}</span>
+                @endif
+            </a>
             <ul class="sub-menu">
                 <li>
                     <div class="sub-content">
@@ -50,7 +69,9 @@
                                 <div class="wrap_img_right"><img src="{{ FrontAssets::sportBlockAvatar($item) }}" alt=""></div>
                                 <div class="text-right-block">
                                     <a href="{{ route('front.fitness.index', ['sportBlock' => $item->id]) }}"><h5>{{ $item->name }}</h5></a>
-                                    @if ($item->place)<p>{{ $item->place }}</p>@endif
+                                    @if ($item->place)
+                                        <p>{{ $item->place }}</p>
+                                    @endif
                                 </div>
                                 <div class="crearfix"></div>
                             </div>
