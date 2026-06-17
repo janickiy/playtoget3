@@ -27,20 +27,19 @@
     <!-- /.login-logo -->
     <div class="card card-outline card-primary">
         <div class="card-header text-center">
-            <b>Admin</b>LTE
+            <b>PlayToGet</b>
         </div>
         <div class="card-body">
-            <p class="login-box-msg">Sign in to start your session</p>
 
             <form action="{{ route('login.submit') }}" method="post">
                 @csrf
 
 
                 <div class="input-group mb-3">
-                    <input type="text" name="login"  class="form-control" placeholder="Email">
+                    <input type="text" name="login"  class="form-control" placeholder="Login">
                     <div class="input-group-append">
                         <div class="input-group-text">
-                            <span class="fas fa-envelope"></span>
+                            <span class="fas fa-user"></span>
                         </div>
                     </div>
                     @if ($errors->has('login'))
