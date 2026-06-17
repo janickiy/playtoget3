@@ -9,7 +9,7 @@ class UserSetting extends BaseModel
 {
     use StaticTableName;
 
-    protected $table = 'usersettings';
+    protected $table = 'user_settings';
 
     protected $fillable = [
         'permission_send_message',

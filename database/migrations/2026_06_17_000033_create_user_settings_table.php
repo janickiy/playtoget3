@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('usersettings', function (Blueprint $table): void {
+        Schema::create('user_settings', function (Blueprint $table): void {
             $table->integer('id', true);
             $table->tinyInteger('permission_send_message')->default(0);
             $table->tinyInteger('permission_view_profile')->default(0);
@@ -31,12 +31,12 @@ return new class extends Migration
 
             $table->index('user_id', 'id_user');
 
-            $table->foreign('user_id', 'fk_usersettings_user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('user_id', 'fk_user_settings_user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('usersettings');
+        Schema::dropIfExists('user_settings');
     }
 };
