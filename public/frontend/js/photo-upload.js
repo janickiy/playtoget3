@@ -33,10 +33,10 @@
 
     function formatSize(bytes) {
         if (bytes >= 1048576) {
-            return (bytes / 1048576).toFixed(1) + ' МБ';
+            return (bytes / 1048576).toFixed(1) + ' MB';
         }
 
-        return Math.ceil(bytes / 1024) + ' КБ';
+        return Math.ceil(bytes / 1024) + ' KB';
     }
 
     function fileExtension(name) {
@@ -73,7 +73,7 @@
         $('#' + id).remove();
 
         if (!queue.length) {
-            setStatus('Выберите одну или несколько фотографий.');
+            setStatus('Select one or more photos.');
         }
     }
 
@@ -88,13 +88,13 @@
                 '<div class="attach big photo-upload-preview">' +
                     '<img alt="">' +
                     '<b><span class="photo-upload-percent">0%</span></b>' +
-                    '<span class="icons-hid"><i class="no_attach" data-tooltip="Не добавлять" data-num="' + id + '">' +
+                    '<span class="icons-hid"><i class="no_attach" data-tooltip="Do not add" data-num="' + id + '">' +
                         '<img src="/frontend/images/icon-krest.png" alt="">' +
                     '</i></span>' +
                 '</div>' +
                 '<div class="photo-upload-meta">' +
                     '<div class="photo-upload-name">' + escapeHtml(file.name) + ' <span>' + formatSize(file.size) + '</span></div>' +
-                    '<textarea class="form-control comment_attach input_hastags" placeholder="Комментарий к фото" data-num="' + hashId + '"></textarea>' +
+                    '<textarea class="form-control comment_attach input_hastags" placeholder="Photo comment" data-num="' + hashId + '"></textarea>' +
                     '<div class="hashtags" data-num="' + hashId + '"></div>' +
                     '<div class="photo-upload-progress"><div class="photo-upload-progress-bar"></div></div>' +
                     '<div class="photo-upload-message"></div>' +
@@ -115,12 +115,12 @@
 
         $.each(files, function (_, file) {
             if (!isImage(file)) {
-                setStatus('Файл "' + file.name + '" не добавлен: допустимы только JPG, PNG и GIF.', 'error');
+                setStatus('File "' + file.name + '" was not added: only JPG, PNG, and GIF are allowed.', 'error');
                 return;
             }
 
             if (file.size > maxFileSize) {
-                setStatus('Файл "' + file.name + '" не добавлен: размер больше 32 МБ.', 'error');
+                setStatus('File "' + file.name + '" was not added: size exceeds 32 MB.', 'error');
                 return;
             }
 
@@ -129,7 +129,7 @@
         });
 
         if (added) {
-            setStatus('Файлов в очереди: ' + queue.length + '.');
+            setStatus('Files in queue: ' + queue.length + '.');
         }
     }
 
@@ -158,23 +158,23 @@
                 try {
                     response = JSON.parse(xhr.responseText);
                 } catch (error) {
-                    reject('Некорректный ответ сервера.');
+                    reject('Invalid server response.');
                     return;
                 }
 
                 if (xhr.status >= 200 && xhr.status < 300 && response.info && !response.error) {
                     setProgress(item.id, 100);
                     $item.addClass('photo-upload-item-success');
-                    $item.find('.photo-upload-message').text('Загружено');
+                    $item.find('.photo-upload-message').text('Uploaded');
                     resolve(response);
                     return;
                 }
 
-                reject(response.error || 'Ошибка загрузки.');
+                reject(response.error || 'Upload error.');
             };
 
             xhr.onerror = function () {
-                reject('Ошибка соединения с сервером.');
+                reject('Server connection error.');
             };
 
             xhr.send(formData);
@@ -187,29 +187,29 @@
         let failed = 0;
 
         if (!queue.length) {
-            setStatus('Сначала выберите фотографии.', 'error');
+            setStatus('Select photos first.', 'error');
             return;
         }
 
         if (!albumId) {
-            setStatus('Выберите альбом для загрузки.', 'error');
+            setStatus('Choose an album for upload.', 'error');
             return;
         }
 
-        $uploadButton.addClass('disabled').text('Загрузка...');
+        $uploadButton.addClass('disabled').text('Loading...');
         $pickButton.addClass('disabled');
-        setStatus('Загрузка фото...');
+        setStatus('Uploading photos...');
 
         function next() {
             if (current >= queue.length) {
                 if (failed) {
-                    $uploadButton.removeClass('disabled').text('Загрузить фото');
+                    $uploadButton.removeClass('disabled').text('Upload photo');
                     $pickButton.removeClass('disabled');
-                    setStatus('Загрузка завершена с ошибками. Не загружено: ' + failed + '.', 'error');
+                    setStatus('Upload completed with errors. Not uploaded: ' + failed + '.', 'error');
                     return;
                 }
 
-                setStatus('Фотографии загружены.', 'success');
+                setStatus('Photos uploaded.', 'success');
                 window.location = redirectBase + '/' + albumId;
                 return;
             }
@@ -230,7 +230,7 @@
     }
 
     if (!supportsHtml5Upload()) {
-        setStatus('Ваш браузер не поддерживает HTML5-загрузку файлов.', 'error');
+        setStatus('Your browser does not support HTML5 file uploads.', 'error');
         $pickButton.addClass('disabled');
         $uploadButton.addClass('disabled');
         return;

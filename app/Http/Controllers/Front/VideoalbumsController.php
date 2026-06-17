@@ -19,7 +19,7 @@ class VideoalbumsController extends Controller
     private const ALBUM_VIDEOS_LIMIT = 6;
 
     /**
-     * Показывает видеоальбомы текущего пользователя.
+     * Shows video albums current user.
      */
     public function index(
         VideoalbumRepository $videoAlbums,
@@ -37,7 +37,7 @@ class VideoalbumsController extends Controller
     }
 
     /**
-     * Показывает видеоальбомы выбранного пользователя.
+     * Shows video albums selected user.
      */
     public function user(
         int                  $user,
@@ -50,7 +50,7 @@ class VideoalbumsController extends Controller
     }
 
     /**
-     * Показывает видео выбранного видеоальбома.
+     * Shows video selected video album.
      *
      * @param int $album
      * @param VideoalbumRepository $videoAlbums
@@ -81,7 +81,7 @@ class VideoalbumsController extends Controller
             : collect();
 
         return view('front.videoalbums.show', [
-            'title' => 'Видеоальбомы',
+            'title' => 'Video albums',
             'hideTopProfile' => true,
             'viewer' => $viewer,
             'profileUser' => $profile,
@@ -99,7 +99,7 @@ class VideoalbumsController extends Controller
     }
 
     /**
-     * Показывает форму добавления видео в доступный альбом.
+     * Shows form adding video в accessный album.
      *
      * @param VideoalbumRepository $videoAlbums
      * @return View|RedirectResponse
@@ -115,7 +115,7 @@ class VideoalbumsController extends Controller
         $videoAlbums->ensureDefaultAlbum($viewer);
 
         return view('front.videoalbums.add-video', [
-            'title' => 'Добавление видео',
+            'title' => 'Add video',
             'viewer' => $viewer,
             'profileLayout' => $this->profileLayout($viewer),
             'albums' => $videoAlbums->editableAlbumsFor($viewer),
@@ -124,7 +124,7 @@ class VideoalbumsController extends Controller
 
 
     /**
-     * Валидирует ссылку и добавляет видео в выбранный альбом.
+     * Валидирует link и добавляет video в выбранный album.
      *
      * @param StoreVideoRequest $request
      * @param VideoalbumRepository $videoAlbums
@@ -158,7 +158,7 @@ class VideoalbumsController extends Controller
     }
 
     /**
-     * Показывает форму создания видеоальбома.
+     * Shows form creation video album.
      */
     public function create(): View|RedirectResponse
     {
@@ -169,17 +169,17 @@ class VideoalbumsController extends Controller
         }
 
         return view('front.videoalbums.form', [
-            'title' => 'Создание видеоальбома',
+            'title' => 'Create video album',
             'viewer' => $viewer,
             'profileLayout' => $this->profileLayout($viewer),
             'action' => route('front.videoalbums.store'),
             'name' => old('name', ''),
-            'button' => 'Создать',
+            'button' => 'Create',
         ]);
     }
 
     /**
-     * Создает видеоальбом из валидированных данных формы.
+     * Creates video album из валидированных data form.
      *
      * @param AlbumRequest $request
      * @param VideoalbumRepository $videoAlbums
@@ -197,7 +197,7 @@ class VideoalbumsController extends Controller
 
         if ($videoAlbums->nameExists($viewer, $albumData->name)) {
             return back()
-                ->withErrors(['name' => 'Альбом с таким названием уже существует.'])
+                ->withErrors(['name' => 'An album with this name already exists.'])
                 ->withInput();
         }
 
@@ -207,7 +207,7 @@ class VideoalbumsController extends Controller
     }
 
     /**
-     * Проверяет права и показывает форму редактирования видеоальбома.
+     * Checks permissions и показывает form editing video album.
      *
      * @param int $album
      * @param VideoalbumRepository $videoAlbums
@@ -225,18 +225,18 @@ class VideoalbumsController extends Controller
         }
 
         return view('front.videoalbums.form', [
-            'title' => 'Редактирование видеоальбома',
+            'title' => 'Edit video album',
             'viewer' => $viewer,
             'profileLayout' => $this->profileLayout($viewer),
             'videoAlbum' => $videoAlbum,
             'action' => route('front.videoalbums.update', ['album' => $videoAlbum->id]),
             'name' => old('name', $videoAlbum->name),
-            'button' => 'Редактировать',
+            'button' => 'Edit',
         ]);
     }
 
     /**
-     * Проверяет права и сохраняет изменения видеоальбома
+     * Checks permissions и сохраняет изменения video album
      *
      * @param int $album
      * @param AlbumRequest $request
@@ -258,7 +258,7 @@ class VideoalbumsController extends Controller
 
         if ($videoAlbums->nameExists($viewer, $albumData->name, $videoAlbum->id)) {
             return back()
-                ->withErrors(['name' => 'Альбом с таким названием уже существует.'])
+                ->withErrors(['name' => 'An album with this name already exists.'])
                 ->withInput();
         }
 
@@ -268,7 +268,7 @@ class VideoalbumsController extends Controller
     }
 
     /**
-     * Проверяет права и удаляет видеоальбом.
+     * Checks permissions и deletes video album.
      *
      * @param int $album
      * @param VideoalbumRepository $videoAlbums
@@ -291,7 +291,7 @@ class VideoalbumsController extends Controller
     }
 
     /**
-     * Готовит общую выдачу видеоальбомов для текущего или выбранного пользователя.
+     * Готовит общую listing video albums для current or selected user.
      *
      * @param int $userId
      * @param VideoalbumRepository $videoAlbums
@@ -321,7 +321,7 @@ class VideoalbumsController extends Controller
             : collect();
 
         return view('front.videoalbums.index', [
-            'title' => 'Видеоальбомы',
+            'title' => 'Video albums',
             'hideTopProfile' => true,
             'viewer' => $viewer,
             'profileUser' => $profile,
@@ -343,7 +343,7 @@ class VideoalbumsController extends Controller
     }
 
     /**
-     * Готовит данные верхнего блока профиля для страниц видеоальбомов.
+     * Готовит data верхнего block профиля для страниц video albums.
      */
     private function profileLayout($user): array
     {

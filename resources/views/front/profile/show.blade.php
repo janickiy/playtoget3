@@ -4,17 +4,17 @@
     @include('front.profile._top')
 
     <div class="photo-caption front-section-title">
-        <h3>Профиль</h3>
+        <h3>Profile</h3>
     </div>
 
     @if ($profileUser->isBlocked())
-        <p class="no_message">Пользователь заблокирован.</p>
+        <p class="no_message">User blocked.</p>
     @elseif ($profileUser->isDeleted())
-        <p class="no_message">Пользователь удален.</p>
+        <p class="no_message">User is deleted.</p>
     @elseif ($permissions['blocked_by_profile'] ?? false)
-        <p class="no_message">Пользователь ограничил доступ к своей странице для вас.</p>
+        <p class="no_message">The user has restricted access to their page for you.</p>
     @elseif (! $permissions['profile'])
-        <p class="no_message">Профиль пользователя доступен только друзьям.</p>
+        <p class="no_message">This profile is available to friends only.</p>
     @elseif ($permissions['wall'])
         @if ($viewer)
             <div class="message-content">
@@ -25,12 +25,12 @@
                     <input type="hidden" name="user_id" value="{{ $viewer->id }}">
                     <input type="hidden" name="parent_id" value="0">
                     <input type="file" class="file_name" name="file_name[]" data-num="{{ $profileUser->id }}" multiple>
-                    <textarea id="comment" name="comment" data-num="{{ $profileUser->id }}" class="ahref_input" placeholder="Что у Вас интересного?"></textarea>
+                    <textarea id="comment" name="comment" data-num="{{ $profileUser->id }}" class="ahref_input" placeholder="What's interesting?"></textarea>
                     <div class="smile-files">
                         <a id="smilesBtn" class="smile smilesBtn" data-num="{{ $profileUser->id }}">
                             <img src="{{ asset('frontend/images/smile.png') }}" alt="">
                         </a>
-                        <a href="#" class="files" data-num="{{ $profileUser->id }}" data-tooltip="Прикрепить изображение">
+                        <a href="#" class="files" data-num="{{ $profileUser->id }}" data-tooltip="Attach image">
                             <img src="{{ asset('frontend/images/files.png') }}" alt="">
                         </a>
                         <div class="smilesChoose" data-num="{{ $profileUser->id }}"></div>
@@ -55,7 +55,7 @@
             @include('front.profile._comments', ['comments' => $comments, 'viewer' => $viewer])
         </div>
     @else
-        <p class="no_message">Стена пользователя скрыта настройками приватности.</p>
+        <p class="no_message">The user wall is hidden by privacy settings.</p>
     @endif
 @endsection
 
@@ -63,7 +63,7 @@
     <script>
         window.content_id = '{{ $profileUser->id }}';
         window.id_profile = '{{ $profileUser->id }}';
-        window.placeholder = 'Ваш комментарий';
+        window.placeholder = 'Your comment';
         window.profileCommentsEndpoint = '{{ route('front.ajax.handle', ['action' => 'get_comments']) }}';
         window.profileCommentsHasMore = {{ $hasMoreComments ? 'true' : 'false' }};
     </script>

@@ -11,9 +11,9 @@ enum FeedbackStatus: int
     public function label(): string
     {
         return match ($this) {
-            self::New => 'Новое',
-            self::Processing => 'В обработке',
-            self::Closed => 'Закрыт',
+            self::New => 'New',
+            self::Processing => 'In progress',
+            self::Closed => 'Closed',
         };
     }
 
@@ -27,7 +27,7 @@ enum FeedbackStatus: int
     }
 
     /**
-     * Возвращает подпись статуса обращения по числовому значению.
+     * Returns signature statusа обращения по numeric value.
      */
     public static function labelFor(?int $status): string
     {
@@ -35,7 +35,7 @@ enum FeedbackStatus: int
     }
 
     /**
-     * Возвращает CSS-класс статуса обращения по числовому значению.
+     * Returns CSS-класс statusа обращения по numeric value.
      */
     public static function cssColorFor(?int $status): string
     {
@@ -43,7 +43,7 @@ enum FeedbackStatus: int
     }
 
     /**
-     * Возвращает варианты статусов для форм админки.
+     * Returns options statusов для форм admin panel.
      *
      * @return array<int, string>
      */

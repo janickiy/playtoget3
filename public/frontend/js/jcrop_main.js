@@ -1,25 +1,25 @@
 $(function () {
-    // Для примера 1
-    $('#cropbox1').Jcrop({ // Привязываем плагин JСrop к изображению с id=cropbox1
+    // Example 1.
+    $('#cropbox1').Jcrop({ // Bind JCrop to the image with id=cropbox1.
         aspectRatio: 0,
         onChange: updateCoords,
         onSelect: updateCoords
     });
 
-    // Для примера 2
-    const api = $.Jcrop('#cropbox2', { // Привязываем плагин JСrop к изображению с id=cropbox2
+    // Example 2.
+    const api = $.Jcrop('#cropbox2', { // Bind JCrop to the image with id=cropbox2.
         setSelect: [100, 100, 200, 200]
     });
     let i;
 
-    // Обработчик, который прерывает действие
+    // Handler that cancels the action.
     function nothing(e) {
         e.stopPropagation();
         e.preventDefault();
         return false;
     }
 
-    // Обработчик события для запуска анимации
+    // Event handler for starting animation.
     function anim_handler(ac) {
         return function (e) {
             api.animateTo(ac);
@@ -27,7 +27,7 @@ $(function () {
         };
     }
 
-    // Устанавливаем координаты областей для анимации
+    // Set area coordinates for animation.
     const ac = {
         anim1: [0, 0, 40, 600],
         anim2: [115, 100, 210, 215],
@@ -36,11 +36,11 @@ $(function () {
         anim5: [495, 150, 570, 235]
     };
 
-    // Привязываем соответствующий обработчик события
+    // Bind the matching event handler.
     for (i in ac) jQuery('#' + i).on('click', anim_handler(ac[i]));
 
-    // Для примера 3
-    $('#cropbox3').Jcrop({ // Привязываем плагин JСrop к изображению с id=cropbox3
+    // Example 3.
+    $('#cropbox3').Jcrop({ // Bind JCrop to the image with id=cropbox3.
         setSelect: [20, 130, 480, 230],
         addClass: 'jcrop_custom',
         bgColor: 'blue',
@@ -60,7 +60,7 @@ function updateCoords(c) {
     $('#y2').val(c.y2);
 
 
-    const rx = 200 / c.w; // 200 - размер окна предварительного просмотра
+    const rx = 200 / c.w; // 200 is the preview window size.
     const ry = 200 / c.h;
 
     $('#preview').css({
@@ -77,6 +77,6 @@ jQuery(window).on('load', function () {
 
 function checkCoords() {
     if (parseInt($('#w').val())) return true;
-    alert('Пожалуйста, выберите область для обрезки.');
+    alert('Please select an area to crop.');
     return false;
 };

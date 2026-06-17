@@ -6,7 +6,7 @@ class VideoService
 {
 
     /**
-     * Формирует HTML-плеер для поддерживаемого видео.
+     * Builds HTML-плеер для поддерживаемого video.
      *
      * @param string $provider
      * @param string $video
@@ -22,7 +22,7 @@ class VideoService
     }
 
     /**
-     * Определяет провайдера и идентификатор видео по ссылке.
+     * Detects provider и идентификатор video по ссылке.
      *
      * @param string $link
      * @return array|null

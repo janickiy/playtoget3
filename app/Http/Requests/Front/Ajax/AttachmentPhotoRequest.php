@@ -16,11 +16,11 @@ class AttachmentPhotoRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'file.required' => 'Выберите фото для загрузки.',
-            'file.image' => 'Можно загружать только изображения.',
-            'file.mimes' => 'Можно загружать только изображения JPG или PNG.',
-            'file.extensions' => 'Расширение файла должно быть JPG или PNG.',
-            'file.max' => 'Размер фото не должен превышать 10 МБ.',
+            'file.required' => 'Choose a photo to upload.',
+            'file.image' => 'Only images can be uploaded.',
+            'file.mimes' => 'Only JPG or PNG images can be uploaded.',
+            'file.extensions' => 'The file extension must be JPG or PNG.',
+            'file.max' => 'Photo size must not exceed 10 MB.',
         ];
     }
 }

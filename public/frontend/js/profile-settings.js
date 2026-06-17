@@ -28,7 +28,7 @@
             minDisplaySize: [80, 80],
             maxDisplayWidth: 640,
             reservedHeight: 248,
-            successText: 'Аватар подготовлен. Нажмите «Применить»'
+            successText: 'Avatar is ready. Click Apply'
         },
         cover: {
             api: null,
@@ -55,7 +55,7 @@
             minDisplaySize: [140, 40],
             maxDisplayWidth: 760,
             reservedHeight: 246,
-            successText: 'Обложка подготовлена. Нажмите «Применить»'
+            successText: 'Cover is ready. Click Apply'
         }
     };
 
@@ -330,7 +330,7 @@
         if (!/^image\/(jpeg|png)$/i.test(file.type)) {
             input.value = '';
             cropper.file = null;
-            showFail('Можно загрузить только JPG или PNG');
+            showFail('Only JPG or PNG can be uploaded');
             return;
         }
 
@@ -343,7 +343,7 @@
             initCrop(type, event.target.result);
         };
         reader.onerror = function () {
-            setLoading(type, 'Ошибка чтения файла');
+            setLoading(type, 'File reading error');
         };
         reader.readAsDataURL(file);
     }
@@ -371,12 +371,12 @@
         event.preventDefault();
 
         if (!cropper.file) {
-            showFail('Выберите файл');
+            showFail('Choose a file');
             return false;
         }
 
         if (!width || !height || width < cropper.minOriginalWidth || height < cropper.minOriginalHeight) {
-            showFail('Выделенная область слишком мала');
+            showFail('The selected area is too small');
             return false;
         }
 
@@ -400,7 +400,7 @@
             dataType: 'json',
             success: function (response) {
                 if (!response || response.result !== 'success') {
-                    setLoading(type, response && response.error ? response.error : 'Ошибка обработки изображения');
+                    setLoading(type, response && response.error ? response.error : 'Image processing error');
                     return;
                 }
 
@@ -413,7 +413,7 @@
             error: function (xhr) {
                 var message = xhr.responseJSON && xhr.responseJSON.error
                     ? xhr.responseJSON.error
-                    : 'Ошибка обработки изображения';
+                    : 'Image processing error';
 
                 setLoading(type, message);
             }

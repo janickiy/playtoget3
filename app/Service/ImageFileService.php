@@ -10,7 +10,7 @@ use RuntimeException;
 class ImageFileService
 {
     /**
-     * Возвращает нормализованное расширение загруженного изображения.
+     * Returns нормализованное расширение загруженного image.
      */
     public function extension(UploadedFile $file): string
     {
@@ -20,7 +20,7 @@ class ImageFileService
     }
 
     /**
-     * Генерирует имя файла с хешем для пользовательских upload-изображений.
+     * Генерирует name файла с хешем для user upload-images.
      */
     public function hashedFilename(UploadedFile $file): string
     {
@@ -30,7 +30,7 @@ class ImageFileService
     }
 
     /**
-     * Генерирует короткое случайное имя файла с расширением исходного изображения.
+     * Генерирует короткое случайное name файла с расширением исходного image.
      *
      * @param UploadedFile $file
      * @return string
@@ -41,7 +41,7 @@ class ImageFileService
     }
 
     /**
-     * Генерирует имя изображения профиля с префиксом пользователя.
+     * Генерирует name image профиля с префиксом user.
      *
      * @param UploadedFile $file
      * @param int $userId
@@ -53,7 +53,7 @@ class ImageFileService
     }
 
     /**
-     * Генерирует имя временного JPG-файла профиля с префиксом пользователя.
+     * Генерирует name временного JPG-файла профиля с префиксом user.
      *
      * @param int $userId
      * @return string
@@ -64,7 +64,7 @@ class ImageFileService
     }
 
     /**
-     * Открывает загруженный файл как GD-изображение и учитывает ориентацию JPEG.
+     * Открывает uploaded файл как GD-image и учитывает ориентацию JPEG.
      *
      * @param UploadedFile $file
      * @param bool $allowGif
@@ -76,7 +76,7 @@ class ImageFileService
         $mime = $file->getMimeType();
 
         if (! is_string($path)) {
-            throw new RuntimeException('Неверный формат изображения.');
+            throw new RuntimeException('Invalid image format.');
         }
 
         $image = match ($mime) {
@@ -87,7 +87,7 @@ class ImageFileService
         };
 
         if (! $image instanceof GdImage) {
-            throw new RuntimeException('Неверный формат изображения.');
+            throw new RuntimeException('Invalid image format.');
         }
 
         return $mime === 'image/jpeg' || $mime === 'image/jpg'
@@ -96,7 +96,7 @@ class ImageFileService
     }
 
     /**
-     * Поворачивает JPEG-изображение по EXIF-ориентации, если она задана.
+     * Поворачивает JPEG-image по EXIF-ориентации, если она set.
      *
      * @param GdImage $image
      * @param string $path

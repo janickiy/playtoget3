@@ -28,7 +28,7 @@ class EventsController extends Controller
 
 
     /**
-     * Показывает раздел мероприятий с фильтрами, вкладками и первой страницей списков.
+     * Shows section events с фильтрами, вкладками и первой страницей списков.
      *
      * @param Request $request
      * @param EventRepository $events
@@ -41,7 +41,7 @@ class EventsController extends Controller
         $viewerId = (int) ($viewer?->id ?? 0);
 
         return view('front.events.index', [
-            'title' => 'Мероприятия',
+            'title' => 'Events',
             'viewer' => $viewer,
             'eventsPageSize' => self::EVENTS_PAGE_SIZE,
             'popularEvents' => $events->popularEvents(self::EVENTS_PAGE_SIZE, 0, $filters, $viewer),
@@ -54,7 +54,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Показывает карточку мероприятия, профильный верхний блок и комментарии.
+     * Shows карточку event, профильный верхний block и комментарии.
      *
      * @param int $event
      * @param EventRepository $events
@@ -78,7 +78,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Проверяет авторизацию и показывает форму создания
+     * Checks авторизацию и показывает form creation
      *
      * @return View|RedirectResponse
      */
@@ -91,16 +91,16 @@ class EventsController extends Controller
         }
 
         return view('front.events.form', [
-            'title' => 'Создание мероприятия',
+            'title' => 'Create event',
             'action' => route('front.events.store'),
-            'button' => 'Создать мероприятие',
+            'button' => 'Create event',
             'event' => null,
             'eventData' => null,
         ]);
     }
 
     /**
-     * Валидирует данные формы, создает мероприятие и перенаправляет на его карточку.
+     * Валидирует data form, creates event и перенаправляет на его карточку.
      *
      * @param EventRequest $request
      * @param EventRepository $events
@@ -120,7 +120,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Проверяет права участника и показывает форму редактирования мероприятия.
+     * Checks permissions members и показывает form editing event.
      *
      * @param int $event
      * @param EventRepository $events
@@ -133,15 +133,15 @@ class EventsController extends Controller
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
         return view('front.events.form', $this->eventPayload($eventModel, $events, 'edit') + [
-            'title' => 'Редактирование: ' . ($eventModel->name ?: 'мероприятие'),
+            'title' => 'Editing: ' . ($eventModel->name ?: 'event'),
             'action' => route('front.events.update', ['event' => $eventModel->id]),
-            'button' => 'Сохранить',
+            'button' => 'Save',
             'event' => $eventModel,
         ]);
     }
 
     /**
-     * Проверяет права участника, сохраняет изменения мероприятия и возвращает на карточку.
+     * Checks permissions members, сохраняет изменения event и возвращает на карточку.
      *
      * @param int $event
      * @param EventRequest $request
@@ -160,7 +160,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Показывает участников мероприятия: пользователей, команды и группы.
+     * Shows members event: users, team и group.
      *
      * @param int $event
      * @param EventRepository $events
@@ -181,7 +181,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Показывает фотоальбомы мероприятия.
+     * Shows photo albums event.
      *
      * @param int $event
      * @param EventRepository $events
@@ -204,7 +204,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Показывает фотографии выбранного фотоальбома мероприятия.
+     * Shows photo selected photo albumа event.
      *
      * @param int $event
      * @param int $album
@@ -228,7 +228,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Показывает конкретную фотографию из фотоальбома мероприятия.
+     * Shows specific photo из photo albumа event.
      *
      * @param int $event
      * @param int $album
@@ -246,7 +246,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Показывает фотографию мероприятия без привязки к выбранному альбому.
+     * Shows photo event без привязки к выбранному albumу.
      *
      * @param int $event
      * @param int $photo
@@ -266,7 +266,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Показывает форму добавления фотографии в фотоальбом мероприятия.
+     * Shows form adding photo в photo album event.
      *
      * @param int $event
      * @param EventRepository $events
@@ -278,16 +278,16 @@ class EventsController extends Controller
         $eventModel = $this->eventOrFail($event, $events);
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
-        $photoAlbums->ensureDefaultAlbumForOwner($eventModel->id, 'event', 'Альбом мероприятия');
+        $photoAlbums->ensureDefaultAlbumForOwner($eventModel->id, 'event', 'Album event');
 
         return view('front.teams.photoalbums.add-photo', $this->eventPayload($eventModel, $events, 'photoalbums') + [
-            'title' => 'Добавление фотографий',
+            'title' => 'Add photos',
             'albums' => $photoAlbums->editableAlbumsForOwner($eventModel->id, 'event'),
         ]);
     }
 
     /**
-     * Показывает форму создания фотоальбома мероприятия.
+     * Shows form creation photo albumа event.
      *
      * @param int $event
      * @param EventRepository $events
@@ -299,15 +299,15 @@ class EventsController extends Controller
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->eventPayload($eventModel, $events, 'photoalbums') + [
-            'title' => 'Создание фотоальбома',
+            'title' => 'Create photo album',
             'action' => route('front.events.photoalbums.store', ['event' => $eventModel->id]),
             'name' => old('name', ''),
-            'button' => 'Создать',
+            'button' => 'Create',
         ]);
     }
 
     /**
-     * Создает фотоальбом мероприятия из валидированных данных формы.
+     * Creates photo album event из валидированных data form.
      *
      * @param int $event
      * @param AlbumRequest $request
@@ -323,7 +323,7 @@ class EventsController extends Controller
         $albumData = $request->toDto();
 
         if ($photoAlbums->nameExistsForOwner($eventModel->id, 'event', $albumData->name)) {
-            return back()->withErrors(['name' => 'Альбом с таким названием уже существует.'])->withInput();
+            return back()->withErrors(['name' => 'An album with this name already exists.'])->withInput();
         }
 
         $photoAlbums->createAlbumForOwner($eventModel->id, 'event', $albumData);
@@ -332,7 +332,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Проверяет доступ и показывает форму редактирования фотоальбома мероприятия.
+     * Checks access и показывает form editing photo albumа event.
      */
 
     /**
@@ -350,15 +350,15 @@ class EventsController extends Controller
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->eventPayload($eventModel, $events, 'photoalbums') + [
-            'title' => 'Редактирование фотоальбома',
+            'title' => 'Edit photo album',
             'action' => route('front.events.photoalbum.update', ['event' => $eventModel->id, 'album' => $photoAlbum->id]),
             'name' => old('name', $photoAlbum->name),
-            'button' => 'Редактировать',
+            'button' => 'Edit',
         ]);
     }
 
     /**
-     * Проверяет доступ и сохраняет изменения фотоальбома мероприятия.
+     * Checks access и сохраняет изменения photo albumа event.
      */
     public function updatePhotoalbum(int $event, int $album, AlbumRequest $request, EventRepository $events, PhotoalbumRepository $photoAlbums): RedirectResponse
     {
@@ -373,7 +373,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Проверяет доступ и удаляет фотоальбом мероприятия.
+     * Checks access и deletes photo album event.
      */
     public function destroyPhotoalbum(int $event, int $album, EventRepository $events, PhotoalbumRepository $photoAlbums): RedirectResponse
     {
@@ -388,7 +388,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Показывает видеоальбомы мероприятия.
+     * Shows video albums event.
      */
     public function videoAlbums(int $event, EventRepository $events, VideoalbumRepository $videoAlbums): View
     {
@@ -405,7 +405,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Показывает видео выбранного видеоальбома мероприятия.
+     * Shows video selected video album event.
      */
     public function showVideoAlbum(int $event, int $album, EventRepository $events, VideoalbumRepository $videoAlbums): View
     {
@@ -422,23 +422,23 @@ class EventsController extends Controller
     }
 
     /**
-     * Показывает форму добавления видео в видеоальбом мероприятия.
+     * Shows form adding video в video album event.
      */
     public function addVideo(int $event, EventRepository $events, VideoalbumRepository $videoAlbums): View
     {
         $eventModel = $this->eventOrFail($event, $events);
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
-        $videoAlbums->ensureDefaultAlbumForOwner($eventModel->id, 'event', 'Альбом мероприятия');
+        $videoAlbums->ensureDefaultAlbumForOwner($eventModel->id, 'event', 'Album event');
 
         return view('front.teams.videoalbums.add-video', $this->eventPayload($eventModel, $events, 'videoalbums') + [
-            'formTitle' => 'Добавление видеозаписи',
+            'formTitle' => 'Add video',
             'albums' => $videoAlbums->editableAlbumsForOwner($eventModel->id, 'event'),
         ]);
     }
 
     /**
-     * Валидирует ссылку и добавляет видео в видеоальбом мероприятия.
+     * Валидирует link и добавляет video в video album event.
      */
     public function storeVideo(int $event, StoreVideoRequest $request, EventRepository $events, VideoalbumRepository $videoAlbums): RedirectResponse
     {
@@ -453,7 +453,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Показывает форму создания видеоальбома мероприятия.
+     * Shows form creation video album event.
      */
     public function createVideoAlbum(int $event, EventRepository $events): View
     {
@@ -461,16 +461,16 @@ class EventsController extends Controller
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->eventPayload($eventModel, $events, 'videoalbums') + [
-            'formTitle' => 'Создание видеоальбома',
+            'formTitle' => 'Create video album',
             'formTitleClass' => 'video-form-title',
             'action' => route('front.events.videoalbums.store', ['event' => $eventModel->id]),
             'name' => old('name', ''),
-            'button' => 'Создать',
+            'button' => 'Create',
         ]);
     }
 
     /**
-     * Создает видеоальбом мероприятия из валидированных данных формы.
+     * Creates video album event из валидированных data form.
      */
     public function storeVideoAlbum(int $event, AlbumRequest $request, EventRepository $events, VideoalbumRepository $videoAlbums): RedirectResponse
     {
@@ -480,7 +480,7 @@ class EventsController extends Controller
         $albumData = $request->toDto();
 
         if ($videoAlbums->nameExistsForOwner($eventModel->id, 'event', $albumData->name)) {
-            return back()->withErrors(['name' => 'Альбом с таким названием уже существует.'])->withInput();
+            return back()->withErrors(['name' => 'An album with this name already exists.'])->withInput();
         }
 
         $videoAlbums->createAlbumForOwner($eventModel->id, 'event', $albumData);
@@ -489,7 +489,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Проверяет доступ и показывает форму редактирования видеоальбома мероприятия.
+     * Checks access и показывает form editing video album event.
      */
     public function editVideoalbum(int $event, int $album, EventRepository $events, VideoalbumRepository $videoAlbums): View
     {
@@ -499,16 +499,16 @@ class EventsController extends Controller
         abort_unless($events->canManage($eventModel, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->eventPayload($eventModel, $events, 'videoalbums') + [
-            'formTitle' => 'Редактирование видеоальбома',
+            'formTitle' => 'Edit video album',
             'formTitleClass' => 'video-form-title',
             'action' => route('front.events.videoalbum.update', ['event' => $eventModel->id, 'album' => $videoAlbum->id]),
             'name' => old('name', $videoAlbum->name),
-            'button' => 'Редактировать',
+            'button' => 'Edit',
         ]);
     }
 
     /**
-     * Проверяет доступ и сохраняет изменения видеоальбома мероприятия.
+     * Checks access и сохраняет изменения video album event.
      */
     public function updateVideoalbum(int $event, int $album, AlbumRequest $request, EventRepository $events, VideoalbumRepository $videoAlbums): RedirectResponse
     {
@@ -523,7 +523,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Проверяет доступ и удаляет видеоальбом мероприятия.
+     * Checks access и deletes video album event.
      */
     public function destroyVideoalbum(int $event, int $album, EventRepository $events, VideoalbumRepository $videoAlbums): RedirectResponse
     {
@@ -538,7 +538,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Готовит общие данные мероприятия для страниц вложенных разделов.
+     * Готовит общие data event для страниц nested sections.
      */
     private function eventPayload(Event $event, EventRepository $events, string $section): array
     {
@@ -548,7 +548,7 @@ class EventsController extends Controller
         $accessDenied = (bool) ($permissions['blocked_by_event'] ?? false);
 
         return [
-            'title' => $event->name ?: 'Мероприятие',
+            'title' => $event->name ?: 'Event',
             'hideTopProfile' => true,
             'viewer' => $viewer,
             'event' => $event,
@@ -560,7 +560,7 @@ class EventsController extends Controller
             'membershipType' => $events->membershipType($event, $viewer),
             'canManageEvent' => $events->canManage($event, $viewer),
             'communityAccessDenied' => $accessDenied,
-            'communityAccessMessage' => 'Доступ к странице ограничен',
+            'communityAccessMessage' => 'Access to this page is restricted',
             'sectionAccessDenied' => false,
             'section' => $section,
             'communityView' => [
@@ -569,10 +569,10 @@ class EventsController extends Controller
                 'routeParam' => 'event',
                 'basePath' => url('/events/' . $event->id . '/photoalbums'),
                 'top' => 'front.events._top',
-                'label' => 'Мероприятие',
-                'labelLower' => 'мероприятие',
-                'labelGenitive' => 'мероприятия',
-                'pluralGenitive' => 'участников',
+                'label' => 'Event',
+                'labelLower' => 'event',
+                'labelGenitive' => 'event',
+                'pluralGenitive' => 'members',
                 'entity' => $event,
                 'data' => $eventData,
             ],
@@ -580,7 +580,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Собирает фильтры списка мероприятий из query-параметров.
+     * Собирает фильтры списка events из query-параметров.
      */
     private function eventFilters(Request $request): array
     {
@@ -599,7 +599,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Находит активное мероприятие или завершает запрос ошибкой 404.
+     * Finds активное event or завершает запрос ошибкой 404.
      */
     private function eventOrFail(int $event, EventRepository $events): Event
     {
@@ -611,7 +611,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Находит фотоальбом, принадлежащий мероприятию, или завершает запрос ошибкой 404.
+     * Finds photo album, принадлежащий event, or завершает запрос ошибкой 404.
      */
     private function eventPhotoalbumOrFail(int $album, Event $event, PhotoalbumRepository $photoAlbums): PhotoAlbums
     {
@@ -623,7 +623,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Находит видеоальбом, принадлежащий мероприятию, или завершает запрос ошибкой 404.
+     * Finds video album, принадлежащий event, or завершает запрос ошибкой 404.
      */
     private function eventVideoalbumOrFail(int $album, Event $event, VideoalbumRepository $videoAlbums): VideoAlbums
     {

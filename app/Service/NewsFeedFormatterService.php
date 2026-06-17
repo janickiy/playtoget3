@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 class NewsFeedFormatterService
 {
     /**
-     * Возвращает URL аватара пользователя или стандартную заглушку.
+     * Returns URL avatarа user or default заглушку.
      *
      * @param object $row
      * @return string
@@ -27,7 +27,7 @@ class NewsFeedFormatterService
     }
 
     /**
-     * Возвращает отображаемое имя владельца записи.
+     * Returns отображаемое name владельца записи.
      *
      * @param object $row
      * @return string
@@ -40,7 +40,7 @@ class NewsFeedFormatterService
     }
 
     /**
-     * Возвращает URL аватара владельца или стандартную заглушку.
+     * Returns URL avatarа владельца or default заглушку.
      *
      * @param object $row
      * @return string
@@ -59,7 +59,7 @@ class NewsFeedFormatterService
     }
 
     /**
-     * Декодирует и экранирует текст для безопасного вывода.
+     * Декодирует и экранирует текст для безопасного output.
      *
      * @param string $value
      * @return string
@@ -70,7 +70,7 @@ class NewsFeedFormatterService
     }
 
     /**
-     * Возвращает URL фотографии или стандартную заглушку.
+     * Returns URL photo or default заглушку.
      *
      * @param string|null $file
      * @param string|null $type
@@ -99,7 +99,7 @@ class NewsFeedFormatterService
     }
 
     /**
-     * Возвращает публичный URL изображения из storage, если файл существует.
+     * Returns публичный URL image из storage, если файл существует.
      *
      * @param string $path
      * @return string|null

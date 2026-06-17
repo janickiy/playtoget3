@@ -42,10 +42,10 @@
 
                         <div class="card-body">
 
-                            <p>*-обязательные поля</p>
+                            <p>* required fields</p>
 
                             <div class="form-group">
-                                {!! Form::label('title', 'Название*') !!}
+                                {!! Form::label('title', 'Name*') !!}
                                 {!! Form::text('title', old('title', $row->title ?? null), ['id' => 'title', 'title' => 'title', 'class' => 'form-control']) !!}
                                 @if ($errors->has('title'))
                                     <p class="text-danger">{{ $errors->first('title') }}</p>
@@ -53,7 +53,7 @@
                             </div>
 
                             <div class="form-group">
-                                {!! Form::label('slug', 'ЧПУ') !!}
+                                {!! Form::label('slug', 'Slug') !!}
                                 {!! Form::text('slug', old('slug', $row->slug ?? null), ['id' => 'slug', 'title' => 'slug', 'class' => 'form-control']) !!}
                                 @if ($errors->has('slug'))
                                     <p class="text-danger">{{ $errors->first('slug') }}</p>
@@ -61,8 +61,8 @@
                             </div>
 
                             <div class="form-group content-text-field">
-                                {!! Form::label('text', 'Содержание*') !!}
-                                {!! Form::textarea('text', old('text', $row->text ?? null), ['rows' => "5", 'placeholder' => "Описание",  'id' => 'summernote', 'style' => "display: none;"]) !!}
+                                {!! Form::label('text', 'Content*') !!}
+                                {!! Form::textarea('text', old('text', $row->text ?? null), ['rows' => "5", 'placeholder' => "Description",  'id' => 'summernote', 'style' => "display: none;"]) !!}
                                 @if ($errors->has('text'))
                                     <p class="text-danger">{{ $errors->first('text') }}</p>
                                 @endif
@@ -71,7 +71,7 @@
 
                             <div class="form-check">
                                 {!! Form::checkbox('published', 1, (bool) old('published', isset($row) ? $row->published : 1), ['id' => 'published', 'class' => 'form-check-input']) !!}
-                                {!! Form::label('published', 'Публиковать', ['class' => 'form-check-label']) !!}
+                                {!! Form::label('published', 'Publish', ['class' => 'form-check-label']) !!}
                                 @if ($errors->has('published'))
                                     <p class="text-danger">{{ $errors->first('published') }}</p>
                                 @endif
@@ -82,10 +82,10 @@
 
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">
-                                {{ isset($row) ? 'редактировать' : 'добавить' }}
+                                {{ isset($row) ? 'edit' : 'add' }}
                             </button>
                             <a class="btn btn-default float-sm-right" href="{{ route('admin.content.index') }}">
-                                назад
+                                back
                             </a>
                         </div>
 

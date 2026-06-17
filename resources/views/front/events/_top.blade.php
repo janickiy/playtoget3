@@ -2,11 +2,11 @@
     $membershipType = $membershipType ?? 'none';
     $accessDenied = (bool) ($communityAccessDenied ?? false);
     $leaveMessage = match ($membershipType) {
-        'owner' => 'Вы владелец мероприятия. Покинув его, вы лишитесь прав владельца. Покинуть мероприятие?',
-        'admin' => 'Вы администратор мероприятия. Покинув его, вы лишитесь административных прав. Покинуть мероприятие?',
-        'invited' => 'Вы действительно хотите отказаться от приглашения?',
-        'applied' => 'Вы действительно хотите отменить заявку?',
-        default => 'Вы действительно хотите покинуть мероприятие?',
+        'owner' => 'You are the event owner. If you leave it, you will lose owner rights. Leave the event?',
+        'admin' => 'You are an event administrator. If you leave it, you will lose administrator rights. Leave the event?',
+        'invited' => 'Do you really want to decline the invitation?',
+        'applied' => 'Do you really want to cancel the request?',
+        default => 'Do you really want to leave the event?',
     };
 @endphp
 
@@ -14,16 +14,16 @@
     <div class="cover_page">
         @if ($viewer && $membershipType !== 'blocked')
             @if ($membershipType === 'none')
-                <a href="#" class="groups_button js-event-join" data-event-id="{{ $event->id }}"><span>Присоединиться</span></a>
+                <a href="#" class="groups_button js-event-join" data-event-id="{{ $event->id }}"><span>Join</span></a>
                 <a href="#" class="groups_button_leave hide js-event-leave" data-event-id="{{ $event->id }}" data-message="{{ $leaveMessage }}"></a>
             @elseif ($membershipType === 'invited')
-                <a href="#" class="groups_button js-event-join" data-event-id="{{ $event->id }}"><span>Принять приглашение</span></a>
+                <a href="#" class="groups_button js-event-join" data-event-id="{{ $event->id }}"><span>Accept invitation</span></a>
                 <a href="#" class="groups_button_leave red js-event-leave" data-event-id="{{ $event->id }}" data-message="{{ $leaveMessage }}"></a>
             @elseif (in_array($membershipType, ['owner', 'admin', 'member'], true))
-                <a href="#" class="groups_button leave_fr js-event-invite" data-event-id="{{ $event->id }}">Пригласить друзей</a>
+                <a href="#" class="groups_button leave_fr js-event-invite" data-event-id="{{ $event->id }}">Invite friends</a>
                 <a href="#" class="groups_button_leave js-event-leave" data-event-id="{{ $event->id }}" data-message="{{ $leaveMessage }}"></a>
             @elseif ($membershipType === 'applied')
-                <span class="groups_button applied"><span>Вы отправили заявку</span></span>
+                <span class="groups_button applied"><span>Request sent</span></span>
                 <a href="#" class="groups_button_leave js-event-leave" data-event-id="{{ $event->id }}" data-message="{{ $leaveMessage }}"></a>
             @endif
         @endif
@@ -45,7 +45,7 @@
         </h3>
         <p class="citation">{{ trim($eventData['place'] . ' ' . $eventData['address']) }}</p>
         @if ($canManageEvent ?? false)
-            <a class="button_edit_groups team-top-edit" href="{{ route('front.events.edit', ['event' => $event->id]) }}">Редактировать</a>
+            <a class="button_edit_groups team-top-edit" href="{{ route('front.events.edit', ['event' => $event->id]) }}">Edit</a>
         @endif
     </div>
 </div>
@@ -57,10 +57,10 @@
 
 @if (! $accessDenied)
     <ul class="sport_group_list">
-        <li><a href="{{ route('front.events.show', ['event' => $event->id]) }}" @class(['active-link' => $section === 'feed'])><i class="icon_list icon-4"></i><span>Лента</span></a></li>
-        <li><a href="{{ route('front.events.members', ['event' => $event->id]) }}" @class(['active-link' => $section === 'members'])><i class="icon_list icon-5"></i><span>Участники</span></a></li>
-        <li><a href="{{ route('front.events.photoalbums', ['event' => $event->id]) }}" @class(['active-link' => $section === 'photoalbums'])><i class="icon_list icon-2"></i><span>Фотографии</span></a></li>
-        <li><a href="{{ route('front.events.videoalbums', ['event' => $event->id]) }}" @class(['active-link' => $section === 'videoalbums'])><i class="icon_list icon-3"></i><span>Видео</span></a></li>
+        <li><a href="{{ route('front.events.show', ['event' => $event->id]) }}" @class(['active-link' => $section === 'feed'])><i class="icon_list icon-4"></i><span>Feed</span></a></li>
+        <li><a href="{{ route('front.events.members', ['event' => $event->id]) }}" @class(['active-link' => $section === 'members'])><i class="icon_list icon-5"></i><span>Members</span></a></li>
+        <li><a href="{{ route('front.events.photoalbums', ['event' => $event->id]) }}" @class(['active-link' => $section === 'photoalbums'])><i class="icon_list icon-2"></i><span>Photos</span></a></li>
+        <li><a href="{{ route('front.events.videoalbums', ['event' => $event->id]) }}" @class(['active-link' => $section === 'videoalbums'])><i class="icon_list icon-3"></i><span>Video</span></a></li>
     </ul>
 @endif
 
@@ -100,14 +100,14 @@
                     }
 
                     $.confirm({
-                        title: 'Подтверждение',
+                        title: 'Confirmation',
                         message: message,
                         buttons: {
-                            'Да': {
+                            'Yes': {
                                 class: 'blue',
                                 action: action,
                             },
-                            'Нет': {
+                            'No': {
                                 class: 'gray',
                                 action: function () {
                                 },
@@ -120,8 +120,8 @@
                     root.find('.groups_button').remove();
                     root.find('.groups_button_leave').remove();
                     root.find('.cover_page').prepend(
-                        '<a href="#" class="groups_button leave_fr js-event-invite" data-event-id="' + eventId + '">Пригласить друзей</a>' +
-                        '<a href="#" class="groups_button_leave js-event-leave" data-event-id="' + eventId + '" data-message="Вы действительно хотите покинуть мероприятие?"></a>'
+                        '<a href="#" class="groups_button leave_fr js-event-invite" data-event-id="' + eventId + '">Invite friends</a>' +
+                        '<a href="#" class="groups_button_leave js-event-leave" data-event-id="' + eventId + '" data-message="Do you really want to leave the event?"></a>'
                     );
                 }
 
@@ -129,8 +129,8 @@
                     root.find('.groups_button').remove();
                     root.find('.groups_button_leave').remove();
                     root.find('.cover_page').prepend(
-                        '<a href="#" class="groups_button js-event-join" data-event-id="' + eventId + '"><span>Присоединиться</span></a>' +
-                        '<a href="#" class="groups_button_leave hide js-event-leave" data-event-id="' + eventId + '" data-message="Вы действительно хотите покинуть мероприятие?"></a>'
+                        '<a href="#" class="groups_button js-event-join" data-event-id="' + eventId + '"><span>Join</span></a>' +
+                        '<a href="#" class="groups_button_leave hide js-event-leave" data-event-id="' + eventId + '" data-message="Do you really want to leave the event?"></a>'
                     );
                 }
 
@@ -144,13 +144,13 @@
                         .done(function (response) {
                             if (response.result === 'success') {
                                 setJoinedState(root, eventId);
-                                eventNotice('Вы присоединились к мероприятию', true);
+                                eventNotice('You joined the event', true);
                             } else {
-                                eventNotice('Не удалось изменить статус', false);
+                                eventNotice('Could not change status', false);
                             }
                         })
                         .fail(function () {
-                            eventNotice('Не удалось изменить статус', false);
+                            eventNotice('Could not change status', false);
                         });
                 });
 
@@ -159,20 +159,20 @@
                     const button = $(this);
                     const eventId = button.data('event-id');
                     const root = button.closest('.event-profile-top');
-                    const message = button.data('message') || 'Вы действительно хотите покинуть мероприятие?';
+                    const message = button.data('message') || 'Do you really want to leave the event?';
 
                     confirmEventLeave(message, function () {
                         eventAjax('change_event_memberstatus', {event_id: eventId, status: 0})
                             .done(function (response) {
                                 if (response.result === 'success') {
                                     setLeftState(root, eventId);
-                                    eventNotice('Статус обновлен', true);
+                                    eventNotice('Status updated', true);
                                 } else {
-                                    eventNotice('Не удалось изменить статус', false);
+                                    eventNotice('Could not change status', false);
                                 }
                             })
                             .fail(function () {
-                                eventNotice('Не удалось изменить статус', false);
+                                eventNotice('Could not change status', false);
                             });
                     });
                 });
@@ -189,13 +189,13 @@
                     eventAjax('send_event_invitation', {event_id: button.data('event-id')})
                         .done(function (response) {
                             if (response.result === 'success') {
-                                eventNotice('Приглашения вашим друзьям отправлены', true);
+                                eventNotice('Invitations have been sent to your friends', true);
                             } else {
-                                eventNotice('Не удалось отправить приглашения', false);
+                                eventNotice('Could not send invitations', false);
                             }
                         })
                         .fail(function () {
-                            eventNotice('Не удалось отправить приглашения', false);
+                            eventNotice('Could not send invitations', false);
                         });
                 });
             })();

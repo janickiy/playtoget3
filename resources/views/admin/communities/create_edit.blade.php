@@ -14,19 +14,19 @@
                         {!! Form::hidden('id', $row->id) !!}
 
                         <div class="card-body">
-                            <p>*-обязательные поля</p>
+                            <p>* required fields</p>
 
                             <div class="form-group">
-                                {!! Form::label('current_avatar', 'Текущая аватарка') !!}
+                                {!! Form::label('current_avatar', 'Current avatar') !!}
                                 <div>
-                                    <img src="{{ $avatarUrl }}" alt="Аватар комьюнити" class="img-thumbnail" style="width: 140px; height: 140px; object-fit: cover;">
+                                    <img src="{{ $avatarUrl }}" alt="Community avatar" class="img-thumbnail" style="width: 140px; height: 140px; object-fit: cover;">
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        {!! Form::label('type', 'Тип*') !!}
+                                        {!! Form::label('type', 'Type*') !!}
                                         {!! Form::select('type', $typeOptions, old('type', $row->type ?? 'team'), ['class' => 'custom-select']) !!}
                                         @if ($errors->has('type'))
                                             <p class="text-danger">{{ $errors->first('type') }}</p>
@@ -36,7 +36,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        {!! Form::label('name', 'Название*') !!}
+                                        {!! Form::label('name', 'Name*') !!}
                                         {!! Form::text('name', old('name', $row->name ?? null), ['class' => 'form-control']) !!}
                                         @if ($errors->has('name'))
                                             <p class="text-danger">{{ $errors->first('name') }}</p>
@@ -48,7 +48,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        {!! Form::label('place', 'Место') !!}
+                                        {!! Form::label('place', 'Place') !!}
                                         {!! Form::text('place', old('place', $row->place ?? null), ['class' => 'form-control']) !!}
                                         @if ($errors->has('place'))
                                             <p class="text-danger">{{ $errors->first('place') }}</p>
@@ -58,7 +58,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        {!! Form::label('sport_type', 'Вид спорта') !!}
+                                        {!! Form::label('sport_type', 'Sport type') !!}
                                         {!! Form::text('sport_type', old('sport_type', $row->sport_type ?? null), ['class' => 'form-control']) !!}
                                         @if ($errors->has('sport_type'))
                                             <p class="text-danger">{{ $errors->first('sport_type') }}</p>
@@ -70,7 +70,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        {!! Form::label('avatar', 'Аватар') !!}
+                                        {!! Form::label('avatar', 'Avatar') !!}
                                         {!! Form::text('avatar', old('avatar', $row->avatar ?? null), ['class' => 'form-control']) !!}
                                         @if ($errors->has('avatar'))
                                             <p class="text-danger">{{ $errors->first('avatar') }}</p>
@@ -80,7 +80,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        {!! Form::label('cover_page', 'Обложка') !!}
+                                        {!! Form::label('cover_page', 'Cover') !!}
                                         {!! Form::text('cover_page', old('cover_page', $row->cover_page ?? null), ['class' => 'form-control']) !!}
                                         @if ($errors->has('cover_page'))
                                             <p class="text-danger">{{ $errors->first('cover_page') }}</p>
@@ -90,7 +90,7 @@
                             </div>
 
                             <div class="form-group">
-                                {!! Form::label('about', 'Описание') !!}
+                                {!! Form::label('about', 'Description') !!}
                                 {!! Form::textarea('about', old('about', $row->about ?? null), ['class' => 'form-control', 'rows' => 5]) !!}
                                 @if ($errors->has('about'))
                                     <p class="text-danger">{{ $errors->first('about') }}</p>
@@ -100,7 +100,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        {!! Form::label('status', 'Статус*') !!}
+                                        {!! Form::label('status', 'Status*') !!}
                                         {!! Form::select('status', $statusOptions, old('status', $row->status ?? \App\Enums\CommunityStatus::New->value), ['class' => 'custom-select']) !!}
                                         @if ($errors->has('status'))
                                             <p class="text-danger">{{ $errors->first('status') }}</p>
@@ -111,7 +111,7 @@
                                         {!! Form::hidden('recommended', 0) !!}
                                         <div class="custom-control custom-checkbox">
                                             {!! Form::checkbox('recommended', 1, (int) old('recommended', (int) ($row->recommended ?? 0)) === 1, ['class' => 'custom-control-input', 'id' => 'recommended']) !!}
-                                            {!! Form::label('recommended', 'Рекомендовано', ['class' => 'custom-control-label']) !!}
+                                            {!! Form::label('recommended', 'Recommended', ['class' => 'custom-control-label']) !!}
                                         </div>
                                         @if ($errors->has('recommended'))
                                             <p class="text-danger">{{ $errors->first('recommended') }}</p>
@@ -123,10 +123,10 @@
 
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">
-                                редактировать
+                                edit
                             </button>
                             <a class="btn btn-default float-sm-right" href="{{ route('admin.communities.index') }}">
-                                назад
+                                back
                             </a>
                         </div>
 

@@ -5,7 +5,7 @@
         <form autocomplete="off" action="{{ $indexRoute }}" method="GET" role="search">
             <div class="add-photos-album selects-field-events sport-blocks-search-form">
                 <p class="select-container-text lupa width100">
-                    <input type="text" name="search" value="{{ $filters['search'] ?? '' }}" class="search_word border-top-none padding25" placeholder="Ключевое слово">
+                    <input type="text" name="search" value="{{ $filters['search'] ?? '' }}" class="search_word border-top-none padding25" placeholder="Keyword">
                     <span class="padding2"></span>
                 </p>
                 <div class="select-container-text two_block">
@@ -32,14 +32,14 @@
                     'items' => $items,
                     'routePrefix' => $routePrefix,
                     'viewer' => $viewer ?? null,
-                    'editLabel' => $editLabel ?? 'Редактировать',
+                    'editLabel' => $editLabel ?? 'Edit',
                 ])
             </div>
             @if ($items->isEmpty())
-                <div class="text-center"><h5>Записей пока нет.</h5></div>
+                <div class="text-center"><h5>No records yet.</h5></div>
             @endif
             <a href="#" class="show-more js-sport-blocks-load-more" @style(['display: none' => ($itemsTotal ?? $items->count()) <= $items->count()])>
-                <i></i><span>Показать еще</span>
+                <i></i><span>Show more</span>
             </a>
         </div>
     </div>

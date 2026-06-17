@@ -7,39 +7,39 @@
                 <div class="add-photos-album selects-field-events teams-search-form">
                     <div class="select-container-text two_block">
                         <input type="hidden" name="id_place" class="id_place" value="{{ request('id_place') }}" data-type="search_city">
-                        <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('place') }}" name="place" data-type="search_city" placeholder="Ищу команду в городе">
+                        <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('place') }}" name="place" data-type="search_city" placeholder="Search teams by city">
                         <div class="select-place" data-type="search_city"></div>
                     </div>
                     <div class="select-container-text two_block borderLeft">
                         <input type="hidden" name="id_sport" class="id_place" value="{{ request('id_sport') }}" data-type="search_sport">
-                        <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('sport') }}" name="sport" data-type="search_sport" placeholder="Ищу свой спорт">
+                        <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('sport') }}" name="sport" data-type="search_sport" placeholder="Search sport type">
                         <div class="select-place" data-type="search_sport"></div>
                     </div>
                     <p class="select-container-text lupa">
-                        <input type="text" name="search" value="{{ request('search') }}" class="search_word" placeholder="Ключевое слово">
+                        <input type="text" name="search" value="{{ request('search') }}" class="search_word" placeholder="Keyword">
                         <span></span>
                     </p>
                     <input type="submit" class="displayNone">
-                    <button type="button" onclick="location.href='{{ route('front.teams.create') }}'" class="btn btn-white">Создать команду</button>
+                    <button type="button" onclick="location.href='{{ route('front.teams.create') }}'" class="btn btn-white">Create team</button>
                 </div>
             </form>
 
             <div class="photo-caption front-section-title">
-                <h3>Команды</h3>
+                <h3>Teams</h3>
             </div>
 
             <div id="tabs">
                 <ul id="main-menu" class="marginBottom-40">
-                    <li data-type="popular" class="active"><a href="#popular">Популярные команды</a></li>
+                    <li data-type="popular" class="active"><a href="#popular">Popular teams</a></li>
                     <li data-type="mygroups">
-                        <a href="#mygroups">Мои команды
+                        <a href="#mygroups">My teams
                             @if ($myTeamsTotal > 0)
                                 <sup>{{ $myTeamsTotal }}</sup>
                             @endif
                         </a>
                     </li>
                     <li data-type="invited">
-                        <a href="#invited">Меня пригласили
+                        <a href="#invited">Invited
                             @if ($invitedTeamsTotal > 0)
                                 <sup class="active">{{ $invitedTeamsTotal }}</sup>
                             @endif
@@ -59,11 +59,11 @@
                                 @endforeach
                             </div>
                             <a href="#" class="show-more js-teams-load-more" data-feed="popular" @style(['display: none' => $popularTeamsTotal <= $popularTeams->count()])>
-                                <i></i><span>Показать еще</span>
+                                <i></i><span>Show more</span>
                             </a>
                         </div>
                     @else
-                        <div class="text-center"><h5>Популярных команд пока нет.</h5></div>
+                        <div class="text-center"><h5>There are no popular teams yet.</h5></div>
                     @endif
                 </div>
 
@@ -80,11 +80,11 @@
                                 @endforeach
                             </div>
                             <a href="#" class="show-more js-teams-load-more" data-feed="mygroups" @style(['display: none' => $myTeamsTotal <= $myTeams->count()])>
-                                <i></i><span>Показать еще</span>
+                                <i></i><span>Show more</span>
                             </a>
                         </div>
                     @else
-                        <div class="text-center"><h5>Вы еще не вступили ни в одну команду.</h5></div>
+                        <div class="text-center"><h5>You have not joined any teams yet.</h5></div>
                     @endif
                 </div>
 
@@ -101,17 +101,17 @@
                                 @endforeach
                             </div>
                             <a href="#" class="show-more js-teams-load-more" data-feed="invited" @style(['display: none' => $invitedTeamsTotal <= $invitedTeams->count()])>
-                                <i></i><span>Показать еще</span>
+                                <i></i><span>Show more</span>
                             </a>
                         </div>
                     @else
-                        <div class="text-center"><h5>У вас нет приглашений.</h5></div>
+                        <div class="text-center"><h5>You have no invitations.</h5></div>
                     @endif
                 </div>
             </div>
         @else
             <div class="photo-caption">
-                <h3>Команды<sup>{{ $myTeams->count() }}</sup></h3>
+                <h3>Teams<sup>{{ $myTeams->count() }}</sup></h3>
             </div>
 
             @if ($myTeams->isNotEmpty())
@@ -121,7 +121,7 @@
                     @endforeach
                 </div>
             @else
-                <p class="no_message">Команд пока нет.</p>
+                <p class="no_message">No teams yet.</p>
             @endif
         @endempty
     </div>

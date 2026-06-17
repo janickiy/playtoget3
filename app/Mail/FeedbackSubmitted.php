@@ -21,7 +21,7 @@ class FeedbackSubmitted extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Ваше сообщение отправлено',
+            subject: 'Your message has been sent',
         );
     }
 

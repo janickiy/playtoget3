@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 class AdminUserRepository extends BaseRepository
 {
     /**
-     * Подключает модель пользователя для админских операций.
+     * Connects модель user для админских операций.
      */
     public function __construct(User $model)
     {
@@ -21,7 +21,7 @@ class AdminUserRepository extends BaseRepository
     }
 
     /**
-     * Создает пользователя из DTO и хеширует пароль, если он передан.
+     * Creates user из DTO и hashes password, если он provided.
      */
     public function createFromData(UserData $data): Builder|Model
     {
@@ -32,7 +32,7 @@ class AdminUserRepository extends BaseRepository
     }
 
     /**
-     * Обновляет пользователя из DTO и меняет пароль только при заполненном поле.
+     * Updates user из DTO и меняет password только при заполненном поле.
      */
     public function updateFromData(UserData $data): bool
     {
@@ -46,7 +46,7 @@ class AdminUserRepository extends BaseRepository
     }
 
     /**
-     * Блокирует или разблокирует одного пользователя.
+     * Blocks or разblocksрует одного user.
      */
     public function setBlocked(int $id, bool $blocked): bool
     {
@@ -62,7 +62,7 @@ class AdminUserRepository extends BaseRepository
     }
 
     /**
-     * Помечает одного пользователя как удаленного без физического удаления связанных данных.
+     * Marks одного user как deleted без физического deletion связанных data.
      */
     public function markDeleted(int $id): bool
     {
@@ -70,7 +70,7 @@ class AdminUserRepository extends BaseRepository
     }
 
     /**
-     * Выполняет массовую блокировку, разблокировку или удаление выбранных пользователей.
+     * Runs массовую blocksровку, разblocksровку or deletion selected users.
      *
      * @param array<int, int|string> $ids
      */
@@ -87,7 +87,7 @@ class AdminUserRepository extends BaseRepository
     }
 
     /**
-     * Массово меняет флаг блокировки выбранных пользователей.
+     * Массово меняет флаг block selected users.
      *
      * @param array<int, int> $ids
      */
@@ -107,7 +107,7 @@ class AdminUserRepository extends BaseRepository
     }
 
     /**
-     * Массово помечает выбранных пользователей как удаленных.
+     * Marks selected users as deleted in bulk.
      *
      * @param array<int, int> $ids
      */
@@ -119,7 +119,7 @@ class AdminUserRepository extends BaseRepository
     }
 
     /**
-     * Готовит массив атрибутов пользователя для сохранения.
+     * Готовит массив атрибутов user для сохранения.
      *
      * @return array<string, mixed>
      */
@@ -139,7 +139,7 @@ class AdminUserRepository extends BaseRepository
     }
 
     /**
-     * Приводит список id к уникальным положительным целым значениям.
+     * Приводит list id к уникальным положительным целым значениям.
      *
      * @param array<int, int|string> $ids
      * @return array<int, int>

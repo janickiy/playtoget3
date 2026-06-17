@@ -17,7 +17,7 @@ class PlaygroundsController extends Controller
     private const TYPE = 'playground';
 
     /**
-     * Показывает список площадки с фильтрами или открывает карточку конкретного объекта
+     * Shows list playground с фильтрами or открывает карточку конкретного object
      *
      * @param Request $request
      * @param SportBlockRepository $sportBlocks
@@ -43,7 +43,7 @@ class PlaygroundsController extends Controller
     }
 
     /**
-     * Проверяет авторизацию и показывает форму создания площадки.
+     * Checks авторизацию и показывает form creation playground.
      *
      * @return View|RedirectResponse
      */
@@ -54,15 +54,15 @@ class PlaygroundsController extends Controller
         }
 
         return view('front.sport-blocks.form', $this->basePayload() + [
-            'title' => 'Создание площадки',
-            'button' => 'Создать',
+            'title' => 'Create playground',
+            'button' => 'Create',
             'action' => route('front.playgrounds.store'),
             'sportBlock' => null,
         ]);
     }
 
     /**
-     * Валидирует данные формы, создает площадку и перенаправляет на его карточку
+     * Валидирует data form, creates площадку и перенаправляет на его карточку
      *
      * @param SportBlockRequest $request
      * @param SportBlockRepository $sportBlocks
@@ -82,7 +82,7 @@ class PlaygroundsController extends Controller
     }
 
     /**
-     * Проверяет владельца и показывает форму редактирования площадки.
+     * Checks владельца и показывает form editing playground.
      *
      * @param int $sportBlock
      * @param SportBlockRepository $sportBlocks
@@ -94,15 +94,15 @@ class PlaygroundsController extends Controller
         abort_unless($sportBlocks->isOwner($entity, Auth::guard('web')->user()), 403);
 
         return view('front.sport-blocks.form', $this->basePayload() + [
-            'title' => 'Редактирование площадки',
-            'button' => 'Сохранить',
+            'title' => 'Edit playground',
+            'button' => 'Save',
             'action' => route('front.playgrounds.update', ['sportBlock' => $entity->id]),
             'sportBlock' => $entity,
         ]);
     }
 
     /**
-     * Проверяет владельца, сохраняет изменения площадки и возвращает на карточку.
+     * Checks владельца, сохраняет изменения playground и возвращает на карточку.
      *
      * @param int $sportBlock
      * @param SportBlockRequest $request
@@ -120,7 +120,7 @@ class PlaygroundsController extends Controller
     }
 
     /**
-     * Показывает карточку площадки, фотографии и права текущего пользователя.
+     * Shows карточку playground, photo и permissions current user.
      *
      * @param int $sportBlock
      * @param SportBlockRepository $sportBlocks
@@ -134,17 +134,17 @@ class PlaygroundsController extends Controller
         $canEdit = $sportBlocks->isOwner($entity, $viewer);
 
         return view('front.sport-blocks.show', $this->basePayload() + [
-            'title' => $entity->name ?: 'Площадка',
+            'title' => $entity->name ?: 'Playground',
             'sportBlock' => $entity,
             'data' => $sportBlocks->serialize($entity),
             'photos' => $photoAlbums->photosForOwner($entity->id, self::TYPE, 20, 0),
-            'uploadAlbum' => $canEdit && $viewer ? $photoAlbums->ensureDefaultAlbumForOwner($entity->id, self::TYPE, 'Фото площадки') : null,
+            'uploadAlbum' => $canEdit && $viewer ? $photoAlbums->ensureDefaultAlbumForOwner($entity->id, self::TYPE, 'Photos playground') : null,
             'canEdit' => $canEdit,
         ]);
     }
 
     /**
-     * Находит объект нужного типа или завершает запрос ошибкой 404.
+     * Finds object нужного typeа or завершает запрос ошибкой 404.
      */
     private function sportBlockOrFail(SportBlockRepository $sportBlocks, int $id): SportBlock
     {
@@ -156,7 +156,7 @@ class PlaygroundsController extends Controller
     }
 
     /**
-     * Готовит общие параметры шаблонов для раздела площадки.
+     * Готовит общие параметры шаблонов для section playground.
      */
     private function basePayload(): array
     {
@@ -165,16 +165,16 @@ class PlaygroundsController extends Controller
             'routePrefix' => 'front.playgrounds',
             'indexRoute' => route('front.playgrounds.index'),
             'createRoute' => route('front.playgrounds.create'),
-            'listTitle' => 'Площадки',
-            'createButton' => 'Создать площадку',
-            'searchPlaceholder' => 'Ищу площадку в городе',
-            'editLabel' => 'редактирование площадки',
+            'listTitle' => 'Playgrounds',
+            'createButton' => 'Create playground',
+            'searchPlaceholder' => 'Search playgrounds by city',
+            'editLabel' => 'edit playground',
             'viewer' => Auth::guard('web')->user(),
         ];
     }
 
     /**
-     * Собирает фильтры поиска площадки из query-параметров.
+     * Собирает фильтры поиска playground из query-параметров.
      */
     private function filters(Request $request): array
     {

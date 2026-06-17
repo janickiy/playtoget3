@@ -27,7 +27,7 @@ use Yajra\DataTables\Facades\DataTables;
 class DataTableController extends Controller
 {
     /**
-     * Возвращает JSON-данные пользователей админки для таблицы DataTables.
+     * Returns JSON data users admin panel для DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -38,10 +38,10 @@ class DataTableController extends Controller
 
         return Datatables::of($row)
             ->addColumn('action', function ($row) {
-                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . route('admin.admin.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
+                $editBtn = '<a title="edit" class="btn btn-xs btn-primary"  href="' . route('admin.admin.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
 
                 if ((int) $row->id !== (int) Auth::id())
-                    $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.admin.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
+                    $deleteBtn = '<a title="delete" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.admin.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
                 else
                     $deleteBtn = '';
 
@@ -54,7 +54,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Возвращает JSON-данные пользователей сайта для таблицы DataTables.
+     * Returns JSON data users site для DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -74,16 +74,16 @@ class DataTableController extends Controller
                 return UserStatus::cssColorFor((int) $row->status);
             })
             ->addColumn('actions', function ($row) {
-                $showBtn = '<a title="просмотр" class="btn btn-xs btn-info" href="' . route('admin.users.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
-                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary" href="' . route('admin.users.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a> &nbsp;';
+                $showBtn = '<a title="view" class="btn btn-xs btn-info" href="' . route('admin.users.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
+                $editBtn = '<a title="edit" class="btn btn-xs btn-primary" href="' . route('admin.users.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a> &nbsp;';
 
                 if ((int) $row->status === UserStatus::Blocked->value) {
-                    $statusBtn = '<a title="разблокировать" class="btn btn-xs btn-success statusRow" href="' . route('admin.users.unblock', ['id' => $row->id]) . '" data-id="' . $row->id . '" data-action="unblock"><span class="fa fa-unlock"></span></a> &nbsp;';
+                    $statusBtn = '<a title="unblock" class="btn btn-xs btn-success statusRow" href="' . route('admin.users.unblock', ['id' => $row->id]) . '" data-id="' . $row->id . '" data-action="unblock"><span class="fa fa-unlock"></span></a> &nbsp;';
                 } else {
-                    $statusBtn = '<a title="заблокировать" class="btn btn-xs btn-warning statusRow" href="' . route('admin.users.block', ['id' => $row->id]) . '" data-id="' . $row->id . '" data-action="block"><span class="fa fa-lock"></span></a> &nbsp;';
+                    $statusBtn = '<a title="block" class="btn btn-xs btn-warning statusRow" href="' . route('admin.users.block', ['id' => $row->id]) . '" data-id="' . $row->id . '" data-action="block"><span class="fa fa-lock"></span></a> &nbsp;';
                 }
 
-                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.users.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
+                $deleteBtn = '<a title="delete" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.users.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
 
                 return '<div class="nobr"> ' . $showBtn . $editBtn . $statusBtn . $deleteBtn . '</div>';
             })
@@ -101,7 +101,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Возвращает JSON-данные категорий для таблицы DataTables.
+     * Returns JSON data категорий для DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -112,9 +112,9 @@ class DataTableController extends Controller
 
         return Datatables::of($row)
             ->addColumn('actions', function ($row) {
-                $showBtn = '<a title="просмотр" class="btn btn-xs btn-info" href="' . route('admin.content.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
-                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . route('admin.content.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
-                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.content.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
+                $showBtn = '<a title="view" class="btn btn-xs btn-info" href="' . route('admin.content.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
+                $editBtn = '<a title="edit" class="btn btn-xs btn-primary"  href="' . route('admin.content.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="delete" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.content.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
 
                 return '<div class="nobr"> ' . $showBtn . $editBtn . $deleteBtn . '</div>';
             })
@@ -122,7 +122,7 @@ class DataTableController extends Controller
                 return Str::limit(strip_tags((string) $row->text), 120);
             })
             ->editColumn('published', function ($row) {
-                return $row->published == 1 ? 'да' : 'нет';
+                return $row->published == 1 ? 'yes' : 'no';
             })
             ->editColumn('created_at', function ($row) {
                 return Carbon::parse($row->created_at)->format('d/m/Y H:i');
@@ -131,7 +131,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Возвращает JSON-данные комьюнити для таблицы DataTables.
+     * Returns JSON data community для DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -142,16 +142,16 @@ class DataTableController extends Controller
 
         return Datatables::of($row)
             ->addColumn('actions', function ($row) {
-                $showBtn = '<a title="просмотр" class="btn btn-xs btn-info" href="' . route('admin.communities.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
-                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary" href="' . route('admin.communities.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a> &nbsp;';
-                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.communities.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
+                $showBtn = '<a title="view" class="btn btn-xs btn-info" href="' . route('admin.communities.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
+                $editBtn = '<a title="edit" class="btn btn-xs btn-primary" href="' . route('admin.communities.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="delete" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.communities.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
 
                 return '<div class="nobr"> ' . $showBtn . $editBtn . $deleteBtn . '</div>';
             })
             ->editColumn('type', function ($row) {
                 return match ((string) $row->type) {
-                    'team' => 'Команда',
-                    'group' => 'Группа',
+                    'team' => 'Team',
+                    'group' => 'Group',
                     default => (string) $row->type,
                 };
             })
@@ -162,7 +162,7 @@ class DataTableController extends Controller
                 return CommunityStatus::labelFor((int) $row->status);
             })
             ->editColumn('recommended', function ($row) {
-                return (int) $row->recommended === 1 ? 'да' : 'нет';
+                return (int) $row->recommended === 1 ? 'yes' : 'no';
             })
             ->filterColumn('created_at', function ($query, string $keyword): void {
                 $this->filterFormattedDateColumn($query, 'communities.created_at', $keyword);
@@ -175,7 +175,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Возвращает JSON-данные мероприятий для таблицы DataTables.
+     * Returns JSON data events для DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -186,9 +186,9 @@ class DataTableController extends Controller
 
         return Datatables::of($row)
             ->addColumn('actions', function ($row) {
-                $showBtn = '<a title="просмотр" class="btn btn-xs btn-info" href="' . route('admin.events.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
-                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary" href="' . route('admin.events.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a> &nbsp;';
-                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.events.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
+                $showBtn = '<a title="view" class="btn btn-xs btn-info" href="' . route('admin.events.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
+                $editBtn = '<a title="edit" class="btn btn-xs btn-primary" href="' . route('admin.events.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="delete" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.events.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
 
                 return '<div class="nobr"> ' . $showBtn . $editBtn . $deleteBtn . '</div>';
             })
@@ -224,7 +224,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Возвращает JSON-данные объявлений для таблицы DataTables.
+     * Returns JSON data announcements для DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -235,9 +235,9 @@ class DataTableController extends Controller
 
         return Datatables::of($row)
             ->addColumn('actions', function ($row) {
-                $showBtn = '<a title="просмотр" class="btn btn-xs btn-info" href="' . route('admin.announcements.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
-                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary" href="' . route('admin.announcements.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a> &nbsp;';
-                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.announcements.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
+                $showBtn = '<a title="view" class="btn btn-xs btn-info" href="' . route('admin.announcements.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
+                $editBtn = '<a title="edit" class="btn btn-xs btn-primary" href="' . route('admin.announcements.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="delete" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.announcements.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
 
                 return '<div class="nobr"> ' . $showBtn . $editBtn . $deleteBtn . '</div>';
             })
@@ -245,7 +245,7 @@ class DataTableController extends Controller
                 return Str::limit(strip_tags((string) $row->text), 120);
             })
             ->editColumn('published', function ($row) {
-                return $row->published == 1 ? 'да' : 'нет';
+                return $row->published == 1 ? 'yes' : 'no';
             })
             ->editColumn('created_at', function ($row) {
                 return Carbon::parse($row->created_at)->format('d/m/Y H:i');
@@ -255,7 +255,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Возвращает JSON-данные обращений обратной связи для таблицы DataTables.
+     * Returns JSON data feedback requests для DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -266,8 +266,8 @@ class DataTableController extends Controller
 
         return Datatables::of($row)
             ->addColumn('actions', function ($row) {
-                $showBtn = '<a title="просмотр" class="btn btn-xs btn-info" href="' . route('admin.feedback.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
-                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary" href="' . route('admin.feedback.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a>';
+                $showBtn = '<a title="view" class="btn btn-xs btn-info" href="' . route('admin.feedback.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
+                $editBtn = '<a title="edit" class="btn btn-xs btn-primary" href="' . route('admin.feedback.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a>';
 
                 return '<div class="nobr"> ' . $showBtn . $editBtn . '</div>';
             })
@@ -291,7 +291,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Возвращает JSON-данные спортивных блоков для таблицы DataTables.
+     * Returns JSON data sport blocks для DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -302,9 +302,9 @@ class DataTableController extends Controller
 
         return Datatables::of($row)
             ->addColumn('actions', function ($row) {
-                $showBtn = '<a title="просмотр" class="btn btn-xs btn-info" href="' . route('admin.sport-blocks.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
-                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary" href="' . route('admin.sport-blocks.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a> &nbsp;';
-                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.sport-blocks.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
+                $showBtn = '<a title="view" class="btn btn-xs btn-info" href="' . route('admin.sport-blocks.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
+                $editBtn = '<a title="edit" class="btn btn-xs btn-primary" href="' . route('admin.sport-blocks.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="delete" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.sport-blocks.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
 
                 return '<div class="nobr"> ' . $showBtn . $editBtn . $deleteBtn . '</div>';
             })
@@ -313,9 +313,9 @@ class DataTableController extends Controller
             })
             ->editColumn('type', function ($row) {
                 return match ((string) $row->type) {
-                    'playground' => 'Площадка',
-                    'shop' => 'Магазин',
-                    'fitness' => 'Фитнес',
+                    'playground' => 'Playground',
+                    'shop' => 'Shop',
+                    'fitness' => 'Fitness',
                     default => (string) $row->type,
                 };
             })
@@ -323,7 +323,7 @@ class DataTableController extends Controller
                 return SportBlockStatus::labelFor((int) $row->status);
             })
             ->editColumn('recommended', function ($row) {
-                return (int) $row->recommended === 1 ? 'да' : 'нет';
+                return (int) $row->recommended === 1 ? 'yes' : 'no';
             })
             ->filterColumn('created_at', function ($query, string $keyword): void {
                 $this->filterFormattedDateColumn($query, 'sport_blocks.created_at', $keyword);
@@ -345,13 +345,13 @@ class DataTableController extends Controller
 
         return Datatables::of($row)
             ->addColumn('actions', function ($row) {
-                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . route('admin.settings.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
-                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.settings.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
+                $editBtn = '<a title="edit" class="btn btn-xs btn-primary"  href="' . route('admin.settings.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="delete" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.settings.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
 
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
             })
             ->editColumn('published', function ($row) {
-                return $row->published == 1 ? 'да' : 'нет';
+                return $row->published == 1 ? 'yes' : 'no';
             })
             ->editColumn('created_at', function ($row) {
                 return Carbon::parse($row->created_at)->format('d/m/Y H:i');
@@ -360,7 +360,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Возвращает JSON-данные логов авторизации для таблицы DataTables.
+     * Returns JSON data logs authorization для DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -374,7 +374,7 @@ class DataTableController extends Controller
         return Datatables::of($row)
             ->addColumn('user', function (Log $row) {
                 if (! $row->user) {
-                    return $row->user_id ? 'Пользователь #' . $row->user_id : '';
+                    return $row->user_id ? 'User #' . $row->user_id : '';
                 }
 
                 return $row->user->displayName() . ' (#' . $row->user_id . ')';
@@ -409,7 +409,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Добавляет поиск по дате в том же формате, который отображается в таблице.
+     * Adds поиск по date in the same format displayed in the table.
      */
     private function filterFormattedDateColumn($query, string $column, string $keyword): void
     {

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="description" content="Мы первый спортивный интернет-ресурс, объединивший приверженцев здорового образа жизни, любителей спорта и профессиональных спортсменов.">
+    <meta name="description" content="We are the first sports online resource that brings together healthy lifestyle followers, sports fans and professional athletes.">
     <title>{{ $title ?? 'PlayToGet' }}</title>
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061526">
@@ -37,30 +37,30 @@
                                     </a>
                                     <div class="col-md-6 col-md-offset-3"><hr></div>
                                     <div class="col-md-8 col-md-offset-2">
-                                        <h1>Спортивный интернет-проект</h1>
-                                        <p class="desc">Мы первый спортивный интернет-ресурс, объединивший:<br>
-                                            приверженцев здорового образа жизни, любителей спорта и профессиональных спортсменов</p>
+                                        <h1>Sports social network</h1>
+                                        <p class="desc">We are the first sports online resource that brings together:<br>
+                                            healthy lifestyle followers, sports fans and professional athletes</p>
                                     </div>
                                     <div class="col-md-12 cols">
                                         <div class="col-md-3">
                                             <img src="{{ asset('frontend/images/teams.png') }}" alt="">
-                                            <h3>создавай и находи команды</h3>
-                                            <p>Устраивай соревнования, ищи противников и приглашай болельщиков</p>
+                                            <h3>create and find teams</h3>
+                                            <p>Organize competitions, find opponents and invite fans</p>
                                         </div>
                                         <div class="col-md-3">
                                             <img src="{{ asset('frontend/images/child.png') }}" alt="">
-                                            <h3>принимай участие</h3>
-                                            <p>Следи за спортивными мероприятиями твоего города вместе с друзьями</p>
+                                            <h3>take part</h3>
+                                            <p>Follow sports events in your city with friends</p>
                                         </div>
                                         <div class="col-md-3">
                                             <img src="{{ asset('frontend/images/master.png') }}" alt="">
-                                            <h3>повышай мастерство</h3>
-                                            <p>Находи наставников, получай советы и делись опытом</p>
+                                            <h3>improve your skills</h3>
+                                            <p>Find mentors, get advice and share experience</p>
                                         </div>
                                         <div class="col-md-3">
                                             <img src="{{ asset('frontend/images/kurs.png') }}" alt="">
-                                            <h3>будь в курсе</h3>
-                                            <p>Общайся с единомышленниками, получай фото- и видеорепортажи</p>
+                                            <h3>stay up to date</h3>
+                                            <p>Chat with like-minded people and get photo and video reports</p>
                                         </div>
                                     </div>
                                 </div>
@@ -69,35 +69,35 @@
                     </div>
                     <div class="col-md-5 form-frame">
                         <div class="form-container">
-                            <p class="sport-inside">Спорт внутри!</p>
-                            <p>Не ограничивай себя. Зарегистрируйся и получи полный доступ ко всем возможностям сайта.</p>
+                            <p class="sport-inside">Sport inside!</p>
+                            <p>Do not limit yourself. Sign up and get full access to all site features.</p>
                             <form autocomplete="off" name="enter-form" method="POST" id="entrance-form" action="{{ route('front.login') }}">
                                 @csrf
-                                <h3>Вход на сайт</h3>
+                                <h3>Sign in to the site</h3>
                                 @if ($errors->any())
-                                    <div class="alert_msg"><p><strong>Ошибка! </strong>{{ $errors->first() }}</p></div>
+                                    <div class="alert_msg"><p><strong>Error! </strong>{{ $errors->first() }}</p></div>
                                 @endif
                                 <input type="email" name="username" value="{{ old('username', $email ?? '') }}" placeholder="email" id="input-login" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
-                                <input type="password" name="password" placeholder="Пароль" id="input-password" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
+                                <input type="password" name="password" placeholder="Password" id="input-password" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
                                 <input type="checkbox" value="1" name="remember_me" checked id="input-checkbox" hidden>
-                                <label for="input-checkbox">Запомнить меня</label>
-                                <a href="#" class="form-enter-link_pass">Напомнить пароль</a>
-                                <input type="submit" name="login" value="Войти" id="input-submit">
-                                <span>или</span>
-                                <a href="#" class="form-enter-link_reg">Зарегистрироваться</a>
+                                <label for="input-checkbox">Remember me</label>
+                                <a href="#" class="form-enter-link_pass">Remind password</a>
+                                <input type="submit" name="login" value="Sign in" id="input-submit">
+                                <span>or</span>
+                                <a href="#" class="form-enter-link_reg">Sign up</a>
                             </form>
                             <div class="social">
-                                <h4>Войти через</h4>
-                                <a href="{{ route('front.social.redirect', ['provider' => 'google']) }}" class="social-auth-link" aria-label="Войти через Google" title="Google">
+                                <h4>Sign in with</h4>
+                                <a href="{{ route('front.social.redirect', ['provider' => 'google']) }}" class="social-auth-link" aria-label="Sign in with Google" title="Google">
                                     <img src="{{ asset('frontend/images/social-google.svg') }}" alt="">
                                 </a>
-                                <a href="{{ route('front.social.redirect', ['provider' => 'x']) }}" class="social-auth-link" aria-label="Войти через X" title="X">
+                                <a href="{{ route('front.social.redirect', ['provider' => 'x']) }}" class="social-auth-link" aria-label="Sign in with X" title="X">
                                     <img src="{{ asset('frontend/images/social-x.svg') }}" alt="">
                                 </a>
-                                <a href="{{ route('front.social.redirect', ['provider' => 'facebook']) }}" class="social-auth-link" aria-label="Войти через Facebook" title="Facebook">
+                                <a href="{{ route('front.social.redirect', ['provider' => 'facebook']) }}" class="social-auth-link" aria-label="Sign in with Facebook" title="Facebook">
                                     <img src="{{ asset('frontend/images/social-facebook.svg') }}" alt="">
                                 </a>
-                                <a href="{{ route('front.social.redirect', ['provider' => 'linkedin']) }}" class="social-auth-link" aria-label="Войти через LinkedIn" title="LinkedIn">
+                                <a href="{{ route('front.social.redirect', ['provider' => 'linkedin']) }}" class="social-auth-link" aria-label="Sign in with LinkedIn" title="LinkedIn">
                                     <img src="{{ asset('frontend/images/social-linkedin.svg') }}" alt="">
                                 </a>
                             </div>

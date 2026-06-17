@@ -24,10 +24,10 @@ class CommunityInvitationMail extends Mailable
 
     public function envelope(): Envelope
     {
-        $label = $this->community->type === 'group' ? 'группу' : 'команду';
+        $label = $this->community->type === 'group' ? 'group' : 'team';
 
         return new Envelope(
-            subject: 'Вас пригласили в ' . $label,
+            subject: 'You have been invited to ' . $label,
         );
     }
 

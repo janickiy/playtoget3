@@ -18,7 +18,7 @@
                     <li><a target="_blank" rel="noopener" href="https://www.linkedin.com/groups/8510609"><img src="{{ asset('frontend/images/in.svg') }}" alt=""></a></li>
                     <li><a target="_blank" rel="noopener" href="https://www.youtube.com/channel/UC44vVK3JlHCIBBpIY16Ok2g"><img src="{{ asset('frontend/images/youtube.svg') }}" alt=""></a></li>
                 </ul>
-                <p class="copyright">© {{ date('Y') }} PlayToget: Спорт внутри</p>
+                <p class="copyright">© {{ date('Y') }} PlayToget: Sport inside</p>
             </div>
         </div>
     </div>

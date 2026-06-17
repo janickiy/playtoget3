@@ -43,15 +43,15 @@
                                 <thead>
                                 <tr>
                                     <th class="users-checkbox-column" style="width: 3%">
-                                        <input type="checkbox" id="checkAllUsers" title="Отметить / снять отметку у всех">
+                                        <input type="checkbox" id="checkAllUsers" title="Select / clear all">
                                     </th>
                                     <th>ID</th>
                                     <th>Email</th>
-                                    <th>Имя</th>
-                                    <th>Город</th>
-                                    <th>Статус</th>
-                                    <th>Создан</th>
-                                    <th style="width: 14%">Действия</th>
+                                    <th>Name</th>
+                                    <th>City</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th style="width: 14%">Actions</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -62,15 +62,15 @@
                             <div class="row mt-3">
                                 <div class="col-md-4 col-lg-3">
                                     <select id="bulkAction" class="custom-select custom-select-sm">
-                                        <option value="">Выберите действие</option>
-                                        <option value="block">Заблокировать</option>
-                                        <option value="unblock">Разблокировать</option>
-                                        <option value="delete">Удалить</option>
+                                        <option value="">Select action</option>
+                                        <option value="block">Block</option>
+                                        <option value="unblock">Unblock</option>
+                                        <option value="delete">Delete</option>
                                     </select>
                                 </div>
                                 <div class="col-md-3 col-lg-2 mt-2 mt-md-0">
                                     <button type="button" id="bulkApply" class="btn btn-primary btn-sm">
-                                        Применить
+                                        Apply
                                     </button>
                                 </div>
                             </div>
@@ -102,16 +102,16 @@
         $(function () {
             let table = $("#itemList").DataTable({
                 "oLanguage": {
-                    "sLengthMenu": "Отображено _MENU_ записей на страницу",
-                    "sZeroRecords": "Ничего не найдено - извините",
-                    "sInfo": "Показано с _START_ по _END_ из _TOTAL_ записей",
-                    "sInfoEmpty": "Показано с 0 по 0 из 0 записей",
-                    "sInfoFiltered": "(отфильтровано  _MAX_ всего записей)",
+                    "sLengthMenu": "Show _MENU_ entries per page",
+                    "sZeroRecords": "No matching records found",
+                    "sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
+                    "sInfoEmpty": "Showing 0 to 0 of 0 entries",
+                    "sInfoFiltered": "(filtered from _MAX_ total entries)",
                     "oPaginate": {
-                        "sFirst": "Первая",
-                        "sLast": "Посл.",
-                        "sNext": "След.",
-                        "sPrevious": "Пред."
+                        "sFirst": "First",
+                        "sLast": "Last",
+                        "sNext": "Next",
+                        "sPrevious": "Previous"
                     },
                     "sSearch": ' <i class="fas fa-search" aria-hidden="true"></i>'
                 },
@@ -185,16 +185,16 @@
                 let statusUrl = $(this).attr('href');
                 let action = $(this).data('action');
                 let text = action === 'block'
-                    ? 'Пользователь будет заблокирован.'
-                    : 'Пользователь будет разблокирован.';
+                    ? 'User will be blocked.'
+                    : 'User will be unblocked.';
 
                 Swal.fire({
-                    title: "Вы уверены?",
+                    title: "Are you sure?",
                     text: text,
                     showCancelButton: true,
                     icon: 'warning',
-                    cancelButtonText: "Отмена",
-                    confirmButtonText: "Да, применить!",
+                    cancelButtonText: "Cancel",
+                    confirmButtonText: "Yes, apply!",
                     reverseButtons: true,
                     confirmButtonColor: "#DD6B55"
                 }).then((result) => {
@@ -206,10 +206,10 @@
                             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                             success: function (response) {
                                 table.ajax.reload(null, false);
-                                Swal.fire("Сделано!", response.message || "Данные успешно обновлены!", 'success');
+                                Swal.fire("Done!", response.message || "Data updated successfully!", 'success');
                             },
                             error: function (xhr) {
-                                Swal.fire("Ошибка!", (xhr.responseJSON && xhr.responseJSON.message) || "Попробуйте еще раз", 'error');
+                                Swal.fire("Error!", (xhr.responseJSON && xhr.responseJSON.message) || "Please try again", 'error');
                             }
                         });
                     }
@@ -222,12 +222,12 @@
                 let deleteUrl = $(this).attr('href');
 
                 Swal.fire({
-                    title: "Вы уверены?",
-                    text: "Пользователь будет удален из списка.",
+                    title: "Are you sure?",
+                    text: "User will be deleted from the list.",
                     showCancelButton: true,
                     icon: 'warning',
-                    cancelButtonText: "Отмена",
-                    confirmButtonText: "Да, удалить!",
+                    cancelButtonText: "Cancel",
+                    confirmButtonText: "Yes, delete!",
                     reverseButtons: true,
                     confirmButtonColor: "#DD6B55"
                 }).then((result) => {
@@ -239,10 +239,10 @@
                             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                             success: function (response) {
                                 table.ajax.reload(null, false);
-                                Swal.fire("Сделано!", response.message || "Пользователь удален!", 'success');
+                                Swal.fire("Done!", response.message || "User deleted!", 'success');
                             },
                             error: function (xhr) {
-                                Swal.fire("Ошибка при удалении!", (xhr.responseJSON && xhr.responseJSON.message) || "Попробуйте еще раз", 'error');
+                                Swal.fire("Deletion error!", (xhr.responseJSON && xhr.responseJSON.message) || "Please try again", 'error');
                             }
                         });
                     }
@@ -256,22 +256,22 @@
                 }).get();
 
                 if (!action) {
-                    Swal.fire("Выберите действие", "Нужно выбрать действие для применения.", 'warning');
+                    Swal.fire("Select action", "Select an action to apply.", 'warning');
                     return;
                 }
 
                 if (ids.length === 0) {
-                    Swal.fire("Выберите пользователей", "Отметьте хотя бы одного пользователя.", 'warning');
+                    Swal.fire("Select users", "Select at least one user.", 'warning');
                     return;
                 }
 
                 Swal.fire({
-                    title: "Вы уверены?",
-                    text: "Действие будет применено к выбранным пользователям.",
+                    title: "Are you sure?",
+                    text: "The action will be applied to selected users.",
                     showCancelButton: true,
                     icon: 'warning',
-                    cancelButtonText: "Отмена",
-                    confirmButtonText: "Да, применить!",
+                    cancelButtonText: "Cancel",
+                    confirmButtonText: "Yes, apply!",
                     reverseButtons: true,
                     confirmButtonColor: "#DD6B55"
                 }).then((result) => {
@@ -288,10 +288,10 @@
                             success: function (response) {
                                 $('#bulkAction').val('');
                                 table.ajax.reload(null, false);
-                                Swal.fire("Сделано!", response.message || "Действие выполнено!", 'success');
+                                Swal.fire("Done!", response.message || "Action completed!", 'success');
                             },
                             error: function (xhr) {
-                                Swal.fire("Ошибка!", (xhr.responseJSON && xhr.responseJSON.message) || "Попробуйте еще раз", 'error');
+                                Swal.fire("Error!", (xhr.responseJSON && xhr.responseJSON.message) || "Please try again", 'error');
                             }
                         });
                     }

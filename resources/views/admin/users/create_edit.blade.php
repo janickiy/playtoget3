@@ -13,14 +13,14 @@
                         {!! Form::hidden('id', $row->id) !!}
 
                         <div class="card-body">
-                            <p>*-обязательные поля</p>
+                            <p>* required fields</p>
 
                             <div class="form-group">
-                                <label>Текущая аватарка</label>
+                                <label>Current avatar</label>
                                 <div>
                                     <img
                                         src="{{ \App\Helpers\FrontAssets::adminUserAvatar($row) }}"
-                                        alt="Аватар пользователя"
+                                        alt="User avatar"
                                         class="img-thumbnail"
                                         style="width: 120px; height: 120px; object-fit: cover;"
                                     >
@@ -36,7 +36,7 @@
                             </div>
 
                             <div class="form-group">
-                                {!! Form::label('password', 'Новый пароль') !!}
+                                {!! Form::label('password', 'New password') !!}
                                 {!! Form::password('password', ['class' => 'form-control']) !!}
                                 @if ($errors->has('password'))
                                     <p class="text-danger">{{ $errors->first('password') }}</p>
@@ -44,7 +44,7 @@
                             </div>
 
                             <div class="form-group">
-                                {!! Form::label('password_again', 'Повтор пароля') !!}
+                                {!! Form::label('password_again', 'Repeat password') !!}
                                 {!! Form::password('password_again', ['class' => 'form-control']) !!}
                                 @if ($errors->has('password_again'))
                                     <p class="text-danger">{{ $errors->first('password_again') }}</p>
@@ -54,7 +54,7 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        {!! Form::label('firstname', 'Имя') !!}
+                                        {!! Form::label('firstname', 'Name') !!}
                                         {!! Form::text('firstname', old('firstname', $row->firstname), ['class' => 'form-control']) !!}
                                         @if ($errors->has('firstname'))
                                             <p class="text-danger">{{ $errors->first('firstname') }}</p>
@@ -63,7 +63,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        {!! Form::label('lastname', 'Фамилия') !!}
+                                        {!! Form::label('lastname', 'Last name') !!}
                                         {!! Form::text('lastname', old('lastname', $row->lastname), ['class' => 'form-control']) !!}
                                         @if ($errors->has('lastname'))
                                             <p class="text-danger">{{ $errors->first('lastname') }}</p>
@@ -72,7 +72,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        {!! Form::label('secondname', 'Отчество') !!}
+                                        {!! Form::label('secondname', 'Middle name') !!}
                                         {!! Form::text('secondname', old('secondname', $row->secondname), ['class' => 'form-control']) !!}
                                         @if ($errors->has('secondname'))
                                             <p class="text-danger">{{ $errors->first('secondname') }}</p>
@@ -84,8 +84,8 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        {!! Form::label('sex', 'Пол') !!}
-                                        {!! Form::select('sex', ['male' => 'Мужской', 'female' => 'Женский'], old('sex', $row->sex), ['class' => 'custom-select', 'placeholder' => 'не указано']) !!}
+                                        {!! Form::label('sex', 'Gender') !!}
+                                        {!! Form::select('sex', ['male' => 'Male', 'female' => 'Female'], old('sex', $row->sex), ['class' => 'custom-select', 'placeholder' => 'not specified']) !!}
                                         @if ($errors->has('sex'))
                                             <p class="text-danger">{{ $errors->first('sex') }}</p>
                                         @endif
@@ -93,7 +93,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        {!! Form::label('birthday', 'Дата рождения') !!}
+                                        {!! Form::label('birthday', 'Date of birth') !!}
                                         {!! Form::date('birthday', old('birthday', $row->birthday ? $row->birthday->format('Y-m-d') : null), ['class' => 'form-control']) !!}
                                         @if ($errors->has('birthday'))
                                             <p class="text-danger">{{ $errors->first('birthday') }}</p>
@@ -105,7 +105,7 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        {!! Form::label('phone', 'Телефон') !!}
+                                        {!! Form::label('phone', 'Phone') !!}
                                         {!! Form::text('phone', old('phone', $row->phone), ['class' => 'form-control']) !!}
                                         @if ($errors->has('phone'))
                                             <p class="text-danger">{{ $errors->first('phone') }}</p>
@@ -114,7 +114,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        {!! Form::label('contact_email', 'Контактный email') !!}
+                                        {!! Form::label('contact_email', 'Contact email') !!}
                                         {!! Form::text('contact_email', old('contact_email', $row->contact_email), ['class' => 'form-control']) !!}
                                         @if ($errors->has('contact_email'))
                                             <p class="text-danger">{{ $errors->first('contact_email') }}</p>
@@ -123,7 +123,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        {!! Form::label('website', 'Сайт') !!}
+                                        {!! Form::label('website', 'Website') !!}
                                         {!! Form::text('website', old('website', $row->website), ['class' => 'form-control']) !!}
                                         @if ($errors->has('website'))
                                             <p class="text-danger">{{ $errors->first('website') }}</p>
@@ -165,7 +165,7 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        {!! Form::label('country', 'Страна') !!}
+                                        {!! Form::label('country', 'Country') !!}
                                         {!! Form::text('country', old('country', $row->country), ['class' => 'form-control']) !!}
                                         @if ($errors->has('country'))
                                             <p class="text-danger">{{ $errors->first('country') }}</p>
@@ -174,7 +174,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        {!! Form::label('region', 'Регион') !!}
+                                        {!! Form::label('region', 'Region') !!}
                                         {!! Form::text('region', old('region', $row->region), ['class' => 'form-control']) !!}
                                         @if ($errors->has('region'))
                                             <p class="text-danger">{{ $errors->first('region') }}</p>
@@ -183,7 +183,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        {!! Form::label('city', 'Город') !!}
+                                        {!! Form::label('city', 'City') !!}
                                         {!! Form::text('city', old('city', $row->city), ['class' => 'form-control']) !!}
                                         @if ($errors->has('city'))
                                             <p class="text-danger">{{ $errors->first('city') }}</p>
@@ -193,7 +193,7 @@
                             </div>
 
                             <div class="form-group">
-                                {!! Form::label('about', 'О себе') !!}
+                                {!! Form::label('about', 'About me') !!}
                                 {!! Form::textarea('about', old('about', $row->about), ['class' => 'form-control', 'rows' => 4]) !!}
                                 @if ($errors->has('about'))
                                     <p class="text-danger">{{ $errors->first('about') }}</p>
@@ -201,7 +201,7 @@
                             </div>
 
                             <div class="form-group">
-                                {!! Form::label('about_sport', 'О спорте') !!}
+                                {!! Form::label('about_sport', 'About sport') !!}
                                 {!! Form::textarea('about_sport', old('about_sport', $row->about_sport), ['class' => 'form-control', 'rows' => 4]) !!}
                                 @if ($errors->has('about_sport'))
                                     <p class="text-danger">{{ $errors->first('about_sport') }}</p>
@@ -211,7 +211,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        {!! Form::label('status', 'Статус*') !!}
+                                        {!! Form::label('status', 'Status*') !!}
                                         {!! Form::select('status', $statusOptions, old('status', $row->status), ['class' => 'custom-select']) !!}
                                         @if ($errors->has('status'))
                                             <p class="text-danger">{{ $errors->first('status') }}</p>
@@ -220,7 +220,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        {!! Form::label('confirmed_at', 'Дата подтверждения') !!}
+                                        {!! Form::label('confirmed_at', 'Confirmation date') !!}
                                         {!! Form::datetimeLocal('confirmed_at', old('confirmed_at', $row->confirmed_at ? $row->confirmed_at->format('Y-m-d\TH:i') : null), ['class' => 'form-control']) !!}
                                         @if ($errors->has('confirmed_at'))
                                             <p class="text-danger">{{ $errors->first('confirmed_at') }}</p>
@@ -231,9 +231,9 @@
                         </div>
 
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">редактировать</button>
+                            <button type="submit" class="btn btn-primary">edit</button>
                             <a class="btn btn-default float-sm-right" href="{{ route('admin.users.index') }}">
-                                назад
+                                back
                             </a>
                         </div>
 

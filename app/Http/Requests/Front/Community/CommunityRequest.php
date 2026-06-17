@@ -33,7 +33,7 @@ class CommunityRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Укажите название ' . $this->entityNameGenitive() . '.',
+            'name.required' => 'Enter the name of ' . $this->entityNameGenitive() . '.',
         ];
     }
 
@@ -49,6 +49,6 @@ class CommunityRequest extends FormRequest
     {
         $routeName = (string) $this->route()?->getName();
 
-        return str_starts_with($routeName, 'front.groups.') ? 'группы' : 'команды';
+        return str_starts_with($routeName, 'front.groups.') ? 'group' : 'team';
     }
 }

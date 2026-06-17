@@ -13,7 +13,7 @@ class CalendarController extends Controller
 {
 
     /**
-     * Показывает календарь выбранного месяца с отметками дней, где есть мероприятия.
+     * Shows calendar selected месяца с отметками дней, где есть event.
      *
      * @param Request $request
      * @param EventRepository $events
@@ -28,7 +28,7 @@ class CalendarController extends Controller
         $calendarEnd = $monthEnd->endOfWeek(CarbonInterface::SUNDAY);
 
         return view('front.calendar.index', [
-            'title' => 'Календарь',
+            'title' => 'Calendar',
             'month' => $month,
             'monthStart' => $monthStart,
             'monthEnd' => $monthEnd,
@@ -42,7 +42,7 @@ class CalendarController extends Controller
     }
 
     /**
-     * Определяет месяц календаря из query-параметра или возвращает текущий месяц.
+     * Detects месяц calendar из query-параметра or возвращает current месяц.
      *
      * @param Request $request
      * @return CarbonImmutable

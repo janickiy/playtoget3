@@ -30,7 +30,7 @@ class EventRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Укажите название мероприятия.',
+            'name.required' => 'Enter the event name.',
         ];
     }
 

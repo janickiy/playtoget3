@@ -15,7 +15,7 @@ use Illuminate\View\View;
 class ContentController extends Controller
 {
     /**
-     * Подключает репозиторий страниц и базовые настройки админ-контроллера.
+     * Connects репозиторий страниц и базовые настройки админ-контроллера.
      */
     public function __construct(
         private readonly ContentRepository $contentRepository,
@@ -24,27 +24,27 @@ class ContentController extends Controller
     }
 
     /**
-     * Показывает список страниц и разделов.
+     * Shows list pages and sections.
      */
     public function index(): View
     {
         return view('admin.content.index', [
-            'title' => 'Страницы и разделы',
+            'title' => 'Pages and sections',
         ]);
     }
 
     /**
-     * Показывает форму добавления страницы или раздела.
+     * Shows form adding page or section.
      */
     public function create(): View
     {
         return view('admin.content.create_edit', [
-            'title' => 'Добавление раздела',
+            'title' => 'Add section',
         ]);
     }
 
     /**
-     * Создает страницу или раздел из валидированных данных формы.
+     * Creates page or section из валидированных data form.
      */
     public function store(StoreRequest $request): RedirectResponse
     {
@@ -60,11 +60,11 @@ class ContentController extends Controller
 
         return redirect()
             ->route('admin.content.index')
-            ->with('success', 'Данные успешно добавлены');
+            ->with('success', 'Data added successfully');
     }
 
     /**
-     * Показывает страницу просмотра выбранной записи.
+     * Shows page view выбранной записи.
      */
     public function show(int $id): View
     {
@@ -74,12 +74,12 @@ class ContentController extends Controller
 
         return view('admin.content.show', [
             'row' => $row,
-            'title' => 'Просмотр раздела',
+            'title' => 'View section',
         ]);
     }
 
     /**
-     * Показывает форму редактирования выбранной страницы или раздела.
+     * Shows form editing выбранной page or section.
      */
     public function edit(int $id): View
     {
@@ -89,12 +89,12 @@ class ContentController extends Controller
 
         return view('admin.content.create_edit', [
             'row' => $row,
-            'title' => 'Редактирование раздела',
+            'title' => 'Edit section',
         ]);
     }
 
     /**
-     * Обновляет страницу или раздел из валидированных данных формы.
+     * Updates page or section из валидированных data form.
      */
     public function update(EditRequest $request): RedirectResponse
     {
@@ -110,16 +110,16 @@ class ContentController extends Controller
 
         return redirect()
             ->route('admin.content.index')
-            ->with('success', 'Данные успешно обновлены');
+            ->with('success', 'Data updated successfully');
     }
 
     /**
-     * Удаляет выбранную страницу или раздел.
+     * Deletes selected page or section.
      */
     public function destroy(DeleteRequest $request, int $id): JsonResponse
     {
         $this->contentRepository->delete($id);
 
-        return response()->json(['message' => 'Данные успешно удалены.']);
+        return response()->json(['message' => 'Data deleted successfully.']);
     }
 }

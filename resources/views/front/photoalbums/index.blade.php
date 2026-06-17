@@ -4,24 +4,24 @@
     @include('front.profile._top')
 
     <div class="photo-caption front-section-title">
-        <h3>Фотографии</h3>
+        <h3>Photos</h3>
     </div>
 
     @if (! $permissions['photo'])
-        <h4 class="blocking">Пользователь ограничил доступ к этому разделу</h4>
+        <h4 class="blocking">The user has restricted access to this section</h4>
     @else
         @if ($canManage)
             <div class="add-photos-album">
-                <span><i></i><a href="{{ route('front.photoalbums.add-photo') }}">Добавить фото</a></span>
-                <span>или</span>
-                <span><i></i><a href="{{ route('front.photoalbums.create') }}">Создать фотоальбом</a></span>
+                <span><i></i><a href="{{ route('front.photoalbums.add-photo') }}">Add photo</a></span>
+                <span>or</span>
+                <span><i></i><a href="{{ route('front.photoalbums.create') }}">Create photo album</a></span>
             </div>
         @endif
 
         @if ($showPopular && $popularPhotos->isNotEmpty())
             <div class="photo-caption">
-                <h3>Популярные фото</h3>
-                <a id="button-hid" class="button-hid show-pop-photo-block">Скрыть</a>
+                <h3>Popular photos</h3>
+                <a id="button-hid" class="button-hid show-pop-photo-block">Hide</a>
             </div>
 
             <div id="popular-photos">
@@ -36,7 +36,7 @@
         @if ($albums->isNotEmpty())
             <div class="photo-caption">
                 <h3>
-                    {{ $canManage ? 'Мои альбомы' : 'Альбомы пользователя' }}
+                    {{ $canManage ? 'My albums' : 'User albums' }}
                     <sup>{{ $albums->count() }}</sup>
                 </h3>
             </div>
@@ -50,7 +50,7 @@
 
         @if ($photos->isNotEmpty())
             <div class="photo-caption">
-                <h3>{{ $canManage ? 'Мои фото' : 'Фото пользователя' }}</h3>
+                <h3>{{ $canManage ? 'My photos' : 'User photos' }}</h3>
             </div>
 
             <div class="photo-container my-photos" id="photo-list">
@@ -59,12 +59,12 @@
                 @endforeach
                 @if ($hasMorePhotos)
                     <a class="show-more" id="my-event" onclick="showMorePhotos('{{ $profileUser->id }}', 'user')">
-                        <i></i><span id="show-more">показать ещё</span>
+                        <i></i><span id="show-more">show more</span>
                     </a>
                 @endif
             </div>
         @elseif ($albums->isEmpty())
-            <p class="no_message">Фотографий пока нет.</p>
+            <p class="no_message">No photos yet.</p>
         @endif
     @endif
 @endsection

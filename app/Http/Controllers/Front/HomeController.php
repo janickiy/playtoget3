@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
     /**
-     * Показывает главную страницу: гостям форму входа, авторизованным пользователям ленту новостей.
+     * Shows home page: guests form login, authenticated users news feed.
      *
      * @param Request $request
      * @param NewsRepository $news
@@ -27,7 +27,7 @@ class HomeController extends Controller
             $total = collect($results)->sum(fn ($items): int => $items->count());
 
             return view('front.search.index', [
-                'title' => 'Поиск',
+                'title' => 'Search',
                 'query' => $query,
                 'results' => $results,
                 'total' => $total,
@@ -39,7 +39,7 @@ class HomeController extends Controller
             $items = $news->feedPage($pageSize);
 
             return view('front.news.index', [
-                'title' => 'Главная',
+                'title' => 'Home',
                 'news' => $items,
                 'newsPageSize' => $pageSize,
                 'newsOffset' => $pageSize,
@@ -49,7 +49,7 @@ class HomeController extends Controller
         }
 
         return view('front.auth.login', [
-            'title' => 'Спортивный интернет-проект',
+            'title' => 'Sports social network',
             'email' => $request->old('username'),
         ]);
     }

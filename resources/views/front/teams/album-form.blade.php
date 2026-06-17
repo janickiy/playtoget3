@@ -18,7 +18,7 @@
             @csrf
             <div class="education_form">
                 <div class="form-group">
-                    <label class="col-lg-3 control-label" for="name">Название</label>
+                    <label class="col-lg-3 control-label" for="name">Name</label>
                     <div class="col-lg-6">
                         <input class="form-control" type="text" value="{{ $name }}" name="name" id="name">
                     </div>

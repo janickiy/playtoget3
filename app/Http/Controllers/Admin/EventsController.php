@@ -15,7 +15,7 @@ use Illuminate\View\View;
 class EventsController extends Controller
 {
     /**
-     * Подключает репозиторий мероприятий и базовые настройки админ-контроллера.
+     * Connects репозиторий events и базовые настройки админ-контроллера.
      */
     public function __construct(
         private readonly AdminEventRepository $eventRepository,
@@ -24,17 +24,17 @@ class EventsController extends Controller
     }
 
     /**
-     * Показывает список мероприятий.
+     * Shows list events.
      */
     public function index(): View
     {
         return view('admin.events.index', [
-            'title' => 'Мероприятия',
+            'title' => 'Events',
         ]);
     }
 
     /**
-     * Показывает страницу просмотра выбранного мероприятия.
+     * Shows page view selected event.
      */
     public function show(int $id): View
     {
@@ -44,14 +44,14 @@ class EventsController extends Controller
 
         return view('admin.events.show', [
             'row' => $row,
-            'title' => 'Просмотр мероприятия',
+            'title' => 'View event',
             'statusLabel' => $this->eventRepository->statusLabel((int) $row->status),
             'coverUrl' => FrontAssets::eventAvatar($row),
         ]);
     }
 
     /**
-     * Показывает форму редактирования выбранного мероприятия.
+     * Shows form editing selected event.
      */
     public function edit(int $id): View
     {
@@ -61,14 +61,14 @@ class EventsController extends Controller
 
         return view('admin.events.create_edit', [
             'row' => $row,
-            'title' => 'Редактирование мероприятия',
+            'title' => 'Edit event',
             'statusOptions' => $this->eventRepository->statusOptions(),
             'coverUrl' => FrontAssets::eventAvatar($row),
         ]);
     }
 
     /**
-     * Обновляет мероприятие из валидированных данных формы.
+     * Updates event из валидированных data form.
      */
     public function update(EditRequest $request): RedirectResponse
     {
@@ -86,11 +86,11 @@ class EventsController extends Controller
 
         return redirect()
             ->route('admin.events.index')
-            ->with('success', 'Данные успешно обновлены');
+            ->with('success', 'Data updated successfully');
     }
 
     /**
-     * Удаляет выбранное мероприятие.
+     * Deletes selected event.
      */
     public function destroy(DeleteRequest $request): JsonResponse
     {
@@ -98,6 +98,6 @@ class EventsController extends Controller
 
         $this->eventRepository->delete($id);
 
-        return response()->json(['message' => 'Данные успешно удалены.']);
+        return response()->json(['message' => 'Data deleted successfully.']);
     }
 }

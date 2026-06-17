@@ -6,8 +6,8 @@
             'kind' => 'team',
             'route' => 'front.teams',
             'top' => 'front.teams._top',
-            'label' => 'Команда',
-            'labelGenitive' => 'команды',
+            'label' => 'Team',
+            'labelGenitive' => 'team',
             'entity' => $team,
         ];
         $community = $communityView['entity'] ?? $team;
@@ -21,14 +21,14 @@
         @elseif ($sectionAccessDenied ?? false)
             @include('front.communities._closed-message', ['message' => $sectionAccessMessage])
         @elseif (! $permissions['photo'])
-            @include('front.communities._closed-message', ['message' => $sectionAccessMessage ?? ($communityView['label'] . ' ограничила доступ к этому разделу')])
+            @include('front.communities._closed-message', ['message' => $sectionAccessMessage ?? ($communityView['label'] . ' has restricted access to this section')])
         @else
             <div class="photo-caption album-show-title">
                 <h3>{{ $photoalbum->name }}</h3>
             </div>
             <p class="album-show-back">
                 <a href="{{ route($communityView['route'] . '.photoalbums', [$routeParam => $community->id]) }}">
-                    Все фото
+                    All photos
                 </a>
             </p>
 
@@ -47,7 +47,7 @@
                 </div>
             @else
                 <div class="photo-caption">
-                    <h5 class="center_text">У {{ $communityView['labelGenitive'] ?? 'команды' }} пока нет фотографий</h5>
+                    <h5 class="center_text">{{ ucfirst($communityView['label'] ?? 'Team') }} has no photos yet</h5>
                 </div>
             @endif
         @endif

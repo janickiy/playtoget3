@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Админ панель | @yield('title')</title>
+    <title>Admin panel | @yield('title')</title>
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -39,7 +39,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" data-widget="fullscreen" title="развернуть"
+                <a class="nav-link" data-widget="fullscreen" title="expand"
                    href="#" role="button">
                     <i class="fas fa-expand-arrows-alt"></i>
                 </a>
@@ -50,7 +50,7 @@
         <ul class="navbar-nav ml-auto">
             <!-- Notifications Dropdown Menu -->
             <li class="nav-item">
-                <a class="nav-link" title="выйти" href="{{ route('logout') }}"
+                <a class="nav-link" title="log out" href="{{ route('logout') }}"
                    role="button">
                     <i class="fas fa-sign-out-alt"></i>
                 </a>
@@ -90,9 +90,9 @@
                             <li class="nav-item">
                                 <a href="{{ route('admin.dashboard.index') }}"
                                    class="nav-link{{ Request::is('cp') ? ' active' : '' }}"
-                                   title="Главная">
+                                   title="Home">
                                     <i class="nav-icon fas fa-home"></i>
-                                    <p>Главная</p>
+                                    <p>Home</p>
                                 </a>
                             </li>
 
@@ -100,7 +100,7 @@
                                 <a href="#" class="nav-link{{ Request::is('cp/content*') ? ' active' : '' }}">
                                     <i class="nav-icon fas fa-book"></i>
                                     <p>
-                                        Контент
+                                        Content
                                         <i class="fas fa-angle-left right"></i>
                                     </p>
                                 </a>
@@ -108,18 +108,18 @@
                                     <li class="nav-item">
                                         <a href="{{ route('admin.menu.index') }}"
                                            class="nav-link{{ Request::is('cp/content/manage-menus*') ? ' active' : '' }}"
-                                           title="Меню">
+                                           title="Menu">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>Меню</p>
+                                            <p>Menu</p>
                                         </a>
                                     </li>
 
                                     <li class="nav-item">
                                         <a href="{{ route('admin.content.index') }}"
                                            class="nav-link{{ Request::is('cp/content/content*') ? ' active' : '' }}"
-                                           title="Страницы и разделы">
+                                           title="Pages and sections">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>Страницы и разделы</p>
+                                            <p>Pages and sections</p>
                                         </a>
                                     </li>
 
@@ -131,73 +131,73 @@
 
                         <li class="nav-item">
                             <a href="{{ route('admin.admin.index') }}" class="nav-link{{ Request::is('cp/admin*') ? ' active' : '' }}"
-                               title="Администраторы">
+                               title="Administrators">
                                 <i class="nav-icon fas fa-users"></i>
-                                <p>Администраторы</p>
+                                <p>Administrators</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a href="{{ route('admin.users.index') }}" class="nav-link{{ Request::is('cp/users*') ? ' active' : '' }}"
-                               title="Пользователи">
+                               title="Users">
                                 <i class="nav-icon fas fa-user"></i>
-                                <p>Пользователи</p>
+                                <p>Users</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a href="{{ route('admin.communities.index') }}" class="nav-link{{ Request::is('cp/communities*') ? ' active' : '' }}"
-                               title="Комьюнити">
+                               title="Communities">
                                 <i class="nav-icon fas fa-users-cog"></i>
-                                <p>Комьюнити</p>
+                                <p>Communities</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a href="{{ route('admin.events.index') }}" class="nav-link{{ Request::is('cp/events*') ? ' active' : '' }}"
-                               title="Мероприятия">
+                               title="Events">
                                 <i class="nav-icon fas fa-calendar-alt"></i>
-                                <p>Мероприятия</p>
+                                <p>Events</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a href="{{ route('admin.announcements.index') }}" class="nav-link{{ Request::is('cp/announcements*') ? ' active' : '' }}"
-                               title="Объявления">
+                               title="Announcements">
                                 <i class="nav-icon fas fa-bullhorn"></i>
-                                <p>Объявления</p>
+                                <p>Announcements</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a href="{{ route('admin.feedback.index') }}" class="nav-link{{ Request::is('cp/feedback*') ? ' active' : '' }}"
-                               title="Обратная связь">
+                               title="Feedback">
                                 <i class="nav-icon fas fa-envelope"></i>
-                                <p>Обратная связь</p>
+                                <p>Feedback</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a href="{{ route('admin.sport-blocks.index') }}" class="nav-link{{ Request::is('cp/sport-blocks*') ? ' active' : '' }}"
-                               title="Спортивные блоки">
+                               title="Sports blocks">
                                 <i class="nav-icon fas fa-running"></i>
-                                <p>Спортивные блоки</p>
+                                <p>Sports blocks</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a href="{{ route('admin.logs.index') }}" class="nav-link{{ Request::is('cp/logs*') ? ' active' : '' }}"
-                               title="Логи">
+                               title="Logs">
                                 <i class="nav-icon fas fa-clipboard-list"></i>
-                                <p>Логи</p>
+                                <p>Logs</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a href="{{ route('admin.settings.index') }}" class="nav-link{{ Request::is('cp/settings*') ? ' active' : '' }}"
-                               title="Настройки">
+                               title="Settings">
                                 <i class="nav-icon fas fa-cogs"></i>
-                                <p>Настройки</p>
+                                <p>Settings</p>
                             </a>
                         </li>
 
@@ -221,7 +221,7 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ url('/') }}">Админ панель</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url('/') }}">Admin panel</a></li>
                             <li class="breadcrumb-item active">{{ $title }}</li>
                         </ol>
                     </div>

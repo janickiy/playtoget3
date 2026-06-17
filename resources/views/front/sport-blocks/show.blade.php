@@ -23,14 +23,14 @@
                 <div class="text-container">
                     <p>{!! nl2br(e($data['about'])) !!}</p>
                 </div>
-                <a href="#" class="read_next" data-status="hide">Читать далее...</a>
+                <a href="#" class="read_next" data-status="hide">Read more...</a>
             </div>
             <div class="contact">
                 @if ($data['avatar'])
                     <img src="{{ $data['avatar'] }}" class="avatar_sport_block" alt="">
                 @endif
                 @if ($canEdit)
-                    <a class="button_edit_groups" href="{{ route($routePrefix . '.edit', ['sportBlock' => $data['id']]) }}">Редактировать</a>
+                    <a class="button_edit_groups" href="{{ route($routePrefix . '.edit', ['sportBlock' => $data['id']]) }}">Edit</a>
                 @endif
                 <h3>{{ $data['name'] }}</h3>
                 @if ($data['address'])
@@ -54,14 +54,14 @@
         </div>
 
         @if ($canEdit && $uploadAlbum)
-            <div id="filelist">Ваш браузер не поддерживает загрузку файлов.</div>
+            <div id="filelist">Your browser does not support file uploads.</div>
             <br>
             <div class="job_form">
                 <form class="form-horizontal">
                     <div class="form-group">
                         <div id="container" class="center_text marginTop20">
-                            <button id="pickfiles" type="button" class="save-button">Добавить фото</button>
-                            <button id="uploadfiles" type="button" class="save-button">Загрузить фото</button>
+                            <button id="pickfiles" type="button" class="save-button">Add photo</button>
+                            <button id="uploadfiles" type="button" class="save-button">Upload photo</button>
                         </div>
                         <div id="photo-upload-error" class="photo-upload-error" style="display:none"></div>
                     </div>
@@ -196,7 +196,7 @@
                 const isHidden = link.attr('data-status') === 'hide';
 
                 textContainer.css('height', isHidden ? textHeight : '140px');
-                link.text(isHidden ? 'Скрыть' : 'Читать далее...');
+                link.text(isHidden ? 'Hide' : 'Read more...');
                 link.attr('data-status', isHidden ? 'show' : 'hide');
             });
 
@@ -273,7 +273,7 @@
                     filters: {
                         max_file_size: '10mb',
                         mime_types: [
-                            {title: 'Изображения', extensions: allowedPhotoExtensions}
+                            {title: 'Images', extensions: allowedPhotoExtensions}
                         ]
                     },
                     multipart_params: {
@@ -302,7 +302,7 @@
                                 const reader = new FileReader();
 
                                 reader.onload = function (event) {
-                                    document.getElementById('filelist').innerHTML += '<div id="' + file.id + '"><div class="attach big"><img src="' + event.target.result + '" alt=""><b></b><span class="icons-hid"><i class="no_attach" data-tooltip="Не добавлять" data-num="' + file.id + '"><img src="{{ asset('frontend/images/icon-krest.png') }}" alt=""></i></span></div><textarea class="form-control comment_attach" placeholder="Комментарий к фото"></textarea></div><div style="clear:both"></div>';
+                                    document.getElementById('filelist').innerHTML += '<div id="' + file.id + '"><div class="attach big"><img src="' + event.target.result + '" alt=""><b></b><span class="icons-hid"><i class="no_attach" data-tooltip="Do not add" data-num="' + file.id + '"><img src="{{ asset('frontend/images/icon-krest.png') }}" alt=""></i></span></div><textarea class="form-control comment_attach" placeholder="Photo comment"></textarea></div><div style="clear:both"></div>';
                                 };
 
                                 reader.readAsDataURL(file.getNative());
@@ -327,19 +327,19 @@
                             uploadFailed = true;
 
                             if (error.code === plupload.FILE_EXTENSION_ERROR) {
-                                showUploadError('Можно загружать только изображения: JPG, PNG или GIF.');
+                                showUploadError('Only images can be uploaded: JPG, PNG, or GIF.');
                                 return;
                             }
 
                             if (error.code === plupload.FILE_SIZE_ERROR) {
-                                showUploadError('Фото не загружено: размер файла больше 10 МБ.');
+                                showUploadError('Photo not uploaded: file size exceeds 10 MB.');
                                 return;
                             }
 
                             showUploadError(
                                 ajaxErrorMessage(error.response)
                                     || error.message
-                                    || 'Не удалось загрузить фото.'
+                                    || 'Could not upload photo.'
                             );
                         }
                     }

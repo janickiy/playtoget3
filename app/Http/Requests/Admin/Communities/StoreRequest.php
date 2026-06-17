@@ -34,15 +34,15 @@ class StoreRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'type' => 'тип',
-            'name' => 'название',
-            'about' => 'описание',
-            'avatar' => 'аватар',
-            'cover_page' => 'обложка',
-            'place' => 'место',
-            'sport_type' => 'вид спорта',
-            'status' => 'статус',
-            'recommended' => 'рекомендовано',
+            'type' => 'type',
+            'name' => 'name',
+            'about' => 'description',
+            'avatar' => 'avatar',
+            'cover_page' => 'cover',
+            'place' => 'place',
+            'sport_type' => 'sport type',
+            'status' => 'status',
+            'recommended' => 'recommended',
         ];
     }
 }

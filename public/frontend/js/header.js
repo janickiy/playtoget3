@@ -209,11 +209,11 @@ function enqueuePushNotification(item) {
 function messageSenderName(row) {
     const name = $.trim([row.firstname, row.lastname].join(' '));
 
-    return name || 'Пользователь';
+    return name || 'User';
 }
 
 function messageNotificationText(row) {
-    return messageSenderName(row) + ' отправил(а) Вам новое личное сообщение';
+    return messageSenderName(row) + ' sent you a new private message';
 }
 
 function renderIncomingMessage(row) {

@@ -30,7 +30,7 @@ class SportBlockRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Укажите название ' . $this->entityNameGenitive() . '.',
+            'name.required' => 'Enter the name of ' . $this->entityNameGenitive() . '.',
         ];
     }
 
@@ -46,9 +46,9 @@ class SportBlockRequest extends FormRequest
         $routeName = (string) $this->route()?->getName();
 
         return match (true) {
-            str_starts_with($routeName, 'front.fitness.') => 'фитнеса',
-            str_starts_with($routeName, 'front.shops.') => 'магазина',
-            default => 'площадки',
+            str_starts_with($routeName, 'front.fitness.') => 'fitness',
+            str_starts_with($routeName, 'front.shops.') => 'shop',
+            default => 'playground',
         };
     }
 }

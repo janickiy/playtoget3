@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 class SearchRepository
 {
     /**
-     * Подключает репозитории сущностей, по которым выполняется общий поиск.
+     * Connects репозитории сущностей, по которым выполняется общий поиск.
      */
     public function __construct(
         private readonly CommunityRepository $communities,
@@ -18,7 +18,7 @@ class SearchRepository
     }
 
     /**
-     * Собирает результаты общего поиска по основным сущностям сайта.
+     * Собирает результаты общего поиска по основным сущностям site.
      *
      * @return array<string, Collection>
      */
@@ -54,22 +54,22 @@ class SearchRepository
     }
 
     /**
-     * Ищет спортивные блоки всех типов и добавляет маршрут для каждой карточки.
+     * Ищет sport blocks всех typeов и добавляет маршрут для каждой карточки.
      */
     private function sportBlockResults(string $query, int $limit): Collection
     {
         return collect([
             'playground' => [
                 'routePrefix' => 'front.playgrounds',
-                'typeLabel' => 'Площадка',
+                'typeLabel' => 'Playground',
             ],
             'shop' => [
                 'routePrefix' => 'front.shops',
-                'typeLabel' => 'Магазин',
+                'typeLabel' => 'Shop',
             ],
             'fitness' => [
                 'routePrefix' => 'front.fitness',
-                'typeLabel' => 'Фитнес',
+                'typeLabel' => 'Fitness',
             ],
         ])->flatMap(function (array $meta, string $type) use ($query, $limit): Collection {
             return $this->sportBlocks

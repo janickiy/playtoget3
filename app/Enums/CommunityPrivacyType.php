@@ -10,12 +10,12 @@ enum CommunityPrivacyType: int
 
     public function label(string $kind = 'team'): string
     {
-        $noun = $kind === 'group' ? 'группа' : 'команда';
+        $noun = $kind === 'group' ? 'group' : 'team';
 
         return match ($this) {
-            self::Private => 'Приватная ' . $noun,
-            self::Closed => 'Закрытая ' . $noun,
-            self::Open => 'Открытая ' . $noun,
+            self::Private => 'Private ' . $noun,
+            self::Closed => 'Closed ' . $noun,
+            self::Open => 'Open ' . $noun,
         };
     }
 

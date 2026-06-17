@@ -15,7 +15,7 @@ class ProfileCoverCropService
     private ImageFileService $images;
 
     /**
-     * Подключает сервис для работы с загруженными изображениями.
+     * Connects сервис для работы с uploaded images.
      *
      * @param ImageFileService|null $images
      */
@@ -25,7 +25,7 @@ class ProfileCoverCropService
     }
 
     /**
-     * Обрезает загруженную обложку профиля во временный файл нужного размера.
+     * Обрезает uploaded cover профиля во temporary файл нужного размера.
      *
      * @param User $user
      * @param ImageCropData $data
@@ -41,7 +41,7 @@ class ProfileCoverCropService
         if ($sourceWidth < 1 || $sourceHeight < 1) {
             imagedestroy($source);
 
-            throw new RuntimeException('Не удалось прочитать изображение.');
+            throw new RuntimeException('Failed to read the image.');
         }
 
         $x = max(0, (int) floor($data->x));
@@ -54,7 +54,7 @@ class ProfileCoverCropService
         if ($width < 300 || $height < 80) {
             imagedestroy($source);
 
-            throw new RuntimeException('Выделенная область слишком мала.');
+            throw new RuntimeException('The selected area is too small.');
         }
 
         [$x, $y, $width, $height] = $this->normalizeCoverCrop($x, $y, $width, $height);
@@ -62,7 +62,7 @@ class ProfileCoverCropService
         if ($width < 300 || $height < 80) {
             imagedestroy($source);
 
-            throw new RuntimeException('Выделенная область выходит за границы изображения.');
+            throw new RuntimeException('The selected area is outside the image bounds.');
         }
 
         $target = imagecreatetruecolor(self::COVER_WIDTH, self::COVER_HEIGHT);
@@ -87,14 +87,14 @@ class ProfileCoverCropService
         imagedestroy($target);
 
         if (! is_string($contents) || $contents === '') {
-            throw new RuntimeException('Не удалось обработать изображение.');
+            throw new RuntimeException('Failed to process the image.');
         }
 
         $filename = $this->images->temporaryProfileFilename((int) $user->id);
         $path = 'images/tmp/profile/cover_page/' . $filename;
 
         if (! Storage::disk('public')->put($path, $contents)) {
-            throw new RuntimeException('Не удалось сохранить изображение.');
+            throw new RuntimeException('Failed to save the image.');
         }
 
         return [
@@ -104,7 +104,7 @@ class ProfileCoverCropService
     }
 
     /**
-     * Нормализует область обрезки обложки под целевые пропорции.
+     * Нормализует область crop обложки под целевые пропорции.
      *
      * @param int $x
      * @param int $y

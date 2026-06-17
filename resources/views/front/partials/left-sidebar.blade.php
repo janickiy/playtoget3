@@ -3,7 +3,7 @@
     <ul>
         <li>
             <img src="{{ asset('frontend/images/left-sitebar.png') }}" alt="">
-            <a href="#">рекомендует</a>
+            <a href="#">recommends</a>
             <ul class="sub-menu">
                 <li>
                     <div class="sub-content">
@@ -21,14 +21,14 @@
                                 <div class="crearfix"></div>
                             </div>
                         @empty
-                            <h5 class="marginNone">Рекомендаций пока нет</h5>
+                            <h5 class="marginNone">There are no recommendations yet.</h5>
                         @endforelse
                     </div>
                 </li>
             </ul>
         </li>
         <li class="ads">
-            <a href="{{ route('front.events.index') }}">Мероприятия<span>{{ $frontLayout['eventCount'] }}</span></a>
+            <a href="{{ route('front.events.index') }}">Events<span>{{ $frontLayout['eventCount'] }}</span></a>
             <ul class="sub-menu">
                 <li>
                     <div class="sub-content">
@@ -49,7 +49,12 @@
             </ul>
         </li>
         <li class="ads">
-            <a href="{{ route('front.announcements.index') }}">Объявления@if ($frontLayout['announcementsCount'] > 0)<span>{{ $frontLayout['announcementsCount'] }}</span>@endif</a>
+            <a href="{{ route('front.announcements.index') }}">
+                Announcements
+                @if ($frontLayout['announcementsCount'] > 0)
+                    <span>{{ $frontLayout['announcementsCount'] }}</span>
+                @endif
+            </a>
             <ul class="sub-menu">
                 <li>
                     <div class="sub-content">
@@ -65,7 +70,7 @@
                                 <div class="crearfix"></div>
                             </div>
                         @empty
-                            <h5>Объявлений пока нет</h5>
+                            <h5>There are no ads yet</h5>
                         @endforelse
                     </div>
                 </li>

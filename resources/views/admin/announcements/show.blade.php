@@ -13,35 +13,35 @@
                                 <dt class="col-sm-3">ID</dt>
                                 <dd class="col-sm-9">{{ $row->id }}</dd>
 
-                                <dt class="col-sm-3">Название</dt>
+                                <dt class="col-sm-3">Name</dt>
                                 <dd class="col-sm-9">{{ $row->title }}</dd>
 
-                                <dt class="col-sm-3">ЧПУ</dt>
+                                <dt class="col-sm-3">Slug</dt>
                                 <dd class="col-sm-9">{{ $row->slug }}</dd>
 
-                                <dt class="col-sm-3">Опубликовано</dt>
-                                <dd class="col-sm-9">{{ $row->published ? 'да' : 'нет' }}</dd>
+                                <dt class="col-sm-3">Published</dt>
+                                <dd class="col-sm-9">{{ $row->published ? 'yes' : 'no' }}</dd>
 
-                                <dt class="col-sm-3">Создано</dt>
+                                <dt class="col-sm-3">Created</dt>
                                 <dd class="col-sm-9">{{ optional($row->created_at)->format('d/m/Y H:i') }}</dd>
 
-                                <dt class="col-sm-3">Обновлено</dt>
+                                <dt class="col-sm-3">Updated</dt>
                                 <dd class="col-sm-9">{{ optional($row->updated_at)->format('d/m/Y H:i') }}</dd>
 
-                                <dt class="col-sm-3">Содержание</dt>
+                                <dt class="col-sm-3">Content</dt>
                                 <dd class="col-sm-9">{!! $row->text !!}</dd>
                             </dl>
                         </div>
 
                         <div class="card-footer">
                             <a class="btn btn-primary" href="{{ route('admin.announcements.edit', ['id' => $row->id]) }}">
-                                редактировать
+                                edit
                             </a>
                             <a class="btn btn-info" href="{{ route('front.announcements.show', ['slug' => $row->slug]) }}" target="_blank">
-                                открыть на сайте
+                                open on site
                             </a>
                             <a class="btn btn-default float-sm-right" href="{{ route('admin.announcements.index') }}">
-                                назад
+                                back
                             </a>
                         </div>
                     </div>

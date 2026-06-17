@@ -18,7 +18,7 @@ class FitnessController extends Controller
 
 
     /**
-     * Показывает список фитнеса с фильтрами или открывает карточку конкретного объекта.
+     * Shows list fitness с фильтрами or открывает карточку конкретного object.
      *
      * @param Request $request
      * @param SportBlockRepository $sportBlocks
@@ -36,7 +36,7 @@ class FitnessController extends Controller
         $pageSize = 5;
 
         return view('front.sport-blocks.index', $this->basePayload() + [
-                'title' => 'Фитнес',
+                'title' => 'Fitness',
                 'items' => $sportBlocks->serializedByType(self::TYPE, $filters, $pageSize, 0),
                 'itemsPageSize' => $pageSize,
                 'itemsTotal' => $sportBlocks->countByType(self::TYPE, $filters),
@@ -45,7 +45,7 @@ class FitnessController extends Controller
     }
 
     /**
-     * Проверяет авторизацию и показывает форму создания фитнеса.
+     * Checks авторизацию и показывает form creation fitness.
      *
      * @return View|RedirectResponse
      */
@@ -56,15 +56,15 @@ class FitnessController extends Controller
         }
 
         return view('front.sport-blocks.form', $this->basePayload() + [
-                'title' => 'Добавление фитнеса',
-                'button' => 'Создать',
+                'title' => 'Add fitness',
+                'button' => 'Create',
                 'action' => route('front.fitness.store'),
                 'sportBlock' => null,
             ]);
     }
 
     /**
-     * Валидирует данные формы, создает фитнес и перенаправляет на его карточку
+     * Валидирует data form, creates фитнес и перенаправляет на его карточку
      *
      * @param SportBlockRequest $request
      * @param SportBlockRepository $sportBlocks
@@ -84,7 +84,7 @@ class FitnessController extends Controller
     }
 
     /**
-     * Проверяет владельца и показывает форму редактирования фитнеса.
+     * Checks владельца и показывает form editing fitness.
      */
     public function edit(int $sportBlock, SportBlockRepository $sportBlocks): View
     {
@@ -92,15 +92,15 @@ class FitnessController extends Controller
         abort_unless($sportBlocks->isOwner($entity, Auth::guard('web')->user()), 403);
 
         return view('front.sport-blocks.form', $this->basePayload() + [
-                'title' => 'Редактирование фитнеса',
-                'button' => 'Сохранить',
+                'title' => 'Edit fitness',
+                'button' => 'Save',
                 'action' => route('front.fitness.update', ['sportBlock' => $entity->id]),
                 'sportBlock' => $entity,
             ]);
     }
 
     /**
-     * Проверяет владельца, сохраняет изменения фитнеса и возвращает на карточку.
+     * Checks владельца, сохраняет изменения fitness и возвращает на карточку.
      *
      * @param int $sportBlock
      * @param SportBlockRequest $request
@@ -118,7 +118,7 @@ class FitnessController extends Controller
     }
 
     /**
-     * Показывает карточку фитнеса, фотографии и права текущего пользователя.
+     * Shows карточку fitness, photo и permissions current user.
      *
      * @param int $sportBlock
      * @param SportBlockRepository $sportBlocks
@@ -132,17 +132,17 @@ class FitnessController extends Controller
         $canEdit = $sportBlocks->isOwner($entity, $viewer);
 
         return view('front.sport-blocks.show', $this->basePayload() + [
-                'title' => $entity->name ?: 'Фитнес',
+                'title' => $entity->name ?: 'Fitness',
                 'sportBlock' => $entity,
                 'data' => $sportBlocks->serialize($entity),
                 'photos' => $photoAlbums->photosForOwner($entity->id, self::TYPE, 20, 0),
-                'uploadAlbum' => $canEdit && $viewer ? $photoAlbums->ensureDefaultAlbumForOwner($entity->id, self::TYPE, 'Фото фитнеса') : null,
+                'uploadAlbum' => $canEdit && $viewer ? $photoAlbums->ensureDefaultAlbumForOwner($entity->id, self::TYPE, 'Photos fitness') : null,
                 'canEdit' => $canEdit,
             ]);
     }
 
     /**
-     * Находит объект нужного типа или завершает запрос ошибкой 404.
+     * Finds object нужного typeа or завершает запрос ошибкой 404.
      *
      * @param SportBlockRepository $sportBlocks
      * @param int $id
@@ -158,7 +158,7 @@ class FitnessController extends Controller
     }
 
     /**
-     * Готовит общие параметры шаблонов для раздела фитнеса.
+     * Готовит общие параметры шаблонов для section fitness.
      *
      * @return array
      */
@@ -169,15 +169,15 @@ class FitnessController extends Controller
             'routePrefix' => 'front.fitness',
             'indexRoute' => route('front.fitness.index'),
             'createRoute' => route('front.fitness.create'),
-            'listTitle' => 'Фитнес',
-            'createButton' => 'Создать фитнес',
-            'searchPlaceholder' => 'Ищу фитнес в городе',
+            'listTitle' => 'Fitness',
+            'createButton' => 'Create fitness',
+            'searchPlaceholder' => 'Search fitness by city',
             'viewer' => Auth::guard('web')->user(),
         ];
     }
 
     /**
-     * Собирает фильтры поиска фитнеса из query-параметров.
+     * Собирает фильтры поиска fitness из query-параметров.
      *
      * @param Request $request
      * @return array

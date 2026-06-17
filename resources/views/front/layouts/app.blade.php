@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta property="og:image" content="{{ asset('frontend/images/left-sitebar-img-2.png') }}">
-    <meta name="description" content="Мы первый спортивный интернет-ресурс, объединивший: приверженцев здорового образа жизни, любителей спорта и профессиональных спортсменов.">
+    <meta name="description" content="We are the first sports online resource that brings together: healthy lifestyle followers, sports fans and professional athletes.">
     <title>{{ $title ?? 'PlayToGet' }}</title>
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap-theme.min.css') }}">
@@ -53,7 +53,7 @@
                             </div>
                             <div class="search">
                                 <form autocomplete="off" action="{{ route('front.home') }}" method="GET">
-                                    <input type="text" name="search" id="main_search" value="{{ request('search') }}" placeholder="Найти">
+                                    <input type="text" name="search" id="main_search" value="{{ request('search') }}" placeholder="Find">
                                 </form>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                                 <li>
                                     <form method="POST" action="{{ route('front.logout') }}">
                                         @csrf
-                                        <button type="submit"><b>X</b> Выйти</button>
+                                        <button type="submit"><b>X</b> Log out</button>
                                     </form>
                                 </li>
                             </ul>
@@ -119,42 +119,42 @@
                         <li class="{{ $isHomeActive ? 'active' : '' }}">
                             <a href="{{ route('front.home') }}"><img src="{{ asset('frontend/images/main-menu-home.svg') }}?v=2026061603" width="34" height="36" alt=""></a>
                             <span class="for-submenu">
-                                <a title="Главная" href="{{ route('front.home') }}">Главная</a>
+                                <a title="Home" href="{{ route('front.home') }}">Home</a>
                             </span>
                         </li>
                         <li class="{{ $isProfileActive ? 'active' : '' }}">
                             <a href="{{ $profileUrl }}"><img src="{{ asset('frontend/images/main-menu-profile.svg') }}?v=2026061603" width="32" height="38" alt=""></a>
                             <span class="for-submenu">
-                                <a title="Профиль" href="{{ $profileUrl }}">Профиль</a>
+                                <a title="Profile" href="{{ $profileUrl }}">Profile</a>
                             </span>
                         </li>
-                        <li class="{{ $isFriendsActive ? 'active' : '' }}"><a href="{{ route('front.friends.index') }}"><img src="{{ asset('frontend/images/main-menu-friends.svg') }}?v=2026061603" width="52" height="38" alt=""></a><span class="for-submenu"><a title="Друзья" href="{{ route('front.friends.index') }}">Друзья</a></span></li>
+                        <li class="{{ $isFriendsActive ? 'active' : '' }}"><a href="{{ route('front.friends.index') }}"><img src="{{ asset('frontend/images/main-menu-friends.svg') }}?v=2026061603" width="52" height="38" alt=""></a><span class="for-submenu"><a title="Friends" href="{{ route('front.friends.index') }}">Friends</a></span></li>
                         <li class="{{ $isShareActive ? 'active' : '' }}">
                             <a><img src="{{ asset('frontend/images/main-menu-share.svg') }}?v=2026061603" width="48" height="34" alt=""></a>
                             <span class="for-submenu">
-                                <a>Поделиться</a>
+                                <a>Share</a>
                                 <ul class="top-mnu-submenu">
-                                    <li><a href="{{ route('front.photoalbums.index') }}">Фотографии</a></li>
-                                    <li><a href="{{ route('front.videoalbums.index') }}">Видео</a></li>
+                                    <li><a href="{{ route('front.photoalbums.index') }}">Photos</a></li>
+                                    <li><a href="{{ route('front.videoalbums.index') }}">Video</a></li>
                                 </ul>
                             </span>
                         </li>
-                        <li class="{{ $isTeamsActive ? 'active' : '' }}"><a href="{{ route('front.teams.index') }}"><img src="{{ asset('frontend/images/main-menu-teams.svg') }}?v=2026061603" width="40" height="34" alt=""></a><span class="for-submenu"><a title="Команды" href="{{ route('front.teams.index') }}">Команды</a></span></li>
-                        <li class="menu_groups_hide {{ $isGroupsActive ? 'active' : '' }}"><a href="{{ route('front.groups.index') }}"><img src="{{ asset('frontend/images/main-menu-groups.svg') }}?v=2026061603" width="56" height="34" alt=""></a><span class="for-submenu"><a title="Группы" href="{{ route('front.groups.index') }}">Группы</a></span></li>
+                        <li class="{{ $isTeamsActive ? 'active' : '' }}"><a href="{{ route('front.teams.index') }}"><img src="{{ asset('frontend/images/main-menu-teams.svg') }}?v=2026061603" width="40" height="34" alt=""></a><span class="for-submenu"><a title="Teams" href="{{ route('front.teams.index') }}">Teams</a></span></li>
+                        <li class="menu_groups_hide {{ $isGroupsActive ? 'active' : '' }}"><a href="{{ route('front.groups.index') }}"><img src="{{ asset('frontend/images/main-menu-groups.svg') }}?v=2026061603" width="56" height="34" alt=""></a><span class="for-submenu"><a title="Groups" href="{{ route('front.groups.index') }}">Groups</a></span></li>
                         <li class="menu_groups {{ $isGroupsActive ? 'active' : '' }}">
                             <a><img src="{{ asset('frontend/images/main-menu-groups.svg') }}?v=2026061603" width="56" height="34" alt=""></a>
                             <span class="for-submenu">
-                                <a title="Группы" href="{{ route('front.groups.index') }}">Группы</a>
+                                <a title="Groups" href="{{ route('front.groups.index') }}">Groups</a>
                                 <ul class="top-mnu-submenu">
-                                    <li><a href="{{ route('front.groups.index') }}">Группы</a></li>
-                                    <li><a href="{{ route('front.playgrounds.index') }}">Площадки</a></li>
-                                    <li><a href="{{ route('front.shops.index') }}">Магазины</a></li>
-                                    <li><a href="{{ route('front.fitness.index') }}">Фитнес</a></li>
+                                    <li><a href="{{ route('front.groups.index') }}">Groups</a></li>
+                                    <li><a href="{{ route('front.playgrounds.index') }}">Playgrounds</a></li>
+                                    <li><a href="{{ route('front.shops.index') }}">Shops</a></li>
+                                    <li><a href="{{ route('front.fitness.index') }}">Fitness</a></li>
                                 </ul>
                             </span>
                         </li>
-                        <li class="{{ $isEventsActive ? 'active' : '' }}"><a href="{{ route('front.events.index') }}"><img src="{{ asset('frontend/images/main-menu-events.svg') }}?v=2026061603" width="36" height="40" alt=""></a><span class="for-submenu"><a title="Мероприятия" href="{{ route('front.events.index') }}">Мероприятия</a></span></li>
-                        <li class="{{ $isCalendarActive ? 'active' : '' }}"><a href="{{ route('front.calendar.index') }}"><img src="{{ asset('frontend/images/main-menu-calendar.svg') }}?v=2026061603" width="42" height="40" alt=""></a><span class="for-submenu"><a title="Календарь" href="{{ route('front.calendar.index') }}">Календарь</a></span></li>
+                        <li class="{{ $isEventsActive ? 'active' : '' }}"><a href="{{ route('front.events.index') }}"><img src="{{ asset('frontend/images/main-menu-events.svg') }}?v=2026061603" width="36" height="40" alt=""></a><span class="for-submenu"><a title="Events" href="{{ route('front.events.index') }}">Events</a></span></li>
+                        <li class="{{ $isCalendarActive ? 'active' : '' }}"><a href="{{ route('front.calendar.index') }}"><img src="{{ asset('frontend/images/main-menu-calendar.svg') }}?v=2026061603" width="42" height="40" alt=""></a><span class="for-submenu"><a title="Calendar" href="{{ route('front.calendar.index') }}">Calendar</a></span></li>
                     </ul>
                 </div>
             </div>

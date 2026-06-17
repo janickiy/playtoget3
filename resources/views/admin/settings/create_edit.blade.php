@@ -31,11 +31,11 @@
 
                         <div class="card-body">
 
-                            <p>*-обязательные поля</p>
+                            <p>* required fields</p>
 
                             <div class="form-group">
 
-                                {!! Form::label('key_cd', 'Ключ*') !!}
+                                {!! Form::label('key_cd', 'Key*') !!}
 
                                 @if(isset($row))
                                     {!! Form::text('key_cd', old('key_cd', $row->key_cd ?? null), ['class' => 'form-control', 'readonly']) !!}
@@ -50,7 +50,7 @@
 
                             <div class="form-group">
 
-                                {!! Form::label('name', 'Название') !!}
+                                {!! Form::label('name', 'Name') !!}
 
                                 @if(isset($row))
                                     {!! Form::text('name', old('name', $row->name ?? null), ['class' => 'form-control']) !!}
@@ -64,7 +64,7 @@
                             </div>
 
                             <div class="form-group">
-                                {!! Form::label('type', 'Тип*') !!}
+                                {!! Form::label('type', 'Type*') !!}
                                 {!! Form::text('type', old('type', isset($row) ? $row->type : $type), ['class' => 'form-control', 'readonly']) !!}
                                 @if ($errors->has('type'))
                                     <p class="text-danger">{{ $errors->first('type') }}</p>
@@ -75,24 +75,24 @@
 
                                 @if(isset($row) && $row->type == 'FILE' || $type == 'FILE')
 
-                                    {!! Form::label('value', 'Файл* (jpg,png,txt,doc,docx,pdf,xls,xlsx,odt,ods,pdf)') !!}
+                                    {!! Form::label('value', 'File* (jpg,png,txt,doc,docx,pdf,xls,xlsx,odt,ods,pdf)') !!}
 
                                     <div class="input-group">
                                         <div class="custom-file">
                                             {!! Form::file('value',  [ 'class' => 'custom-file-input']) !!}
 
-                                            {!! Form::label('value', 'Выберите файл*', ['class' => 'custom-file-label']) !!}
+                                            {!! Form::label('value', 'Choose a file*', ['class' => 'custom-file-label']) !!}
                                         </div>
                                         <div class="input-group-append">
-                                            <span class="input-group-text">Обзор...</span>
+                                            <span class="input-group-text">Browse...</span>
                                         </div>
                                     </div>
 
                                 @elseif (isset($row) && $row->type == 'HTML' || $type == 'HTML')
-                                    {!! Form::label('value', 'Значение*') !!}
+                                    {!! Form::label('value', 'Value*') !!}
                                     {!! Form::textarea('value', old('value', $row->value ?? null), ['rows' => "3", 'placeholder' => "",  'id' => 'summernote', 'style' => "display: none;"]) !!}
                                 @else
-                                    {!! Form::label('value', 'Значение*') !!}
+                                    {!! Form::label('value', 'Value*') !!}
                                     {!! Form::text('value', old('value', $row->value ?? null ), ['class' => 'form-control']) !!}
                                 @endif
 
@@ -103,8 +103,8 @@
                             </div>
 
                             <div class="form-group">
-                                {!! Form::label('display_value', 'Описание') !!}
-                                {!! Form::textarea('display_value', old('display_value', $row->display_value ?? null), ['rows' => "3", 'placeholder' => "Описание", 'class' => 'form-control']) !!}
+                                {!! Form::label('display_value', 'Description') !!}
+                                {!! Form::textarea('display_value', old('display_value', $row->display_value ?? null), ['rows' => "3", 'placeholder' => "Description", 'class' => 'form-control']) !!}
                                 @if ($errors->has('display_value'))
                                     <p class="text-danger">{{ $errors->first('display_value') }}</p>
                                 @endif
@@ -112,7 +112,7 @@
 
                             <div class="form-check">
                                 {!! Form::checkbox('published', 1, isset($row) ? ($row->published): 1, ['class' => 'form-check-input']) !!}
-                                {!! Form::label('published', 'Публиковать', ['class' => 'form-check-label']) !!}
+                                {!! Form::label('published', 'Publish', ['class' => 'form-check-label']) !!}
                                 @if ($errors->has('published'))
                                     <p class="text-danger">{{ $errors->first('published') }}</p>
                                 @endif
@@ -123,10 +123,10 @@
 
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">
-                                {{ isset($row) ? 'редактировать' : 'добавить' }}
+                                {{ isset($row) ? 'edit' : 'add' }}
                             </button>
                             <a class="btn btn-default float-sm-right" href="{{ route('admin.settings.index') }}">
-                                назад
+                                back
                             </a>
                         </div>
 

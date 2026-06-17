@@ -1,5 +1,5 @@
 @extends('errors.layout')
 
-@section('title', '500 - Что-то пошло не так')
+@section('title', '500 - Something went wrong')
 @section('code', '500')
-@section('message', 'Что-то пошло не так')
+@section('message', 'Something went wrong')

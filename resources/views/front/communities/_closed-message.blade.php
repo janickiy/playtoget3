@@ -1,4 +1,4 @@
 <div class="community-closed-message">
     <div class="community-closed-message__icon" aria-hidden="true"></div>
-    <p>{{ $message ?? 'Это закрытое сообщество' }}</p>
+    <p>{{ $message ?? 'This community is closed' }}</p>
 </div>

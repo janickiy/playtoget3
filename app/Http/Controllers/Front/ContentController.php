@@ -9,7 +9,7 @@ use Illuminate\Contracts\View\View;
 class ContentController extends Controller
 {
     /**
-     * Показывает доступную статическую страницу контента.
+     * Shows available static page content.
      *
      * @param string $slug
      * @param ContentRepository $pages

@@ -2,14 +2,14 @@
 
 @section('content')
     <div class="photo-caption">
-        <h3>{{ $title ?? 'Раздел' }}</h3>
+        <h3>{{ $title ?? 'Section' }}</h3>
     </div>
 
     @isset($entity)
         @if ($entity)
             <div class="news-block-item">
                 <div class="news-block-head">
-                    <p class="head-topic">{{ $entity->name ?? $entity->title ?? $entity->displayName() ?? 'Запись' }}</p>
+                    <p class="head-topic">{{ $entity->name ?? $entity->title ?? $entity->displayName() ?? 'Record' }}</p>
                     <div class="clearfix"></div>
                 </div>
                 <div class="news-block-content">
@@ -17,7 +17,7 @@
                 </div>
             </div>
         @else
-            <p>Запись не найдена.</p>
+            <p>Record not found.</p>
         @endif
     @endisset
 
@@ -26,14 +26,14 @@
     @endisset
 
     @isset($childId)
-        <p>Связанная запись: {{ $childId }}</p>
+        <p>Related record: {{ $childId }}</p>
     @endisset
 
     @isset($items)
         @forelse ($items as $item)
             <div class="news-block-item">
                 <div class="news-block-head">
-                    <p class="head-topic">{{ $item->name ?? $item->title ?? 'Запись' }}</p>
+                    <p class="head-topic">{{ $item->name ?? $item->title ?? 'Record' }}</p>
                     <div class="clearfix"></div>
                 </div>
                 <div class="news-block-content">
@@ -41,7 +41,7 @@
                 </div>
             </div>
         @empty
-            <p>Записей пока нет.</p>
+            <p>No records yet.</p>
         @endforelse
     @endisset
 @endsection

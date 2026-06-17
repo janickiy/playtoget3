@@ -2,11 +2,11 @@
 
 @section('content')
     <div class="photo-caption">
-        <h3>Диалоги</h3>
+        <h3>Dialogs</h3>
     </div>
 
     <div class="row dialogues new_dialog" data-status="new">
-        <h5><img src="{{ asset('frontend/images/message-sitebar.svg') }}" alt=""> Начать новый диалог</h5>
+        <h5><img src="{{ asset('frontend/images/message-sitebar.svg') }}" alt=""> Start a new dialog</h5>
     </div>
 
     <div class="mess_list">
@@ -27,8 +27,8 @@
                     </div>
                 </div>
             @empty
-                <div class="text-center"><h4>У Вас пока нет друзей</h4></div>
-                <div class="text-center"><h5><a href="{{ route('front.friends.index') }}">Посмотреть возможных друзей</a></h5></div>
+                <div class="text-center"><h4>You have no friends yet</h4></div>
+                <div class="text-center"><h5><a href="{{ route('front.friends.index') }}">View possible friends</a></h5></div>
             @endforelse
         </div>
 
@@ -57,10 +57,10 @@
                             </span>
                         </div>
                     </div>
-                    <div class="del-dialog" data-item="{{ $dialogue['user_id'] }}" data-tooltip="Очистить диалог"></div>
+                    <div class="del-dialog" data-item="{{ $dialogue['user_id'] }}" data-tooltip="Clear dialogue"></div>
                 </div>
             @empty
-                <div class="text-center"><h4 class="no_dialogues">У Вас пока нет диалогов</h4></div>
+                <div class="text-center"><h4 class="no_dialogues">You have no dialogs yet</h4></div>
             @endforelse
         </div>
     </div>

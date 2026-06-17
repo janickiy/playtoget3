@@ -4,13 +4,13 @@
 
 <script src="{{ asset('frontend/js/photoalbum.js') }}?v=2026061504"></script>
 <div class="overlay photo-viewer-overlay" id="photo_big">
-    <div class="overlay-back back_one">Закрыть</div>
-    <div class="prev">Предыдущая</div>
-    <div class="photo_big_wrap" role="dialog" aria-modal="true" aria-label="Просмотр фотографии">
+    <div class="overlay-back back_one">Close</div>
+    <div class="prev">Previous</div>
+    <div class="photo_big_wrap" role="dialog" aria-modal="true" aria-label="Photo preview">
         <input type="hidden" id="owner_id">
-        <button type="button" class="photo-modal-close back_one" aria-label="Закрыть"></button>
-        <img id="prev_photo" src="{{ asset('frontend/images/prev.png') }}" alt="Предыдущее фото">
-        <img id="next_photo" src="{{ asset('frontend/images/next.png') }}" alt="Следующее фото">
+        <button type="button" class="photo-modal-close back_one" aria-label="Close"></button>
+        <img id="prev_photo" src="{{ asset('frontend/images/prev.png') }}" alt="Previous photo">
+        <img id="next_photo" src="{{ asset('frontend/images/next.png') }}" alt="Next photo">
         <div class="photo-modal-image">
             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" class="photo_wrap next" alt="">
         </div>
@@ -44,24 +44,24 @@
                     <input type="hidden" name="user_id" value="{{ $viewer?->id }}">
                     <input type="hidden" name="parent_id" value="0">
                     @if ($viewer)
-                        <label class="photo-modal-comment-title" for="comment">Оставить комментарий</label>
+                        <label class="photo-modal-comment-title" for="comment">Leave a comment</label>
                         <div class="form-group photo-modal-form-field">
                             <div class="photo-modal-textarea-wrap">
                                 <input type="file" class="file_name" name="file_name[]" data-num="0" multiple>
                                 <textarea class="form-control form-dark" id="comment" rows="4" name="comment" data-num="0"></textarea>
                                 <div class="smile-files">
                                     <a id="smilesBtn" class="smile smilesBtn" data-num="0"><img src="{{ asset('frontend/images/smile.png') }}" alt=""></a>
-                                    <a href="#" class="files" data-num="0" data-tooltip="Прикрепить изображение"><img src="{{ asset('frontend/images/files.png') }}" alt=""></a>
+                                    <a href="#" class="files" data-num="0" data-tooltip="Attach image"><img src="{{ asset('frontend/images/files.png') }}" alt=""></a>
                                     <div class="smilesChoose" data-num="0"></div>
                                 </div>
                                 <div class="files_block" data-num="0"></div>
                             </div>
                         </div>
                         <div class="control photo-modal-submit">
-                            <input class="btn btn-success" type="submit" value="Отправить">
+                            <input class="btn btn-success" type="submit" value="Send">
                         </div>
                     @else
-                        <div class="photo-modal-login-note">Чтобы оставить комментарий авторизуйтесь</div>
+                        <div class="photo-modal-login-note">Log in to leave a comment</div>
                     @endif
                 </form>
             </div>

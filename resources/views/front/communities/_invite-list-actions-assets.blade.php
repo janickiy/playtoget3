@@ -128,7 +128,7 @@
                     })
                         .done(function (response) {
                             if (response.result !== 'success') {
-                                notice('Не удалось изменить статус', false);
+                                notice('Could not change status', false);
                                 return;
                             }
 
@@ -136,10 +136,10 @@
                                 $(this).remove();
                             });
                             decrementInviteCounter();
-                            notice(status === 1 ? 'Приглашение принято' : 'Приглашение отклонено', true);
+                            notice(status === 1 ? 'Invitation accepted' : 'Invitation declined', true);
                         })
                         .fail(function () {
-                            notice('Не удалось изменить статус', false);
+                            notice('Could not change status', false);
                         });
                 });
             })();

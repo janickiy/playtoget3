@@ -9,7 +9,7 @@ class SportBlockAvatarService
     private ImageFileService $images;
 
     /**
-     * Подключает сервис для генерации имен загруженных изображений.
+     * Connects сервис для генерации имен загруженных images.
      */
     public function __construct(?ImageFileService $images = null)
     {
@@ -17,7 +17,7 @@ class SportBlockAvatarService
     }
 
     /**
-     * Сохраняет аватар спортивного объекта и возвращает имя файла.
+     * Сохраняет avatar sport object и возвращает name файла.
      *
      * @param UploadedFile|null $file
      * @return string|null

@@ -23,7 +23,7 @@
         var markup = [
             '<div id="confirmOverlay">',
             '<div id="confirmBox">',
-            '<button type="button" class="confirm-close" aria-label="Закрыть"></button>',
+            '<button type="button" class="confirm-close" aria-label="Close"></button>',
             '<h1>', params.title, '</h1>',
             '<p>', params.message, '</p>',
             '<div id="confirmButtons">',

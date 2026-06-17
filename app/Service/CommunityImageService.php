@@ -10,7 +10,7 @@ class CommunityImageService
     private ImageFileService $images;
 
     /**
-     * Подключает сервис для генерации имен загруженных изображений.
+     * Connects сервис для генерации имен загруженных images.
      */
     public function __construct(?ImageFileService $images = null)
     {
@@ -18,7 +18,7 @@ class CommunityImageService
     }
 
     /**
-     * Сохраняет изображение сообщества и возвращает имя файла.
+     * Сохраняет image community и возвращает name файла.
      *
      * @param UploadedFile|null $file
      * @param string $directory
@@ -39,7 +39,7 @@ class CommunityImageService
     }
 
     /**
-     * Удаляет изображение сообщества из нового и legacy-хранилища.
+     * Deletes image community из нового и legacy-storage.
      *
      * @param string $filename
      * @param string $directory

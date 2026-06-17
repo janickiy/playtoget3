@@ -32,7 +32,7 @@ class TeamsController extends Controller
 
 
     /**
-     * Показывает список команд с фильтрами и вкладками текущего пользователя.
+     * Shows list teams с фильтрами и вкладками current user.
      *
      * @param Request $request
      * @param CommunityRepository $communities
@@ -49,7 +49,7 @@ class TeamsController extends Controller
         $filters = $this->teamFilters($request);
 
         return view('front.teams.index', [
-            'title' => 'Команды',
+            'title' => 'Teams',
             'myTeams' => $this->teamsForViewer($communities->myTeams($viewer->id, self::PAGE_SIZE, 0, $filters), $communities, $viewer),
             'popularTeams' => $this->teamsForViewer($communities->popularTeams(self::PAGE_SIZE, 0, $filters, $viewer), $communities, $viewer),
             'invitedTeams' => $this->teamsForViewer($communities->invitedTeams($viewer->id, self::PAGE_SIZE, 0, $filters), $communities, $viewer),
@@ -62,7 +62,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Показывает команд выбранного пользователя.
+     * Shows teams selected user.
      *
      * @param int $user
      * @param CommunityRepository $communities
@@ -71,7 +71,7 @@ class TeamsController extends Controller
     public function user(int $user, CommunityRepository $communities): View
     {
         return view('front.teams.index', [
-            'title' => 'Команды пользователя',
+            'title' => 'Teams user',
             'myTeams' => $this->teamsForViewer($communities->myTeams($user, 20), $communities, Auth::guard('web')->user()),
             'popularTeams' => collect(),
             'invitedTeams' => collect(),
@@ -81,7 +81,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Проверяет авторизацию и показывает форму создания команды.
+     * Checks авторизацию и показывает form creation team.
      *
      * @return View|RedirectResponse
      */
@@ -94,9 +94,9 @@ class TeamsController extends Controller
         }
 
         return view('front.teams.form', [
-            'title' => 'Создание команды',
+            'title' => 'Create team',
             'action' => route('front.teams.store'),
-            'button' => 'Создать команду',
+            'button' => 'Create team',
             'team' => null,
             'settings' => null,
             'canEditSettings' => false,
@@ -105,7 +105,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Валидирует данные формы и создает команду.
+     * Валидирует data form и creates team.
      *
      * @param CommunityRequest $request
      * @param CommunityRepository $communities
@@ -125,7 +125,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Показывает карточку команды, верхний блок и комментарии.
+     * Shows карточку team, верхний block и комментарии.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -149,7 +149,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Показывает участников команды и их роли.
+     * Shows members team и их роли.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -169,7 +169,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Проверяет права и показывает форму редактирования команды.
+     * Checks permissions и показывает form editing team.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -183,9 +183,9 @@ class TeamsController extends Controller
         abort_unless($communities->canManage($team, $viewer), 403);
 
         return view('front.teams.form', array_merge($this->teamPayload($team, $communities, 'edit'), [
-            'title' => 'Редактирование команды',
+            'title' => 'Edit team',
             'action' => route('front.teams.update', ['community' => $team->id]),
-            'button' => 'Сохранить',
+            'button' => 'Save',
             'team' => $team,
             'settings' => $communities->settings($team),
             'canEditSettings' => true,
@@ -195,7 +195,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Проверяет права и сохраняет изменения команды.
+     * Checks permissions и сохраняет изменения team.
      *
      * @param int $community
      * @param CommunityRequest $request
@@ -215,7 +215,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Показывает фотоальбомы команды или текущей команды.
+     * Shows photo albums team or current team.
      *
      * @param CommunityRepository $communities
      * @param PhotoalbumRepository $photoAlbums
@@ -239,7 +239,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Показывает фотографии выбранного фотоальбома команды.
+     * Shows photo selected photo albumа team.
      *
      * @param int $community
      * @param int $album
@@ -265,7 +265,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Показывает форму добавления фотографии в фотоальбом команды.
+     * Shows form adding photo в photo album team.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -277,16 +277,16 @@ class TeamsController extends Controller
         $team = $this->teamOrFail($community, $communities);
         abort_unless($communities->canManage($team, Auth::guard('web')->user()), 403);
 
-        $photoAlbums->ensureDefaultAlbumForOwner($team->id, 'team', 'Альбом сообщества');
+        $photoAlbums->ensureDefaultAlbumForOwner($team->id, 'team', 'Community album');
 
         return view('front.teams.photoalbums.add-photo', $this->teamPayload($team, $communities, 'photoalbums') + [
-            'title' => 'Добавление фотографий',
+            'title' => 'Add photos',
             'albums' => $photoAlbums->editableAlbumsForOwner($team->id, 'team'),
         ]);
     }
 
     /**
-     * Показывает форму создания фотоальбома команды.
+     * Shows form creation photo albumа team.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -298,17 +298,17 @@ class TeamsController extends Controller
         abort_unless($communities->canManage($team, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', array_merge($this->teamPayload($team, $communities, 'photoalbums'), [
-            'title' => 'Создание альбома',
-            'formTitle' => 'Создание альбома',
+            'title' => 'Create album',
+            'formTitle' => 'Create album',
             'formTitleClass' => 'form-section-title',
             'action' => route('front.teams.photoalbums.store', ['community' => $team->id]),
             'name' => old('name', ''),
-            'button' => 'Создать',
+            'button' => 'Create',
         ]));
     }
 
     /**
-     * Создает фотоальбом команды из валидированных данных формы.
+     * Creates photo album team из валидированных data form.
      *
      * @param int $community
      * @param AlbumRequest $request
@@ -324,7 +324,7 @@ class TeamsController extends Controller
         $albumData = $request->toDto();
 
         if ($photoAlbums->nameExistsForOwner($team->id, 'team', $albumData->name)) {
-            return back()->withErrors(['name' => 'Альбом с таким названием уже существует.'])->withInput();
+            return back()->withErrors(['name' => 'An album with this name already exists.'])->withInput();
         }
 
         $photoAlbums->createAlbumForOwner($team->id, 'team', $albumData);
@@ -333,7 +333,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Проверяет права и показывает форму редактирования фотоальбома команды.
+     * Checks permissions и показывает form editing photo albumа team.
      *
      * @param int $album
      * @param CommunityRepository $communities
@@ -351,15 +351,15 @@ class TeamsController extends Controller
         abort_unless($communities->canManage($team, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->teamPayload($team, $communities, 'photoalbums') + [
-            'title' => 'Редактирование фотоальбома',
+            'title' => 'Edit photo album',
             'action' => route('front.teams.photoalbum.update', ['album' => $photoAlbum->id]),
             'name' => old('name', $photoAlbum->name),
-            'button' => 'Редактировать',
+            'button' => 'Edit',
         ]);
     }
 
     /**
-     * Проверяет права и сохраняет изменения фотоальбома команды.
+     * Checks permissions и сохраняет изменения photo albumа team.
      *
      * @param int $album
      * @param AlbumRequest $request
@@ -380,7 +380,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Проверяет права и удаляет фотоальбом команды.
+     * Checks permissions и deletes photo album team.
      *
      * @param int $album
      * @param CommunityRepository $communities
@@ -401,7 +401,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Показывает форму редактирования фотоальбома конкретной команды
+     * Shows form editing photo albumа конкретной team
      *
      * @param int $community
      * @param int $album
@@ -415,7 +415,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Сохраняет изменения фотоальбома конкретной команды.
+     * Сохраняет изменения photo albumа конкретной team.
      *
      * @param int $community
      * @param int $album
@@ -437,7 +437,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Показывает конкретную фотографию из фотоальбома команды.
+     * Shows specific photo из photo albumа team.
      *
      * @param int $community
      * @param int $album
@@ -455,7 +455,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Показывает фотографию команды без привязки к выбранному альбому.
+     * Shows photo team без привязки к выбранному albumу.
      *
      * @param int $community
      * @param int $photo
@@ -475,7 +475,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Показывает видеоальбомы команды или текущей команды.
+     * Shows video albums team or current team.
      *
      * @param CommunityRepository $communities
      * @param VideoalbumRepository $videoAlbums
@@ -499,7 +499,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Показывает видео выбранного видеоальбома команды.
+     * Shows video selected video album team.
      *
      * @param int $community
      * @param int $album
@@ -524,7 +524,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Показывает форму добавления видео в видеоальбом команды.
+     * Shows form adding video в video album team.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -536,16 +536,16 @@ class TeamsController extends Controller
         $team = $this->teamOrFail($community, $communities);
         abort_unless($communities->canManage($team, Auth::guard('web')->user()), 403);
 
-        $videoAlbums->ensureDefaultAlbumForOwner($team->id, 'team', 'Альбом сообщества');
+        $videoAlbums->ensureDefaultAlbumForOwner($team->id, 'team', 'Community album');
 
         return view('front.teams.videoalbums.add-video', $this->teamPayload($team, $communities, 'videoalbums') + [
-            'formTitle' => 'Добавление видеозаписи',
+            'formTitle' => 'Add video',
             'albums' => $videoAlbums->editableAlbumsForOwner($team->id, 'team'),
         ]);
     }
 
     /**
-     * Валидирует ссылку и добавляет видео в видеоальбом команды.
+     * Валидирует link и добавляет video в video album team.
      *
      * @param int $community
      * @param StoreVideoRequest $request
@@ -566,7 +566,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Показывает форму создания видеоальбома команды.
+     * Shows form creation video album team.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -578,16 +578,16 @@ class TeamsController extends Controller
         abort_unless($communities->canManage($team, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->teamPayload($team, $communities, 'videoalbums') + [
-            'formTitle' => 'Создание видеоальбома',
+            'formTitle' => 'Create video album',
             'formTitleClass' => 'video-form-title',
             'action' => route('front.teams.videoalbums.store', ['community' => $team->id]),
             'name' => old('name', ''),
-            'button' => 'Создать',
+            'button' => 'Create',
         ]);
     }
 
     /**
-     * Создает видеоальбом команды из валидированных данных формы.
+     * Creates video album team из валидированных data form.
      *
      * @param int $community
      * @param AlbumRequest $request
@@ -603,7 +603,7 @@ class TeamsController extends Controller
         $albumData = $request->toDto();
 
         if ($videoAlbums->nameExistsForOwner($team->id, 'team', $albumData->name)) {
-            return back()->withErrors(['name' => 'Альбом с таким названием уже существует.'])->withInput();
+            return back()->withErrors(['name' => 'An album with this name already exists.'])->withInput();
         }
 
         $videoAlbums->createAlbumForOwner($team->id, 'team', $albumData);
@@ -612,7 +612,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Проверяет права и показывает форму редактирования видеоальбома команды.
+     * Checks permissions и показывает form editing video album team.
      *
      * @param int $album
      * @param CommunityRepository $communities
@@ -630,16 +630,16 @@ class TeamsController extends Controller
         abort_unless($communities->canManage($team, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->teamPayload($team, $communities, 'videoalbums') + [
-            'formTitle' => 'Редактирование видеоальбома',
+            'formTitle' => 'Edit video album',
             'formTitleClass' => 'video-form-title',
             'action' => route('front.teams.videoalbum.update', ['album' => $videoAlbum->id]),
             'name' => old('name', $videoAlbum->name),
-            'button' => 'Редактировать',
+            'button' => 'Edit',
         ]);
     }
 
     /**
-     * Проверяет права и сохраняет изменения видеоальбома команды
+     * Checks permissions и сохраняет изменения video album team
      *
      * @param int $album
      * @param AlbumRequest $request
@@ -660,7 +660,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Проверяет права и удаляет видеоальбом команды.
+     * Checks permissions и deletes video album team.
      *
      * @param int $album
      * @param CommunityRepository $communities
@@ -681,7 +681,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Показывает мероприятия команды.
+     * Shows event team.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -698,7 +698,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Показывает форму создания мероприятия для команды.
+     * Shows form creation event для team.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -712,16 +712,16 @@ class TeamsController extends Controller
         abort_unless($viewer && $communities->canViewCommunityContent($team, $viewer), 403);
 
         return view('front.events.form', array_merge($this->teamPayload($team, $communities, 'events'), [
-            'title' => 'Создание мероприятия',
+            'title' => 'Create event',
             'action' => route('front.teams.events.store', ['community' => $team->id]),
-            'button' => 'Создать мероприятие',
+            'button' => 'Create event',
             'event' => null,
             'eventData' => null,
         ]));
     }
 
     /**
-     * Создает мероприятие и сразу привязывает его к команде.
+     * Creates event и сразу привязывает его к teamsе.
      *
      * @param int $community
      * @param EventRequest $request
@@ -744,7 +744,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Готовит общие данные команды для страниц вложенных разделов.
+     * Готовит общие data team для страниц nested sections.
      *
      * @param Community $team
      * @param CommunityRepository $communities
@@ -773,7 +773,7 @@ class TeamsController extends Controller
             && ! (bool) ($permissions[$sectionPermission] ?? true);
 
         return [
-            'title' => $team->name ?: 'Команда',
+            'title' => $team->name ?: 'Team',
             'hideTopProfile' => true,
             'viewer' => $viewer,
             'team' => $team,
@@ -784,15 +784,15 @@ class TeamsController extends Controller
             'canManageTeam' => $communities->canManage($team, $viewer),
             'canInviteTeam' => $communities->canInvite($team, $viewer),
             'communityAccessDenied' => $accessDenied,
-            'communityAccessMessage' => $membershipType === 'blocked' ? 'Доступ к странице ограничен' : 'Это закрытая команда',
+            'communityAccessMessage' => $membershipType === 'blocked' ? 'Access to this page is restricted' : 'This is a closed team',
             'sectionAccessDenied' => $sectionAccessDenied,
-            'sectionAccessMessage' => $this->sectionAccessMessage($sectionPermission, 'команды'),
+            'sectionAccessMessage' => $this->sectionAccessMessage($sectionPermission, 'team'),
             'section' => $section,
         ];
     }
 
     /**
-     * Возвращает ключ настройки приватности для текущего раздела команды.
+     * Returns ключ настройки приватности для current section team.
      */
     private function sectionPermissionKey(string $section): ?string
     {
@@ -805,20 +805,20 @@ class TeamsController extends Controller
     }
 
     /**
-     * Возвращает текст сообщения для закрытого раздела команды.
+     * Returns текст сообщения для закрытого section team.
      */
     private function sectionAccessMessage(?string $sectionPermission, string $labelGenitive): string
     {
         return match ($sectionPermission) {
-            'wall' => 'Лента ' . $labelGenitive . ' скрыта настройками приватности.',
-            'photo' => 'Фотографии ' . $labelGenitive . ' скрыты настройками приватности.',
-            'video' => 'Видео ' . $labelGenitive . ' скрыто настройками приватности.',
-            default => 'Раздел скрыт настройками приватности.',
+            'wall' => 'Feed ' . $labelGenitive . ' is hidden by privacy settings.',
+            'photo' => 'Photos ' . $labelGenitive . ' are hidden by privacy settings.',
+            'video' => 'Video ' . $labelGenitive . ' is hidden by privacy settings.',
+            default => 'Section is hidden by privacy settings.',
         };
     }
 
     /**
-     * Добавляет к списку команд данные о правах и статусе текущего пользователя.
+     * Adds к списку teams data о permissionsх и statusе current user.
      *
      * @param Collection $teams
      * @param CommunityRepository $communities
@@ -838,7 +838,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Собирает фильтры списка команд из query-параметров.
+     * Собирает фильтры списка teams из query-параметров.
      *
      * @param Request $request
      * @return array
@@ -855,7 +855,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Определяет команду из параметра маршрута или из текущего пользователя.
+     * Detects team из параметра маршрута or из current user.
      */
     private function resolveTeam(?int $community, CommunityRepository $communities): Community
     {
@@ -871,7 +871,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Находит активную команду или завершает запрос ошибкой 404.
+     * Finds активную team or завершает запрос ошибкой 404.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -887,7 +887,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Находит фотоальбом, принадлежащий команде, или завершает запрос ошибкой 404
+     * Finds photo album, принадлежащий teamsе, or завершает запрос ошибкой 404
      *
      * @param int $album
      * @param Community $team
@@ -904,7 +904,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Находит видеоальбом, принадлежащий команде, или завершает запрос ошибкой 404
+     * Finds video album, принадлежащий teamsе, or завершает запрос ошибкой 404
      *
      * @param int $album
      * @param Community $team

@@ -15,7 +15,7 @@ use Illuminate\View\View;
 class AnnouncementsController extends Controller
 {
     /**
-     * Подключает репозиторий объявлений и базовые настройки админ-контроллера.
+     * Connects репозиторий announcements и базовые настройки админ-контроллера.
      */
     public function __construct(
         private readonly AnnouncementRepository $announcementRepository,
@@ -24,27 +24,27 @@ class AnnouncementsController extends Controller
     }
 
     /**
-     * Показывает список объявлений.
+     * Shows list announcements.
      */
     public function index(): View
     {
         return view('admin.announcements.index', [
-            'title' => 'Объявления',
+            'title' => 'Announcements',
         ]);
     }
 
     /**
-     * Показывает форму добавления объявления.
+     * Shows form adding announcement.
      */
     public function create(): View
     {
         return view('admin.announcements.create_edit', [
-            'title' => 'Добавление объявления',
+            'title' => 'Add announcement',
         ]);
     }
 
     /**
-     * Создает объявление из валидированных данных формы.
+     * Creates announcement из валидированных data form.
      */
     public function store(StoreRequest $request): RedirectResponse
     {
@@ -60,11 +60,11 @@ class AnnouncementsController extends Controller
 
         return redirect()
             ->route('admin.announcements.index')
-            ->with('success', 'Данные успешно добавлены');
+            ->with('success', 'Data added successfully');
     }
 
     /**
-     * Показывает страницу просмотра выбранного объявления.
+     * Shows page view selected announcement.
      */
     public function show(int $id): View
     {
@@ -74,12 +74,12 @@ class AnnouncementsController extends Controller
 
         return view('admin.announcements.show', [
             'row' => $row,
-            'title' => 'Просмотр объявления',
+            'title' => 'View announcement',
         ]);
     }
 
     /**
-     * Показывает форму редактирования выбранного объявления.
+     * Shows form editing selected announcement.
      */
     public function edit(int $id): View
     {
@@ -89,12 +89,12 @@ class AnnouncementsController extends Controller
 
         return view('admin.announcements.create_edit', [
             'row' => $row,
-            'title' => 'Редактирование объявления',
+            'title' => 'Edit announcement',
         ]);
     }
 
     /**
-     * Обновляет объявление из валидированных данных формы.
+     * Updates announcement из валидированных data form.
      */
     public function update(EditRequest $request): RedirectResponse
     {
@@ -110,16 +110,16 @@ class AnnouncementsController extends Controller
 
         return redirect()
             ->route('admin.announcements.index')
-            ->with('success', 'Данные успешно обновлены');
+            ->with('success', 'Data updated successfully');
     }
 
     /**
-     * Удаляет выбранное объявление.
+     * Deletes selected announcement.
      */
     public function destroy(DeleteRequest $request, int $id): JsonResponse
     {
         $this->announcementRepository->delete($id);
 
-        return response()->json(['message' => 'Данные успешно удалены.']);
+        return response()->json(['message' => 'Data deleted successfully.']);
     }
 }

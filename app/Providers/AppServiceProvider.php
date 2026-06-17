@@ -122,7 +122,7 @@ class AppServiceProvider extends ServiceProvider
                     ->limit(5)
                     ->get()
                     ->map(function (Community $community): array {
-                        $typeLabel = $community->type === 'group' ? 'Группа' : 'Команда';
+                        $typeLabel = $community->type === 'group' ? 'Group' : 'Team';
 
                         return [
                             'title' => (string) $community->name,
@@ -155,9 +155,9 @@ class AppServiceProvider extends ServiceProvider
                             default => 'front.playgrounds',
                         };
                         $typeLabel = match ((string) $sportBlock->type) {
-                            'shop' => 'Магазин',
-                            'fitness' => 'Фитнес',
-                            default => 'Площадка',
+                            'shop' => 'Shop',
+                            'fitness' => 'Fitness',
+                            default => 'Playground',
                         };
 
                         return [

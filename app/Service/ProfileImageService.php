@@ -13,7 +13,7 @@ class ProfileImageService
     private ImageFileService $images;
 
     /**
-     * Подключает сервис для работы с загруженными изображениями.
+     * Connects сервис для работы с uploaded images.
      */
     public function __construct(?ImageFileService $images = null)
     {
@@ -21,7 +21,7 @@ class ProfileImageService
     }
 
     /**
-     * Обрезает загруженный аватар во временный квадратный файл.
+     * Обрезает uploaded avatar во temporary квадратный файл.
      *
      * @param User $user
      * @param ImageCropData $data
@@ -37,7 +37,7 @@ class ProfileImageService
         if ($sourceWidth < 1 || $sourceHeight < 1) {
             imagedestroy($source);
 
-            throw new RuntimeException('Не удалось прочитать изображение.');
+            throw new RuntimeException('Failed to read the image.');
         }
 
         $x = max(0, (int) floor($data->x));
@@ -49,7 +49,7 @@ class ProfileImageService
         if ($size < 100) {
             imagedestroy($source);
 
-            throw new RuntimeException('Выделенная область слишком мала.');
+            throw new RuntimeException('The selected area is too small.');
         }
 
         $size = min($size, $sourceWidth - $x, $sourceHeight - $y);
@@ -57,7 +57,7 @@ class ProfileImageService
         if ($size < 100) {
             imagedestroy($source);
 
-            throw new RuntimeException('Выделенная область выходит за границы изображения.');
+            throw new RuntimeException('The selected area is outside the image bounds.');
         }
 
         $target = imagecreatetruecolor(300, 300);
@@ -71,14 +71,14 @@ class ProfileImageService
         imagedestroy($target);
 
         if (! is_string($contents) || $contents === '') {
-            throw new RuntimeException('Не удалось обработать изображение.');
+            throw new RuntimeException('Failed to process the image.');
         }
 
         $filename = $this->images->temporaryProfileFilename((int) $user->id);
         $path = 'images/tmp/profile/avatar/' . $filename;
 
         if (! Storage::disk('public')->put($path, $contents)) {
-            throw new RuntimeException('Не удалось сохранить изображение.');
+            throw new RuntimeException('Failed to save the image.');
         }
 
         return [
@@ -88,7 +88,7 @@ class ProfileImageService
     }
 
     /**
-     * Сохраняет изображение профиля в указанную директорию.
+     * Сохраняет image профиля в указанную директорию.
      *
      * @param UploadedFile $file
      * @param string $directory
@@ -102,14 +102,14 @@ class ProfileImageService
         $contents = file_get_contents($file->getRealPath());
 
         if ($contents === false || ! Storage::disk('public')->put($path, $contents)) {
-            throw new RuntimeException('Не удалось сохранить изображение профиля.');
+            throw new RuntimeException('Failed to save the profile image.');
         }
 
         return $filename;
     }
 
     /**
-     * Переносит временный аватар в постоянное хранилище пользователя.
+     * Переносит temporary avatar в permanent storage user.
      *
      * @param string|null $temporaryAvatar
      * @param int $userId
@@ -126,14 +126,14 @@ class ProfileImageService
             $userId,
             'images/tmp/profile/avatar/',
             'images/user/avatar/',
-            'Некорректное имя файла аватара.',
-            'Файл аватара не найден.',
-            'Не удалось сохранить аватар.',
+            'Invalid avatar filename.',
+            'Avatar file not found.',
+            'Failed to save avatar.',
         );
     }
 
     /**
-     * Переносит временную обложку в постоянное хранилище пользователя.
+     * Переносит temporary cover в permanent storage user.
      *
      * @param string|null $temporaryCover
      * @param int $userId
@@ -150,14 +150,14 @@ class ProfileImageService
             $userId,
             'images/tmp/profile/cover_page/',
             'images/user/cover_page/',
-            'Некорректное имя файла обложки.',
-            'Файл обложки не найден.',
-            'Не удалось сохранить обложку.',
+            'Invalid cover filename.',
+            'Cover file not found.',
+            'Failed to save cover.',
         );
     }
 
     /**
-     * Удаляет изображение профиля из указанной директории.
+     * Deletes image профиля из указанной директории.
      *
      * @param string $directory
      * @param string|null $filename
@@ -173,7 +173,7 @@ class ProfileImageService
     }
 
     /**
-     * Переносит временное изображение в постоянную директорию профиля.
+     * Переносит временное image в permanent директорию профиля.
      *
      * @param string $temporaryImage
      * @param int $userId

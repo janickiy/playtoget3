@@ -9,19 +9,19 @@ use Illuminate\Contracts\View\View;
 class AnnouncementsController extends Controller
 {
     /**
-     * Показывает список опубликованных объявлений.
+     * Shows list published announcements.
      */
     public function index(AnnouncementRepository $announcements): View
     {
         return view('front.announcements.index', [
             'announcements' => $announcements->visibleList(),
             'hideTopProfile' => true,
-            'title' => 'Объявления',
+            'title' => 'Announcements',
         ]);
     }
 
     /**
-     * Показывает опубликованное объявление по slug.
+     * Shows published announcement по slug.
      */
     public function show(string $slug, AnnouncementRepository $announcements): View
     {
@@ -30,7 +30,7 @@ class AnnouncementsController extends Controller
         return view('front.content.show', [
             'hideTopProfile' => true,
             'page' => $announcement,
-            'title' => $announcement?->title ?? 'Объявление',
+            'title' => $announcement?->title ?? 'Announcement',
         ]);
     }
 }

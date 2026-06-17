@@ -8,7 +8,7 @@
             @include('front.communities._closed-message', ['message' => $communityAccessMessage])
         @else
             <div class="photo-caption">
-                <h3>Участники<sup>{{ $members->count() }}</sup></h3>
+                <h3>Members<sup>{{ $members->count() }}</sup></h3>
             </div>
 
             @if ($members->isNotEmpty())
@@ -30,12 +30,12 @@
                     @endforeach
                 </div>
             @else
-                <p class="no_message">Участников пока нет.</p>
+                <p class="no_message">No members yet.</p>
             @endif
 
             @if ($teams->isNotEmpty())
                 <div class="photo-caption">
-                    <h3>Команды<sup>{{ $teams->count() }}</sup></h3>
+                    <h3>Teams<sup>{{ $teams->count() }}</sup></h3>
                 </div>
                 <div class="event-container">
                     @foreach ($teams as $team)
@@ -52,7 +52,7 @@
 
             @if ($groups->isNotEmpty())
                 <div class="photo-caption">
-                    <h3>Группы<sup>{{ $groups->count() }}</sup></h3>
+                    <h3>Groups<sup>{{ $groups->count() }}</sup></h3>
                 </div>
                 <div class="event-container">
                     @foreach ($groups as $group)
@@ -69,7 +69,7 @@
 
             @if ($applications->isNotEmpty())
                 <div class="photo-caption">
-                    <h3>Заявки</h3>
+                    <h3>Requests</h3>
                 </div>
                 <div class="possible-friend">
                     @foreach ($applications as $member)

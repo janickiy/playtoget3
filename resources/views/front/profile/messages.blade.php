@@ -10,14 +10,14 @@
             <img src="{{ \App\Helpers\FrontAssets::userAvatar($receiver) }}" alt="">
         </a>
         <div class="dialogue-header-main">
-            <span class="dialogue-header-label">Диалог с пользователем</span>
+            <span class="dialogue-header-label">Dialogue with user</span>
             <h1>
                 <a href="{{ route('front.profile.show', ['user' => $receiver->id]) }}">{{ $receiverName }}</a>
             </h1>
         </div>
         <a href="{{ route('front.profile.messages.index', ['user' => $viewer->id]) }}" class="dialogue-back-link">
             <span aria-hidden="true">&larr;</span>
-            К списку диалогов
+            Back to dialogues
         </a>
     </div>
 
@@ -31,7 +31,7 @@
         @forelse ($messages as $message)
             @include('front.profile._dialog-message', ['message' => $message, 'viewer' => $viewer])
         @empty
-            <h5 class="no_message">Здесь будет история переписки</h5>
+            <h5 class="no_message">Message history will appear here</h5>
         @endforelse
 
         <div id="message-list" data-num="{{ $receiver->id }}"></div>
@@ -41,7 +41,7 @@
             <div class="animate">
                 <img src="{{ asset('frontend/images/icon-news-pen-active.png') }}" alt="">
             </div>
-            <span>Набирает сообщение</span>
+            <span>Typing a message</span>
             <span class="dotten"></span>
         </div>
     </div>
@@ -62,21 +62,21 @@
                             <a id="smilesBtn" class="smile smilesBtn" data-num="0">
                                 <img src="{{ asset('frontend/images/smile.png') }}" alt="">
                             </a>
-                            <a href="#" class="files" data-num="0" data-tooltip="Прикрепить изображение">
+                            <a href="#" class="files" data-num="0" data-tooltip="Attach image">
                                 <img src="{{ asset('frontend/images/files.png') }}" alt="">
                             </a>
                             <div class="smilesChoose" data-num="0"></div>
                         </div>
                     </div>
                     <div class="control static_control">
-                        <input class="btn btn-success" id="submit" type="submit" value="Отправить">
+                        <input class="btn btn-success" id="submit" type="submit" value="Send">
                     </div>
                     <div class="files_block" data-num="0"></div>
                 </form>
             </div>
         </div>
     @else
-        <div class="text-center"><h4>Вы не можете написать сообщение пользователю</h4></div>
+        <div class="text-center"><h4>You cannot message this user</h4></div>
     @endif
 @endsection
 

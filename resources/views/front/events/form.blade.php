@@ -28,22 +28,22 @@
             <form class="form-horizontal create_form" method="POST" action="{{ $action }}" enctype="multipart/form-data" autocomplete="off">
                 @csrf
                 <div class="education_form">
-                    <div class="text-center"><h2>Информация</h2></div>
+                    <div class="text-center"><h2>Information</h2></div>
                     <br>
                     <div class="form-group">
-                        <label class="col-lg-3 control-label" for="name">Название</label>
+                        <label class="col-lg-3 control-label" for="name">Name</label>
                         <div class="col-lg-6">
                             <input class="form-control" type="text" id="name" name="name" value="{{ old('name', $event?->name) }}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-3 control-label" for="description">Описание</label>
+                        <label class="col-lg-3 control-label" for="description">Description</label>
                         <div class="col-lg-6">
                             <textarea class="form-control form-dark" id="description" rows="5" name="description">{{ old('description', $event?->description) }}</textarea>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-3 control-label" for="place">Город</label>
+                        <label class="col-lg-3 control-label" for="place">City</label>
                         <div class="col-lg-6 event-form-autocomplete">
                             <input type="hidden" name="id_place" value="{{ old('id_place') }}" class="id_place" data-type="search_city">
                             <input autocomplete="off" class="form-control search_word text-place border-top-none" type="text" value="{{ old('place', $event?->place) }}" name="place" data-type="search_city">
@@ -51,13 +51,13 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-3 control-label" for="address">Адрес</label>
+                        <label class="col-lg-3 control-label" for="address">Address</label>
                         <div class="col-lg-6">
                             <input class="form-control" type="text" id="address" name="address" value="{{ old('address', $event?->address) }}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-3 control-label" for="sport">Вид спорта</label>
+                        <label class="col-lg-3 control-label" for="sport">Sport type</label>
                         <div class="col-lg-6 event-form-autocomplete">
                             <input type="hidden" name="id_sport" class="id_place" value="{{ old('id_sport') }}" data-type="search_sport">
                             <input autocomplete="off" class="form-control search_word text-place border-top-none" type="text" value="{{ old('sport', $event?->sport_type) }}" name="sport" data-type="search_sport">
@@ -65,23 +65,23 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-3 control-label" for="date_from">Начало</label>
+                        <label class="col-lg-3 control-label" for="date_from">Start</label>
                         <div class="col-lg-6">
                             <input class="form-control" type="datetime-local" id="date_from" name="date_from" value="{{ old('date_from', $event?->date_from?->format('Y-m-d\TH:i')) }}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-3 control-label" for="date_to">Окончание</label>
+                        <label class="col-lg-3 control-label" for="date_to">End</label>
                         <div class="col-lg-6">
                             <input class="form-control" type="datetime-local" id="date_to" name="date_to" value="{{ old('date_to', $event?->date_to?->format('Y-m-d\TH:i')) }}">
                         </div>
                     </div>
                     <div class="form-group event-form-cover">
-                        <label class="col-lg-3 control-label">Обложка</label>
+                        <label class="col-lg-3 control-label">Cover</label>
                         <div class="col-lg-6">
                             <img id="preview_cover" src="{{ $event ? $eventData['cover'] : asset('frontend/images/content-bg.png') }}" alt="">
                             <div class="file_upload team-file-upload">
-                                <button type="button">Загрузить обложку</button>
+                                <button type="button">Upload cover</button>
                                 <input class="event-cover-input" type="file" name="cover_file" accept="image/jpeg,image/png,image/gif">
                             </div>
                         </div>

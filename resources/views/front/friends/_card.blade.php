@@ -25,13 +25,13 @@
     <p>{{ $city }}</p>
 
     @if ($showMessage ?? true)
-        <a href="{{ $messageUrl }}" data-tooltip="Написать сообщение"><b></b></a>
+        <a href="{{ $messageUrl }}" data-tooltip="Send message"><b></b></a>
     @endif
 
     @if (($action ?? null) === 'add')
         <div class="control">
             <span>
-                <a onclick="add_as_friend({{ $friend->id }});" data-tooltip="Добавить в друзья">
+                <a onclick="add_as_friend({{ $friend->id }});" data-tooltip="Add friend">
                     <img src="{{ asset('frontend/images/icon-plus.svg') }}" alt="">
                 </a>
             </span>
@@ -41,7 +41,7 @@
                     alt=""
                     class="js-hide-possible-friend"
                     data-num="{{ $friend->id }}"
-                    data-tooltip="Больше не показывать"
+                    data-tooltip="Hide from suggestions"
                 >
             </span>
         </div>
@@ -49,7 +49,7 @@
         <div class="control">
             <span></span>
             <span>
-                <a onclick="remove_friend({{ $friend->id }});" data-tooltip="Удалить из друзей">
+                <a onclick="remove_friend({{ $friend->id }});" data-tooltip="Remove from friends">
                     <img src="{{ asset('frontend/images/icon-krest.svg') }}" alt="">
                 </a>
             </span>
@@ -57,7 +57,7 @@
     @elseif (($action ?? null) === 'accept')
         <div class="control">
             <span>
-                <a onclick="accept_friendship({{ $friend->id }});" data-tooltip="Принять заявку">
+                <a onclick="accept_friendship({{ $friend->id }});" data-tooltip="Accept request">
                     <img src="{{ asset('frontend/images/icon-ok.svg') }}" alt="">
                 </a>
             </span>

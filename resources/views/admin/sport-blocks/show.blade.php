@@ -11,61 +11,61 @@
                     <div class="card">
                         <div class="card-body">
                             <dl class="row">
-                                <dt class="col-sm-3">Аватарка</dt>
+                                <dt class="col-sm-3">Avatar</dt>
                                 <dd class="col-sm-9">
-                                    <img src="{{ $avatarUrl }}" alt="Аватар спортивного блока" class="img-thumbnail" style="width: 140px; height: 140px; object-fit: cover;">
+                                    <img src="{{ $avatarUrl }}" alt="Sport block avatar" class="img-thumbnail" style="width: 140px; height: 140px; object-fit: cover;">
                                 </dd>
 
                                 <dt class="col-sm-3">ID</dt>
                                 <dd class="col-sm-9">{{ $row->id }}</dd>
 
-                                <dt class="col-sm-3">Тип</dt>
+                                <dt class="col-sm-3">Type</dt>
                                 <dd class="col-sm-9">{{ $typeLabel }}</dd>
 
-                                <dt class="col-sm-3">Название</dt>
+                                <dt class="col-sm-3">Name</dt>
                                 <dd class="col-sm-9">{{ $row->name }}</dd>
 
-                                <dt class="col-sm-3">Место</dt>
+                                <dt class="col-sm-3">Place</dt>
                                 <dd class="col-sm-9">{{ $row->place }}</dd>
 
-                                <dt class="col-sm-3">Адрес</dt>
+                                <dt class="col-sm-3">Address</dt>
                                 <dd class="col-sm-9">{{ $row->address }}</dd>
 
-                                <dt class="col-sm-3">Телефон</dt>
+                                <dt class="col-sm-3">Phone</dt>
                                 <dd class="col-sm-9">{{ $row->phone }}</dd>
 
                                 <dt class="col-sm-3">Email</dt>
                                 <dd class="col-sm-9">{{ $row->email }}</dd>
 
-                                <dt class="col-sm-3">Сайт</dt>
+                                <dt class="col-sm-3">Website</dt>
                                 <dd class="col-sm-9">{{ $row->website }}</dd>
 
-                                <dt class="col-sm-3">ID владельца</dt>
+                                <dt class="col-sm-3">Owner ID</dt>
                                 <dd class="col-sm-9">{{ $row->owner_id }}</dd>
 
-                                <dt class="col-sm-3">Статус</dt>
+                                <dt class="col-sm-3">Status</dt>
                                 <dd class="col-sm-9">{{ $statusLabel }}</dd>
 
-                                <dt class="col-sm-3">Рекомендовано</dt>
-                                <dd class="col-sm-9">{{ (int) $row->recommended === 1 ? 'да' : 'нет' }}</dd>
+                                <dt class="col-sm-3">Recommended</dt>
+                                <dd class="col-sm-9">{{ (int) $row->recommended === 1 ? 'yes' : 'no' }}</dd>
 
-                                <dt class="col-sm-3">Создано</dt>
+                                <dt class="col-sm-3">Created</dt>
                                 <dd class="col-sm-9">{{ optional($row->created_at)->format('d/m/Y H:i') }}</dd>
 
-                                <dt class="col-sm-3">Обновлено</dt>
+                                <dt class="col-sm-3">Updated</dt>
                                 <dd class="col-sm-9">{{ optional($row->updated_at)->format('d/m/Y H:i') }}</dd>
 
-                                <dt class="col-sm-3">Описание</dt>
+                                <dt class="col-sm-3">Description</dt>
                                 <dd class="col-sm-9">{{ $row->about }}</dd>
                             </dl>
                         </div>
 
                         <div class="card-footer">
                             <a class="btn btn-primary" href="{{ route('admin.sport-blocks.edit', ['id' => $row->id]) }}">
-                                редактировать
+                                edit
                             </a>
                             <a class="btn btn-default float-sm-right" href="{{ route('admin.sport-blocks.index') }}">
-                                назад
+                                back
                             </a>
                         </div>
                     </div>

@@ -9,7 +9,7 @@ use Illuminate\Validation\Rule;
 class BulkActionRequest extends FormRequest
 {
     /**
-     * Разрешает массовые действия над пользователями авторизованному администратору.
+     * Allows массовые actions над users authenticated administratorу.
      */
     public function authorize(): bool
     {
@@ -17,7 +17,7 @@ class BulkActionRequest extends FormRequest
     }
 
     /**
-     * Возвращает правила проверки массового действия и выбранных пользователей.
+     * Returns rules validation массового actions и selected users.
      *
      * @return array<string, mixed>
      */

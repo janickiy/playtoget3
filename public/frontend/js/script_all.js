@@ -108,10 +108,10 @@ function csrfToken() {
 
 function remove_black_list(id) {
     $.confirm({
-        'title': 'Подтверждение',
-        'message': 'Вы действительно хотите удалить пользователя из черного списка?',
+        'title': 'Confirmation',
+        'message': 'Do you really want to remove the user from the blacklist?',
         'buttons': {
-            'Да': {
+            'Yes': {
                 'class': 'blue',
                 'action': function () {
                     $.ajax({
@@ -124,7 +124,7 @@ function remove_black_list(id) {
                     });
                 }
             },
-            'Нет': {
+            'No': {
                 'class': 'gray',
                 'action': function () {
                 }
@@ -233,7 +233,7 @@ function showMoreFriend(user_id) {
                     if (data.item[i]['status_user'] == 'online') html += 'online';
                     html += '" data-num="' + data.item[i]['user_id'] + '"></span><br />' + data.item[i]['lastname'] + '</strong></h5></a><br>';
                     if (data.item[i]['city'] != null) html += '<p>' + data.item[i]['city'] + '</p>';
-                    html += '<a href="/profile/' + window.user + '/messages/user/' + data.item[i]['user_id'] + '" data-tooltip="Написать сообщение"><b></b></a>';
+                    html += '<a href="/profile/' + window.user + '/messages/user/' + data.item[i]['user_id'] + '" data-tooltip="Send message"><b></b></a>';
                     html += '</div>';
 
                     $('#friends').append(html);
@@ -312,7 +312,7 @@ function blockUserButtonHtml(id, label, action) {
 }
 
 function addAsFriendButtonHtml(id) {
-    return '<button type="button" class="btn btn-success" id="add_as_friend" data-item="' + id + '">Добавить<span> друга</span></button>';
+    return '<button type="button" class="btn btn-success" id="add_as_friend" data-item="' + id + '">Add<span> friend</span></button>';
 }
 
 $(document).on("click", "#block_user", function (event) {
@@ -327,7 +327,7 @@ $(document).on("click", "#block_user", function (event) {
         success: function (data) {
             if (data.result != '') {
                 $('#friends_button').html('');
-                $('#block_user_button').html(blockUserButtonHtml(IdUser, 'Разблокировать', 'unblock_user'));
+                $('#block_user_button').html(blockUserButtonHtml(IdUser, 'Unblock', 'unblock_user'));
             }
         }
     });
@@ -345,7 +345,7 @@ $(document).on("click", "#unblock_user", function (event) {
         success: function (data) {
             if (data.result != '') {
                 $('#friends_button').html(addAsFriendButtonHtml(IdUser));
-                $('#block_user_button').html(blockUserButtonHtml(IdUser, 'Заблокировать', 'block_user'));
+                $('#block_user_button').html(blockUserButtonHtml(IdUser, 'Block', 'block_user'));
             }
         }
     });
@@ -389,10 +389,10 @@ $(document).ready(function () {
         const $form = $(this).closest('form');
         const href = $(this).attr('href');
         $.confirm({
-            'title': 'Подтверждение',
-            'message': 'Вы действительно хотите удалить альбом?',
+            'title': 'Confirmation',
+            'message': 'Do you really want to delete the album?',
             'buttons': {
-                'Да': {
+                'Yes': {
                     'class': 'blue',
                     'action': function () {
                         if ($form.length) {
@@ -402,7 +402,7 @@ $(document).ready(function () {
                         }
                     }
                 },
-                'Нет': {
+                'No': {
                     'class': 'gray',
                     'action': function () {
                     }
@@ -443,7 +443,7 @@ $(document).ready(function () {
     let liked = true;
     $(document).on("mousemove", ".liked", function (eventObject) {
         if (liked) {
-            $data_tooltip = 'Мне нравится';
+            $data_tooltip = 'Like';
 
             $("#tooltip").html($data_tooltip)
                 .css({
@@ -470,7 +470,7 @@ $(document).ready(function () {
     let tell = true;
     $(document).on("mousemove", ".tell", function (eventObject) {
         if (tell) {
-            $data_tooltip = 'Поделиться';
+            $data_tooltip = 'Share';
 
             $("#tooltip").html($data_tooltip)
                 .css({
@@ -536,7 +536,7 @@ $(document).ready(function () {
                     $('.tell[data-type=' + type + '][data-item=' + IdComment + ']')
                         .text(Result)
                         .toggleClass('active', Boolean(data.shared));
-                    $('body').append('<div id="ok_com_fr" class="save_window_ok hiden">Запись появится в новостях у Ваших друзей!</div>');
+	                    $('body').append("<div id=\"ok_com_fr\" class=\"save_window_ok hiden\">The post will appear in your friends' news feed!</div>");
                     setTimeout(function () {
                         $('#ok_com_fr').removeClass('hiden');
                     }, 100);
@@ -555,10 +555,10 @@ $(document).ready(function () {
     $(document).on('click', '.del_mess', function () {
         const id = $(this).attr('data-item');
         $.confirm({
-            'title': 'Подтверждение',
-            'message': 'Вы действительно хотите удалить?',
+            'title': 'Confirmation',
+            'message': 'Do you really want to delete?',
             'buttons': {
-                'Да': {
+                'Yes': {
                     'class': 'blue',
                     'action': function () {
                         $.ajax({
@@ -577,7 +577,7 @@ $(document).ready(function () {
                         });
                     }
                 },
-                'Нет': {
+                'No': {
                     'class': 'gray',
                     'action': function () {
                     }
@@ -592,10 +592,10 @@ $(document).ready(function () {
     $(document).on('click', '.del-message', function () {
         const id = $(this).attr('data-item');
         $.confirm({
-            'title': 'Подтверждение',
-            'message': 'Вы действительно хотите удалить?',
+            'title': 'Confirmation',
+            'message': 'Do you really want to delete?',
             'buttons': {
-                'Да': {
+                'Yes': {
                     'class': 'blue',
                     'action': function () {
                         $.ajax({
@@ -614,7 +614,7 @@ $(document).ready(function () {
                         });
                     }
                 },
-                'Нет': {
+                'No': {
                     'class': 'gray',
                     'action': function () {
                     }
@@ -632,10 +632,10 @@ $(document).ready(function () {
 
         const id = $(this).attr('data-item');
         $.confirm({
-            'title': 'Подтверждение',
-            'message': 'Вы действительно хотите очистить диалог?',
+            'title': 'Confirmation',
+            'message': 'Do you really want to clear the dialog?',
             'buttons': {
-                'Да': {
+                'Yes': {
                     'class': 'blue',
                     'action': function () {
                         $.ajax({
@@ -650,14 +650,14 @@ $(document).ready(function () {
                                 if (msg.result == 'success') {
                                     $('.dialogues[data-num="' + id + '"]').remove();
                                     if (!$('#old_dialogue .dialogues').length) {
-                                        $('#old_dialogue').html('<div class="text-center"><h4 class="no_dialogues">У Вас пока нет диалогов</h4></div>');
+                                        $('#old_dialogue').html('<div class="text-center"><h4 class="no_dialogues">You have no dialogs yet</h4></div>');
                                     }
                                 }
                             }
                         });
                     }
                 },
-                'Нет': {
+                'No': {
                     'class': 'gray',
                     'action': function () {
                     }
@@ -852,15 +852,15 @@ $(document).ready(function () {
 
     $('.age').on('keydown', function (event) {
         if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 ||
-            // Разрешаем: Ctrl+A
-            (event.keyCode == 65 && event.ctrlKey === true) ||
-            // Разрешаем: home, end, влево, вправо
-            (event.keyCode >= 35 && event.keyCode <= 39)) {
-            // Ничего не делаем
-            return;
-        } else {
-            // Обеждаемся, что это цифра, и останавливаем событие keypress
-            if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
+	            // Allow: Ctrl+A
+	            (event.keyCode == 65 && event.ctrlKey === true) ||
+	            // Allow: home, end, left, right.
+	            (event.keyCode >= 35 && event.keyCode <= 39)) {
+	            // Do nothing.
+	            return;
+	        } else {
+	            // Make sure this is a digit; otherwise stop keypress.
+	            if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
                 event.preventDefault();
             }
         }

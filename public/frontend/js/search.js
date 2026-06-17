@@ -66,7 +66,7 @@ $(document).ready(function () {
     $(document).on('focus', '.text-place', function () {
         const text = $(this).val();
         const type = $(this).attr('data-type');
-        if (text == 'Нет') {
+        if (text == 'No') {
             $(this).val('');
         } else {
             select_place(text, type, this);

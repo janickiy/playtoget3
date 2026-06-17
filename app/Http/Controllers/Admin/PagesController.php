@@ -20,7 +20,7 @@ class PagesController extends Controller
     public function index(): View
     {
         return view('cp.pages.index', [
-            'title' => 'Страницы и разделы',
+            'title' => 'Pages and sections',
         ]);
     }
 
@@ -28,7 +28,7 @@ class PagesController extends Controller
     {
         return view('cp.pages.create_edit', [
             'options' => $this->pageRepository->getOption(),
-            'title' => 'Добавление раздела',
+            'title' => 'Add section',
         ]);
     }
 
@@ -53,7 +53,7 @@ class PagesController extends Controller
 
         return redirect()
             ->route('admin.pages.index')
-            ->with('success', 'Данные успешно добавлены');
+            ->with('success', 'Data added successfully');
     }
 
     public function edit(int $id): View
@@ -65,7 +65,7 @@ class PagesController extends Controller
         return view('cp.pages.create_edit', [
             'row' => $row,
             'options' => $this->pageRepository->getOption(),
-            'title' => 'Редактирование раздела',
+            'title' => 'Edit section',
         ]);
     }
 
@@ -91,7 +91,7 @@ class PagesController extends Controller
 
         return redirect()
             ->route('admin.pages.index')
-            ->with('success', 'Данные успешно обновлены');
+            ->with('success', 'Data updated successfully');
     }
 
     public function destroy(DeleteRequest $request, int $id): void

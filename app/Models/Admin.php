@@ -18,9 +18,9 @@ class Admin extends Authenticatable
     public const string ROLE_EDITOR = 'editor';
 
     public static array $role_name = [
-        self::ROLE_ADMIN => 'Админ',
-        self::ROLE_MODERATOR => 'Модератор',
-        self::ROLE_EDITOR => 'Редактор',
+        self::ROLE_ADMIN => 'Admin',
+        self::ROLE_MODERATOR => 'Moderator',
+        self::ROLE_EDITOR => 'Editor',
     ];
 
     protected $fillable = [

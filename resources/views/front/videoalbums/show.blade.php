@@ -5,12 +5,12 @@
 
     <div class="video-albums-page">
         @if (! $permissions['video'])
-            <h4 class="blocking">Пользователь ограничил доступ к этому разделу</h4>
+            <h4 class="blocking">The user has restricted access to this section</h4>
         @else
             <h2>{{ $videoAlbum->name }}</h2>
             <p>
                 <a href="{{ $canManage ? route('front.videoalbums.index') : route('front.videoalbums.user', ['user' => $profileUser->id]) }}">
-                    Все видео
+                    All videos
                 </a>
             </p>
 
@@ -25,7 +25,7 @@
                 @forelse ($videos as $video)
                     @include('front.videoalbums._video-card', ['video' => $video, 'canManage' => $canManage])
                 @empty
-                    <p class="no_message">Видео пока нет.</p>
+                    <p class="no_message">No videos yet.</p>
                 @endforelse
             </div>
         @endif

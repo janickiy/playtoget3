@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 class FriendsController extends Controller
 {
     /**
-     * Подключает репозиторий друзей для всех действий контроллера.
+     * Connects репозиторий друзей для всех действий контроллера.
      */
     public function __construct(
         private readonly FriendRepository $friends,
@@ -27,7 +27,7 @@ class FriendsController extends Controller
     }
 
     /**
-     * Показывает страницу друзей текущего пользователя.
+     * Shows page друзей current user.
      *
      * @param Request $request
      * @return View|RedirectResponse
@@ -44,7 +44,7 @@ class FriendsController extends Controller
     }
 
     /**
-     * Показывает страницу друзей выбранного пользователя.
+     * Shows page друзей selected user.
      *
      * @param int $user
      * @param Request $request
@@ -59,7 +59,7 @@ class FriendsController extends Controller
     }
 
     /**
-     * Готовит списки друзей, заявок, рекомендаций и данные профиля для страницы друзей.
+     * Готовит списки друзей, заявок, recommendations и data профиля для page друзей.
      *
      * @param Request $request
      * @param User|null $viewer
@@ -76,7 +76,7 @@ class FriendsController extends Controller
         $friendsCount = $canViewFriends ? $this->friends->friendsCountFor($targetUser->id, $filters) : 0;
 
         return [
-            'title' => $isOwnPage ? 'Друзья' : 'Друзья пользователя',
+            'title' => $isOwnPage ? 'Friends' : 'Friends user',
             'viewer' => $viewer,
             'targetUser' => $targetUser,
             'isOwnPage' => $isOwnPage && $viewer?->is($targetUser),
@@ -130,7 +130,7 @@ class FriendsController extends Controller
     }
 
     /**
-     * Возвращает текущего авторизованного пользователя фронта.
+     * Returns current авторизованного user фронта.
      *
      * @return User|null
      */
@@ -143,7 +143,7 @@ class FriendsController extends Controller
     }
 
     /**
-     * Готовит данные верхнего блока профиля для страниц друзей.
+     * Готовит data верхнего block профиля для страниц друзей.
      *
      * @param User $user
      * @return array

@@ -7,39 +7,39 @@
             <div class="add-photos-album selects-field-events groups-search-form">
                 <div class="select-container-text two_block">
                     <input type="hidden" name="id_place" class="id_place" value="{{ request('id_place') }}" data-type="search_city">
-                    <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('place') }}" name="place" data-type="search_city" placeholder="Ищу группу в городе">
+                    <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('place') }}" name="place" data-type="search_city" placeholder="Search groups by city">
                     <div class="select-place" data-type="search_city"></div>
                 </div>
                 <div class="select-container-text two_block borderLeft">
                     <input type="hidden" name="id_sport" class="id_place" value="{{ request('id_sport') }}" data-type="search_sport">
-                    <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('sport') }}" name="sport" data-type="search_sport" placeholder="Ищу вид спорта">
+                    <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('sport') }}" name="sport" data-type="search_sport" placeholder="Search sport type">
                     <div class="select-place" data-type="search_sport"></div>
                 </div>
                 <p class="select-container-text lupa">
-                    <input type="text" name="search" value="{{ request('search') }}" class="search_word" placeholder="Ключевое слово">
+                    <input type="text" name="search" value="{{ request('search') }}" class="search_word" placeholder="Keyword">
                     <span></span>
                 </p>
                 <input type="submit" class="displayNone">
-                <button type="button" onclick="location.href='{{ route('front.groups.create') }}'" class="btn btn-white">Создать группу</button>
+                <button type="button" onclick="location.href='{{ route('front.groups.create') }}'" class="btn btn-white">Create group</button>
             </div>
         </form>
 
         <div class="photo-caption front-section-title">
-            <h3>Группы</h3>
+            <h3>Groups</h3>
         </div>
 
         <div id="tabs">
             <ul id="main-menu" class="marginBottom-40">
-                <li data-type="popular" class="active"><a href="#popular">Популярные группы</a></li>
+                <li data-type="popular" class="active"><a href="#popular">Popular groups</a></li>
                 <li data-type="mygroups">
-                    <a href="#mygroups">Мои группы
+                    <a href="#mygroups">My groups
                         @if ($myGroupsTotal > 0)
                             <sup>{{ $myGroupsTotal }}</sup>
                         @endif
                     </a>
                 </li>
                 <li data-type="invited">
-                    <a href="#invited">Меня пригласили
+                    <a href="#invited">Invited
                         @if ($invitedGroupsTotal > 0)
                             <sup class="active">{{ $invitedGroupsTotal }}</sup>
                         @endif
@@ -59,11 +59,11 @@
                             @endforeach
                         </div>
                         <a href="#" class="show-more js-groups-load-more" data-feed="popular" @style(['display: none' => $popularGroupsTotal <= $popularGroups->count()])>
-                            <i></i><span>Показать еще</span>
+                            <i></i><span>Show more</span>
                         </a>
                     </div>
                 @else
-                    <div class="text-center"><h5>Популярные группы отсутствуют</h5></div>
+                    <div class="text-center"><h5>No popular groups yet</h5></div>
                 @endif
             </div>
 
@@ -80,11 +80,11 @@
                             @endforeach
                         </div>
                         <a href="#" class="show-more js-groups-load-more" data-feed="mygroups" @style(['display: none' => $myGroupsTotal <= $myGroups->count()])>
-                            <i></i><span>Показать еще</span>
+                            <i></i><span>Show more</span>
                         </a>
                     </div>
                 @else
-                    <div class="text-center"><h5>Вы пока не вступали в группы</h5></div>
+                    <div class="text-center"><h5>You have not joined any groups yet</h5></div>
                 @endif
             </div>
 
@@ -101,17 +101,17 @@
                             @endforeach
                         </div>
                         <a href="#" class="show-more js-groups-load-more" data-feed="invited" @style(['display: none' => $invitedGroupsTotal <= $invitedGroups->count()])>
-                            <i></i><span>Показать еще</span>
+                            <i></i><span>Show more</span>
                         </a>
                     </div>
                 @else
-                    <div class="text-center"><h5>У вас нет приглашений.</h5></div>
+                    <div class="text-center"><h5>You have no invitations.</h5></div>
                 @endif
             </div>
         </div>
         @else
             <div class="photo-caption">
-                <h3>Группы<sup>{{ $myGroups->count() }}</sup></h3>
+                <h3>Groups<sup>{{ $myGroups->count() }}</sup></h3>
             </div>
 
             @if ($myGroups->isNotEmpty())
@@ -121,7 +121,7 @@
                     @endforeach
                 </div>
             @else
-                <p class="no_message">Групп пока нет.</p>
+                <p class="no_message">No groups yet.</p>
             @endif
         @endempty
     </div>

@@ -1,17 +1,17 @@
 @php
-    $label = $community->type === 'group' ? 'группу' : 'команду';
+    $label = $community->type === 'group' ? 'group' : 'team';
     $url = $community->type === 'group'
         ? route('front.groups.show', ['community' => $community->id])
         : route('front.teams.show', ['community' => $community->id]);
 @endphp
 
-<p>Здравствуйте, {{ $invitee->displayName() }}!</p>
+<p>Hello, {{ $invitee->displayName() }}!</p>
 
-<p>{{ $inviter->displayName() }} приглашает вас вступить в {{ $label }} «{{ $community->name }}».</p>
+<p>{{ $inviter->displayName() }} invites you to join {{ $label }} «{{ $community->name }}».</p>
 
 <p>
-    Чтобы принять или отклонить приглашение, перейдите на страницу:
+    To accept or decline the invitation, go to the page:
     <a href="{{ $url }}">{{ $url }}</a>
 </p>
 
-<p>Спасибо, что вы с PlayToGet.</p>
+<p>Thank you for being with PlayToGet.</p>

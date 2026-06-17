@@ -7,7 +7,7 @@ use Illuminate\View\View;
 class DashboardController extends Controller
 {
     /**
-     * Показывает стартовую страницу админской панели.
+     * Shows start page admin panel.
      */
     public function index(): View
     {

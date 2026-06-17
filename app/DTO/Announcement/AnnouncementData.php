@@ -16,7 +16,7 @@ final readonly class AnnouncementData implements DataTransferObject
     }
 
     /**
-     * Создает DTO объявления из валидированных данных формы.
+     * Creates DTO announcement из валидированных data form.
      *
      * @param array<string, mixed> $data
      */
@@ -34,7 +34,7 @@ final readonly class AnnouncementData implements DataTransferObject
     }
 
     /**
-     * Возвращает массив полей объявления для сохранения.
+     * Returns массив полей announcement для сохранения.
      *
      * @return array<string, mixed>
      */

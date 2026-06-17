@@ -27,19 +27,19 @@
             @csrf
             <div class="job_form">
                 <div class="form-group">
-                    <label class="col-lg-3 control-label" for="video">Ссылка на видео:</label>
+                    <label class="col-lg-3 control-label" for="video">Video link:</label>
                     <div class="col-lg-7">
                         <input class="form-control" type="text" value="{{ old('video') }}" name="video" id="video">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-3 control-label" for="description">Описание:</label>
+                    <label class="col-lg-3 control-label" for="description">Description:</label>
                     <div class="col-lg-7">
                         <textarea class="form-control form-dark" id="description" rows="4" name="description">{{ old('description') }}</textarea>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-3 control-label" for="videoalbum_id">Выберите альбом:</label>
+                    <label class="col-lg-3 control-label" for="videoalbum_id">Choose album:</label>
                     <div class="col-lg-7">
                         <div class="styled-select styled-select-4">
                             <select name="videoalbum_id" id="videoalbum_id">
@@ -53,7 +53,7 @@
             </div>
 
             <div class="control center_text">
-                <input class="btn-form save-button margin0Auto" type="submit" value="Сохранить">
+                <input class="btn-form save-button margin0Auto" type="submit" value="Save">
             </div>
         </form>
     </div>

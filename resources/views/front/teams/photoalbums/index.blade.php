@@ -6,9 +6,9 @@
             'kind' => 'team',
             'route' => 'front.teams',
             'top' => 'front.teams._top',
-            'label' => 'Команда',
-            'labelLower' => 'команда',
-            'labelGenitive' => 'команды',
+            'label' => 'Team',
+            'labelLower' => 'team',
+            'labelGenitive' => 'team',
             'entity' => $team,
         ];
         $community = $communityView['entity'] ?? $team;
@@ -24,20 +24,20 @@
         @elseif ($sectionAccessDenied ?? false)
             @include('front.communities._closed-message', ['message' => $sectionAccessMessage])
         @elseif (! $permissions['photo'])
-            @include('front.communities._closed-message', ['message' => $sectionAccessMessage ?? ($communityView['label'] . ' ограничила доступ к этому разделу')])
+            @include('front.communities._closed-message', ['message' => $sectionAccessMessage ?? ($communityView['label'] . ' has restricted access to this section')])
         @else
             @if ($canManage)
                 <div class="add-photos-album">
-                    <span><i></i><a href="{{ route($communityView['route'] . '.photoalbums.add-photo', $routeParams) }}">Добавить фото</a></span>
-                    <span>или</span>
-                    <span><i></i><a href="{{ route($communityView['route'] . '.photoalbums.create', $routeParams) }}">Создать фотоальбом</a></span>
+                    <span><i></i><a href="{{ route($communityView['route'] . '.photoalbums.add-photo', $routeParams) }}">Add photo</a></span>
+                    <span>or</span>
+                    <span><i></i><a href="{{ route($communityView['route'] . '.photoalbums.create', $routeParams) }}">Create photo album</a></span>
                 </div>
             @endif
 
             @if ($popularPhotos->isNotEmpty())
                 <div class="photo-caption">
-                    <h3>Популярные фото</h3>
-                    <a id="button-hid" class="button-hid show-pop-photo-block">Скрыть</a>
+                    <h3>Popular photos</h3>
+                    <a id="button-hid" class="button-hid show-pop-photo-block">Hide</a>
                 </div>
 
                 <div id="popular-photos">
@@ -51,7 +51,7 @@
 
             @if ($albums->isNotEmpty())
                 <div class="photo-caption">
-                    <h3>Альбомы сообщества<sup>{{ $albums->count() }}</sup></h3>
+                    <h3>Community albums<sup>{{ $albums->count() }}</sup></h3>
                 </div>
 
                 <div class="my-albums">
@@ -63,7 +63,7 @@
 
             @if ($photos->isNotEmpty())
                 <div class="photo-caption">
-                    <h3>Фотографии сообщества</h3>
+                    <h3>Community photos</h3>
                 </div>
 
                 <div class="photo-container my-photos" id="photo-list">
@@ -72,12 +72,12 @@
                     @endforeach
                     @if ($hasMorePhotos)
                         <a class="show-more" id="my-event" onclick="showMorePhotos('{{ $community->id }}', '{{ $communityKind }}')">
-                            <i></i><span id="show-more">показать ещё</span>
+                            <i></i><span id="show-more">show more</span>
                         </a>
                     @endif
                 </div>
             @elseif ($albums->isEmpty())
-                <p class="no_message">Фотографий пока нет.</p>
+                <p class="no_message">No photos yet.</p>
             @endif
         @endif
     </div>

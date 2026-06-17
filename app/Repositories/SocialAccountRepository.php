@@ -21,14 +21,14 @@ class SocialAccountRepository extends BaseRepository
     }
 
     /**
-     * Находит пользователя по соцаккаунту или создает подтвержденную учетную запись.
+     * Finds user по соцаккаунту or creates подтвержденную учетную record.
      */
     public function findOrCreateUser(string $provider, SocialiteUser $profile): User
     {
         $providerUserId = (string) $profile->getId();
 
         if ($providerUserId === '') {
-            throw new RuntimeException('Не удалось получить идентификатор пользователя.');
+            throw new RuntimeException('Failed to get the user identifier.');
         }
 
         return DB::transaction(function () use ($provider, $profile, $providerUserId): User {
@@ -69,17 +69,17 @@ class SocialAccountRepository extends BaseRepository
     }
 
     /**
-     * Возвращает ошибку авторизации для заблокированных и удаленных пользователей.
+     * Returns ошибку authorization error for blocked and deleted users.
      */
     private function ensureAllowedToLogin(User $user): void
     {
         if ($user->isBlocked() || $user->isDeleted()) {
-            throw new RuntimeException('Неверный email или пароль.');
+            throw new RuntimeException('Invalid email or password.');
         }
     }
 
     /**
-     * Подтверждает существующего пользователя, если он пришел через проверенный OAuth-провайдер.
+     * Confirms existing user, если он пришел через verified OAuth-provider.
      */
     private function confirmUser(User $user): void
     {
@@ -94,7 +94,7 @@ class SocialAccountRepository extends BaseRepository
     }
 
     /**
-     * Создает нового пользователя на основе данных, полученных от OAuth-провайдера.
+     * Creates нового user на основе data, полученных от OAuth-provider.
      */
     private function createUser(string $provider, string $email, SocialiteUser $profile): User
     {
@@ -115,7 +115,7 @@ class SocialAccountRepository extends BaseRepository
     }
 
     /**
-     * Возвращает email провайдера или стабильный технический email для сервисов без email.
+     * Returns email provider or стабильный технический email для сервисов без email.
      */
     private function emailFor(string $provider, string $providerUserId, SocialiteUser $profile): string
     {
@@ -129,7 +129,7 @@ class SocialAccountRepository extends BaseRepository
     }
 
     /**
-     * Готовит имя и фамилию для локального профиля пользователя.
+     * Готовит name и last name для local profile user.
      *
      * @return array{0: string|null, 1: string|null}
      */
@@ -147,7 +147,7 @@ class SocialAccountRepository extends BaseRepository
     }
 
     /**
-     * Возвращает общие атрибуты привязки соцаккаунта.
+     * Returns общие атрибуты привязки соцаккаунта.
      *
      * @return array<string, string|null>
      */

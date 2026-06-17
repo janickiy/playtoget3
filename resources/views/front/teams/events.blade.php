@@ -6,10 +6,10 @@
             'kind' => 'team',
             'route' => 'front.teams',
             'top' => 'front.teams._top',
-            'label' => 'Команда',
-            'labelLower' => 'команда',
-            'labelGenitive' => 'команды',
-            'pluralGenitive' => 'команд',
+            'label' => 'Team',
+            'labelLower' => 'team',
+            'labelGenitive' => 'team',
+            'pluralGenitive' => 'teams',
             'entity' => $team,
         ];
         $community = $communityView['entity'] ?? $team;
@@ -28,20 +28,20 @@
             <div class="add-photos-album community-event-create-link">
                 <span>
                     <i class="eventicon"></i>
-                    <a href="{{ route($communityView['route'] . '.events.create', $routeParams) }}">Создать мероприятие</a>
+                    <a href="{{ route($communityView['route'] . '.events.create', $routeParams) }}">Create event</a>
                 </span>
             </div>
         @endif
 
         @if ($canManage)
             <div class="photo-caption">
-                <h3>Поиск</h3>
+                <h3>Search</h3>
             </div>
             <form class="form-horizontal team-events-search-form" enctype="multipart/form-data" method="post" action="">
                 <div class="form-group">
                     <div class="col-lg-12">
                         <p class="select-container-text lupa width100">
-                            <input class="form-control search_events" type="text" name="name" placeholder="Начните вводить" autocomplete="off">
+                            <input class="form-control search_events" type="text" name="name" placeholder="Start typing" autocomplete="off">
                             <span></span>
                         </p>
                     </div>
@@ -52,7 +52,7 @@
         @endif
 
         <div class="photo-caption">
-            <h3>Мероприятия {{ $communityView['labelGenitive'] }}</h3>
+            <h3>Events {{ $communityView['labelGenitive'] }}</h3>
         </div>
 
         @if ($events->isNotEmpty())
@@ -73,14 +73,14 @@
                             </p>
                             <p>{{ $event['description'] }}</p>
                             <p><i></i>{{ $event['participants'] }} {{ $communityView['pluralGenitive'] }}</p>
-                            <span @class(['ended' => ! $event['active']])>{{ $event['active'] ? 'Мероприятие продолжается' : 'Мероприятие завершено' }}</span>
+                            <span @class(['ended' => ! $event['active']])>{{ $event['active'] ? 'Event is in progress' : 'Event has ended' }}</span>
                         </div>
                     </div>
                 @endforeach
             </div>
         @else
             <div class="photo-caption">
-                <h5 class="center_text">У {{ $communityView['labelGenitive'] }} пока нет мероприятий</h5>
+                <h5 class="center_text">{{ ucfirst($communityView['label'] ?? 'Team') }} has no events yet</h5>
             </div>
         @endif
         @endif
@@ -153,7 +153,7 @@
                                 if (data.status === 1 && data.html) {
                                     $results.html('<div class="event-container">' + data.html + '</div>');
                                 } else {
-                                    $results.html('<div class="photo-caption"><h5 class="center_text">Мероприятия не найдены</h5></div>');
+                                    $results.html('<div class="photo-caption"><h5 class="center_text">Events not found</h5></div>');
                                 }
                             }
                         });

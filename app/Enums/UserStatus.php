@@ -12,10 +12,10 @@ enum UserStatus: int
     public function label(): string
     {
         return match ($this) {
-            self::New => 'Новый',
-            self::Confirmed => 'Подтвержденный',
-            self::Blocked => 'Заблокирован',
-            self::Deleted => 'Удален',
+            self::New => 'New',
+            self::Confirmed => 'Confirmed',
+            self::Blocked => 'Blocked',
+            self::Deleted => 'Deleted',
         };
     }
 
@@ -40,7 +40,7 @@ enum UserStatus: int
     }
 
     /**
-     * Возвращает подпись статуса пользователя по числовому значению.
+     * Returns signature statusа user по numeric value.
      */
     public static function labelFor(?int $status): string
     {
@@ -48,7 +48,7 @@ enum UserStatus: int
     }
 
     /**
-     * Возвращает CSS-класс статуса пользователя по числовому значению.
+     * Returns CSS-класс statusа user по numeric value.
      */
     public static function cssColorFor(?int $status): string
     {
@@ -56,7 +56,7 @@ enum UserStatus: int
     }
 
     /**
-     * Возвращает варианты статусов для форм админки.
+     * Returns options statusов для форм admin panel.
      *
      * @return array<int, string>
      */

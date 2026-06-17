@@ -20,7 +20,7 @@
         @forelse ($news as $item)
             @include('front.news._item', ['item' => $item])
         @empty
-            <p>Новостей пока нет.</p>
+            <p>No news yet.</p>
         @endforelse
     </div>
 @endsection

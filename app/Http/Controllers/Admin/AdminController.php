@@ -15,7 +15,7 @@ use Illuminate\Http\Response;
 class AdminController extends Controller
 {
     /**
-     * Подключает репозиторий администраторов и базовые настройки админ-контроллера.
+     * Connects репозиторий administratorов и базовые настройки админ-контроллера.
      */
     public function __construct(
         private AdminRepository $adminRepository,
@@ -25,17 +25,17 @@ class AdminController extends Controller
     }
 
     /**
-     * Показывает страницу со списком пользователей админки.
+     * Shows page со списком users admin panel.
      *
      * @return View
      */
     public function index(): View
     {
-        return view('admin.admin.index')->with('title', 'Пользователи');
+        return view('admin.admin.index')->with('title', 'Users');
     }
 
     /**
-     * Показывает форму добавления пользователя админки.
+     * Shows form adding user admin panel.
      *
      * @return View
      */
@@ -43,11 +43,11 @@ class AdminController extends Controller
     {
         $options = $this->adminRepository->roleOptions();
 
-        return view('admin.admin.create_edit', compact('options'))->with('title', 'Добавить пользователя');
+        return view('admin.admin.create_edit', compact('options'))->with('title', 'Add user');
     }
 
     /**
-     * Создает нового пользователя админки из валидированных данных формы.
+     * Creates нового user admin panel из валидированных data form.
      *
      * @param StoreRequest $request
      * @return RedirectResponse
@@ -56,11 +56,11 @@ class AdminController extends Controller
     {
         $this->adminRepository->createFromArray($request->validated());
 
-        return redirect()->route('admin.admin.index')->with('success', 'Информация успешно добавлена!');
+        return redirect()->route('admin.admin.index')->with('success', 'Information added successfully!');
     }
 
     /**
-     * Показывает форму редактирования выбранного пользователя админки.
+     * Shows form editing selected user admin panel.
      *
      * @param int $id
      * @return View
@@ -73,11 +73,11 @@ class AdminController extends Controller
 
         $options = $this->adminRepository->roleOptions();
 
-        return view('admin.admin.create_edit', compact('row', 'options'))->with('title', 'Редактировать пользователя');
+        return view('admin.admin.create_edit', compact('row', 'options'))->with('title', 'Edit user');
     }
 
     /**
-     * Обновляет данные пользователя админки из валидированных данных формы.
+     * Updates data user admin panel из валидированных data form.
      *
      * @param EditRequest $request
      * @return RedirectResponse
@@ -86,11 +86,11 @@ class AdminController extends Controller
     {
         if (!$this->adminRepository->updateFromArray($request->validated())) abort(404);
 
-        return redirect()->route('admin.admin.index')->with('success', 'Данные успешно обновлены!');
+        return redirect()->route('admin.admin.index')->with('success', 'Data updated successfully!');
     }
 
     /**
-     * Удаляет пользователя админки и запрещает удалить текущего авторизованного пользователя.
+     * Deletes user admin panel и запрещает delete current авторизованного user.
      *
      * @param DeleteRequest $request
      * @return JsonResponse
@@ -99,13 +99,13 @@ class AdminController extends Controller
     {
         if ($request->id === (int)Auth::id()) {
             return response()->json(
-                ['message' => 'Нельзя удалить текущего пользователя.'],
+                ['message' => 'You cannot delete the current user.'],
                 Response::HTTP_FORBIDDEN,
             );
         }
 
         $this->adminRepository->delete($request->id);
 
-        return response()->json(['message' => 'Данные успешно удалены.']);
+        return response()->json(['message' => 'Data deleted successfully.']);
     }
 }

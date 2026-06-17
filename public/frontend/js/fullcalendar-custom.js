@@ -20,28 +20,28 @@
             },
             initialView: 'multiMonthYear',
             initialDate: new Date(),
-            locale: 'ru',
+            locale: 'en',
             firstDay: 1,
             selectable: true,
             editable: true,
             dayMaxEvents: true,
             multiMonthMaxColumns: 3,
             buttonText: {
-                today: 'Сегодня',
+                today: 'Today',
                 year: '',
                 month: '',
             },
             events: [
                 {
-                    title: 'Соревнования по стрельбе',
+                    title: 'Shooting competition',
                     start: '2015-11-07',
                 },
                 {
-                    title: 'Игорь \n Алексеев',
+                    title: 'Igor \n Alekseev',
                     start: '2015-11-20',
                 },
                 {
-                    title: 'Соревнования по стрельбе',
+                    title: 'Shooting competition',
                     start: '2015-10-07',
                 },
             ],
@@ -51,7 +51,7 @@
                     return;
                 }
 
-                const title = prompt('Введите событие:');
+                const title = prompt('Enter event:');
 
                 if (!title) {
                     return;
@@ -98,6 +98,6 @@
         }
 
         title.dataset.decorated = '1';
-        title.textContent = 'Календарь ' + title.textContent;
+        title.textContent = 'Calendar ' + title.textContent;
     }
 }());

@@ -33,10 +33,10 @@ $(document).ready(function () {
         const IdVideo = $(this).attr('data-item');
 
         $.confirm({
-            'title': 'Подтверждение',
-            'message': 'Вы действительно хотите удалить?',
+            'title': 'Confirmation',
+            'message': 'Do you really want to delete?',
             'buttons': {
-                'Да': {
+                'Yes': {
                     'class': 'blue',
                     'action': function () {
                         $.ajax({
@@ -57,7 +57,7 @@ $(document).ready(function () {
                         });
                     }
                 },
-                'Нет': {
+                'No': {
                     'class': 'gray',
                     'action': function () {
                     }
@@ -242,14 +242,14 @@ $(document).on('scroll', function () {
 
 $(document).on('click', '.hide-pop-video-block', function () {
     $('#popular-videos').hide().fadeIn('2000');
-    $('#button-hid').text('Скрыть');
+    $('#button-hid').text('Hide');
     $('#button-hid').removeClass('hide-pop-video-block');
     $('#button-hid').addClass('show-pop-video-block');
 });
 
 $(document).on('click', '.show-pop-video-block', function () {
     $('#popular-videos').show().fadeOut('2000');
-    $('#button-hid').text('Показать');
+    $('#button-hid').text('Show');
     $('#button-hid').removeClass('show-pop-video-block');
     $('#button-hid').addClass('hide-pop-video-block');
 });
@@ -275,11 +275,11 @@ $(document).on('click', '#video_big .reply', function () {
     ReplyForm += '<input id="comment" name="comment" type="text" data-num="' + IdComment + '" placeholder="' + placeholder + '">';
     ReplyForm += '<div class="smile-files">';
     ReplyForm += '<a id="smilesBtn" class="smile smilesBtn" data-num="' + IdComment + '"><img src="/frontend/images/smile.png" alt=""></a>';
-    ReplyForm += '<a href="#" class="files" data-num="' + IdComment + '" data-tooltip="Прикрепить изображение"><img src="/frontend/images/files.png" alt=""></a>';
+    ReplyForm += '<a href="#" class="files" data-num="' + IdComment + '" data-tooltip="Attach image"><img src="/frontend/images/files.png" alt=""></a>';
     ReplyForm += "<div class='smilesChoose add' data-num='" + IdComment + "'></div>";
     ReplyForm += '</div>';
     ReplyForm += "<div class='files_block two' data-num='" + IdComment + "'></div>";
-    ReplyForm += '<input type="submit" id="send-reply" class="send" value="Ответить" data-item="' + IdComment + '">';
+    ReplyForm += '<input type="submit" id="send-reply" class="send" value="Reply" data-item="' + IdComment + '">';
     ReplyForm += '</form>';
     ReplyForm += '</div>';
 

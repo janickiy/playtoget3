@@ -1,5 +1,5 @@
 @if ($users->isEmpty())
-    <p class="community-admin-empty">Пользователи не найдены.</p>
+    <p class="community-admin-empty">No users found.</p>
 @else
     <div class="community-admin-candidates">
         @foreach ($users as $user)
@@ -18,7 +18,7 @@
                     <span>{{ $user['role_name'] }}</span>
                 </div>
                 <button type="button" class="community-admin-candidate-add js-community-admin-add" data-user-id="{{ $user['id'] }}">
-                    Добавить
+                    Add
                 </button>
             </div>
         @endforeach

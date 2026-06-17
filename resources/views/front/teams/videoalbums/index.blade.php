@@ -6,7 +6,7 @@
             'kind' => 'team',
             'route' => 'front.teams',
             'top' => 'front.teams._top',
-            'label' => 'Команда',
+            'label' => 'Team',
             'entity' => $team,
         ];
         $community = $communityView['entity'] ?? $team;
@@ -22,20 +22,20 @@
         @elseif ($sectionAccessDenied ?? false)
             @include('front.communities._closed-message', ['message' => $sectionAccessMessage])
         @elseif (! $permissions['video'])
-            @include('front.communities._closed-message', ['message' => $sectionAccessMessage ?? ($communityView['label'] . ' ограничила доступ к этому разделу')])
+            @include('front.communities._closed-message', ['message' => $sectionAccessMessage ?? ($communityView['label'] . ' has restricted access to this section')])
         @else
             @if ($canManage)
                 <div class="add-photos-album">
-                    <span><i class="videoicon"></i><a href="{{ route($communityView['route'] . '.videoalbums.add-video', $routeParams) }}">Добавить новую видеозапись</a></span>
-                    <span>или</span>
-                    <span><i></i><a href="{{ route($communityView['route'] . '.videoalbums.create', $routeParams) }}">Создать новый альбом</a></span>
+                    <span><i class="videoicon"></i><a href="{{ route($communityView['route'] . '.videoalbums.add-video', $routeParams) }}">Add new video</a></span>
+                    <span>or</span>
+                    <span><i></i><a href="{{ route($communityView['route'] . '.videoalbums.create', $routeParams) }}">Create new album</a></span>
                 </div>
             @endif
 
             @if ($popularVideos->isNotEmpty())
                 <div class="photo-caption">
-                    <h3>Популярные видео</h3>
-                    <a id="button-hid" class="button-hid show-pop-video-block">Скрыть</a>
+                    <h3>Popular videos</h3>
+                    <a id="button-hid" class="button-hid show-pop-video-block">Hide</a>
                 </div>
 
                 <div id="popular-videos">
@@ -49,7 +49,7 @@
 
             @if ($albums->isNotEmpty())
                 <div class="photo-caption">
-                    <h3>Видеоальбомы сообщества<sup>{{ $albums->count() }}</sup></h3>
+                    <h3>Community video albums<sup>{{ $albums->count() }}</sup></h3>
                 </div>
 
                 <div class="my-albums video-album-list">
@@ -61,7 +61,7 @@
 
             @if ($videos->isNotEmpty())
                 <div class="photo-caption">
-                    <h3>Видео сообщества</h3>
+                    <h3>Community videos</h3>
                 </div>
 
                 <div class="photo-container video-container vid-no-border my-videos" id="video-list">
@@ -70,12 +70,12 @@
                     @endforeach
                     @if ($hasMoreVideos)
                         <a class="show-more" id="my-event" onclick="showMoreVideos('{{ $community->id }}', '{{ $communityKind }}')">
-                            <i></i><span id="show-more">показать ещё</span>
+                            <i></i><span id="show-more">show more</span>
                         </a>
                     @endif
                 </div>
             @elseif ($albums->isEmpty())
-                <p class="no_message">Видео пока нет.</p>
+                <p class="no_message">No videos yet.</p>
             @endif
         @endif
     </div>

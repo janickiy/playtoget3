@@ -5,7 +5,7 @@
         <form autocomplete="off" action="{{ route('front.home') }}" method="GET" role="search" class="search-page-form">
             <div class="add-photos-album selects-field-events">
                 <p class="select-container-text lupa width100">
-                    <input type="text" name="search" value="{{ $query }}" class="search_word border-top-none padding25" placeholder="Введите ключевое слово">
+                    <input type="text" name="search" value="{{ $query }}" class="search_word border-top-none padding25" placeholder="Enter keyword">
                     <span class="padding2"></span>
                 </p>
                 <input type="submit" class="displayNone">
@@ -13,43 +13,43 @@
         </form>
 
         <div class="photo-caption front-section-title">
-            <h3>Поиск</h3>
+            <h3>Search</h3>
         </div>
 
         @if ($query === '')
-            <p class="no_message search-empty-message">Введите ключевое слово для поиска.</p>
+            <p class="no_message search-empty-message">Enter a keyword to search.</p>
         @else
             <p class="search-summary">
-                Результаты по запросу «{{ $query }}»: {{ $total }}
+                Results for «{{ $query }}»: {{ $total }}
             </p>
 
             @include('front.search._section', [
-                'title' => 'Команды',
+                'title' => 'Teams',
                 'items' => $results['teams'],
-                'emptyText' => 'Команды не найдены.',
+                'emptyText' => 'No teams found.',
                 'partial' => 'front.teams._team-card',
                 'itemName' => 'team',
             ])
 
             @include('front.search._section', [
-                'title' => 'Группы',
+                'title' => 'Groups',
                 'items' => $results['groups'],
-                'emptyText' => 'Группы не найдены.',
+                'emptyText' => 'No groups found.',
                 'partial' => 'front.groups._group-card',
                 'itemName' => 'group',
             ])
 
             @include('front.search._section', [
-                'title' => 'Мероприятия',
+                'title' => 'Events',
                 'items' => $results['events'],
-                'emptyText' => 'Мероприятия не найдены.',
+                'emptyText' => 'No events found.',
                 'partial' => 'front.events._event-card',
                 'itemName' => 'event',
             ])
 
             <div class="search-section">
                 <div class="photo-caption">
-                    <h5 class="center_text">Спортивные блоки</h5>
+                    <h5 class="center_text">Sports blocks</h5>
                 </div>
 
                 @if ($results['sportBlocks']->isNotEmpty())
@@ -59,12 +59,12 @@
                                 'item' => $item,
                                 'routePrefix' => $item['route_prefix'],
                                 'viewer' => $frontLayout['user'] ?? null,
-                                'editLabel' => 'Редактировать',
+                                'editLabel' => 'Edit',
                             ])
                         @endforeach
                     </div>
                 @else
-                    <p class="no_message search-empty-message">Спортивные блоки не найдены.</p>
+                    <p class="no_message search-empty-message">No sports blocks found.</p>
                 @endif
             </div>
         @endif

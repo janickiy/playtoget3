@@ -29,7 +29,7 @@ class SettingsController extends Controller
     public function index(): View
     {
         return view('admin.settings.index', [
-            'title' => 'Настройки',
+            'title' => 'Settings',
         ]);
     }
 
@@ -41,7 +41,7 @@ class SettingsController extends Controller
     {
         return view('admin.settings.create_edit', [
             'type' => $type,
-            'title' => 'Добавление настроек',
+            'title' => 'Add settings',
         ]);
     }
 
@@ -75,7 +75,7 @@ class SettingsController extends Controller
 
         return redirect()
             ->route('admin.settings.index')
-            ->with('success', 'Информация успешно добавлена');
+            ->with('success', 'Information added successfully');
     }
 
     /**
@@ -91,7 +91,7 @@ class SettingsController extends Controller
         return view('admin.settings.create_edit', [
             'row' => $row,
             'type' => $row->type,
-            'title' => 'Редактирование настроек',
+            'title' => 'Edit settings',
         ]);
     }
 
@@ -111,7 +111,7 @@ class SettingsController extends Controller
                 if ($value === false) {
                     return redirect()
                         ->route('admin.settings.index')
-                        ->with('error', 'Не удалось сохранить файл!');
+                        ->with('error', 'Could not save the file!');
                 }
             }
 
@@ -133,7 +133,7 @@ class SettingsController extends Controller
 
         return redirect()
             ->route('admin.settings.index')
-            ->with('success', 'Данные обновлены');
+            ->with('success', 'Data updated');
     }
 
     /**
@@ -145,6 +145,6 @@ class SettingsController extends Controller
     {
         $this->settingsRepository->remove($id);
 
-        return response()->json(['message' => 'Данные успешно удалены.']);
+        return response()->json(['message' => 'Data deleted successfully.']);
     }
 }

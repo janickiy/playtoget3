@@ -12,10 +12,10 @@ enum SportBlockStatus: int
     public function label(): string
     {
         return match ($this) {
-            self::New => 'Новый',
-            self::Confirmed => 'Подтвержденный',
-            self::Blocked => 'Заблокирован',
-            self::Hidden => 'Скрытый',
+            self::New => 'New',
+            self::Confirmed => 'Confirmed',
+            self::Blocked => 'Blocked',
+            self::Hidden => 'Hidden',
         };
     }
 
@@ -35,7 +35,7 @@ enum SportBlockStatus: int
     }
 
     /**
-     * Возвращает подпись статуса спортивного блока по числовому значению.
+     * Returns signature statusа sport block по numeric value.
      */
     public static function labelFor(?int $status): string
     {
@@ -43,7 +43,7 @@ enum SportBlockStatus: int
     }
 
     /**
-     * Возвращает CSS-класс статуса спортивного блока по числовому значению.
+     * Returns CSS-класс statusа sport block по numeric value.
      */
     public static function cssColorFor(?int $status): string
     {
@@ -51,7 +51,7 @@ enum SportBlockStatus: int
     }
 
     /**
-     * Возвращает варианты статусов для форм админки.
+     * Returns options statusов для форм admin panel.
      *
      * @return array<int, string>
      */
@@ -66,7 +66,7 @@ enum SportBlockStatus: int
     }
 
     /**
-     * Возвращает значения статусов, доступных на фронте.
+     * Returns status values available on the frontend.
      *
      * @return array<int, int>
      */

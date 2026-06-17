@@ -1,11 +1,11 @@
 <div class="community-invite-modal js-event-invite-modal" aria-hidden="true">
     <div class="community-invite-modal-dialog">
-        <button type="button" class="community-invite-close js-event-invite-close" aria-label="Закрыть">×</button>
-        <h3>Пригласить друзей</h3>
-        <div class="community-invite-status js-event-invite-status">Загрузка...</div>
+        <button type="button" class="community-invite-close js-event-invite-close" aria-label="Close">×</button>
+        <h3>Invite friends</h3>
+        <div class="community-invite-status js-event-invite-status">Loading...</div>
         <div class="community-invite-content js-event-invite-content"></div>
         <div class="community-invite-footer">
-            <button type="button" class="community-invite-submit js-event-invite-submit" disabled>Отправить приглашение</button>
+            <button type="button" class="community-invite-submit js-event-invite-submit" disabled>Send invitation</button>
         </div>
     </div>
 </div>
@@ -226,21 +226,21 @@
                 window.openEventInviteModal = function (eventId) {
                     $modal.data('event-id', eventId).addClass('is-open').attr('aria-hidden', 'false');
                     $content.empty();
-                    $status.text('Загрузка...');
-                    $submit.prop('disabled', true).data('loading', 0).text('Отправить приглашение');
+                    $status.text('Loading...');
+                    $submit.prop('disabled', true).data('loading', 0).text('Send invitation');
 
                     inviteAjax('get_event_invite_friends', {event_id: eventId})
                         .done(function (response) {
                             if (response.result === 'success') {
                                 $content.html(response.html || '');
-                                $status.text(response.count > 0 ? 'Выберите друзей для приглашения.' : '');
+                                $status.text(response.count > 0 ? 'Select friends to invite.' : '');
                                 syncSubmit();
                             } else {
-                                $status.text('Не удалось загрузить список друзей.');
+                                $status.text('Could not load the friends list.');
                             }
                         })
                         .fail(function () {
-                            $status.text('Не удалось загрузить список друзей.');
+                            $status.text('Could not load the friends list.');
                         });
                 };
 
@@ -262,7 +262,7 @@
                         return;
                     }
 
-                    $submit.data('loading', 1).prop('disabled', true).text('Отправка...');
+                    $submit.data('loading', 1).prop('disabled', true).text('Sending...');
 
                     inviteAjax('send_event_invitation', {
                         event_id: eventId,
@@ -270,17 +270,17 @@
                     })
                         .done(function (response) {
                             if (response.result === 'success') {
-                                notice('Приглашения отправлены: ' + response.count, true);
+                                notice('Invitations sent: ' + response.count, true);
                                 closeModal();
                             } else {
-                                notice('Не удалось отправить приглашения', false);
+                                notice('Could not send invitations', false);
                             }
                         })
                         .fail(function () {
-                            notice('Не удалось отправить приглашения', false);
+                            notice('Could not send invitations', false);
                         })
                         .always(function () {
-                            $submit.data('loading', 0).text('Отправить приглашение');
+                            $submit.data('loading', 0).text('Send invitation');
                             syncSubmit();
                         });
                 });

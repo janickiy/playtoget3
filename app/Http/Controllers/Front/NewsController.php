@@ -10,7 +10,7 @@ class NewsController extends Controller
 {
 
     /**
-     * Показывает ленту новостей пользователя с первой страницей записей.
+     * Shows news feed user с первой страницей записей.
      *
      * @param NewsRepository $news
      * @return View
@@ -21,7 +21,7 @@ class NewsController extends Controller
         $items = $news->feedPage($pageSize);
 
         return view('front.news.index', [
-            'title' => 'Главная',
+            'title' => 'Home',
             'news' => $items,
             'newsPageSize' => $pageSize,
             'newsOffset' => $pageSize,

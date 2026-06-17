@@ -9,7 +9,7 @@ use App\Models\Community;
 class AdminCommunityRepository extends BaseRepository
 {
     /**
-     * Подключает модель комьюнити, с которой работает админский репозиторий.
+     * Connects модель community, с которой работает админский репозиторий.
      */
     public function __construct(Community $model)
     {
@@ -17,20 +17,20 @@ class AdminCommunityRepository extends BaseRepository
     }
 
     /**
-     * Возвращает варианты типов комьюнити для формы админки.
+     * Returns options typeов community для form admin panel.
      *
      * @return array<string, string>
      */
     public function typeOptions(): array
     {
         return [
-            'team' => 'Команда',
-            'group' => 'Группа',
+            'team' => 'Team',
+            'group' => 'Group',
         ];
     }
 
     /**
-     * Возвращает подпись типа комьюнити.
+     * Returns signature typeа community.
      */
     public function typeLabel(?string $type): string
     {
@@ -38,7 +38,7 @@ class AdminCommunityRepository extends BaseRepository
     }
 
     /**
-     * Возвращает варианты статусов комьюнити для формы админки.
+     * Returns options statusов community для form admin panel.
      *
      * @return array<int, string>
      */
@@ -48,7 +48,7 @@ class AdminCommunityRepository extends BaseRepository
     }
 
     /**
-     * Возвращает подпись статуса комьюнити.
+     * Returns signature statusа community.
      */
     public function statusLabel(?int $status): string
     {
@@ -56,7 +56,7 @@ class AdminCommunityRepository extends BaseRepository
     }
 
     /**
-     * Обновляет комьюнити из DTO.
+     * Updates community из DTO.
      */
     public function updateFromData(CommunityData $data): bool
     {

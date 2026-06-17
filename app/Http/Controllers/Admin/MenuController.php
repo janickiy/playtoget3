@@ -11,6 +11,6 @@ class MenuController extends Controller
      */
     public function index(): View
     {
-        return view('admin.menu.index')->with('title', 'Меню');
+        return view('admin.menu.index')->with('title', 'Menu');
     }
 }

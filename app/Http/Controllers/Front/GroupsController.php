@@ -32,7 +32,7 @@ class GroupsController extends Controller
 
 
     /**
-     * Показывает список групп с фильтрами и вкладками текущего пользователя.
+     * Shows list groups с фильтрами и вкладками current user.
      *
      * @param Request $request
      * @param CommunityRepository $communities
@@ -49,7 +49,7 @@ class GroupsController extends Controller
         $filters = $this->groupFilters($request);
 
         return view('front.groups.index', [
-            'title' => 'Группы',
+            'title' => 'Groups',
             'myGroups' => $this->groupsForViewer($communities->myGroups($viewer->id, self::PAGE_SIZE, 0, $filters), $communities, $viewer),
             'popularGroups' => $this->groupsForViewer($communities->popularGroups(self::PAGE_SIZE, 0, $filters, $viewer), $communities, $viewer),
             'invitedGroups' => $this->groupsForViewer($communities->invitedGroups($viewer->id, self::PAGE_SIZE, 0, $filters), $communities, $viewer),
@@ -62,7 +62,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Показывает групп выбранного пользователя.
+     * Shows groups selected user.
      *
      * @param int $user
      * @param CommunityRepository $communities
@@ -71,7 +71,7 @@ class GroupsController extends Controller
     public function user(int $user, CommunityRepository $communities): View
     {
         return view('front.groups.index', [
-            'title' => 'Группы пользователя',
+            'title' => 'Groups user',
             'myGroups' => $this->groupsForViewer($communities->myGroups($user, 20), $communities, Auth::guard('web')->user()),
             'popularGroups' => collect(),
             'invitedGroups' => collect(),
@@ -81,7 +81,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Проверяет авторизацию и показывает форму создания группы.
+     * Checks авторизацию и показывает form creation group.
      *
      * @return View|RedirectResponse
      */
@@ -94,9 +94,9 @@ class GroupsController extends Controller
         }
 
         return view('front.groups.form', [
-            'title' => 'Создание группы',
+            'title' => 'Create group',
             'action' => route('front.groups.store'),
-            'button' => 'Создать группу',
+            'button' => 'Create group',
             'group' => null,
             'settings' => null,
             'canEditSettings' => false,
@@ -105,7 +105,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Валидирует данные формы и создает группу.
+     * Валидирует data form и creates group.
      *
      * @param CommunityRequest $request
      * @param CommunityRepository $communities
@@ -125,7 +125,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Показывает карточку группы, верхний блок и комментарии.
+     * Shows карточку group, верхний block и комментарии.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -149,7 +149,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Показывает участников группы и их роли.
+     * Shows members group и их роли.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -169,7 +169,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Проверяет права и показывает форму редактирования группы.
+     * Checks permissions и показывает form editing group.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -183,9 +183,9 @@ class GroupsController extends Controller
         abort_unless($communities->canManage($group, $viewer), 403);
 
         return view('front.groups.form', array_merge($this->groupPayload($group, $communities, 'edit'), [
-            'title' => 'Редактирование группы',
+            'title' => 'Edit group',
             'action' => route('front.groups.update', ['community' => $group->id]),
-            'button' => 'Сохранить',
+            'button' => 'Save',
             'group' => $group,
             'settings' => $communities->settings($group),
             'canEditSettings' => true,
@@ -195,7 +195,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Проверяет права и сохраняет изменения группы
+     * Checks permissions и сохраняет изменения group
      *
      * @param int $community
      * @param CommunityRequest $request
@@ -215,7 +215,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Показывает фотоальбомы группы или текущей группы.
+     * Shows photo albums group or current group.
      *
      * @param CommunityRepository $communities
      * @param PhotoalbumRepository $photoAlbums
@@ -239,7 +239,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Показывает фотографии выбранного фотоальбома группы.
+     * Shows photo selected photo albumа group.
      *
      * @param int $community
      * @param int $album
@@ -265,7 +265,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Показывает форму добавления фотографии в фотоальбом группы.
+     * Shows form adding photo в photo album group.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -277,16 +277,16 @@ class GroupsController extends Controller
         $group = $this->groupOrFail($community, $communities);
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
-        $photoAlbums->ensureDefaultAlbumForOwner($group->id, 'group', 'Альбом сообщества');
+        $photoAlbums->ensureDefaultAlbumForOwner($group->id, 'group', 'Community album');
 
         return view('front.teams.photoalbums.add-photo', $this->groupPayload($group, $communities, 'photoalbums') + [
-            'title' => 'Добавление фотографий',
+            'title' => 'Add photos',
             'albums' => $photoAlbums->editableAlbumsForOwner($group->id, 'group'),
         ]);
     }
 
     /**
-     * Показывает форму создания фотоальбома группы.
+     * Shows form creation photo albumа group.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -298,17 +298,17 @@ class GroupsController extends Controller
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', array_merge($this->groupPayload($group, $communities, 'photoalbums'), [
-            'title' => 'Создание альбома',
-            'formTitle' => 'Создание альбома',
+            'title' => 'Create album',
+            'formTitle' => 'Create album',
             'formTitleClass' => 'form-section-title',
             'action' => route('front.groups.photoalbums.store', ['community' => $group->id]),
             'name' => old('name', ''),
-            'button' => 'Создать',
+            'button' => 'Create',
         ]));
     }
 
     /**
-     * Создает фотоальбом группы из валидированных данных формы.
+     * Creates photo album group из валидированных data form.
      *
      * @param int $community
      * @param AlbumRequest $request
@@ -324,7 +324,7 @@ class GroupsController extends Controller
         $albumData = $request->toDto();
 
         if ($photoAlbums->nameExistsForOwner($group->id, 'group', $albumData->name)) {
-            return back()->withErrors(['name' => 'Альбом с таким названием уже существует.'])->withInput();
+            return back()->withErrors(['name' => 'An album with this name already exists.'])->withInput();
         }
 
         $photoAlbums->createAlbumForOwner($group->id, 'group', $albumData);
@@ -333,7 +333,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Проверяет права и показывает форму редактирования фотоальбома группы.
+     * Checks permissions и показывает form editing photo albumа group.
      */
     public function editPhotoalbum(int $album, CommunityRepository $communities, PhotoalbumRepository $photoAlbums, ?int $community = null): View
     {
@@ -345,15 +345,15 @@ class GroupsController extends Controller
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->groupPayload($group, $communities, 'photoalbums') + [
-            'title' => 'Редактирование фотоальбома',
+            'title' => 'Edit photo album',
             'action' => route('front.groups.photoalbum.update', ['album' => $photoAlbum->id]),
             'name' => old('name', $photoAlbum->name),
-            'button' => 'Редактировать',
+            'button' => 'Edit',
         ]);
     }
 
     /**
-     * Проверяет права и сохраняет изменения фотоальбома группы.
+     * Checks permissions и сохраняет изменения photo albumа group.
      */
     public function updatePhotoalbum(int $album, AlbumRequest $request, CommunityRepository $communities, PhotoalbumRepository $photoAlbums): RedirectResponse
     {
@@ -368,7 +368,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Проверяет права и удаляет фотоальбом группы.
+     * Checks permissions и deletes photo album group.
      *
      * @param int $album
      * @param CommunityRepository $communities
@@ -389,7 +389,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Проверяет группу в URL и удаляет ее фотоальбом.
+     * Checks group в URL и deletes ее photo album.
      *
      * @param int $community
      * @param int $album
@@ -410,7 +410,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Показывает форму редактирования фотоальбома конкретной группы.
+     * Shows form editing photo albumа конкретной group.
      *
      * @param int $community
      * @param int $album
@@ -424,7 +424,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Сохраняет изменения фотоальбома конкретной группы.
+     * Сохраняет изменения photo albumа конкретной group.
      */
     public function updatePhotoalbumForGroup(int $community, int $album, AlbumRequest $request, CommunityRepository $communities, PhotoalbumRepository $photoAlbums): RedirectResponse
     {
@@ -439,7 +439,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Показывает конкретную фотографию из фотоальбома группы.
+     * Shows specific photo из photo albumа group.
      *
      * @param int $community
      * @param int $album
@@ -458,7 +458,7 @@ class GroupsController extends Controller
 
 
     /**
-     * Показывает фотографию группы без привязки к выбранному альбому.
+     * Shows photo group без привязки к выбранному albumу.
      *
      * @param int $community
      * @param int $photo
@@ -478,7 +478,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Показывает видеоальбомы группы или текущей группы.
+     * Shows video albums group or current group.
      *
      * @param CommunityRepository $communities
      * @param VideoalbumRepository $videoAlbums
@@ -502,7 +502,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Показывает видео выбранного видеоальбома групп
+     * Shows video selected video album groups
      *
      * @param int $community
      * @param int $album
@@ -527,7 +527,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Показывает форму добавления видео в видеоальбом группы.
+     * Shows form adding video в video album group.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -539,16 +539,16 @@ class GroupsController extends Controller
         $group = $this->groupOrFail($community, $communities);
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
-        $videoAlbums->ensureDefaultAlbumForOwner($group->id, 'group', 'Альбом сообщества');
+        $videoAlbums->ensureDefaultAlbumForOwner($group->id, 'group', 'Community album');
 
         return view('front.teams.videoalbums.add-video', $this->groupPayload($group, $communities, 'videoalbums') + [
-            'formTitle' => 'Добавление видеозаписи',
+            'formTitle' => 'Add video',
             'albums' => $videoAlbums->editableAlbumsForOwner($group->id, 'group'),
         ]);
     }
 
     /**
-     * Валидирует ссылку и добавляет видео в видеоальбом группы.
+     * Валидирует link и добавляет video в video album group.
      *
      * @param int $community
      * @param StoreVideoRequest $request
@@ -569,7 +569,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Показывает форму создания видеоальбома группы.
+     * Shows form creation video album group.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -581,16 +581,16 @@ class GroupsController extends Controller
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->groupPayload($group, $communities, 'videoalbums') + [
-            'formTitle' => 'Создание видеоальбома',
+            'formTitle' => 'Create video album',
             'formTitleClass' => 'video-form-title',
             'action' => route('front.groups.videoalbums.store', ['community' => $group->id]),
             'name' => old('name', ''),
-            'button' => 'Создать',
+            'button' => 'Create',
         ]);
     }
 
     /**
-     * Создает видеоальбом группы из валидированных данных формы
+     * Creates video album group из валидированных data form
      *
      * @param int $community
      * @param AlbumRequest $request
@@ -606,7 +606,7 @@ class GroupsController extends Controller
         $albumData = $request->toDto();
 
         if ($videoAlbums->nameExistsForOwner($group->id, 'group', $albumData->name)) {
-            return back()->withErrors(['name' => 'Альбом с таким названием уже существует.'])->withInput();
+            return back()->withErrors(['name' => 'An album with this name already exists.'])->withInput();
         }
 
         $videoAlbums->createAlbumForOwner($group->id, 'group', $albumData);
@@ -615,7 +615,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Проверяет права и показывает форму редактирования видеоальбома группы.
+     * Checks permissions и показывает form editing video album group.
      *
      * @param int $album
      * @param CommunityRepository $communities
@@ -633,16 +633,16 @@ class GroupsController extends Controller
         abort_unless($communities->canManage($group, Auth::guard('web')->user()), 403);
 
         return view('front.teams.album-form', $this->groupPayload($group, $communities, 'videoalbums') + [
-            'formTitle' => 'Редактирование видеоальбома',
+            'formTitle' => 'Edit video album',
             'formTitleClass' => 'video-form-title',
             'action' => route('front.groups.videoalbum.update', ['album' => $videoAlbum->id]),
             'name' => old('name', $videoAlbum->name),
-            'button' => 'Редактировать',
+            'button' => 'Edit',
         ]);
     }
 
     /**
-     * Проверяет права и сохраняет изменения видеоальбома группы.
+     * Checks permissions и сохраняет изменения video album group.
      *
      * @param int $album
      * @param AlbumRequest $request
@@ -663,7 +663,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Проверяет права и удаляет видеоальбом группы.
+     * Checks permissions и deletes video album group.
      *
      * @param int $album
      * @param CommunityRepository $communities
@@ -685,7 +685,7 @@ class GroupsController extends Controller
 
 
     /**
-     * Проверяет группу в URL и удаляет ее видеоальбом.
+     * Checks group в URL и deletes ее video album.
      *
      * @param int $community
      * @param int $album
@@ -706,7 +706,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Показывает мероприятия группы.
+     * Shows event group.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -723,7 +723,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Показывает форму создания мероприятия для группы.
+     * Shows form creation event для group.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -737,16 +737,16 @@ class GroupsController extends Controller
         abort_unless($viewer && $communities->canViewCommunityContent($group, $viewer), 403);
 
         return view('front.events.form', array_merge($this->groupPayload($group, $communities, 'events'), [
-            'title' => 'Создание мероприятия',
+            'title' => 'Create event',
             'action' => route('front.groups.events.store', ['community' => $group->id]),
-            'button' => 'Создать мероприятие',
+            'button' => 'Create event',
             'event' => null,
             'eventData' => null,
         ]));
     }
 
     /**
-     * Создает мероприятие и сразу привязывает его к группе.
+     * Creates event и сразу привязывает его к groupsе.
      *
      * @param int $community
      * @param EventRequest $request
@@ -769,7 +769,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Готовит общие данные группы для страниц вложенных разделов.
+     * Готовит общие data group для страниц nested sections.
      */
     private function groupPayload(Community $group, CommunityRepository $communities, string $section): array
     {
@@ -794,7 +794,7 @@ class GroupsController extends Controller
             && ! (bool) ($permissions[$sectionPermission] ?? true);
 
         return [
-            'title' => $group->name ?: 'Группа',
+            'title' => $group->name ?: 'Group',
             'hideTopProfile' => true,
             'viewer' => $viewer,
             'group' => $group,
@@ -809,18 +809,18 @@ class GroupsController extends Controller
             'canInviteGroup' => $communities->canInvite($group, $viewer),
             'canInviteTeam' => $communities->canInvite($group, $viewer),
             'communityAccessDenied' => $accessDenied,
-            'communityAccessMessage' => $membershipType === 'blocked' ? 'Доступ к странице ограничен' : 'Это закрытая группа',
+            'communityAccessMessage' => $membershipType === 'blocked' ? 'Access to this page is restricted' : 'This is a closed group',
             'sectionAccessDenied' => $sectionAccessDenied,
-            'sectionAccessMessage' => $this->sectionAccessMessage($sectionPermission, 'группы'),
+            'sectionAccessMessage' => $this->sectionAccessMessage($sectionPermission, 'group'),
             'section' => $section,
             'communityView' => [
                 'kind' => 'group',
                 'route' => 'front.groups',
                 'top' => 'front.groups._top',
-                'label' => 'Группа',
-                'labelLower' => 'группа',
-                'labelGenitive' => 'группы',
-                'pluralGenitive' => 'групп',
+                'label' => 'Group',
+                'labelLower' => 'group',
+                'labelGenitive' => 'group',
+                'pluralGenitive' => 'groups',
                 'entity' => $group,
                 'data' => $groupData,
             ],
@@ -828,7 +828,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Возвращает ключ настройки приватности для текущего раздела группы.
+     * Returns ключ настройки приватности для current section group.
      */
     private function sectionPermissionKey(string $section): ?string
     {
@@ -841,20 +841,20 @@ class GroupsController extends Controller
     }
 
     /**
-     * Возвращает текст сообщения для закрытого раздела группы.
+     * Returns текст сообщения для закрытого section group.
      */
     private function sectionAccessMessage(?string $sectionPermission, string $labelGenitive): string
     {
         return match ($sectionPermission) {
-            'wall' => 'Лента ' . $labelGenitive . ' скрыта настройками приватности.',
-            'photo' => 'Фотографии ' . $labelGenitive . ' скрыты настройками приватности.',
-            'video' => 'Видео ' . $labelGenitive . ' скрыто настройками приватности.',
-            default => 'Раздел скрыт настройками приватности.',
+            'wall' => 'Feed ' . $labelGenitive . ' is hidden by privacy settings.',
+            'photo' => 'Photos ' . $labelGenitive . ' are hidden by privacy settings.',
+            'video' => 'Video ' . $labelGenitive . ' is hidden by privacy settings.',
+            default => 'Section is hidden by privacy settings.',
         };
     }
 
     /**
-     * Добавляет к списку групп данные о правах и статусе текущего пользователя.
+     * Adds к списку groups data о permissionsх и statusе current user.
      */
     private function groupsForViewer(Collection $groups, CommunityRepository $communities, ?User $viewer): Collection
     {
@@ -869,7 +869,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Собирает фильтры списка групп из query-параметров.
+     * Собирает фильтры списка groups из query-параметров.
      */
     private function groupFilters(Request $request): array
     {
@@ -883,7 +883,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Определяет группу из параметра маршрута или из текущего пользователя.
+     * Detects group из параметра маршрута or из current user.
      */
     private function resolveGroup(?int $community, CommunityRepository $communities): Community
     {
@@ -899,7 +899,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Находит активную группу или завершает запрос ошибкой 404.
+     * Finds активную group or завершает запрос ошибкой 404.
      */
     private function groupOrFail(int $community, CommunityRepository $communities): Community
     {
@@ -911,7 +911,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Находит фотоальбом, принадлежащий группе, или завершает запрос ошибкой 404.
+     * Finds photo album, принадлежащий groupsе, or завершает запрос ошибкой 404.
      */
     private function groupPhotoalbumOrFail(int $album, Community $group, PhotoalbumRepository $photoAlbums): PhotoAlbums
     {
@@ -923,7 +923,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Находит видеоальбом, принадлежащий группе, или завершает запрос ошибкой 404.
+     * Finds video album, принадлежащий groupsе, or завершает запрос ошибкой 404.
      */
     private function groupVideoalbumOrFail(int $album, Community $group, VideoalbumRepository $videoAlbums): VideoAlbums
     {

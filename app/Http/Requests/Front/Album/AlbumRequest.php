@@ -22,7 +22,7 @@ class AlbumRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Укажите название альбома.',
+            'name.required' => 'Enter the album name.',
         ];
     }
 

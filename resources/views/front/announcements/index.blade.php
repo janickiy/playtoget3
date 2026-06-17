@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="photo-caption">
-        <h3>Объявления</h3>
+        <h3>Announcements</h3>
     </div>
 
     <div class="news-block-item">
@@ -18,7 +18,7 @@
                     <div>{{ \Illuminate\Support\Str::limit(strip_tags((string) $announcement->text), 240) }}</div>
                 </div>
             @empty
-                <div class="article nov">Объявлений пока нет</div>
+                <div class="article nov">No announcements yet</div>
             @endforelse
         </div>
     </div>

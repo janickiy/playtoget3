@@ -18,14 +18,14 @@ class PhotoUploadRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'file.required' => 'Выберите фото для загрузки.',
-            'file.image' => 'Можно загружать только изображения.',
-            'file.mimes' => 'Можно загружать только изображения JPG, PNG или GIF.',
-            'file.extensions' => 'Расширение файла должно быть JPG, PNG или GIF.',
-            'file.max' => 'Размер фото не должен превышать 32 МБ.',
-            'categorie.required' => 'Выберите альбом для загрузки.',
-            'categorie.integer' => 'Некорректный альбом для загрузки.',
-            'categorie.min' => 'Некорректный альбом для загрузки.',
+            'file.required' => 'Choose a photo to upload.',
+            'file.image' => 'Only images can be uploaded.',
+            'file.mimes' => 'Only JPG, PNG, or GIF images can be uploaded.',
+            'file.extensions' => 'The file extension must be JPG, PNG, or GIF.',
+            'file.max' => 'Photo size must not exceed 32 MB.',
+            'categorie.required' => 'Choose an album for upload.',
+            'categorie.integer' => 'Invalid upload album.',
+            'categorie.min' => 'Invalid upload album.',
         ];
     }
 }

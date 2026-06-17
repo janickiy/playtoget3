@@ -14,27 +14,27 @@
             <div class="cover-buttons">
                 @if ($permissions['send_message'])
                     <a class="cover-send-message" href="{{ route('front.profile.messages.show', ['user' => $viewer->id, 'recipient' => $profileUser->id]) }}">
-                        <button class="btn btn-primary">Написать <span>сообщение</span></button>
+                        <button class="btn btn-primary">Send <span>message</span></button>
                     </a>
                 @endif
 
                 <div id="friends_button">
                     @if ($friendshipStatus === 'invitation_sent')
-                        <button type="button" class="btn btn-primary"><span>Приглашение </span>отправлено</button>
+                        <button type="button" class="btn btn-primary"><span>Invitation </span>sent</button>
                     @elseif ($friendshipStatus === 'friend')
-                        <button type="button" class="btn btn-danger" id="remove_friend" data-item="{{ $profileUser->id }}">Удалить<span> друга</span></button>
+                        <button type="button" class="btn btn-danger" id="remove_friend" data-item="{{ $profileUser->id }}">Remove<span> friend</span></button>
                     @elseif ($friendshipStatus === 'nofriend')
-                        <button type="button" class="btn btn-success" id="add_as_friend" data-item="{{ $profileUser->id }}">Добавить<span> друга</span></button>
+                        <button type="button" class="btn btn-success" id="add_as_friend" data-item="{{ $profileUser->id }}">Add<span> friend</span></button>
                     @elseif ($friendshipStatus === 'invated')
-                        <button type="button" class="btn btn-success" id="accept_friendship" data-item="{{ $profileUser->id }}">Принять<span> дружбу</span></button>
+                        <button type="button" class="btn btn-success" id="accept_friendship" data-item="{{ $profileUser->id }}">Accept<span> friendship</span></button>
                     @endif
                 </div>
 
                 <div id="block_user_button">
                     @if ($friendshipStatus === 'block')
-                        <button type="button" class="btn btn-danger" id="unblock_user" data-item="{{ $profileUser->id }}">Разблокировать</button>
+                        <button type="button" class="btn btn-danger" id="unblock_user" data-item="{{ $profileUser->id }}">Unblock</button>
                     @else
-                        <button type="button" class="btn btn-danger" id="block_user" data-item="{{ $profileUser->id }}">Заблокировать</button>
+                        <button type="button" class="btn btn-danger" id="block_user" data-item="{{ $profileUser->id }}">Block</button>
                     @endif
                 </div>
                 <div class="clearfix"></div>

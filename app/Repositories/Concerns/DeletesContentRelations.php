@@ -9,7 +9,7 @@ use App\Models\Share;
 trait DeletesContentRelations
 {
     /**
-     * Удаляет связанные реакции, вложения и комментарии контента.
+     * Deletes related reactions, attachments and content comments.
      */
     private function deleteContentRelations(string $type, int $contentId): void
     {

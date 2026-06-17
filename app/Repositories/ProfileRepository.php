@@ -27,18 +27,18 @@ use Illuminate\Support\Facades\DB;
 class ProfileRepository extends BaseRepository
 {
     private const MONTHS = [
-        1 => 'января',
-        2 => 'февраля',
-        3 => 'марта',
-        4 => 'апреля',
-        5 => 'мая',
-        6 => 'июня',
-        7 => 'июля',
-        8 => 'августа',
-        9 => 'сентября',
-        10 => 'октября',
-        11 => 'ноября',
-        12 => 'декабря',
+        1 => 'January',
+        2 => 'February',
+        3 => 'March',
+        4 => 'April',
+        5 => 'May',
+        6 => 'June',
+        7 => 'July',
+        8 => 'August',
+        9 => 'September',
+        10 => 'October',
+        11 => 'November',
+        12 => 'December',
     ];
 
     private const CONTACT_FIELDS = [
@@ -51,30 +51,30 @@ class ProfileRepository extends BaseRepository
     ];
 
     private const PERMISSION_FIELDS = [
-        'permission_send_message' => 'Кто может писать мне сообщения',
-        'permission_view_profile' => 'Кто может просматривать мой профиль',
-        'permission_view_friends' => 'Кто может видеть список моих друзей',
-        'permission_view_photo' => 'Кто может просматривать мои фотографии',
-        'permission_view_video' => 'Кто может просматривать мои видеозаписи',
-        'permission_view_wall' => 'Кто может просматривать записи на моей стене',
-        'permission_comment_photo' => 'Кто может комментировать мои фотографии',
-        'permission_comment_video' => 'Кто может комментировать мои видеозаписи',
-        'permission_comment_wall' => 'Кто может комментировать записи на моей стене',
+        'permission_send_message' => 'Who can message me',
+        'permission_view_profile' => 'Who can view my profile',
+        'permission_view_friends' => 'Who can see my friends list',
+        'permission_view_photo' => 'Who can view my photos',
+        'permission_view_video' => 'Who can view my videos',
+        'permission_view_wall' => 'Who can view posts on my wall',
+        'permission_comment_photo' => 'Who can comment on my photos',
+        'permission_comment_video' => 'Who can comment on my videos',
+        'permission_comment_wall' => 'Who can comment on posts on my wall',
     ];
 
     private const NOTIFICATION_FIELDS = [
-        'notification_friends_request' => 'Заявки в друзья',
-        'notification_private_messages' => 'Личные сообщения',
-        'notification_wall_comments' => 'Комментарии на стене',
-        'notification_picture_comments' => 'Комментарии к фотографиям',
-        'notification_video_comments' => 'Комментарии к видео',
-        'notification_answers_in_comments' => 'Ответы в комментариях',
-        'notification_events' => 'Мероприятия',
-        'notification_birthdays' => 'Дни рождения',
+        'notification_friends_request' => 'Friend requests',
+        'notification_private_messages' => 'Private messages',
+        'notification_wall_comments' => 'Wall comments',
+        'notification_picture_comments' => 'Photo comments',
+        'notification_video_comments' => 'Video comments',
+        'notification_answers_in_comments' => 'Replies in comments',
+        'notification_events' => 'Events',
+        'notification_birthdays' => 'Birthdays',
     ];
 
     /**
-     * Подключает модель и зависимости, с которыми работает репозиторий.
+     * Connects модель и зависимости, с которыми работает репозиторий.
      */
     public function __construct(
         User $model,
@@ -85,7 +85,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Находит профиль пользователя для просмотра.
+     * Finds профиль user для view.
      */
     public function profile(int $id): ?User
     {
@@ -110,7 +110,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Формирует основные данные профиля для страницы пользователя.
+     * Builds основные data профиля для page user.
      */
     public function profileData(User $profile): array
     {
@@ -138,7 +138,7 @@ class ProfileRepository extends BaseRepository
                 ->map(fn($row): array => [
                     'sport_type' => (string)($row->sportType?->name ?? ''),
                     'sport_level' => (string)($row->sportLevel?->name ?? ''),
-                    'search_team' => (int)$row->search_team === 1 ? 'да' : 'нет',
+                    'search_team' => (int)$row->search_team === 1 ? 'yes' : 'no',
                 ])
                 ->filter(fn(array $row): bool => $row['sport_type'] !== '' || $row['sport_level'] !== '')
                 ->values(),
@@ -148,7 +148,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Формирует данные верхнего блока профиля пользователя.
+     * Builds data верхнего block профиля user.
      */
     public function topProfileData(User $user): array
     {
@@ -163,7 +163,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Возвращает настройки профиля или создает их со значениями по умолчанию.
+     * Returns настройки профиля or creates их со значениями по умолчанию.
      */
     public function profileSettings(User $user): UserSetting
     {
@@ -182,7 +182,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Возвращает пользователей, заблокированных текущим профилем.
+     * Returns users, blocked текущим профилем.
      */
     public function blockedUsers(User $user): Collection
     {
@@ -205,7 +205,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Возвращает последние записи журнала безопасности пользователя.
+     * Returns последние записи журнала безопасности user.
      *
      * @param User $user
      * @param int $limit
@@ -227,7 +227,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Возвращает список полей прав доступа профиля.
+     * Returns list полей прав accessа профиля.
      */
     public function permissionFields(): array
     {
@@ -235,7 +235,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Возвращает список полей уведомлений профиля.
+     * Returns list полей уведомлений профиля.
      */
     public function notificationFields(): array
     {
@@ -243,7 +243,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Обрезает загруженный аватар во временный квадратный файл.
+     * Обрезает uploaded avatar во temporary квадратный файл.
      */
     public function cropTemporaryAvatar(User $user, ImageCropData $data): array
     {
@@ -251,7 +251,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Обновляет профиль, настройки приватности и изображения пользователя.
+     * Updates профиль, настройки приватности и image user.
      *
      * @param User $user
      * @param ProfileSettingsData $data
@@ -319,7 +319,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Возвращает набор прав пользователя для текущей сущности.
+     * Returns набор прав user для current entity.
      *
      * @param User $profile
      * @param User|null $viewer
@@ -367,7 +367,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Возвращает комментарии стены профиля.
+     * Returns комментарии стены профиля.
      *
      * @param int $profileId
      * @param int $limit
@@ -381,7 +381,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Возвращает комментарии сущности с древовидными ответами.
+     * Returns комментарии entity с древовидными ответами.
      */
     public function comments(
         string $commentableType,
@@ -399,7 +399,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Проверяет, есть ли еще комментарии стены после текущей страницы.
+     * Checks, есть ли еще комментарии стены после current page.
      *
      * @param int $profileId
      * @param int $limit
@@ -412,7 +412,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Проверяет, есть ли еще комментарии у сущности после текущей страницы.
+     * Checks, есть ли еще комментарии у entity после current page.
      *
      * @param string $commentableType
      * @param int $contentId
@@ -429,7 +429,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Создает комментарий на стене или у связанной сущности.
+     * Creates комментарий на стене or у связанной entity.
      *
      * @param User $author
      * @param CommentData $data
@@ -465,7 +465,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Удаляет комментарий, если у пользователя есть права.
+     * Deletes комментарий, если у user есть permissions.
      *
      * @param User $viewer
      * @param int $commentId
@@ -511,7 +511,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Преобразует комментарий и ответы в массив данных для вывода.
+     * Преобразует комментарий и ответы в массив data для output.
      *
      * @param Comment $comment
      * @param User|null $viewer
@@ -562,7 +562,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Готовит базовый запрос комментариев для указанной сущности.
+     * Готовит базовый запрос комментариев для указанной entity.
      *
      * @param string $commentableType
      * @param int $contentId
@@ -589,7 +589,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Проверяет, может ли пользователь удалить комментарий.
+     * Checks, может ли user delete комментарий.
      *
      * @param User $viewer
      * @param Comment $comment
@@ -657,7 +657,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Возвращает занятия пользователя указанного типа.
+     * Returns занятия user указанного typeа.
      *
      * @param User $profile
      * @param int $kind
@@ -680,7 +680,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Преобразует вложение комментария в массив данных для вывода.
+     * Преобразует вложение комментария в массив data для output.
      *
      * @param Attachment $attachment
      * @return array|null
@@ -704,7 +704,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Проверяет, разрешает ли настройка приватности выбранное действие.
+     * Checks, разрешает ли настройка приватности selected действие.
      *
      * @param mixed $permission
      * @param bool $isOwnPage
@@ -721,7 +721,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Проверяет настройки с доступными значениями «Все» и «Друзья».
+     * Checks настройки с accessными значениями «Everyone» и «Friends».
      *
      * @param mixed $permission
      * @param bool $isOwnPage
@@ -737,7 +737,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Нормализует список идентификаторов вложений из входных данных.
+     * Нормализует list идентификаторов вложений из входных data.
      *
      * @param mixed $attach
      * @return array
@@ -762,7 +762,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Определяет операционную систему по строке User-Agent.
+     * Detects операционную систему по строке User-Agent.
      */
     private function detectOs(string $userAgent): string
     {
@@ -772,12 +772,12 @@ class ProfileRepository extends BaseRepository
             stripos($userAgent, 'iPhone') !== false || stripos($userAgent, 'iPad') !== false => 'iOS',
             stripos($userAgent, 'Android') !== false => 'Android',
             stripos($userAgent, 'Linux') !== false => 'Linux',
-            default => 'Не определено',
+            default => 'Not detected',
         };
     }
 
     /**
-     * Определяет браузер по строке User-Agent.
+     * Detects браузер по строке User-Agent.
      *
      * @param string $userAgent
      * @return string
@@ -790,12 +790,12 @@ class ProfileRepository extends BaseRepository
             stripos($userAgent, 'Firefox') !== false => 'Firefox',
             stripos($userAgent, 'Chrome') !== false => 'Chrome',
             stripos($userAgent, 'Safari') !== false => 'Safari',
-            default => 'Не определено',
+            default => 'Not detected',
         };
     }
 
     /**
-     * Форматирует дату и время для вывода в интерфейсе.
+     * Форматирует date и время для output в интерфейсе.
      *
      * @param CarbonInterface|null $date
      * @return string
@@ -803,12 +803,12 @@ class ProfileRepository extends BaseRepository
     private function dateTime(?CarbonInterface $date): string
     {
         return $date
-            ? sprintf('%d %s %d в %02d:%02d', $date->day, self::MONTHS[$date->month], $date->year, $date->hour, $date->month)
+            ? sprintf('%d %s %d at %02d:%02d', $date->day, self::MONTHS[$date->month], $date->year, $date->hour, $date->month)
             : '';
     }
 
     /**
-     * Форматирует дату для вывода в интерфейсе.
+     * Форматирует date для output в интерфейсе.
      *
      * @param CarbonInterface|null $date
      * @return string

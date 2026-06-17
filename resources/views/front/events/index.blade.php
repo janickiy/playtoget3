@@ -15,48 +15,48 @@
                 <input type="hidden" name="date" value="{{ request('date') }}">
                 <div class="select-container-text two_block">
                     <input type="hidden" name="id_place" class="id_place" value="{{ request('id_place') }}" data-type="search_city">
-                    <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('place') }}" name="place" data-type="search_city" placeholder="Ищу мероприятие в городе">
+                    <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('place') }}" name="place" data-type="search_city" placeholder="Search events by city">
                     <div class="select-place" data-type="search_city"></div>
                 </div>
                 <div class="select-container-text two_block borderLeft">
                     <input type="hidden" name="id_sport" class="id_place" value="{{ request('id_sport') }}" data-type="search_sport">
-                    <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('sport') }}" name="sport" data-type="search_sport" placeholder="Ищу вид спорта">
+                    <input autocomplete="off" class="search_word text-place border-top-none" type="text" value="{{ request('sport') }}" name="sport" data-type="search_sport" placeholder="Search sport type">
                     <div class="select-place" data-type="search_sport"></div>
                 </div>
                 <p class="select-container-text lupa">
-                    <input type="text" name="search" value="{{ request('search') }}" class="search_word" placeholder="Ключевое слово">
+                    <input type="text" name="search" value="{{ request('search') }}" class="search_word" placeholder="Keyword">
                     <span></span>
                 </p>
                 <input type="submit" class="displayNone">
                 @if ($viewer)
-                    <button type="button" onclick="location.href='{{ route('front.events.create') }}'" class="btn btn-white">Создать мероприятие</button>
+                    <button type="button" onclick="location.href='{{ route('front.events.create') }}'" class="btn btn-white">Create event</button>
                 @endif
             </div>
         </form>
 
         <div class="photo-caption front-section-title">
-            <h3>Мероприятия</h3>
+            <h3>Events</h3>
         </div>
 
         @if ($selectedDate)
             <div class="events-date-filter">
-                Мероприятия на {{ $selectedDate->format('d.m.Y') }}
-                <a href="{{ route('front.events.index') }}">сбросить</a>
+                Events on {{ $selectedDate->format('d.m.Y') }}
+                <a href="{{ route('front.events.index') }}">reset</a>
             </div>
         @endif
 
         <div id="tabs">
             <ul id="main-menu" class="marginBottom-40">
-                <li data-type="popular" class="active"><a href="#popular">Популярные мероприятия</a></li>
+                <li data-type="popular" class="active"><a href="#popular">Popular events</a></li>
                 <li data-type="mygroups">
-                    <a href="#mygroups">Мои мероприятия
+                    <a href="#mygroups">My events
                         @if ($myEventsTotal > 0)
                             <sup>{{ $myEventsTotal }}</sup>
                         @endif
                     </a>
                 </li>
                 <li data-type="invited">
-                    <a href="#invited">Я приглашен
+                    <a href="#invited">Invited
                         @if ($invitedEventsTotal > 0)
                             <sup class="active">{{ $invitedEventsTotal }}</sup>
                         @endif
@@ -76,11 +76,11 @@
                             @endforeach
                         </div>
                         <a href="#" class="show-more js-events-load-more" data-feed="popular" @style(['display: none' => $popularEventsTotal <= $popularEvents->count()])>
-                            <i></i><span>Показать еще</span>
+                            <i></i><span>Show more</span>
                         </a>
                     </div>
                 @else
-                    <div class="text-center"><h5>Популярных мероприятий пока нет.</h5></div>
+                    <div class="text-center"><h5>There are no popular events yet.</h5></div>
                 @endif
             </div>
 
@@ -97,11 +97,11 @@
                             @endforeach
                         </div>
                         <a href="#" class="show-more js-events-load-more" data-feed="mygroups" @style(['display: none' => $myEventsTotal <= $myEvents->count()])>
-                            <i></i><span>Показать еще</span>
+                            <i></i><span>Show more</span>
                         </a>
                     </div>
                 @else
-                    <div class="text-center"><h5>Вы пока не участвуете в мероприятиях.</h5></div>
+                    <div class="text-center"><h5>You are not participating in any events yet.</h5></div>
                 @endif
             </div>
 
@@ -118,11 +118,11 @@
                             @endforeach
                         </div>
                         <a href="#" class="show-more js-events-load-more" data-feed="invited" @style(['display: none' => $invitedEventsTotal <= $invitedEvents->count()])>
-                            <i></i><span>Показать еще</span>
+                            <i></i><span>Show more</span>
                         </a>
                     </div>
                 @else
-                    <div class="text-center"><h5>У вас нет приглашений.</h5></div>
+                    <div class="text-center"><h5>You have no invitations.</h5></div>
                 @endif
             </div>
         </div>

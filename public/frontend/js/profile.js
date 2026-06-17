@@ -54,7 +54,7 @@ $(document).ready(function () {
             message += '<p class="data">' + row.created + '</p></div>';
             message += '<p class="message-text">' + row.content + '<br>';
             message += row.image + '</p>';
-            message += "<div class='del-message' data-item='" + id + "' data-tooltip='Удалить сообщение'></div>";
+            message += "<div class='del-message' data-item='" + id + "' data-tooltip='Delete message'></div>";
             message += '</div>';
         } else {
             message += '<div class="message-reply" id="message-' + id + '">';
@@ -161,7 +161,7 @@ $(document).ready(function () {
                         Message += '<p class="data">' + data.created + '</p></div>';
                         Message += '<p class="message-text">' + data.content + '<br>';
                         Message += data.image + '</p>';
-                        Message += "<div class='del-message' data-item='" + data.id + "' data-tooltip='Удалить сообщение'></div>";
+                        Message += "<div class='del-message' data-item='" + data.id + "' data-tooltip='Delete message'></div>";
                         Message += '</div>';
 
                         $('#message-list').append(Message);
@@ -237,12 +237,12 @@ $(document).ready(function () {
             $('#old_dialogue').addClass('hide');
             $('#new_dialogue').removeClass('hide');
             $(this).attr('data-status', 'old');
-            $(this).html("<h5><img src='/frontend/images/message-sitebar.png'/> Вернуться в диалоги</h5>");
+            $(this).html("<h5><img src='/frontend/images/message-sitebar.png'/> Back to dialogs</h5>");
         } else {
             $('#old_dialogue').removeClass('hide');
             $('#new_dialogue').addClass('hide');
             $(this).attr('data-status', 'new');
-            $(this).html("<h5><img src='/frontend/images/pen.png'/> Начать новый диалог</h5>");
+            $(this).html("<h5><img src='/frontend/images/pen.png'/> Start a new dialog</h5>");
         }
     })
 
@@ -272,7 +272,7 @@ $(document).on("click", ".reply", function () {
     ReplyForm += '<input id="comment" name="comment" type="text" data-num="' + IdComment + '" placeholder="' + placeholder + '">';
     ReplyForm += '<div class="smile-files">';
     ReplyForm += '<a id="smilesBtn" class="smile smilesBtn" data-num="' + IdComment + '"><img src="/frontend/images/smile.png" alt=""></a>';
-    ReplyForm += '<a href="#" class="files" data-num="' + IdComment + '"  data-tooltip="Прикрепить изображение"><img src="./frontend/images/files.png" alt=""></a>';
+    ReplyForm += '<a href="#" class="files" data-num="' + IdComment + '"  data-tooltip="Attach image"><img src="./frontend/images/files.png" alt=""></a>';
     ReplyForm += "<div class='smilesChoose add' data-num='" + IdComment + "'></div>";
     ReplyForm += '</div>';
     if (window.profileCanPostAsCommunity && (window.profileCommentableType === 'team' || window.profileCommentableType === 'group')) {
@@ -281,11 +281,11 @@ $(document).on("click", ".reply", function () {
         ReplyForm += '<input id="team_check_reply_' + IdComment + '" type="checkbox" hidden checked name="author_community" value="1">';
         ReplyForm += '<label for="team_check_reply_' + IdComment + '"></label>';
         ReplyForm += '</div>';
-        ReplyForm += '<label class="col-lg-6 control-label label_team_check" for="team_check_reply_' + IdComment + '">подпись</label>';
+        ReplyForm += '<label class="col-lg-6 control-label label_team_check" for="team_check_reply_' + IdComment + '">signature</label>';
         ReplyForm += '</div>';
     }
     ReplyForm += "<div class='files_block two' data-num='" + IdComment + "'></div>";
-    ReplyForm += '<input type="submit" id="send-reply" class="send" value="Отправить" data-item="' + IdComment + '">';
+    ReplyForm += '<input type="submit" id="send-reply" class="send" value="Send" data-item="' + IdComment + '">';
     ReplyForm += '</form>';
     ReplyForm += '<div style="clear:both"></div>';
     ReplyForm += '</div>';

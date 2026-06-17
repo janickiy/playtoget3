@@ -11,7 +11,7 @@
             <p>{!! nl2br(e($item['about'])) !!}</p>
         @endif
         @if ($item['owner_id'] && $viewer && (int) $item['owner_id'] === (int) $viewer->id)
-            <a href="{{ route($routePrefix . '.edit', ['sportBlock' => $item['id']]) }}">{{ $editLabel ?? 'Редактировать' }}</a>
+            <a href="{{ route($routePrefix . '.edit', ['sportBlock' => $item['id']]) }}">{{ $editLabel ?? 'Edit' }}</a>
         @endif
     </div>
 </div>

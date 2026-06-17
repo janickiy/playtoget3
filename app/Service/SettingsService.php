@@ -12,7 +12,7 @@ class SettingsService
     use File;
 
     /**
-     * Сохраняет файл настройки и возвращает имя сохраненного файла.
+     * Сохраняет файл настройки и возвращает name сохраненного файла.
      *
      * @param Request $request
      * @return string
@@ -25,14 +25,14 @@ class SettingsService
         $originName = $request->file('value')->getClientOriginalName();
 
         if ($request->file('value')->move('uploads/' . Settings::getTableName(), $filename) === false) {
-            throw new Exception(sprintf('Не удалось сохранить %s!', $originName));
+            throw new Exception(sprintf('Failed to save %s!', $originName));
         }
 
         return $filename;
     }
 
     /**
-     * Заменяет файл настройки и возвращает имя нового файла.
+     * Заменяет файл настройки и возвращает name нового файла.
      *
      * @param Settings $settings
      * @param Request $request
@@ -48,7 +48,7 @@ class SettingsService
         $originName = $request->file('value')->getClientOriginalName();
 
         if ($request->file('value')->move('uploads/' . Settings::getTableName(), $filename) === false) {
-            throw new Exception(sprintf('Не удалось сохранить %s!', $originName));
+            throw new Exception(sprintf('Failed to save %s!', $originName));
         }
 
         return $filename;

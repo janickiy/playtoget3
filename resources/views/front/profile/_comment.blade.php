@@ -51,7 +51,7 @@
         </p>
 
         @if ($comment['can_interact'] ?? (bool) $viewer)
-            <a id="reply-{{ $comment['id'] }}" class="reply" data-item="{{ $comment['id'] }}"> Ответить</a>
+            <a id="reply-{{ $comment['id'] }}" class="reply" data-item="{{ $comment['id'] }}"> Reply</a>
             @if ($comment['can_share'])
                 <a id="tell-comment-{{ $comment['id'] }}" class="tell" data-item="{{ $comment['id'] }}" data-type="comment">{{ $comment['shares_count'] }}</a>
             @endif

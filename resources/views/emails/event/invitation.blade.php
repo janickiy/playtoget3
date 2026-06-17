@@ -2,13 +2,13 @@
     $url = route('front.events.show', ['event' => $event->id]);
 @endphp
 
-<p>Здравствуйте, {{ $invitee->displayName() }}!</p>
+<p>Hello, {{ $invitee->displayName() }}!</p>
 
-<p>{{ $inviter->displayName() }} приглашает вас на мероприятие «{{ $event->name }}».</p>
+<p>{{ $inviter->displayName() }} invites you to the event «{{ $event->name }}».</p>
 
 <p>
-    Чтобы принять или отклонить приглашение, перейдите на страницу:
+    To accept or decline the invitation, go to the page:
     <a href="{{ $url }}">{{ $url }}</a>
 </p>
 
-<p>Спасибо, что вы с PlayToGet.</p>
+<p>Thank you for being with PlayToGet.</p>

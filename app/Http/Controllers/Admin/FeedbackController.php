@@ -15,7 +15,7 @@ use Illuminate\View\View;
 class FeedbackController extends Controller
 {
     /**
-     * Подключает репозиторий обращений и сервис уведомлений.
+     * Connects репозиторий feedback requests и notification service.
      */
     public function __construct(
         private readonly FeedbackRepository $feedbackRepository,
@@ -25,17 +25,17 @@ class FeedbackController extends Controller
     }
 
     /**
-     * Показывает список обращений обратной связи.
+     * Shows list feedback requests.
      */
     public function index(): View
     {
         return view('admin.feedback.index', [
-            'title' => 'Обратная связь',
+            'title' => 'Feedback',
         ]);
     }
 
     /**
-     * Показывает обращение обратной связи.
+     * Shows feedback request feedback.
      */
     public function show(int $id): View
     {
@@ -45,12 +45,12 @@ class FeedbackController extends Controller
 
         return view('admin.feedback.show', [
             'row' => $row,
-            'title' => 'Просмотр обращения',
+            'title' => 'View feedback request',
         ]);
     }
 
     /**
-     * Показывает форму редактирования статуса и ответа.
+     * Shows form editing statusа и ответа.
      */
     public function edit(int $id): View
     {
@@ -61,12 +61,12 @@ class FeedbackController extends Controller
         return view('admin.feedback.create_edit', [
             'row' => $row,
             'statusOptions' => $this->feedbackRepository->statusOptions(),
-            'title' => 'Редактирование обращения',
+            'title' => 'Edit feedback request',
         ]);
     }
 
     /**
-     * Обновляет статус и ответ обращения, отправляя уведомление при смене статуса.
+     * Updates status и ответ обращения, отправляя уведомление при status change.
      */
     public function update(EditRequest $request): RedirectResponse
     {
@@ -94,6 +94,6 @@ class FeedbackController extends Controller
 
         return redirect()
             ->route('admin.feedback.index')
-            ->with('success', 'Данные успешно обновлены');
+            ->with('success', 'Data updated successfully');
     }
 }

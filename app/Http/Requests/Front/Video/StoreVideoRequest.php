@@ -24,8 +24,8 @@ class StoreVideoRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'video.required' => 'Укажите ссылку на видео.',
-            'videoalbum_id.required' => 'Выберите альбом.',
+            'video.required' => 'Enter a video link.',
+            'videoalbum_id.required' => 'Choose an album.',
         ];
     }
 

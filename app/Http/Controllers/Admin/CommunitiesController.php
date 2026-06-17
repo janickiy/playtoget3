@@ -15,7 +15,7 @@ use Illuminate\View\View;
 class CommunitiesController extends Controller
 {
     /**
-     * Подключает репозиторий комьюнити и базовые настройки админ-контроллера.
+     * Connects репозиторий community и базовые настройки админ-контроллера.
      */
     public function __construct(
         private readonly AdminCommunityRepository $communityRepository,
@@ -24,17 +24,17 @@ class CommunitiesController extends Controller
     }
 
     /**
-     * Показывает список комьюнити.
+     * Shows list community.
      */
     public function index(): View
     {
         return view('admin.communities.index', [
-            'title' => 'Комьюнити',
+            'title' => 'Communities',
         ]);
     }
 
     /**
-     * Показывает страницу просмотра выбранного комьюнити.
+     * Shows page view selected community.
      */
     public function show(int $id): View
     {
@@ -44,7 +44,7 @@ class CommunitiesController extends Controller
 
         return view('admin.communities.show', [
             'row' => $row,
-            'title' => 'Просмотр комьюнити',
+            'title' => 'View community',
             'typeLabel' => $this->communityRepository->typeLabel((string) $row->type),
             'statusLabel' => $this->communityRepository->statusLabel((int) $row->status),
             'avatarUrl' => FrontAssets::adminCommunityAvatar($row),
@@ -52,7 +52,7 @@ class CommunitiesController extends Controller
     }
 
     /**
-     * Показывает форму редактирования выбранного комьюнити.
+     * Shows form editing selected community.
      */
     public function edit(int $id): View
     {
@@ -62,7 +62,7 @@ class CommunitiesController extends Controller
 
         return view('admin.communities.create_edit', [
             'row' => $row,
-            'title' => 'Редактирование комьюнити',
+            'title' => 'Edit community',
             'typeOptions' => $this->communityRepository->typeOptions(),
             'statusOptions' => $this->communityRepository->statusOptions(),
             'avatarUrl' => FrontAssets::adminCommunityAvatar($row),
@@ -70,7 +70,7 @@ class CommunitiesController extends Controller
     }
 
     /**
-     * Обновляет комьюнити из валидированных данных формы.
+     * Updates community из валидированных data form.
      */
     public function update(EditRequest $request): RedirectResponse
     {
@@ -88,16 +88,16 @@ class CommunitiesController extends Controller
 
         return redirect()
             ->route('admin.communities.index')
-            ->with('success', 'Данные успешно обновлены');
+            ->with('success', 'Data updated successfully');
     }
 
     /**
-     * Удаляет выбранное комьюнити.
+     * Deletes selected community.
      */
     public function destroy(DeleteRequest $request, int $id): JsonResponse
     {
         $this->communityRepository->delete($id);
 
-        return response()->json(['message' => 'Данные успешно удалены.']);
+        return response()->json(['message' => 'Data deleted successfully.']);
     }
 }

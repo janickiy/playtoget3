@@ -12,7 +12,7 @@
             @include('front.communities._closed-message', ['message' => $communityAccessMessage])
         @else
             <div class="photo-caption">
-                <h3>Участники<sup>{{ $members->count() }}</sup></h3>
+                <h3>Members<sup>{{ $members->count() }}</sup></h3>
             </div>
 
             @if ($members->isNotEmpty())
@@ -50,7 +50,7 @@
                                         <a href="#"
                                            class="community-member-icon-action js-add-as-friend"
                                            data-user-id="{{ $member['id'] }}"
-                                           data-tooltip="Добавить в друзья">
+                                           data-tooltip="Add friend">
                                             <img src="{{ asset('frontend/images/icon-plus.svg') }}" alt="">
                                         </a>
                                     </span>
@@ -62,9 +62,9 @@
                                            data-action="remove_community_member"
                                            data-community-id="{{ $group->id }}"
                                            data-user-id="{{ $member['id'] }}"
-                                           data-confirm="Удалить участника из группы?"
-                                           data-success="Участник удален"
-                                           data-tooltip="Удалить участника">
+                                           data-confirm="Remove the member from the group?"
+                                           data-success="Member removed"
+                                           data-tooltip="Remove member">
                                             <img src="{{ asset('frontend/images/icon-krest.svg') }}" alt="">
                                         </a>
                                     </span>
@@ -74,9 +74,9 @@
                                            data-action="block_community_member"
                                            data-community-id="{{ $group->id }}"
                                            data-user-id="{{ $member['id'] }}"
-                                           data-confirm="Заблокировать участника в группе?"
-                                           data-success="Участник заблокирован"
-                                           data-tooltip="Заблокировать участника">
+                                           data-confirm="Block the member in the group?"
+                                           data-success="Member blocked"
+                                           data-tooltip="Block member">
                                             <img src="{{ asset('frontend/images/icon-block-member.svg') }}" alt="">
                                         </a>
                                     </span>
@@ -87,12 +87,12 @@
                     @endforeach
                 </div>
             @else
-                <p class="no_message">Участников пока нет.</p>
+                <p class="no_message">No members yet.</p>
             @endif
 
             @if ($applications->isNotEmpty())
                 <div class="photo-caption">
-                    <h3>Заявки</h3>
+                    <h3>Requests</h3>
                 </div>
                 <div class="possible-friend">
                     @foreach ($applications as $member)

@@ -24,7 +24,7 @@ class FeedbackStatusChanged extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Статус обращения изменен',
+            subject: 'Request status changed',
         );
     }
 

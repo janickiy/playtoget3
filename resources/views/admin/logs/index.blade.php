@@ -19,10 +19,10 @@
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Пользователь</th>
+                                    <th>User</th>
                                     <th>IP</th>
                                     <th>User Agent</th>
-                                    <th>Дата входа</th>
+                                    <th>Login date</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -51,16 +51,16 @@
         $(function () {
             $("#itemList").DataTable({
                 "oLanguage": {
-                    "sLengthMenu": "Отображено _MENU_ записей на страницу",
-                    "sZeroRecords": "Ничего не найдено - извините",
-                    "sInfo": "Показано с _START_ по _END_ из _TOTAL_ записей",
-                    "sInfoEmpty": "Показано с 0 по 0 из 0 записей",
-                    "sInfoFiltered": "(отфильтровано  _MAX_ всего записей)",
+                    "sLengthMenu": "Show _MENU_ entries per page",
+                    "sZeroRecords": "No matching records found",
+                    "sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
+                    "sInfoEmpty": "Showing 0 to 0 of 0 entries",
+                    "sInfoFiltered": "(filtered from _MAX_ total entries)",
                     "oPaginate": {
-                        "sFirst": "Первая",
-                        "sLast": "Посл.",
-                        "sNext": "След.",
-                        "sPrevious": "Пред."
+                        "sFirst": "First",
+                        "sLast": "Last",
+                        "sNext": "Next",
+                        "sPrevious": "Previous"
                     },
                     "sSearch": ' <i class="fas fa-search" aria-hidden="true"></i>'
                 },

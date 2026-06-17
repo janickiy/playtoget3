@@ -27,15 +27,15 @@ Route::prefix('cp')->group(function () {
     Route::middleware('auth:admin')->group(function () {
         Route::get('', [DashboardController::class, 'index'])->name('admin.dashboard.index');
 
-        //Управление контентом
+        // Content management
         Route::prefix('content')->group(function () {
 
-            //Меню
+            // Menu
             Route::any('manage-menus', [MenuController::class, 'index'])
                 ->name('admin.menu.index')
                 ->middleware(['permission:admin|moderator']);
 
-            //Страницы
+            // Pages
             Route::prefix('content')->group(function () {
                 Route::get('', [ContentController::class, 'index'])->name('admin.content.index');
                 Route::get('create', [ContentController::class, 'create'])->name('admin.content.create');

@@ -32,13 +32,13 @@ class StoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'subject.required' => 'Укажите тему сообщения.',
-            'name.required' => 'Укажите ваше имя.',
-            'email.required' => 'Укажите адрес электронной почты.',
-            'email.email' => 'Введите корректный адрес электронной почты.',
-            'message.required' => 'Введите сообщение.',
-            'g-recaptcha-response.required' => 'Подтвердите, что вы не робот.',
-            'g-recaptcha-response.recaptchav3' => 'Проверка reCAPTCHA не пройдена. Попробуйте отправить форму еще раз.',
+            'subject.required' => 'Enter the message subject.',
+            'name.required' => 'Enter your name.',
+            'email.required' => 'Enter your email address.',
+            'email.email' => 'Enter a valid email address.',
+            'message.required' => 'Enter message.',
+            'g-recaptcha-response.required' => 'Please confirm that you are not a robot.',
+            'g-recaptcha-response.recaptchav3' => 'reCAPTCHA verification failed. Please try submitting the form again.',
         ];
     }
 

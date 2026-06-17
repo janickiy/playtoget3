@@ -20,7 +20,7 @@ class DeleteRequest extends FormRequest
     }
 
     /**
-     * Возвращает правила проверки удаления объявления.
+     * Returns rules validation deletion announcement.
      *
      * @return array<string, mixed>
      */

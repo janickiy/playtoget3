@@ -2,20 +2,20 @@
 
 @php
     $monthNames = [
-        1 => 'Январь',
-        2 => 'Февраль',
-        3 => 'Март',
-        4 => 'Апрель',
-        5 => 'Май',
-        6 => 'Июнь',
-        7 => 'Июль',
-        8 => 'Август',
-        9 => 'Сентябрь',
-        10 => 'Октябрь',
-        11 => 'Ноябрь',
-        12 => 'Декабрь',
+        1 => 'January',
+        2 => 'February',
+        3 => 'March',
+        4 => 'April',
+        5 => 'May',
+        6 => 'June',
+        7 => 'July',
+        8 => 'August',
+        9 => 'September',
+        10 => 'October',
+        11 => 'November',
+        12 => 'December',
     ];
-    $weekDays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+    $weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     $today = \Carbon\CarbonImmutable::now()->toDateString();
     $cursor = $calendarStart;
 @endphp
@@ -23,14 +23,14 @@
 @section('content')
     <div class="content-groups friends calendar-page">
         <div class="photo-caption calendar-caption">
-            <h3>Календарь</h3>
+            <h3>Calendar</h3>
         </div>
 
         <div class="calendar-toolbar">
-            <a class="calendar-nav" href="{{ $prevMonthUrl }}">Назад</a>
+            <a class="calendar-nav" href="{{ $prevMonthUrl }}">Back</a>
             <div class="calendar-title">{{ $monthNames[(int) $month->format('n')] }} {{ $month->format('Y') }}</div>
-            <a class="calendar-nav" href="{{ $nextMonthUrl }}">Вперед</a>
-            <a class="calendar-today" href="{{ $currentMonthUrl }}">Сегодня</a>
+            <a class="calendar-nav" href="{{ $nextMonthUrl }}">Next</a>
+            <a class="calendar-today" href="{{ $currentMonthUrl }}">Today</a>
         </div>
 
         <div class="calendar-grid">
@@ -53,7 +53,7 @@
 
                 <a @class($classes)
                    href="{{ route('front.events.index', ['date' => $dateKey]) }}"
-                   title="Мероприятия на {{ $cursor->format('d.m.Y') }}">
+                   title="Events on {{ $cursor->format('d.m.Y') }}">
                     <span class="calendar-day-number">{{ $cursor->format('j') }}</span>
                     @if ($dayEvents)
                         <span class="calendar-event-count">{{ $dayEvents['count'] }}</span>

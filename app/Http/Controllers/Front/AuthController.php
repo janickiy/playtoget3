@@ -26,7 +26,7 @@ class AuthController extends Controller
     ];
 
     /**
-     * Проверяет пользователя по bcrypt-паролю и авторизует на сайт.
+     * Checks user по bcrypt-паролю и авторизует на website.
      *
      * @param LoginRequest $request
      * @param UserRepository $users
@@ -35,7 +35,7 @@ class AuthController extends Controller
     public function login(LoginRequest $request, UserRepository $users): RedirectResponse
     {
         $user = $users->findForLogin($request->email());
-        $loginError = ['username' => 'Неверный email или пароль.'];
+        $loginError = ['username' => 'Invalid email or password.'];
 
         if (! $user || ! $user->isConfirmed()) {
             return back()
@@ -55,7 +55,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Перенаправляет пользователя на страницу авторизации выбранного OAuth-провайдера.
+     * Redirects user на page authorization selected OAuth-provider.
      *
      * @param string $provider
      * @return RedirectResponse
@@ -67,7 +67,7 @@ class AuthController extends Controller
         if (! $driver || ! $this->providerIsConfigured($driver)) {
             return redirect()
                 ->route('front.home')
-                ->withErrors(['username' => 'Авторизация через выбранный сервис временно недоступна.']);
+                ->withErrors(['username' => 'Authorization through the selected service is temporarily unavailable.']);
         }
 
         try {
@@ -75,12 +75,12 @@ class AuthController extends Controller
         } catch (DriverMissingConfigurationException) {
             return redirect()
                 ->route('front.home')
-                ->withErrors(['username' => 'Авторизация через выбранный сервис временно недоступна.']);
+                ->withErrors(['username' => 'Authorization through the selected service is temporarily unavailable.']);
         }
     }
 
     /**
-     * Обрабатывает callback OAuth-провайдера и авторизует локального пользователя.
+     * Обрабатывает callback OAuth-provider и авторизует локального user.
      *
      * @param string $provider
      * @param SocialAccountRepository $accounts
@@ -95,7 +95,7 @@ class AuthController extends Controller
         if (! $driver || ! $this->providerIsConfigured($driver)) {
             return redirect()
                 ->route('front.home')
-                ->withErrors(['username' => 'Авторизация через выбранный сервис временно недоступна.']);
+                ->withErrors(['username' => 'Authorization through the selected service is temporarily unavailable.']);
         }
 
         try {
@@ -105,7 +105,7 @@ class AuthController extends Controller
             if (! $user->isConfirmed()) {
                 return redirect()
                     ->route('front.home')
-                    ->withErrors(['username' => 'Неверный email или пароль.']);
+                    ->withErrors(['username' => 'Invalid email or password.']);
             }
 
             Auth::guard('web')->login($user, true);
@@ -114,16 +114,16 @@ class AuthController extends Controller
         } catch (InvalidStateException|DriverMissingConfigurationException|RuntimeException $exception) {
             return redirect()
                 ->route('front.home')
-                ->withErrors(['username' => $exception->getMessage() ?: 'Не удалось выполнить авторизацию.']);
+                ->withErrors(['username' => $exception->getMessage() ?: 'Authorization failed.']);
         } catch (Throwable) {
             return redirect()
                 ->route('front.home')
-                ->withErrors(['username' => 'Не удалось выполнить авторизацию.']);
+                ->withErrors(['username' => 'Authorization failed.']);
         }
     }
 
     /**
-     * Завершает пользовательскую сессию и возвращает на главную страницу
+     * Ends userскую session и возвращает на home page
      *
      * @return RedirectResponse
      */
@@ -135,7 +135,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Сопоставляет публичное имя провайдера с драйвером Socialite.
+     * Maps public name provider с driver Socialite.
      */
     private function driverFor(string $provider): ?string
     {
@@ -143,7 +143,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Проверяет, что для провайдера заполнены обязательные OAuth-настройки.
+     * Checks, что для provider заполнены обязательные OAuth-настройки.
      */
     private function providerIsConfigured(string $driver): bool
     {

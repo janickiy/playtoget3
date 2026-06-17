@@ -12,7 +12,7 @@
         data-icon-remove="{{ asset('frontend/images/icon-krest.svg') }}"
     >
         @if (! $canViewFriends)
-            <p class="no_message">Список друзей пользователя доступен только друзьям.</p>
+            <p class="no_message">The user's friends list is available only to friends.</p>
         @endif
 
         @if ($isOwnPage && $possibleFriends->isNotEmpty())
@@ -24,7 +24,7 @@
                     <div class="select-container-text border-top-none">
                         <input
                             type="text"
-                            placeholder="Имя"
+                            placeholder="Name"
                             name="search"
                             value="{{ $filters['search'] }}"
                             class="search_word text-place border-top-none border-right-none"
@@ -33,9 +33,9 @@
                     <div class="select-container-text two_block borderLeft">
                         <div class="styled-select styled-select-4">
                             <select name="sex">
-                                <option value="">Пол</option>
-                                <option value="male" @selected($filters['sex'] === 'male')>Мужской</option>
-                                <option value="female" @selected($filters['sex'] === 'female')>Женский</option>
+                                <option value="">Gender</option>
+                                <option value="male" @selected($filters['sex'] === 'male')>Male</option>
+                                <option value="female" @selected($filters['sex'] === 'female')>Female</option>
                             </select>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                             name="place"
                             value="{{ $filters['city'] }}"
                             data-type="search_city"
-                            placeholder="Город"
+                            placeholder="City"
                         >
                         <div class="select-place" data-type="search_city"></div>
                     </div>
@@ -61,14 +61,14 @@
                             name="sport"
                             value="{{ $filters['sport'] }}"
                             data-type="search_sport"
-                            placeholder="Вид спорта"
+                            placeholder="Sport type"
                         >
                         <div class="select-place" data-type="search_sport"></div>
                     </div>
                     <div class="select-container-text">
                         <input
                             type="text"
-                            placeholder="Возраст от"
+                            placeholder="Age from"
                             maxlength="2"
                             name="min_age"
                             value="{{ $filters['min_age'] }}"
@@ -76,7 +76,7 @@
                         >
                         <input
                             type="text"
-                            placeholder="Возраст до"
+                            placeholder="Age to"
                             maxlength="2"
                             name="max_age"
                             value="{{ $filters['max_age'] }}"
@@ -86,9 +86,9 @@
                     <div class="select-container-text borderLeft borderTop">
                         <div class="checkbox">
                             <input id="checkbox-find-comand" type="checkbox" hidden @checked((string) request('photo', '1') === '1') name="photo" value="1">
-                            <label for="checkbox-find-comand">фото</label>
+                            <label for="checkbox-find-comand">photo</label>
                         </div>
-                        <button type="submit" class="btn btn-white">Поиск</button>
+                        <button type="submit" class="btn btn-white">Search</button>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -97,7 +97,7 @@
             <script src="{{ asset('frontend/js/search.js') }}"></script>
 
             <div class="photo-caption">
-                <h3>Возможные друзья
+                <h3>Possible friends
                 </h3>
             </div>
             <div id="possible-friend" class="possible-friend">
@@ -110,13 +110,13 @@
                     ])
                 @endforeach
             </div>
-            <a id="show-possible_friends" class="show-more"><i></i>показать ещё</a>
+            <a id="show-possible_friends" class="show-more"><i></i>show more</a>
         @endif
 
         @if ($friends->isNotEmpty())
             <div class="photo-caption">
                 <h3>
-                    {{ $isOwnPage ? 'мои друзья' : 'друзья' }}
+                    {{ $isOwnPage ? 'my friends' : 'friends' }}
                     <sup>{{ $friendsCount }}</sup>
                 </h3>
             </div>
@@ -130,14 +130,14 @@
                 @endforeach
             </div>
             @if ($hasMoreFriends)
-                <a id="show_more_friends" class="show-more" onclick="showMoreFriend({{ $targetUser->id }})"><i></i>показать ещё</a>
+                <a id="show_more_friends" class="show-more" onclick="showMoreFriend({{ $targetUser->id }})"><i></i>show more</a>
             @endif
         @endif
 
         @if ($isOwnPage && $incomingRequests->isNotEmpty())
             <div class="photo-caption">
                 <h3>
-                    Заявки в друзья
+                    Friend requests
                     <sup>{{ $incomingRequestsCount }}</sup>
                 </h3>
             </div>
@@ -155,7 +155,7 @@
         @if ($isOwnPage && $outgoingRequests->isNotEmpty())
             <div class="photo-caption">
                 <h3>
-                    Исходящие заявки
+                    Outgoing requests
                     <sup>{{ $outgoingRequestsCount }}</sup>
                 </h3>
             </div>

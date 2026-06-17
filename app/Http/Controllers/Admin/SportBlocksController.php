@@ -15,7 +15,7 @@ use Illuminate\View\View;
 class SportBlocksController extends Controller
 {
     /**
-     * Подключает репозиторий спортивных блоков и базовые настройки админ-контроллера.
+     * Connects репозиторий sport blocks и базовые настройки админ-контроллера.
      */
     public function __construct(
         private readonly AdminSportBlockRepository $sportBlockRepository,
@@ -24,17 +24,17 @@ class SportBlocksController extends Controller
     }
 
     /**
-     * Показывает список спортивных блоков.
+     * Shows list sport blocks.
      */
     public function index(): View
     {
         return view('admin.sport-blocks.index', [
-            'title' => 'Спортивные блоки',
+            'title' => 'Sports blocks',
         ]);
     }
 
     /**
-     * Показывает страницу просмотра выбранного спортивного блока.
+     * Shows page view selected sport block.
      */
     public function show(int $id): View
     {
@@ -44,7 +44,7 @@ class SportBlocksController extends Controller
 
         return view('admin.sport-blocks.show', [
             'row' => $row,
-            'title' => 'Просмотр спортивного блока',
+            'title' => 'View sport block',
             'typeLabel' => $this->sportBlockRepository->typeLabel((string) $row->type),
             'statusLabel' => $this->sportBlockRepository->statusLabel((int) $row->status),
             'avatarUrl' => FrontAssets::sportBlockAvatar($row),
@@ -52,7 +52,7 @@ class SportBlocksController extends Controller
     }
 
     /**
-     * Показывает форму редактирования выбранного спортивного блока.
+     * Shows form editing selected sport block.
      */
     public function edit(int $id): View
     {
@@ -62,7 +62,7 @@ class SportBlocksController extends Controller
 
         return view('admin.sport-blocks.create_edit', [
             'row' => $row,
-            'title' => 'Редактирование спортивного блока',
+            'title' => 'Edit sport block',
             'typeOptions' => $this->sportBlockRepository->typeOptions(),
             'statusOptions' => $this->sportBlockRepository->statusOptions(),
             'avatarUrl' => FrontAssets::sportBlockAvatar($row),
@@ -70,7 +70,7 @@ class SportBlocksController extends Controller
     }
 
     /**
-     * Обновляет спортивный блок из валидированных данных формы.
+     * Updates sport block из валидированных data form.
      */
     public function update(EditRequest $request): RedirectResponse
     {
@@ -88,16 +88,16 @@ class SportBlocksController extends Controller
 
         return redirect()
             ->route('admin.sport-blocks.index')
-            ->with('success', 'Данные успешно обновлены');
+            ->with('success', 'Data updated successfully');
     }
 
     /**
-     * Удаляет выбранный спортивный блок.
+     * Deletes выбранный sport block.
      */
     public function destroy(DeleteRequest $request): JsonResponse
     {
         $this->sportBlockRepository->delete((int) $request->route('id'));
 
-        return response()->json(['message' => 'Данные успешно удалены.']);
+        return response()->json(['message' => 'Data deleted successfully.']);
     }
 }

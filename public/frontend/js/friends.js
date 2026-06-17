@@ -48,21 +48,21 @@
         html += '<p>' + escapeHtml(user.city) + '</p>';
 
         if (showMessage !== false) {
-            html += '<a href="' + messageUrl(user.user_id) + '" data-tooltip="Написать сообщение"><b></b></a>';
+            html += '<a href="' + messageUrl(user.user_id) + '" data-tooltip="Send message"><b></b></a>';
         }
 
         if (action === 'add') {
             html += '<div class="control">';
-            html += '<span><a onclick="add_as_friend(' + Number(user.user_id) + ');" data-tooltip="Добавить в друзья"><img src="' + iconAdd + '" alt=""></a></span>';
-            html += '<span><img src="' + iconRemove + '" alt="" class="js-hide-possible-friend" data-num="' + Number(user.user_id) + '" data-tooltip="Больше не показывать"></span>';
+            html += '<span><a onclick="add_as_friend(' + Number(user.user_id) + ');" data-tooltip="Add friend"><img src="' + iconAdd + '" alt=""></a></span>';
+            html += '<span><img src="' + iconRemove + '" alt="" class="js-hide-possible-friend" data-num="' + Number(user.user_id) + '" data-tooltip="Hide from suggestions"></span>';
             html += '</div>';
         } else if (action === 'remove') {
             html += '<div class="control"><span></span>';
-            html += '<span><a onclick="remove_friend(' + Number(user.user_id) + ');" data-tooltip="Удалить из друзей"><img src="' + iconRemove + '" alt=""></a></span>';
+            html += '<span><a onclick="remove_friend(' + Number(user.user_id) + ');" data-tooltip="Remove from friends"><img src="' + iconRemove + '" alt=""></a></span>';
             html += '</div>';
         } else if (action === 'accept') {
             html += '<div class="control">';
-            html += '<span><a onclick="accept_friendship(' + Number(user.user_id) + ');" data-tooltip="Принять заявку"><img src="' + iconOk + '" alt=""></a></span>';
+            html += '<span><a onclick="accept_friendship(' + Number(user.user_id) + ');" data-tooltip="Accept request"><img src="' + iconOk + '" alt=""></a></span>';
             html += '<span></span></div>';
         }
 

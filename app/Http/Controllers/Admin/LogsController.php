@@ -7,12 +7,12 @@ use Illuminate\View\View;
 class LogsController extends Controller
 {
     /**
-     * Показывает список логов авторизации пользователей.
+     * Shows list logs authorization users.
      */
     public function index(): View
     {
         return view('admin.logs.index', [
-            'title' => 'Логи',
+            'title' => 'Logs',
         ]);
     }
 }

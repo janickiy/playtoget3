@@ -17,7 +17,7 @@ class PhotoalbumsController extends Controller
     private const ALBUM_PHOTOS_LIMIT = 9;
 
     /**
-     * Показывает фотоальбомы текущего пользователя.
+     * Shows photo albums current user.
      */
     public function index(
         PhotoalbumRepository $photoAlbums,
@@ -35,7 +35,7 @@ class PhotoalbumsController extends Controller
     }
 
     /**
-     * Показывает фотоальбомы выбранного пользователя.
+     * Shows photo albums selected user.
      *
      * @param int $user
      * @param PhotoalbumRepository $photoAlbums
@@ -54,7 +54,7 @@ class PhotoalbumsController extends Controller
     }
 
     /**
-     * Показывает фотографии выбранного фотоальбома.
+     * Shows photo selected photo albumа.
      *
      * @param int $album
      * @param PhotoalbumRepository $photoAlbums
@@ -85,7 +85,7 @@ class PhotoalbumsController extends Controller
             : collect();
 
         return view('front.photoalbums.show', [
-            'title' => 'Фотоальбомы',
+            'title' => 'Photo albums',
             'hideTopProfile' => true,
             'viewer' => $viewer,
             'profileUser' => $profile,
@@ -103,7 +103,7 @@ class PhotoalbumsController extends Controller
     }
 
     /**
-     * Показывает форму добавления фотографии в доступный альбом.
+     * Shows form adding photo в accessный album.
      *
      * @param PhotoalbumRepository $photoAlbums
      * @return View|RedirectResponse
@@ -119,7 +119,7 @@ class PhotoalbumsController extends Controller
         $photoAlbums->ensureDefaultAlbum($viewer);
 
         return view('front.photoalbums.add-photo', [
-            'title' => 'Добавление фото',
+            'title' => 'Add photo',
             'viewer' => $viewer,
             'profileLayout' => $this->profileLayout($viewer),
             'albums' => $photoAlbums->editableAlbumsFor($viewer),
@@ -127,7 +127,7 @@ class PhotoalbumsController extends Controller
     }
 
     /**
-     * Показывает форму создания фотоальбома.
+     * Shows form creation photo albumа.
      */
     public function create(): View|RedirectResponse
     {
@@ -138,18 +138,18 @@ class PhotoalbumsController extends Controller
         }
 
         return view('front.photoalbums.form', [
-            'title' => 'Создание фотоальбома',
+            'title' => 'Create photo album',
             'viewer' => $viewer,
             'profileLayout' => $this->profileLayout($viewer),
             'action' => route('front.photoalbums.store'),
             'method' => 'POST',
             'name' => old('name', ''),
-            'button' => 'Создать',
+            'button' => 'Create',
         ]);
     }
 
     /**
-     * Создает фотоальбом из валидированных данных формы.
+     * Creates photo album из валидированных data form.
      *
      * @param AlbumRequest $request
      * @param PhotoalbumRepository $photoAlbums
@@ -167,7 +167,7 @@ class PhotoalbumsController extends Controller
 
         if ($photoAlbums->nameExists($viewer, $albumData->name)) {
             return back()
-                ->withErrors(['name' => 'Альбом с таким названием уже существует.'])
+                ->withErrors(['name' => 'An album with this name already exists.'])
                 ->withInput();
         }
 
@@ -177,7 +177,7 @@ class PhotoalbumsController extends Controller
     }
 
     /**
-     * Проверяет права и показывает форму редактирования фотоальбома.
+     * Checks permissions и показывает form editing photo albumа.
      *
      * @param int $album
      * @param PhotoalbumRepository $photoAlbums
@@ -195,19 +195,19 @@ class PhotoalbumsController extends Controller
         }
 
         return view('front.photoalbums.form', [
-            'title' => 'Редактирование фотоальбома',
+            'title' => 'Edit photo album',
             'viewer' => $viewer,
             'profileLayout' => $this->profileLayout($viewer),
             'photoalbum' => $photoAlbum,
             'action' => route('front.photoalbums.update', ['album' => $photoAlbum->id]),
             'method' => 'POST',
             'name' => old('name', $photoAlbum->name),
-            'button' => 'Редактировать',
+            'button' => 'Edit',
         ]);
     }
 
     /**
-     * Проверяет права и сохраняет изменения фотоальбома.
+     * Checks permissions и сохраняет изменения photo albumа.
      *
      * @param int $album
      * @param AlbumRequest $request
@@ -229,7 +229,7 @@ class PhotoalbumsController extends Controller
 
         if ($photoAlbums->nameExists($viewer, $albumData->name, $photoAlbum->id)) {
             return back()
-                ->withErrors(['name' => 'Альбом с таким названием уже существует.'])
+                ->withErrors(['name' => 'An album with this name already exists.'])
                 ->withInput();
         }
 
@@ -239,7 +239,7 @@ class PhotoalbumsController extends Controller
     }
 
     /**
-     * Проверяет права и удаляет фотоальбом.
+     * Checks permissions и deletes photo album.
      *
      * @param int $album
      * @param PhotoalbumRepository $photoAlbums
@@ -262,7 +262,7 @@ class PhotoalbumsController extends Controller
     }
 
     /**
-     * Готовит общую выдачу фотоальбомов для текущего или выбранного пользователя.
+     * Готовит общую listing photo albumов для current or selected user.
      *
      * @param int $userId
      * @param PhotoalbumRepository $photoAlbums
@@ -292,7 +292,7 @@ class PhotoalbumsController extends Controller
             : collect();
 
         return view('front.photoalbums.index', [
-            'title' => 'Фотоальбомы',
+            'title' => 'Photo albums',
             'hideTopProfile' => true,
             'viewer' => $viewer,
             'profileUser' => $profile,
@@ -314,7 +314,7 @@ class PhotoalbumsController extends Controller
     }
 
     /**
-     * Готовит данные верхнего блока профиля для страниц фотоальбомов.
+     * Готовит data верхнего block профиля для страниц photo albumов.
      *
      * @param $user
      * @return array

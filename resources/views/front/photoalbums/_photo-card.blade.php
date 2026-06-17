@@ -10,7 +10,7 @@
                     id="my-video-{{ $photo['id'] }}"
                     class="remove_pic"
                     data-item="{{ $photo['id'] }}"
-                    data-tooltip="Удалить фото"
+                    data-tooltip="Delete photo"
                 >
                     <img src="{{ asset('frontend/images/icon-krest.png') }}" alt="">
                 </i>

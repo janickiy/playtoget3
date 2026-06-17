@@ -11,55 +11,55 @@
                     <div class="card">
                         <div class="card-body">
                             <dl class="row">
-                                <dt class="col-sm-3">Обложка</dt>
+                                <dt class="col-sm-3">Cover</dt>
                                 <dd class="col-sm-9">
-                                    <img src="{{ $coverUrl }}" alt="Обложка мероприятия" class="img-thumbnail" style="width: 180px; height: 120px; object-fit: cover;">
+                                    <img src="{{ $coverUrl }}" alt="Event cover" class="img-thumbnail" style="width: 180px; height: 120px; object-fit: cover;">
                                 </dd>
 
                                 <dt class="col-sm-3">ID</dt>
                                 <dd class="col-sm-9">{{ $row->id }}</dd>
 
-                                <dt class="col-sm-3">Название</dt>
+                                <dt class="col-sm-3">Name</dt>
                                 <dd class="col-sm-9">{{ $row->name }}</dd>
 
-                                <dt class="col-sm-3">Место</dt>
+                                <dt class="col-sm-3">Place</dt>
                                 <dd class="col-sm-9">{{ $row->place }}</dd>
 
-                                <dt class="col-sm-3">Вид спорта</dt>
+                                <dt class="col-sm-3">Sport type</dt>
                                 <dd class="col-sm-9">{{ $row->sport_type }}</dd>
 
-                                <dt class="col-sm-3">Начало</dt>
+                                <dt class="col-sm-3">Start</dt>
                                 <dd class="col-sm-9">{{ optional($row->date_from)->format('d/m/Y H:i') }}</dd>
 
-                                <dt class="col-sm-3">Окончание</dt>
+                                <dt class="col-sm-3">End</dt>
                                 <dd class="col-sm-9">{{ optional($row->date_to)->format('d/m/Y H:i') }}</dd>
 
-                                <dt class="col-sm-3">Файл обложки</dt>
+                                <dt class="col-sm-3">Cover file</dt>
                                 <dd class="col-sm-9">{{ $row->cover_page }}</dd>
 
-                                <dt class="col-sm-3">Адрес</dt>
+                                <dt class="col-sm-3">Address</dt>
                                 <dd class="col-sm-9">{{ $row->address }}</dd>
 
-                                <dt class="col-sm-3">Статус</dt>
+                                <dt class="col-sm-3">Status</dt>
                                 <dd class="col-sm-9">{{ $statusLabel }}</dd>
 
-                                <dt class="col-sm-3">Создано</dt>
+                                <dt class="col-sm-3">Created</dt>
                                 <dd class="col-sm-9">{{ optional($row->created_at)->format('d/m/Y H:i') }}</dd>
 
-                                <dt class="col-sm-3">Обновлено</dt>
+                                <dt class="col-sm-3">Updated</dt>
                                 <dd class="col-sm-9">{{ optional($row->updated_at)->format('d/m/Y H:i') }}</dd>
 
-                                <dt class="col-sm-3">Описание</dt>
+                                <dt class="col-sm-3">Description</dt>
                                 <dd class="col-sm-9">{{ $row->description }}</dd>
                             </dl>
                         </div>
 
                         <div class="card-footer">
                             <a class="btn btn-primary" href="{{ route('admin.events.edit', ['id' => $row->id]) }}">
-                                редактировать
+                                edit
                             </a>
                             <a class="btn btn-default float-sm-right" href="{{ route('admin.events.index') }}">
-                                назад
+                                back
                             </a>
                         </div>
                     </div>

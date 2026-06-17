@@ -34,7 +34,7 @@
             ×
         </button>
         <i class="fas fa-times" aria-hidden="true"></i>
-        <strong>Ошибки</strong>
+        <strong>Errors</strong>
         <ul>
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>

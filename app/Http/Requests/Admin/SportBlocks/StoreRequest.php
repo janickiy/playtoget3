@@ -40,18 +40,18 @@ class StoreRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'type' => 'тип',
-            'name' => 'название',
-            'about' => 'описание',
-            'place' => 'место',
-            'address' => 'адрес',
-            'phone' => 'телефон',
+            'type' => 'type',
+            'name' => 'name',
+            'about' => 'description',
+            'place' => 'place',
+            'address' => 'address',
+            'phone' => 'phone',
             'email' => 'email',
-            'avatar' => 'аватар',
-            'website' => 'сайт',
-            'owner_id' => 'владелец',
-            'status' => 'статус',
-            'recommended' => 'рекомендовано',
+            'avatar' => 'avatar',
+            'website' => 'website',
+            'owner_id' => 'owner',
+            'status' => 'status',
+            'recommended' => 'recommended',
         ];
     }
 }

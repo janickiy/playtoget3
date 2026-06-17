@@ -21,7 +21,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * Создает новую запись из массива атрибутов; базовая операция для всех наследников.
+     * Creates новую record из массива атрибутов; базовая операция для всех наследников.
      *
      * @param array $data
      * @return Builder|Model
@@ -32,7 +32,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * Создает новую запись из DTO; нужен, чтобы сервисы не передавали сырые массивы напрямую.
+     * Creates новую record из DTO; нужен, чтобы сервисы не passed сырые массивы напрямую.
      */
     public function createFromDto(DataTransferObject $dto): Builder|Model
     {
@@ -40,7 +40,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * Обновляет запись по id переданными атрибутами; возвращает false, если запись не найдена.
+     * Updates record по id provided атрибутами; возвращает false, если record не найдена.
      *
      * @param array<string, mixed> $data
      */
@@ -56,7 +56,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * Обновляет запись по id данными из DTO; нужен для единого typed update-подхода.
+     * Updates record по id data из DTO; нужен для единого typed update-approach.
      */
     public function updateFromDto(int|string $id, DataTransferObject $dto): bool
     {
@@ -64,7 +64,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * Возвращает все записи таблицы модели; используется только для простых выборок без фильтров.
+     * Returns все записи таблицы модели; используется только для простых выборок без фильтров.
      *
      * @return Collection
      */
@@ -74,7 +74,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * Ищет запись по первичному ключу и возвращает null, если запись отсутствует.
+     * Ищет record by primary key и возвращает null, если record отсутствует.
      *
      * @return Model|null
      */
@@ -84,7 +84,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * Удаляет запись по первичному ключу; нужен для общей операции удаления в наследниках.
+     * Deletes record by primary key; нужен для общей операции deletion в наследниках.
      */
     public function delete(int|string $id): bool
     {
@@ -97,7 +97,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * Удаляет все записи через query builder без пересоздания таблицы.
+     * Deletes все записи через query builder без переcreation таблицы.
      */
     public function deleteAll(): void
     {
@@ -105,7 +105,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * Полностью очищает таблицу модели; полезно для служебной очистки и тестов.
+     * Completely очищает таблицу модели; полезно для служебной очистки и тестов.
      */
     public function truncate(): void
     {

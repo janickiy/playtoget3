@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class DeleteRequest extends FormRequest
 {
     /**
-     * Разрешает удаление пользователя авторизованному администратору.
+     * Allows deletion user authenticated administratorу.
      */
     public function authorize(): bool
     {
@@ -16,7 +16,7 @@ class DeleteRequest extends FormRequest
     }
 
     /**
-     * Подмешивает id из маршрута в данные запроса для общей валидации.
+     * Merges id из маршрута в data запроса для общей validation.
      */
     protected function prepareForValidation(): void
     {
@@ -26,7 +26,7 @@ class DeleteRequest extends FormRequest
     }
 
     /**
-     * Возвращает правила проверки удаляемого пользователя.
+     * Returns rules validation deleted user.
      *
      * @return array<string, mixed>
      */

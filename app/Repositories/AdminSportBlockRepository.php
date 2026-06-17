@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class AdminSportBlockRepository extends BaseRepository
 {
     /**
-     * Подключает модель спортивного блока, с которой работает админский репозиторий.
+     * Connects модель sport block, с которой работает админский репозиторий.
      */
     public function __construct(SportBlock $model)
     {
@@ -19,21 +19,21 @@ class AdminSportBlockRepository extends BaseRepository
     }
 
     /**
-     * Возвращает варианты типов спортивных блоков для формы админки.
+     * Returns options typeов sport blocks для form admin panel.
      *
      * @return array<string, string>
      */
     public function typeOptions(): array
     {
         return [
-            'playground' => 'Площадка',
-            'shop' => 'Магазин',
-            'fitness' => 'Фитнес',
+            'playground' => 'Playground',
+            'shop' => 'Shop',
+            'fitness' => 'Fitness',
         ];
     }
 
     /**
-     * Возвращает подпись типа спортивного блока.
+     * Returns signature typeа sport block.
      */
     public function typeLabel(?string $type): string
     {
@@ -41,7 +41,7 @@ class AdminSportBlockRepository extends BaseRepository
     }
 
     /**
-     * Возвращает варианты статусов спортивных блоков для формы админки.
+     * Returns options statusов sport blocks для form admin panel.
      *
      * @return array<int, string>
      */
@@ -51,7 +51,7 @@ class AdminSportBlockRepository extends BaseRepository
     }
 
     /**
-     * Возвращает подпись статуса спортивного блока.
+     * Returns signature statusа sport block.
      */
     public function statusLabel(?int $status): string
     {
@@ -59,7 +59,7 @@ class AdminSportBlockRepository extends BaseRepository
     }
 
     /**
-     * Создает спортивный блок из DTO.
+     * Creates sport block из DTO.
      *
      * @param SportBlockData $data
      * @return Builder|Model
@@ -70,7 +70,7 @@ class AdminSportBlockRepository extends BaseRepository
     }
 
     /**
-     * Обновляет спортивный блок из DTO.
+     * Updates sport block из DTO.
      */
     public function updateFromData(SportBlockData $data): bool
     {

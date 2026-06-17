@@ -25,30 +25,30 @@
                 @csrf
 
                 <div class="form-group">
-                    <label class="control-label col-lg-3" for="subject">Тема:</label>
+                    <label class="control-label col-lg-3" for="subject">Subject:</label>
                     <div class="col-lg-6">
-                        <input type="text" class="form-control" name="subject" id="subject" value="{{ old('subject') }}" placeholder="Введите тему сообщения">
+                        <input type="text" class="form-control" name="subject" id="subject" value="{{ old('subject') }}" placeholder="Enter message subject">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-lg-3" for="name">Ваше имя:</label>
+                    <label class="control-label col-lg-3" for="name">Your name:</label>
                     <div class="col-lg-6">
-                        <input type="text" class="form-control" name="name" id="name" value="{{ old('name') }}" placeholder="Укажите ваше имя">
+                        <input type="text" class="form-control" name="name" id="name" value="{{ old('name') }}" placeholder="Enter your name">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-lg-3" for="email">Адрес электронной почты:</label>
+                    <label class="control-label col-lg-3" for="email">Email address:</label>
                     <div class="col-lg-6">
-                        <input type="text" class="form-control" id="email" name="email" value="{{ old('email') }}" placeholder="Введите Ваш адрес электронной почты">
+                        <input type="text" class="form-control" id="email" name="email" value="{{ old('email') }}" placeholder="Enter your email address">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-lg-3" for="message">Ваше сообщение:</label>
+                    <label class="control-label col-lg-3" for="message">Your message:</label>
                     <div class="col-lg-6">
-                        <textarea rows="3" class="form-control" id="message" name="message" placeholder="Введите сообщение">{{ old('message') }}</textarea>
+                        <textarea rows="3" class="form-control" id="message" name="message" placeholder="Enter message">{{ old('message') }}</textarea>
                     </div>
                 </div>
 
@@ -58,7 +58,7 @@
 
                 <div class="form-group">
                     <div class="col-xs-offset-3 col-lg-6">
-                        <input type="submit" class="btn-form save-button" value="Отправить">
+                        <input type="submit" class="btn-form save-button" value="Send">
                     </div>
                 </div>
             </form>

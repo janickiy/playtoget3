@@ -11,7 +11,7 @@ use Illuminate\Contracts\View\View;
 class AuthController extends Controller
 {
     /**
-     * Ограничивает доступ к страницам авторизации для уже авторизованных администраторов.
+     * Restricts access к страницам authorization для уже авторизованных administratorов.
      */
     public function __construct()
     {
@@ -19,17 +19,17 @@ class AuthController extends Controller
     }
 
     /**
-     * Показывает форму входа в админку.
+     * Shows form login в админку.
      *
      * @return View
      */
     public function showLoginForm(): View
     {
-        return view('login')->with('title', 'Авторизация');
+        return view('login')->with('title', 'Authorization');
     }
 
     /**
-     * Проверяет учетные данные администратора и выполняет вход в админку.
+     * Checks учетные data administrator и выполняет вход в админку.
      *
      * @param Request $request
      * @return RedirectResponse
@@ -48,11 +48,11 @@ class AuthController extends Controller
             return redirect()->route('admin.dashboard.index');
         }
         // if unsuccessful, then redirect back to the login with the form data
-        return redirect()->route('login')->with('error', "Неверный логин или пароль!");
+        return redirect()->route('login')->with('error', "Invalid login or password!");
     }
 
     /**
-     * Перенаправляет администратора на дашборд после успешной авторизации.
+     * Redirects administrator на dashboard после успешной authorization.
      *
      * @param $request
      * @param $user
@@ -64,7 +64,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Завершает админскую сессию и возвращает на страницу входа.
+     * Ends admin session и возвращает на page login.
      *
      * @return RedirectResponse
      */

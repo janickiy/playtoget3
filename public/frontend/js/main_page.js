@@ -17,11 +17,11 @@ $(document).ready(function () {
 
         messages: {
             username: {
-                required: "Это поле обязательно для заполнения",
+                required: "This field is required",
             },
 
             password: {
-                required: "Это поле обязательно для заполнения",
+                required: "This field is required",
             },
         }
     });

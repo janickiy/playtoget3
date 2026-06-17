@@ -18,7 +18,7 @@ use Illuminate\View\View;
 class UsersController extends Controller
 {
     /**
-     * Подключает репозиторий пользователей и базовые настройки админ-контроллера.
+     * Connects репозиторий users и базовые настройки админ-контроллера.
      */
     public function __construct(
         private readonly AdminUserRepository $userRepository,
@@ -27,19 +27,19 @@ class UsersController extends Controller
     }
 
     /**
-     * Показывает страницу со списком пользователей сайта.
+     * Shows page со списком users site.
      *
      * @return View
      */
     public function index(): View
     {
         return view('admin.users.index', [
-            'title' => 'Пользователи',
+            'title' => 'Users',
         ]);
     }
 
     /**
-     * Показывает карточку выбранного пользователя
+     * Shows карточку selected user
      *
      * @param int $id
      * @return View
@@ -52,12 +52,12 @@ class UsersController extends Controller
 
         return view('admin.users.show', [
             'row' => $row,
-            'title' => 'Просмотр пользователя',
+            'title' => 'View user',
         ]);
     }
 
     /**
-     * Показывает форму редактирования выбранного пользователя.
+     * Shows form editing selected user.
      *
      * @param int $id
      * @return View
@@ -71,12 +71,12 @@ class UsersController extends Controller
         return view('admin.users.create_edit', [
             'row' => $row,
             'statusOptions' => UserStatus::options(),
-            'title' => 'Редактирование пользователя',
+            'title' => 'Edit user',
         ]);
     }
 
     /**
-     * Обновляет пользователя из валидированных данных формы.
+     * Updates user из валидированных data form.
      *
      * @param EditRequest $request
      * @return RedirectResponse
@@ -97,11 +97,11 @@ class UsersController extends Controller
 
         return redirect()
             ->route('admin.users.index')
-            ->with('success', 'Данные успешно обновлены!');
+            ->with('success', 'Data updated successfully!');
     }
 
     /**
-     * Блокирует выбранного пользователя.
+     * Blocks selected user.
      *
      * @param StatusRequest $request
      * @return JsonResponse
@@ -110,12 +110,12 @@ class UsersController extends Controller
     {
         $this->userRepository->setBlocked($request->id, true);
 
-        return response()->json(['message' => 'Пользователь заблокирован.']);
+        return response()->json(['message' => 'User blocked.']);
     }
 
 
     /**
-     * Разблокирует выбранного пользователя
+     * Unblocks selected user
      *
      * @param StatusRequest $request
      * @return JsonResponse
@@ -124,11 +124,11 @@ class UsersController extends Controller
     {
         $this->userRepository->setBlocked($request->id, false);
 
-        return response()->json(['message' => 'Пользователь разблокирован.']);
+        return response()->json(['message' => 'User unblocked.']);
     }
 
     /**
-     * Помечает выбранного пользователя как удаленного.
+     * Marks selected user как deleted.
      *
      * @param DeleteRequest $request
      * @return JsonResponse
@@ -137,11 +137,11 @@ class UsersController extends Controller
     {
         $this->userRepository->markDeleted($request->id);
 
-        return response()->json(['message' => 'Пользователь удален.']);
+        return response()->json(['message' => 'User is deleted.']);
     }
 
     /**
-     * Выполняет массовое действие над выбранными пользователями.
+     * Runs массовое действие над selected users.
      *
      * @param BulkActionRequest $request
      * @return JsonResponse
@@ -154,7 +154,7 @@ class UsersController extends Controller
         );
 
         return response()->json([
-            'message' => 'Действие успешно выполнено.',
+            'message' => 'Action completed successfully.',
             'count' => $count,
         ]);
     }

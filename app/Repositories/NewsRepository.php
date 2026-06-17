@@ -16,7 +16,7 @@ use Illuminate\Support\Collection;
 class NewsRepository extends BaseRepository
 {
     /**
-     * Подключает модель и зависимости, с которыми работает репозиторий.
+     * Connects модель и зависимости, с которыми работает репозиторий.
      */
     public function __construct(
         Comment $model,
@@ -27,7 +27,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Возвращает последние новости RSS.
+     * Returns последние новости RSS.
      *
      * @param int $limit
      * @return Collection
@@ -38,7 +38,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Собирает общую ленту новостей.
+     * Собирает общую news feed.
      */
     public function feed(int $limit = 25): Collection
     {
@@ -46,7 +46,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Возвращает страницу ленты новостей с учетом лимита и смещения.
+     * Returns page ленты новостей с учетом лимита и смещения.
      *
      * @param int $limit
      * @param int $offset
@@ -68,7 +68,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Возвращает элементы ленты по новым фотографиям.
+     * Returns элементы ленты по новым photos.
      *
      * @param int $limit
      * @param int $offset
@@ -115,7 +115,7 @@ class NewsRepository extends BaseRepository
                 'content_id' => (int) $row->id,
                 'likeable_type' => 'photo',
                 'message' => sprintf(
-                    '<p class="mess_news">Опубликовал(а) фото:</p><br> <ul class="attach_image"><li><img class="photo_big" alt="" src="%s" data-num="%d"></li></ul>',
+                    '<p class="mess_news">Published a photo:</p><br> <ul class="attach_image"><li><img class="photo_big" alt="" src="%s" data-num="%d"></li></ul>',
                     e($this->formatter->photoUrl($row->small_photo ?: $row->photo, $row->photoalbumable_type)),
                     (int) $row->id
                 ),
@@ -123,7 +123,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Возвращает элементы ленты по новым видео.
+     * Returns элементы ленты по новым video.
      *
      * @param int $limit
      * @param int $offset
@@ -162,7 +162,7 @@ class NewsRepository extends BaseRepository
                 'content_id' => (int) $row->id,
                 'likeable_type' => 'video',
                 'message' => sprintf(
-                    '<p class="mess_news">Опубликовал(а) видео:</p><br> <ul class="attach_image"><li><img class="video_prev" alt="" src="%s" data-num="%d"></li></ul>',
+                    '<p class="mess_news">Published a video:</p><br> <ul class="attach_image"><li><img class="video_prev" alt="" src="%s" data-num="%d"></li></ul>',
                     e(StringHelper::videoThumbUrl($row->provider, $row->video)),
                     (int) $row->id
                 ),
@@ -170,7 +170,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Возвращает элементы ленты по комментариям к стене.
+     * Returns элементы ленты по комментариям к стене.
      *
      * @param int $limit
      * @param int $offset
@@ -213,14 +213,14 @@ class NewsRepository extends BaseRepository
                 'event_key' => 'user-comment:' . (int) $row->id,
                 'content_id' => (int) $row->id,
                 'likeable_type' => 'comment',
-                'message' => '<p class="mess_news">Оставил(a) комментарий на своей странице:</p> '
+                'message' => '<p class="mess_news">Left a comment on their page:</p> '
                     . nl2br($this->formatter->safeText((string) $row->content))
                     . $this->commentAttachmentsHtml((int) $row->id),
             ]));
     }
 
     /**
-     * Возвращает элементы ленты по комментариям к фотографиям.
+     * Returns элементы ленты по комментариям к photos.
      *
      * @param int $limit
      * @param int $offset
@@ -272,7 +272,7 @@ class NewsRepository extends BaseRepository
                 'content_id' => (int) $row->id,
                 'likeable_type' => 'photo',
                 'message' => sprintf(
-                    '<p class="mess_news">Прокомментировал(а) фото: <br><br>%s</p> <div class="art_mess"><a href="%s"><div class="message-account"><div class="head-img"><img src="%s" alt=""></div><p class="head-topic">%s</p><p class="data">%s</p></div></a><div style="clear:both"> <ul class="attach_image"><li><img class="photo_big" alt="" src="%s" data-num="%d"></li></ul></div></div>',
+                    '<p class="mess_news">Commented on a photo: <br><br>%s</p> <div class="art_mess"><a href="%s"><div class="message-account"><div class="head-img"><img src="%s" alt=""></div><p class="head-topic">%s</p><p class="data">%s</p></div></a><div style="clear:both"> <ul class="attach_image"><li><img class="photo_big" alt="" src="%s" data-num="%d"></li></ul></div></div>',
                     nl2br($this->formatter->safeText((string) $row->content)),
                     e(route('front.profile.show', ['user' => (int) $row->owner_id])),
                     e($this->formatter->ownerAvatar($row)),
@@ -285,7 +285,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Возвращает элементы ленты по комментариям к видео.
+     * Returns элементы ленты по комментариям к video.
      *
      * @param int $limit
      * @param int $offset
@@ -335,7 +335,7 @@ class NewsRepository extends BaseRepository
                 'content_id' => (int) $row->id,
                 'likeable_type' => 'video',
                 'message' => sprintf(
-                    '<p class="mess_news">Прокомментировал(а) видео: <br><br>%s</p> <div class="art_mess"><a href="%s"><div class="message-account"><div class="head-img"><img src="%s" alt=""></div><p class="head-topic">%s</p><p class="data">%s</p></div></a><div style="clear:both"> <ul class="attach_image"><li><img class="video_prev" alt="" src="%s" data-num="%d"></li></ul></div></div>',
+                    '<p class="mess_news">Commented on a video: <br><br>%s</p> <div class="art_mess"><a href="%s"><div class="message-account"><div class="head-img"><img src="%s" alt=""></div><p class="head-topic">%s</p><p class="data">%s</p></div></a><div style="clear:both"> <ul class="attach_image"><li><img class="video_prev" alt="" src="%s" data-num="%d"></li></ul></div></div>',
                     nl2br($this->formatter->safeText((string) $row->content)),
                     e(route('front.profile.show', ['user' => (int) $row->owner_id])),
                     e($this->formatter->ownerAvatar($row)),
@@ -348,7 +348,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Формирует элемент ленты от имени пользователя.
+     * Builds элемент ленты от имени user.
      *
      * @param object $row
      * @param array $data
@@ -376,7 +376,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Добавляет к элементам ленты счетчики лайков и комментариев.
+     * Adds к элементам ленты счетчики лайков и комментариев.
      *
      * @param Collection $items
      * @return Collection
@@ -402,7 +402,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Считает связанные действия по типам и идентификаторам сущностей.
+     * Считает связанные actions по typeам и идентификаторам сущностей.
      *
      * @param string $modelClass
      * @param string $typeColumn
@@ -431,7 +431,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Возвращает отображаемое имя пользователя из строки выборки.
+     * Returns отображаемое name user из строки выборки.
      */
     private function userName(object $row): string
     {
@@ -441,7 +441,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Формирует HTML вложений комментария для ленты новостей.
+     * Builds HTML вложений комментария для ленты новостей.
      *
      * @param int $commentId
      * @return string

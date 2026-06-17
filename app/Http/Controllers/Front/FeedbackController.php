@@ -12,20 +12,20 @@ use Illuminate\Http\RedirectResponse;
 class FeedbackController extends Controller
 {
     /**
-     * Показывает форму обратной связи.
+     * Shows form feedback.
      *
      * @return View
      */
     public function create(): View
     {
         return view('front.feedback.create', [
-            'title' => 'Обратная связь',
+            'title' => 'Feedback',
             'hideTopProfile' => true,
         ]);
     }
 
     /**
-     * Сохраняет сообщение обратной связи и возвращает пользователя к форме.
+     * Сохраняет сообщение feedback и возвращает user к форме.
      *
      * @param StoreRequest $request
      * @param FeedbackRepository $feedback
@@ -45,6 +45,6 @@ class FeedbackController extends Controller
 
         return redirect()
             ->route('front.feedback.create')
-            ->with('status', 'Сообщение отправлено. На указанный адрес электронной почты отправлено уведомление.');
+            ->with('status', 'Your message has been sent. A notification has been sent to the specified email address.');
     }
 }

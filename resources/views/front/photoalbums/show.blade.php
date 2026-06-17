@@ -4,12 +4,12 @@
     @include('front.profile._top')
 
     @if (! $permissions['photo'])
-        <h4 class="blocking">Пользователь ограничил доступ к этому разделу</h4>
+        <h4 class="blocking">The user has restricted access to this section</h4>
     @else
         <h2>{{ $photoalbum->name }}</h2>
         <p>
             <a href="{{ $canManage ? route('front.photoalbums.index') : route('front.photoalbums.user', ['user' => $profileUser->id]) }}">
-                Все фото
+                All photos
             </a>
         </p>
 
@@ -27,7 +27,7 @@
                 @endforeach
             </div>
         @else
-            <p class="no_message">Фотографий пока нет.</p>
+            <p class="no_message">No photos yet.</p>
         @endif
     @endif
 @endsection

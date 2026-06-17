@@ -28,11 +28,11 @@
 
     @if ($canManage)
         <p>
-            <a href="{{ route($editRoute, $editParams) }}">Редактировать</a>
+            <a href="{{ route($editRoute, $editParams) }}">Edit</a>
             <form class="album-delete-form" method="POST" action="{{ route($destroyRoute, $destroyParams) }}">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="remove_album">Удалить</button>
+                <button type="submit" class="remove_album">Delete</button>
             </form>
         </p>
     @endif

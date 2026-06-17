@@ -2,11 +2,11 @@
     $membershipType = $membershipType ?? 'none';
     $closedAccessDenied = (bool) ($communityAccessDenied ?? false);
     $leaveMessage = match ($membershipType) {
-        'owner' => 'Вы владелец команды. Покинув ее, вы лишитесь прав владельца. Выйти из команды?',
-        'admin' => 'Вы администратор команды. Покинув ее, вы лишитесь административных прав. Выйти из команды?',
-        'invited' => 'Вы действительно хотите отказаться от приглашения?',
-        'applied' => 'Вы действительно хотите отменить заявку?',
-        default => 'Вы действительно хотите выйти из команды?',
+        'owner' => 'You are the team owner. If you leave it, you will lose owner rights. Leave the team?',
+        'admin' => 'You are a team administrator. If you leave it, you will lose admin rights. Leave the team?',
+        'invited' => 'Do you really want to decline the invitation?',
+        'applied' => 'Do you really want to cancel the request?',
+        default => 'Do you really want to leave the team?',
     };
 @endphp
 
@@ -14,17 +14,17 @@
     <div class="cover_page">
         @if ($viewer && $membershipType !== 'blocked')
             @if ($membershipType === 'none')
-                <a href="#" class="groups_button js-team-join" data-community-id="{{ $team->id }}"><span>Присоединиться</span></a>
+                <a href="#" class="groups_button js-team-join" data-community-id="{{ $team->id }}"><span>Join</span></a>
             @elseif ($membershipType === 'invited')
-                <a href="#" class="groups_button team-invite-action team-invite-accept js-team-join" data-community-id="{{ $team->id }}">Принять</a>
-                <a href="#" class="groups_button team-invite-action team-invite-decline js-team-leave" data-community-id="{{ $team->id }}" data-message="{{ $leaveMessage }}" data-silent="1" data-success-message="Приглашение отклонено">Отклонить</a>
+                <a href="#" class="groups_button team-invite-action team-invite-accept js-team-join" data-community-id="{{ $team->id }}">Accept</a>
+                <a href="#" class="groups_button team-invite-action team-invite-decline js-team-leave" data-community-id="{{ $team->id }}" data-message="{{ $leaveMessage }}" data-silent="1" data-success-message="Invitation declined">Decline</a>
             @elseif ($membershipType === 'owner')
-                <a href="#" class="groups_button leave_fr js-team-invite" data-community-id="{{ $team->id }}">Пригласить друзей</a>
+                <a href="#" class="groups_button leave_fr js-team-invite" data-community-id="{{ $team->id }}">Invite friends</a>
             @elseif (in_array($membershipType, ['admin', 'member'], true))
-                <a href="#" class="groups_button leave_fr js-team-invite" data-community-id="{{ $team->id }}">Пригласить друзей</a>
+                <a href="#" class="groups_button leave_fr js-team-invite" data-community-id="{{ $team->id }}">Invite friends</a>
                 <a href="#" class="groups_button_leave js-team-leave" data-community-id="{{ $team->id }}" data-message="{{ $leaveMessage }}"></a>
             @elseif ($membershipType === 'applied')
-                <a href="#" class="groups_button applied pending js-team-leave" data-community-id="{{ $team->id }}" data-message="{{ $leaveMessage }}" data-silent="1" data-success-message="Заявка отменена">На рассмотрении</a>
+                <a href="#" class="groups_button applied pending js-team-leave" data-community-id="{{ $team->id }}" data-message="{{ $leaveMessage }}" data-silent="1" data-success-message="Request cancelled">Pending</a>
             @endif
         @endif
 
@@ -37,7 +37,7 @@
     <div id="top-top" class="account top_thumb_avatar">
         <img src="{{ $teamData['avatar'] }}" alt="">
         @if ($teamData['is_closed'] ?? false)
-            <span class="community-avatar-lock community-avatar-lock--top" aria-label="Закрытая команда"></span>
+            <span class="community-avatar-lock community-avatar-lock--top" aria-label="Closed team"></span>
         @endif
         <h3 class="name">
             {{ $teamData['name'] }}
@@ -48,7 +48,7 @@
         </h3>
         <p class="citation">{{ $teamData['place'] }}</p>
         @if ($canManageTeam ?? false)
-            <a class="button_edit_groups team-top-edit" href="{{ route('front.teams.edit', ['community' => $team->id]) }}">Редактировать</a>
+            <a class="button_edit_groups team-top-edit" href="{{ route('front.teams.edit', ['community' => $team->id]) }}">Edit</a>
         @endif
     </div>
 </div>
@@ -60,15 +60,15 @@
 
 @if (! $closedAccessDenied)
     <ul class="sport_group_list">
-        <li><a href="{{ route('front.teams.show', ['community' => $team->id]) }}" @class(['active-link' => $section === 'feed'])><i class="icon_list icon-4"></i><span>Лента</span></a></li>
-        <li><a href="{{ route('front.teams.members', ['community' => $team->id]) }}" @class(['active-link' => $section === 'members'])><i class="icon_list icon-5"></i><span>Участники</span></a></li>
+        <li><a href="{{ route('front.teams.show', ['community' => $team->id]) }}" @class(['active-link' => $section === 'feed'])><i class="icon_list icon-4"></i><span>Feed</span></a></li>
+        <li><a href="{{ route('front.teams.members', ['community' => $team->id]) }}" @class(['active-link' => $section === 'members'])><i class="icon_list icon-5"></i><span>Members</span></a></li>
         @if ($permissions['photo'])
-            <li><a href="{{ route('front.teams.photoalbums', ['community' => $team->id]) }}" @class(['active-link' => $section === 'photoalbums'])><i class="icon_list icon-2"></i><span>Фотографии</span></a></li>
+            <li><a href="{{ route('front.teams.photoalbums', ['community' => $team->id]) }}" @class(['active-link' => $section === 'photoalbums'])><i class="icon_list icon-2"></i><span>Photos</span></a></li>
         @endif
         @if ($permissions['video'])
-            <li><a href="{{ route('front.teams.videoalbums', ['community' => $team->id]) }}" @class(['active-link' => $section === 'videoalbums'])><i class="icon_list icon-3"></i><span>Видео</span></a></li>
+            <li><a href="{{ route('front.teams.videoalbums', ['community' => $team->id]) }}" @class(['active-link' => $section === 'videoalbums'])><i class="icon_list icon-3"></i><span>Video</span></a></li>
         @endif
-        <li><a href="{{ route('front.teams.events', ['community' => $team->id]) }}" @class(['active-link' => $section === 'events'])><i class="icon_list icon-1"></i><span>Мероприятия</span></a></li>
+        <li><a href="{{ route('front.teams.events', ['community' => $team->id]) }}" @class(['active-link' => $section === 'events'])><i class="icon_list icon-1"></i><span>Events</span></a></li>
     </ul>
 @endif
 
@@ -160,14 +160,14 @@
                     }
 
                     $.confirm({
-                        title: 'Подтверждение',
+                        title: 'Confirmation',
                         message: message,
                         buttons: {
-                            'Да': {
+                            'Yes': {
                                 class: 'blue',
                                 action: action,
                             },
-                            'Нет': {
+                            'No': {
                                 class: 'gray',
                                 action: function () {
                                 },
@@ -180,8 +180,8 @@
                     root.find('.groups_button').remove();
                     root.find('.groups_button_leave').remove();
                     root.find('.cover_page').prepend(
-                        '<a href="#" class="groups_button leave_fr js-team-invite" data-community-id="' + communityId + '">Пригласить друзей</a>' +
-                        '<a href="#" class="groups_button_leave js-team-leave" data-community-id="' + communityId + '" data-message="Вы действительно хотите выйти из команды?"></a>'
+                        '<a href="#" class="groups_button leave_fr js-team-invite" data-community-id="' + communityId + '">Invite friends</a>' +
+                        '<a href="#" class="groups_button_leave js-team-leave" data-community-id="' + communityId + '" data-message="Do you really want to leave the team?"></a>'
                     );
                 }
 
@@ -189,7 +189,7 @@
                     root.find('.groups_button').remove();
                     root.find('.groups_button_leave').remove();
                     root.find('.cover_page').prepend(
-                        '<a href="#" class="groups_button js-team-join" data-community-id="' + communityId + '"><span>Присоединиться</span></a>'
+                        '<a href="#" class="groups_button js-team-join" data-community-id="' + communityId + '"><span>Join</span></a>'
                     );
                 }
 
@@ -197,7 +197,7 @@
                     root.find('.groups_button').remove();
                     root.find('.groups_button_leave').remove();
                     root.find('.cover_page').prepend(
-                        '<a href="#" class="groups_button applied pending js-team-leave" data-community-id="' + communityId + '" data-message="Вы действительно хотите отменить заявку?" data-silent="1" data-success-message="Заявка отменена">На рассмотрении</a>'
+                        '<a href="#" class="groups_button applied pending js-team-leave" data-community-id="' + communityId + '" data-message="Do you really want to cancel the request?" data-silent="1" data-success-message="Request cancelled">Pending</a>'
                     );
                 }
 
@@ -212,17 +212,17 @@
                             if (response.result === 'success') {
                                 if (response.member === 'applied') {
                                     setPendingState(root, communityId);
-                                    teamNotice('Заявка отправлена', true);
+                                    teamNotice('Request sent', true);
                                 } else {
                                     setJoinedState(root, communityId);
-                                    teamNotice('Вы вступили в команду', true);
+                                    teamNotice('You joined the team', true);
                                 }
                             } else {
-                                teamNotice('Не удалось изменить статус', false);
+                                teamNotice('Could not change status', false);
                             }
                         })
                         .fail(function () {
-                            teamNotice('Не удалось изменить статус', false);
+                            teamNotice('Could not change status', false);
                         });
                 });
 
@@ -231,7 +231,7 @@
                     const button = $(this);
                     const communityId = button.data('community-id');
                     const root = button.closest('.team-profile-top');
-                    const message = button.data('message') || 'Вы действительно хотите выйти из команды?';
+                    const message = button.data('message') || 'Do you really want to leave the team?';
                     const silent = String(button.data('silent')) === '1';
 
                     const leaveAction = function () {
@@ -239,13 +239,13 @@
                             .done(function (response) {
                                 if (response.result === 'success') {
                                     setLeftState(root, communityId);
-                                    teamNotice(button.data('success-message') || 'Статус обновлен', true);
+                                    teamNotice(button.data('success-message') || 'Status updated', true);
                                 } else {
-                                    teamNotice('Не удалось изменить статус', false);
+                                    teamNotice('Could not change status', false);
                                 }
                             })
                             .fail(function () {
-                                teamNotice('Не удалось изменить статус', false);
+                                teamNotice('Could not change status', false);
                             });
                     };
 
@@ -269,13 +269,13 @@
                     memberAjax('send_community_invitation', {community_id: button.data('community-id')})
                         .done(function (response) {
                             if (response.result === 'success') {
-                                teamNotice('Приглашения вашим друзьям отправлены', true);
+                                teamNotice('Invitations have been sent to your friends', true);
                             } else {
-                                teamNotice('Не удалось отправить приглашения', false);
+                                teamNotice('Could not send invitations', false);
                             }
                         })
                         .fail(function () {
-                            teamNotice('Не удалось отправить приглашения', false);
+                            teamNotice('Could not send invitations', false);
                         });
                 });
             })();

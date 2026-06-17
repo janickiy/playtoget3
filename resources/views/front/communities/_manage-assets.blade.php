@@ -1,11 +1,11 @@
 <div class="community-admin-modal js-community-admin-modal" aria-hidden="true">
     <div class="community-admin-modal-dialog">
-        <button type="button" class="community-admin-modal-close js-community-admin-modal-close" aria-label="Закрыть">×</button>
-        <h3>Добавить администратора</h3>
+        <button type="button" class="community-admin-modal-close js-community-admin-modal-close" aria-label="Close">×</button>
+        <h3>Add administrator</h3>
         <div class="community-admin-search">
-            <input type="text" class="js-community-admin-search" placeholder="ФИО или ID пользователя">
+            <input type="text" class="js-community-admin-search" placeholder="user name or ID">
         </div>
-        <div class="community-admin-status js-community-admin-status">Введите ФИО или ID пользователя.</div>
+        <div class="community-admin-status js-community-admin-status">Enter a user name or ID.</div>
         <div class="community-admin-results js-community-admin-results"></div>
     </div>
 </div>
@@ -234,7 +234,7 @@
                     $modal.removeData('community-id');
                     $search.val('');
                     $results.empty();
-                    $status.text('Введите ФИО или ID пользователя.');
+                    $status.text('Enter a user name or ID.');
                 }
 
                 function searchAdmins() {
@@ -243,11 +243,11 @@
 
                     if (!communityId || (query.length < 2 && !/^\d+$/.test(query))) {
                         $results.empty();
-                        $status.text('Введите минимум 2 символа или ID пользователя.');
+                        $status.text('Enter at least 2 characters or a user ID.');
                         return;
                     }
 
-                    $status.text('Поиск...');
+                    $status.text('Search...');
 
                     communityAjax('search_community_admin_candidates', {
                         community_id: communityId,
@@ -255,11 +255,11 @@
                     })
                         .done(function (response) {
                             $results.html(response.html || '');
-                            $status.text(response.count > 0 ? 'Выберите пользователя.' : '');
+                            $status.text(response.count > 0 ? 'Select a user.' : '');
                         })
                         .fail(function () {
                             $results.empty();
-                            $status.text('Не удалось выполнить поиск.');
+                            $status.text('Search failed.');
                         });
                 }
 
@@ -267,7 +267,7 @@
                     event.preventDefault();
 
                     const $button = $(this);
-                    const message = $button.data('confirm') || 'Подтвердить действие?';
+                    const message = $button.data('confirm') || 'Confirm this action?';
 
                     if (!window.confirm(message)) {
                         return;
@@ -279,17 +279,17 @@
                     })
                         .done(function (response) {
                             if (response.result !== 'success') {
-                                notice('Не удалось выполнить действие', false);
+                                notice('Action failed', false);
                                 return;
                             }
 
                             $button.closest('.possible-friend-cart').fadeOut(180, function () {
                                 $(this).remove();
                             });
-                            notice($button.data('success') || 'Готово', true);
+                            notice($button.data('success') || 'Done', true);
                         })
                         .fail(function () {
-                            notice('Не удалось выполнить действие', false);
+                            notice('Action failed', false);
                         });
                 });
 
@@ -321,15 +321,15 @@
                     })
                         .done(function (response) {
                             if (response.result !== 'success') {
-                                notice('Не удалось добавить администратора', false);
+                                notice('Failed to add administrator', false);
                                 return;
                             }
 
-                            notice('Администратор добавлен', true);
+                            notice('Administrator added', true);
                             window.location.reload();
                         })
                         .fail(function () {
-                            notice('Не удалось добавить администратора', false);
+                            notice('Failed to add administrator', false);
                         });
                 });
             })();

@@ -12,7 +12,7 @@
         </div>
     @else
         <div class="photo-caption">
-            <h3>Страница не найдена</h3>
+            <h3>Page not found</h3>
         </div>
     @endif
 @endsection

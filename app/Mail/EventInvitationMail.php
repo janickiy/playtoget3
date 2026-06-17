@@ -25,7 +25,7 @@ class EventInvitationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Вас пригласили на мероприятие',
+            subject: 'You have been invited to an event',
         );
     }
 

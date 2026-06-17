@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class StatusRequest extends FormRequest
 {
     /**
-     * Разрешает изменение статуса пользователя авторизованному администратору.
+     * Allows изменение statusа user authenticated administratorу.
      */
     public function authorize(): bool
     {
@@ -16,7 +16,7 @@ class StatusRequest extends FormRequest
     }
 
     /**
-     * Подмешивает id из маршрута в данные запроса для общей валидации.
+     * Merges id из маршрута в data запроса для общей validation.
      */
     protected function prepareForValidation(): void
     {
@@ -26,7 +26,7 @@ class StatusRequest extends FormRequest
     }
 
     /**
-     * Возвращает правила проверки пользователя, чей статус меняется.
+     * Returns rules validation user, чей status меняется.
      *
      * @return array<string, mixed>
      */

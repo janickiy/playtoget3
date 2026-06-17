@@ -18,7 +18,7 @@
             @endif
             {!! $message['image'] !!}
         </p>
-        <div class="del-message" data-item="{{ $message['id'] }}" data-tooltip="Удалить сообщение"></div>
+        <div class="del-message" data-item="{{ $message['id'] }}" data-tooltip="Delete message"></div>
     </div>
 @else
     <div class="message-reply" id="message-{{ $message['id'] }}">

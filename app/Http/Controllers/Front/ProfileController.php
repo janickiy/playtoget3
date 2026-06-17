@@ -16,7 +16,7 @@ class ProfileController extends Controller
 {
 
     /**
-     * Показывает профиль пользователя, его данные и ленту комментариев.
+     * Shows профиль user, его data и ленту комментариев.
      *
      * @param int $user
      * @param ProfileRepository $profiles
@@ -34,7 +34,7 @@ class ProfileController extends Controller
         $permissions = $profiles->permissions($profile, $viewer, $friendshipStatus);
 
         return view('front.profile.show', [
-            'title' => 'Стена',
+            'title' => 'Wall',
             'hideTopProfile' => true,
             'profileUser' => $profile,
             'viewer' => $viewer,
@@ -52,7 +52,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Показывает форму редактирования профиля текущего пользователя.
+     * Shows form editing профиля current user.
      *
      * @param ProfileRepository $profiles
      * @return View|RedirectResponse
@@ -66,7 +66,7 @@ class ProfileController extends Controller
         }
 
         return view('front.profile.edit', [
-            'title' => 'Настройки',
+            'title' => 'Settings',
             'editableProfileAssets' => true,
             'profileLayout' => $profiles->topProfileData($viewer),
             'user' => $viewer,
@@ -79,7 +79,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Показывает список диалогов текущего пользователя.
+     * Shows list dialogues current user.
      *
      * @param int $user
      * @param FriendRepository $friends
@@ -102,7 +102,7 @@ class ProfileController extends Controller
         }
 
         return view('front.profile.dialogues', [
-            'title' => 'Диалоги',
+            'title' => 'Dialogs',
             'hideTopProfile' => true,
             'viewer' => $viewer,
             'friends' => $friends->friendsFor($viewer->id, 100, 0),
@@ -111,7 +111,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Показывает переписку текущего пользователя с выбранным собеседником.
+     * Shows переписку current user с выбранным собеседником.
      *
      * @param int $user
      * @param int $recipient
@@ -144,7 +144,7 @@ class ProfileController extends Controller
         $messages->markConversationRead($viewer, $receiver);
 
         return view('front.profile.messages', [
-            'title' => 'Диалог',
+            'title' => 'Dialogue',
             'hideTopProfile' => true,
             'viewer' => $viewer,
             'receiver' => $receiver,
@@ -156,7 +156,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Валидирует и сохраняет настройки профиля текущего пользователя.
+     * Валидирует и сохраняет настройки профиля current user.
      *
      * @param ProfileSettingsRequest $request
      * @param ProfileRepository $profiles
@@ -175,6 +175,6 @@ class ProfileController extends Controller
 
         return redirect()
             ->route('front.profile.edit')
-            ->with('status', 'Изменения сохранены');
+            ->with('status', 'Changes saved');
     }
 }

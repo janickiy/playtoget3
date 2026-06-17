@@ -14,12 +14,12 @@ enum MembershipRole: int
     public function label(): string
     {
         return match ($this) {
-            self::Owner => 'Владелец',
-            self::Admin => 'Администратор',
-            self::Member => 'Участник',
-            self::Applied => 'Заявка',
-            self::Blocked => 'Заблокирован',
-            self::Invited => 'Приглашен',
+            self::Owner => 'Owner',
+            self::Admin => 'Administrator',
+            self::Member => 'Member',
+            self::Applied => 'Request',
+            self::Blocked => 'Blocked',
+            self::Invited => 'Invited',
         };
     }
 

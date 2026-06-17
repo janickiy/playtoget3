@@ -25,13 +25,13 @@
 
                         <div class="card-body">
 
-                            <p>*-обязательные поля</p>
+                            <p>* required fields</p>
 
                             <div class="form-group">
 
-                                {!! Form::label('name', 'имя') !!}
+                                {!! Form::label('name', 'name') !!}
 
-                                {!! Form::text('name', old('name', $row->name ?? null), ['class' => 'form-control', 'placeholder' => 'имя']) !!}
+                                {!! Form::text('name', old('name', $row->name ?? null), ['class' => 'form-control', 'placeholder' => 'name']) !!}
 
                                 @if ($errors->has('name'))
                                     <p class="text-danger">{{ $errors->first('name') }}</p>
@@ -40,9 +40,9 @@
 
                             <div class="form-group">
 
-                                {!! Form::label('login', 'логин') !!}
+                                {!! Form::label('login', 'login') !!}
 
-                                {!! Form::text('login', old('login', $row->login ?? null), [ 'placeholder' => 'логин', 'class' => 'form-control']) !!}
+                                {!! Form::text('login', old('login', $row->login ?? null), [ 'placeholder' => 'login', 'class' => 'form-control']) !!}
 
                                 @if ($errors->has('login'))
                                     <p class="text-danger">{{ $errors->first('login') }}</p>
@@ -54,9 +54,9 @@
 
                                 <div class="form-group">
 
-                                    {!! Form::label('role', 'роль') !!}
+                                    {!! Form::label('role', 'role') !!}
 
-                                    {!! Form::select('role', $options, $row->role ?? 'admin', ['placeholder' => 'роль', 'class' => 'custom-select']) !!}
+                                    {!! Form::select('role', $options, $row->role ?? 'admin', ['placeholder' => 'role', 'class' => 'custom-select']) !!}
 
                                     @if ($errors->has('role'))
                                         <p class="text-danger">{{ $errors->first('role') }}</p>
@@ -66,7 +66,7 @@
 
                                 <div class="form-group">
 
-                                    {!! Form::label('password', 'пароль') !!}
+                                    {!! Form::label('password', 'password') !!}
 
                                     {!! Form::password('password', ['class' => 'form-control']) !!}
 
@@ -78,7 +78,7 @@
 
                                 <div class="form-group">
 
-                                    {!! Form::label('password_again', 'павтор пароля') !!}
+                                    {!! Form::label('password_again', 'repeat password') !!}
 
                                     {!! Form::password('password_again', ['class' => 'form-control']) !!}
 
@@ -95,10 +95,10 @@
 
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">
-                                {{ isset($row) ? 'редактировать' : 'добавить' }}
+                                {{ isset($row) ? 'edit' : 'add' }}
                             </button>
                             <a class="btn btn-default float-sm-right" href="{{ route('admin.admin.index') }}">
-                                назад
+                                back
                             </a>
                         </div>
 

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 class AdminRepository extends BaseRepository
 {
     /**
-     * Подключает модель и зависимости, с которыми работает репозиторий.
+     * Connects модель и зависимости, с которыми работает репозиторий.
      */
     public function __construct(Admin $model)
     {
@@ -19,7 +19,7 @@ class AdminRepository extends BaseRepository
     }
 
     /**
-     * Возвращает доступные роли администраторов для формы.
+     * Returns accessные роли administratorов для form.
      *
      * @return array<string, string>
      */
@@ -29,7 +29,7 @@ class AdminRepository extends BaseRepository
     }
 
     /**
-     * Создает запись из DTO с подготовленными данными
+     * Creates record из DTO с подготовленными data
      *
      * @param AdminData $data
      * @return Builder|Model
@@ -43,7 +43,7 @@ class AdminRepository extends BaseRepository
     }
 
     /**
-     * Создает запись из массива данных, преобразуя его в DTO.
+     * Creates record из массива data, преобразуя его в DTO.
      *
      * @param array $data
      * @return Builder|Model
@@ -54,7 +54,7 @@ class AdminRepository extends BaseRepository
     }
 
     /**
-     * Обновляет запись из DTO с подготовленными данными.
+     * Updates record из DTO с подготовленными data.
      *
      * @param AdminData $data
      * @return bool
@@ -71,7 +71,7 @@ class AdminRepository extends BaseRepository
     }
 
     /**
-     * Обновляет запись из массива данных, преобразуя его в DTO.
+     * Updates record из массива data, преобразуя его в DTO.
      *
      * @param array<string, mixed> $data
      */

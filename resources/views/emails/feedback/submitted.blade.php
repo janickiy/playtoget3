@@ -1,12 +1,12 @@
-<p>Здравствуйте, {{ $feedback->name() }}!</p>
+<p>Hello, {{ $feedback->name() }}!</p>
 
-<p>Ваше сообщение отправлено. С вами свяжется сотрудник PlayToGet.</p>
+<p>Your message has been sent. A PlayToGet team member will contact you.</p>
 
 @if ($feedback->subject())
-    <p><strong>Тема:</strong> {{ $feedback->subject() }}</p>
+    <p><strong>Subject:</strong> {{ $feedback->subject() }}</p>
 @endif
 
-<p><strong>Текст сообщения:</strong></p>
+<p><strong>Message text:</strong></p>
 <p>{!! nl2br(e($feedback->message())) !!}</p>
 
-<p>Спасибо за обращение.</p>
+<p>Thank you for contacting us.</p>

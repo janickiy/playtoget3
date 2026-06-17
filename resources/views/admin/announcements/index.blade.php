@@ -19,7 +19,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <a href="{{ route('admin.announcements.create') }}" class="btn btn-info btn-sm pull-left">
-                                            <span class="fa fa-plus"> &nbsp;</span> Добавить
+                                            <span class="fa fa-plus"> &nbsp;</span> Add
                                         </a>
                                     </div>
                                 </div>
@@ -29,12 +29,12 @@
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Название</th>
-                                    <th>Содержание</th>
-                                    <th>ЧПУ</th>
-                                    <th>Опубликовано</th>
-                                    <th>Создано</th>
-                                    <th style="width: 10%">Действия</th>
+                                    <th>Name</th>
+                                    <th>Content</th>
+                                    <th>Slug</th>
+                                    <th>Published</th>
+                                    <th>Created</th>
+                                    <th style="width: 10%">Actions</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -63,16 +63,16 @@
         $(function () {
             $("#itemList").DataTable({
                 "oLanguage": {
-                    "sLengthMenu": "Отображено _MENU_ записей на страницу",
-                    "sZeroRecords": "Ничего не найдено - извините",
-                    "sInfo": "Показано с _START_ по _END_ из _TOTAL_ записей",
-                    "sInfoEmpty": "Показано с 0 по 0 из 0 записей",
-                    "sInfoFiltered": "(отфильтровано  _MAX_ всего записей)",
+                    "sLengthMenu": "Show _MENU_ entries per page",
+                    "sZeroRecords": "No matching records found",
+                    "sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
+                    "sInfoEmpty": "Showing 0 to 0 of 0 entries",
+                    "sInfoFiltered": "(filtered from _MAX_ total entries)",
                     "oPaginate": {
-                        "sFirst": "Первая",
-                        "sLast": "Посл.",
-                        "sNext": "След.",
-                        "sPrevious": "Пред."
+                        "sFirst": "First",
+                        "sLast": "Last",
+                        "sNext": "Next",
+                        "sPrevious": "Previous"
                     },
                     "sSearch": ' <i class="fas fa-search" aria-hidden="true"></i>'
                 },
@@ -104,12 +104,12 @@
                 let deleteUrl = $(this).attr('href');
 
                 Swal.fire({
-                    title: "Вы уверены?",
-                    text: "Вы не сможете восстановить эту информацию!",
+                    title: "Are you sure?",
+                    text: "You will not be able to restore this information!",
                     showCancelButton: true,
                     icon: 'warning',
-                    cancelButtonText: "Отмена",
-                    confirmButtonText: "Да, удалить!",
+                    cancelButtonText: "Cancel",
+                    confirmButtonText: "Yes, delete!",
                     reverseButtons: true,
                     confirmButtonColor: "#DD6B55",
                     customClass: {
@@ -125,10 +125,10 @@
                             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                             success: function () {
                                 $("#rowid_" + rowid).remove();
-                                Swal.fire("Сделано!", "Данные успешно удалены!", 'success');
+                                Swal.fire("Done!", "Data deleted successfully!", 'success');
                             },
                             error: function (xhr, ajaxOptions, thrownError) {
-                                Swal.fire("Ошибка при удалении!", (xhr.responseJSON && xhr.responseJSON.message) || "Попробуйте еще раз", 'error');
+                                Swal.fire("Deletion error!", (xhr.responseJSON && xhr.responseJSON.message) || "Please try again", 'error');
                                 console.log(ajaxOptions);
                                 console.log(thrownError);
                             }

@@ -3,6 +3,6 @@
         'item' => $item,
         'routePrefix' => $routePrefix,
         'viewer' => $viewer ?? null,
-        'editLabel' => $editLabel ?? 'Редактировать',
+        'editLabel' => $editLabel ?? 'Edit',
     ])
 @endforeach

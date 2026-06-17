@@ -106,7 +106,7 @@ $(document).ready(function () {
         if (files.length > 5) {
             form.reset();
             input.val(mess);
-            $('.save_window_fail').html('Максимальное количество файлов 5').removeClass('hiden');
+            $('.save_window_fail').html('Maximum number of files is 5').removeClass('hiden');
             setTimeout(function () {
                 $('.save_window_fail').addClass('hiden');
             }, 2000);
@@ -146,15 +146,14 @@ $(document).ready(function () {
                             data: formData,
                             dataType: 'json',
                             xhr: function () {
-                                const xhr = $.ajaxSettings.xhr(); // получаем объект XMLHttpRequest
-                                xhr.upload.addEventListener('progress', function (evt) { // добавляем обработчик события progress (onprogress)
-                                    if (evt.lengthComputable) { // если известно количество байт
-                                        // высчитываем процент загруженного
-                                        const percentComplete = Math.ceil(evt.loaded / evt.total * 100);
-                                        $('.attach').find('p').html(percentComplete + '%');
-                                        // устанавливаем значение в атрибут value тега <progress>
-                                        // и это же значение альтернативным текстом для браузеров, не поддерживающих <progress>
-                                        console.log('Загружено ' + percentComplete + '%');
+	                                const xhr = $.ajaxSettings.xhr(); // Get the XMLHttpRequest object.
+	                                xhr.upload.addEventListener('progress', function (evt) { // Add a progress event handler.
+	                                    if (evt.lengthComputable) { // The total byte count is known.
+	                                        // Calculate the uploaded percentage.
+	                                        const percentComplete = Math.ceil(evt.loaded / evt.total * 100);
+	                                        $('.attach').find('p').html(percentComplete + '%');
+	                                        // Set the progress value and fallback text for browsers without <progress> support.
+	                                        console.log('Uploaded ' + percentComplete + '%');
                                     }
                                 }, false);
                                 return xhr;
@@ -171,7 +170,7 @@ $(document).ready(function () {
                     } else {
                         form.reset();
                         input.val(mess);
-                        $('.save_window_fail').html('Неверный формат файла').removeClass('hiden');
+                        $('.save_window_fail').html('Invalid file format').removeClass('hiden');
                         setTimeout(function () {
                             $('.save_window_fail').addClass('hiden');
                         }, 2000);
@@ -180,7 +179,7 @@ $(document).ready(function () {
 
                 }
                 if (!error)
-                    $('.files_block[data-num=' + num + ']').prepend('<p><a href="#" class="removeAttach">Удалить прикрепленные файлы</a></p>')
+                    $('.files_block[data-num=' + num + ']').prepend('<p><a href="#" class="removeAttach">Remove attached files</a></p>')
             }
         }
         //console.log(files.length);
@@ -205,9 +204,9 @@ $(document).ready(function () {
     })
 
 
-    $(document).on('click', function (e) { // событие клика по веб-документу
-        const div = $('.smilesChoose'); // тут указываем ID элемента
-        if (!div.is(e.target) // если клик был не по нашему блоку
+	    $(document).on('click', function (e) { // Click handler for the document.
+	        const div = $('.smilesChoose'); // Target element.
+	        if (!div.is(e.target) // Click was outside the target block.
             && div.has(e.target).length === 0) {
             div.removeClass('is-open').hide();
 

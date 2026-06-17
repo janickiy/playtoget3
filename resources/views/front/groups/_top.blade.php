@@ -2,11 +2,11 @@
     $membershipType = $membershipType ?? 'none';
     $closedAccessDenied = (bool) ($communityAccessDenied ?? false);
     $leaveMessage = match ($membershipType) {
-        'owner' => 'Вы владелец группы. Покинув ее, вы лишитесь прав владельца. Выйти из группы?',
-        'admin' => 'Вы администратор группы. Покинув ее, вы лишитесь административных прав. Выйти из группы?',
-        'invited' => 'Вы действительно хотите отказаться от приглашения?',
-        'applied' => 'Вы действительно хотите отменить заявку?',
-        default => 'Вы действительно хотите выйти из группы?',
+        'owner' => 'You are the group owner. If you leave it, you will lose owner rights. Leave the group?',
+        'admin' => 'You are a group administrator. If you leave it, you will lose admin rights. Leave the group?',
+        'invited' => 'Do you really want to decline the invitation?',
+        'applied' => 'Do you really want to cancel the request?',
+        default => 'Do you really want to leave the group?',
     };
 @endphp
 
@@ -14,17 +14,17 @@
     <div class="cover_page">
         @if ($viewer && $membershipType !== 'blocked')
             @if ($membershipType === 'none')
-                <a href="#" class="groups_button js-group-join" data-community-id="{{ $group->id }}"><span>Присоединиться</span></a>
+                <a href="#" class="groups_button js-group-join" data-community-id="{{ $group->id }}"><span>Join</span></a>
             @elseif ($membershipType === 'invited')
-                <a href="#" class="groups_button group-invite-action group-invite-accept js-group-join" data-community-id="{{ $group->id }}">Принять</a>
-                <a href="#" class="groups_button group-invite-action group-invite-decline js-group-leave" data-community-id="{{ $group->id }}" data-message="{{ $leaveMessage }}" data-silent="1" data-success-message="Приглашение отклонено">Отклонить</a>
+                <a href="#" class="groups_button group-invite-action group-invite-accept js-group-join" data-community-id="{{ $group->id }}">Accept</a>
+                <a href="#" class="groups_button group-invite-action group-invite-decline js-group-leave" data-community-id="{{ $group->id }}" data-message="{{ $leaveMessage }}" data-silent="1" data-success-message="Invitation declined">Decline</a>
             @elseif ($membershipType === 'owner')
-                <a href="#" class="groups_button leave_fr js-group-invite" data-community-id="{{ $group->id }}">Пригласить друзей</a>
+                <a href="#" class="groups_button leave_fr js-group-invite" data-community-id="{{ $group->id }}">Invite friends</a>
             @elseif (in_array($membershipType, ['admin', 'member'], true))
-                <a href="#" class="groups_button leave_fr js-group-invite" data-community-id="{{ $group->id }}">Пригласить друзей</a>
+                <a href="#" class="groups_button leave_fr js-group-invite" data-community-id="{{ $group->id }}">Invite friends</a>
                 <a href="#" class="groups_button_leave js-group-leave" data-community-id="{{ $group->id }}" data-message="{{ $leaveMessage }}"></a>
             @elseif ($membershipType === 'applied')
-                <a href="#" class="groups_button applied pending js-group-leave" data-community-id="{{ $group->id }}" data-message="{{ $leaveMessage }}" data-silent="1" data-success-message="Заявка отменена">На рассмотрении</a>
+                <a href="#" class="groups_button applied pending js-group-leave" data-community-id="{{ $group->id }}" data-message="{{ $leaveMessage }}" data-silent="1" data-success-message="Request cancelled">Pending</a>
             @endif
         @endif
 
@@ -37,7 +37,7 @@
     <div id="top-top" class="account top_thumb_avatar">
         <img src="{{ $groupData['avatar'] }}" alt="">
         @if ($groupData['is_closed'] ?? false)
-            <span class="community-avatar-lock community-avatar-lock--top" aria-label="Закрытая группа"></span>
+            <span class="community-avatar-lock community-avatar-lock--top" aria-label="Closed group"></span>
         @endif
         <h3 class="name">
             {{ $groupData['name'] }}
@@ -48,7 +48,7 @@
         </h3>
         <p class="citation">{{ $groupData['place'] }}</p>
         @if ($canManageGroup ?? false)
-            <a class="button_edit_groups group-top-edit" href="{{ route('front.groups.edit', ['community' => $group->id]) }}">Редактировать</a>
+            <a class="button_edit_groups group-top-edit" href="{{ route('front.groups.edit', ['community' => $group->id]) }}">Edit</a>
         @endif
     </div>
 </div>
@@ -60,15 +60,15 @@
 
 @if (! $closedAccessDenied)
     <ul class="sport_group_list">
-        <li><a href="{{ route('front.groups.show', ['community' => $group->id]) }}" @class(['active-link' => $section === 'feed'])><i class="icon_list icon-4"></i><span>Лента</span></a></li>
-        <li><a href="{{ route('front.groups.members', ['community' => $group->id]) }}" @class(['active-link' => $section === 'members'])><i class="icon_list icon-5"></i><span>Участники</span></a></li>
+        <li><a href="{{ route('front.groups.show', ['community' => $group->id]) }}" @class(['active-link' => $section === 'feed'])><i class="icon_list icon-4"></i><span>Feed</span></a></li>
+        <li><a href="{{ route('front.groups.members', ['community' => $group->id]) }}" @class(['active-link' => $section === 'members'])><i class="icon_list icon-5"></i><span>Members</span></a></li>
         @if ($permissions['photo'])
-            <li><a href="{{ route('front.groups.photoalbums', ['community' => $group->id]) }}" @class(['active-link' => $section === 'photoalbums'])><i class="icon_list icon-2"></i><span>Фотографии</span></a></li>
+            <li><a href="{{ route('front.groups.photoalbums', ['community' => $group->id]) }}" @class(['active-link' => $section === 'photoalbums'])><i class="icon_list icon-2"></i><span>Photos</span></a></li>
         @endif
         @if ($permissions['video'])
-            <li><a href="{{ route('front.groups.videoalbums', ['community' => $group->id]) }}" @class(['active-link' => $section === 'videoalbums'])><i class="icon_list icon-3"></i><span>Видео</span></a></li>
+            <li><a href="{{ route('front.groups.videoalbums', ['community' => $group->id]) }}" @class(['active-link' => $section === 'videoalbums'])><i class="icon_list icon-3"></i><span>Video</span></a></li>
         @endif
-        <li><a href="{{ route('front.groups.events', ['community' => $group->id]) }}" @class(['active-link' => $section === 'events'])><i class="icon_list icon-1"></i><span>Мероприятия</span></a></li>
+        <li><a href="{{ route('front.groups.events', ['community' => $group->id]) }}" @class(['active-link' => $section === 'events'])><i class="icon_list icon-1"></i><span>Events</span></a></li>
     </ul>
 @endif
 
@@ -160,14 +160,14 @@
                     }
 
                     $.confirm({
-                        title: 'Подтверждение',
+                        title: 'Confirmation',
                         message: message,
                         buttons: {
-                            'Да': {
+                            'Yes': {
                                 class: 'blue',
                                 action: action,
                             },
-                            'Нет': {
+                            'No': {
                                 class: 'gray',
                                 action: function () {
                                 },
@@ -180,8 +180,8 @@
                     root.find('.groups_button').remove();
                     root.find('.groups_button_leave').remove();
                     root.find('.cover_page').prepend(
-                        '<a href="#" class="groups_button leave_fr js-group-invite" data-community-id="' + communityId + '">Пригласить друзей</a>' +
-                        '<a href="#" class="groups_button_leave js-group-leave" data-community-id="' + communityId + '" data-message="Вы действительно хотите выйти из группы?"></a>'
+                        '<a href="#" class="groups_button leave_fr js-group-invite" data-community-id="' + communityId + '">Invite friends</a>' +
+                        '<a href="#" class="groups_button_leave js-group-leave" data-community-id="' + communityId + '" data-message="Do you really want to leave the group?"></a>'
                     );
                 }
 
@@ -189,7 +189,7 @@
                     root.find('.groups_button').remove();
                     root.find('.groups_button_leave').remove();
                     root.find('.cover_page').prepend(
-                        '<a href="#" class="groups_button js-group-join" data-community-id="' + communityId + '"><span>Присоединиться</span></a>'
+                        '<a href="#" class="groups_button js-group-join" data-community-id="' + communityId + '"><span>Join</span></a>'
                     );
                 }
 
@@ -197,7 +197,7 @@
                     root.find('.groups_button').remove();
                     root.find('.groups_button_leave').remove();
                     root.find('.cover_page').prepend(
-                        '<a href="#" class="groups_button applied pending js-group-leave" data-community-id="' + communityId + '" data-message="Вы действительно хотите отменить заявку?" data-silent="1" data-success-message="Заявка отменена">На рассмотрении</a>'
+                        '<a href="#" class="groups_button applied pending js-group-leave" data-community-id="' + communityId + '" data-message="Do you really want to cancel the request?" data-silent="1" data-success-message="Request cancelled">Pending</a>'
                     );
                 }
 
@@ -212,17 +212,17 @@
                             if (response.result === 'success') {
                                 if (response.member === 'applied') {
                                     setPendingState(root, communityId);
-                                    groupNotice('Заявка отправлена', true);
+                                    groupNotice('Request sent', true);
                                 } else {
                                     setJoinedState(root, communityId);
-                                    groupNotice('Вы вступили в группу', true);
+                                    groupNotice('You joined the group', true);
                                 }
                             } else {
-                                groupNotice('Не удалось изменить статус', false);
+                                groupNotice('Could not change status', false);
                             }
                         })
                         .fail(function () {
-                            groupNotice('Не удалось изменить статус', false);
+                            groupNotice('Could not change status', false);
                         });
                 });
 
@@ -231,7 +231,7 @@
                     const button = $(this);
                     const communityId = button.data('community-id');
                     const root = button.closest('.group-profile-top');
-                    const message = button.data('message') || 'Вы действительно хотите выйти из группы?';
+                    const message = button.data('message') || 'Do you really want to leave the group?';
                     const silent = String(button.data('silent')) === '1';
 
                     const leaveAction = function () {
@@ -239,13 +239,13 @@
                             .done(function (response) {
                                 if (response.result === 'success') {
                                     setLeftState(root, communityId);
-                                    groupNotice(button.data('success-message') || 'Статус обновлен', true);
+                                    groupNotice(button.data('success-message') || 'Status updated', true);
                                 } else {
-                                    groupNotice('Не удалось изменить статус', false);
+                                    groupNotice('Could not change status', false);
                                 }
                             })
                             .fail(function () {
-                                groupNotice('Не удалось изменить статус', false);
+                                groupNotice('Could not change status', false);
                             });
                     };
 
@@ -269,13 +269,13 @@
                     memberAjax('send_community_invitation', {community_id: button.data('community-id')})
                         .done(function (response) {
                             if (response.result === 'success') {
-                                groupNotice('Приглашения вашим друзьям отправлены', true);
+                                groupNotice('Invitations have been sent to your friends', true);
                             } else {
-                                groupNotice('Не удалось отправить приглашения', false);
+                                groupNotice('Could not send invitations', false);
                             }
                         })
                         .fail(function () {
-                            groupNotice('Не удалось отправить приглашения', false);
+                            groupNotice('Could not send invitations', false);
                         });
                 });
             })();

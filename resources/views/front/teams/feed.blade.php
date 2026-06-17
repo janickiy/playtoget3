@@ -6,8 +6,8 @@
             'kind' => 'team',
             'route' => 'front.teams',
             'top' => 'front.teams._top',
-            'label' => 'Команда',
-            'labelLower' => 'команда',
+            'label' => 'Team',
+            'labelLower' => 'team',
             'entity' => $team,
         ];
         $community = $communityView['entity'] ?? $team;
@@ -31,12 +31,12 @@
                         <input type="hidden" name="user_id" value="{{ $viewer->id }}">
                         <input type="hidden" name="parent_id" value="0">
                         <input type="file" class="file_name" name="file_name[]" data-num="{{ $community->id }}" multiple>
-                        <textarea id="comment" name="comment" data-num="{{ $community->id }}" class="ahref_input" placeholder="Что у Вас интересного?"></textarea>
+                        <textarea id="comment" name="comment" data-num="{{ $community->id }}" class="ahref_input" placeholder="What's interesting?"></textarea>
                         <div class="smile-files">
                             <a id="smilesBtn" class="smile smilesBtn" data-num="{{ $community->id }}">
                                 <img src="{{ asset('frontend/images/smile.png') }}" alt="">
                             </a>
-                            <a href="#" class="files" data-num="{{ $community->id }}" data-tooltip="Прикрепить изображение">
+                            <a href="#" class="files" data-num="{{ $community->id }}" data-tooltip="Attach image">
                                 <img src="{{ asset('frontend/images/files.png') }}" alt="">
                             </a>
                             <div class="smilesChoose" data-num="{{ $community->id }}"></div>
@@ -48,7 +48,7 @@
                                     <input id="team_check" type="checkbox" hidden checked name="author_community" value="1">
                                     <label for="team_check"></label>
                                 </div>
-                                <label class="col-lg-3 control-label label_team_check" for="team_check">подпись</label>
+                                <label class="col-lg-3 control-label label_team_check" for="team_check">signature</label>
                             </div>
                         @endif
                         <div class="link_attach" data-num="{{ $community->id }}"></div>
@@ -71,7 +71,7 @@
                 @include('front.profile._comments', ['comments' => $comments, 'viewer' => $viewer])
             </div>
         @else
-            @include('front.communities._closed-message', ['message' => $sectionAccessMessage ?? ($communityView['label'] . ' ограничила доступ к ленте')])
+            @include('front.communities._closed-message', ['message' => $sectionAccessMessage ?? ($communityView['label'] . ' has restricted access to the feed')])
         @endif
     </div>
 @endsection
@@ -147,7 +147,7 @@
     <script>
         window.content_id = '{{ $community->id }}';
         window.id_profile = '{{ $community->id }}';
-        window.placeholder = 'Ваш комментарий';
+        window.placeholder = 'Your comment';
         window.profileCommentableType = '{{ $communityKind }}';
         window.profileCanPostAsCommunity = {{ $canManageCommunity ? 'true' : 'false' }};
         window.profileCommentsEndpoint = '{{ route('front.ajax.handle', ['action' => 'get_comments']) }}';

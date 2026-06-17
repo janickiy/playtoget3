@@ -10,7 +10,7 @@ use Illuminate\Validation\Rule;
 class EditRequest extends FormRequest
 {
     /**
-     * Разрешает обработку формы редактирования пользователя авторизованному администратору.
+     * Allows обработку form editing user authenticated administratorу.
      */
     public function authorize(): bool
     {
@@ -18,7 +18,7 @@ class EditRequest extends FormRequest
     }
 
     /**
-     * Возвращает правила валидации формы редактирования пользователя.
+     * Returns rules validation form editing user.
      *
      * @return array<string, mixed>
      */

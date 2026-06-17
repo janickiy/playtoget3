@@ -26,30 +26,30 @@
                 <div @if($showFormTabs) id="tabs" @endif @class(['community-form-tabs' => $showFormTabs, 'team-form-tabs' => $showFormTabs, 'community-create-form-panel' => ! $showFormTabs])>
                     @if ($showFormTabs)
                         <ul>
-                            <li><a href="#info">Информация</a></li>
-                            <li><a href="#administrators">Администраторы</a></li>
-                            <li><a href="#privacy">Приватность</a></li>
-                            <li><a href="#blacklist">Черный список</a></li>
+                            <li><a href="#info">Information</a></li>
+                            <li><a href="#administrators">Administrators</a></li>
+                            <li><a href="#privacy">Privacy</a></li>
+                            <li><a href="#blacklist">Blacklist</a></li>
                         </ul>
                     @endif
 
                     <div id="info">
-                        <div class="text-center"><h2>Информация</h2></div>
+                        <div class="text-center"><h2>Information</h2></div>
                         <br>
                         <div class="form-group">
-                            <label class="col-lg-3 control-label" for="name">Название</label>
+                            <label class="col-lg-3 control-label" for="name">Name</label>
                             <div class="col-lg-6">
                                 <input class="form-control" type="text" id="name" name="name" value="{{ old('name', $team?->name) }}">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-3 control-label" for="about">Описание</label>
+                            <label class="col-lg-3 control-label" for="about">Description</label>
                             <div class="col-lg-6">
                                 <textarea class="form-control form-dark" id="about" rows="4" name="about">{{ old('about', $team?->about) }}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-3 control-label" for="place">Место</label>
+                            <label class="col-lg-3 control-label" for="place">Place</label>
                             <div class="col-lg-6">
                                 <input type="hidden" name="id_place" value="{{ old('id_place') }}" class="id_place" data-type="search_city">
                                 <input autocomplete="off" class="form-control search_word text-place border-top-none" type="text" value="{{ old('place', $team?->place) }}" name="place" data-type="search_city">
@@ -57,7 +57,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-3 control-label" for="sport">Вид спорта</label>
+                            <label class="col-lg-3 control-label" for="sport">Sport type</label>
                             <div class="col-lg-6">
                                 <input type="hidden" name="id_sport" class="id_place" value="{{ old('id_sport') }}" data-type="search_sport">
                                 <input autocomplete="off" class="form-control search_word text-place border-top-none" type="text" value="{{ old('sport', $team?->sport_type) }}" name="sport" data-type="search_sport">
@@ -68,14 +68,14 @@
                             <div class="col-sm-6 team-form-image-field">
                                 <img id="preview_ava" src="{{ $team ? $teamData['avatar'] : asset('frontend/images/noimage.png') }}" alt="">
                                 <div class="file_upload team-file-upload">
-                                    <button type="button">Загрузить аватар</button>
+                                    <button type="button">Upload avatar</button>
                                     <input class="team-avatar-input" type="file" name="avatar_file" accept="image/jpeg,image/png,image/gif">
                                 </div>
                             </div>
                             <div class="col-sm-6 team-form-image-field">
                                 <img id="preview_cover" src="{{ $team ? $teamData['cover'] : asset('frontend/images/default_group.png') }}" alt="">
                                 <div class="file_upload team-file-upload">
-                                    <button type="button">Загрузить обложку</button>
+                                    <button type="button">Upload cover</button>
                                     <input class="team-cover-input" type="file" name="cover_file" accept="image/jpeg,image/png,image/gif">
                                 </div>
                             </div>
@@ -84,10 +84,10 @@
 
                     @if ($showFormTabs)
                         <div id="administrators">
-                            <div class="text-center"><h2>Администраторы</h2></div>
+                            <div class="text-center"><h2>Administrators</h2></div>
                             @if ($isCommunityOwner)
                                 <button type="button" class="community-admin-add-open js-community-admin-open" data-community-id="{{ $team->id }}">
-                                    Добавить администратора
+                                    Add administrator
                                 </button>
                             @endif
                             <div class="possible-friend">
@@ -102,71 +102,71 @@
                                                         data-action="remove_community_admin"
                                                         data-community-id="{{ $team->id }}"
                                                         data-user-id="{{ $member['id'] }}"
-                                                        data-confirm="Удалить администратора команды?"
-                                                        data-success="Администратор удален">
-                                                    Удалить администратора
+                                                        data-confirm="Remove this team administrator?"
+                                                        data-success="Administrator removed">
+                                                    Remove administrator
                                                 </button>
                                             </div>
                                         @endif
                                     </div>
                                 @empty
-                                    <p class="no_message">Администраторов пока нет.</p>
+                                    <p class="no_message">No administrators yet.</p>
                                 @endforelse
                             </div>
                         </div>
 
                         <div id="privacy">
-                            <div class="text-center"><h2>Приватность</h2></div>
+                            <div class="text-center"><h2>Privacy</h2></div>
                             <br>
                             @php($wall = old('community.permission_wall', $settings?->permission_wall ?? 0))
                             @php($photo = old('community.permission_photo', $settings?->permission_photo ?? 0))
                             @php($video = old('community.permission_video', $settings?->permission_video ?? 0))
                             @php($type = old('community.type', $settings?->type ?? 0))
                             <div class="form-group">
-                                <label class="col-lg-4 control-label">Лента</label>
+                                <label class="col-lg-4 control-label">Feed</label>
                                 <div class="col-lg-7">
                                     <div class="styled-select styled-select-4">
                                         <select class="form-control form-primary" name="community[permission_wall]">
-                                            <option value="0" @selected((int)$wall === 0)>Открыта</option>
-                                            <option value="1" @selected((int)$wall === 1)>Отключена</option>
-                                            <option value="2" @selected((int)$wall === 2)>Только участники</option>
-                                            <option value="3" @selected((int)$wall === 3)>Только администрация</option>
+                                            <option value="0" @selected((int)$wall === 0)>Open</option>
+                                            <option value="1" @selected((int)$wall === 1)>Disabled</option>
+                                            <option value="2" @selected((int)$wall === 2)>Members only</option>
+                                            <option value="3" @selected((int)$wall === 3)>Administration only</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-lg-4 control-label">Фотографии</label>
+                                <label class="col-lg-4 control-label">Photos</label>
                                 <div class="col-lg-7">
                                     <div class="styled-select styled-select-4">
                                         <select class="form-control form-primary" name="community[permission_photo]">
-                                            <option value="0" @selected((int)$photo === 0)>Открыты</option>
-                                            <option value="1" @selected((int)$photo === 1)>Отключены</option>
-                                            <option value="2" @selected((int)$photo === 2)>Только участники</option>
+                                            <option value="0" @selected((int)$photo === 0)>Open</option>
+                                            <option value="1" @selected((int)$photo === 1)>Disabled</option>
+                                            <option value="2" @selected((int)$photo === 2)>Members only</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-lg-4 control-label">Видео</label>
+                                <label class="col-lg-4 control-label">Video</label>
                                 <div class="col-lg-7">
                                     <div class="styled-select styled-select-4">
                                         <select class="form-control form-primary" name="community[permission_video]">
-                                            <option value="0" @selected((int)$video === 0)>Открыто</option>
-                                            <option value="1" @selected((int)$video === 1)>Отключено</option>
-                                            <option value="2" @selected((int)$video === 2)>Только участники</option>
+                                            <option value="0" @selected((int)$video === 0)>Open</option>
+                                            <option value="1" @selected((int)$video === 1)>Disabled</option>
+                                            <option value="2" @selected((int)$video === 2)>Members only</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-lg-4 control-label">Тип команды</label>
+                                <label class="col-lg-4 control-label">Type team</label>
                                 <div class="col-lg-7">
                                     <div class="styled-select styled-select-4">
                                         <select class="form-control form-primary" name="community[type]">
-                                            <option value="0" @selected((int)$type === 0)>Открытая</option>
-                                            <option value="1" @selected((int)$type === 1)>Закрытая</option>
-                                            <option value="2" @selected((int)$type === 2)>Приватная</option>
+                                            <option value="0" @selected((int)$type === 0)>Open</option>
+                                            <option value="1" @selected((int)$type === 1)>Closed</option>
+                                            <option value="2" @selected((int)$type === 2)>Private</option>
                                         </select>
                                     </div>
                                 </div>
@@ -174,7 +174,7 @@
                         </div>
 
                         <div id="blacklist">
-                            <div class="text-center"><h2>Черный список</h2></div>
+                            <div class="text-center"><h2>Blacklist</h2></div>
                             <div class="possible-friend">
                                 @forelse ($blocked as $member)
                                     <div class="col-xs-6 possible-friend-cart" data-user-id="{{ $member['id'] }}">
@@ -186,14 +186,14 @@
                                                     data-action="unblock_community_member"
                                                     data-community-id="{{ $team->id }}"
                                                     data-user-id="{{ $member['id'] }}"
-                                                    data-confirm="Удалить пользователя из черного списка команды?"
-                                                    data-success="Пользователь удален из черного списка">
-                                                Удалить из списка
+                                                    data-confirm="Remove this user from the team blacklist?"
+                                                    data-success="User removed from blacklist">
+                                                Remove from list
                                             </button>
                                         </div>
                                     </div>
                                 @empty
-                                    <p class="no_message">Черный список пуст.</p>
+                                    <p class="no_message">Blacklist is empty.</p>
                                 @endforelse
                             </div>
                         </div>

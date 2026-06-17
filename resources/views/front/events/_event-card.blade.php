@@ -23,7 +23,7 @@
         @endif
         <p class="event-members"><i></i>{{ $event['participants'] }}</p>
         @if ($event['can_edit'])
-            <a href="{{ route('front.events.edit', ['event' => $event['id']]) }}">Редактировать</a>
+            <a href="{{ route('front.events.edit', ['event' => $event['id']]) }}">Edit</a>
         @endif
         <span @class(['ended' => ! $event['active']])>{{ $event['status'] }}</span>
     </div>

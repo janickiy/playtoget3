@@ -2,7 +2,7 @@
     <a href="{{ route('front.groups.show', ['community' => $group['id']]) }}" class="img community-card-avatar">
         <img src="{{ $group['avatar'] ?: asset('frontend/images/noimage.png') }}" alt="" onerror="this.onerror=null;this.src='{{ asset('frontend/images/noimage.png') }}';">
         @if ($group['is_closed'] ?? false)
-            <span class="community-avatar-lock" aria-label="Закрытая группа"></span>
+            <span class="community-avatar-lock" aria-label="Closed group"></span>
         @endif
     </a>
     <div class="teg">
@@ -21,7 +21,7 @@
         </p>
         <p class="group-members"><i></i>{{ $group['members_text'] }}</p>
         @if ($group['can_edit'] ?? false)
-            <a href="{{ route('front.groups.edit', ['community' => $group['id']]) }}">Редактировать</a>
+            <a href="{{ route('front.groups.edit', ['community' => $group['id']]) }}">Edit</a>
         @endif
         @if ($inviteActions ?? false)
             <div class="community-invite-actions">
@@ -29,14 +29,14 @@
                    class="community-invite-list-action community-invite-list-accept js-community-invite-list-action"
                    data-community-id="{{ $group['id'] }}"
                    data-status="1"
-                   data-tooltip="Вступить"
-                   aria-label="Вступить"></a>
+                   data-tooltip="Join"
+                   aria-label="Join"></a>
                 <a href="#"
                    class="community-invite-list-action community-invite-list-decline js-community-invite-list-action"
                    data-community-id="{{ $group['id'] }}"
                    data-status="0"
-                   data-tooltip="Отклонить"
-                   aria-label="Отклонить"></a>
+                   data-tooltip="Decline"
+                   aria-label="Decline"></a>
             </div>
         @endif
         <div class="transparent"></div>

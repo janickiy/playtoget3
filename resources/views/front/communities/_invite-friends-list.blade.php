@@ -1,5 +1,5 @@
 @if ($friends->isEmpty())
-    <p class="community-invite-empty">Нет друзей, которых можно пригласить.</p>
+    <p class="community-invite-empty">There are no friends you can invite.</p>
 @else
     <div class="community-invite-friends">
         @foreach ($friends as $friend)

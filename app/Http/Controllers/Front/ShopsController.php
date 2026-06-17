@@ -17,7 +17,7 @@ class ShopsController extends Controller
     private const TYPE = 'shop';
 
     /**
-     * Показывает список магазина с фильтрами или открывает карточку конкретного объекта.
+     * Shows list shop с фильтрами or открывает карточку конкретного object.
      *
      * @param Request $request
      * @param SportBlockRepository $sportBlocks
@@ -38,7 +38,7 @@ class ShopsController extends Controller
     }
 
     /**
-     * Проверяет авторизацию и показывает форму создания магазина.
+     * Checks авторизацию и показывает form creation shop.
      *
      * @return View|RedirectResponse
      */
@@ -49,15 +49,15 @@ class ShopsController extends Controller
         }
 
         return view('front.sport-blocks.form', $this->basePayload() + [
-            'title' => 'Создание магазина',
-            'button' => 'Создать',
+            'title' => 'Create shop',
+            'button' => 'Create',
             'action' => route('front.shops.store'),
             'sportBlock' => null,
         ]);
     }
 
     /**
-     * Валидирует данные формы, создает магазин и перенаправляет на его карточку.
+     * Валидирует data form, creates магазин и перенаправляет на его карточку.
      *
      * @param SportBlockRequest $request
      * @param SportBlockRepository $sportBlocks
@@ -77,7 +77,7 @@ class ShopsController extends Controller
     }
 
     /**
-     * Проверяет владельца и показывает форму редактирования магазина.
+     * Checks владельца и показывает form editing shop.
      *
      * @param int $sportBlock
      * @param SportBlockRepository $sportBlocks
@@ -89,15 +89,15 @@ class ShopsController extends Controller
         abort_unless($sportBlocks->isOwner($entity, Auth::guard('web')->user()), 403);
 
         return view('front.sport-blocks.form', $this->basePayload() + [
-            'title' => 'Редактирование магазина',
-            'button' => 'Сохранить',
+            'title' => 'Edit shop',
+            'button' => 'Save',
             'action' => route('front.shops.update', ['sportBlock' => $entity->id]),
             'sportBlock' => $entity,
         ]);
     }
 
     /**
-     * Проверяет владельца, сохраняет изменения магазина и возвращает на карточку.
+     * Checks владельца, сохраняет изменения shop и возвращает на карточку.
      *
      * @param int $sportBlock
      * @param SportBlockRequest $request
@@ -115,7 +115,7 @@ class ShopsController extends Controller
     }
 
     /**
-     * Показывает карточку магазина, фотографии и права текущего пользователя.
+     * Shows карточку shop, photo и permissions current user.
      *
      * @param int $sportBlock
      * @param SportBlockRepository $sportBlocks
@@ -129,17 +129,17 @@ class ShopsController extends Controller
         $canEdit = $sportBlocks->isOwner($entity, $viewer);
 
         return view('front.sport-blocks.show', $this->basePayload() + [
-            'title' => $entity->name ?: 'Магазин',
+            'title' => $entity->name ?: 'Shop',
             'sportBlock' => $entity,
             'data' => $sportBlocks->serialize($entity),
             'photos' => $photoAlbums->photosForOwner($entity->id, self::TYPE, 20, 0),
-            'uploadAlbum' => $canEdit && $viewer ? $photoAlbums->ensureDefaultAlbumForOwner($entity->id, self::TYPE, 'Фото магазина') : null,
+            'uploadAlbum' => $canEdit && $viewer ? $photoAlbums->ensureDefaultAlbumForOwner($entity->id, self::TYPE, 'Photos shop') : null,
             'canEdit' => $canEdit,
         ]);
     }
 
     /**
-     * Находит объект нужного типа или завершает запрос ошибкой 404.
+     * Finds object нужного typeа or завершает запрос ошибкой 404.
      *
      * @param SportBlockRepository $sportBlocks
      * @param int $id
@@ -155,7 +155,7 @@ class ShopsController extends Controller
     }
 
     /**
-     * Готовит общие параметры шаблонов для раздела магазина
+     * Готовит общие параметры шаблонов для section shop
      *
      * @return array
      */
@@ -166,15 +166,15 @@ class ShopsController extends Controller
             'routePrefix' => 'front.shops',
             'indexRoute' => route('front.shops.index'),
             'createRoute' => route('front.shops.create'),
-            'listTitle' => 'Магазины',
-            'createButton' => 'Создать магазин',
-            'searchPlaceholder' => 'Искать магазин в городе',
+            'listTitle' => 'Shops',
+            'createButton' => 'Create shop',
+            'searchPlaceholder' => 'Search shop by city',
             'viewer' => Auth::guard('web')->user(),
         ];
     }
 
     /**
-     * Собирает фильтры поиска магазина из query-параметров
+     * Собирает фильтры поиска shop из query-параметров
      *
      * @param Request $request
      * @return array

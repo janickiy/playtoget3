@@ -13,7 +13,7 @@
             >
         </div>
         @if ($editableProfileAssets)
-            <span class="upload_cover_img">Изменить обложку</span>
+            <span class="upload_cover_img">Change cover</span>
         @endif
     </div>
     <div class="clearfix"></div>

@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 class AnnouncementRepository extends BaseRepository
 {
     /**
-     * Подключает модель объявления, с которой работает репозиторий.
+     * Connects модель announcement, с которой работает репозиторий.
      */
     public function __construct(Announcement $model)
     {
@@ -20,7 +20,7 @@ class AnnouncementRepository extends BaseRepository
     }
 
     /**
-     * Создает объявление из DTO с уникальным slug.
+     * Creates announcement из DTO с уникальным slug.
      *
      * @param AnnouncementData $data
      * @return Builder|Model
@@ -31,7 +31,7 @@ class AnnouncementRepository extends BaseRepository
     }
 
     /**
-     * Обновляет объявление из DTO с уникальным slug.
+     * Updates announcement из DTO с уникальным slug.
      */
     public function updateFromData(AnnouncementData $data): bool
     {
@@ -39,7 +39,7 @@ class AnnouncementRepository extends BaseRepository
     }
 
     /**
-     * Возвращает опубликованное объявление по slug.
+     * Returns published announcement по slug.
      */
     public function visibleBySlug(string $slug): ?Announcement
     {
@@ -53,7 +53,7 @@ class AnnouncementRepository extends BaseRepository
     }
 
     /**
-     * Возвращает последние опубликованные объявления.
+     * Returns последние опубликованные announcement.
      *
      * @param int $limit
      * @return Collection<int, Announcement>
@@ -69,7 +69,7 @@ class AnnouncementRepository extends BaseRepository
     }
 
     /**
-     * Возвращает все опубликованные объявления для страницы раздела.
+     * Returns все опубликованные announcement для page section.
      *
      * @return Collection<int, Announcement>
      */
@@ -83,7 +83,7 @@ class AnnouncementRepository extends BaseRepository
     }
 
     /**
-     * Готовит массив полей объявления перед сохранением.
+     * Готовит массив полей announcement перед сохранением.
      *
      * @param AnnouncementData $data
      * @param int|null $ignoreId
@@ -98,7 +98,7 @@ class AnnouncementRepository extends BaseRepository
     }
 
     /**
-     * Формирует уникальный slug объявления.
+     * Builds уникальный slug announcement.
      */
     private function uniqueSlug(string $source, ?int $ignoreId = null): string
     {
@@ -116,7 +116,7 @@ class AnnouncementRepository extends BaseRepository
     }
 
     /**
-     * Проверяет, занят ли slug другим объявлением.
+     * Checks, whether the slug is used by another announcement.
      */
     private function slugExists(string $slug, ?int $ignoreId = null): bool
     {

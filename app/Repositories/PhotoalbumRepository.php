@@ -23,7 +23,7 @@ class PhotoalbumRepository extends BaseRepository
     private const USER_TYPES = ['user', 'user_attach'];
 
     /**
-     * Подключает модель и зависимости, с которыми работает репозиторий.
+     * Connects модель и зависимости, с которыми работает репозиторий.
      */
     public function __construct(
         PhotoAlbums $model,
@@ -34,7 +34,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Возвращает альбомы пользователя.
+     * Returns albums user.
      *
      * @param int $userId
      * @return Collection
@@ -45,7 +45,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Возвращает альбомы указанного владельца и типа.
+     * Returns albums указанного владельца и typeа.
      *
      * @param int $ownerId
      * @param string $type
@@ -66,7 +66,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Возвращает фотографии пользователя.
+     * Returns photo user.
      *
      * @param int $userId
      * @param int $limit
@@ -79,7 +79,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Возвращает фотографии указанного владельца и типа.
+     * Returns photo указанного владельца и typeа.
      *
      * @param int $ownerId
      * @param string $type
@@ -103,7 +103,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Проверяет, есть ли еще фотографии пользователя после текущей страницы.
+     * Checks, есть ли еще photo user после current page.
      *
      * @param int $userId
      * @param int $limit
@@ -116,7 +116,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Проверяет, есть ли еще фотографии владельца после текущей страницы.
+     * Checks, есть ли еще photo владельца после current page.
      *
      * @param int $ownerId
      * @param string $type
@@ -138,7 +138,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Возвращает популярные фотографии выбранного типа.
+     * Returns популярные photo selected typeа.
      *
      * @param int $limit
      * @param int $offset
@@ -178,7 +178,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Находит альбом по id и допустимым типам владельца.
+     * Finds album по id и допустимым typeам владельца.
      *
      * @param int $albumId
      * @param array|null $types
@@ -197,7 +197,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Возвращает фотографии выбранного альбома постранично.
+     * Returns photo selected album постранично.
      *
      * @param PhotoAlbums $album
      * @param int $limit
@@ -217,7 +217,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Проверяет, есть ли еще фотографии в альбоме после текущей страницы.
+     * Checks, есть ли еще photo в albumе после current page.
      *
      * @param PhotoAlbums $album
      * @param int $limit
@@ -235,7 +235,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Возвращает альбомы, доступные пользователю для редактирования.
+     * Returns albums, accessные user для editing.
      *
      * @param User $user
      * @return Collection
@@ -246,7 +246,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Возвращает альбомы владельца, доступные для редактирования.
+     * Returns albums владельца, accessные для editing.
      *
      * @param int $ownerId
      * @param string $type
@@ -262,22 +262,22 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Возвращает альбом пользователя по умолчанию или создает его.
+     * Returns album user по умолчанию or creates его.
      */
     public function ensureDefaultAlbum(User $user): PhotoAlbums
     {
-        return $this->ensureDefaultAlbumForOwner($user->id, 'user', 'Мой альбом');
+        return $this->ensureDefaultAlbumForOwner($user->id, 'user', 'My album');
     }
 
     /**
-     * Возвращает альбом владельца по умолчанию или создает его.
+     * Returns album владельца по умолчанию or creates его.
      *
      * @param int $ownerId
      * @param string $type
      * @param string $name
      * @return PhotoAlbums
      */
-    public function ensureDefaultAlbumForOwner(int $ownerId, string $type, string $name = 'Мой альбом'): PhotoAlbums
+    public function ensureDefaultAlbumForOwner(int $ownerId, string $type, string $name = 'My album'): PhotoAlbums
     {
         /** @var PhotoAlbums $album */
         $album = $this->model->newQuery()->firstOrCreate([
@@ -291,7 +291,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Создает альбом пользователя.
+     * Creates album user.
      *
      * @param User $user
      * @param AlbumData $data
@@ -303,7 +303,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Создает альбом для указанного владельца и типа.
+     * Creates album для указанного владельца и typeа.
      *
      * @param int $ownerId
      * @param string $type
@@ -323,7 +323,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Обновляет название пользовательского альбома.
+     * Updates name userского album.
      *
      * @param PhotoAlbums $album
      * @param AlbumData $data
@@ -335,7 +335,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Проверяет, занято ли имя альбома у пользователя.
+     * Checks, занято ли name album у user.
      *
      * @param User $user
      * @param string $name
@@ -348,7 +348,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Проверяет, занято ли имя альбома у владельца.
+     * Checks, занято ли name album у владельца.
      *
      * @param int $ownerId
      * @param string $type
@@ -367,7 +367,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Проверяет, является ли пользователь владельцем сущности.
+     * Checks, является ли user владельцем entity.
      */
     public function isOwner(PhotoAlbums $album, ?User $user): bool
     {
@@ -375,7 +375,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Сохраняет фотографию и уменьшенную копию в публичном хранилище.
+     * Сохраняет photo и thumbnail в public storage.
      *
      * @param User $user
      * @param PhotoAlbums $album
@@ -385,14 +385,14 @@ class PhotoalbumRepository extends BaseRepository
     public function storePhoto(User $user, PhotoAlbums $album, PhotoUploadData $data): Photo
     {
         if (! $this->isOwner($album, $user) || $album->photoalbumable_type !== 'user') {
-            throw new RuntimeException('Нет доступа к выбранному альбому.');
+            throw new RuntimeException('No access to the selected album.');
         }
 
         return $this->storePhotoForAlbum($user, $album, $data);
     }
 
     /**
-     * Сохраняет фотографию в альбом пользователя и создает запись фото.
+     * Сохраняет photo в album user и creates record photo.
      *
      * @param User $user
      * @param PhotoAlbums $album
@@ -418,7 +418,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Сохраняет прикрепленную фотографию пользователя и возвращает данные для записи.
+     * Сохраняет attached photo user и возвращает data для записи.
      *
      * @param User $user
      * @param PhotoUploadData $data
@@ -445,7 +445,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Находит фотографию по id и допустимым типам альбома.
+     * Finds photo по id и допустимым typeам album.
      *
      * @param int $photoId
      * @param array|null $types
@@ -465,7 +465,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Удаляет фотографию вместе со связанными данными.
+     * Deletes photo вместе со связанными data.
      *
      * @param Photo $photo
      * @return bool
@@ -482,7 +482,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Удаляет альбом и связанные с ним материалы.
+     * Deletes album и связанные с ним материалы.
      *
      * @param PhotoAlbums $album
      * @return bool
@@ -504,7 +504,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Удаляет фотографию пользователя, если он является владельцем.
+     * Deletes photo user, если он является владельцем.
      *
      * @param User $user
      * @param int $photoId
@@ -527,7 +527,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Преобразует фотографию в массив данных для вывода.
+     * Преобразует photo в массив data для output.
      *
      * @param Photo $photo
      * @return array
@@ -547,7 +547,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Преобразует альбом в массив данных для вывода.
+     * Преобразует album в массив data для output.
      *
      * @param PhotoAlbums $album
      * @return array
@@ -572,7 +572,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Удаляет реакции, комментарии и вложения фотографии.
+     * Deletes реакции, комментарии и вложения photo.
      *
      * @param Photo $photo
      * @return void
@@ -587,7 +587,7 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
-     * Удаляет файлы фотографии из публичного хранилища.
+     * Deletes файлы photo из публичного storage.
      *
      * @param Photo $photo
      * @return void

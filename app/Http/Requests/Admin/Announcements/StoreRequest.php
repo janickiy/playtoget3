@@ -14,7 +14,7 @@ class StoreRequest extends FormRequest
     }
 
     /**
-     * Возвращает правила валидации формы добавления объявления.
+     * Returns rules validation form adding announcement.
      *
      * @return array<string, mixed>
      */

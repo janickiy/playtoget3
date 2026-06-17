@@ -16,7 +16,7 @@ class AlbumPhotoStorageService
 
 
     /**
-     * Подключает сервис для работы с загруженными изображениями.
+     * Connects сервис для работы с uploaded images.
      *
      * @param ImageFileService|null $images
      */
@@ -26,7 +26,7 @@ class AlbumPhotoStorageService
     }
 
     /**
-     * Сохраняет фотографию и уменьшенную копию в публичном хранилище.
+     * Сохраняет photo и thumbnail в public storage.
      *
      * @param UploadedFile $file
      * @param string|null $albumType
@@ -50,7 +50,7 @@ class AlbumPhotoStorageService
         if (! $disk->put($originalPath, $original) || ! $disk->put($smallPath, $thumb)) {
             $disk->delete([$originalPath, $smallPath]);
 
-            throw new RuntimeException('Не удалось сохранить фотографию.');
+            throw new RuntimeException('Failed to save photo.');
         }
 
         return [
@@ -60,7 +60,7 @@ class AlbumPhotoStorageService
     }
 
     /**
-     * Сохраняет прикрепленную фотографию пользователя и возвращает данные для записи.
+     * Сохраняет attached photo user и возвращает data для записи.
      *
      * @param User $user
      * @param UploadedFile $file
@@ -73,7 +73,7 @@ class AlbumPhotoStorageService
             'owner_id' => $user->id,
             'photoalbumable_type' => 'user_attach',
         ], [
-            'name' => 'Мои прикрепленные фотографии',
+            'name' => 'My attached photos',
         ]);
 
         $filename = $this->images->randomFilename($file);
@@ -103,7 +103,7 @@ class AlbumPhotoStorageService
     }
 
     /**
-     * Готовит содержимое уменьшенного изображения с сохранением пропорций.
+     * Готовит содержимое уменьшенного image с preserved aspect ratio.
      *
      * @param GdImage $source
      * @param string|null $mime
@@ -151,7 +151,7 @@ class AlbumPhotoStorageService
         imagedestroy($target);
 
         if (! is_string($contents) || $contents === '') {
-            throw new RuntimeException('Не удалось обработать изображение.');
+            throw new RuntimeException('Failed to process the image.');
         }
 
         return $contents;

@@ -23,14 +23,14 @@
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Название</th>
-                                    <th>Место</th>
-                                    <th>Вид спорта</th>
-                                    <th>Начало</th>
-                                    <th>Окончание</th>
-                                    <th>Статус</th>
-                                    <th>Создано</th>
-                                    <th style="width: 12%">Действия</th>
+                                    <th>Name</th>
+                                    <th>Place</th>
+                                    <th>Sport type</th>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th style="width: 12%">Actions</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -65,16 +65,16 @@
         $(function () {
             let table = $("#itemList").DataTable({
                 "oLanguage": {
-                    "sLengthMenu": "Отображено _MENU_ записей на страницу",
-                    "sZeroRecords": "Ничего не найдено - извините",
-                    "sInfo": "Показано с _START_ по _END_ из _TOTAL_ записей",
-                    "sInfoEmpty": "Показано с 0 по 0 из 0 записей",
-                    "sInfoFiltered": "(отфильтровано  _MAX_ всего записей)",
+                    "sLengthMenu": "Show _MENU_ entries per page",
+                    "sZeroRecords": "No matching records found",
+                    "sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
+                    "sInfoEmpty": "Showing 0 to 0 of 0 entries",
+                    "sInfoFiltered": "(filtered from _MAX_ total entries)",
                     "oPaginate": {
-                        "sFirst": "Первая",
-                        "sLast": "Посл.",
-                        "sNext": "След.",
-                        "sPrevious": "Пред."
+                        "sFirst": "First",
+                        "sLast": "Last",
+                        "sNext": "Next",
+                        "sPrevious": "Previous"
                     },
                     "sSearch": ' <i class="fas fa-search" aria-hidden="true"></i>'
                 },
@@ -111,12 +111,12 @@
                 let deleteUrl = $(this).attr('href');
 
                 Swal.fire({
-                    title: "Вы уверены?",
-                    text: "Вы не сможете восстановить эту информацию!",
+                    title: "Are you sure?",
+                    text: "You will not be able to restore this information!",
                     showCancelButton: true,
                     icon: 'warning',
-                    cancelButtonText: "Отмена",
-                    confirmButtonText: "Да, удалить!",
+                    cancelButtonText: "Cancel",
+                    confirmButtonText: "Yes, delete!",
                     reverseButtons: true,
                     confirmButtonColor: "#DD6B55"
                 }).then((result) => {
@@ -128,10 +128,10 @@
                             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                             success: function (response) {
                                 table.ajax.reload(null, false);
-                                Swal.fire("Сделано!", response.message || "Данные успешно удалены!", 'success');
+                                Swal.fire("Done!", response.message || "Data deleted successfully!", 'success');
                             },
                             error: function (xhr) {
-                                Swal.fire("Ошибка при удалении!", (xhr.responseJSON && xhr.responseJSON.message) || "Попробуйте еще раз", 'error');
+                                Swal.fire("Deletion error!", (xhr.responseJSON && xhr.responseJSON.message) || "Please try again", 'error');
                             }
                         });
                     }

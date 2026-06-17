@@ -14,21 +14,21 @@
 
                         <div class="card-body">
                             <dl class="row">
-                                <dt class="col-sm-3">Тема</dt>
+                                <dt class="col-sm-3">Subject</dt>
                                 <dd class="col-sm-9">{{ $row->subject }}</dd>
 
-                                <dt class="col-sm-3">Имя</dt>
+                                <dt class="col-sm-3">Name</dt>
                                 <dd class="col-sm-9">{{ $row->name }}</dd>
 
                                 <dt class="col-sm-3">Email</dt>
                                 <dd class="col-sm-9">{{ $row->email }}</dd>
 
-                                <dt class="col-sm-3">Сообщение</dt>
+                                <dt class="col-sm-3">Message</dt>
                                 <dd class="col-sm-9">{!! nl2br(e((string) $row->message)) !!}</dd>
                             </dl>
 
                             <div class="form-group">
-                                {!! Form::label('status', 'Статус*') !!}
+                                {!! Form::label('status', 'Status*') !!}
                                 {!! Form::select('status', $statusOptions, old('status', $row->status), ['class' => 'custom-select']) !!}
                                 @if ($errors->has('status'))
                                     <p class="text-danger">{{ $errors->first('status') }}</p>
@@ -36,7 +36,7 @@
                             </div>
 
                             <div class="form-group">
-                                {!! Form::label('answer', 'Ответ') !!}
+                                {!! Form::label('answer', 'Answer') !!}
                                 {!! Form::textarea('answer', old('answer', $row->answer), ['class' => 'form-control', 'rows' => 5]) !!}
                                 @if ($errors->has('answer'))
                                     <p class="text-danger">{{ $errors->first('answer') }}</p>
@@ -46,10 +46,10 @@
 
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">
-                                редактировать
+                                edit
                             </button>
                             <a class="btn btn-default float-sm-right" href="{{ route('admin.feedback.index') }}">
-                                назад
+                                back
                             </a>
                         </div>
 

@@ -8,11 +8,11 @@
 
     @if ($canManage)
         <p>
-            <a href="{{ route('front.photoalbums.edit', ['album' => $album['id']]) }}">Редактировать</a>
+            <a href="{{ route('front.photoalbums.edit', ['album' => $album['id']]) }}">Edit</a>
             <form class="album-delete-form" method="POST" action="{{ route('front.photoalbums.destroy', ['album' => $album['id']]) }}">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="remove_album">Удалить</button>
+                <button type="submit" class="remove_album">Delete</button>
             </form>
         </p>
     @endif
