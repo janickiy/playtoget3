@@ -16,6 +16,7 @@ use App\Http\Requests\Front\Ajax\CropAvatarRequest;
 use App\Http\Requests\Front\Ajax\CropCoverRequest;
 use App\Http\Requests\Front\Ajax\PhotoUploadRequest;
 use App\Models\AcceptedEventMember;
+use App\Models\Comment;
 use App\Models\Community;
 use App\Models\CommunityRole;
 use App\Models\Friend;
