@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AnnouncementsController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\CacheController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\ContentController;
 use App\Http\Controllers\Admin\CommunitiesController;
@@ -26,6 +27,9 @@ Route::prefix('cp')->group(function () {
 
     Route::middleware('auth:admin')->group(function () {
         Route::get('', [DashboardController::class, 'index'])->name('admin.dashboard.index');
+        Route::post('cache/clear', [CacheController::class, 'clear'])
+            ->middleware('permission:admin')
+            ->name('admin.cache.clear');
 
         // Content management
         Route::prefix('content')->group(function () {

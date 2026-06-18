@@ -17,6 +17,7 @@ use App\Models\Event;
 use App\Models\Message;
 use App\Models\Occupation;
 use App\Models\Photo;
+use App\Models\Settings;
 use App\Models\SportBlock;
 use App\Models\User;
 use App\Models\Video;
@@ -28,6 +29,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Harimayco\Menu\Models\MenuItems;
+use Harimayco\Menu\Models\Menus;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -61,6 +64,25 @@ class AppServiceProvider extends ServiceProvider
             'user_attach' => User::class,
             'video' => Video::class,
         ]);
+
+        Settings::saved(static function (): void {
+            SettingsHelper::cacheClear();
+        });
+        Settings::deleted(static function (): void {
+            SettingsHelper::cacheClear();
+        });
+        Menus::saved(static function (): void {
+            MenuHelper::cacheClear();
+        });
+        Menus::deleted(static function (): void {
+            MenuHelper::cacheClear();
+        });
+        MenuItems::saved(static function (): void {
+            MenuHelper::cacheClear();
+        });
+        MenuItems::deleted(static function (): void {
+            MenuHelper::cacheClear();
+        });
 
         View::composer('front.*', function ($view) {
             $user = Auth::guard('web')->user();

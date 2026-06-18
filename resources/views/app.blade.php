@@ -49,6 +49,18 @@
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
             <!-- Notifications Dropdown Menu -->
+            @if(PermissionsHelper::has_permission('admin'))
+                <li class="nav-item d-flex align-items-center mr-2">
+                    <form action="{{ route('admin.cache.clear') }}" method="POST" class="mb-0">
+                        @csrf
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-sync-alt mr-1"></i>
+                            Сбросить кеш
+                        </button>
+                    </form>
+                </li>
+            @endif
+
             <li class="nav-item">
                 <a class="nav-link" title="log out" href="{{ route('logout') }}"
                    role="button">

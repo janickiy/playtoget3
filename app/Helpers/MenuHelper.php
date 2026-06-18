@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Enums\CacheKey;
 use Harimayco\Menu\Models\Menus;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
@@ -13,24 +14,25 @@ class MenuHelper
      */
     public static function getMenuList(): array
     {
-        if (Cache::has('menu')) {
-            $menu = Cache::get('menu');
+        $menu = Cache::remember(CacheKey::Menu->value, CacheKey::Menu->ttl(), function (): array {
+            $menuTable = config('menu.table_prefix') . config('menu.table_name_menus');
+            $itemsTable = config('menu.table_prefix') . config('menu.table_name_items');
 
-            return is_array($menu) ? $menu : [];
-        }
+            if (! Schema::hasTable($menuTable) || ! Schema::hasTable($itemsTable)) {
+                return [];
+            }
 
-        $menuTable = config('menu.table_prefix') . config('menu.table_name_menus');
-        $itemsTable = config('menu.table_prefix') . config('menu.table_name_items');
+            $menu = [];
+            $menu['bottom'] = Menus::where('name', 'bottom')->with('items')->first()?->items?->toArray();
 
-        if (! Schema::hasTable($menuTable) || ! Schema::hasTable($itemsTable)) {
-            return [];
-        }
+            return $menu;
+        });
 
-        $menu = [];
-        $menu['bottom'] = Menus::where('name', 'bottom')->with('items')->first()?->items?->toArray();
+        return is_array($menu) ? $menu : [];
+    }
 
-        Cache::put('menu', $menu);
-
-        return $menu;
+    public static function cacheClear(): bool
+    {
+        return Cache::forget(CacheKey::Menu->value);
     }
 }

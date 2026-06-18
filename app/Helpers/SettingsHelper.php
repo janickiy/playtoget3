@@ -2,14 +2,13 @@
 
 namespace App\Helpers;
 
+use App\Enums\CacheKey;
 use App\Models\Settings;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Cache;
 
 class SettingsHelper
 {
-    public const CACHE_KEY = 'settings';
-
     private static $instance;
 
     private $settings;
@@ -37,7 +36,7 @@ class SettingsHelper
      */
     private function loadSettings(): mixed
     {
-        $this->settings = self::loadSettingsFromCache();
+        $this->settings = self::loadSettingsFromCache(true);
 
         return $this->settings;
     }
@@ -49,7 +48,7 @@ class SettingsHelper
     private static function loadSettingsFromCache(bool $cache = false): mixed
     {
         if ($cache === true) {
-            return Cache::remember(self::CACHE_KEY, 180, function () {
+            return Cache::remember(CacheKey::Settings->value, CacheKey::Settings->ttl(), function () {
                 try {
                     $settings = Settings::all();
                 } catch (QueryException $e) {
@@ -60,15 +59,16 @@ class SettingsHelper
                     return [];
                 }
 
-                $result = $settings->pluck('value', 'key_cd');
-
-                return $result;
+                return $settings->pluck('value', 'key_cd')->toArray();
             });
         } else {
-            $settings = Settings::all();
-            $result = $settings->pluck('value', 'key_cd');
+            try {
+                $settings = Settings::all();
+            } catch (QueryException $e) {
+                return [];
+            }
 
-            return $result;
+            return $settings->pluck('value', 'key_cd')->toArray();
         }
     }
 
@@ -109,10 +109,11 @@ class SettingsHelper
      */
     public static function cacheClear(bool $reload = false): bool
     {
-        $result = Cache::forget(self::CACHE_KEY);
+        $result = Cache::forget(CacheKey::Settings->value);
+        self::$instance = null;
 
-        if ($result && $reload) {
-            self::loadSettingsFromCache();
+        if ($reload) {
+            self::getInstance();
         }
 
         return $result;
