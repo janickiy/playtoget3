@@ -770,6 +770,14 @@ margin-top: 115px;
 	border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 	min-height: 65px;
 }
+.right-sidebar-empty
+{
+	font-size: 13px;
+	font-weight: 600;
+	color: #aeaeae;
+	line-height: 18px;
+	padding: 8px 0;
+}
 .left-sitebar ul.sub-menu li img, .right-sitebar ul.sub-menu li img
 {
 	width: 47px;

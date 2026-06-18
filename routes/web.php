@@ -88,7 +88,7 @@ Route::prefix('events')->name('front.events.')->controller(EventsController::cla
         Route::get('add-photo', 'addPhoto')->name('photoalbums.add-photo');
         Route::get('create', 'createPhotoAlbum')->name('photoalbums.create');
         Route::post('create', 'storePhotoAlbum')->name('photoalbums.store');
-        Route::get('photo/{photo}', 'photoWithoutAlbum')->where('photo', '[0-9]+')->name('photoalbums.photo.legacy');
+        Route::get('photo/{photo}', 'photoWithoutAlbum')->where('photo', '[0-9]+')->name('photoalbums.photo.standalone');
         Route::get('{album}/photo/{photo}', 'photo')
             ->where(['album' => '[0-9]+', 'photo' => '[0-9]+'])
             ->name('photoalbums.photo');
@@ -165,7 +165,7 @@ Route::prefix('groups')->name('front.groups.')->controller(GroupsController::cla
         Route::get('add-photo', 'addPhoto')->name('photoalbums.add-photo');
         Route::get('create', 'createPhotoAlbum')->name('photoalbums.create');
         Route::post('create', 'storePhotoAlbum')->name('photoalbums.store');
-        Route::get('photo/{photo}', 'photoWithoutAlbum')->where('photo', '[0-9]+')->name('photoalbums.photo.legacy');
+        Route::get('photo/{photo}', 'photoWithoutAlbum')->where('photo', '[0-9]+')->name('photoalbums.photo.standalone');
         Route::get('{album}/photo/{photo}', 'photo')
             ->where(['album' => '[0-9]+', 'photo' => '[0-9]+'])
             ->name('photoalbums.photo');
@@ -256,7 +256,7 @@ Route::prefix('teams')->name('front.teams.')->controller(TeamsController::class)
         Route::get('add-photo', 'addPhoto')->name('photoalbums.add-photo');
         Route::get('create', 'createPhotoAlbum')->name('photoalbums.create');
         Route::post('create', 'storePhotoAlbum')->name('photoalbums.store');
-        Route::get('photo/{photo}', 'photoWithoutAlbum')->where('photo', '[0-9]+')->name('photoalbums.photo.legacy');
+        Route::get('photo/{photo}', 'photoWithoutAlbum')->where('photo', '[0-9]+')->name('photoalbums.photo.standalone');
         Route::get('{album}/photo/{photo}', 'photo')
             ->where(['album' => '[0-9]+', 'photo' => '[0-9]+'])
             ->name('photoalbums.photo');

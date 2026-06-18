@@ -12,7 +12,7 @@
             <ul class="sub-menu">
                 <li>
                     <div class="sub-content">
-                        @foreach ($frontLayout['playgrounds'] as $item)
+                        @forelse ($frontLayout['playgrounds'] as $item)
                             <div class="block_right">
                                 <div class="wrap_img_right"><img src="{{ FrontAssets::sportBlockAvatar($item) }}" alt=""></div>
                                 <div class="text-right-block">
@@ -23,7 +23,9 @@
                                 </div>
                                 <div class="crearfix"></div>
                             </div>
-                        @endforeach
+                        @empty
+                            <div class="right-sidebar-empty">Nothing yet</div>
+                        @endforelse
                     </div>
                 </li>
             </ul>
@@ -38,7 +40,7 @@
             <ul class="sub-menu">
                 <li>
                     <div class="sub-content">
-                        @foreach ($frontLayout['shops'] as $item)
+                        @forelse ($frontLayout['shops'] as $item)
                             <div class="block_right">
                                 <div class="wrap_img_right"><img src="{{ FrontAssets::sportBlockAvatar($item) }}" alt=""></div>
                                 <div class="text-right-block">
@@ -49,7 +51,9 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
-                        @endforeach
+                        @empty
+                            <div class="right-sidebar-empty">Nothing yet</div>
+                        @endforelse
                     </div>
                 </li>
             </ul>
@@ -64,7 +68,7 @@
             <ul class="sub-menu">
                 <li>
                     <div class="sub-content">
-                        @foreach ($frontLayout['fitness'] as $item)
+                        @forelse ($frontLayout['fitness'] as $item)
                             <div class="block_right">
                                 <div class="wrap_img_right"><img src="{{ FrontAssets::sportBlockAvatar($item) }}" alt=""></div>
                                 <div class="text-right-block">
@@ -75,7 +79,9 @@
                                 </div>
                                 <div class="crearfix"></div>
                             </div>
-                        @endforeach
+                        @empty
+                            <div class="right-sidebar-empty">Nothing yet</div>
+                        @endforelse
                     </div>
                 </li>
             </ul>

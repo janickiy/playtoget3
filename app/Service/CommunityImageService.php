@@ -40,7 +40,7 @@ class CommunityImageService
     }
 
     /**
-     * Deletes image community из нового и legacy-storage.
+     * Deletes image community из storage и uploads.
      *
      * @param string $filename
      * @param string $directory
@@ -51,9 +51,9 @@ class CommunityImageService
     {
         Storage::disk('public')->delete(MediaPath::community($kind, $directory, $filename));
 
-        $legacyPath = public_path(MediaPath::communityLegacy($kind, $directory, $filename));
-        if (is_file($legacyPath)) {
-            @unlink($legacyPath);
+        $uploadsPath = public_path(MediaPath::communityUploads($kind, $directory, $filename));
+        if (is_file($uploadsPath)) {
+            @unlink($uploadsPath);
         }
     }
 }

@@ -38,7 +38,7 @@ class EventCoverService
     }
 
     /**
-     * Deletes cover event из нового и legacy-storage.
+     * Deletes cover event из storage и uploads.
      *
      * @param string $filename
      * @return void
@@ -47,9 +47,9 @@ class EventCoverService
     {
         Storage::disk('public')->delete(MediaPath::storage('event_cover', $filename));
 
-        $legacyPath = public_path(MediaPath::legacy('event_cover', $filename));
-        if (is_file($legacyPath)) {
-            @unlink($legacyPath);
+        $uploadsPath = public_path(MediaPath::uploads('event_cover', $filename));
+        if (is_file($uploadsPath)) {
+            @unlink($uploadsPath);
         }
     }
 }

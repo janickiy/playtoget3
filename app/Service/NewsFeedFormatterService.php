@@ -114,10 +114,10 @@ class NewsFeedFormatterService
             return Storage::disk('public')->url($path);
         }
 
-        $legacyPath = MediaPath::legacyFromRelative($relativePath);
+        $uploadsPath = MediaPath::uploadsFromRelative($relativePath);
 
-        return is_file(public_path($legacyPath))
-            ? asset($legacyPath)
+        return is_file(public_path($uploadsPath))
+            ? asset($uploadsPath)
             : null;
     }
 

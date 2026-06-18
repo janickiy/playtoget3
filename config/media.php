@@ -2,7 +2,7 @@
 
 return [
     'storage_root' => 'images',
-    'legacy_root' => 'uploads/images',
+    'uploads_root' => 'uploads/images',
 
     'directories' => [
         'user_avatar' => 'user/avatar',

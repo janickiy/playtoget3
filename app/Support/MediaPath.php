@@ -15,11 +15,11 @@ final class MediaPath
     }
 
     /**
-     * Returns legacy public path for a configured media directory.
+     * Returns uploads public path for a configured media directory.
      */
-    public static function legacy(string $key, ?string $filename = null): string
+    public static function uploads(string $key, ?string $filename = null): string
     {
-        return self::legacyFromRelative(self::directory($key), $filename);
+        return self::uploadsFromRelative(self::directory($key), $filename);
     }
 
     /**
@@ -45,11 +45,11 @@ final class MediaPath
     }
 
     /**
-     * Returns legacy public path for a relative media path.
+     * Returns uploads public path for a relative media path.
      */
-    public static function legacyFromRelative(string $relativePath, ?string $filename = null): string
+    public static function uploadsFromRelative(string $relativePath, ?string $filename = null): string
     {
-        return self::join(self::legacyRoot(), $relativePath, $filename);
+        return self::join(self::uploadsRoot(), $relativePath, $filename);
     }
 
     /**
@@ -61,11 +61,11 @@ final class MediaPath
     }
 
     /**
-     * Returns legacy public path for a gallery media type.
+     * Returns uploads public path for a gallery media type.
      */
-    public static function galleryLegacy(?string $type = 'user', ?string $filename = null): string
+    public static function galleryUploads(?string $type = 'user', ?string $filename = null): string
     {
-        return self::legacyFromRelative(self::galleryRelative($type), $filename);
+        return self::uploadsFromRelative(self::galleryRelative($type), $filename);
     }
 
     /**
@@ -85,11 +85,11 @@ final class MediaPath
     }
 
     /**
-     * Returns legacy public path for community media.
+     * Returns uploads public path for community media.
      */
-    public static function communityLegacy(string $kind, string $directory, ?string $filename = null): string
+    public static function communityUploads(string $kind, string $directory, ?string $filename = null): string
     {
-        return self::legacyFromRelative(self::communityRelative($kind, $directory), $filename);
+        return self::uploadsFromRelative(self::communityRelative($kind, $directory), $filename);
     }
 
     /**
@@ -125,11 +125,11 @@ final class MediaPath
     }
 
     /**
-     * Returns configured legacy root.
+     * Returns configured uploads root.
      */
-    public static function legacyRoot(): string
+    public static function uploadsRoot(): string
     {
-        return self::configString('media.legacy_root');
+        return self::configString('media.uploads_root');
     }
 
     /**

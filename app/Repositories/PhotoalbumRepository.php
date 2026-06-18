@@ -604,9 +604,9 @@ class PhotoalbumRepository extends BaseRepository
         foreach (array_filter([$photo->small_photo, $photo->photo]) as $filename) {
             $disk->delete(MediaPath::gallery($type, $filename));
 
-            $legacyPath = public_path(MediaPath::galleryLegacy($type, $filename));
-            if (is_file($legacyPath)) {
-                @unlink($legacyPath);
+            $uploadsPath = public_path(MediaPath::galleryUploads($type, $filename));
+            if (is_file($uploadsPath)) {
+                @unlink($uploadsPath);
             }
         }
     }

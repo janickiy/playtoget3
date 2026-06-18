@@ -225,7 +225,7 @@ class ContentCascadeDeleteService
     }
 
     /**
-     * Deletes community avatar and cover from actual and legacy directories.
+     * Deletes community avatar and cover from storage and uploads directories.
      */
     private function deleteCommunityImages(Community $community): void
     {

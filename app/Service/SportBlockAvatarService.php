@@ -36,7 +36,7 @@ class SportBlockAvatarService
     }
 
     /**
-     * Deletes avatar sport object из нового и legacy-storage.
+     * Deletes avatar sport object из storage и uploads.
      *
      * @param string $filename
      * @return void
@@ -45,9 +45,9 @@ class SportBlockAvatarService
     {
         Storage::disk('public')->delete(MediaPath::storage('sport_block_avatar', $filename));
 
-        $legacyPath = public_path(MediaPath::legacy('sport_block_avatar', $filename));
-        if (is_file($legacyPath)) {
-            @unlink($legacyPath);
+        $uploadsPath = public_path(MediaPath::uploads('sport_block_avatar', $filename));
+        if (is_file($uploadsPath)) {
+            @unlink($uploadsPath);
         }
     }
 }
