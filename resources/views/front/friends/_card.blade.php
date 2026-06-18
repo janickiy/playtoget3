@@ -11,8 +11,12 @@
 @endphp
 
 <div class="col-xs-6 possible-friend-cart" data-num="{{ $friend->id }}">
-    <a class="possible-avatar" href="{{ $profileUrl }}">
+    <a class="possible-avatar avatar-status-holder" href="{{ $profileUrl }}">
         <img src="{{ FrontAssets::userAvatar($friend) }}" alt="">
+        @include('front.partials.user-online-status', [
+            'isOnline' => $friend->isOnline(),
+            'userId' => $friend->id,
+        ])
     </a>
     <a href="{{ $profileUrl }}">
         <h5>

@@ -132,9 +132,7 @@ class ProfileRepository extends BaseRepository
             'viber' => (string)$profile->viber,
             'website' => (string)$profile->website,
             'about_sport' => (string)$profile->about_sport,
-            'is_online' => $profile->activity?->last_activity
-                ? $profile->activity->last_activity->greaterThan(now()->subMinutes(5))
-                : false,
+            'is_online' => $profile->isOnline(),
             'sport_types' => $profile->sportTypes
                 ->map(fn($row): array => [
                     'sport_type' => (string)($row->sportType?->name ?? ''),

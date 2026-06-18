@@ -1296,7 +1296,7 @@ div.message
 	height: 50px;
     width: 50px;
     border-radius: 100px;
-    overflow:hidden;
+    overflow:visible;
     background:none;
 }
 
@@ -1305,6 +1305,71 @@ div.message
     float: left;
     height: 50px;
     width: 50px;
+    border-radius: 50%;
+}
+
+.avatar-status-holder {
+    position: relative;
+    display: inline-block;
+}
+
+.avatar-online-status {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    z-index: 5;
+    display: block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: #D46F6F;
+    box-shadow: 0 0 0 1px rgba(47, 59, 101, 0.14);
+}
+
+.avatar-online-status.online {
+    background: #5ECE42;
+}
+
+.avatar-online-status.offline {
+    background: #D46F6F;
+}
+
+.mini_thumb_avatar .avatar-online-status {
+    right: 0;
+    bottom: 1px;
+    width: 11px;
+    height: 11px;
+}
+
+.top_thumb_avatar .avatar-status-holder--profile {
+    float: left;
+    margin-right: 20px;
+}
+
+.top_thumb_avatar .avatar-status-holder--profile img {
+    margin-right: 0;
+}
+
+.top_thumb_avatar .avatar-status-holder--profile .avatar-online-status {
+    right: 11px;
+    bottom: 8px;
+    width: 15px;
+    height: 15px;
+    border-width: 3px;
+}
+
+.friends .possible-friend-cart .possible-avatar .avatar-online-status {
+    right: 4px;
+    bottom: 4px;
+}
+
+.news-block-item .head-img .avatar-online-status {
+    right: 1px;
+    bottom: 1px;
+    width: 10px;
+    height: 10px;
+    border-width: 2px;
 }
 
 .communities_thumb_avatar img {

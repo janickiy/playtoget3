@@ -15,8 +15,12 @@
                 <div class="possible-friend">
                     @foreach ($members as $member)
                         <div class="col-xs-6 possible-friend-cart">
-                            <a class="possible-avatar" href="{{ route('front.profile.show', ['user' => $member['id']]) }}">
+                            <a class="possible-avatar avatar-status-holder" href="{{ route('front.profile.show', ['user' => $member['id']]) }}">
                                 <img src="{{ $member['avatar'] }}" alt="">
+                                @include('front.partials.user-online-status', [
+                                    'isOnline' => $member['is_online'],
+                                    'userId' => $member['id'],
+                                ])
                             </a>
                             <a href="{{ route('front.profile.show', ['user' => $member['id']]) }}">
                                 <h5><strong>{{ $member['firstname'] }}<span class="status_user{{ $member['is_online'] ? ' online' : '' }}" data-num="{{ $member['id'] }}"></span><br>{{ $member['lastname'] }}</strong></h5>

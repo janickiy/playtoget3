@@ -353,7 +353,7 @@ class FriendRepository extends BaseRepository
                 'firstname' => $user->firstname ?: $user->displayName(),
                 'lastname' => $user->firstname ? (string)$user->lastname : '',
                 'city' => $user->city,
-                'status_user' => 'offline',
+                'status_user' => $user->isOnline() ? 'online' : 'offline',
                 'sender_id' => $senderId,
             ])
             ->values()
@@ -460,6 +460,7 @@ class FriendRepository extends BaseRepository
     private function activeUsersQuery(array $filters = []): Builder
     {
         return User::query()
+            ->with('activity')
             ->where('status', UserStatus::Confirmed->value)
             ->when($filters['search'] ?? null, function (Builder $query, string $search): void {
                 foreach (preg_split('/\s+/', $search) ?: [] as $term) {

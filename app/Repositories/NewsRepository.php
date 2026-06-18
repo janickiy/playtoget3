@@ -8,9 +8,11 @@ use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Photo;
 use App\Models\Share;
+use App\Models\UserActivity;
 use App\Models\Video;
 use App\Service\NewsFeedFormatterService;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class NewsRepository extends BaseRepository
@@ -94,6 +96,7 @@ class NewsRepository extends BaseRepository
                 'u.avatar',
                 'u.status',
             ])
+            ->addSelect(['author_last_activity' => $this->authorLastActivitySubquery()])
             ->where('p.banned', false)
             ->where('p.moderate', false)
             ->whereNotNull('p.owner_id')
@@ -149,6 +152,7 @@ class NewsRepository extends BaseRepository
                 'u.avatar',
                 'u.status',
             ])
+            ->addSelect(['author_last_activity' => $this->authorLastActivitySubquery()])
             ->where('v.banned', false)
             ->whereNotNull('v.owner_id')
             ->whereNotNull('v.video')
@@ -193,6 +197,7 @@ class NewsRepository extends BaseRepository
                 'u.avatar',
                 'u.status',
             ])
+            ->addSelect(['author_last_activity' => $this->authorLastActivitySubquery()])
             ->where('c.commentable_type', 'user')
             ->whereNotNull('c.user_id')
             ->where(function ($query) {
@@ -258,6 +263,7 @@ class NewsRepository extends BaseRepository
                 'u.avatar',
                 'u.status',
             ])
+            ->addSelect(['author_last_activity' => $this->authorLastActivitySubquery()])
             ->where('c.commentable_type', 'photo')
             ->where('p.banned', false)
             ->whereNotNull('c.user_id')
@@ -321,6 +327,7 @@ class NewsRepository extends BaseRepository
                 'u.avatar',
                 'u.status',
             ])
+            ->addSelect(['author_last_activity' => $this->authorLastActivitySubquery()])
             ->where('c.commentable_type', 'video')
             ->where('v.banned', false)
             ->whereNotNull('c.user_id')
@@ -371,8 +378,28 @@ class NewsRepository extends BaseRepository
             'message' => $data['message'],
             'likes_count' => 0,
             'tells_count' => 0,
-            'online' => false,
+            'online' => $this->isAuthorOnline($row),
         ];
+    }
+
+    /**
+     * Builds a subquery with the author's last activity timestamp.
+     */
+    private function authorLastActivitySubquery(): Builder
+    {
+        return UserActivity::query()
+            ->select('last_activity')
+            ->whereColumn('user_activity.user_id', 'u.id')
+            ->limit(1);
+    }
+
+    /**
+     * Checks whether a feed author should be shown as online.
+     */
+    private function isAuthorOnline(object $row): bool
+    {
+        return ! empty($row->author_last_activity)
+            && Carbon::parse($row->author_last_activity)->greaterThan(now()->subMinutes(5));
     }
 
     /**

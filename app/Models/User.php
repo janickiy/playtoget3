@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\UserStatus;
 use App\Http\Traits\StaticTableName;
+use App\Service\UserOnlineStatusService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -79,6 +80,11 @@ class User extends Authenticatable
     public function isActive(): bool
     {
         return $this->statusEnum()->isActive();
+    }
+
+    public function isOnline(): bool
+    {
+        return app(UserOnlineStatusService::class)->isOnline($this);
     }
 
     /**

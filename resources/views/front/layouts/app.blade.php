@@ -11,7 +11,7 @@
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap-theme.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061801">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061901">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.carousel.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.theme.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.transitions.css') }}">
@@ -59,7 +59,15 @@
                         </div>
                         <div class="profile-user">
                             <a href="{{ $frontLayout['user'] ? route('front.profile.show', ['user' => $frontLayout['user']->id]) : route('front.home') }}">
-                                <div class="mini_thumb_avatar"><img width="50" height="50" src="{{ $frontLayout['avatar'] }}" alt=""></div>
+                                <div class="mini_thumb_avatar avatar-status-holder">
+                                    <img width="50" height="50" src="{{ $frontLayout['avatar'] }}" alt="">
+                                    @if ($frontLayout['user'])
+                                        @include('front.partials.user-online-status', [
+                                            'isOnline' => $frontLayout['user']->isOnline(),
+                                            'userId' => $frontLayout['user']->id,
+                                        ])
+                                    @endif
+                                </div>
                             </a>
                             <a href="{{ $frontLayout['user'] ? route('front.profile.show', ['user' => $frontLayout['user']->id]) : route('front.home') }}">
                                 {{ $frontLayout['firstname'] }}<br>{{ $frontLayout['lastname'] }}
@@ -70,7 +78,15 @@
                             <ul>
                                 <li>
                                     <a href="{{ $frontLayout['user'] ? route('front.profile.show', ['user' => $frontLayout['user']->id]) : route('front.home') }}">
-                                        <div class="mini_thumb_avatar"><img width="50" height="50" src="{{ $frontLayout['avatar'] }}" alt=""></div>
+                                        <div class="mini_thumb_avatar avatar-status-holder">
+                                            <img width="50" height="50" src="{{ $frontLayout['avatar'] }}" alt="">
+                                            @if ($frontLayout['user'])
+                                                @include('front.partials.user-online-status', [
+                                                    'isOnline' => $frontLayout['user']->isOnline(),
+                                                    'userId' => $frontLayout['user']->id,
+                                                ])
+                                            @endif
+                                        </div>
                                     </a>
                                     <a href="{{ $frontLayout['user'] ? route('front.profile.show', ['user' => $frontLayout['user']->id]) : route('front.home') }}">{{ $frontLayout['firstname'] }}<span></span>{{ $frontLayout['lastname'] }}<span></span></a>
                                 </li>

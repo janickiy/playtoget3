@@ -45,7 +45,13 @@
     <div class="clearfix"></div>
 
     <div id="top-top" class="account top_thumb_avatar">
-        <img src="{{ $profileData['avatar'] }}" alt="">
+        <span class="avatar-status-holder avatar-status-holder--profile">
+            <img src="{{ $profileData['avatar'] }}" alt="">
+            @include('front.partials.user-online-status', [
+                'isOnline' => $profileData['is_online'],
+                'userId' => $profileUser->id,
+            ])
+        </span>
         <h3 class="name">
             {{ $profileData['firstname'] }}
             <span class="status_user{{ $profileData['is_online'] ? ' online' : '' }}" data-num="{{ $profileUser->id }}"></span><br>

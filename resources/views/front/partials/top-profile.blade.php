@@ -18,11 +18,19 @@
     </div>
     <div class="clearfix"></div>
     <div id="top-top" class="account top_thumb_avatar">
-        <img
-            @if ($editableProfileAssets) id="preview_ava" class="editable-avatar" @endif
-            src="{{ $topProfile['avatar'] }}"
-            alt=""
-        >
+        <span class="avatar-status-holder avatar-status-holder--profile">
+            <img
+                @if ($editableProfileAssets) id="preview_ava" class="editable-avatar" @endif
+                src="{{ $topProfile['avatar'] }}"
+                alt=""
+            >
+            @if ($topProfile['user'])
+                @include('front.partials.user-online-status', [
+                    'isOnline' => $topProfile['user']->isOnline(),
+                    'userId' => $topProfile['user']->id,
+                ])
+            @endif
+        </span>
         <h3 class="name">
             {{ $topProfile['firstname'] }}
             @if ($topProfile['user'])

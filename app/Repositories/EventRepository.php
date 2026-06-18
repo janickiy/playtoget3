@@ -888,7 +888,7 @@ class EventRepository extends BaseRepository
             'city' => (string) $user->city,
             'role' => (int) $member->role,
             'role_name' => MembershipRole::labelFor((int) $member->role),
-            'is_online' => false,
+            'is_online' => $user->isOnline(),
         ];
     }
 

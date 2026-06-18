@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'permission' => \App\Http\Middleware\CheckPermission::class,
         ]);
+        $middleware->appendToGroup('web', \App\Http\Middleware\TrackUserOnlineStatus::class);
         $middleware->redirectGuestsTo(fn (Request $request) => $request->expectsJson() ? null : route('login'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {

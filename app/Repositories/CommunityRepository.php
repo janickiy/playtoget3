@@ -1596,7 +1596,7 @@ class CommunityRepository extends BaseRepository
             'role' => (int) $role->role,
             'role_name' => MembershipRole::labelFor((int) $role->role),
             'friendship_status' => $this->friends->friendshipStatus($viewerId, (int) $user->id),
-            'is_online' => false,
+            'is_online' => $user->isOnline(),
         ];
     }
 

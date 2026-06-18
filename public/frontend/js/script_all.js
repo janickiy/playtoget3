@@ -227,8 +227,10 @@ function showMoreFriend(user_id) {
                     console.log(data.item[i])
                     html = '';
                     html += '<div class="col-xs-6 possible-friend-cart">';
-                    html += '<a class="possible-avatar" href="/profile/' + data.item[i]['user_id'] + '">';
-                    html += '<img src="' + data.item[i]['avatar'] + '" alt=""> </a> <a href="/profile/' + data.item[i]['user_id'] + '">';
+                    const avatarStatus = data.item[i]['status_user'] == 'online' ? ' online' : ' offline';
+                    html += '<a class="possible-avatar avatar-status-holder" href="/profile/' + data.item[i]['user_id'] + '">';
+                    html += '<img src="' + data.item[i]['avatar'] + '" alt="">';
+                    html += '<span class="avatar-online-status' + avatarStatus + '" data-num="' + data.item[i]['user_id'] + '" title="' + (avatarStatus === ' online' ? 'Online' : 'Offline') + '"></span></a> <a href="/profile/' + data.item[i]['user_id'] + '">';
                     html += '<h5><strong>' + data.item[i]['firstname'] + '<span class="status_user';
                     if (data.item[i]['status_user'] == 'online') html += 'online';
                     html += '" data-num="' + data.item[i]['user_id'] + '"></span><br />' + data.item[i]['lastname'] + '</strong></h5></a><br>';

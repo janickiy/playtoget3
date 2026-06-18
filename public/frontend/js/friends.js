@@ -39,8 +39,9 @@
         let html = '';
 
         html += '<div class="col-xs-6 possible-friend-cart" data-num="' + escapeHtml(user.user_id) + '">';
-        html += '<a class="possible-avatar" href="' + profileUrl(user.user_id) + '">';
-        html += '<img src="' + escapeHtml(user.avatar) + '" alt=""></a>';
+        html += '<a class="possible-avatar avatar-status-holder" href="' + profileUrl(user.user_id) + '">';
+        html += '<img src="' + escapeHtml(user.avatar) + '" alt="">';
+        html += '<span class="avatar-online-status' + statusUser + (statusUser ? '' : ' offline') + '" data-num="' + escapeHtml(user.user_id) + '" title="' + (statusUser ? 'Online' : 'Offline') + '"></span></a>';
         html += '<a href="' + profileUrl(user.user_id) + '"><h5><strong>';
         html += escapeHtml(user.firstname) + '<span class="status_user' + statusUser + '" data-num="' + escapeHtml(user.user_id) + '"></span><br>';
         html += escapeHtml(user.lastname) + '</strong></h5></a>';
