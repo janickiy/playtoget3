@@ -2,13 +2,13 @@
 
 @php
     $permissionOptions = [
-        0 => 'Everyone',
-        1 => 'Friends',
-        2 => 'Nobody',
+        0 => __('profile.settings.privacy.options.everyone'),
+        1 => __('profile.settings.privacy.options.friends'),
+        2 => __('profile.settings.privacy.options.nobody'),
     ];
     $limitedPermissionOptions = [
-        0 => 'Everyone',
-        1 => 'Friends',
+        0 => __('profile.settings.privacy.options.everyone'),
+        1 => __('profile.settings.privacy.options.friends'),
     ];
     $limitedPermissionFields = [
         'permission_send_message' => true,
@@ -16,12 +16,21 @@
     ];
 
     $contactFields = [
-        'contact_email' => ['label' => 'Email', 'type' => 'email'],
-        'phone' => ['label' => 'Phone', 'type' => 'text'],
-        'telegram' => ['label' => 'Telegram', 'type' => 'text'],
-        'whatsapp' => ['label' => 'WhatsApp', 'type' => 'text'],
-        'viber' => ['label' => 'Viber', 'type' => 'text'],
-        'website' => ['label' => 'Website', 'type' => 'text'],
+        'contact_email' => ['label' => __('profile.settings.contacts.contact_email'), 'type' => 'email'],
+        'phone' => ['label' => __('profile.settings.contacts.phone'), 'type' => 'text'],
+        'telegram' => ['label' => __('profile.settings.contacts.telegram'), 'type' => 'text'],
+        'whatsapp' => ['label' => __('profile.settings.contacts.whatsapp'), 'type' => 'text'],
+        'viber' => ['label' => __('profile.settings.contacts.viber'), 'type' => 'text'],
+        'website' => ['label' => __('profile.settings.contacts.website'), 'type' => 'text'],
+    ];
+
+    $profileFields = [
+        'nickname' => ['label' => __('profile.settings.profile.fields.nickname'), 'type' => 'text'],
+        'firstname' => ['label' => __('profile.settings.profile.fields.firstname'), 'type' => 'text'],
+        'lastname' => ['label' => __('profile.settings.profile.fields.lastname'), 'type' => 'text'],
+        'birthday' => ['label' => __('profile.settings.profile.fields.birthday'), 'type' => 'date'],
+        'country' => ['label' => __('profile.settings.profile.fields.country'), 'type' => 'text'],
+        'region' => ['label' => __('profile.settings.profile.fields.region'), 'type' => 'text'],
     ];
 
     $notificationChecked = static function (string $field) use ($settings): bool {
@@ -45,12 +54,12 @@
     @endif
 
     @if ($errors->any())
-        <div class="save_window_fail">Check the form fields</div>
+        <div class="save_window_fail">{{ __('profile.settings.form_error') }}</div>
     @endif
 
     <div class="friends profile-edit-page">
         <div class="photo-caption">
-            <h3>Settings</h3>
+            <h3>{{ __('profile.settings.title') }}</h3>
         </div>
 
         <div class="job_form">
@@ -64,6 +73,7 @@
             >
                 @csrf
 
+                <input id="profile-settings-active-tab" type="hidden" name="active_tab" value="{{ old('active_tab', 'profile') }}">
                 <input id="profile-avatar-file" type="hidden" name="file_ava" value="{{ old('file_ava') }}">
                 <input id="profile-cover-file" type="hidden" name="file_cover" value="{{ old('file_cover') }}">
                 <input id="profile-cover-input" class="profile-asset-input" type="file" accept="image/jpeg,image/png">
@@ -80,20 +90,21 @@
                     <div class="settings-field-error">{{ $message }}</div>
                 @enderror
 
-                <div id="tabs" class="five">
+                <div id="tabs" class="six">
                     <ul>
-                        <li><a href="#contacts">Contact</a></li>
-                        <li><a href="#privacy">Privacy</a></li>
-                        <li><a href="#notifications">Notifications</a></li>
-                        <li><a href="#security">Security</a></li>
-                        <li><a href="#blacklist">Blacklist</a></li>
+                        <li><a href="#profile">{{ __('profile.settings.tabs.profile') }}</a></li>
+                        <li><a href="#contacts">{{ __('profile.settings.tabs.contact') }}</a></li>
+                        <li><a href="#privacy">{{ __('profile.settings.tabs.privacy') }}</a></li>
+                        <li><a href="#notifications">{{ __('profile.settings.tabs.notifications') }}</a></li>
+                        <li><a href="#security">{{ __('profile.settings.tabs.security') }}</a></li>
+                        <li><a href="#blacklist">{{ __('profile.settings.tabs.blacklist') }}</a></li>
                     </ul>
 
                     <div id="contacts">
                         <div class="photo-caption marginTopNone">
-                            <h3>Contact settings</h3>
+                            <h3>{{ __('profile.settings.contact.title') }}</h3>
                         </div>
-                        <p>This data is displayed in your profile according to your privacy settings.</p>
+                        <p>{{ __('profile.settings.contact.description') }}</p>
 
                         @foreach ($contactFields as $field => $meta)
                             <div class="form-group">
@@ -114,11 +125,79 @@
                         @endforeach
                     </div>
 
+                    <div id="profile">
+                        <div class="photo-caption marginTopNone">
+                            <h3>{{ __('profile.settings.profile.title') }}</h3>
+                        </div>
+                        <p>{{ __('profile.settings.profile.description') }}</p>
+
+                        @foreach ($profileFields as $field => $meta)
+                            @php
+                                $profileValue = old("profile.{$field}", $user->{$field});
+                                if ($field === 'birthday' && $profileValue instanceof \Carbon\CarbonInterface) {
+                                    $profileValue = $profileValue->format('Y-m-d');
+                                }
+                            @endphp
+                            <div class="form-group">
+                                <label for="profile-basic-{{ $field }}" class="col-sm-4 control-label">{{ $meta['label'] }}</label>
+                                <div class="col-sm-8">
+                                    <input
+                                        id="profile-basic-{{ $field }}"
+                                        class="form-control"
+                                        type="{{ $meta['type'] }}"
+                                        name="profile[{{ $field }}]"
+                                        value="{{ $profileValue }}"
+                                    >
+                                    @error("profile.{$field}")
+                                        <div class="settings-field-error">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        @endforeach
+
+                        <div class="form-group">
+                            <label for="profile-basic-sex" class="col-sm-4 control-label">{{ __('profile.settings.profile.fields.sex') }}</label>
+                            <div class="col-sm-8">
+                                <select id="profile-basic-sex" class="form-control" name="profile[sex]">
+                                    <option value="male" @selected(old('profile.sex', $user->sex) === 'male')>
+                                        {{ __('profile.settings.profile.sex.male') }}
+                                    </option>
+                                    <option value="female" @selected(old('profile.sex', $user->sex) === 'female')>
+                                        {{ __('profile.settings.profile.sex.female') }}
+                                    </option>
+                                </select>
+                                @error('profile.sex')
+                                    <div class="settings-field-error">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="profile-basic-about" class="col-sm-4 control-label">{{ __('profile.settings.profile.fields.about') }}</label>
+                            <div class="col-sm-8">
+                                <textarea id="profile-basic-about" class="form-control" name="profile[about]" rows="5">{{ old('profile.about', $user->about) }}</textarea>
+                                @error('profile.about')
+                                    <div class="settings-field-error">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="profile-basic-about-sport" class="col-sm-4 control-label">{{ __('profile.settings.profile.fields.about_sport') }}</label>
+                            <div class="col-sm-8">
+                                <textarea id="profile-basic-about-sport" class="form-control" name="profile[about_sport]" rows="5">{{ old('profile.about_sport', $user->about_sport) }}</textarea>
+                                @error('profile.about_sport')
+                                    <div class="settings-field-error">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
                     <div id="privacy">
                         <div class="photo-caption marginTopNone">
-                            <h3>Privacy settings</h3>
+                            <h3>{{ __('profile.settings.privacy.title') }}</h3>
                         </div>
-                        <p>Choose who can access profile sections and actions on your page.</p>
+                        <p>{{ __('profile.settings.privacy.description') }}</p>
 
                         @foreach ($permissionFields as $field => $label)
                             @php
@@ -150,9 +229,9 @@
 
                     <div id="notifications">
                         <div class="photo-caption marginTopNone">
-                            <h3>Notification settings</h3>
+                            <h3>{{ __('profile.settings.notifications.title') }}</h3>
                         </div>
-                        <p>Select the events you want to receive notifications for.</p>
+                        <p>{{ __('profile.settings.notifications.description') }}</p>
 
                         @foreach ($notificationFields as $field => $label)
                             <div class="form-group notification-row">
@@ -173,29 +252,29 @@
 
                     <div id="security">
                         <div class="photo-caption marginTopNone">
-                            <h3>Security</h3>
+                            <h3>{{ __('profile.settings.security.title') }}</h3>
                         </div>
-                        <p>Login history. Your current IP address: {{ request()->ip() }}</p>
+                        <p>{{ __('profile.settings.security.description', ['ip' => request()->ip()]) }}</p>
 
                         <div class="settings-log-list">
                             @forelse ($securityLogs as $log)
                                 <div class="settings-log-row">
-                                    <span>IP: {{ $log['ip'] ?: 'Not detected' }}</span>
-                                    <span>OS: {{ $log['os'] }}</span>
-                                    <span>Browser: {{ $log['browser'] }}</span>
-                                    <span>Time: {{ $log['time'] ?: 'Not detected' }}</span>
+                                    <span>{{ __('profile.settings.security.ip') }}: {{ $log['ip'] ?: __('profile.settings.security.not_detected') }}</span>
+                                    <span>{{ __('profile.settings.security.os') }}: {{ $log['os'] }}</span>
+                                    <span>{{ __('profile.settings.security.browser') }}: {{ $log['browser'] }}</span>
+                                    <span>{{ __('profile.settings.security.time') }}: {{ $log['time'] ?: __('profile.settings.security.not_detected') }}</span>
                                 </div>
                             @empty
-                                <p class="settings-empty">No records yet.</p>
+                                <p class="settings-empty">{{ __('profile.settings.security.empty') }}</p>
                             @endforelse
                         </div>
                     </div>
 
                     <div id="blacklist">
                         <div class="photo-caption marginTopNone">
-                            <h3>Blacklist</h3>
+                            <h3>{{ __('profile.settings.blacklist.title') }}</h3>
                         </div>
-                        <p>Users in the blacklist cannot interact with your profile.</p>
+                        <p>{{ __('profile.settings.blacklist.description') }}</p>
 
                         <div class="possible-friend my-friend">
                             @forelse ($blockedUsers as $blockedUser)
@@ -211,7 +290,7 @@
                                     </button>
                                 </div>
                             @empty
-                                <p class="settings-empty">Blacklist is empty.</p>
+                                <p class="settings-empty">{{ __('profile.settings.blacklist.empty') }}</p>
                             @endforelse
                             <div class="clearfix"></div>
                         </div>
@@ -219,7 +298,7 @@
                 </div>
 
                 <div class="profile-settings button">
-                    <button class="save-button" type="submit">Apply</button>
+                    <button class="save-button" type="submit">{{ __('profile.settings.apply') }}</button>
                 </div>
             </form>
         </div>
@@ -227,19 +306,19 @@
 
     <div class="overlay_ava avatar-crop-overlay" id="avatar-crop-overlay">
         <div class="avatarUpload avatar-crop-modal" id="avatar-crop-modal" data-type="avatar">
-            <button type="button" class="avatar-crop-close" aria-label="Close">×</button>
+            <button type="button" class="avatar-crop-close" aria-label="{{ __('profile.settings.crop.close') }}">×</button>
             <div class="avatar-crop-inner">
                 <div class="page-header">
-                    <h3>Avatar upload</h3>
+                    <h3>{{ __('profile.settings.crop.avatar_title') }}</h3>
                 </div>
                 <div class="loading-bar" id="avatar-crop-loading">
                     <img src="{{ asset('frontend/images/select2-spinner.gif') }}" width="20" alt="">
                 </div>
                 <div class="file_upload2 avatar-crop-file">
-                    <button type="button" id="avatar-select-button">Choose a file</button>
+                    <button type="button" id="avatar-select-button">{{ __('profile.settings.crop.choose_file') }}</button>
                     <input id="profile-avatar-input" type="file" accept="image/jpeg,image/png">
                 </div>
-                <p class="text-show avatar-crop-hint">Select the area you want to use</p>
+                <p class="text-show avatar-crop-hint">{{ __('profile.settings.crop.select_area') }}</p>
                 <div class="avatar-crop-stage">
                     <img
                         id="avatar-crop-target"
@@ -252,7 +331,7 @@
                     <input type="hidden" id="avatar-crop-y" name="y" value="0">
                     <input type="hidden" id="avatar-crop-w" name="w" value="0">
                     <input type="hidden" id="avatar-crop-h" name="h" value="0">
-                    <button type="submit" class="save-button saveAva">Save</button>
+                    <button type="submit" class="save-button saveAva">{{ __('profile.settings.crop.save') }}</button>
                 </form>
             </div>
         </div>
@@ -260,18 +339,18 @@
 
     <div class="overlay_ava avatar-crop-overlay" id="cover-crop-overlay">
         <div class="avatarUpload avatar-crop-modal cover-crop-modal" id="cover-crop-modal" data-type="cover">
-            <button type="button" class="avatar-crop-close cover-crop-close" aria-label="Close">×</button>
+            <button type="button" class="avatar-crop-close cover-crop-close" aria-label="{{ __('profile.settings.crop.close') }}">×</button>
             <div class="avatar-crop-inner">
                 <div class="page-header">
-                    <h3>Cover upload</h3>
+                    <h3>{{ __('profile.settings.crop.cover_title') }}</h3>
                 </div>
                 <div class="loading-bar" id="cover-crop-loading">
                     <img src="{{ asset('frontend/images/select2-spinner.gif') }}" width="20" alt="">
                 </div>
                 <div class="file_upload2 avatar-crop-file">
-                    <button type="button" id="cover-select-button">Choose a file</button>
+                    <button type="button" id="cover-select-button">{{ __('profile.settings.crop.choose_file') }}</button>
                 </div>
-                <p class="text-show avatar-crop-hint">Select the area you want to use</p>
+                <p class="text-show avatar-crop-hint">{{ __('profile.settings.crop.select_area') }}</p>
                 <div class="avatar-crop-stage cover-crop-stage">
                     <img
                         id="cover-crop-target"
@@ -284,7 +363,7 @@
                     <input type="hidden" id="cover-crop-y" name="y" value="0">
                     <input type="hidden" id="cover-crop-w" name="w" value="0">
                     <input type="hidden" id="cover-crop-h" name="h" value="0">
-                    <button type="submit" class="save-button saveCover">Save</button>
+                    <button type="submit" class="save-button saveCover">{{ __('profile.settings.crop.save') }}</button>
                 </form>
             </div>
         </div>

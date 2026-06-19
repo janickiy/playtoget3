@@ -81,6 +81,31 @@
         }, 2500);
     }
 
+    function normalizeTabName(tab) {
+        var allowedTabs = ['profile', 'contacts', 'privacy', 'notifications', 'security', 'blacklist'];
+
+        tab = (tab || '').toString().replace(/^#/, '');
+
+        return $.inArray(tab, allowedTabs) !== -1 ? tab : 'profile';
+    }
+
+    function activeTabIndex($links, tabName) {
+        var index = 0;
+
+        $links.each(function (currentIndex) {
+            if ($(this).attr('href') === '#' + tabName) {
+                index = currentIndex;
+                return false;
+            }
+        });
+
+        return index;
+    }
+
+    function setActiveTabValue(tabName) {
+        $('#profile-settings-active-tab').val(normalizeTabName(tabName));
+    }
+
     function initTabs() {
         var $tabs = $('#tabs');
 
@@ -88,16 +113,28 @@
             return;
         }
 
+        var $links = $tabs.find('> ul > li > a');
+        var $panels = $tabs.find('> div');
+        var initialTab = normalizeTabName(window.location.hash || $('#profile-settings-active-tab').val());
+        var initialIndex = activeTabIndex($links, initialTab);
+
         if ($.fn.tabs) {
-            $tabs.tabs();
+            $tabs.tabs({
+                active: initialIndex,
+                activate: function (event, ui) {
+                    setActiveTabValue(ui.newPanel.attr('id'));
+                }
+            });
+            setActiveTabValue($panels.eq($tabs.tabs('option', 'active')).attr('id'));
             return;
         }
 
-        var $links = $tabs.find('> ul > li > a');
-        var $panels = $tabs.find('> div');
+        var $initialLink = $links.eq(initialIndex);
 
-        $panels.hide().first().show();
-        $links.first().parent().addClass('active');
+        $panels.hide();
+        $($initialLink.attr('href')).show();
+        $initialLink.parent().addClass('active');
+        setActiveTabValue(initialTab);
 
         $links.on('click', function (event) {
             event.preventDefault();
@@ -106,6 +143,7 @@
             $(this).parent().addClass('active');
             $panels.hide();
             $($(this).attr('href')).show();
+            setActiveTabValue($(this).attr('href'));
         });
     }
 
@@ -424,6 +462,19 @@
 
     $(function () {
         initTabs();
+
+        $('#profile-settings-form').on('submit', function () {
+            var $tabs = $('#tabs');
+            var activePanelId = '';
+
+            if ($.fn.tabs && $tabs.data('ui-tabs')) {
+                activePanelId = $tabs.find('> div').eq($tabs.tabs('option', 'active')).attr('id');
+            } else {
+                activePanelId = $tabs.find('> ul > li.active > a').attr('href');
+            }
+
+            setActiveTabValue(activePanelId);
+        });
 
         $('#profile-avatar-input').on('change', function () {
             chooseCropFile('avatar', this);

@@ -23,7 +23,7 @@ class User extends Authenticatable
         'remember_token',
         'firstname',
         'lastname',
-        'secondname',
+        'nickname',
         'sex',
         'birthday',
         'phone',

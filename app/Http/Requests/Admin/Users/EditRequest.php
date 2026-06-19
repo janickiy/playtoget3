@@ -36,7 +36,7 @@ class EditRequest extends FormRequest
             'password_again' => ['nullable', 'string', 'min:6', 'same:password'],
             'firstname' => ['nullable', 'string', 'max:255'],
             'lastname' => ['nullable', 'string', 'max:255'],
-            'secondname' => ['nullable', 'string', 'max:255'],
+            'nickname' => ['nullable', 'string', 'max:255'],
             'sex' => ['nullable', Rule::in(['male', 'female'])],
             'birthday' => ['nullable', 'date'],
             'phone' => ['nullable', 'string', 'max:255'],

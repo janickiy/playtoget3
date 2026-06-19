@@ -1344,19 +1344,30 @@ div.message
 
 .top_thumb_avatar .avatar-status-holder--profile {
     float: left;
+    width: 124px;
+    height: 124px;
     margin-right: 20px;
 }
 
 .top_thumb_avatar .avatar-status-holder--profile img {
+    float: none;
+    display: block;
     margin-right: 0;
 }
 
 .top_thumb_avatar .avatar-status-holder--profile .avatar-online-status {
-    right: 11px;
-    bottom: 8px;
+    top: 8px;
+    right: 8px;
+    bottom: auto;
     width: 15px;
     height: 15px;
     border-width: 3px;
+}
+
+.account.top_thumb_avatar .name {
+    min-width: 210px;
+    overflow-wrap: normal;
+    word-break: normal;
 }
 
 .friends .possible-friend-cart .possible-avatar .avatar-online-status {

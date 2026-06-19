@@ -38,7 +38,7 @@ class AdminUsersCrudTest extends TestCase
             $table->rememberToken();
             $table->string('firstname')->nullable();
             $table->string('lastname')->nullable();
-            $table->string('secondname')->nullable();
+            $table->string('nickname')->nullable();
             $table->string('sex')->nullable();
             $table->date('birthday')->nullable();
             $table->string('phone')->nullable();
@@ -87,29 +87,29 @@ class AdminUsersCrudTest extends TestCase
         $this->actingAs($this->admin, 'admin')
             ->get(route('admin.users.index'))
             ->assertOk()
-            ->assertSee('Пользователи')
+            ->assertSee('Users')
             ->assertSee(route('admin.datatable.users'), false)
             ->assertSee('id="checkAllUsers"', false)
             ->assertSee('users-checkbox-column')
             ->assertSee('"order": [[1, \'desc\']]', false)
             ->assertSee('id="bulkAction"', false)
-            ->assertSee('Применить');
+            ->assertSee('Apply');
 
         $this->actingAs($this->admin, 'admin')
             ->get(route('admin.users.show', ['id' => $user->id]))
             ->assertOk()
-            ->assertSee('Просмотр пользователя')
-            ->assertSee('Аватарка')
-            ->assertSee('Аватар пользователя')
+            ->assertSee('View user')
+            ->assertSee('Avatar')
+            ->assertSee('User avatar')
             ->assertSee('ivan@example.com')
             ->assertSee('Иван Петров');
 
         $this->actingAs($this->admin, 'admin')
             ->get(route('admin.users.edit', ['id' => $user->id]))
             ->assertOk()
-            ->assertSee('Редактирование пользователя')
-            ->assertSee('Текущая аватарка')
-            ->assertSee('Аватар пользователя')
+            ->assertSee('Edit user')
+            ->assertSee('Current avatar')
+            ->assertSee('User avatar')
             ->assertSee('name="telegram"', false)
             ->assertSee('name="whatsapp"', false)
             ->assertSee('name="viber"', false);
@@ -186,7 +186,7 @@ class AdminUsersCrudTest extends TestCase
                 'password_again' => 'new-password',
                 'firstname' => 'Алексей',
                 'lastname' => 'Иванов',
-                'secondname' => 'Петрович',
+                'nickname' => 'Петрович',
                 'sex' => 'male',
                 'birthday' => '1991-05-10',
                 'phone' => '+79999999999',
@@ -224,7 +224,7 @@ class AdminUsersCrudTest extends TestCase
         $this->actingAs($this->admin, 'admin')
             ->patchJson(route('admin.users.block', ['id' => $user->id]))
             ->assertOk()
-            ->assertJson(['message' => 'Пользователь заблокирован.']);
+            ->assertJson(['message' => 'User blocked.']);
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
@@ -234,7 +234,7 @@ class AdminUsersCrudTest extends TestCase
         $this->actingAs($this->admin, 'admin')
             ->patchJson(route('admin.users.unblock', ['id' => $user->id]))
             ->assertOk()
-            ->assertJson(['message' => 'Пользователь разблокирован.']);
+            ->assertJson(['message' => 'User unblocked.']);
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
@@ -244,7 +244,7 @@ class AdminUsersCrudTest extends TestCase
         $this->actingAs($this->admin, 'admin')
             ->deleteJson(route('admin.users.destroy', ['id' => $user->id]))
             ->assertOk()
-            ->assertJson(['message' => 'Пользователь удален.']);
+            ->assertJson(['message' => 'User is deleted.']);
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,

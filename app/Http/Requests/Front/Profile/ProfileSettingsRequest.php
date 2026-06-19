@@ -4,9 +4,19 @@ namespace App\Http\Requests\Front\Profile;
 
 use App\DTO\Profile\ProfileSettingsData;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProfileSettingsRequest extends FormRequest
 {
+    private const TABS = [
+        'profile',
+        'contacts',
+        'privacy',
+        'notifications',
+        'security',
+        'blacklist',
+    ];
+
     public function authorize(): bool
     {
         return true;
@@ -15,6 +25,15 @@ class ProfileSettingsRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'profile.nickname' => ['nullable', 'string', 'max:255'],
+            'profile.firstname' => ['nullable', 'string', 'max:255'],
+            'profile.lastname' => ['nullable', 'string', 'max:255'],
+            'profile.sex' => ['required', Rule::in(['male', 'female'])],
+            'profile.birthday' => ['nullable', 'date', 'before_or_equal:today'],
+            'profile.about' => ['nullable', 'string', 'max:5000'],
+            'profile.about_sport' => ['nullable', 'string', 'max:5000'],
+            'profile.country' => ['nullable', 'string', 'max:100'],
+            'profile.region' => ['nullable', 'string', 'max:100'],
             'user.contact_email' => ['nullable', 'email', 'max:100'],
             'user.phone' => ['nullable', 'string', 'max:255'],
             'user.telegram' => ['nullable', 'string', 'max:255'],
@@ -41,7 +60,15 @@ class ProfileSettingsRequest extends FormRequest
             'file_ava' => ['nullable', 'string', 'max:255', 'regex:/^[A-Za-z0-9_.-]+$/'],
             'file_cover' => ['nullable', 'string', 'max:255', 'regex:/^[A-Za-z0-9_.-]+$/'],
             'cover' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:10240'],
+            'active_tab' => ['nullable', Rule::in(self::TABS)],
         ];
+    }
+
+    public function activeTab(): string
+    {
+        $tab = (string) $this->input('active_tab', 'profile');
+
+        return in_array($tab, self::TABS, true) ? $tab : 'profile';
     }
 
     public function toDto(): ProfileSettingsData

@@ -1113,7 +1113,7 @@ class CommunityRepository extends BaseRepository
             $query
                 ->orWhere('firstname', 'like', '%' . $search . '%')
                 ->orWhere('lastname', 'like', '%' . $search . '%')
-                ->orWhere('secondname', 'like', '%' . $search . '%')
+                ->orWhere('nickname', 'like', '%' . $search . '%')
                 ->orWhere('email', 'like', '%' . $search . '%')
                 ->orWhereRaw("CONCAT_WS(' ', firstname, lastname) LIKE ?", ['%' . $search . '%'])
                 ->orWhereRaw("CONCAT_WS(' ', lastname, firstname) LIKE ?", ['%' . $search . '%']);

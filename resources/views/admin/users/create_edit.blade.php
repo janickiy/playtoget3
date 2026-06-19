@@ -72,10 +72,10 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        {!! Form::label('secondname', 'Middle name') !!}
-                                        {!! Form::text('secondname', old('secondname', $row->secondname), ['class' => 'form-control']) !!}
-                                        @if ($errors->has('secondname'))
-                                            <p class="text-danger">{{ $errors->first('secondname') }}</p>
+                                        {!! Form::label('nickname', 'Nickname') !!}
+                                        {!! Form::text('nickname', old('nickname', $row->nickname), ['class' => 'form-control']) !!}
+                                        @if ($errors->has('nickname'))
+                                            <p class="text-danger">{{ $errors->first('nickname') }}</p>
                                         @endif
                                     </div>
                                 </div>

@@ -8,6 +8,7 @@ use App\Repositories\FriendRepository;
 use App\Repositories\MessageRepository;
 use App\Repositories\ProfileRepository;
 use App\Repositories\UserRepository;
+use App\Service\ProfileUpdateService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -159,11 +160,11 @@ class ProfileController extends Controller
      * Валидирует и сохраняет настройки профиля current user.
      *
      * @param ProfileSettingsRequest $request
-     * @param ProfileRepository $profiles
+     * @param ProfileUpdateService $profileUpdates
      * @return RedirectResponse
      * @throws \Throwable
      */
-    public function update(ProfileSettingsRequest $request, ProfileRepository $profiles): RedirectResponse
+    public function update(ProfileSettingsRequest $request, ProfileUpdateService $profileUpdates): RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
 
@@ -171,10 +172,10 @@ class ProfileController extends Controller
             return redirect()->route('front.home');
         }
 
-        $profiles->updateProfileSettings($viewer, $request->toDto());
+        $profileUpdates->update($viewer, $request->toDto());
 
         return redirect()
-            ->route('front.profile.edit')
-            ->with('status', 'Changes saved');
+            ->to(route('front.profile.edit') . '#' . $request->activeTab())
+            ->with('status', __('profile.messages.updated'));
     }
 }

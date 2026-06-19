@@ -93,12 +93,8 @@
                             <div class="possible-friend">
                                 @forelse ($admins as $member)
                                     <div class="col-xs-6 possible-friend-cart" data-user-id="{{ $member['id'] }}">
-                                        <a class="possible-avatar avatar-status-holder" href="{{ route('front.profile.show', ['user' => $member['id']]) }}">
+                                        <a class="possible-avatar" href="{{ route('front.profile.show', ['user' => $member['id']]) }}">
                                             <img src="{{ $member['avatar'] }}" alt="">
-                                            @include('front.partials.user-online-status', [
-                                                'isOnline' => $member['is_online'],
-                                                'userId' => $member['id'],
-                                            ])
                                         </a>
                                         <a href="{{ route('front.profile.show', ['user' => $member['id']]) }}"><h5><strong>{{ $member['name'] }}</strong></h5></a>
                                         <p>{{ $member['city'] }}</p>
@@ -184,12 +180,8 @@
                             <div class="possible-friend">
                                 @forelse ($blocked as $member)
                                     <div class="col-xs-6 possible-friend-cart" data-user-id="{{ $member['id'] }}">
-                                        <a class="possible-avatar avatar-status-holder" href="{{ route('front.profile.show', ['user' => $member['id']]) }}">
+                                        <a class="possible-avatar" href="{{ route('front.profile.show', ['user' => $member['id']]) }}">
                                             <img src="{{ $member['avatar'] }}" alt="">
-                                            @include('front.partials.user-online-status', [
-                                                'isOnline' => $member['is_online'],
-                                                'userId' => $member['id'],
-                                            ])
                                         </a>
                                         <a href="{{ route('front.profile.show', ['user' => $member['id']]) }}"><h5><strong>{{ $member['name'] }}</strong></h5></a>
                                         <p>{{ $member['city'] }}</p>

@@ -221,7 +221,7 @@ class PhotoalbumsPageTest extends TestCase
                 'cover' => 'http://site3.local/uploads/images/user/cover_page/1.jpg',
                 'firstname' => 'Александр',
                 'lastname' => 'Яницкий',
-                'secondname' => '',
+                'nickname' => '',
                 'about' => '',
                 'last_visit' => '',
                 'birthday' => '',

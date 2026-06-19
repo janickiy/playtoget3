@@ -32,11 +32,7 @@
             @endif
         </span>
         <h3 class="name">
-            {{ $topProfile['firstname'] }}
-            @if ($topProfile['user'])
-                <span class="status_user online" data-num="{{ $topProfile['user']->id }}"></span>
-            @endif
-            <br>{{ $topProfile['lastname'] }}
+            {{ $topProfile['firstname'] }}<br>{{ $topProfile['lastname'] }}
         </h3>
         <p class="citation">{{ $topProfile['about'] }}</p>
     </div>

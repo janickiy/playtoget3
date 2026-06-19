@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('remember_token', 100)->nullable();
             $table->string('firstname', 255)->nullable();
             $table->string('lastname', 255)->nullable();
-            $table->string('secondname', 255)->nullable();
+            $table->string('nickname', 255)->nullable();
             $table->enum('sex', ['male', 'female']);
             $table->date('birthday')->nullable();
             $table->string('phone', 255)->nullable();

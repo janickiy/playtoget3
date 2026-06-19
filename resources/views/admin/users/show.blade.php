@@ -30,6 +30,9 @@
                                 <dt class="col-sm-3">Name</dt>
                                 <dd class="col-sm-9">{{ $row->displayName() }}</dd>
 
+                                <dt class="col-sm-3">Nickname</dt>
+                                <dd class="col-sm-9">{{ $row->nickname }}</dd>
+
                                 <dt class="col-sm-3">Gender</dt>
                                 <dd class="col-sm-9">{{ $row->sex === 'female' ? 'Female' : ($row->sex === 'male' ? 'Male' : '') }}</dd>
 

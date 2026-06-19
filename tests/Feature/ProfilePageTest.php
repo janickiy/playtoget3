@@ -4,12 +4,15 @@ namespace Tests\Feature;
 
 use App\DTO\Profile\ImageCropData;
 use App\DTO\Profile\ProfileSettingsData;
+use App\Http\Middleware\TrackUserOnlineStatus;
 use App\Models\User;
 use App\Models\UserSetting;
 use App\Repositories\FriendRepository;
 use App\Repositories\ProfileRepository;
 use App\Service\ProfileCoverCropService;
 use App\Service\ProfileImageService;
+use App\Service\ProfileUpdateService;
+use App\Service\UserOnlineStatusService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Mockery\MockInterface;
@@ -17,7 +20,17 @@ use Tests\TestCase;
 
 class ProfilePageTest extends TestCase
 {
-    public function test_profile_edit_page_renders_legacy_settings_tabs(): void
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->withoutMiddleware(TrackUserOnlineStatus::class);
+        $this->mock(UserOnlineStatusService::class, function (MockInterface $mock): void {
+            $mock->shouldReceive('isOnline')->byDefault()->andReturn(false);
+        });
+    }
+
+    public function test_profile_edit_page_renders_settings_tabs(): void
     {
         $viewer = $this->user(1, 'Александр', 'Яницкий');
         $settings = new UserSetting([
@@ -75,17 +88,28 @@ class ProfilePageTest extends TestCase
         $this->get('/profile/edit')
             ->assertStatus(200)
             ->assertSee('id="profile-settings-form"', false)
+            ->assertSee('id="profile-settings-active-tab"', false)
             ->assertSee('id="profile-avatar-input"', false)
             ->assertSee('id="profile-avatar-file"', false)
             ->assertSee('id="avatar-crop-modal"', false)
             ->assertSee('id="profile-cover-input"', false)
             ->assertSee('id="preview_ava"', false)
             ->assertSee('id="preview_cover"', false)
-            ->assertSee('Контакт')
-            ->assertSee('Приватность')
-            ->assertSee('Оповещения')
-            ->assertSee('Безопасность')
-            ->assertSee('Черный список')
+            ->assertSee(__('profile.settings.tabs.contact'))
+            ->assertSee(__('profile.settings.tabs.profile'))
+            ->assertSee(__('profile.settings.tabs.privacy'))
+            ->assertSee(__('profile.settings.tabs.notifications'))
+            ->assertSee(__('profile.settings.tabs.security'))
+            ->assertSee(__('profile.settings.tabs.blacklist'))
+            ->assertSee('id="profile-basic-nickname"', false)
+            ->assertSee('id="profile-basic-firstname"', false)
+            ->assertSee('id="profile-basic-lastname"', false)
+            ->assertSee('id="profile-basic-sex"', false)
+            ->assertSee('id="profile-basic-birthday"', false)
+            ->assertSee('id="profile-basic-about"', false)
+            ->assertSee('id="profile-basic-about-sport"', false)
+            ->assertSee('id="profile-basic-country"', false)
+            ->assertSee('id="profile-basic-region"', false)
             ->assertSee('Кто может писать мне сообщения')
             ->assertSee('Заявки в друзья')
             ->assertSee('Дмитрий Панкратов')
@@ -103,10 +127,19 @@ class ProfilePageTest extends TestCase
 
         $this->actingAs($viewer, 'web');
 
-        $this->mock(ProfileRepository::class, function (MockInterface $mock) use ($viewer): void {
-            $mock->shouldReceive('updateProfileSettings')
+        $this->mock(ProfileUpdateService::class, function (MockInterface $mock) use ($viewer): void {
+            $mock->shouldReceive('update')
                 ->once()
                 ->withArgs(fn (User $user, ProfileSettingsData $data): bool => $user === $viewer
+                    && $data->profile?->nickname === 'Yanack'
+                    && $data->profile?->firstname === 'Alexander'
+                    && $data->profile?->lastname === 'Yanickiy'
+                    && $data->profile?->sex === 'male'
+                    && $data->profile?->birthday === '1990-01-15'
+                    && $data->profile?->about === 'I enjoy building sports communities.'
+                    && $data->profile?->aboutSport === 'Running, cycling and tennis.'
+                    && $data->profile?->country === 'Germany'
+                    && $data->profile?->region === 'Berlin'
                     && $data->user['contact_email'] === 'new@example.test'
                     && $data->user['telegram'] === '@alex'
                     && $data->user['whatsapp'] === '+7 999 000-00-00'
@@ -118,6 +151,17 @@ class ProfilePageTest extends TestCase
         });
 
         $this->post('/profile/edit', [
+            'profile' => [
+                'nickname' => 'Yanack',
+                'firstname' => 'Alexander',
+                'lastname' => 'Yanickiy',
+                'sex' => 'male',
+                'birthday' => '1990-01-15',
+                'about' => 'I enjoy building sports communities.',
+                'about_sport' => 'Running, cycling and tennis.',
+                'country' => 'Germany',
+                'region' => 'Berlin',
+            ],
             'user' => [
                 'contact_email' => 'new@example.test',
                 'phone' => '+7 999 000-00-00',
@@ -137,9 +181,10 @@ class ProfilePageTest extends TestCase
                 'notification_friends_request' => 'yes',
             ],
             'file_ava' => '1_cropped.jpg',
+            'active_tab' => 'privacy',
         ])
-            ->assertRedirect('/profile/edit')
-            ->assertSessionHas('status', 'Изменения сохранены');
+            ->assertRedirect('/profile/edit#privacy')
+            ->assertSessionHas('status', __('profile.messages.updated'));
     }
 
     public function test_profile_avatar_upload_ajax_returns_cropped_temporary_file(): void
@@ -261,7 +306,7 @@ class ProfilePageTest extends TestCase
     {
         $viewer = $this->user(1, 'Александр', 'Яницкий');
         $profile = $this->user(2, 'Дмитрий', 'Панкратов');
-        $profile->secondname = 'ebgik';
+        $profile->nickname = 'ebgik';
 
         $this->actingAs($viewer, 'web');
 
@@ -276,7 +321,7 @@ class ProfilePageTest extends TestCase
                 'cover' => 'http://site3.local/frontend/images/content-bg.png',
                 'firstname' => 'Дмитрий',
                 'lastname' => 'Панкратов',
-                'secondname' => 'ebgik',
+                'nickname' => 'ebgik',
                 'about' => '',
                 'last_visit' => '18 апреля 2016 в 00:52',
                 'birthday' => '16 июня 1991',
@@ -294,6 +339,7 @@ class ProfilePageTest extends TestCase
                 'work' => collect([['name' => 'Playtoget', 'description' => 'Web-developer', 'period' => '']]),
             ]);
             $mock->shouldReceive('permissions')->with($profile, $viewer, 'friend')->andReturn([
+                'profile' => true,
                 'send_message' => true,
                 'wall' => true,
                 'photo' => true,
@@ -328,13 +374,13 @@ class ProfilePageTest extends TestCase
             ->assertSee('Дмитрий')
             ->assertSee('Панкратов')
             ->assertSee('(ebgik)')
-            ->assertSee('Написать <span>сообщение</span>', false)
+            ->assertSee('Send <span>message</span>', false)
             ->assertSee('/profile/1/messages/user/2', false)
-            ->assertSee('Удалить<span> друга</span>', false)
+            ->assertSee('Remove<span> friend</span>', false)
             ->assertSee('id="remove_friend" data-item="2"', false)
-            ->assertSee('Заблокировать')
+            ->assertSee('Block')
             ->assertSee('id="block_user" data-item="2"', false)
-            ->assertSee('Был(a) на сайте')
+            ->assertSee('Last seen')
             ->assertSee('18 апреля 2016 в 00:52')
             ->assertSee('Telegram')
             ->assertSee('@pankratov')
@@ -384,7 +430,7 @@ class ProfilePageTest extends TestCase
                 'cover' => 'http://site3.local/uploads/images/user/cover_page/owner.jpg',
                 'firstname' => 'Александр',
                 'lastname' => 'Яницкий',
-                'secondname' => 'Yanack',
+                'nickname' => 'Yanack',
                 'about' => '',
                 'last_visit' => '5 июня 2026 в 00:06',
                 'birthday' => '',
@@ -402,6 +448,7 @@ class ProfilePageTest extends TestCase
                 'work' => collect(),
             ]);
             $mock->shouldReceive('permissions')->with($viewer, $viewer, '')->andReturn([
+                'profile' => true,
                 'send_message' => false,
                 'wall' => true,
                 'photo' => true,
@@ -438,7 +485,7 @@ class ProfilePageTest extends TestCase
                 'cover' => 'http://site3.local/uploads/images/user/cover_page/2_923f6633336d81315d03f530022d2082.jpg',
                 'firstname' => 'Дмитрий',
                 'lastname' => 'Панкратов',
-                'secondname' => '',
+                'nickname' => '',
                 'about' => '',
                 'last_visit' => '31 июля 2019 в 18:07',
                 'birthday' => '',
@@ -456,6 +503,7 @@ class ProfilePageTest extends TestCase
                 'work' => collect(),
             ]);
             $mock->shouldReceive('permissions')->with($profile, null, 'nofriend')->andReturn([
+                'profile' => true,
                 'send_message' => false,
                 'wall' => true,
                 'photo' => true,
@@ -493,7 +541,7 @@ class ProfilePageTest extends TestCase
             ->assertSee('31 июля 2019 в 18:07')
             ->assertSee('id="message-472"', false)
             ->assertSee('class="photo_big"', false)
-            ->assertSee('Чтобы оставить комментарий авторизуйтесь')
+            ->assertSee('Log in to leave a comment')
             ->assertDontSee('id="reply-472"', false)
             ->assertDontSee('id="like-comment-472"', false)
             ->assertDontSee('teams/user/2', false);

@@ -9,7 +9,7 @@
                 <h5 class="name">
                     <a href="{{ $comment['author_url'] }}">
                         {{ $comment['author_name'] }}
-                        <span class="status_user" data-num="{{ $comment['author_id'] }}"></span>
+                        
                     </a>
                 </h5>
                 <p class="data">{{ $comment['created'] }}</p>
@@ -31,7 +31,7 @@
             <h5 class="name">
                 <a href="{{ $comment['author_url'] }}">
                     {{ $comment['author_name'] }}
-                    <span class="status_user" data-num="{{ $comment['author_id'] }}"></span>
+                    
                 </a>
             </h5>
             <p class="data">{{ $comment['created'] }}</p>

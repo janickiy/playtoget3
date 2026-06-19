@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\DTO\Profile\ProfileSettingsData;
+use App\DTO\Profile\ProfilePersonalData;
 use App\DTO\Profile\CommentData;
 use App\DTO\Profile\ImageCropData;
 use App\Enums\UserStatus;
@@ -52,26 +53,26 @@ class ProfileRepository extends BaseRepository
     ];
 
     private const PERMISSION_FIELDS = [
-        'permission_send_message' => 'Who can message me',
-        'permission_view_profile' => 'Who can view my profile',
-        'permission_view_friends' => 'Who can see my friends list',
-        'permission_view_photo' => 'Who can view my photos',
-        'permission_view_video' => 'Who can view my videos',
-        'permission_view_wall' => 'Who can view posts on my wall',
-        'permission_comment_photo' => 'Who can comment on my photos',
-        'permission_comment_video' => 'Who can comment on my videos',
-        'permission_comment_wall' => 'Who can comment on posts on my wall',
+        'permission_send_message',
+        'permission_view_profile',
+        'permission_view_friends',
+        'permission_view_photo',
+        'permission_view_video',
+        'permission_view_wall',
+        'permission_comment_photo',
+        'permission_comment_video',
+        'permission_comment_wall',
     ];
 
     private const NOTIFICATION_FIELDS = [
-        'notification_friends_request' => 'Friend requests',
-        'notification_private_messages' => 'Private messages',
-        'notification_wall_comments' => 'Wall comments',
-        'notification_picture_comments' => 'Photo comments',
-        'notification_video_comments' => 'Video comments',
-        'notification_answers_in_comments' => 'Replies in comments',
-        'notification_events' => 'Events',
-        'notification_birthdays' => 'Birthdays',
+        'notification_friends_request',
+        'notification_private_messages',
+        'notification_wall_comments',
+        'notification_picture_comments',
+        'notification_video_comments',
+        'notification_answers_in_comments',
+        'notification_events',
+        'notification_birthdays',
     ];
 
     /**
@@ -120,10 +121,12 @@ class ProfileRepository extends BaseRepository
             'cover' => FrontAssets::userCover($profile),
             'firstname' => $profile->firstname ?: $profile->displayName(),
             'lastname' => (string)$profile->lastname,
-            'secondname' => (string)$profile->secondname,
+            'nickname' => (string)$profile->nickname,
             'about' => (string)$profile->about,
             'last_visit' => $this->dateTime($profile->activity?->last_activity),
             'birthday' => $this->date($profile->birthday),
+            'country' => (string)$profile->country,
+            'region' => (string)$profile->region,
             'city' => (string)$profile->city,
             'phone' => (string)$profile->phone,
             'contact_email' => (string)$profile->contact_email,
@@ -169,11 +172,11 @@ class ProfileRepository extends BaseRepository
         /** @var UserSetting $settings */
         $settings = $user->settings ?: UserSetting::query()->firstOrNew(['user_id' => $user->id]);
 
-        foreach (array_keys(self::PERMISSION_FIELDS) as $field) {
+        foreach (self::PERMISSION_FIELDS as $field) {
             $settings->{$field} ??= 0;
         }
 
-        foreach (array_keys(self::NOTIFICATION_FIELDS) as $field) {
+        foreach (self::NOTIFICATION_FIELDS as $field) {
             $settings->{$field} ??= 'yes';
         }
 
@@ -230,7 +233,11 @@ class ProfileRepository extends BaseRepository
      */
     public function permissionFields(): array
     {
-        return self::PERMISSION_FIELDS;
+        return collect(self::PERMISSION_FIELDS)
+            ->mapWithKeys(fn(string $field): array => [
+                $field => __("profile.settings.privacy.fields.{$field}"),
+            ])
+            ->all();
     }
 
     /**
@@ -238,7 +245,24 @@ class ProfileRepository extends BaseRepository
      */
     public function notificationFields(): array
     {
-        return self::NOTIFICATION_FIELDS;
+        return collect(self::NOTIFICATION_FIELDS)
+            ->mapWithKeys(fn(string $field): array => [
+                $field => __("profile.settings.notifications.fields.{$field}"),
+            ])
+            ->all();
+    }
+
+    /**
+     * Updates personal profile fields for the user.
+     */
+    public function updatePersonalProfile(User $user, ?ProfilePersonalData $data): void
+    {
+        if (! $data) {
+            return;
+        }
+
+        $user->fill($data->toArray());
+        $user->save();
     }
 
     /**
@@ -265,7 +289,7 @@ class ProfileRepository extends BaseRepository
         }
 
         $permissions = [];
-        foreach (array_keys(self::PERMISSION_FIELDS) as $field) {
+        foreach (self::PERMISSION_FIELDS as $field) {
             $permissions[$field] = (int)($data->user[$field] ?? 0);
         }
         foreach (['permission_send_message', 'permission_view_profile'] as $field) {
@@ -275,7 +299,7 @@ class ProfileRepository extends BaseRepository
         }
 
         $notifications = [];
-        foreach (array_keys(self::NOTIFICATION_FIELDS) as $field) {
+        foreach (self::NOTIFICATION_FIELDS as $field) {
             $notifications[$field] = array_key_exists($field, $data->user) ? 'yes' : 'no';
         }
 

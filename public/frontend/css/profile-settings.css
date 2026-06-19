@@ -29,14 +29,17 @@
 }
 
 .profile-edit-page #tabs {
+    box-sizing: border-box;
     margin-top: 15px;
+    max-width: 100%;
 }
 
 .profile-edit-page #tabs > ul {
     background: transparent;
     border: 0;
+    box-sizing: border-box;
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     gap: 3px;
     justify-content: center;
     margin-bottom: 24px;
@@ -45,16 +48,16 @@
 }
 
 .profile-edit-page #tabs > ul:after {
-    clear: both;
-    content: "";
-    display: block;
+    display: none;
 }
 
-.profile-edit-page #tabs.five > ul > li {
+.profile-edit-page #tabs.five > ul > li,
+.profile-edit-page #tabs.six > ul > li {
     box-sizing: border-box;
     flex: 1 1 0;
     float: none;
     margin: 0;
+    min-width: 0;
     top: 0;
     width: auto;
 }
@@ -107,6 +110,12 @@
     margin-bottom: 0;
     padding: 7px 10px;
     width: 100%;
+}
+
+.profile-edit-page .job_form textarea.form-control {
+    height: auto;
+    min-height: 110px;
+    resize: vertical;
 }
 
 .profile-edit-page .job_form .form-control:focus,
@@ -412,9 +421,14 @@
         padding: 0 12px;
     }
 
-    .profile-edit-page #tabs.five > ul > li {
-        flex: 0 0 49%;
-        margin-bottom: 5px;
+    .profile-edit-page #tabs.five > ul > li,
+    .profile-edit-page #tabs.six > ul > li {
+        flex: 1 1 calc(50% - 3px);
+        min-width: calc(50% - 3px);
+    }
+
+    .profile-edit-page #tabs > ul > li a {
+        white-space: normal;
     }
 
     .profile-edit-page .settings-log-row {
@@ -434,5 +448,13 @@
     .avatar-crop-modal .avatar-crop-inner {
         max-height: calc(90vh - 48px);
         overflow: hidden;
+    }
+}
+
+@media (max-width: 420px) {
+    .profile-edit-page #tabs.five > ul > li,
+    .profile-edit-page #tabs.six > ul > li {
+        flex-basis: 100%;
+        min-width: 100%;
     }
 }

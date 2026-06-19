@@ -9,6 +9,7 @@ final readonly class ProfileSettingsData implements DataTransferObject
 {
     public function __construct(
         public array $user,
+        public ?ProfilePersonalData $profile,
         public ?string $temporaryAvatar,
         public ?string $temporaryCover,
         public ?UploadedFile $coverFile = null,
@@ -19,6 +20,9 @@ final readonly class ProfileSettingsData implements DataTransferObject
     {
         return new self(
             user: $data['user'] ?? [],
+            profile: isset($data['profile']) && is_array($data['profile'])
+                ? ProfilePersonalData::fromArray($data['profile'])
+                : null,
             temporaryAvatar: $data['file_ava'] ?? null,
             temporaryCover: $data['file_cover'] ?? null,
             coverFile: $data['cover'] ?? null,
@@ -29,6 +33,7 @@ final readonly class ProfileSettingsData implements DataTransferObject
     {
         return [
             'user' => $this->user,
+            'profile' => $this->profile?->toArray(),
             'file_ava' => $this->temporaryAvatar,
             'file_cover' => $this->temporaryCover,
         ];

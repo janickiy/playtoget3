@@ -53,11 +53,10 @@
             ])
         </span>
         <h3 class="name">
-            {{ $profileData['firstname'] }}
-            <span class="status_user{{ $profileData['is_online'] ? ' online' : '' }}" data-num="{{ $profileUser->id }}"></span><br>
+            {{ $profileData['firstname'] }}<br>
             {{ $profileData['lastname'] }}
-            @if ($profileData['secondname'] !== '')
-                <br>({{ $profileData['secondname'] }})
+            @if ($profileData['nickname'] !== '')
+                <br>({{ $profileData['nickname'] }})
             @endif
         </h3>
         <p class="citation">{{ $profileData['about'] }}</p>

@@ -32,6 +32,12 @@
             @if ($profileData['city'] !== '')
                 <li><span>City</span><div>{{ $profileData['city'] }}</div></li>
             @endif
+            @if (($profileData['country'] ?? '') !== '')
+                <li><span>Country</span><div>{{ $profileData['country'] }}</div></li>
+            @endif
+            @if (($profileData['region'] ?? '') !== '')
+                <li><span>Region</span><div>{{ $profileData['region'] }}</div></li>
+            @endif
             @if ($profileData['phone'] !== '')
                 <li><span>Phone</span><div>{{ $profileData['phone'] }}</div></li>
             @endif
