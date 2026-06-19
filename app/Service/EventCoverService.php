@@ -38,7 +38,7 @@ class EventCoverService
     }
 
     /**
-     * Deletes cover event из storage и uploads.
+     * Deletes the event cover from storage and uploads.
      *
      * @param string $filename
      * @return void

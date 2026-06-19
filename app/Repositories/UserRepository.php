@@ -31,7 +31,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * Finds user по email для authorization.
+     * Finds a user by email for authentication.
      *
      * @param string $email
      * @return User|null

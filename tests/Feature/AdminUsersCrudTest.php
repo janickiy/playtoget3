@@ -309,7 +309,7 @@ class AdminUsersCrudTest extends TestCase
     }
 
     /**
-     * Создает пользователя с базовыми полями для тестов админского CRUD.
+     * Creates a user with base fields for admin CRUD tests.
      *
      * @param array<string, mixed> $attributes
      */

@@ -1674,7 +1674,7 @@ var out = {
           }
 
           if (!opts.type) {
-            throw new Error("No output type specified.");
+            throw new Error("No docs type specified.");
           }
 
           utils.checkSupport(opts.type);
@@ -2630,7 +2630,7 @@ function StreamHelper(worker, outputType, mimeType) {
     try {
         // the type used internally
         this._internalType = internalType;
-        // the type used to output results
+        // the type used to docs results
         this._outputType = outputType;
         // the mime type
         this._mimeType = mimeType;
@@ -3331,11 +3331,11 @@ transform["nodebuffer"] = {
 
 /**
  * Transform an input into any type.
- * The supported output type are : string, array, uint8array, arraybuffer, nodebuffer.
- * If no output type is specified, the unmodified input will be returned.
- * @param {String} outputType the output type.
+ * The supported docs type are : string, array, uint8array, arraybuffer, nodebuffer.
+ * If no docs type is specified, the unmodified input will be returned.
+ * @param {String} outputType the docs type.
  * @param {String|Array|ArrayBuffer|Uint8Array|Buffer} input the input to convert.
- * @throws {Error} an Error if the browser doesn't support the requested output type.
+ * @throws {Error} an Error if the browser doesn't support the requested docs type.
  */
 exports.transformTo = function(outputType, input) {
     if (!input) {
@@ -3460,8 +3460,8 @@ exports.prepareContent = function(name, inputData, isBinary, isOptimizedBinarySt
 
     // if inputData is already a promise, this flatten it.
     var promise = external.Promise.resolve(inputData).then(function(data) {
-        
-        
+
+
         var isBlob = support.blob && (data instanceof Blob || ['[object File]', '[object Blob]'].indexOf(Object.prototype.toString.call(data)) !== -1);
 
         if (isBlob && typeof FileReader !== "undefined") {
@@ -4113,7 +4113,7 @@ ZipObject.prototype = {
         var result = null, outputType = "string";
         try {
             if (!type) {
-                throw new Error("No output type specified.");
+                throw new Error("No docs type specified.");
             }
             outputType = type.toLowerCase();
             var askUnicodeString = outputType === "string" || outputType === "text";
@@ -4611,7 +4611,7 @@ var Z_DEFLATED  = 8;
 /* internal
  * Deflate.chunks -> Array
  *
- * Chunks of output data, if [[Deflate#onData]] not overriden.
+ * Chunks of docs data, if [[Deflate#onData]] not overriden.
  **/
 
 /**
@@ -4774,7 +4774,7 @@ function Deflate(options) {
  *
  * On fail call [[Deflate#onEnd]] with error code and return false.
  *
- * We strongly recommend to use `Uint8Array` on input for best speed (output
+ * We strongly recommend to use `Uint8Array` on input for best speed (docs
  * array format is detected automatically). Also, don't skip last param and always
  * use the same type in your code (boolean or number). That will improve JS speed.
  *
@@ -4854,7 +4854,7 @@ Deflate.prototype.push = function (data, mode) {
 /**
  * Deflate#onData(chunk) -> Void
  * - chunk (Uint8Array|Array|String): ouput data. Type of array depends
- *   on js engine support. When string output requested, each chunk
+ *   on js engine support. When string docs requested, each chunk
  *   will be string.
  *
  * By default, stores data blocks in `chunks[]` property and glue
@@ -4996,7 +4996,7 @@ var toString = Object.prototype.toString;
 /* internal
  * inflate.chunks -> Array
  *
- * Chunks of output data, if [[Inflate#onData]] not overriden.
+ * Chunks of docs data, if [[Inflate#onData]] not overriden.
  **/
 
 /**
@@ -5041,7 +5041,7 @@ var toString = Object.prototype.toString;
  * - `chunkSize` - size of generated data chunks (16K by default)
  * - `raw` (Boolean) - do raw inflate
  * - `to` (String) - if equal to 'string', then result will be converted
- *   from utf8 to utf16 (javascript) string. When string output requested,
+ *   from utf8 to utf16 (javascript) string. When string docs requested,
  *   chunk length can differ from `chunkSize`, depending on content.
  *
  * By default, when no options set, autodetect deflate/gzip data format via
@@ -5127,14 +5127,14 @@ function Inflate(options) {
  *   See constants. Skipped or `false` means Z_NO_FLUSH, `true` meansh Z_FINISH.
  *
  * Sends input data to inflate pipe, generating [[Inflate#onData]] calls with
- * new output chunks. Returns `true` on success. The last data block must have
+ * new docs chunks. Returns `true` on success. The last data block must have
  * mode Z_FINISH (or `true`). That will flush internal pending buffers and call
  * [[Inflate#onEnd]]. For interim explicit flushes (without ending the stream) you
  * can use mode Z_SYNC_FLUSH, keeping the decompression context.
  *
  * On fail call [[Inflate#onEnd]] with error code and return false.
  *
- * We strongly recommend to use `Uint8Array` on input for best speed (output
+ * We strongly recommend to use `Uint8Array` on input for best speed (docs
  * format is detected automatically). Also, don't skip last param and always
  * use the same type in your code (boolean or number). That will improve JS speed.
  *
@@ -5157,7 +5157,7 @@ Inflate.prototype.push = function (data, mode) {
   var dict;
 
   // Flag to properly process Z_BUF_ERROR on testing inflate call
-  // when we check that all output data was flushed.
+  // when we check that all docs data was flushed.
   var allowBufError = false;
 
   if (this.ended) { return false; }
@@ -5235,7 +5235,7 @@ Inflate.prototype.push = function (data, mode) {
 
     // When no more input data, we should check that internal inflate buffers
     // are flushed. The only way to do it when avail_out = 0 - run one more
-    // inflate pass. But if output data not exists, inflate return Z_BUF_ERROR.
+    // inflate pass. But if docs data not exists, inflate return Z_BUF_ERROR.
     // Here we set flag to process this error properly.
     //
     // NOTE. Deflate does not return error in this case and does not needs such
@@ -5272,7 +5272,7 @@ Inflate.prototype.push = function (data, mode) {
 /**
  * Inflate#onData(chunk) -> Void
  * - chunk (Uint8Array|Array|String): ouput data. Type of array depends
- *   on js engine support. When string output requested, each chunk
+ *   on js engine support. When string docs requested, each chunk
  *   will be string.
  *
  * By default, stores data blocks in `chunks[]` property and glue
@@ -5331,7 +5331,7 @@ Inflate.prototype.onEnd = function (status) {
  * - `raw` (Boolean) - say that we work with raw stream, if you don't wish to specify
  *   negative windowBits implicitly.
  * - `to` (String) - if equal to 'string', then result will be converted
- *   from utf8 to utf16 (javascript) string. When string output requested,
+ *   from utf8 to utf16 (javascript) string. When string docs requested,
  *   chunk length can differ from `chunkSize`, depending on content.
  *
  *
@@ -5340,10 +5340,10 @@ Inflate.prototype.onEnd = function (status) {
  * ```javascript
  * var pako = require('pako')
  *   , input = pako.deflate([1,2,3,4,5,6,7,8,9])
- *   , output;
+ *   , docs;
  *
  * try {
- *   output = pako.inflate(input);
+ *   docs = pako.inflate(input);
  * } catch (err)
  *   console.log(err);
  * }
@@ -5984,10 +5984,10 @@ var HCRC_STATE = 103;
 var BUSY_STATE = 113;
 var FINISH_STATE = 666;
 
-var BS_NEED_MORE      = 1; /* block not completed, need more input or more output */
+var BS_NEED_MORE      = 1; /* block not completed, need more input or more docs */
 var BS_BLOCK_DONE     = 2; /* block flush performed */
-var BS_FINISH_STARTED = 3; /* finish started, need only more output at next deflate */
-var BS_FINISH_DONE    = 4; /* finish done, accept no more input or output */
+var BS_FINISH_STARTED = 3; /* finish started, need only more docs at next deflate */
+var BS_FINISH_DONE    = 4; /* finish done, accept no more input or docs */
 
 var OS_CODE = 0x03; // Unix :) . Don't detect, use this default.
 
@@ -6004,9 +6004,9 @@ function zero(buf) { var len = buf.length; while (--len >= 0) { buf[len] = 0; } 
 
 
 /* =========================================================================
- * Flush as much pending output as possible. All deflate() output goes
+ * Flush as much pending docs as possible. All deflate() docs goes
  * through this function so some applications may wish to modify it
- * to avoid allocating a large strm->output buffer and copying into it.
+ * to avoid allocating a large strm->docs buffer and copying into it.
  * (See also read_buf()).
  */
 function flush_pending(strm) {
@@ -6146,7 +6146,7 @@ function longest_match(s, cur_match) {
      * reasons.  Therefore uninitialized memory will be accessed, and
      * conditional jumps will be made that depend on those values.
      * However the length of the match is limited to the lookahead, so
-     * the output of deflate is not affected by the uninitialized values.
+     * the docs of deflate is not affected by the uninitialized values.
      */
 
     if (_win[match + best_len]     !== scan_end  ||
@@ -6376,7 +6376,7 @@ function deflate_stored(s, flush) {
     max_block_size = s.pending_buf_size - 5;
   }
 
-  /* Copy as much as possible from input to output: */
+  /* Copy as much as possible from input to docs: */
   for (;;) {
     /* Fill the window as much as possible: */
     if (s.lookahead <= 1) {
@@ -6549,7 +6549,7 @@ function deflate_fast(s, flush) {
          */
       }
     } else {
-      /* No match, output a literal byte */
+      /* No match, docs a literal byte */
       //Tracevv((stderr,"%c", s.window[s.strstart]));
       /*** _tr_tally_lit(s, s.window[s.strstart], bflush); ***/
       bflush = trees._tr_tally(s, 0, s.window[s.strstart]);
@@ -6650,7 +6650,7 @@ function deflate_slow(s, flush) {
       }
     }
     /* If there was a match at the previous step and the current
-     * match is not better, output the previous match:
+     * match is not better, docs the previous match:
      */
     if (s.prev_length >= MIN_MATCH && s.match_length <= s.prev_length) {
       max_insert = s.strstart + s.lookahead - MIN_MATCH;
@@ -6691,7 +6691,7 @@ function deflate_slow(s, flush) {
       }
 
     } else if (s.match_available) {
-      /* If there was no match at the previous position, output a
+      /* If there was no match at the previous position, docs a
        * single literal. If there was a match but the current match
        * is longer, truncate the previous match to a single literal.
        */
@@ -6807,7 +6807,7 @@ function deflate_rle(s, flush) {
       s.strstart += s.match_length;
       s.match_length = 0;
     } else {
-      /* No match, output a literal byte */
+      /* No match, docs a literal byte */
       //Tracevv((stderr,"%c", s->window[s->strstart]));
       /*** _tr_tally_lit(s, s.window[s.strstart], bflush); ***/
       bflush = trees._tr_tally(s, 0, s.window[s.strstart]);
@@ -6961,9 +6961,9 @@ function lm_init(s) {
 function DeflateState() {
   this.strm = null;            /* pointer back to this zlib stream */
   this.status = 0;            /* as the name implies */
-  this.pending_buf = null;      /* output still pending */
+  this.pending_buf = null;      /* docs still pending */
   this.pending_buf_size = 0;  /* size of pending_buf */
-  this.pending_out = 0;       /* next pending byte to output to the stream */
+  this.pending_out = 0;       /* next pending byte to docs to the stream */
   this.pending = 0;           /* nb of bytes in the pending buffer */
   this.wrap = 0;              /* bit 0 true for zlib, bit 1 true for gzip */
   this.gzhead = null;         /* gzip header information to write */
@@ -7009,7 +7009,7 @@ function DeflateState() {
    */
 
   this.block_start = 0;
-  /* Window position at the beginning of the current output block. Gets
+  /* Window position at the beginning of the current docs block. Gets
    * negative when the window is moved backwards.
    */
 
@@ -7497,12 +7497,12 @@ function deflate(strm, flush) {
   }
 //#endif
 
-  /* Flush as much pending output as possible */
+  /* Flush as much pending docs as possible */
   if (s.pending !== 0) {
     flush_pending(strm);
     if (strm.avail_out === 0) {
       /* Since avail_out is 0, deflate will be called again with
-       * more output space, but possibly with both pending and
+       * more docs space, but possibly with both pending and
        * avail_in equal to zero. There won't be anything to do,
        * but this is not an error situation so make sure we
        * return OK instead of BUF_ERROR at next call of deflate:
@@ -7544,9 +7544,9 @@ function deflate(strm, flush) {
       return Z_OK;
       /* If flush != Z_NO_FLUSH && avail_out == 0, the next call
        * of deflate should use the same flush parameter to make sure
-       * that the flush is complete. So we don't have to output an
+       * that the flush is complete. So we don't have to docs an
        * empty block here, this will be done at next call. This also
-       * ensures that for a very small output buffer, we emit at most
+       * ensures that for a very small docs buffer, we emit at most
        * one empty block.
        */
     }
@@ -7637,7 +7637,7 @@ function deflateEnd(strm) {
 
 /* =========================================================================
  * Initializes the compression dictionary from the given byte
- * sequence without producing any compressed output.
+ * sequence without producing any compressed docs.
  */
 function deflateSetDictionary(strm, dictionary) {
   var dictLength = dictionary.length;
@@ -7830,10 +7830,10 @@ var TYPE = 12;      /* i: waiting for type bits, including last-flag bit */
 
 /*
    Decode literal, length, and distance codes and write out the resulting
-   literal and match bytes until either not enough input or output is
+   literal and match bytes until either not enough input or docs is
    available, an end-of-block is encountered, or a data error is encountered.
-   When large enough input and output buffers are supplied to inflate(), for
-   example, a 16K input buffer and a 64K output buffer, more than 95% of the
+   When large enough input and docs buffers are supplied to inflate(), for
+   example, a 16K input buffer and a 64K docs buffer, more than 95% of the
    inflate execution time is spent in this routine.
 
    Entry assumptions:
@@ -7846,7 +7846,7 @@ var TYPE = 12;      /* i: waiting for type bits, including last-flag bit */
 
    On return, state.mode is one of:
 
-        LEN -- ran out of enough output space or enough available input
+        LEN -- ran out of enough docs space or enough available input
         TYPE -- reached end of block code, inflate() to interpret next block
         BAD -- error in block data
 
@@ -7858,17 +7858,17 @@ var TYPE = 12;      /* i: waiting for type bits, including last-flag bit */
       Therefore if strm.avail_in >= 6, then there is enough input to avoid
       checking for available input while decoding.
 
-    - The maximum bytes that a single length/distance pair can output is 258
+    - The maximum bytes that a single length/distance pair can docs is 258
       bytes, which is the maximum length that can be coded.  inflate_fast()
       requires strm.avail_out >= 258 for each loop to avoid checking for
-      output space.
+      docs space.
  */
 module.exports = function inflate_fast(strm, start) {
   var state;
   var _in;                    /* local strm.input */
   var last;                   /* have enough input while in < last */
-  var _out;                   /* local strm.output */
-  var beg;                    /* inflate()'s initial strm.output */
+  var _out;                   /* local strm.docs */
+  var beg;                    /* inflate()'s initial strm.docs */
   var end;                    /* while out < end, enough space available */
 //#ifdef INFLATE_STRICT
   var dmax;                   /* maximum distance from zlib header */
@@ -7921,7 +7921,7 @@ module.exports = function inflate_fast(strm, start) {
 
 
   /* decode literals and length/distances until end-of-block or not enough
-     input data or output space */
+     input data or docs space */
 
   top:
   do {
@@ -7996,7 +7996,7 @@ module.exports = function inflate_fast(strm, start) {
             hold >>>= op;
             bits -= op;
             //Tracevv((stderr, "inflate:         distance %u\n", dist));
-            op = _out - beg;                /* max distance in output */
+            op = _out - beg;                /* max distance in docs */
             if (dist > op) {                /* see if copy from window */
               op = dist - op;               /* distance back in window */
               if (op > whave) {
@@ -8011,18 +8011,18 @@ module.exports = function inflate_fast(strm, start) {
 //#ifdef INFLATE_ALLOW_INVALID_DISTANCE_TOOFAR_ARRR
 //                if (len <= op - whave) {
 //                  do {
-//                    output[_out++] = 0;
+//                    docs[_out++] = 0;
 //                  } while (--len);
 //                  continue top;
 //                }
 //                len -= op - whave;
 //                do {
-//                  output[_out++] = 0;
+//                  docs[_out++] = 0;
 //                } while (--op > whave);
 //                if (op === 0) {
 //                  from = _out - dist;
 //                  do {
-//                    output[_out++] = output[from++];
+//                    docs[_out++] = docs[from++];
 //                  } while (--len);
 //                  continue top;
 //                }
@@ -8037,7 +8037,7 @@ module.exports = function inflate_fast(strm, start) {
                   do {
                     output[_out++] = s_window[from++];
                   } while (--op);
-                  from = _out - dist;  /* rest from output */
+                  from = _out - dist;  /* rest from docs */
                   from_source = output;
                 }
               }
@@ -8056,7 +8056,7 @@ module.exports = function inflate_fast(strm, start) {
                     do {
                       output[_out++] = s_window[from++];
                     } while (--op);
-                    from = _out - dist;      /* rest from output */
+                    from = _out - dist;      /* rest from docs */
                     from_source = output;
                   }
                 }
@@ -8068,7 +8068,7 @@ module.exports = function inflate_fast(strm, start) {
                   do {
                     output[_out++] = s_window[from++];
                   } while (--op);
-                  from = _out - dist;  /* rest from output */
+                  from = _out - dist;  /* rest from docs */
                   from_source = output;
                 }
               }
@@ -8086,7 +8086,7 @@ module.exports = function inflate_fast(strm, start) {
               }
             }
             else {
-              from = _out - dist;          /* copy direct from output */
+              from = _out - dist;          /* copy direct from docs */
               do {                        /* minimum length is three */
                 output[_out++] = output[from++];
                 output[_out++] = output[from++];
@@ -8231,7 +8231,7 @@ var        TYPE = 12;      /* i: waiting for type bits, including last-flag bit 
 var        TYPEDO = 13;    /* i: same, but skip check to exit inflate on new block */
 var        STORED = 14;    /* i: waiting for stored size (length and complement) */
 var        COPY_ = 15;     /* i/o: same as COPY below, but only first time in */
-var        COPY = 16;      /* i/o: waiting for input or output to copy stored block */
+var        COPY = 16;      /* i/o: waiting for input or docs to copy stored block */
 var        TABLE = 17;     /* i: waiting for dynamic block table lengths */
 var        LENLENS = 18;   /* i: waiting for code length code lengths */
 var        CODELENS = 19;  /* i: waiting for length/lit and distance code lengths */
@@ -8240,8 +8240,8 @@ var            LEN = 21;       /* i: waiting for length/lit/eob code */
 var            LENEXT = 22;    /* i: waiting for length extra bits */
 var            DIST = 23;      /* i: waiting for distance code */
 var            DISTEXT = 24;   /* i: waiting for distance extra bits */
-var            MATCH = 25;     /* o: waiting for output space to copy string */
-var            LIT = 26;       /* o: waiting for output space to write literal */
+var            MATCH = 25;     /* o: waiting for docs space to copy string */
+var            LIT = 26;       /* o: waiting for docs space to write literal */
 var    CHECK = 27;     /* i: waiting for 32-bit check value */
 var    LENGTH = 28;    /* i: waiting for 32-bit length (gzip) */
 var    DONE = 29;      /* finished check, done -- remain here until reset */
@@ -8278,7 +8278,7 @@ function InflateState() {
   this.flags = 0;             /* gzip header method and flags (0 if zlib) */
   this.dmax = 0;              /* zlib header max distance (INFLATE_STRICT) */
   this.check = 0;             /* protected copy of check value */
-  this.total = 0;             /* protected copy of output count */
+  this.total = 0;             /* protected copy of docs count */
   // TODO: may be {}
   this.head = null;           /* where to save gzip header information */
 
@@ -8477,15 +8477,15 @@ function fixedtables(state) {
 /*
  Update the window with the last wsize (normally 32K) bytes written before
  returning.  If window does not exist yet, create it.  This is only called
- when a window is already in use, or when output has been written during this
+ when a window is already in use, or when docs has been written during this
  inflate call, but the end of the deflate stream has not been reached yet.
  It is also called to create a window for dictionary data when a dictionary
  is loaded.
 
- Providing output buffers larger than 32K to inflate() should provide a speed
- advantage, since only the last 32K of output is copied to the sliding window
+ Providing docs buffers larger than 32K to inflate() should provide a speed
+ advantage, since only the last 32K of docs is copied to the sliding window
  upon return from inflate(), and since all distances after the first 32K of
- output will fall in the output data, making match copies simpler and faster.
+ docs will fall in the docs data, making match copies simpler and faster.
  The advantage may be dependent on the size of the processor's data caches.
  */
 function updatewindow(strm, src, end, copy) {
@@ -8501,7 +8501,7 @@ function updatewindow(strm, src, end, copy) {
     state.window = new utils.Buf8(state.wsize);
   }
 
-  /* copy state->wsize or less output bytes into the circular window */
+  /* copy state->wsize or less docs bytes into the circular window */
   if (copy >= state.wsize) {
     utils.arraySet(state.window, src, end - state.wsize, state.wsize, 0);
     state.wnext = 0;
@@ -8532,13 +8532,13 @@ function updatewindow(strm, src, end, copy) {
 
 function inflate(strm, flush) {
   var state;
-  var input, output;          // input/output buffers
+  var input, output;          // input/docs buffers
   var next;                   /* next input INDEX */
-  var put;                    /* next output INDEX */
-  var have, left;             /* available input and output */
+  var put;                    /* next docs INDEX */
+  var have, left;             /* available input and docs */
   var hold;                   /* bit buffer */
   var bits;                   /* bits in bit buffer */
-  var _in, _out;              /* save starting available input and output */
+  var _in, _out;              /* save starting available input and docs */
   var copy;                   /* number of stored or match bytes to copy */
   var from;                   /* where to copy match bytes from */
   var from_source;
@@ -9471,7 +9471,7 @@ function inflate(strm, flush) {
 //          left -= copy;
 //          state.length -= copy;
 //          do {
-//            output[put++] = 0;
+//            docs[put++] = 0;
 //          } while (--copy);
 //          if (state.length === 0) { state.mode = LEN; }
 //          break;
@@ -9487,7 +9487,7 @@ function inflate(strm, flush) {
         if (copy > state.length) { copy = state.length; }
         from_source = state.window;
       }
-      else {                              /* copy from output */
+      else {                              /* copy from docs */
         from_source = output;
         from = put - state.offset;
         copy = state.length;
@@ -10614,7 +10614,7 @@ function init_block(s) {
 
 
 /* ===========================================================================
- * Flush the bit buffer and align the output on a byte boundary
+ * Flush the bit buffer and align the docs on a byte boundary
  */
 function bi_windup(s)
 {
@@ -11155,7 +11155,7 @@ function _tr_align(s) {
 
 /* ===========================================================================
  * Determine the best encoding for the current block: dynamic trees, static
- * trees or store, and output the encoded block to the zip file.
+ * trees or store, and docs the encoded block to the zip file.
  */
 function _tr_flush_block(s, buf, stored_len, last)
 //DeflateState *s;
@@ -11338,12 +11338,12 @@ function ZStream() {
   this.avail_in = 0;
   /* total number of input bytes read so far */
   this.total_in = 0;
-  /* next output byte should be put there */
+  /* next docs byte should be put there */
   this.output = null; // JS specific, because we have no pointers
   this.next_out = 0;
-  /* remaining free space at output */
+  /* remaining free space at docs */
   this.avail_out = 0;
-  /* total number of bytes output so far */
+  /* total number of bytes docs so far */
   this.total_out = 0;
   /* last error message, NULL if no error */
   this.msg = ''/*Z_NULL*/;

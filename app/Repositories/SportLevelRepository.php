@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 class SportLevelRepository extends BaseRepository
 {
     /**
-     * Connects модель sport level, с которой работает репозиторий.
+     * Connects the sport level model with which the repository works.
      */
     public function __construct(SportLevel $model)
     {
@@ -19,7 +19,7 @@ class SportLevelRepository extends BaseRepository
     }
 
     /**
-     * Returns query builder для таблицы sport level.
+     * Returns query builder for the sport level table.
      */
     public function query(): Builder
     {
@@ -27,7 +27,7 @@ class SportLevelRepository extends BaseRepository
     }
 
     /**
-     * Creates sport level из DTO.
+     * Creates a sport level from DTO.
      */
     public function createFromData(SportLevelData $data): Builder|Model
     {
@@ -35,7 +35,7 @@ class SportLevelRepository extends BaseRepository
     }
 
     /**
-     * Updates sport level из DTO.
+     * Updates a sport level from DTO.
      */
     public function updateFromData(SportLevelData $data): bool
     {
@@ -43,7 +43,7 @@ class SportLevelRepository extends BaseRepository
     }
 
     /**
-     * Returns все sport levels ordered by name.
+     * Returns all sport levels ordered by name.
      *
      * @return Collection<int, SportLevel>
      */

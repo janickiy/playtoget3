@@ -27,7 +27,7 @@ class SportTypeRepository extends BaseRepository
     }
 
     /**
-     * Creates sport type из DTO.
+     * Creates a sport type from DTO.
      */
     public function createFromData(SportTypeData $data): Builder|Model
     {
@@ -35,7 +35,7 @@ class SportTypeRepository extends BaseRepository
     }
 
     /**
-     * Updates sport type из DTO.
+     * Updates a sport type from DTO.
      */
     public function updateFromData(SportTypeData $data): bool
     {
@@ -56,7 +56,7 @@ class SportTypeRepository extends BaseRepository
     }
 
     /**
-     * Returns options для select parent sport type.
+     * Returns options for the parent sport type select.
      *
      * @return array<int, string>
      */
@@ -70,7 +70,7 @@ class SportTypeRepository extends BaseRepository
     }
 
     /**
-     * Returns все sport types ordered by name.
+     * Returns all sport types ordered by name.
      *
      * @return Collection<int, SportType>
      */

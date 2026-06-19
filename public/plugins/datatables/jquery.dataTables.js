@@ -11729,7 +11729,7 @@
 
 			/**
 			 * This decimal place operator is a little different from the other
-			 * language options since DataTables doesn't output floating point
+			 * language options since DataTables doesn't docs floating point
 			 * numbers, so it won't ever use this for display of a number. Rather,
 			 * what this parameter does is modify the sort methods of the table so
 			 * that numbers which are in a format which has a character other than
@@ -12535,7 +12535,7 @@
 		 *        for the data requested.
 		 *
 		 * Note that `data` is a getter and setter option. If you just require
-		 * formatting of data for output, you will likely want to use `render` which
+		 * formatting of data for docs, you will likely want to use `render` which
 		 * is simply a getter and thus simpler to use.
 		 *
 		 * Note that prior to DataTables 1.9.2 `data` was called `mDataProp`. The

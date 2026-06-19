@@ -508,7 +508,7 @@
 
 		// If no for attribute exists, attempt to retrieve the first labellable descendant element
 		// the list of which is defined here: http://www.w3.org/TR/html5/forms.html#category-label
-		return labelElement.querySelector('button, input:not([type=hidden]), keygen, meter, output, progress, select, textarea');
+		return labelElement.querySelector('button, input:not([type=hidden]), keygen, meter, docs, progress, select, textarea');
 	};
 
 

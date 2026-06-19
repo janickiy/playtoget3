@@ -15,7 +15,7 @@ use Illuminate\View\View;
 class SportTypesController extends Controller
 {
     /**
-     * Connects service sport types и базовые настройки admin controller.
+     * Connects service sport types and basic settings of admin controller.
      */
     public function __construct(
         private readonly SportTypeService $sportTypeService,
@@ -45,7 +45,7 @@ class SportTypesController extends Controller
     }
 
     /**
-     * Creates sport type из валидированных data form.
+     * Creates sport type from validated data forms.
      */
     public function store(StoreRequest $request): RedirectResponse
     {
@@ -96,7 +96,7 @@ class SportTypesController extends Controller
     }
 
     /**
-     * Updates sport type из валидированных data form.
+     * Updates sport type from validated data forms.
      */
     public function update(EditRequest $request): RedirectResponse
     {

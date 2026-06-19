@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 class AnnouncementRepository extends BaseRepository
 {
     /**
-     * Connects модель announcement, с которой работает репозиторий.
+     * Connects the announcement model that the repository works with.
      */
     public function __construct(Announcement $model)
     {
@@ -20,7 +20,7 @@ class AnnouncementRepository extends BaseRepository
     }
 
     /**
-     * Creates announcement из DTO с уникальным slug.
+     * Creates an announcement from a DTO with a unique slug.
      *
      * @param AnnouncementData $data
      * @return Builder|Model
@@ -31,7 +31,7 @@ class AnnouncementRepository extends BaseRepository
     }
 
     /**
-     * Updates announcement из DTO с уникальным slug.
+     * Updates announcement from DTO with a unique slug.
      */
     public function updateFromData(AnnouncementData $data): bool
     {
@@ -39,7 +39,7 @@ class AnnouncementRepository extends BaseRepository
     }
 
     /**
-     * Returns published announcement по slug.
+     * Returns a published announcement by slug.
      */
     public function visibleBySlug(string $slug): ?Announcement
     {
@@ -53,7 +53,7 @@ class AnnouncementRepository extends BaseRepository
     }
 
     /**
-     * Returns последние опубликованные announcement.
+     * Returns latest published announcement.
      *
      * @param int $limit
      * @return Collection<int, Announcement>
@@ -69,7 +69,7 @@ class AnnouncementRepository extends BaseRepository
     }
 
     /**
-     * Returns все опубликованные announcement для page section.
+     * Returns all published announcements for the page section.
      *
      * @return Collection<int, Announcement>
      */
@@ -83,7 +83,7 @@ class AnnouncementRepository extends BaseRepository
     }
 
     /**
-     * Готовит массив полей announcement перед сохранением.
+     * Prepares an array of announcement fields before saving.
      *
      * @param AnnouncementData $data
      * @param int|null $ignoreId
@@ -98,7 +98,7 @@ class AnnouncementRepository extends BaseRepository
     }
 
     /**
-     * Builds уникальный slug announcement.
+     * Builds a unique slug announcement.
      */
     private function uniqueSlug(string $source, ?int $ignoreId = null): string
     {

@@ -15,7 +15,7 @@ use Illuminate\View\View;
 class ContentController extends Controller
 {
     /**
-     * Connects репозиторий страниц и базовые настройки админ-контроллера.
+     * Connects page repository and basic admin controller settings.
      */
     public function __construct(
         private readonly ContentRepository $contentRepository,
@@ -44,7 +44,7 @@ class ContentController extends Controller
     }
 
     /**
-     * Creates page or section из валидированных data form.
+     * Creates page or section from validated data form.
      */
     public function store(StoreRequest $request): RedirectResponse
     {
@@ -64,7 +64,7 @@ class ContentController extends Controller
     }
 
     /**
-     * Shows page view выбранной записи.
+     * Shows page view of the selected entry.
      */
     public function show(int $id): View
     {
@@ -79,7 +79,7 @@ class ContentController extends Controller
     }
 
     /**
-     * Shows form editing выбранной page or section.
+     * Shows form editing the selected page or section.
      */
     public function edit(int $id): View
     {
@@ -94,7 +94,7 @@ class ContentController extends Controller
     }
 
     /**
-     * Updates page or section из валидированных data form.
+     * Updates page or section from validated data form.
      */
     public function update(EditRequest $request): RedirectResponse
     {

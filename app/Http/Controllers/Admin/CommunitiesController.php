@@ -15,7 +15,7 @@ use Illuminate\View\View;
 class CommunitiesController extends Controller
 {
     /**
-     * Connects репозиторий community и базовые настройки админ-контроллера.
+     * Connects community repository and basic admin controller settings.
      */
     public function __construct(
         private readonly AdminCommunityRepository $communityRepository,
@@ -70,7 +70,7 @@ class CommunitiesController extends Controller
     }
 
     /**
-     * Updates community из валидированных data form.
+     * Updates community from validated data forms.
      */
     public function update(EditRequest $request): RedirectResponse
     {

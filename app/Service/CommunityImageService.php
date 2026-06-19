@@ -40,7 +40,7 @@ class CommunityImageService
     }
 
     /**
-     * Deletes image community из storage и uploads.
+     * Deletes the community image from storage and uploads.
      *
      * @param string $filename
      * @param string $directory

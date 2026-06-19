@@ -76,7 +76,7 @@ class ProfileRepository extends BaseRepository
     ];
 
     /**
-     * Connects модель и зависимости, с которыми работает репозиторий.
+     * Connects model and dependencies that the repository works with.
      */
     public function __construct(
         User $model,
@@ -87,7 +87,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Finds профиль user для view.
+     * Finds user profile for view.
      */
     public function profile(int $id): ?User
     {
@@ -112,7 +112,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Builds основные data профиля для page user.
+     * Builds basic profile data for page user.
      */
     public function profileData(User $profile): array
     {
@@ -150,7 +150,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Builds data верхнего block профиля user.
+     * Builds data of the top block of the user profile.
      */
     public function topProfileData(User $user): array
     {
@@ -165,7 +165,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Returns настройки профиля or creates их со значениями по умолчанию.
+     * Returns profile settings or creates them with default values.
      */
     public function profileSettings(User $user): UserSetting
     {
@@ -184,7 +184,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Returns users, blocked текущим профилем.
+     * Returns users blocked by current profile.
      */
     public function blockedUsers(User $user): Collection
     {
@@ -207,7 +207,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Returns последние записи журнала безопасности user.
+     * Returns user's latest security log entries.
      *
      * @param User $user
      * @param int $limit
@@ -229,7 +229,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Returns list полей прав accessа профиля.
+     * Returns list of profile access rights fields.
      */
     public function permissionFields(): array
     {
@@ -241,7 +241,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Returns list полей уведомлений профиля.
+     * Returns list of profile notification fields.
      */
     public function notificationFields(): array
     {
@@ -266,7 +266,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Обрезает uploaded avatar во temporary квадратный файл.
+     * Crop the uploaded avatar into a temporary square file.
      */
     public function cropTemporaryAvatar(User $user, ImageCropData $data): array
     {
@@ -274,7 +274,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Updates профиль, настройки приватности и image user.
+     * Updates profile, privacy settings and image user.
      *
      * @param User $user
      * @param ProfileSettingsData $data
@@ -342,7 +342,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Returns набор прав user для current entity.
+     * Returns a set of user rights for the current entity.
      *
      * @param User $profile
      * @param User|null $viewer
@@ -390,7 +390,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Returns комментарии стены профиля.
+     * Returns profile wall comments.
      *
      * @param int $profileId
      * @param int $limit
@@ -404,7 +404,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Returns комментарии entity с древовидными ответами.
+     * Returns entity comments with tree responses.
      */
     public function comments(
         string $commentableType,
@@ -422,7 +422,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Checks, есть ли еще комментарии стены после current page.
+     * Checks if there are any more wall comments after the current page.
      *
      * @param int $profileId
      * @param int $limit
@@ -435,7 +435,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Checks, есть ли еще комментарии у entity после current page.
+     * Checks whether the entity has any more comments after the current page.
      *
      * @param string $commentableType
      * @param int $contentId
@@ -452,7 +452,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Creates комментарий на стене or у связанной entity.
+     * Creates a comment on the wall or of a linked entity.
      *
      * @param User $author
      * @param CommentData $data
@@ -488,7 +488,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Deletes комментарий, если у user есть permissions.
+     * Delete a comment if the user has permissions.
      *
      * @param User $viewer
      * @param int $commentId
@@ -534,7 +534,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Преобразует комментарий и ответы в массив data для output.
+     * Converts comments and replies into a data array for docs.
      *
      * @param Comment $comment
      * @param User|null $viewer
@@ -585,7 +585,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Готовит базовый запрос комментариев для указанной entity.
+     * Prepares a basic comment request for the specified entity.
      *
      * @param string $commentableType
      * @param int $contentId
@@ -612,7 +612,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Checks, может ли user delete комментарий.
+     * Checks whether the user can delete a comment.
      *
      * @param User $viewer
      * @param Comment $comment
@@ -649,7 +649,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Собирает идентификаторы комментария и всех его дочерних ответов.
+     * Collects the IDs of a comment and all its child replies.
      *
      * @param Comment $comment
      * @return Collection
@@ -680,7 +680,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Returns занятия user указанного typeа.
+     * Returns activities of the user of the specified type.
      *
      * @param User $profile
      * @param int $kind
@@ -703,7 +703,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Преобразует вложение комментария в массив data для output.
+     * Converts a comment attachment to a data array for docs.
      *
      * @param Attachment $attachment
      * @return array|null
@@ -727,7 +727,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Checks, разрешает ли настройка приватности selected действие.
+     * Checks whether the privacy setting allows the selected action.
      *
      * @param mixed $permission
      * @param bool $isOwnPage
@@ -744,7 +744,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Checks настройки с accessными значениями «Everyone» и «Friends».
+     * Checks settings with access values ​​"Everyone" and "Friends".
      *
      * @param mixed $permission
      * @param bool $isOwnPage
@@ -760,7 +760,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Нормализует list идентификаторов вложений из входных data.
+     * Normalizes the list of attachment IDs from the input data.
      *
      * @param mixed $attach
      * @return array
@@ -785,7 +785,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Detects операционную систему по строке User-Agent.
+     * Detects the operating system by the User-Agent line.
      */
     private function detectOs(string $userAgent): string
     {
@@ -800,7 +800,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Detects браузер по строке User-Agent.
+     * Detects browser by User-Agent line.
      *
      * @param string $userAgent
      * @return string
@@ -818,7 +818,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Форматирует date и время для output в интерфейсе.
+     * Formats date and time for docs in the interface.
      *
      * @param CarbonInterface|null $date
      * @return string
@@ -831,7 +831,7 @@ class ProfileRepository extends BaseRepository
     }
 
     /**
-     * Форматирует date для output в интерфейсе.
+     * Formats date for docs in the interface.
      *
      * @param CarbonInterface|null $date
      * @return string

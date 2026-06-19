@@ -1302,7 +1302,7 @@ DataTable.ext.buttons.excelFlash = $.extend( {}, flashButton, {
 						} );
 					}
 					else {
-						// String output - replace non standard characters for text output
+						// String docs - replace non standard characters for text docs
 						var text = ! row[i].replace ?
 							row[i] :
 							row[i].replace(/[\x00-\x09\x0B\x0C\x0E-\x1F\x7F-\x9F]/g, '');

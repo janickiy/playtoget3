@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 class AdminSportBlockRepository extends BaseRepository
 {
     /**
-     * Connects модель sport block, с которой работает админский репозиторий.
+     * Connects model sport block, with which the admin repository works.
      */
     public function __construct(
         SportBlock $model,
@@ -22,7 +22,7 @@ class AdminSportBlockRepository extends BaseRepository
     }
 
     /**
-     * Returns options typeов sport blocks для form admin panel.
+     * Returns sport block type options for the admin panel form.
      *
      * @return array<string, string>
      */
@@ -36,7 +36,7 @@ class AdminSportBlockRepository extends BaseRepository
     }
 
     /**
-     * Returns signature typeа sport block.
+     * Returns the sport block type label.
      */
     public function typeLabel(?string $type): string
     {
@@ -44,7 +44,7 @@ class AdminSportBlockRepository extends BaseRepository
     }
 
     /**
-     * Returns options statusов sport blocks для form admin panel.
+     * Returns sport block status options for the admin panel form.
      *
      * @return array<int, string>
      */
@@ -54,7 +54,7 @@ class AdminSportBlockRepository extends BaseRepository
     }
 
     /**
-     * Returns signature statusа sport block.
+     * Returns the sport block status label.
      */
     public function statusLabel(?int $status): string
     {
@@ -62,7 +62,7 @@ class AdminSportBlockRepository extends BaseRepository
     }
 
     /**
-     * Creates sport block из DTO.
+     * Creates a sport block from DTO.
      *
      * @param SportBlockData $data
      * @return Builder|Model
@@ -73,7 +73,7 @@ class AdminSportBlockRepository extends BaseRepository
     }
 
     /**
-     * Updates sport block из DTO.
+     * Updates a sport block from DTO.
      */
     public function updateFromData(SportBlockData $data): bool
     {

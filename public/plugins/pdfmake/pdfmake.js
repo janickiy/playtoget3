@@ -350,7 +350,7 @@ var Comparison = function Comparison(obj, keys, actual) {
 function compareExceptionKey(actual, expected, key, message, keys, fn) {
   if (!(key in actual) || !isDeepStrictEqual(actual[key], expected[key])) {
     if (!message) {
-      // Create placeholder objects to create a nice output.
+      // Create placeholder objects to create a nice docs.
       var a = new Comparison(actual, keys);
       var b = new Comparison(expected, keys, actual);
       var err = new AssertionError({
@@ -800,7 +800,7 @@ function createErrDiff(actual, expected, operator) {
   if (actualLines.length === 1 && expectedLines.length === 1 && actualLines[0] !== expectedLines[0]) {
     var inputLength = actualLines[0].length + expectedLines[0].length; // If the character length of "actual" and "expected" together is less than
     // kMaxShortLength and if neither is an object and at least one of them is
-    // not `zero`, use the strict equal comparison to visualize the output.
+    // not `zero`, use the strict equal comparison to visualize the docs.
 
     if (inputLength <= kMaxShortLength) {
       if ((_typeof(actual) !== 'object' || actual === null) && (_typeof(expected) !== 'object' || expected === null) && (actual !== 0 || expected !== 0)) {
@@ -809,7 +809,7 @@ function createErrDiff(actual, expected, operator) {
       }
     } else if (operator !== 'strictEqualObject') {
       // If the stderr is a tty and the input length is lower than the current
-      // columns per line, add a mismatch indicator below the output. If it is
+      // columns per line, add a mismatch indicator below the docs. If it is
       // not a tty, use a default value of 80 characters.
       var maxLength = process.stderr && process.stderr.isTTY ? process.stderr.columns : 80;
 
@@ -827,7 +827,7 @@ function createErrDiff(actual, expected, operator) {
         }
       }
     }
-  } // Remove all ending lines that match (this optimizes the output for
+  } // Remove all ending lines that match (this optimizes the docs for
   // readability by reducing the number of total changed lines).
 
 
@@ -937,7 +937,7 @@ function createErrDiff(actual, expected, operator) {
       // mark it as such.
 
       var divergingLines = actualLine !== expectedLine && (!endsWith(actualLine, ',') || actualLine.slice(0, -1) !== expectedLine); // If the expected line has a trailing comma but is otherwise identical,
-      // add a comma at the end of the actual line. Otherwise the output could
+      // add a comma at the end of the actual line. Otherwise the docs could
       // look weird as in:
       //
       //   [
@@ -1300,7 +1300,7 @@ createErrorType('ERR_INVALID_ARG_TYPE', function (name, expected, actual) {
   } else {
     var type = includes(name, '.') ? 'property' : 'argument';
     msg = "The \"".concat(name, "\" ").concat(type, " ").concat(determiner, " ").concat(oneOf(expected, 'type'));
-  } // TODO(BridgeAR): Improve the output by showing `null` and similar.
+  } // TODO(BridgeAR): Improve the docs by showing `null` and similar.
 
 
   msg += ". Received type ".concat(_typeof(actual));
@@ -6903,7 +6903,7 @@ setSpecies(ARRAY_BUFFER);
         var t0 = (SBOX[s0 >>> 24] << 24 | SBOX[s1 >>> 16 & 0xff] << 16 | SBOX[s2 >>> 8 & 0xff] << 8 | SBOX[s3 & 0xff]) ^ keySchedule[ksRow++];
         var t1 = (SBOX[s1 >>> 24] << 24 | SBOX[s2 >>> 16 & 0xff] << 16 | SBOX[s3 >>> 8 & 0xff] << 8 | SBOX[s0 & 0xff]) ^ keySchedule[ksRow++];
         var t2 = (SBOX[s2 >>> 24] << 24 | SBOX[s3 >>> 16 & 0xff] << 16 | SBOX[s0 >>> 8 & 0xff] << 8 | SBOX[s1 & 0xff]) ^ keySchedule[ksRow++];
-        var t3 = (SBOX[s3 >>> 24] << 24 | SBOX[s0 >>> 16 & 0xff] << 16 | SBOX[s1 >>> 8 & 0xff] << 8 | SBOX[s2 & 0xff]) ^ keySchedule[ksRow++]; // Set output
+        var t3 = (SBOX[s3 >>> 24] << 24 | SBOX[s0 >>> 16 & 0xff] << 16 | SBOX[s1 >>> 8 & 0xff] << 8 | SBOX[s2 & 0xff]) ^ keySchedule[ksRow++]; // Set docs
 
         M[offset] = t0;
         M[offset + 1] = t1;
@@ -11645,7 +11645,7 @@ __webpack_require__(7042);
        * Configuration options.
        *
        * @property {number} outputLength
-       *   The desired number of bits in the output hash.
+       *   The desired number of bits in the docs hash.
        *   Only values permitted are: 224, 256, 384, 512.
        *   Default: 512
        */
@@ -12837,7 +12837,7 @@ __webpack_require__(7042);
         exchangeRL.call(this, 8, 0x00ff00ff);
         exchangeRL.call(this, 2, 0x33333333);
         exchangeLR.call(this, 16, 0x0000ffff);
-        exchangeLR.call(this, 4, 0x0f0f0f0f); // Set output
+        exchangeLR.call(this, 4, 0x0f0f0f0f); // Set docs
 
         M[offset] = this._lBlock;
         M[offset + 1] = this._rBlock;
@@ -14813,7 +14813,7 @@ var PDFTree = /*#__PURE__*/function () {
 
     _classCallCheck(this, PDFTree);
 
-    this._items = {}; // disable /Limits output for this tree
+    this._items = {}; // disable /Limits docs for this tree
 
     this.limits = typeof options.limits === 'boolean' ? options.limits : true;
   }
@@ -19398,7 +19398,7 @@ var TextMixin = {
       }
 
       return last = cur;
-    }; // Flushes the current TJ commands to the output stream
+    }; // Flushes the current TJ commands to the docs stream
 
 
     var flush = function flush(i) {
@@ -27540,7 +27540,7 @@ function CopyUncompressedBlockToOutput(output, len, pos, ringbuffer, ringbuffer_
   len -= nbytes;
 
   /* If we wrote past the logical end of the ringbuffer, copy the tail of the
-     ringbuffer to its beginning and flush the ringbuffer to the output. */
+     ringbuffer to its beginning and flush the ringbuffer to the docs. */
   if (rb_pos >= rb_size) {
     output.write(ringbuffer, rb_size);
     rb_pos -= rb_size;
@@ -27550,7 +27550,7 @@ function CopyUncompressedBlockToOutput(output, len, pos, ringbuffer, ringbuffer_
 
   /* If we have more to copy than the remaining size of the ringbuffer, then we
      first fill the ringbuffer from the input and then flush the ringbuffer to
-     the output */
+     the docs */
   while (rb_pos + len >= rb_size) {
     nbytes = rb_size - rb_pos;
     if (br.input_.read(ringbuffer, rb_pos, nbytes) < nbytes) {
@@ -27562,7 +27562,7 @@ function CopyUncompressedBlockToOutput(output, len, pos, ringbuffer, ringbuffer_
   }
 
   /* Copy straight from the input onto the ringbuffer. The ringbuffer will be
-     flushed to the output at a later time. */
+     flushed to the docs at a later time. */
   if (br.input_.read(ringbuffer, rb_pos, len) < len) {
     throw new Error('[CopyUncompressedBlockToOutput] not enough bytes');
   }
@@ -27695,7 +27695,7 @@ function BrotliDecompress(input, output) {
     var _out = DecodeMetaBlockLength(br);
     meta_block_remaining_len = _out.meta_block_length;
     if (pos + meta_block_remaining_len > output.buffer.length) {
-      /* We need to grow the output buffer to fit the additional data. */
+      /* We need to grow the docs buffer to fit the additional data. */
       var tmp = new Uint8Array( pos + meta_block_remaining_len );
       tmp.set( output.buffer );
       output.buffer = tmp;
@@ -29518,7 +29518,7 @@ Zlib.prototype._processChunk = function (chunk, flushFlag, cb) {
     if (have > 0) {
       var out = self._buffer.slice(self._offset, self._offset + have);
       self._offset += have;
-      // serve some output to the consumer.
+      // serve some docs to the consumer.
       if (async) {
         self.push(out);
       } else {
@@ -29527,7 +29527,7 @@ Zlib.prototype._processChunk = function (chunk, flushFlag, cb) {
       }
     }
 
-    // exhausted the output buffer, or used all the input create a new one.
+    // exhausted the docs buffer, or used all the input create a new one.
     if (availOutAfter === 0 || self._offset >= self._chunkSize) {
       availOutBefore = self._chunkSize;
       self._offset = 0;
@@ -30003,10 +30003,10 @@ var HCRC_STATE = 103;
 var BUSY_STATE = 113;
 var FINISH_STATE = 666;
 
-var BS_NEED_MORE      = 1; /* block not completed, need more input or more output */
+var BS_NEED_MORE      = 1; /* block not completed, need more input or more docs */
 var BS_BLOCK_DONE     = 2; /* block flush performed */
-var BS_FINISH_STARTED = 3; /* finish started, need only more output at next deflate */
-var BS_FINISH_DONE    = 4; /* finish done, accept no more input or output */
+var BS_FINISH_STARTED = 3; /* finish started, need only more docs at next deflate */
+var BS_FINISH_DONE    = 4; /* finish done, accept no more input or docs */
 
 var OS_CODE = 0x03; // Unix :) . Don't detect, use this default.
 
@@ -30023,9 +30023,9 @@ function zero(buf) { var len = buf.length; while (--len >= 0) { buf[len] = 0; } 
 
 
 /* =========================================================================
- * Flush as much pending output as possible. All deflate() output goes
+ * Flush as much pending docs as possible. All deflate() docs goes
  * through this function so some applications may wish to modify it
- * to avoid allocating a large strm->output buffer and copying into it.
+ * to avoid allocating a large strm->docs buffer and copying into it.
  * (See also read_buf()).
  */
 function flush_pending(strm) {
@@ -30165,7 +30165,7 @@ function longest_match(s, cur_match) {
      * reasons.  Therefore uninitialized memory will be accessed, and
      * conditional jumps will be made that depend on those values.
      * However the length of the match is limited to the lookahead, so
-     * the output of deflate is not affected by the uninitialized values.
+     * the docs of deflate is not affected by the uninitialized values.
      */
 
     if (_win[match + best_len]     !== scan_end  ||
@@ -30395,7 +30395,7 @@ function deflate_stored(s, flush) {
     max_block_size = s.pending_buf_size - 5;
   }
 
-  /* Copy as much as possible from input to output: */
+  /* Copy as much as possible from input to docs: */
   for (;;) {
     /* Fill the window as much as possible: */
     if (s.lookahead <= 1) {
@@ -30568,7 +30568,7 @@ function deflate_fast(s, flush) {
          */
       }
     } else {
-      /* No match, output a literal byte */
+      /* No match, docs a literal byte */
       //Tracevv((stderr,"%c", s.window[s.strstart]));
       /*** _tr_tally_lit(s, s.window[s.strstart], bflush); ***/
       bflush = trees._tr_tally(s, 0, s.window[s.strstart]);
@@ -30669,7 +30669,7 @@ function deflate_slow(s, flush) {
       }
     }
     /* If there was a match at the previous step and the current
-     * match is not better, output the previous match:
+     * match is not better, docs the previous match:
      */
     if (s.prev_length >= MIN_MATCH && s.match_length <= s.prev_length) {
       max_insert = s.strstart + s.lookahead - MIN_MATCH;
@@ -30710,7 +30710,7 @@ function deflate_slow(s, flush) {
       }
 
     } else if (s.match_available) {
-      /* If there was no match at the previous position, output a
+      /* If there was no match at the previous position, docs a
        * single literal. If there was a match but the current match
        * is longer, truncate the previous match to a single literal.
        */
@@ -30826,7 +30826,7 @@ function deflate_rle(s, flush) {
       s.strstart += s.match_length;
       s.match_length = 0;
     } else {
-      /* No match, output a literal byte */
+      /* No match, docs a literal byte */
       //Tracevv((stderr,"%c", s->window[s->strstart]));
       /*** _tr_tally_lit(s, s.window[s.strstart], bflush); ***/
       bflush = trees._tr_tally(s, 0, s.window[s.strstart]);
@@ -30980,9 +30980,9 @@ function lm_init(s) {
 function DeflateState() {
   this.strm = null;            /* pointer back to this zlib stream */
   this.status = 0;            /* as the name implies */
-  this.pending_buf = null;      /* output still pending */
+  this.pending_buf = null;      /* docs still pending */
   this.pending_buf_size = 0;  /* size of pending_buf */
-  this.pending_out = 0;       /* next pending byte to output to the stream */
+  this.pending_out = 0;       /* next pending byte to docs to the stream */
   this.pending = 0;           /* nb of bytes in the pending buffer */
   this.wrap = 0;              /* bit 0 true for zlib, bit 1 true for gzip */
   this.gzhead = null;         /* gzip header information to write */
@@ -31028,7 +31028,7 @@ function DeflateState() {
    */
 
   this.block_start = 0;
-  /* Window position at the beginning of the current output block. Gets
+  /* Window position at the beginning of the current docs block. Gets
    * negative when the window is moved backwards.
    */
 
@@ -31516,12 +31516,12 @@ function deflate(strm, flush) {
   }
 //#endif
 
-  /* Flush as much pending output as possible */
+  /* Flush as much pending docs as possible */
   if (s.pending !== 0) {
     flush_pending(strm);
     if (strm.avail_out === 0) {
       /* Since avail_out is 0, deflate will be called again with
-       * more output space, but possibly with both pending and
+       * more docs space, but possibly with both pending and
        * avail_in equal to zero. There won't be anything to do,
        * but this is not an error situation so make sure we
        * return OK instead of BUF_ERROR at next call of deflate:
@@ -31563,9 +31563,9 @@ function deflate(strm, flush) {
       return Z_OK;
       /* If flush != Z_NO_FLUSH && avail_out == 0, the next call
        * of deflate should use the same flush parameter to make sure
-       * that the flush is complete. So we don't have to output an
+       * that the flush is complete. So we don't have to docs an
        * empty block here, this will be done at next call. This also
-       * ensures that for a very small output buffer, we emit at most
+       * ensures that for a very small docs buffer, we emit at most
        * one empty block.
        */
     }
@@ -31656,7 +31656,7 @@ function deflateEnd(strm) {
 
 /* =========================================================================
  * Initializes the compression dictionary from the given byte
- * sequence without producing any compressed output.
+ * sequence without producing any compressed docs.
  */
 function deflateSetDictionary(strm, dictionary) {
   var dictLength = dictionary.length;
@@ -31795,10 +31795,10 @@ var TYPE = 12;      /* i: waiting for type bits, including last-flag bit */
 
 /*
    Decode literal, length, and distance codes and write out the resulting
-   literal and match bytes until either not enough input or output is
+   literal and match bytes until either not enough input or docs is
    available, an end-of-block is encountered, or a data error is encountered.
-   When large enough input and output buffers are supplied to inflate(), for
-   example, a 16K input buffer and a 64K output buffer, more than 95% of the
+   When large enough input and docs buffers are supplied to inflate(), for
+   example, a 16K input buffer and a 64K docs buffer, more than 95% of the
    inflate execution time is spent in this routine.
 
    Entry assumptions:
@@ -31811,7 +31811,7 @@ var TYPE = 12;      /* i: waiting for type bits, including last-flag bit */
 
    On return, state.mode is one of:
 
-        LEN -- ran out of enough output space or enough available input
+        LEN -- ran out of enough docs space or enough available input
         TYPE -- reached end of block code, inflate() to interpret next block
         BAD -- error in block data
 
@@ -31823,17 +31823,17 @@ var TYPE = 12;      /* i: waiting for type bits, including last-flag bit */
       Therefore if strm.avail_in >= 6, then there is enough input to avoid
       checking for available input while decoding.
 
-    - The maximum bytes that a single length/distance pair can output is 258
+    - The maximum bytes that a single length/distance pair can docs is 258
       bytes, which is the maximum length that can be coded.  inflate_fast()
       requires strm.avail_out >= 258 for each loop to avoid checking for
-      output space.
+      docs space.
  */
 module.exports = function inflate_fast(strm, start) {
   var state;
   var _in;                    /* local strm.input */
   var last;                   /* have enough input while in < last */
-  var _out;                   /* local strm.output */
-  var beg;                    /* inflate()'s initial strm.output */
+  var _out;                   /* local strm.docs */
+  var beg;                    /* inflate()'s initial strm.docs */
   var end;                    /* while out < end, enough space available */
 //#ifdef INFLATE_STRICT
   var dmax;                   /* maximum distance from zlib header */
@@ -31886,7 +31886,7 @@ module.exports = function inflate_fast(strm, start) {
 
 
   /* decode literals and length/distances until end-of-block or not enough
-     input data or output space */
+     input data or docs space */
 
   top:
   do {
@@ -31961,7 +31961,7 @@ module.exports = function inflate_fast(strm, start) {
             hold >>>= op;
             bits -= op;
             //Tracevv((stderr, "inflate:         distance %u\n", dist));
-            op = _out - beg;                /* max distance in output */
+            op = _out - beg;                /* max distance in docs */
             if (dist > op) {                /* see if copy from window */
               op = dist - op;               /* distance back in window */
               if (op > whave) {
@@ -31976,18 +31976,18 @@ module.exports = function inflate_fast(strm, start) {
 //#ifdef INFLATE_ALLOW_INVALID_DISTANCE_TOOFAR_ARRR
 //                if (len <= op - whave) {
 //                  do {
-//                    output[_out++] = 0;
+//                    docs[_out++] = 0;
 //                  } while (--len);
 //                  continue top;
 //                }
 //                len -= op - whave;
 //                do {
-//                  output[_out++] = 0;
+//                  docs[_out++] = 0;
 //                } while (--op > whave);
 //                if (op === 0) {
 //                  from = _out - dist;
 //                  do {
-//                    output[_out++] = output[from++];
+//                    docs[_out++] = docs[from++];
 //                  } while (--len);
 //                  continue top;
 //                }
@@ -32002,7 +32002,7 @@ module.exports = function inflate_fast(strm, start) {
                   do {
                     output[_out++] = s_window[from++];
                   } while (--op);
-                  from = _out - dist;  /* rest from output */
+                  from = _out - dist;  /* rest from docs */
                   from_source = output;
                 }
               }
@@ -32021,7 +32021,7 @@ module.exports = function inflate_fast(strm, start) {
                     do {
                       output[_out++] = s_window[from++];
                     } while (--op);
-                    from = _out - dist;      /* rest from output */
+                    from = _out - dist;      /* rest from docs */
                     from_source = output;
                   }
                 }
@@ -32033,7 +32033,7 @@ module.exports = function inflate_fast(strm, start) {
                   do {
                     output[_out++] = s_window[from++];
                   } while (--op);
-                  from = _out - dist;  /* rest from output */
+                  from = _out - dist;  /* rest from docs */
                   from_source = output;
                 }
               }
@@ -32051,7 +32051,7 @@ module.exports = function inflate_fast(strm, start) {
               }
             }
             else {
-              from = _out - dist;          /* copy direct from output */
+              from = _out - dist;          /* copy direct from docs */
               do {                        /* minimum length is three */
                 output[_out++] = output[from++];
                 output[_out++] = output[from++];
@@ -32202,7 +32202,7 @@ var        TYPE = 12;      /* i: waiting for type bits, including last-flag bit 
 var        TYPEDO = 13;    /* i: same, but skip check to exit inflate on new block */
 var        STORED = 14;    /* i: waiting for stored size (length and complement) */
 var        COPY_ = 15;     /* i/o: same as COPY below, but only first time in */
-var        COPY = 16;      /* i/o: waiting for input or output to copy stored block */
+var        COPY = 16;      /* i/o: waiting for input or docs to copy stored block */
 var        TABLE = 17;     /* i: waiting for dynamic block table lengths */
 var        LENLENS = 18;   /* i: waiting for code length code lengths */
 var        CODELENS = 19;  /* i: waiting for length/lit and distance code lengths */
@@ -32211,8 +32211,8 @@ var            LEN = 21;       /* i: waiting for length/lit/eob code */
 var            LENEXT = 22;    /* i: waiting for length extra bits */
 var            DIST = 23;      /* i: waiting for distance code */
 var            DISTEXT = 24;   /* i: waiting for distance extra bits */
-var            MATCH = 25;     /* o: waiting for output space to copy string */
-var            LIT = 26;       /* o: waiting for output space to write literal */
+var            MATCH = 25;     /* o: waiting for docs space to copy string */
+var            LIT = 26;       /* o: waiting for docs space to write literal */
 var    CHECK = 27;     /* i: waiting for 32-bit check value */
 var    LENGTH = 28;    /* i: waiting for 32-bit length (gzip) */
 var    DONE = 29;      /* finished check, done -- remain here until reset */
@@ -32249,7 +32249,7 @@ function InflateState() {
   this.flags = 0;             /* gzip header method and flags (0 if zlib) */
   this.dmax = 0;              /* zlib header max distance (INFLATE_STRICT) */
   this.check = 0;             /* protected copy of check value */
-  this.total = 0;             /* protected copy of output count */
+  this.total = 0;             /* protected copy of docs count */
   // TODO: may be {}
   this.head = null;           /* where to save gzip header information */
 
@@ -32448,15 +32448,15 @@ function fixedtables(state) {
 /*
  Update the window with the last wsize (normally 32K) bytes written before
  returning.  If window does not exist yet, create it.  This is only called
- when a window is already in use, or when output has been written during this
+ when a window is already in use, or when docs has been written during this
  inflate call, but the end of the deflate stream has not been reached yet.
  It is also called to create a window for dictionary data when a dictionary
  is loaded.
 
- Providing output buffers larger than 32K to inflate() should provide a speed
- advantage, since only the last 32K of output is copied to the sliding window
+ Providing docs buffers larger than 32K to inflate() should provide a speed
+ advantage, since only the last 32K of docs is copied to the sliding window
  upon return from inflate(), and since all distances after the first 32K of
- output will fall in the output data, making match copies simpler and faster.
+ docs will fall in the docs data, making match copies simpler and faster.
  The advantage may be dependent on the size of the processor's data caches.
  */
 function updatewindow(strm, src, end, copy) {
@@ -32472,7 +32472,7 @@ function updatewindow(strm, src, end, copy) {
     state.window = new utils.Buf8(state.wsize);
   }
 
-  /* copy state->wsize or less output bytes into the circular window */
+  /* copy state->wsize or less docs bytes into the circular window */
   if (copy >= state.wsize) {
     utils.arraySet(state.window, src, end - state.wsize, state.wsize, 0);
     state.wnext = 0;
@@ -32503,13 +32503,13 @@ function updatewindow(strm, src, end, copy) {
 
 function inflate(strm, flush) {
   var state;
-  var input, output;          // input/output buffers
+  var input, output;          // input/docs buffers
   var next;                   /* next input INDEX */
-  var put;                    /* next output INDEX */
-  var have, left;             /* available input and output */
+  var put;                    /* next docs INDEX */
+  var have, left;             /* available input and docs */
   var hold;                   /* bit buffer */
   var bits;                   /* bits in bit buffer */
-  var _in, _out;              /* save starting available input and output */
+  var _in, _out;              /* save starting available input and docs */
   var copy;                   /* number of stored or match bytes to copy */
   var from;                   /* where to copy match bytes from */
   var from_source;
@@ -33442,7 +33442,7 @@ function inflate(strm, flush) {
 //          left -= copy;
 //          state.length -= copy;
 //          do {
-//            output[put++] = 0;
+//            docs[put++] = 0;
 //          } while (--copy);
 //          if (state.length === 0) { state.mode = LEN; }
 //          break;
@@ -33458,7 +33458,7 @@ function inflate(strm, flush) {
           if (copy > state.length) { copy = state.length; }
           from_source = state.window;
         }
-        else {                              /* copy from output */
+        else {                              /* copy from docs */
           from_source = output;
           from = put - state.offset;
           copy = state.length;
@@ -34605,7 +34605,7 @@ function init_block(s) {
 
 
 /* ===========================================================================
- * Flush the bit buffer and align the output on a byte boundary
+ * Flush the bit buffer and align the docs on a byte boundary
  */
 function bi_windup(s)
 {
@@ -35146,7 +35146,7 @@ function _tr_align(s) {
 
 /* ===========================================================================
  * Determine the best encoding for the current block: dynamic trees, static
- * trees or store, and output the encoded block to the zip file.
+ * trees or store, and docs the encoded block to the zip file.
  */
 function _tr_flush_block(s, buf, stored_len, last)
 //DeflateState *s;
@@ -35335,12 +35335,12 @@ function ZStream() {
   this.avail_in = 0;
   /* total number of input bytes read so far */
   this.total_in = 0;
-  /* next output byte should be put there */
+  /* next docs byte should be put there */
   this.output = null; // JS specific, because we have no pointers
   this.next_out = 0;
-  /* remaining free space at output */
+  /* remaining free space at docs */
   this.avail_out = 0;
-  /* total number of bytes output so far */
+  /* total number of bytes docs so far */
   this.total_out = 0;
   /* last error message, NULL if no error */
   this.msg = ''/*Z_NULL*/;
@@ -45087,7 +45087,7 @@ EventEmitter.prototype.emit = function emit(type) {
       er = args[0];
     if (er instanceof Error) {
       // Note: The comments on the `throw` lines are intentional, they show
-      // up in Node's output if this results in an unhandled exception.
+      // up in Node's docs if this results in an unhandled exception.
       throw er; // Unhandled 'error' event
     }
     // At least give some kind of context to the user
@@ -48834,7 +48834,7 @@ iconv.getDecoder = function getDecoder(encoding, options) {
 
 // Streaming API
 // NOTE: Streaming API naturally depends on 'stream' module from Node.js. Unfortunately in browser environments this module can add
-// up to 100Kb to the output bundle. To avoid unnecessary code bloat, we don't enable Streaming API in browser by default.
+// up to 100Kb to the docs bundle. To avoid unnecessary code bloat, we don't enable Streaming API in browser by default.
 // If you would like to enable it explicitly, please add the following code to your app:
 // > iconv.enableStreamingAPI(require('stream'));
 iconv.enableStreamingAPI = function enableStreamingAPI(stream_module) {
@@ -48947,7 +48947,7 @@ module.exports = function(stream_module) {
     function IconvLiteDecoderStream(conv, options) {
         this.conv = conv;
         options = options || {};
-        options.encoding = this.encoding = 'utf8'; // We output strings.
+        options.encoding = this.encoding = 'utf8'; // We docs strings.
         Transform.call(this, options);
     }
 
@@ -52840,7 +52840,7 @@ Object.defineProperty(Duplex.prototype, 'destroyed', {
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 // a passthrough stream.
 // basically just the most minimal sort of Transform stream.
-// Every written chunk gets output as-is.
+// Every written chunk gets docs as-is.
 
 
 module.exports = PassThrough;
@@ -54022,7 +54022,7 @@ function indexOf(xs, x) {
 // some bits pass through, and others are simply ignored.  (That would
 // be a valid example of a transform, of course.)
 //
-// While the output is causally related to the input, it's not a
+// While the docs is causally related to the input, it's not a
 // necessarily symmetric or synchronous transformation.  For example,
 // a zlib stream might take multiple plain-text writes(), and then
 // emit a single compressed chunk some time in the future.
@@ -54038,7 +54038,7 @@ function indexOf(xs, x) {
 // In a transform stream, the written data is placed in a buffer.  When
 // _read(n) is called, it transforms the queued up data, calling the
 // buffered _write cb's as it consumes chunks.  If consuming a single
-// written chunk would result in multiple output chunks, then the first
+// written chunk would result in multiple docs chunks, then the first
 // outputted bit calls the readcb, and subsequent chunks just go into
 // the read buffer, and will cause it to emit 'readable' if necessary.
 //
@@ -54047,9 +54047,9 @@ function indexOf(xs, x) {
 // a pathological inflate type of transform can cause excessive buffering
 // here.  For example, imagine a stream where every byte of input is
 // interpreted as an integer from 0-255, and then results in that many
-// bytes of output.  Writing the 4 bytes {ff,ff,ff,ff} would result in
-// 1kb of data being output.  In this case, you could write a very small
-// amount of input, and end up with a very large amount of output.  In
+// bytes of docs.  Writing the 4 bytes {ff,ff,ff,ff} would result in
+// 1kb of data being docs.  In this case, you could write a very small
+// amount of input, and end up with a very large amount of docs.  In
 // such a pathological inflating mechanism, there'd be no way to tell
 // the system to stop doing the transform.  A single 4MB write could
 // cause the system to run out of memory.
@@ -54139,7 +54139,7 @@ Transform.prototype.push = function (chunk, encoding) {
 // override this function in implementation classes.
 // 'chunk' is an input chunk.
 //
-// Call `push(newChunk)` to pass along transformed output
+// Call `push(newChunk)` to pass along transformed docs
 // to the readable side.  You may call 'push' zero or more times.
 //
 // Call `cb(err)` when you are done with this chunk.  If you pass
@@ -66389,7 +66389,7 @@ var OTLayoutEngine = /*#__PURE__*/function () {
 
     this.shaper = choose(script);
     this.plan = new ShapingPlan(this.font, script, glyphRun.direction);
-    this.shaper.plan(this.plan, this.glyphInfos, glyphRun.features); // Assign chosen features to output glyph run
+    this.shaper.plan(this.plan, this.glyphInfos, glyphRun.features); // Assign chosen features to docs glyph run
 
     for (var key in this.plan.allFeatures) {
       glyphRun.features[key] = true;
@@ -71539,7 +71539,7 @@ exports.debuglog = function(set) {
  * in the best way possible given the different types.
  *
  * @param {Object} obj The object to print out.
- * @param {Object} opts Optional options object that alters the output.
+ * @param {Object} opts Optional options object that alters the docs.
  */
 /* legacy: obj, showHidden, depth, colors*/
 function inspect(obj, opts) {
@@ -77396,7 +77396,7 @@ var augumenteccs = function (poly, nblocks, genpoly) {
 };
 
 // auguments BCH(p+q,q) code to the polynomial over GF(2), given the proper
-// genpoly. the both input and output are in binary numbers, and unlike
+// genpoly. the both input and docs are in binary numbers, and unlike
 // calculateecc genpoly should include the 1 bit for the highest degree.
 //
 // actual polynomials used for this procedure are as follows:

@@ -230,7 +230,7 @@ class AdminSportBlocksCrudTest extends TestCase
     }
 
     /**
-     * Создает спортивный блок с базовыми полями.
+     * Creates a sport block with base fields.
      *
      * @param array<string, mixed> $attributes
      */

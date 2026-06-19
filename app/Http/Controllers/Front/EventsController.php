@@ -160,7 +160,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Shows members event: users, team и group.
+     * Shows event members: users, teams, and groups.
      *
      * @param int $event
      * @param EventRepository $events
@@ -204,7 +204,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Shows photo selected photo albumа event.
+     * Shows a photo from the selected event photo album.
      *
      * @param int $event
      * @param int $album
@@ -228,7 +228,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Shows specific photo из photo albumа event.
+     * Shows a specific photo from the event photo album.
      *
      * @param int $event
      * @param int $album
@@ -266,7 +266,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Shows form adding photo в photo album event.
+     * Shows the form for adding a photo to the event photo album.
      *
      * @param int $event
      * @param EventRepository $events
@@ -287,7 +287,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Shows form creation photo albumа event.
+     * Shows the event photo album creation form.
      *
      * @param int $event
      * @param EventRepository $events
@@ -373,7 +373,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Checks access и deletes photo album event.
+     * Checks access and deletes the event photo album.
      */
     public function destroyPhotoalbum(int $event, int $album, EventRepository $events, PhotoalbumRepository $photoAlbums): RedirectResponse
     {
@@ -422,7 +422,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Shows form adding video в video album event.
+     * Shows the form for adding a video to the event video album.
      */
     public function addVideo(int $event, EventRepository $events, VideoalbumRepository $videoAlbums): View
     {
@@ -523,7 +523,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Checks access и deletes video album event.
+     * Checks access and deletes the event video album.
      */
     public function destroyVideoalbum(int $event, int $album, EventRepository $events, VideoalbumRepository $videoAlbums): RedirectResponse
     {

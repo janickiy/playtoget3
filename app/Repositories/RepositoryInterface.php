@@ -10,47 +10,47 @@ use Illuminate\Support\Collection;
 interface RepositoryInterface
 {
     /**
-     * Returns все записи модели; нужен для простых сценариев чтения без фильтров.
+     * Returns all model records; needed for simple reading scenarios without filters.
      */
     public function all(): Collection;
 
     /**
-     * Ищет record by primary key; используется как базовый безопасный access к модели.
+     * Looks for record by primary key; used as basic secure access to the model.
      */
     public function find(int|string $id): ?Model;
 
     /**
-     * Creates record из массива атрибутов; общий низкоуровневый метод для наследников.
+     * Creates record from an array of attributes; A common low-level method for heirs.
      */
     public function create(array $data): Builder|Model;
 
     /**
-     * Creates record из DTO; нужен, чтобы record data шла через typeизированный контракт.
+     * Creates record from DTO; It is necessary for record data to go through a typed contract.
      */
     public function createFromDto(DataTransferObject $dto): Builder|Model;
 
     /**
-     * Updates record by primary key массивом атрибутов; возвращает результат сохранения.
+     * Updates record by primary key by array of attributes; returns the result of saving.
      */
     public function update(int|string $id, array $data): bool;
 
     /**
-     * Updates record by primary key data из DTO; используется для typed update-операций.
+     * Updates record by primary key data from DTO; used for typed update operations.
      */
     public function updateFromDto(int|string $id, DataTransferObject $dto): bool;
 
     /**
-     * Deletes record by primary key; возвращает false, если record не найдена.
+     * Delete record by primary key; returns false if record is not found.
      */
     public function delete(int|string $id): bool;
 
     /**
-     * Deletes все записи модели без сброса sequence; нужен для очистки таблицы через query builder.
+     * Delete all model records without resetting sequence; needed to clean the table using query builder.
      */
     public function deleteAll(): void;
 
     /**
-     * Completely очищает таблицу модели со сбросом счетчиков там, где это поддерживает driver.
+     * Completely clears the model table with counters reset where the driver supports it.
      */
     public function truncate(): void;
 }

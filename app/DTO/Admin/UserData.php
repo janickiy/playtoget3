@@ -33,7 +33,7 @@ final readonly class UserData implements DataTransferObject
     }
 
     /**
-     * Creates DTO user из валидированных data admin form.
+     * Creates DTO user from validated data admin form.
      *
      * @param array<string, mixed> $data
      */
@@ -65,7 +65,7 @@ final readonly class UserData implements DataTransferObject
     }
 
     /**
-     * Returns массив атрибутов user без пароля.
+     * Returns an array of user attributes without a password.
      *
      * @return array<string, mixed>
      */
@@ -95,7 +95,7 @@ final readonly class UserData implements DataTransferObject
     }
 
     /**
-     * Нормализует пустые строки form в null.
+     * Normalizes empty form strings to null.
      */
     private static function nullableString(mixed $value): ?string
     {

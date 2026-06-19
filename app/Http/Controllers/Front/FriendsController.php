@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 class FriendsController extends Controller
 {
     /**
-     * Connects репозиторий друзей для всех действий контроллера.
+     * Connects the friends repository for all controller actions.
      */
     public function __construct(
         private readonly FriendRepository $friends,
@@ -27,7 +27,7 @@ class FriendsController extends Controller
     }
 
     /**
-     * Shows page друзей current user.
+     * Shows the current user friends page.
      *
      * @param Request $request
      * @return View|RedirectResponse
@@ -44,7 +44,7 @@ class FriendsController extends Controller
     }
 
     /**
-     * Shows page друзей selected user.
+     * Shows the selected user friends page.
      *
      * @param int $user
      * @param Request $request
@@ -59,7 +59,7 @@ class FriendsController extends Controller
     }
 
     /**
-     * Готовит списки друзей, заявок, recommendations и data профиля для page друзей.
+     * Prepares lists of friends, applications, recommendations and profile data for page friends.
      *
      * @param Request $request
      * @param User|null $viewer
@@ -108,7 +108,7 @@ class FriendsController extends Controller
     }
 
     /**
-     * Собирает фильтры поиска друзей из query-параметров.
+     * Collects friend search filters from query parameters.
      *
      * @param Request $request
      * @return array
@@ -130,7 +130,7 @@ class FriendsController extends Controller
     }
 
     /**
-     * Returns current авторизованного user фронта.
+     * Returns current of the authorized user front.
      *
      * @return User|null
      */
@@ -143,7 +143,7 @@ class FriendsController extends Controller
     }
 
     /**
-     * Готовит data верхнего block профиля для страниц друзей.
+     * Prepares top block profile data for friends' pages.
      *
      * @param User $user
      * @return array

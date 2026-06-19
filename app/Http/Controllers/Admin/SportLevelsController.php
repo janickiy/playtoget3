@@ -15,7 +15,7 @@ use Illuminate\View\View;
 class SportLevelsController extends Controller
 {
     /**
-     * Connects service sport levels и базовые настройки admin controller.
+     * Connects service sport levels and basic settings of admin controller.
      */
     public function __construct(
         private readonly SportLevelService $sportLevelService,
@@ -44,7 +44,7 @@ class SportLevelsController extends Controller
     }
 
     /**
-     * Creates sport level из валидированных data form.
+     * Creates sport level from validated data forms.
      */
     public function store(StoreRequest $request): RedirectResponse
     {
@@ -94,7 +94,7 @@ class SportLevelsController extends Controller
     }
 
     /**
-     * Updates sport level из валидированных data form.
+     * Updates sport level from validated data forms.
      */
     public function update(EditRequest $request): RedirectResponse
     {

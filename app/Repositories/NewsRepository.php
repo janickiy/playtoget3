@@ -18,7 +18,7 @@ use Illuminate\Support\Collection;
 class NewsRepository extends BaseRepository
 {
     /**
-     * Connects модель и зависимости, с которыми работает репозиторий.
+     * Connects model and dependencies that the repository works with.
      */
     public function __construct(
         Comment $model,
@@ -29,7 +29,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Returns последние новости RSS.
+     * Returns latest news RSS.
      *
      * @param int $limit
      * @return Collection
@@ -40,7 +40,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Собирает общую news feed.
+     * Collects general news feed.
      */
     public function feed(int $limit = 25): Collection
     {
@@ -48,7 +48,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Returns page ленты новостей с учетом лимита и смещения.
+     * Returns page of the news feed taking into account the limit and offset.
      *
      * @param int $limit
      * @param int $offset
@@ -70,7 +70,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Returns элементы ленты по новым photos.
+     * Returns feed elements using new photos.
      *
      * @param int $limit
      * @param int $offset
@@ -126,7 +126,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Returns элементы ленты по новым video.
+     * Returns feed elements for new videos.
      *
      * @param int $limit
      * @param int $offset
@@ -174,7 +174,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Returns элементы ленты по комментариям к стене.
+     * Returns feed elements based on comments to the wall.
      *
      * @param int $limit
      * @param int $offset
@@ -225,7 +225,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Returns элементы ленты по комментариям к photos.
+     * Returns feed elements based on comments to photos.
      *
      * @param int $limit
      * @param int $offset
@@ -291,7 +291,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Returns элементы ленты по комментариям к video.
+     * Returns feed elements based on video comments.
      *
      * @param int $limit
      * @param int $offset
@@ -355,7 +355,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Builds элемент ленты от имени user.
+     * Builds a feed element on behalf of user.
      *
      * @param object $row
      * @param array $data
@@ -403,7 +403,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Adds к элементам ленты счетчики лайков и комментариев.
+     * Adds like and comment counters to feed elements.
      *
      * @param Collection $items
      * @return Collection
@@ -429,7 +429,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Считает связанные actions по typeам и идентификаторам сущностей.
+     * Counts related actions by entity types and identifiers.
      *
      * @param string $modelClass
      * @param string $typeColumn
@@ -458,7 +458,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Returns отображаемое name user из строки выборки.
+     * Returns the display name user from the fetch string.
      */
     private function userName(object $row): string
     {
@@ -468,7 +468,7 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Builds HTML вложений комментария для ленты новостей.
+     * Builds HTML comment attachments for the news feed.
      *
      * @param int $commentId
      * @return string

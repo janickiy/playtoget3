@@ -15,7 +15,7 @@ final readonly class FeedbackAdminData implements DataTransferObject
     }
 
     /**
-     * Creates DTO админского обновления обращения из валидированных data.
+     * Creates DTO for admin update of request from validated data.
      *
      * @param array<string, mixed> $data
      */
@@ -31,7 +31,7 @@ final readonly class FeedbackAdminData implements DataTransferObject
     }
 
     /**
-     * Returns массив полей обращения для сохранения.
+     * Returns an array of request fields to save.
      *
      * @return array<string, mixed>
      */

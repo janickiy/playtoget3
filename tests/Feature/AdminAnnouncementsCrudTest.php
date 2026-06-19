@@ -170,7 +170,7 @@ class AdminAnnouncementsCrudTest extends TestCase
     }
 
     /**
-     * Создает объявление с базовыми полями.
+     * Creates an announcement with base fields.
      *
      * @param array<string, mixed> $attributes
      */

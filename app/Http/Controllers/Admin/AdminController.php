@@ -15,7 +15,7 @@ use Illuminate\Http\Response;
 class AdminController extends Controller
 {
     /**
-     * Connects репозиторий administratorов и базовые настройки админ-контроллера.
+     * Connects administrator repository and basic settings of the admin controller.
      */
     public function __construct(
         private AdminRepository $adminRepository,
@@ -25,7 +25,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Shows page со списком users admin panel.
+     * Shows page with list of users admin panel.
      *
      * @return View
      */
@@ -47,7 +47,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Creates нового user admin panel из валидированных data form.
+     * Creates a new user admin panel from validated data form.
      *
      * @param StoreRequest $request
      * @return RedirectResponse
@@ -77,7 +77,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Updates data user admin panel из валидированных data form.
+     * Updates data user admin panel from validated data form.
      *
      * @param EditRequest $request
      * @return RedirectResponse
@@ -90,7 +90,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Deletes user admin panel и запрещает delete current авторизованного user.
+     * Deletes user admin panel and prohibits the delete current of the authorized user.
      *
      * @param DeleteRequest $request
      * @return JsonResponse

@@ -2241,7 +2241,7 @@
          * Attaches the panes to the document and displays a message or hides if there are none
          */
         SearchPanes.prototype._attachPaneContainer = function () {
-            // If a pane is to be displayed then attach the normal pane output
+            // If a pane is to be displayed then attach the normal pane docs
             for (var _i = 0, _a = this.s.panes; _i < _a.length; _i++) {
                 var pane = _a[_i];
                 if (pane.s.displayed === true) {
@@ -2314,7 +2314,7 @@
          * Attaches the message to the document but does not add any panes
          */
         SearchPanes.prototype._checkMessage = function () {
-            // If a pane is to be displayed then attach the normal pane output
+            // If a pane is to be displayed then attach the normal pane docs
             for (var _i = 0, _a = this.s.panes; _i < _a.length; _i++) {
                 var pane = _a[_i];
                 if (pane.s.displayed === true) {

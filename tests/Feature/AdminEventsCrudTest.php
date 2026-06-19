@@ -210,7 +210,7 @@ class AdminEventsCrudTest extends TestCase
     }
 
     /**
-     * Создает мероприятие с базовыми полями.
+     * Creates an event with base fields.
      *
      * @param array<string, mixed> $attributes
      */

@@ -2147,7 +2147,7 @@
   }
 
   // Redraw the line's text. Interacts with the background and text
-  // classes because the mode may output tokens that influence these
+  // classes because the mode may docs tokens that influence these
   // classes.
   function updateLineText(cm, lineView) {
     var cls = lineView.text.className;

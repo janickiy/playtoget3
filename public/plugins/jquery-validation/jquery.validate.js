@@ -64,7 +64,7 @@ $.extend( $.fn, {
 			this.on( "submit.validate", function( event ) {
 				if ( validator.settings.debug ) {
 
-					// Prevent form submit to be able to see console output
+					// Prevent form submit to be able to see console docs
 					event.preventDefault();
 				}
 

@@ -48,7 +48,7 @@ class SportBlockRepository extends BaseRepository
     }
 
     /**
-     * Returns sport objects of the specified type already prepared for output.
+     * Returns sport objects of the specified type already prepared for docs.
      *
      * @param string $type
      * @param array $filters
@@ -100,7 +100,7 @@ class SportBlockRepository extends BaseRepository
     }
 
     /**
-     * Converts the model to a data array for output.
+     * Converts the model to a data array for docs.
      *
      * @param SportBlock $sportBlock
      * @return array

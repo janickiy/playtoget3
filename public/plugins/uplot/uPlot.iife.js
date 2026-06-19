@@ -439,7 +439,7 @@ var uPlot = (function () {
 	}
 
 	// nullModes is a tables-matched array indicating how to treat nulls in each series
-	// output is sorted ASC on the joined field (table[0]) and duplicate join values are collapsed
+	// docs is sorted ASC on the joined field (table[0]) and duplicate join values are collapsed
 	function join(tables, nullModes) {
 		let xVals = new Set();
 

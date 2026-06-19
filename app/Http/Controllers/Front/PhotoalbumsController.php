@@ -54,7 +54,7 @@ class PhotoalbumsController extends Controller
     }
 
     /**
-     * Shows photo selected photo albumа.
+     * Shows a photo from the selected photo album.
      *
      * @param int $album
      * @param PhotoalbumRepository $photoAlbums
@@ -103,7 +103,7 @@ class PhotoalbumsController extends Controller
     }
 
     /**
-     * Shows form adding photo в accessный album.
+     * Shows the form for adding a photo to an accessible album.
      *
      * @param PhotoalbumRepository $photoAlbums
      * @return View|RedirectResponse
@@ -127,7 +127,7 @@ class PhotoalbumsController extends Controller
     }
 
     /**
-     * Shows form creation photo albumа.
+     * Shows the photo album creation form.
      */
     public function create(): View|RedirectResponse
     {
@@ -239,7 +239,7 @@ class PhotoalbumsController extends Controller
     }
 
     /**
-     * Checks permissions и deletes photo album.
+     * Checks permissions and deletes the photo album.
      *
      * @param int $album
      * @param PhotoalbumRepository $photoAlbums

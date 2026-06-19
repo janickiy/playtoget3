@@ -11,7 +11,7 @@ use Illuminate\Contracts\View\View;
 class AuthController extends Controller
 {
     /**
-     * Restricts access к страницам authorization для уже авторизованных administratorов.
+     * Restricts access to authorization pages for already authorized administrators.
      */
     public function __construct()
     {
@@ -19,7 +19,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Shows form login в админку.
+     * Shows form login in admin.
      *
      * @return View
      */
@@ -29,7 +29,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Checks учетные data administrator и выполняет вход в админку.
+     * Checks administrator credentials and logs in to the admin panel.
      *
      * @param Request $request
      * @return RedirectResponse
@@ -52,7 +52,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Redirects administrator на dashboard после успешной authorization.
+     * Redirects administrator to dashboard after successful authorization.
      *
      * @param $request
      * @param $user
@@ -64,7 +64,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Ends admin session и возвращает на page login.
+     * Ends admin session and returns to page login.
      *
      * @return RedirectResponse
      */

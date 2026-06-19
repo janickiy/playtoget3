@@ -55,7 +55,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Redirects user на page authorization selected OAuth-provider.
+     * Redirects the user to the selected OAuth provider authorization page.
      *
      * @param string $provider
      * @return RedirectResponse
@@ -135,7 +135,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Maps public name provider с driver Socialite.
+     * Maps the provider public name from the Socialite driver.
      */
     private function driverFor(string $provider): ?string
     {

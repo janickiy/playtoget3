@@ -15,7 +15,7 @@ use Illuminate\View\View;
 class AnnouncementsController extends Controller
 {
     /**
-     * Connects репозиторий announcements и базовые настройки админ-контроллера.
+     * Connects announcements repository and basic admin controller settings.
      */
     public function __construct(
         private readonly AnnouncementRepository $announcementRepository,
@@ -44,7 +44,7 @@ class AnnouncementsController extends Controller
     }
 
     /**
-     * Creates announcement из валидированных data form.
+     * Creates announcement from validated data form.
      */
     public function store(StoreRequest $request): RedirectResponse
     {
@@ -94,7 +94,7 @@ class AnnouncementsController extends Controller
     }
 
     /**
-     * Updates announcement из валидированных data form.
+     * Updates announcement from validated data form.
      */
     public function update(EditRequest $request): RedirectResponse
     {

@@ -17,7 +17,7 @@ class PlaygroundsController extends Controller
     private const TYPE = 'playground';
 
     /**
-     * Shows list playground с фильтрами or открывает карточку конкретного object
+     * Shows list playground with filters or opens a card for a specific object
      *
      * @param Request $request
      * @param SportBlockRepository $sportBlocks
@@ -43,7 +43,7 @@ class PlaygroundsController extends Controller
     }
 
     /**
-     * Checks авторизацию и показывает form creation playground.
+     * Checks authorization and shows form creation playground.
      *
      * @return View|RedirectResponse
      */
@@ -62,7 +62,7 @@ class PlaygroundsController extends Controller
     }
 
     /**
-     * Валидирует data form, creates площадку и перенаправляет на его карточку
+     * Validates the data form, creates a platform and redirects to its card
      *
      * @param SportBlockRequest $request
      * @param SportBlockRepository $sportBlocks
@@ -82,7 +82,7 @@ class PlaygroundsController extends Controller
     }
 
     /**
-     * Checks владельца и показывает form editing playground.
+     * Checks the owner and shows the form editing playground.
      *
      * @param int $sportBlock
      * @param SportBlockRepository $sportBlocks
@@ -102,7 +102,7 @@ class PlaygroundsController extends Controller
     }
 
     /**
-     * Checks владельца, сохраняет изменения playground и возвращает на карточку.
+     * Checks the owner, saves playground changes and returns to the card.
      *
      * @param int $sportBlock
      * @param SportBlockRequest $request
@@ -120,7 +120,7 @@ class PlaygroundsController extends Controller
     }
 
     /**
-     * Shows карточку playground, photo и permissions current user.
+     * Shows playground card, photo and permissions current user.
      *
      * @param int $sportBlock
      * @param SportBlockRepository $sportBlocks
@@ -144,7 +144,7 @@ class PlaygroundsController extends Controller
     }
 
     /**
-     * Finds object нужного typeа or завершает запрос ошибкой 404.
+     * Finds object of the desired type or ends the request with a 404 error.
      */
     private function sportBlockOrFail(SportBlockRepository $sportBlocks, int $id): SportBlock
     {
@@ -156,7 +156,7 @@ class PlaygroundsController extends Controller
     }
 
     /**
-     * Готовит общие параметры шаблонов для section playground.
+     * Prepares general template parameters for the section playground.
      */
     private function basePayload(): array
     {
@@ -174,7 +174,7 @@ class PlaygroundsController extends Controller
     }
 
     /**
-     * Собирает фильтры поиска playground из query-параметров.
+     * Collects playground search filters from query parameters.
      */
     private function filters(Request $request): array
     {

@@ -26,7 +26,7 @@ offsets are extracted for each image which will be added. For SVGs in
 particular, their CSS rules have to be applied.
 After all temporary images are generated, they are overlapped using
 getExecuteImgComposition function. This is where the destination canvas
-is set to the proper dimensions. It is then output by composeImages.
+is set to the proper dimensions. It is then docs by composeImages.
 This function returns a promise, which can be used to wait for the whole
 composition process. It requires to be asynchronous, because this is how
 temporary images load their data.

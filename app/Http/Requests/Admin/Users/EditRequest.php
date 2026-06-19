@@ -10,7 +10,7 @@ use Illuminate\Validation\Rule;
 class EditRequest extends FormRequest
 {
     /**
-     * Allows обработку form editing user authenticated administratorу.
+     * Allows an authenticated administrator to process the user edit form.
      */
     public function authorize(): bool
     {

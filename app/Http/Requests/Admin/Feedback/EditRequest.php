@@ -15,7 +15,7 @@ class EditRequest extends FormRequest
     }
 
     /**
-     * Returns rules validation editing обращения.
+     * Returns rules validation editing requests.
      *
      * @return array<string, mixed>
      */

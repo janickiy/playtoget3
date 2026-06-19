@@ -22,7 +22,7 @@ final readonly class CommunityData implements DataTransferObject
     }
 
     /**
-     * Creates DTO community из валидированных data form admin panel.
+     * Creates DTO community from validated data form admin panel.
      *
      * @param array<string, mixed> $data
      */
@@ -43,7 +43,7 @@ final readonly class CommunityData implements DataTransferObject
     }
 
     /**
-     * Returns массив полей для сохранения модели.
+     * Returns an array of fields to save the model.
      *
      * @return array<string, mixed>
      */

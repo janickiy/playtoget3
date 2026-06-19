@@ -25,7 +25,7 @@ class FeedbackController extends Controller
     }
 
     /**
-     * Сохраняет сообщение feedback и возвращает user к форме.
+     * Saves the feedback message and returns the user to the form.
      *
      * @param StoreRequest $request
      * @param FeedbackRepository $feedback

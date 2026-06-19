@@ -375,8 +375,8 @@ CodeMirror.defineMode("perl",function(){
                 pipe                            :1,     // - open a pair of connected filehandles
                 pop                             :1,     // - remove the last element from an array and return it
                 pos                             :1,     // - find or set the offset for the last/next m//g search
-                print                           :1,     // - output a list to a filehandle
-                printf                          :1,     // - output a formatted list to a filehandle
+                print                           :1,     // - docs a list to a filehandle
+                printf                          :1,     // - docs a formatted list to a filehandle
                 prototype                       :1,     // - get the prototype (if any) of a subroutine
                 push                            :1,     // - append one or more elements to an array
                 q                               :null,  // - singly quote a string
@@ -390,7 +390,7 @@ CodeMirror.defineMode("perl",function(){
                 readdir                         :1,     // - get a directory from a directory handle
                 readline                        :1,     // - fetch a record from a file
                 readlink                        :1,     // - determine where a symbolic link is pointing
-                readpipe                        :1,     // - execute a system command and collect standard output
+                readpipe                        :1,     // - execute a system command and collect standard docs
                 recv                            :1,     // - receive a message over a Socket
                 redo                            :1,     // - start this loop iteration over again
                 ref                             :1,     // - find out the type of thing being referenced
@@ -407,7 +407,7 @@ CodeMirror.defineMode("perl",function(){
                 scalar                          :1,     // - force a scalar context
                 seek                            :1,     // - reposition file pointer for random-access I/O
                 seekdir                         :1,     // - reposition directory pointer
-                select                          :1,     // - reset default output or do I/O multiplexing
+                select                          :1,     // - reset default docs or do I/O multiplexing
                 semctl                          :1,     // - SysV semaphore control operations
                 semget                          :1,     // - get set of SysV semaphores
                 semop                           :1,     // - SysV semaphore operations
@@ -448,7 +448,7 @@ CodeMirror.defineMode("perl",function(){
                 sysread                         :1,     // - fixed-length unbuffered input from a filehandle
                 sysseek                         :1,     // - position I/O pointer on handle used with sysread and syswrite
                 system                          :1,     // - run a separate program
-                syswrite                        :1,     // - fixed-length unbuffered output to a filehandle
+                syswrite                        :1,     // - fixed-length unbuffered docs to a filehandle
                 tell                            :1,     // - get current seekpointer on a filehandle
                 telldir                         :1,     // - get current seekpointer on a directory handle
                 tie                             :1,     // - bind a variable to an object class

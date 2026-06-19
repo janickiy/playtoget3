@@ -99,7 +99,7 @@ class VideoalbumsController extends Controller
     }
 
     /**
-     * Shows form adding video в accessный album.
+     * Shows the form for adding a video to an accessible album.
      *
      * @param VideoalbumRepository $videoAlbums
      * @return View|RedirectResponse
@@ -268,7 +268,7 @@ class VideoalbumsController extends Controller
     }
 
     /**
-     * Checks permissions и deletes video album.
+     * Checks permissions and deletes the video album.
      *
      * @param int $album
      * @param VideoalbumRepository $videoAlbums

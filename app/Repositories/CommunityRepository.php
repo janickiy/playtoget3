@@ -502,7 +502,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns administratorов community.
+     * Returns community administrators.
      *
      * @param int $teamId
      * @return Collection
@@ -1601,7 +1601,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Converts event to a data array for output.
+     * Converts event to a data array for docs.
      *
      * @param Event $event
      * @param string $participantType

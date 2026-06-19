@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 class AdminEventRepository extends BaseRepository
 {
     /**
-     * Connects модель event, с которой работает админский репозиторий.
+     * Connects event model, with which the admin repository works.
      */
     public function __construct(
         Event $model,
@@ -22,7 +22,7 @@ class AdminEventRepository extends BaseRepository
     }
 
     /**
-     * Returns options statusов events для form admin panel.
+     * Returns event status options for the admin panel form.
      *
      * @return array<int, string>
      */
@@ -32,7 +32,7 @@ class AdminEventRepository extends BaseRepository
     }
 
     /**
-     * Returns signature statusа event.
+     * Returns the event status label.
      */
     public function statusLabel(?int $status): string
     {
@@ -40,7 +40,7 @@ class AdminEventRepository extends BaseRepository
     }
 
     /**
-     * Creates event из DTO.
+     * Creates an event from DTO.
      *
      * @param EventData $data
      * @return Builder|Model
@@ -51,7 +51,7 @@ class AdminEventRepository extends BaseRepository
     }
 
     /**
-     * Updates event из DTO.
+     * Updates an event from DTO.
      */
     public function updateFromData(EventData $data): bool
     {

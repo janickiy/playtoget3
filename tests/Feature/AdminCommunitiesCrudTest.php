@@ -232,7 +232,7 @@ class AdminCommunitiesCrudTest extends TestCase
     }
 
     /**
-     * Создает комьюнити с базовыми полями.
+     * Creates a community with base fields.
      *
      * @param array<string, mixed> $attributes
      */

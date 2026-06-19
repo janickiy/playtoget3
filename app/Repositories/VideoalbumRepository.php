@@ -21,7 +21,7 @@ class VideoalbumRepository extends BaseRepository
     use DeletesContentRelations;
 
     /**
-     * Connects модель и зависимости, с которыми работает репозиторий.
+     * Connects model and dependencies that the repository works with.
      */
     public function __construct(VideoAlbums $model, private readonly VideoService $videos)
     {
@@ -40,7 +40,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Returns albums указанного владельца и typeа.
+     * Returns albums of the specified owner and type.
      *
      * @param int $ownerId
      * @param string $type
@@ -74,7 +74,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Returns video указанного владельца и typeа.
+     * Returns video of the specified owner and type.
      *
      * @param int $ownerId
      * @param string $type
@@ -98,7 +98,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Checks, есть ли еще video user после current page.
+     * Checks if there is another video user after the current page.
      *
      * @param int $userId
      * @param int $limit
@@ -111,7 +111,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Checks, есть ли еще video владельца после current page.
+     * Checks if there is still an owner video after the current page.
      *
      * @param int $ownerId
      * @param string $type
@@ -133,7 +133,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Returns популярные video selected typeа.
+     * Returns popular videos of selected type.
      *
      * @param int $limit
      * @param int $offset
@@ -174,7 +174,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Finds album по id и допустимым typeам владельца.
+     * Finds album by id and valid owner types.
      *
      * @param int $albumId
      * @param array|null $types
@@ -193,7 +193,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Returns video selected album постранично.
+     * Returns video selected album page by page.
      *
      * @param VideoAlbums $album
      * @param int $limit
@@ -213,7 +213,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Checks, есть ли еще video в albumе после current page.
+     * Checks if there is another video in the album after the current page.
      *
      * @param VideoAlbums $album
      * @param int $limit
@@ -231,7 +231,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Returns albums, accessные user для editing.
+     * Returns albums accessible by user for editing.
      *
      * @param User $user
      * @return Collection
@@ -243,7 +243,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Returns albums владельца, accessные для editing.
+     * Returns albums of the owner, available for editing.
      *
      * @param int $ownerId
      * @param string $type
@@ -259,7 +259,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Returns album user по умолчанию or creates его.
+     * Returns album user by default or creates it.
      *
      * @param User $user
      * @return VideoAlbums
@@ -270,7 +270,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Returns album владельца по умолчанию or creates его.
+     * Returns album to default owner or creates it.
      *
      * @param int $ownerId
      * @param string $type
@@ -303,7 +303,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Creates album для указанного владельца и typeа.
+     * Creates album for the specified owner and type.
      *
      * @param int $ownerId
      * @param string $type
@@ -323,7 +323,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Updates name userского album.
+     * Updates name of user album.
      *
      * @param VideoAlbums $album
      * @param AlbumData $data
@@ -335,7 +335,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Checks, занято ли name album у user.
+     * Checks whether the name album is taken by the user.
      *
      * @param User $user
      * @param string $name
@@ -348,7 +348,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Checks, занято ли name album у владельца.
+     * Checks whether the name album is taken by the owner.
      *
      * @param int $ownerId
      * @param string $type
@@ -367,7 +367,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Checks, является ли user владельцем entity.
+     * Checks whether the user is the owner of the entity.
      *
      * @param VideoAlbums $album
      * @param User|null $user
@@ -379,7 +379,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Adds video user в выбранный album.
+     * Adds video user to the selected album.
      *
      * @param User $user
      * @param VideoAlbums $album
@@ -396,7 +396,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Adds video в album владельца и сохраняет data ролика.
+     * Adds video to the owner's album and saves the video data.
      *
      * @param User $user
      * @param VideoAlbums $album
@@ -408,7 +408,7 @@ class VideoalbumRepository extends BaseRepository
         $videoData = $this->videos->detectVideo($data->link);
 
         if (! $videoData) {
-            throw new RuntimeException('Enter a valid YouTube video link.');
+            throw new RuntimeException('Enter a valid YouTube or Vimeo video link.');
         }
 
         /** @var Video $video */
@@ -425,7 +425,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Deletes album и связанные с ним материалы.
+     * Deletes album and related materials.
      *
      * @param VideoAlbums $album
      * @return bool
@@ -446,7 +446,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Deletes video user, если он является владельцем.
+     * Delete video user if he is the owner.
      *
      * @param User $user
      * @param int $videoId
@@ -468,7 +468,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Deletes video вместе со связанными data.
+     * Delete video along with associated data.
      *
      * @param Video $video
      * @return bool
@@ -484,7 +484,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Преобразует video в массив data для output.
+     * Converts video to a data array for docs.
      *
      * @param Video $video
      * @return array
@@ -505,7 +505,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Преобразует album в массив data для output.
+     * Converts album to a data array for docs.
      *
      * @param VideoAlbums $album
      * @return array
@@ -530,7 +530,7 @@ class VideoalbumRepository extends BaseRepository
     }
 
     /**
-     * Deletes реакции, комментарии и вложения video.
+     * Delete reactions, comments and video attachments.
      *
      * @param Video $video
      * @return void

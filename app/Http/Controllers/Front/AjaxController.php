@@ -337,7 +337,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns recommendations possible friends для current user.
+     * Returns possible friend recommendations for the current user.
      *
      * @param Request $request
      * @return JsonResponse
@@ -582,7 +582,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Deletes members из team or group.
+     * Deletes members from a team or group.
      *
      * @param Request $request
      * @return JsonResponse

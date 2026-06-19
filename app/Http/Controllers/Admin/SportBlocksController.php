@@ -15,7 +15,7 @@ use Illuminate\View\View;
 class SportBlocksController extends Controller
 {
     /**
-     * Connects репозиторий sport blocks и базовые настройки админ-контроллера.
+     * Connects sport blocks repository and basic settings of the admin controller.
      */
     public function __construct(
         private readonly AdminSportBlockRepository $sportBlockRepository,
@@ -70,7 +70,7 @@ class SportBlocksController extends Controller
     }
 
     /**
-     * Updates sport block из валидированных data form.
+     * Updates sport block from validated data forms.
      */
     public function update(EditRequest $request): RedirectResponse
     {
@@ -92,7 +92,7 @@ class SportBlocksController extends Controller
     }
 
     /**
-     * Deletes выбранный sport block.
+     * Delete the selected sport block.
      */
     public function destroy(DeleteRequest $request): JsonResponse
     {

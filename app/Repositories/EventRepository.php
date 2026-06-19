@@ -263,7 +263,7 @@ class EventRepository extends BaseRepository
     }
 
     /**
-     * Converts the model to a data array for output
+     * Converts the model to a data array for docs
      *
      * @param Event $event
      * @return array

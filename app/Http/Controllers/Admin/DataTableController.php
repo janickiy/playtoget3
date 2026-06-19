@@ -29,7 +29,7 @@ use Yajra\DataTables\Facades\DataTables;
 class DataTableController extends Controller
 {
     /**
-     * Returns JSON data users admin panel для DataTables table.
+     * Returns admin panel user JSON data for the DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -56,7 +56,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Returns JSON data users site для DataTables table.
+     * Returns site user JSON data for the DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -103,7 +103,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Returns JSON data категорий для DataTables table.
+     * Returns JSON data of categories for DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -133,7 +133,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Returns JSON data community для DataTables table.
+     * Returns community JSON data for the DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -177,7 +177,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Returns JSON data events для DataTables table.
+     * Returns event JSON data for the DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -226,7 +226,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Returns JSON data announcements для DataTables table.
+     * Returns announcement JSON data for the DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -257,7 +257,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Returns JSON data feedback requests для DataTables table.
+     * Returns feedback request JSON data for the DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -293,7 +293,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Returns JSON data sport blocks для DataTables table.
+     * Returns sport block JSON data for the DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -338,7 +338,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Returns JSON data sport types для DataTables table.
+     * Returns sport type JSON data for the DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -377,7 +377,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Returns JSON data sport levels для DataTables table.
+     * Returns sport level JSON data for the DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -423,7 +423,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Returns JSON data logs authorization для DataTables table.
+     * Returns authorization log JSON data for the DataTables table.
      *
      * @return JsonResponse
      * @throws \Exception
@@ -472,7 +472,7 @@ class DataTableController extends Controller
     }
 
     /**
-     * Adds поиск по date in the same format displayed in the table.
+     * Adds date search in the same format displayed in the table.
      */
     private function filterFormattedDateColumn($query, string $column, string $keyword): void
     {

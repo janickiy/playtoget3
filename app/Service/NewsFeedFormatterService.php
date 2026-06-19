@@ -60,7 +60,7 @@ class NewsFeedFormatterService
     }
 
     /**
-     * Decodes and escapes text for secure output.
+     * Decodes and escapes text for secure docs.
      *
      * @param string $value
      * @return string

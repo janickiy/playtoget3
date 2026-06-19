@@ -14,7 +14,7 @@ final readonly class SportTypeData implements DataTransferObject
     }
 
     /**
-     * Creates DTO sport type из валидированных data admin form.
+     * Creates DTO sport type from validated data admin form.
      *
      * @param array<string, mixed> $data
      */
@@ -30,7 +30,7 @@ final readonly class SportTypeData implements DataTransferObject
     }
 
     /**
-     * Returns массив атрибутов sport type для сохранения.
+     * Returns an array of sport type attributes to save.
      *
      * @return array<string, mixed>
      */

@@ -21,7 +21,7 @@ class AnnouncementsController extends Controller
     }
 
     /**
-     * Shows published announcement по slug.
+     * Shows a published announcement by slug.
      */
     public function show(string $slug, AnnouncementRepository $announcements): View
     {

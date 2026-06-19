@@ -18,7 +18,7 @@ use Illuminate\View\View;
 class UsersController extends Controller
 {
     /**
-     * Connects репозиторий users и базовые настройки админ-контроллера.
+     * Connects users repository and basic settings of the admin controller.
      */
     public function __construct(
         private readonly AdminUserRepository $userRepository,
@@ -27,7 +27,7 @@ class UsersController extends Controller
     }
 
     /**
-     * Shows page со списком users site.
+     * Shows a page with a list of site users.
      *
      * @return View
      */
@@ -39,7 +39,7 @@ class UsersController extends Controller
     }
 
     /**
-     * Shows карточку selected user
+     * Shows the card selected user
      *
      * @param int $id
      * @return View
@@ -76,7 +76,7 @@ class UsersController extends Controller
     }
 
     /**
-     * Updates user из валидированных data form.
+     * Updates user from validated data form.
      *
      * @param EditRequest $request
      * @return RedirectResponse
@@ -128,7 +128,7 @@ class UsersController extends Controller
     }
 
     /**
-     * Marks selected user как deleted.
+     * Marks the selected user as deleted.
      *
      * @param DeleteRequest $request
      * @return JsonResponse
@@ -141,7 +141,7 @@ class UsersController extends Controller
     }
 
     /**
-     * Runs массовое действие над selected users.
+     * Runs mass action on selected users.
      *
      * @param BulkActionRequest $request
      * @return JsonResponse

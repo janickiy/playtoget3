@@ -32,7 +32,7 @@ class GroupsController extends Controller
 
 
     /**
-     * Shows list groups с фильтрами и вкладками current user.
+     * Shows list groups with filters and current user tabs.
      *
      * @param Request $request
      * @param CommunityRepository $communities
@@ -81,7 +81,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Checks авторизацию и показывает form creation group.
+     * Checks authorization and shows form creation group.
      *
      * @return View|RedirectResponse
      */
@@ -105,7 +105,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Валидирует data form и creates group.
+     * Validates data form and creates group.
      *
      * @param CommunityRequest $request
      * @param CommunityRepository $communities
@@ -125,7 +125,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Shows карточку group, верхний block и комментарии.
+     * Shows the group card, top block and comments.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -149,7 +149,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Shows members group и их роли.
+     * Shows group members and rolls them.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -169,7 +169,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Checks permissions и показывает form editing group.
+     * Checks permissions and shows form editing group.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -195,7 +195,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Checks permissions и сохраняет изменения group
+     * Checks permissions and saves group changes
      *
      * @param int $community
      * @param CommunityRequest $request
@@ -239,7 +239,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Shows photo selected photo albumа group.
+     * Shows a photo from the selected group photo album.
      *
      * @param int $community
      * @param int $album
@@ -265,7 +265,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Shows form adding photo в photo album group.
+     * Shows the form for adding a photo to the group photo album.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -286,7 +286,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Shows form creation photo albumа group.
+     * Shows the group photo album creation form.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -308,7 +308,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Creates photo album group из валидированных data form.
+     * Creates photo album group from validated data form.
      *
      * @param int $community
      * @param AlbumRequest $request
@@ -333,7 +333,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Checks permissions и показывает form editing photo albumа group.
+     * Checks permissions and shows form editing photo album group.
      */
     public function editPhotoalbum(int $album, CommunityRepository $communities, PhotoalbumRepository $photoAlbums, ?int $community = null): View
     {
@@ -353,7 +353,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Checks permissions и сохраняет изменения photo albumа group.
+     * Checks permissions and saves changes to photo album group.
      */
     public function updatePhotoalbum(int $album, AlbumRequest $request, CommunityRepository $communities, PhotoalbumRepository $photoAlbums): RedirectResponse
     {
@@ -368,7 +368,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Checks permissions и deletes photo album group.
+     * Checks permissions and deletes the group photo album.
      *
      * @param int $album
      * @param CommunityRepository $communities
@@ -389,7 +389,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Checks group в URL и deletes ее photo album.
+     * Checks the group in the URL and deletes its photo album.
      *
      * @param int $community
      * @param int $album
@@ -410,7 +410,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Shows form editing photo albumа конкретной group.
+     * Shows the edit form for a specific group photo album.
      *
      * @param int $community
      * @param int $album
@@ -424,7 +424,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Сохраняет изменения photo albumа конкретной group.
+     * Saves changes to a photo album of a specific group.
      */
     public function updatePhotoalbumForGroup(int $community, int $album, AlbumRequest $request, CommunityRepository $communities, PhotoalbumRepository $photoAlbums): RedirectResponse
     {
@@ -439,7 +439,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Shows specific photo из photo albumа group.
+     * Shows a specific photo from the group photo album.
      *
      * @param int $community
      * @param int $album
@@ -458,7 +458,7 @@ class GroupsController extends Controller
 
 
     /**
-     * Shows photo group без привязки к выбранному albumу.
+     * Shows photo group without reference to the selected album.
      *
      * @param int $community
      * @param int $photo
@@ -527,7 +527,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Shows form adding video в video album group.
+     * Shows the form for adding a video to the group video album.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -548,7 +548,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Валидирует link и добавляет video в video album group.
+     * Validates link and adds video to video album group.
      *
      * @param int $community
      * @param StoreVideoRequest $request
@@ -590,7 +590,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Creates video album group из валидированных data form
+     * Creates video album group from validated data forms
      *
      * @param int $community
      * @param AlbumRequest $request
@@ -615,7 +615,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Checks permissions и показывает form editing video album group.
+     * Checks permissions and shows form editing video album group.
      *
      * @param int $album
      * @param CommunityRepository $communities
@@ -642,7 +642,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Checks permissions и сохраняет изменения video album group.
+     * Checks permissions and saves changes to video album group.
      *
      * @param int $album
      * @param AlbumRequest $request
@@ -663,7 +663,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Checks permissions и deletes video album group.
+     * Checks permissions and deletes the group video album.
      *
      * @param int $album
      * @param CommunityRepository $communities
@@ -685,7 +685,7 @@ class GroupsController extends Controller
 
 
     /**
-     * Checks group в URL и deletes ее video album.
+     * Checks group in URL and deletes its video album.
      *
      * @param int $community
      * @param int $album
@@ -723,7 +723,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Shows form creation event для group.
+     * Shows the event creation form for a group.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -746,7 +746,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Creates event и сразу привязывает его к groupsе.
+     * Creates an event and immediately binds it to the group.
      *
      * @param int $community
      * @param EventRequest $request
@@ -769,7 +769,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Готовит общие data group для страниц nested sections.
+     * Prepares common data groups for nested sections pages.
      */
     private function groupPayload(Community $group, CommunityRepository $communities, string $section): array
     {
@@ -828,7 +828,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Returns ключ настройки приватности для current section group.
+     * Returns privacy setting key for current section group.
      */
     private function sectionPermissionKey(string $section): ?string
     {
@@ -841,7 +841,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Returns текст сообщения для закрытого section group.
+     * Returns message text for the closed section group.
      */
     private function sectionAccessMessage(?string $sectionPermission, string $labelGenitive): string
     {
@@ -854,7 +854,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Adds к списку groups data о permissionsх и statusе current user.
+     * Adds to the list of groups data about permissions and current user status.
      */
     private function groupsForViewer(Collection $groups, CommunityRepository $communities, ?User $viewer): Collection
     {
@@ -869,7 +869,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Собирает фильтры списка groups из query-параметров.
+     * Collects group list filters from query parameters.
      */
     private function groupFilters(Request $request): array
     {
@@ -883,7 +883,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Detects group из параметра маршрута or из current user.
+     * Detects group from route parameter or from current user.
      */
     private function resolveGroup(?int $community, CommunityRepository $communities): Community
     {
@@ -899,7 +899,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Finds активную group or завершает запрос ошибкой 404.
+     * Finds active group or ends the request with a 404 error.
      */
     private function groupOrFail(int $community, CommunityRepository $communities): Community
     {
@@ -911,7 +911,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Finds photo album, принадлежащий groupsе, or завершает запрос ошибкой 404.
+     * Finds a photo album that belongs to the group or aborts with a 404 error.
      */
     private function groupPhotoalbumOrFail(int $album, Community $group, PhotoalbumRepository $photoAlbums): PhotoAlbums
     {
@@ -923,7 +923,7 @@ class GroupsController extends Controller
     }
 
     /**
-     * Finds video album, принадлежащий groupsе, or завершает запрос ошибкой 404.
+     * Finds a video album that belongs to the group or aborts with a 404 error.
      */
     private function groupVideoalbumOrFail(int $album, Community $group, VideoalbumRepository $videoAlbums): VideoAlbums
     {

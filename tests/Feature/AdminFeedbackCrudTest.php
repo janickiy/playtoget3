@@ -201,7 +201,7 @@ class AdminFeedbackCrudTest extends TestCase
     }
 
     /**
-     * Создает обращение обратной связи с базовыми полями.
+     * Creates a feedback request with base fields.
      *
      * @param array<string, mixed> $attributes
      */

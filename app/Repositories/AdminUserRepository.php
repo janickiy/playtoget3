@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 class AdminUserRepository extends BaseRepository
 {
     /**
-     * Connects модель user для админских операций.
+     * Connects user model for admin operations.
      */
     public function __construct(User $model)
     {
@@ -21,7 +21,7 @@ class AdminUserRepository extends BaseRepository
     }
 
     /**
-     * Creates user из DTO и hashes password, если он provided.
+     * Creates user from DTO and hashes password, if provided.
      */
     public function createFromData(UserData $data): Builder|Model
     {
@@ -32,7 +32,7 @@ class AdminUserRepository extends BaseRepository
     }
 
     /**
-     * Updates user из DTO и меняет password только при заполненном поле.
+     * Updates user from DTO and changes password only when the field is filled in.
      */
     public function updateFromData(UserData $data): bool
     {
@@ -46,7 +46,7 @@ class AdminUserRepository extends BaseRepository
     }
 
     /**
-     * Blocks or разblocksрует одного user.
+     * Blocks or unblocks one user.
      */
     public function setBlocked(int $id, bool $blocked): bool
     {
@@ -62,7 +62,7 @@ class AdminUserRepository extends BaseRepository
     }
 
     /**
-     * Marks одного user как deleted без физического deletion связанных data.
+     * Marks one user as deleted without physical deletion of associated data.
      */
     public function markDeleted(int $id): bool
     {
@@ -70,7 +70,7 @@ class AdminUserRepository extends BaseRepository
     }
 
     /**
-     * Runs массовую blocksровку, разblocksровку or deletion selected users.
+     * Runs mass blocking, unblocking or deletion of selected users.
      *
      * @param array<int, int|string> $ids
      */
@@ -87,7 +87,7 @@ class AdminUserRepository extends BaseRepository
     }
 
     /**
-     * Массово меняет флаг block selected users.
+     * Massively changes the block selected users flag.
      *
      * @param array<int, int> $ids
      */
@@ -119,7 +119,7 @@ class AdminUserRepository extends BaseRepository
     }
 
     /**
-     * Готовит массив атрибутов user для сохранения.
+     * Prepares an array of user attributes for saving.
      *
      * @return array<string, mixed>
      */
@@ -139,7 +139,7 @@ class AdminUserRepository extends BaseRepository
     }
 
     /**
-     * Приводит list id к уникальным положительным целым значениям.
+     * Casts list id to unique positive integer values.
      *
      * @param array<int, int|string> $ids
      * @return array<int, int>

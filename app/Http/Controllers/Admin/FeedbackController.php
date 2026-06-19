@@ -15,7 +15,7 @@ use Illuminate\View\View;
 class FeedbackController extends Controller
 {
     /**
-     * Connects репозиторий feedback requests и notification service.
+     * Connects the feedback requests repository and notification service.
      */
     public function __construct(
         private readonly FeedbackRepository $feedbackRepository,
@@ -50,7 +50,7 @@ class FeedbackController extends Controller
     }
 
     /**
-     * Shows form editing statusа и ответа.
+     * Shows form editing status and reply.
      */
     public function edit(int $id): View
     {
@@ -66,7 +66,7 @@ class FeedbackController extends Controller
     }
 
     /**
-     * Updates status и ответ обращения, отправляя уведомление при status change.
+     * Updates status and response to the request, sending a notification when status changes.
      */
     public function update(EditRequest $request): RedirectResponse
     {

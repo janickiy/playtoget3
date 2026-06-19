@@ -20,7 +20,7 @@ class AdminCommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns options typeов community для form admin panel.
+     * Returns community type options for the admin panel form.
      *
      * @return array<string, string>
      */
@@ -33,7 +33,7 @@ class AdminCommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns signature typeа community.
+     * Returns the community type label.
      */
     public function typeLabel(?string $type): string
     {
@@ -41,7 +41,7 @@ class AdminCommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns options statusов community для form admin panel.
+     * Returns community status options for the admin panel form.
      *
      * @return array<int, string>
      */
@@ -51,7 +51,7 @@ class AdminCommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns signature statusа community.
+     * Returns the community status label.
      */
     public function statusLabel(?int $status): string
     {

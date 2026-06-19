@@ -15,7 +15,7 @@ use Illuminate\View\View;
 class EventsController extends Controller
 {
     /**
-     * Connects репозиторий events и базовые настройки админ-контроллера.
+     * Connects events repository and basic admin controller settings.
      */
     public function __construct(
         private readonly AdminEventRepository $eventRepository,
@@ -68,7 +68,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Updates event из валидированных data form.
+     * Updates event from validated data form.
      */
     public function update(EditRequest $request): RedirectResponse
     {

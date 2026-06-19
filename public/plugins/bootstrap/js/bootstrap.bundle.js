@@ -1925,11 +1925,11 @@
   };
 
   /**
-   * Given element offsets, generate an output similar to getBoundingClientRect
+   * Given element offsets, generate an docs similar to getBoundingClientRect
    * @method
    * @memberof Popper.Utils
    * @argument {Object} offsets
-   * @returns {Object} ClientRect like output
+   * @returns {Object} ClientRect like docs
    */
   function getClientRect(offsets) {
     return _extends({}, offsets, {

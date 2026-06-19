@@ -53,7 +53,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Shows form editing профиля current user.
+     * Shows the current user profile edit form.
      *
      * @param ProfileRepository $profiles
      * @return View|RedirectResponse

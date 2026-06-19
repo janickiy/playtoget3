@@ -239,7 +239,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Shows photo selected photo albumа team.
+     * Shows a photo from the selected team photo album.
      *
      * @param int $community
      * @param int $album
@@ -265,7 +265,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Shows form adding photo в photo album team.
+     * Shows the form for adding a photo to the team photo album.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -286,7 +286,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Shows form creation photo albumа team.
+     * Shows the team photo album creation form.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -380,7 +380,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Checks permissions и deletes photo album team.
+     * Checks permissions and deletes the team photo album.
      *
      * @param int $album
      * @param CommunityRepository $communities
@@ -437,7 +437,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Shows specific photo из photo albumа team.
+     * Shows a specific photo from the team photo album.
      *
      * @param int $community
      * @param int $album
@@ -524,7 +524,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Shows form adding video в video album team.
+     * Shows the form for adding a video to the team video album.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -660,7 +660,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Checks permissions и deletes video album team.
+     * Checks permissions and deletes the team video album.
      *
      * @param int $album
      * @param CommunityRepository $communities
@@ -698,7 +698,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Shows form creation event для team.
+     * Shows the event creation form for a team.
      *
      * @param int $community
      * @param CommunityRepository $communities

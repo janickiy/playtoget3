@@ -21,7 +21,7 @@ class SocialAccountRepository extends BaseRepository
     }
 
     /**
-     * Finds user по соцаккаунту or creates подтвержденную учетную record.
+     * Finds user by social account or creates a verified account record.
      */
     public function findOrCreateUser(string $provider, SocialiteUser $profile): User
     {
@@ -69,7 +69,7 @@ class SocialAccountRepository extends BaseRepository
     }
 
     /**
-     * Returns ошибку authorization error for blocked and deleted users.
+     * Returns an authentication error for blocked and deleted users.
      */
     private function ensureAllowedToLogin(User $user): void
     {
@@ -79,7 +79,7 @@ class SocialAccountRepository extends BaseRepository
     }
 
     /**
-     * Confirms existing user, если он пришел через verified OAuth-provider.
+     * Confirms existing user, if he came through a verified OAuth-provider.
      */
     private function confirmUser(User $user): void
     {
@@ -94,7 +94,7 @@ class SocialAccountRepository extends BaseRepository
     }
 
     /**
-     * Creates нового user на основе data, полученных от OAuth-provider.
+     * Creates a new user based on data received from OAuth-provider.
      */
     private function createUser(string $provider, string $email, SocialiteUser $profile): User
     {
@@ -115,7 +115,7 @@ class SocialAccountRepository extends BaseRepository
     }
 
     /**
-     * Returns email provider or стабильный технический email для сервисов без email.
+     * Returns email provider or stable technical email for services without email.
      */
     private function emailFor(string $provider, string $providerUserId, SocialiteUser $profile): string
     {
@@ -129,7 +129,7 @@ class SocialAccountRepository extends BaseRepository
     }
 
     /**
-     * Готовит name и last name для local profile user.
+     * Prepares name and last name for local profile user.
      *
      * @return array{0: string|null, 1: string|null}
      */
@@ -147,7 +147,7 @@ class SocialAccountRepository extends BaseRepository
     }
 
     /**
-     * Returns общие атрибуты привязки соцаккаунта.
+     * Returns general social account linking attributes.
      *
      * @return array<string, string|null>
      */

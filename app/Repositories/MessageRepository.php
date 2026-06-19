@@ -18,7 +18,7 @@ class MessageRepository extends BaseRepository
     private const RECEIVER_VISIBLE_STATUSES = [0, 1, 2];
 
     /**
-     * Connects модель и зависимости, с которыми работает репозиторий.
+     * Connects model and dependencies that the repository works with.
      */
     public function __construct(Message $model)
     {
@@ -26,7 +26,7 @@ class MessageRepository extends BaseRepository
     }
 
     /**
-     * Returns сообщения диалога между двумя users.
+     * Returns dialogue messages between two users.
      *
      * @param User $viewer
      * @param User $receiver
@@ -49,7 +49,7 @@ class MessageRepository extends BaseRepository
     }
 
     /**
-     * Checks, есть ли еще сообщения в диалоге после current page.
+     * Checks if there are any more messages in the dialog after the current page.
      *
      * @param User $viewer
      * @param User $receiver
@@ -115,7 +115,7 @@ class MessageRepository extends BaseRepository
     }
 
     /**
-     * Creates сообщение, если отправка разрешена настройками приватности.
+     * Creates a message if sending is allowed by privacy settings.
      *
      * @param User $sender
      * @param User $receiver
@@ -150,7 +150,7 @@ class MessageRepository extends BaseRepository
     }
 
     /**
-     * Returns новые сообщения user после указанного id.
+     * Returns new user messages after the specified id.
      *
      * @param User $viewer
      * @param int $lastId
@@ -181,7 +181,7 @@ class MessageRepository extends BaseRepository
     }
 
     /**
-     * Marks сообщения диалога прочитанными для user.
+     * Marks dialog messages read for the user.
      *
      * @param User $viewer
      * @param User $sender
@@ -197,7 +197,7 @@ class MessageRepository extends BaseRepository
     }
 
     /**
-     * Считает непрочитанные сообщения user.
+     * Counts unread user messages.
      *
      * @param User $viewer
      * @return int
@@ -211,7 +211,7 @@ class MessageRepository extends BaseRepository
     }
 
     /**
-     * Считает диалоги, в которых у user есть непрочитанные сообщения.
+     * Counts conversations in which the user has unread messages.
      *
      * @param User $viewer
      * @return int
@@ -227,7 +227,7 @@ class MessageRepository extends BaseRepository
     }
 
     /**
-     * Checks, может ли отправитель написать получателю.
+     * Checks whether the sender can write to the recipient.
      *
      * @param User $sender
      * @param User $receiver
@@ -252,7 +252,7 @@ class MessageRepository extends BaseRepository
     }
 
     /**
-     * Скрывает сообщение для selected user.
+     * Hides the message for the selected user.
      *
      * @param User $viewer
      * @param int $messageId
@@ -288,7 +288,7 @@ class MessageRepository extends BaseRepository
     }
 
     /**
-     * Скрывает диалог для selected user.
+     * Hides the dialog for the selected user.
      *
      * @param User $viewer
      * @param User $partner
@@ -306,7 +306,7 @@ class MessageRepository extends BaseRepository
     }
 
     /**
-     * Преобразует сообщение в массив data для диалога.
+     * Converts the message to a data array for the dialog.
      *
      * @param Message $message
      * @return array
@@ -333,7 +333,7 @@ class MessageRepository extends BaseRepository
     }
 
     /**
-     * Готовит запрос видимых сообщений между двумя users.
+     * Prepares a request for visible messages between two users.
      *
      * @param int $viewerId
      * @param int $otherId
@@ -364,7 +364,7 @@ class MessageRepository extends BaseRepository
     }
 
     /**
-     * Готовит запрос сообщений, видимых выбранному user.
+     * Prepares a request for messages visible to the selected user.
      *
      * @param int $viewerId
      * @return Builder
@@ -392,7 +392,7 @@ class MessageRepository extends BaseRepository
     }
 
     /**
-     * Checks, есть ли block между users.
+     * Checks whether there is a block between users.
      *
      * @param int $userId
      * @param int $friendId
@@ -415,7 +415,7 @@ class MessageRepository extends BaseRepository
     }
 
     /**
-     * Checks, whether users friendsи.
+     * Checks whether the users are friends.
      *
      * @param int $userId
      * @param int $friendId
@@ -438,7 +438,7 @@ class MessageRepository extends BaseRepository
     }
 
     /**
-     * Нормализует list идентификаторов вложений из входных data.
+     * Normalizes the list of attachment IDs from the input data.
      *
      * @param array|string|null $attach
      * @return array
@@ -463,7 +463,7 @@ class MessageRepository extends BaseRepository
     }
 
     /**
-     * Подготавливает текст сообщения для безопасного output.
+     * Prepares message text for secure docs.
      *
      * @param string $content
      * @return string
@@ -481,7 +481,7 @@ class MessageRepository extends BaseRepository
     }
 
     /**
-     * Builds HTML вложений сообщения.
+     * Builds HTML message attachments.
      *
      * @param Collection $attachments
      * @return string

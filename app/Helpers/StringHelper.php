@@ -6,6 +6,10 @@ use Carbon\Carbon;
 
 class StringHelper
 {
+    private const PROVIDER_YOUTUBE = 'youtube';
+
+    private const PROVIDER_VIMEO = 'vimeo';
+
     /**
      * @param string $provider
      * @param string $video
@@ -13,8 +17,12 @@ class StringHelper
      */
     public static function thumbUrl(string $provider, string $video): string
     {
-        if ($provider === 'youtube' && $video !== '') {
+        if ($provider === self::PROVIDER_YOUTUBE && $video !== '') {
             return 'https://img.youtube.com/vi/' . rawurlencode($video) . '/hqdefault.jpg';
+        }
+
+        if ($provider === self::PROVIDER_VIMEO && $video !== '') {
+            return asset('frontend/images/default_group.png');
         }
 
         return asset('frontend/images/default_group.png');
@@ -27,8 +35,12 @@ class StringHelper
      */
     public static function videoThumbUrl(?string $provider, ?string $video): string
     {
-        if ($provider === 'youtube' && $video) {
+        if ($provider === self::PROVIDER_YOUTUBE && $video) {
             return 'https://img.youtube.com/vi/' . rawurlencode($video) . '/hqdefault.jpg';
+        }
+
+        if ($provider === self::PROVIDER_VIMEO && $video) {
+            return asset('frontend/images/noimage.png');
         }
 
         return asset('frontend/images/noimage.png');

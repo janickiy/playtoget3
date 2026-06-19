@@ -31,7 +31,7 @@ class FeedbackRepository extends BaseRepository
     }
 
     /**
-     * Returns options statusов feedback requests для form admin panel.
+     * Returns feedback request status options for the admin panel form.
      *
      * @return array<int, string>
      */
