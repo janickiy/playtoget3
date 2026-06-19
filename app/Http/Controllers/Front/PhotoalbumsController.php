@@ -149,7 +149,7 @@ class PhotoalbumsController extends Controller
     }
 
     /**
-     * Creates photo album из валидированных data form.
+     * Creates photo album from validated data form.
      *
      * @param AlbumRequest $request
      * @param PhotoalbumRepository $photoAlbums
@@ -177,7 +177,7 @@ class PhotoalbumsController extends Controller
     }
 
     /**
-     * Checks permissions и показывает form editing photo albumа.
+     * Checks permissions and shows the form editing photo album.
      *
      * @param int $album
      * @param PhotoalbumRepository $photoAlbums
@@ -207,7 +207,7 @@ class PhotoalbumsController extends Controller
     }
 
     /**
-     * Checks permissions и сохраняет изменения photo albumа.
+     * Checks permissions and saves changes to the photo album.
      *
      * @param int $album
      * @param AlbumRequest $request
@@ -262,7 +262,7 @@ class PhotoalbumsController extends Controller
     }
 
     /**
-     * Готовит общую listing photo albumов для current or selected user.
+     * Prepares a general listing of photo albums for the current or selected user.
      *
      * @param int $userId
      * @param PhotoalbumRepository $photoAlbums
@@ -314,7 +314,7 @@ class PhotoalbumsController extends Controller
     }
 
     /**
-     * Готовит data верхнего block профиля для страниц photo albumов.
+     * Prepares top block profile data for photo album pages.
      *
      * @param $user
      * @return array

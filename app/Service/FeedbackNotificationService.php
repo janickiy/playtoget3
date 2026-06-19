@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Mail;
 class FeedbackNotificationService
 {
     /**
-     * Отправляет user письмо с подтверждением, что feedback request принято.
+     * Sends a letter to the user confirming that the feedback request has been accepted.
      */
     public function sendSubmittedNotification(FeedbackData $data): void
     {
@@ -20,7 +20,7 @@ class FeedbackNotificationService
     }
 
     /**
-     * Отправляет user уведомление о status change обращения.
+     * Sends a notification to the user about the status change of the request.
      */
     public function sendStatusChangedNotification(Feedback $feedback, FeedbackStatus $previousStatus): void
     {

@@ -14,7 +14,7 @@ class ProfileImageService
     private ImageFileService $images;
 
     /**
-     * Connects сервис для работы с uploaded images.
+     * Connects service for working with uploaded images.
      */
     public function __construct(?ImageFileService $images = null)
     {
@@ -22,7 +22,7 @@ class ProfileImageService
     }
 
     /**
-     * Обрезает uploaded avatar во temporary квадратный файл.
+     * Crop the uploaded avatar into a temporary square file.
      *
      * @param User $user
      * @param ImageCropData $data
@@ -89,7 +89,7 @@ class ProfileImageService
     }
 
     /**
-     * Сохраняет image профиля в указанную директорию.
+     * Saves the profile image to the specified directory.
      *
      * @param UploadedFile $file
      * @param string $directory
@@ -110,7 +110,7 @@ class ProfileImageService
     }
 
     /**
-     * Переносит temporary avatar в permanent storage user.
+     * Transfers temporary avatar to permanent storage user.
      *
      * @param string|null $temporaryAvatar
      * @param int $userId
@@ -134,7 +134,7 @@ class ProfileImageService
     }
 
     /**
-     * Переносит temporary cover в permanent storage user.
+     * Transfers temporary cover to permanent storage user.
      *
      * @param string|null $temporaryCover
      * @param int $userId
@@ -158,7 +158,7 @@ class ProfileImageService
     }
 
     /**
-     * Deletes image профиля из указанной директории.
+     * Deletes profile image from the specified directory.
      *
      * @param string $directory
      * @param string|null $filename
@@ -174,7 +174,7 @@ class ProfileImageService
     }
 
     /**
-     * Переносит временное image в permanent директорию профиля.
+     * Moves the temporary image to the permanent profile directory.
      *
      * @param string $temporaryImage
      * @param int $userId

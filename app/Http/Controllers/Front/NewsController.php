@@ -10,7 +10,7 @@ class NewsController extends Controller
 {
 
     /**
-     * Shows news feed user с первой страницей записей.
+     * Shows news feed user with the first page of posts.
      *
      * @param NewsRepository $news
      * @return View

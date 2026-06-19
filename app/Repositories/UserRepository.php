@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 class UserRepository extends BaseRepository
 {
     /**
-     * Connects модель и зависимости, с которыми работает репозиторий.
+     * Connects model and dependencies that the repository works with.
      */
     public function __construct(User $model)
     {
@@ -17,7 +17,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * Считает подтвержденных активных users.
+     * Counts confirmed active users.
      */
     public function countConfirmed(): int
     {
@@ -47,7 +47,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * Finds активную record по идентификатору.
+     * Finds active record by identifier.
      *
      * @param int $id
      * @return User|null
@@ -64,7 +64,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * Checks, что password user хранится в bcrypt-формате.
+     * Checks that user password is stored in bcrypt format.
      */
     public function passwordUsesBcrypt(User $user): bool
     {

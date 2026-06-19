@@ -26,7 +26,7 @@ class AuthController extends Controller
     ];
 
     /**
-     * Checks user по bcrypt-паролю и авторизует на website.
+     * Checks user by bcrypt-password and authorized website.
      *
      * @param LoginRequest $request
      * @param UserRepository $users
@@ -80,7 +80,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Обрабатывает callback OAuth-provider и авторизует локального user.
+     * Processes the OAuth-provider callback and authorizes the local user.
      *
      * @param string $provider
      * @param SocialAccountRepository $accounts
@@ -123,7 +123,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Ends userскую session и возвращает на home page
+     * Ends user session and returns to home page
      *
      * @return RedirectResponse
      */
@@ -143,7 +143,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Checks, что для provider заполнены обязательные OAuth-настройки.
+     * Checks that the required OAuth settings are filled in for the provider.
      */
     private function providerIsConfigured(string $driver): bool
     {

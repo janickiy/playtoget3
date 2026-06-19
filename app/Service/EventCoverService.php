@@ -11,7 +11,7 @@ class EventCoverService
     private ImageFileService $images;
 
     /**
-     * Connects сервис для генерации имен загруженных images.
+     * Connects service for generating names of downloaded images.
      */
     public function __construct(?ImageFileService $images = null)
     {
@@ -19,7 +19,7 @@ class EventCoverService
     }
 
     /**
-     * Сохраняет cover event и возвращает name файла.
+     * Saves the cover event and returns the file name.
      *
      * @param UploadedFile|null $file
      * @return string|null

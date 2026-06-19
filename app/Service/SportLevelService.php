@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class SportLevelService
 {
     /**
-     * Connects repository для управления sport levels.
+     * Connects repository for managing sport levels.
      */
     public function __construct(
         private readonly SportLevelRepository $sportLevelRepository,
@@ -19,7 +19,7 @@ class SportLevelService
     }
 
     /**
-     * Creates новый sport level.
+     * Creates a new sport level.
      */
     public function create(SportLevelData $data): Builder|Model
     {
@@ -27,7 +27,7 @@ class SportLevelService
     }
 
     /**
-     * Updates выбранный sport level.
+     * Updates selected sport level.
      */
     public function update(SportLevelData $data): bool
     {
@@ -35,7 +35,7 @@ class SportLevelService
     }
 
     /**
-     * Deletes выбранный sport level.
+     * Delete the selected sport level.
      */
     public function delete(int $id): bool
     {
@@ -43,7 +43,7 @@ class SportLevelService
     }
 
     /**
-     * Returns sport level для страницы просмотра или редактирования.
+     * Returns sport level for view or edit page.
      */
     public function find(int $id): ?SportLevel
     {

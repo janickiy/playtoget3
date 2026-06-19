@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 class FeedbackRepository extends BaseRepository
 {
     /**
-     * Connects модель и зависимости, с которыми работает репозиторий.
+     * Connects model and dependencies that the repository works with.
      */
     public function __construct(Feedback $model)
     {
@@ -20,7 +20,7 @@ class FeedbackRepository extends BaseRepository
     }
 
     /**
-     * Creates record из DTO с подготовленными data.
+     * Creates record from DTO with prepared data.
      */
     public function createFromData(FeedbackData $data): Builder|Model
     {
@@ -41,7 +41,7 @@ class FeedbackRepository extends BaseRepository
     }
 
     /**
-     * Updates status и ответ обращения из DTO.
+     * Updates status and response from the DTO.
      */
     public function updateFromAdminData(FeedbackAdminData $data): bool
     {

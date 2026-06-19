@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class ContentRepository extends BaseRepository
 {
     /**
-     * Connects модель и зависимости, с которыми работает репозиторий.
+     * Connects model and dependencies that the repository works with.
      */
     public function __construct(Content $model)
     {
@@ -19,7 +19,7 @@ class ContentRepository extends BaseRepository
     }
 
     /**
-     * Creates page or section из DTO с подготовленным уникальным slug.
+     * Creates a page or section from a DTO with a unique slug prepared.
      *
      * @param ContentData $data
      * @return Builder|Model
@@ -30,7 +30,7 @@ class ContentRepository extends BaseRepository
     }
 
     /**
-     * Updates page or section из DTO с подготовленным уникальным slug.
+     * Updates page or section from a DTO with a unique slug prepared.
      *
      * @param ContentData $data
      * @return bool
@@ -41,7 +41,7 @@ class ContentRepository extends BaseRepository
     }
 
     /**
-     * Returns опубликованную контентную page по slug.
+     * Returns published content page by slug.
      *
      * @param string $slug
      * @return Content|null
@@ -58,7 +58,7 @@ class ContentRepository extends BaseRepository
     }
 
     /**
-     * Готовит массив полей для сохранения page.
+     * Prepares an array of fields for saving page.
      *
      * @param ContentData $data
      * @param int|null $ignoreId
@@ -74,7 +74,7 @@ class ContentRepository extends BaseRepository
 
 
     /**
-     * Builds уникальный slug для page, игнорируя текущую record при реyesктировании
+     * Builds a unique slug for page, ignoring the current record when responding
      *
      * @param string $source
      * @param int|null $ignoreId
@@ -96,7 +96,7 @@ class ContentRepository extends BaseRepository
     }
 
     /**
-     * Checks, занят ли slug другой страницей.
+     * Checks whether the slug is occupied by another page.
      *
      * @param string $slug
      * @param int|null $ignoreId

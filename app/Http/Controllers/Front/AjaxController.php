@@ -51,7 +51,7 @@ use Illuminate\Support\Facades\Validator;
 class AjaxController extends Controller
 {
     /**
-     * Connects репозитории, нужные AJAX-обработчикам фронта.
+     * Connects repositories needed by AJAX front handlers.
      */
     public function __construct(
         private readonly NewsRepository       $news,
@@ -73,7 +73,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Маршрутизирует AJAX-запрос по имени actions и возвращает JSON-ответ.
+     * Routes an AJAX request named actions and returns a JSON response.
      */
     public function handle(Request $request, string $action): JsonResponse
     {
@@ -139,7 +139,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns следующую page новостей user для бесконечной прокрутки.
+     * Returns next user news page for infinite scrolling.
      */
     private function getUserNewsList(Request $request): JsonResponse
     {
@@ -157,7 +157,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns list моих or приглашенных teams/groups с фильтрами.
+     * Returns list of my or invited teams/groups with filters.
      *
      * @param Request $request
      * @return JsonResponse
@@ -206,7 +206,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns популярные team or group с фильтрами.
+     * Returns popular team or group with filters.
      *
      * @param Request $request
      * @return JsonResponse
@@ -244,7 +244,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns карточки площадок, магазинов or fitness для AJAX-подгрузки.
+     * Returns cards of sites, stores or fitness for AJAX loading.
      *
      * @param Request $request
      * @return JsonResponse
@@ -278,7 +278,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns мои or приглашенные event для AJAX-подгрузки.
+     * Returns my or invited events for AJAX loading.
      *
      * @param Request $request
      * @return JsonResponse
@@ -314,7 +314,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns популярные event для AJAX-подгрузки.
+     * Returns popular events for AJAX loading.
      *
      * @param Request $request
      * @return JsonResponse
@@ -359,7 +359,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns page списка друзей selected user.
+     * Returns page of friends list selected user.
      *
      * @param Request $request
      * @return JsonResponse
@@ -383,7 +383,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Creates заявку в friends от current user.
+     * Creates a friend request from the current user.
      *
      * @param Request $request
      * @return JsonResponse
@@ -403,7 +403,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Принимает входящую заявку в friends.
+     * Accepts incoming requests to friends.
      *
      * @param Request $request
      * @return JsonResponse
@@ -423,7 +423,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Deletes друга or отклоняет заявку в friends.
+     * Deletes a friend or rejects a request to friends.
      *
      * @param Request $request
      * @return JsonResponse
@@ -446,7 +446,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Blocks selected user для current профиля.
+     * Blocks selected user for the current profile.
      *
      * @param Request $request
      * @return JsonResponse
@@ -469,7 +469,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Снимает blocksровку с selected user.
+     * Removes blocks from the selected user.
      *
      * @param Request $request
      * @return JsonResponse
@@ -492,7 +492,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Меняет status участия user в teamsе or groupsе.
+     * Changes the user's participation status in teams or groups.
      *
      * @param Request $request
      * @return JsonResponse
@@ -520,7 +520,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Отправляет user приглашение в team or group.
+     * Sends a user an invitation to a team or group.
      *
      * @param Request $request
      * @return JsonResponse
@@ -554,7 +554,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns list друзей, которых можно пригласить в team or group.
+     * Returns list of friends who can be invited to team or group.
      *
      * @param Request $request
      * @return JsonResponse
@@ -630,7 +630,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Deletes user из черного списка team or group.
+     * Deletes user from the team or group blacklist.
      *
      * @param Request $request
      * @return JsonResponse
@@ -654,7 +654,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Ищет users, которых можно назначить administrators.
+     * Searches for users who can be assigned as administrators.
      *
      * @param Request $request
      * @return JsonResponse
@@ -680,7 +680,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Назначает user administrator team or group.
+     * Assigns user administrator to team or group.
      *
      * @param Request $request
      * @return JsonResponse
@@ -704,7 +704,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Снимает administrator team or group.
+     * Filmed by administrator team or group.
      *
      * @param Request $request
      * @return JsonResponse
@@ -728,7 +728,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Ищет event, которые можно привязать к teamsе or groupsе.
+     * Looks for events that can be associated with teams or groups.
      *
      * @param Request $request
      * @return JsonResponse
@@ -770,7 +770,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Меняет status участия team or group в мероприятии.
+     * Changes the status of a team or group's participation in an event.
      *
      * @param Request $request
      * @return JsonResponse
@@ -801,7 +801,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Меняет status участия user в мероприятии.
+     * Changes the user's participation status in the event.
      *
      * @param Request $request
      * @return JsonResponse
@@ -827,7 +827,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns list друзей, которых можно пригласить в event.
+     * Returns list of friends who can be invited to the event.
      *
      * @param Request $request
      * @return JsonResponse
@@ -853,7 +853,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Отправляет выбранным friends приглашение в event.
+     * Sends an event invitation to the selected friends.
      *
      * @param Request $request
      * @return JsonResponse
@@ -885,7 +885,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns page комментариев для профиля, события or entity.
+     * Returns page comments for a profile, event or entity.
      *
      * @param Request $request
      * @return JsonResponse
@@ -932,7 +932,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns data photo и соседние элементы галереи.
+     * Returns data photo and adjacent gallery elements.
      *
      * @param Request $request
      * @return JsonResponse
@@ -995,7 +995,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Загружает photo через AJAX в выбранный album or сущность.
+     * Loads a photo via AJAX into the selected album or entity.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1066,7 +1066,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns page photos для владельца or current user.
+     * Returns page photos for owner or current user.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1107,7 +1107,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns page photos конкретного album.
+     * Returns page photos of a specific album.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1143,7 +1143,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Deletes photo после validation прав current user.
+     * Deletes photo after validation by current user.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1180,7 +1180,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns data video и соседние элементы video album.
+     * Returns data video and adjacent video album elements.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1247,7 +1247,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns page video для владельца or current user.
+     * Returns page video for owner or current user.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1288,7 +1288,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns page video конкретного album.
+     * Returns page video of a specific album.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1324,7 +1324,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Deletes video после validation прав current user.
+     * Deletes video after validation by current user.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1362,7 +1362,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Загружает вложение-photo для комментария or сообщения.
+     * Loads a photo attachment for a comment or message.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1397,7 +1397,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Принимает файл avatarа, creates temporary crop и возвращает data preview.
+     * Takes an avatar file, creates a temporary crop and returns a data preview.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1434,7 +1434,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Принимает файл обложки, creates temporary crop и возвращает data preview.
+     * Takes a cover file, creates a temporary crop and returns a data preview.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1471,7 +1471,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Creates комментарий к профилю, событию or другой поддержанной entity.
+     * Creates a comment on a profile, event or other supported entity.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1560,7 +1560,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Deletes комментарий после validation прав.
+     * Delete the comment after validating rights.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1582,7 +1582,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Creates сообщение в диалоге current user.
+     * Creates a message in the current user dialog.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1616,7 +1616,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns page сообщений selected диалога.
+     * Returns page of selected dialog messages.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1642,7 +1642,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns новые сообщения диалога после указанного идентификатора.
+     * Returns new conversation messages after the specified ID.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1666,7 +1666,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns актуальные события для push-уведомлений current user.
+     * Returns current events for push notifications current user.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1698,7 +1698,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Готовит уведомления о входящих заявках в friends.
+     * Prepares notifications about incoming requests to friends.
      *
      * @param User $viewer
      * @return Collection
@@ -1728,7 +1728,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Готовит уведомления о приглашениях в group и team.
+     * Prepares notifications of invitations to group and team.
      *
      * @param User $viewer
      * @return Collection
@@ -1764,7 +1764,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Готовит уведомления о приглашениях на event.
+     * Prepares notifications of invitations to events.
      *
      * @param User $viewer
      * @return Collection
@@ -1799,7 +1799,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns отображаемое name user для текста уведомления.
+     * Returns user's display name for the notification text.
      *
      * @param User|null $user
      * @return string
@@ -1810,7 +1810,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Deletes сообщение current user.
+     * Delete message current user.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1830,7 +1830,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Deletes диалог для current user.
+     * Delete dialog for current user.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1851,7 +1851,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Переключает лайк для поддержанной entity и возвращает новое количество.
+     * Toggles the like for the supported entity and returns the new amount.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1902,7 +1902,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Creates репост поддержанной entity от имени user or community.
+     * Creates a repost of a supported entity on behalf of a user or community.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1943,7 +1943,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Ищет city для живого поиска в формах.
+     * Searches for city for live search in forms.
      *
      * @param Request $request
      * @return JsonResponse
@@ -1975,7 +1975,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Ищет виды спорта для живого поиска в формах.
+     * Looks for sports for live search in forms.
      *
      * @param Request $request
      * @return JsonResponse
@@ -2002,7 +2002,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns current авторизованного user фронта.
+     * Returns current of the authorized user front.
      *
      * @param Request $request
      * @return JsonResponse
@@ -2016,7 +2016,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns team or group из AJAX-запроса по идентификатору.
+     * Returns team or group from an AJAX request by ID.
      *
      * @param Request $request
      * @return Community|null
@@ -2031,7 +2031,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Нормализует входящий list идентификаторов вложений.
+     * Normalizes the incoming list of attachment IDs.
      */
     private function attachmentIds(mixed $attach): array
     {
@@ -2053,7 +2053,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Checks access к медиа-sectionу владельца перед AJAX-подгрузкой.
+     * Checks access to the owner's media section before AJAX loading.
      */
     private function canViewOwnerMedia(string $type, int $ownerId, string $section, ?User $viewer): bool
     {
@@ -2067,7 +2067,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Checks access к sectionу профиля user для AJAX-сценариев.
+     * Checks access to the user profile section for AJAX scripts.
      */
     private function canViewUserSection(int $userId, string $section, ?User $viewer): bool
     {
@@ -2084,7 +2084,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Checks access к конкретной photo or video с учетом владельца album.
+     * Checks access to a specific photo or video based on the owner of the album.
      */
     private function canViewMediaEntity(string $type, int $contentId, ?User $viewer): bool
     {
@@ -2116,7 +2116,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Checks access к комментарию через access к entity, к которой он относится.
+     * Checks access to a comment through access to the entity it belongs to.
      */
     private function canViewCommentEntity(int $commentId, ?User $viewer): bool
     {
@@ -2139,7 +2139,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Returns пустой ответ для закрытого медиа-section.
+     * Returns an empty response for a closed media section.
      */
     private function emptyMediaResponse(): JsonResponse
     {
@@ -2148,7 +2148,7 @@ class AjaxController extends Controller
 
 
     /**
-     * Рендерит HTML-карточки photos для AJAX-ответа.
+     * Renders HTML photos cards for AJAX response.
      *
      * @param $photos
      * @param User|null $viewer
@@ -2168,7 +2168,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Рендерит HTML-карточки video для AJAX-ответа.
+     * Renders HTML video cards for AJAX response.
      *
      * @param $videos
      * @param User|null $viewer
@@ -2188,7 +2188,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Adds к списку сообществ data о permissionsх и statusе current user.
+     * Adds to the list of communities data about permissions and status of the current user.
      *
      * @param Collection $items
      * @param User $viewer
@@ -2207,7 +2207,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Рендерит HTML-карточки teams or groups для AJAX-ответа.
+     * Renders HTML teams or groups cards for an AJAX response.
      *
      * @param Collection $items
      * @param string $type
@@ -2228,7 +2228,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Рендерит HTML-карточки events для AJAX-ответа
+     * Renders HTML event cards for AJAX response
      *
      * @param Collection $items
      * @return string
@@ -2242,7 +2242,7 @@ class AjaxController extends Controller
 
 
     /**
-     * Рендерит HTML-карточки спорт-blocks для AJAX-ответа.
+     * Renders HTML sports-blocks cards for AJAX response.
      *
      * @param Collection $items
      * @param string $routePrefix
@@ -2262,7 +2262,7 @@ class AjaxController extends Controller
 
 
     /**
-     * Собирает фильтры teams и groups из AJAX-запроса.
+     * Collects teams and groups filters from an AJAX request.
      *
      * @param Request $request
      * @return array
@@ -2279,7 +2279,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Собирает фильтры events из AJAX-запроса
+     * Collects event filters from an AJAX request
      *
      * @param Request $request
      * @return array
@@ -2301,7 +2301,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Собирает фильтры спорт-blocks из AJAX-запроса.
+     * Collects sports block filters from an AJAX request.
      *
      * @param Request $request
      * @return array
@@ -2316,7 +2316,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Валидирует AJAX-запрос rulesми из FormRequest-класса.
+     * Validates the AJAX request rules from the FormRequest class.
      *
      * @param Request $request
      * @param string $requestClass

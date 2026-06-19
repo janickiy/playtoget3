@@ -30,7 +30,7 @@ class CommunityRepository extends BaseRepository
     use SyncsGeoTargets;
 
     /**
-     * Connects модель и зависимости, с которыми работает репозиторий.
+     * Connects model and dependencies that the repository works with.
      */
     public function __construct(
         Community $model,
@@ -56,7 +56,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Finds team по идентификатору.
+     * Finds team by ID.
      *
      * @param int $id
      * @return Community|null
@@ -76,7 +76,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Finds group по идентификатору.
+     * Finds group by identifier.
      *
      * @param int $id
      * @return Community|null
@@ -96,7 +96,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns team по умолчанию для current контекста.
+     * Returns team is the default for the current context.
      *
      * @param User|null $viewer
      * @return Community|null
@@ -127,7 +127,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns group по умолчанию для current контекста.
+     * Returns group is the default for the current context.
      *
      * @param User|null $viewer
      * @return Community|null
@@ -158,7 +158,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Finds team, которой принадлежит album.
+     * Finds team that owns the album.
      */
     public function teamForAlbumOwner(int $ownerId): ?Community
     {
@@ -198,7 +198,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Считает team user.
+     * Counts team user.
      *
      * @param int $userId
      * @param array $filters
@@ -219,7 +219,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns популярные team с фильтрами и пагинацией.
+     * Returns popular team with filters and pagination.
      *
      * @param int $limit
      * @param int $offset
@@ -247,7 +247,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Считает популярные team с учетом фильтров.
+     * Counts popular teams taking into account filters.
      */
     public function popularTeamsCount(array $filters = [], ?User $viewer = null): int
     {
@@ -262,7 +262,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns team, where user приглашен.
+     * Returns team, where user is invited.
      *
      * @param int $userId
      * @param int $limit
@@ -293,7 +293,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Считает team, where user приглашен.
+     * Counts as a team where the user is invited.
      *
      * @param int $userId
      * @param array $filters
@@ -346,7 +346,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Считает group user.
+     * Counts group user.
      *
      * @param int $userId
      * @param array $filters
@@ -367,7 +367,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns популярные group с фильтрами и пагинацией.
+     * Returns popular groups with filters and pagination.
      *
      * @param int $limit
      * @param int $offset
@@ -395,7 +395,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Считает популярные group с учетом фильтров.
+     * Counts popular groups taking into account filters.
      *
      * @param array $filters
      * @return int
@@ -413,7 +413,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns group, where user приглашен.
+     * Returns group, where user registered.
      *
      * @param int $userId
      * @param int $limit
@@ -444,7 +444,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Считает group, where user приглашен.
+     * Considers group where user is invited.
      *
      * @param int $userId
      * @param array $filters
@@ -484,7 +484,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns заявки на участие для выбранной entity.
+     * Returns participation requests for the selected entity.
      *
      * @param int $teamId
      * @return Collection
@@ -558,7 +558,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Ищет event для привязки к teamsе.
+     * Looks for an event to bind to teams.
      */
     public function searchEventsForTeam(int $teamId, string $search = '', int $limit = 10, int $offset = 0, array $filters = []): Collection
     {
@@ -566,7 +566,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Ищет event для привязки к сообществу.
+     * Searches for an event to link to the community.
      *
      * @param int $communityId
      * @param string $eventableType
@@ -629,7 +629,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Меняет участие community в мероприятии.
+     * Changes the community's participation in the event.
      *
      * @param Community $team
      * @param int $eventId
@@ -670,7 +670,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns числовую role user в entity.
+     * Returns the numeric role user in the entity.
      *
      * @param int $teamId
      * @param int|null $userId
@@ -689,7 +689,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns русское name роли по ее коду.
+     * Returns the Russian name of the role by its code.
      *
      * @param int|null $role
      * @return string
@@ -700,7 +700,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Checks, является ли user владельцем entity.
+     * Checks whether the user is the owner of the entity.
      *
      * @param Community|null $team
      * @param User|null $viewer
@@ -716,7 +716,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Checks, может ли user управлять сущностью.
+     * Checks whether the user can manage the entity.
      *
      * @param Community|null $team
      * @param User|null $viewer
@@ -732,7 +732,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Checks, может ли user приглашать members.
+     * Checks whether the user can invite members.
      *
      * @param Community|null $team
      * @param User|null $viewer
@@ -748,7 +748,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns строковый type участия user.
+     * Returns string participation type user.
      *
      * @param Community $team
      * @param User|null $viewer
@@ -760,7 +760,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Checks, является ли сообщество закрытым.
+     * Checks whether the community is closed.
      *
      * @param Community $team
      * @return bool
@@ -771,7 +771,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Checks, является ли сообщество приватным.
+     * Checks whether the community is private.
      *
      * @param Community $team
      * @return bool
@@ -782,7 +782,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Checks, можно ли user видеть основной контент community.
+     * Checks whether the user can see the main content of the community.
      *
      * @param Community $team
      * @param User|null $viewer
@@ -804,7 +804,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Меняет status участия user в entity.
+     * Changes the user's membership status in an entity.
      *
      * @param Community $team
      * @param User $viewer
@@ -863,7 +863,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Приглашает друзей user в selected сущность.
+     * Invites the user's friends to the selected entity.
      *
      * @param Community $team
      * @param User $viewer
@@ -875,7 +875,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns друзей user, которых можно пригласить в selected сущность.
+     * Returns the user's friends who can be invited to the selected entity.
      *
      * @param Community $team
      * @param User $viewer
@@ -909,7 +909,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Приглашает selected друзей user и возвращает list приглашенных users.
+     * Invites the selected user's friends and returns a list of invited users.
      *
      * @param Community $team
      * @param User $viewer
@@ -959,7 +959,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Deletes members из community с учетом прав current user.
+     * Deletes members from community taking into account the rights of the current user.
      *
      * @param Community $team
      * @param User $viewer
@@ -973,7 +973,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Blocks members community с учетом прав current user.
+     * Blocks members community taking into account the rights of the current user.
      *
      * @param Community $team
      * @param User $viewer
@@ -987,7 +987,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Deletes user из черного списка community.
+     * Delete user from the community blacklist.
      *
      * @param Community $team
      * @param User $viewer
@@ -1008,7 +1008,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Назначает user administrator community.
+     * Assigns user administrator community.
      *
      * @param Community $team
      * @param User $viewer
@@ -1056,7 +1056,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Снимает с user role administrator и оставляет его memberом.
+     * Removes the user role administrator and leaves him as a member.
      *
      * @param Community $team
      * @param User $viewer
@@ -1077,7 +1077,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Ищет users, которых owner может назначить administrators.
+     * Looks for users, which the owner can assign as administrators.
      *
      * @param Community $team
      * @param User $viewer
@@ -1145,7 +1145,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Меняет role управляемого members or deletes его из community.
+     * Changes the role of the managed member or deletes it from the community.
      *
      * @param Community $team
      * @param User $viewer
@@ -1205,7 +1205,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns id друзей, у которых еще no роли в выбранной entity.
+     * Returns id of friends who do not yet have a role in the selected entity.
      *
      * @param Community $team
      * @param User $viewer
@@ -1240,7 +1240,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns набор прав user для current entity.
+     * Returns a set of user rights for the current entity.
      *
      * @param Community $team
      * @param User|null $viewer
@@ -1259,7 +1259,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Checks, можно ли текущему user видеть выбранный section community.
+     * Checks whether the current user can see the selected section community.
      *
      * @param Community|null $team
      * @param User|null $viewer
@@ -1278,7 +1278,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns or creates настройки community.
+     * Returns or creates community settings.
      */
     public function settings(Community $team): CommunitySetting
     {
@@ -1296,7 +1296,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Creates team и ее настройки для владельца.
+     * Creates a team and its settings for the owner.
      *
      * @param User $owner
      * @param CommunityData $data
@@ -1342,7 +1342,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Creates group и ее настройки для владельца.
+     * Creates group and its settings for the owner.
      *
      * @param User $owner
      * @param CommunityData $data
@@ -1388,7 +1388,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Updates team, настройки и image.
+     * Updates team, settings and image.
      *
      * @param Community $team
      * @param CommunityData $data
@@ -1441,7 +1441,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Updates group, настройки и image.
+     * Updates group, settings and image.
      *
      * @param Community $group
      * @param CommunityData $data
@@ -1494,7 +1494,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns name city по его идентификатору.
+     * Returns name city by its identifier.
      */
     public function cityName(?int $cityId): string
     {
@@ -1506,7 +1506,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Returns name sport type по идентификатору.
+     * Returns name sport type by identifier.
      */
     public function sportName(?int $sportId): string
     {
@@ -1518,7 +1518,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Преобразует team в массив data для карточки.
+     * Converts team to a data array for the card.
      */
     public function serializeTeam(Community $team): array
     {
@@ -1544,7 +1544,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Преобразует group в массив data для карточки.
+     * Converts group to a data array for the card.
      *
      * @param Community $group
      * @return array
@@ -1573,7 +1573,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Преобразует members community в массив data.
+     * Converts community members to a data array.
      *
      * @param CommunityRole $role
      * @return array|null
@@ -1601,7 +1601,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Преобразует event в массив data для output.
+     * Converts event to a data array for output.
      *
      * @param Event $event
      * @param string $participantType
@@ -1631,7 +1631,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Checks, разрешает ли настройка приватности selected действие.
+     * Checks whether the privacy setting allows the selected action.
      *
      * @param int $permission
      * @param int|null $role
@@ -1656,7 +1656,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Применяет фильтры поиска к запросу сообществ.
+     * Applies search filters to a community query.
      *
      * @param Builder $query
      * @param array $filters
@@ -1696,7 +1696,7 @@ class CommunityRepository extends BaseRepository
     }
 
     /**
-     * Скрывает приватные community от users, которые не являются их members.
+     * Hides private communities from users who are not members.
      *
      * @param Builder $query
      * @param User|null $viewer

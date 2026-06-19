@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class SportTypeService
 {
     /**
-     * Connects repository для управления sport types.
+     * Connects repository for managing sport types.
      */
     public function __construct(
         private readonly SportTypeRepository $sportTypeRepository,
@@ -19,7 +19,7 @@ class SportTypeService
     }
 
     /**
-     * Creates новый sport type.
+     * Creates a new sport type.
      */
     public function create(SportTypeData $data): Builder|Model
     {
@@ -27,7 +27,7 @@ class SportTypeService
     }
 
     /**
-     * Updates выбранный sport type.
+     * Updates selected sport type.
      */
     public function update(SportTypeData $data): bool
     {
@@ -35,7 +35,7 @@ class SportTypeService
     }
 
     /**
-     * Deletes выбранный sport type.
+     * Delete the selected sport type.
      */
     public function delete(int $id): bool
     {
@@ -43,7 +43,7 @@ class SportTypeService
     }
 
     /**
-     * Returns sport type для страницы просмотра или редактирования.
+     * Returns sport type for view or edit page.
      */
     public function find(int $id): ?SportType
     {
@@ -51,7 +51,7 @@ class SportTypeService
     }
 
     /**
-     * Returns options для выбора parent sport type.
+     * Returns options to select parent sport type.
      *
      * @return array<int, string>
      */

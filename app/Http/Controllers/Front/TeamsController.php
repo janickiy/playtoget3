@@ -32,7 +32,7 @@ class TeamsController extends Controller
 
 
     /**
-     * Shows list teams с фильтрами и вкладками current user.
+     * Shows list teams with filters and current user tabs.
      *
      * @param Request $request
      * @param CommunityRepository $communities
@@ -81,7 +81,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Checks авторизацию и показывает form creation team.
+     * Checks authorization and shows form creation team.
      *
      * @return View|RedirectResponse
      */
@@ -105,7 +105,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Валидирует data form и creates team.
+     * Validates the data form and creates a team.
      *
      * @param CommunityRequest $request
      * @param CommunityRepository $communities
@@ -125,7 +125,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Shows карточку team, верхний block и комментарии.
+     * Shows team card, top block and comments.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -149,7 +149,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Shows members team и их роли.
+     * Shows team members and rolls them.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -169,7 +169,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Checks permissions и показывает form editing team.
+     * Checks permissions and shows form editing team.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -195,7 +195,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Checks permissions и сохраняет изменения team.
+     * Checks permissions and saves changes team.
      *
      * @param int $community
      * @param CommunityRequest $request
@@ -308,7 +308,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Creates photo album team из валидированных data form.
+     * Creates photo album team from validated data forms.
      *
      * @param int $community
      * @param AlbumRequest $request
@@ -333,7 +333,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Checks permissions и показывает form editing photo albumа team.
+     * Checks permissions and shows the team's editing photo album form.
      *
      * @param int $album
      * @param CommunityRepository $communities
@@ -359,7 +359,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Checks permissions и сохраняет изменения photo albumа team.
+     * Checks permissions and saves changes to photo album team.
      *
      * @param int $album
      * @param AlbumRequest $request
@@ -401,7 +401,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Shows form editing photo albumа конкретной team
+     * Shows form editing photo album of a specific team
      *
      * @param int $community
      * @param int $album
@@ -415,7 +415,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Сохраняет изменения photo albumа конкретной team.
+     * Saves changes to a specific team's photo album.
      *
      * @param int $community
      * @param int $album
@@ -455,7 +455,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Shows photo team без привязки к выбранному albumу.
+     * Shows photo team without reference to the selected album.
      *
      * @param int $community
      * @param int $photo
@@ -545,7 +545,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Валидирует link и добавляет video в video album team.
+     * Validates the link and adds video to the video album team.
      *
      * @param int $community
      * @param StoreVideoRequest $request
@@ -587,7 +587,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Creates video album team из валидированных data form.
+     * Creates video album team from validated data forms.
      *
      * @param int $community
      * @param AlbumRequest $request
@@ -612,7 +612,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Checks permissions и показывает form editing video album team.
+     * Checks permissions and shows form editing video album team.
      *
      * @param int $album
      * @param CommunityRepository $communities
@@ -639,7 +639,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Checks permissions и сохраняет изменения video album team
+     * Checks permissions and saves changes video album team
      *
      * @param int $album
      * @param AlbumRequest $request
@@ -721,7 +721,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Creates event и сразу привязывает его к teamsе.
+     * Creates an event and immediately binds it to teams.
      *
      * @param int $community
      * @param EventRequest $request
@@ -744,7 +744,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Готовит общие data team для страниц nested sections.
+     * Prepares general data team for nested sections pages.
      *
      * @param Community $team
      * @param CommunityRepository $communities
@@ -792,7 +792,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Returns ключ настройки приватности для current section team.
+     * Returns privacy settings key for the current section team.
      */
     private function sectionPermissionKey(string $section): ?string
     {
@@ -805,7 +805,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Returns текст сообщения для закрытого section team.
+     * Returns message text for the closed section team.
      */
     private function sectionAccessMessage(?string $sectionPermission, string $labelGenitive): string
     {
@@ -818,7 +818,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Adds к списку teams data о permissionsх и statusе current user.
+     * Adds to the list of teams data about permissions and status of the current user.
      *
      * @param Collection $teams
      * @param CommunityRepository $communities
@@ -838,7 +838,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Собирает фильтры списка teams из query-параметров.
+     * Collects filters for the teams list from query parameters.
      *
      * @param Request $request
      * @return array
@@ -855,7 +855,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Detects team из параметра маршрута or из current user.
+     * Detects team from route parameter or from current user.
      */
     private function resolveTeam(?int $community, CommunityRepository $communities): Community
     {
@@ -871,7 +871,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Finds активную team or завершает запрос ошибкой 404.
+     * Finds active team or ends the request with a 404 error.
      *
      * @param int $community
      * @param CommunityRepository $communities
@@ -887,7 +887,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Finds photo album, принадлежащий teamsе, or завершает запрос ошибкой 404
+     * Finds photo album owned by teams or fails with a 404 error
      *
      * @param int $album
      * @param Community $team
@@ -904,7 +904,7 @@ class TeamsController extends Controller
     }
 
     /**
-     * Finds video album, принадлежащий teamsе, or завершает запрос ошибкой 404
+     * Finds video album owned by teams or fails the request with a 404 error
      *
      * @param int $album
      * @param Community $team

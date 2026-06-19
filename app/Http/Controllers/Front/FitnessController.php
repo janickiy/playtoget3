@@ -18,7 +18,7 @@ class FitnessController extends Controller
 
 
     /**
-     * Shows list fitness с фильтрами or открывает карточку конкретного object.
+     * Shows list fitness with filters or opens a card for a specific object.
      *
      * @param Request $request
      * @param SportBlockRepository $sportBlocks
@@ -45,7 +45,7 @@ class FitnessController extends Controller
     }
 
     /**
-     * Checks авторизацию и показывает form creation fitness.
+     * Checks authorization and shows form creation fitness.
      *
      * @return View|RedirectResponse
      */
@@ -64,7 +64,7 @@ class FitnessController extends Controller
     }
 
     /**
-     * Валидирует data form, creates фитнес и перенаправляет на его карточку
+     * Validates data form, creates fitness and redirects to its card
      *
      * @param SportBlockRequest $request
      * @param SportBlockRepository $sportBlocks
@@ -84,7 +84,7 @@ class FitnessController extends Controller
     }
 
     /**
-     * Checks владельца и показывает form editing fitness.
+     * Checks the owner and shows form editing fitness.
      */
     public function edit(int $sportBlock, SportBlockRepository $sportBlocks): View
     {
@@ -100,7 +100,7 @@ class FitnessController extends Controller
     }
 
     /**
-     * Checks владельца, сохраняет изменения fitness и возвращает на карточку.
+     * Checks the owner, saves fitness changes and returns to the card.
      *
      * @param int $sportBlock
      * @param SportBlockRequest $request
@@ -118,7 +118,7 @@ class FitnessController extends Controller
     }
 
     /**
-     * Shows карточку fitness, photo и permissions current user.
+     * Shows the card fitness, photo and permissions current user.
      *
      * @param int $sportBlock
      * @param SportBlockRepository $sportBlocks
@@ -142,7 +142,7 @@ class FitnessController extends Controller
     }
 
     /**
-     * Finds object нужного typeа or завершает запрос ошибкой 404.
+     * Finds object of the desired type or ends the request with a 404 error.
      *
      * @param SportBlockRepository $sportBlocks
      * @param int $id
@@ -158,7 +158,7 @@ class FitnessController extends Controller
     }
 
     /**
-     * Готовит общие параметры шаблонов для section fitness.
+     * Prepares general template parameters for section fitness.
      *
      * @return array
      */
@@ -177,7 +177,7 @@ class FitnessController extends Controller
     }
 
     /**
-     * Собирает фильтры поиска fitness из query-параметров.
+     * Collects fitness search filters from query parameters.
      *
      * @param Request $request
      * @return array

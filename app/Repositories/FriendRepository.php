@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 class FriendRepository extends BaseRepository
 {
     /**
-     * Connects модель и зависимости, с которыми работает репозиторий.
+     * Connects model and dependencies that the repository works with.
      */
     public function __construct(Friend $model)
     {
@@ -20,7 +20,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Returns users, которых можно предложить в friends.
+     * Returns users, which can be proposed to friends.
      *
      * @param int $userId
      * @param int $limit
@@ -40,7 +40,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Returns друзей user с пагинацией и фильтрами.
+     * Returns of user friends with pagination and filters.
      *
      * @param int $userId
      * @param int $limit
@@ -56,7 +56,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Считает друзей user с учетом фильтров.
+     * Counts the user's friends taking into account filters.
      *
      * @param int $userId
      * @param array $filters
@@ -68,7 +68,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Returns входящие заявки в friends с пагинацией и фильтрами.
+     * Returns incoming requests to friends with pagination and filters.
      *
      * @param int $userId
      * @param int $limit
@@ -91,7 +91,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Считает входящие заявки в friends с учетом фильтров.
+     * Counts incoming requests to friends taking into account filters.
      *
      * @param int $userId
      * @param array $filters
@@ -103,7 +103,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Считает уникальные входящие заявки в friends для счётчика в шапке.
+     * Counts unique incoming requests in friends for the counter in the header.
      *
      * @param int $userId
      * @return int
@@ -119,7 +119,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Returns исходящие заявки в friends с пагинацией и фильтрами.
+     * Returns outgoing requests to friends with pagination and filters.
      *
      * @param int $userId
      * @param int $limit
@@ -142,7 +142,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Считает исходящие заявки в friends с учетом фильтров.
+     * Counts outgoing requests to friends taking into account filters.
      */
     public function outgoingRequestsCountFor(int $userId, array $filters = []): int
     {
@@ -150,7 +150,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Creates or обновляет заявку в friends.
+     * Creates or updates an application in friends.
      *
      * @param int $userId
      * @param int $friendId
@@ -204,7 +204,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Принимает входящую заявку в friends и переводит relationship в status friendship.
+     * Accepts an incoming request for friends and transfers the relationship to friendship status.
      *
      * @param int $userId
      * @param int $friendId
@@ -243,7 +243,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Deletes or отменяет relationship friendship между users.
+     * Deletes or cancels relationship friendship between users.
      *
      * @param int $userId
      * @param int $friendId
@@ -266,7 +266,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Detects status friendship между двумя users.
+     * Detects friendship status between two users.
      *
      * @param int|null $userId
      * @param int $friendId
@@ -297,7 +297,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Blocks user в отношениях friendship.
+     * Blocks user in friendship relationships.
      *
      * @param int $userId
      * @param int $friendId
@@ -322,7 +322,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Снимает blocksровку user в отношениях friendship.
+     * Removes user blocks in friendship relationships.
      *
      * @param int $userId
      * @param int $friendId
@@ -338,7 +338,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Преобразует коллекцию users в массив карточек.
+     * Converts the users collection to an array of cards.
      *
      * @param Collection $users
      * @param int|null $senderId
@@ -381,7 +381,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Gets users из связей friendship с учетом фильтров.
+     * Gets users from friendship connections, taking into account filters.
      *
      * @param Collection $relations
      * @param int $userId
@@ -404,7 +404,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Returns идентификаторы users, уже связанных с user.
+     * Returns the identifiers of users already associated with the user.
      *
      * @param int $userId
      * @return Collection
@@ -428,7 +428,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Returns users в порядке passed идентификаторов.
+     * Returns users in order of passed IDs.
      *
      * @param Collection $ids
      * @param array $filters
@@ -452,7 +452,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Готовит базовый запрос активных users с учетом фильтров.
+     * Prepares a basic query for active users taking into account filters.
      *
      * @param array $filters
      * @return Builder
@@ -485,7 +485,7 @@ class FriendRepository extends BaseRepository
     }
 
     /**
-     * Готовит запрос relationships friendship между двумя users.
+     * Prepares a relationship friendship request between two users.
      *
      * @param int $userId
      * @param int $friendId

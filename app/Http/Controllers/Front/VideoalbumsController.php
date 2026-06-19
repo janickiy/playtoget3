@@ -124,7 +124,7 @@ class VideoalbumsController extends Controller
 
 
     /**
-     * Валидирует link и добавляет video в выбранный album.
+     * Validates link and adds video to the selected album.
      *
      * @param StoreVideoRequest $request
      * @param VideoalbumRepository $videoAlbums
@@ -179,7 +179,7 @@ class VideoalbumsController extends Controller
     }
 
     /**
-     * Creates video album из валидированных data form.
+     * Creates video album from validated data forms.
      *
      * @param AlbumRequest $request
      * @param VideoalbumRepository $videoAlbums
@@ -207,7 +207,7 @@ class VideoalbumsController extends Controller
     }
 
     /**
-     * Checks permissions и показывает form editing video album.
+     * Checks permissions and shows form editing video album.
      *
      * @param int $album
      * @param VideoalbumRepository $videoAlbums
@@ -236,7 +236,7 @@ class VideoalbumsController extends Controller
     }
 
     /**
-     * Checks permissions и сохраняет изменения video album
+     * Checks permissions and saves changes to video album
      *
      * @param int $album
      * @param AlbumRequest $request
@@ -291,7 +291,7 @@ class VideoalbumsController extends Controller
     }
 
     /**
-     * Готовит общую listing video albums для current or selected user.
+     * Prepares a general listing of video albums for the current or selected user.
      *
      * @param int $userId
      * @param VideoalbumRepository $videoAlbums
@@ -343,7 +343,7 @@ class VideoalbumsController extends Controller
     }
 
     /**
-     * Готовит data верхнего block профиля для страниц video albums.
+     * Prepares top block profile data for video albums pages.
      */
     private function profileLayout($user): array
     {

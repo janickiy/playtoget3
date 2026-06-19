@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Mail;
 class EventInvitationNotificationService
 {
     /**
-     * Отправляет выбранным users письма с приглашением на event.
+     * Sends emails to selected users with an invitation to an event.
      *
      * @param Event $event
      * @param User $inviter

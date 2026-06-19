@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class SettingsRepository extends BaseRepository
 {
     /**
-     * Connects модель и зависимости, с которыми работает репозиторий.
+     * Connects model and dependencies that the repository works with.
      */
     public function __construct(Settings $model)
     {
@@ -18,7 +18,7 @@ class SettingsRepository extends BaseRepository
     }
 
     /**
-     * Creates record из DTO с подготовленными data.
+     * Creates record from DTO with prepared data.
      */
     public function createFromData(SettingsData $data): Builder|Model
     {
@@ -26,7 +26,7 @@ class SettingsRepository extends BaseRepository
     }
 
     /**
-     * Updates record из DTO с подготовленными data.
+     * Updates record from DTO with prepared data.
      *
      * @param SettingsData $data
      * @return bool
@@ -37,7 +37,7 @@ class SettingsRepository extends BaseRepository
     }
 
     /**
-     * Deletes record настроек и связанный файл при необходимости.
+     * Deletes record settings and associated file if necessary.
      *
      * @param int $id
      * @return bool

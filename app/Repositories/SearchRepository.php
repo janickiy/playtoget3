@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 class SearchRepository
 {
     /**
-     * Connects репозитории сущностей, по которым выполняется общий поиск.
+     * Connects repositories of entities that are generally searched.
      */
     public function __construct(
         private readonly CommunityRepository $communities,
@@ -18,7 +18,7 @@ class SearchRepository
     }
 
     /**
-     * Собирает результаты общего поиска по основным сущностям site.
+     * Collects general search results for the main site entities.
      *
      * @return array<string, Collection>
      */
@@ -54,7 +54,7 @@ class SearchRepository
     }
 
     /**
-     * Ищет sport blocks всех typeов и добавляет маршрут для каждой карточки.
+     * Searches for sport blocks of all types and adds a route for each card.
      */
     private function sportBlockResults(string $query, int $limit): Collection
     {

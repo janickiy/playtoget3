@@ -28,7 +28,7 @@ class EventsController extends Controller
 
 
     /**
-     * Shows section events с фильтрами, вкладками и первой страницей списков.
+     * Shows section events with filters, tabs and the first page of lists.
      *
      * @param Request $request
      * @param EventRepository $events
@@ -54,7 +54,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Shows карточку event, профильный верхний block и комментарии.
+     * Shows event card, profile top block and comments.
      *
      * @param int $event
      * @param EventRepository $events
@@ -78,7 +78,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Checks авторизацию и показывает form creation
+     * Checks authorization and shows form creation
      *
      * @return View|RedirectResponse
      */
@@ -100,7 +100,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Валидирует data form, creates event и перенаправляет на его карточку.
+     * Validates the data form, creates an event and redirects to its card.
      *
      * @param EventRequest $request
      * @param EventRepository $events
@@ -120,7 +120,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Checks permissions members и показывает form editing event.
+     * Checks permissions members and shows form editing event.
      *
      * @param int $event
      * @param EventRepository $events
@@ -141,7 +141,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Checks permissions members, сохраняет изменения event и возвращает на карточку.
+     * Checks permissions members, saves event changes and returns to the card.
      *
      * @param int $event
      * @param EventRequest $request
@@ -246,7 +246,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Shows photo event без привязки к выбранному albumу.
+     * Shows photo event without reference to the selected album.
      *
      * @param int $event
      * @param int $photo
@@ -307,7 +307,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Creates photo album event из валидированных data form.
+     * Creates photo album event from validated data form.
      *
      * @param int $event
      * @param AlbumRequest $request
@@ -332,7 +332,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Checks access и показывает form editing photo albumа event.
+     * Checks access and shows the form editing photo album event.
      */
 
     /**
@@ -358,7 +358,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Checks access и сохраняет изменения photo albumа event.
+     * Checks access and saves changes to the photo album and event.
      */
     public function updatePhotoalbum(int $event, int $album, AlbumRequest $request, EventRepository $events, PhotoalbumRepository $photoAlbums): RedirectResponse
     {
@@ -438,7 +438,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Валидирует link и добавляет video в video album event.
+     * Validates the link and adds video to the video album event.
      */
     public function storeVideo(int $event, StoreVideoRequest $request, EventRepository $events, VideoalbumRepository $videoAlbums): RedirectResponse
     {
@@ -470,7 +470,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Creates video album event из валидированных data form.
+     * Creates video album event from validated data form.
      */
     public function storeVideoAlbum(int $event, AlbumRequest $request, EventRepository $events, VideoalbumRepository $videoAlbums): RedirectResponse
     {
@@ -489,7 +489,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Checks access и показывает form editing video album event.
+     * Checks access and shows form editing video album event.
      */
     public function editVideoalbum(int $event, int $album, EventRepository $events, VideoalbumRepository $videoAlbums): View
     {
@@ -508,7 +508,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Checks access и сохраняет изменения video album event.
+     * Checks access and saves changes to video album event.
      */
     public function updateVideoalbum(int $event, int $album, AlbumRequest $request, EventRepository $events, VideoalbumRepository $videoAlbums): RedirectResponse
     {
@@ -538,7 +538,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Готовит общие data event для страниц nested sections.
+     * Prepares common data events for nested sections pages.
      */
     private function eventPayload(Event $event, EventRepository $events, string $section): array
     {
@@ -580,7 +580,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Собирает фильтры списка events из query-параметров.
+     * Collects events list filters from query parameters.
      */
     private function eventFilters(Request $request): array
     {
@@ -599,7 +599,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Finds активное event or завершает запрос ошибкой 404.
+     * Finds active event or ends the request with a 404 error.
      */
     private function eventOrFail(int $event, EventRepository $events): Event
     {
@@ -611,7 +611,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Finds photo album, принадлежащий event, or завершает запрос ошибкой 404.
+     * Finds photo album owned by event or fails the request with a 404 error.
      */
     private function eventPhotoalbumOrFail(int $album, Event $event, PhotoalbumRepository $photoAlbums): PhotoAlbums
     {
@@ -623,7 +623,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Finds video album, принадлежащий event, or завершает запрос ошибкой 404.
+     * Finds video album owned by event or fails the request with a 404 error.
      */
     private function eventVideoalbumOrFail(int $album, Event $event, VideoalbumRepository $videoAlbums): VideoAlbums
     {

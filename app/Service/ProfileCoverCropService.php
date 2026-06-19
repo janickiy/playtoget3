@@ -16,7 +16,7 @@ class ProfileCoverCropService
     private ImageFileService $images;
 
     /**
-     * Connects сервис для работы с uploaded images.
+     * Connects service for working with uploaded images.
      *
      * @param ImageFileService|null $images
      */
@@ -26,7 +26,7 @@ class ProfileCoverCropService
     }
 
     /**
-     * Обрезает uploaded cover профиля во temporary файл нужного размера.
+     * Trims the uploaded profile cover into a temporary file of the required size.
      *
      * @param User $user
      * @param ImageCropData $data
@@ -105,7 +105,7 @@ class ProfileCoverCropService
     }
 
     /**
-     * Нормализует область crop обложки под целевые пропорции.
+     * Normalizes the crop cover area to the target proportions.
      *
      * @param int $x
      * @param int $y

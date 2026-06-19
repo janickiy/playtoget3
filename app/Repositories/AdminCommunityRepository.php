@@ -10,7 +10,7 @@ use App\Service\ContentCascadeDeleteService;
 class AdminCommunityRepository extends BaseRepository
 {
     /**
-     * Connects модель community, с которой работает админский репозиторий.
+     * Connects community model with which the admin repository works.
      */
     public function __construct(
         Community $model,
@@ -59,7 +59,7 @@ class AdminCommunityRepository extends BaseRepository
     }
 
     /**
-     * Updates community из DTO.
+     * Updates community from DTO.
      */
     public function updateFromData(CommunityData $data): bool
     {

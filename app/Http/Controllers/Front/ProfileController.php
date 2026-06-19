@@ -17,7 +17,7 @@ class ProfileController extends Controller
 {
 
     /**
-     * Shows профиль user, его data и ленту комментариев.
+     * Shows the user's profile, his data and comment feed.
      *
      * @param int $user
      * @param ProfileRepository $profiles
@@ -112,7 +112,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Shows переписку current user с выбранным собеседником.
+     * Shows the current user's correspondence with the selected interlocutor.
      *
      * @param int $user
      * @param int $recipient
@@ -157,7 +157,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Валидирует и сохраняет настройки профиля current user.
+     * Validates and saves the current user's profile settings.
      *
      * @param ProfileSettingsRequest $request
      * @param ProfileUpdateService $profileUpdates

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Mail;
 class CommunityInvitationNotificationService
 {
     /**
-     * Отправляет выбранным users письма с приглашением в team or group.
+     * Sends emails to selected users inviting them to join a team or group.
      *
      * @param Community $community
      * @param User $inviter

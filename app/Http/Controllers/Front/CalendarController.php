@@ -13,7 +13,7 @@ class CalendarController extends Controller
 {
 
     /**
-     * Shows calendar selected месяца с отметками дней, где есть event.
+     * Shows calendar selected months with marks of days where there is an event.
      *
      * @param Request $request
      * @param EventRepository $events
@@ -42,7 +42,7 @@ class CalendarController extends Controller
     }
 
     /**
-     * Detects месяц calendar из query-параметра or возвращает current месяц.
+     * Detects month calendar from the query parameter or returns the current month.
      *
      * @param Request $request
      * @return CarbonImmutable

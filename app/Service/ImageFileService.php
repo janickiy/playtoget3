@@ -10,7 +10,7 @@ use RuntimeException;
 class ImageFileService
 {
     /**
-     * Returns нормализованное расширение загруженного image.
+     * Returns is the normalized extension of the loaded image.
      */
     public function extension(UploadedFile $file): string
     {
@@ -20,7 +20,7 @@ class ImageFileService
     }
 
     /**
-     * Генерирует name файла с хешем для user upload-images.
+     * Generates a hash file name for user upload-images.
      */
     public function hashedFilename(UploadedFile $file): string
     {
@@ -30,7 +30,7 @@ class ImageFileService
     }
 
     /**
-     * Генерирует короткое случайное name файла с расширением исходного image.
+     * Generates a short random file name with the extension of the original image.
      *
      * @param UploadedFile $file
      * @return string
@@ -41,7 +41,7 @@ class ImageFileService
     }
 
     /**
-     * Генерирует name image профиля с префиксом user.
+     * Generates a profile name image with the user prefix.
      *
      * @param UploadedFile $file
      * @param int $userId
@@ -53,7 +53,7 @@ class ImageFileService
     }
 
     /**
-     * Генерирует name временного JPG-файла профиля с префиксом user.
+     * Generates the name of a temporary JPG profile file with the user prefix.
      *
      * @param int $userId
      * @return string
@@ -64,7 +64,7 @@ class ImageFileService
     }
 
     /**
-     * Открывает uploaded файл как GD-image и учитывает ориентацию JPEG.
+     * Opens the uploaded file as a GD-image and takes into account the JPEG orientation.
      *
      * @param UploadedFile $file
      * @param bool $allowGif
@@ -96,7 +96,7 @@ class ImageFileService
     }
 
     /**
-     * Поворачивает JPEG-image по EXIF-ориентации, если она set.
+     * Rotates a JPEG image by EXIF ​​orientation, if it is set.
      *
      * @param GdImage $image
      * @param string $path

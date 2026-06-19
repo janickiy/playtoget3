@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 class SportTypeRepository extends BaseRepository
 {
     /**
-     * Connects модель sport type, с которой работает репозиторий.
+     * Connects the sport type model with which the repository works.
      */
     public function __construct(SportType $model)
     {
@@ -19,7 +19,7 @@ class SportTypeRepository extends BaseRepository
     }
 
     /**
-     * Returns query builder для таблицы sport types.
+     * Returns query builder for the sport types table.
      */
     public function query(): Builder
     {
@@ -43,7 +43,7 @@ class SportTypeRepository extends BaseRepository
     }
 
     /**
-     * Returns sport type вместе с parent relation.
+     * Returns sport type together with parent relation.
      */
     public function findWithParent(int $id): ?SportType
     {

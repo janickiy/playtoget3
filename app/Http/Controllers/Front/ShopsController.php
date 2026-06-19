@@ -17,7 +17,7 @@ class ShopsController extends Controller
     private const TYPE = 'shop';
 
     /**
-     * Shows list shop с фильтрами or открывает карточку конкретного object.
+     * Shows list shop with filters or opens a card for a specific object.
      *
      * @param Request $request
      * @param SportBlockRepository $sportBlocks
@@ -38,7 +38,7 @@ class ShopsController extends Controller
     }
 
     /**
-     * Checks авторизацию и показывает form creation shop.
+     * Checks authorization and shows form creation shop.
      *
      * @return View|RedirectResponse
      */
@@ -57,7 +57,7 @@ class ShopsController extends Controller
     }
 
     /**
-     * Валидирует data form, creates магазин и перенаправляет на его карточку.
+     * Validates the data form, creates a store and redirects to its card.
      *
      * @param SportBlockRequest $request
      * @param SportBlockRepository $sportBlocks
@@ -77,7 +77,7 @@ class ShopsController extends Controller
     }
 
     /**
-     * Checks владельца и показывает form editing shop.
+     * Checks the owner and shows the form editing shop.
      *
      * @param int $sportBlock
      * @param SportBlockRepository $sportBlocks
@@ -97,7 +97,7 @@ class ShopsController extends Controller
     }
 
     /**
-     * Checks владельца, сохраняет изменения shop и возвращает на карточку.
+     * Checks the owner, saves shop changes and returns to the card.
      *
      * @param int $sportBlock
      * @param SportBlockRequest $request
@@ -115,7 +115,7 @@ class ShopsController extends Controller
     }
 
     /**
-     * Shows карточку shop, photo и permissions current user.
+     * Shows card shop, photo and permissions current user.
      *
      * @param int $sportBlock
      * @param SportBlockRepository $sportBlocks
@@ -139,7 +139,7 @@ class ShopsController extends Controller
     }
 
     /**
-     * Finds object нужного typeа or завершает запрос ошибкой 404.
+     * Finds object of the desired type or ends the request with a 404 error.
      *
      * @param SportBlockRepository $sportBlocks
      * @param int $id
@@ -155,7 +155,7 @@ class ShopsController extends Controller
     }
 
     /**
-     * Готовит общие параметры шаблонов для section shop
+     * Prepares general template parameters for section shop
      *
      * @return array
      */
@@ -174,7 +174,7 @@ class ShopsController extends Controller
     }
 
     /**
-     * Собирает фильтры поиска shop из query-параметров
+     * Collects shop search filters from query parameters
      *
      * @param Request $request
      * @return array

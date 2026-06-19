@@ -12,7 +12,7 @@ abstract class BaseRepository implements RepositoryInterface
 {
 
     /**
-     * Сохраняет Eloquent-модель, с которой работает конкретный репозиторий.
+     * Saves the Eloquent model that a specific repository works with.
      *
      * @param Model $model
      */
@@ -21,7 +21,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * Creates новую record из массива атрибутов; базовая операция для всех наследников.
+     * Creates a new record from the attributes array; basic operation for all heirs.
      *
      * @param array $data
      * @return Builder|Model
@@ -32,7 +32,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * Creates новую record из DTO; нужен, чтобы сервисы не passed сырые массивы напрямую.
+     * Creates a new record from DTO; needed to prevent services from passing raw arrays directly.
      */
     public function createFromDto(DataTransferObject $dto): Builder|Model
     {
@@ -40,7 +40,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * Updates record по id provided атрибутами; возвращает false, если record не найдена.
+     * Updates record by id provided attributes; returns false if record is not found.
      *
      * @param array<string, mixed> $data
      */
@@ -56,7 +56,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * Updates record по id data из DTO; нужен для единого typed update-approach.
+     * Updates record by id data from DTO; needed for a single typed update-approach.
      */
     public function updateFromDto(int|string $id, DataTransferObject $dto): bool
     {
@@ -64,7 +64,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * Returns все записи таблицы модели; используется только для простых выборок без фильтров.
+     * Returns all records of the model table; used only for simple samples without filters.
      *
      * @return Collection
      */
@@ -74,7 +74,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * Ищет record by primary key и возвращает null, если record отсутствует.
+     * Looks for record by primary key and returns null if there is no record.
      *
      * @return Model|null
      */
@@ -84,7 +84,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * Deletes record by primary key; нужен для общей операции deletion в наследниках.
+     * Delete record by primary key; needed for the general deletion operation in descendants.
      */
     public function delete(int|string $id): bool
     {
@@ -97,7 +97,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * Deletes все записи через query builder без переcreation таблицы.
+     * Delete all records via query builder without recreating the table.
      */
     public function deleteAll(): void
     {
@@ -105,7 +105,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * Completely очищает таблицу модели; полезно для служебной очистки и тестов.
+     * Completely clears the model table; useful for utility cleanup and testing.
      */
     public function truncate(): void
     {

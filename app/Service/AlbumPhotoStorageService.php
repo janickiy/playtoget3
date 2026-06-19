@@ -17,7 +17,7 @@ class AlbumPhotoStorageService
 
 
     /**
-     * Connects сервис для работы с uploaded images.
+     * Connects service for working with uploaded images.
      *
      * @param ImageFileService|null $images
      */
@@ -27,7 +27,7 @@ class AlbumPhotoStorageService
     }
 
     /**
-     * Сохраняет photo и thumbnail в public storage.
+     * Saves photo and thumbnail in public storage.
      *
      * @param UploadedFile $file
      * @param string|null $albumType
@@ -61,7 +61,7 @@ class AlbumPhotoStorageService
     }
 
     /**
-     * Сохраняет attached photo user и возвращает data для записи.
+     * Saves attached photo user and returns data for recording.
      *
      * @param User $user
      * @param UploadedFile $file
@@ -104,7 +104,7 @@ class AlbumPhotoStorageService
     }
 
     /**
-     * Готовит содержимое уменьшенного image с preserved aspect ratio.
+     * Prepares the contents of the reduced image with preserved aspect ratio.
      *
      * @param GdImage $source
      * @param string|null $mime

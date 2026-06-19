@@ -12,7 +12,7 @@ class SettingsService
     use File;
 
     /**
-     * Сохраняет файл настройки и возвращает name сохраненного файла.
+     * Saves a configuration file and returns the name of the saved file.
      *
      * @param Request $request
      * @return string
@@ -32,7 +32,7 @@ class SettingsService
     }
 
     /**
-     * Заменяет файл настройки и возвращает name нового файла.
+     * Replaces the configuration file and returns the name of the new file.
      *
      * @param Settings $settings
      * @param Request $request

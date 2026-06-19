@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 class NewsFeedFormatterService
 {
     /**
-     * Returns URL avatarа user or default заглушку.
+     * Returns the URL of the avatar user or default stub.
      *
      * @param object $row
      * @return string
@@ -28,7 +28,7 @@ class NewsFeedFormatterService
     }
 
     /**
-     * Returns отображаемое name владельца записи.
+     * Returns the display name of the owner of the entry.
      *
      * @param object $row
      * @return string
@@ -41,7 +41,7 @@ class NewsFeedFormatterService
     }
 
     /**
-     * Returns URL avatarа владельца or default заглушку.
+     * Returns URL of the owner's avatar or default placeholder.
      *
      * @param object $row
      * @return string
@@ -60,7 +60,7 @@ class NewsFeedFormatterService
     }
 
     /**
-     * Декодирует и экранирует текст для безопасного output.
+     * Decodes and escapes text for secure output.
      *
      * @param string $value
      * @return string
@@ -71,7 +71,7 @@ class NewsFeedFormatterService
     }
 
     /**
-     * Returns URL photo or default заглушку.
+     * Returns URL photo or default stub.
      *
      * @param string|null $file
      * @param string|null $type
@@ -100,7 +100,7 @@ class NewsFeedFormatterService
     }
 
     /**
-     * Returns публичный URL image из storage, если файл существует.
+     * Returns public URL image from storage if the file exists.
      *
      * @param string $path
      * @return string|null
