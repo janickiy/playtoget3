@@ -18,7 +18,10 @@
                     <li><a target="_blank" rel="noopener" href="https://www.linkedin.com/groups/8510609"><img src="{{ asset('frontend/images/in.svg') }}" alt=""></a></li>
                     <li><a target="_blank" rel="noopener" href="https://www.youtube.com/channel/UC44vVK3JlHCIBBpIY16Ok2g"><img src="{{ asset('frontend/images/youtube.svg') }}" alt=""></a></li>
                 </ul>
-                <p class="copyright">© {{ date('Y') }} PlayToget: Sport inside</p>
+                <p class="copyright">
+                    © {{ date('Y') }} PlayToGet: Sport inside. Created by
+                    <a href="https://janickiy.com" target="_blank" rel="noopener">Alexander Yanitsky</a>
+                </p>
             </div>
         </div>
     </div>

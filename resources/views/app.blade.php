@@ -269,7 +269,10 @@
         <div class="float-right d-none d-sm-block">
             <b></b>
         </div>
-        <strong>&copy; {{ date('Y') }} {{ config('app.name') }}</strong>
+        <strong>
+            &copy; {{ date('Y') }} {{ config('app.name') }}. Created by
+            <a href="https://janickiy.com" target="_blank" rel="noopener">Alexander Yanitsky</a>
+        </strong>
     </footer>
 
     <!-- Control Sidebar -->
