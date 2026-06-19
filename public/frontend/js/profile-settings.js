@@ -2,6 +2,7 @@
     'use strict';
 
     var blankImage = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+    var saveWindowVisibleMs = 5000;
     var croppers = {
         avatar: {
             api: null,
@@ -67,7 +68,7 @@
 
         window.setTimeout(function () {
             $message.addClass('hiden');
-        }, 2500);
+        }, saveWindowVisibleMs);
     }
 
     function showOk(message) {
@@ -78,7 +79,7 @@
 
         window.setTimeout(function () {
             $message.addClass('hiden');
-        }, 2500);
+        }, saveWindowVisibleMs);
     }
 
     function normalizeTabName(tab) {

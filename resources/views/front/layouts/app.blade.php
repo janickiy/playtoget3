@@ -175,7 +175,7 @@
         </div>
     </section>
 
-    <script src="{{ asset('frontend/js/script_all.js') }}?v=2026061501"></script>
+    <script src="{{ asset('frontend/js/script_all.js') }}?v=2026061904"></script>
     <script src="{{ asset('frontend/js/lightbox.min.js') }}?v=2.12.0"></script>
 
     @include('front.partials.video-window')

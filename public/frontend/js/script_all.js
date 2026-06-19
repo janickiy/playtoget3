@@ -371,6 +371,44 @@ $(window).on('load', function () {
 
 
 $(document).ready(function () {
+    const SAVE_WINDOW_VISIBLE_MS = 5000;
+
+    function scheduleSaveWindowHide($items) {
+        $items.each(function () {
+            const $item = $(this);
+
+            if ($item.data('save-window-hide-scheduled')) {
+                return;
+            }
+
+            $item.data('save-window-hide-scheduled', true);
+            setTimeout(function () {
+                $item.addClass('hiden');
+            }, SAVE_WINDOW_VISIBLE_MS);
+        });
+    }
+
+    scheduleSaveWindowHide($('.save_window_ok, .save_window_fail'));
+
+    if (window.MutationObserver) {
+        const saveWindowObserver = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                $(mutation.addedNodes).each(function () {
+                    const $node = $(this);
+                    const $items = $node.is('.save_window_ok, .save_window_fail')
+                        ? $node
+                        : $node.find('.save_window_ok, .save_window_fail');
+
+                    scheduleSaveWindowHide($items);
+                });
+            });
+        });
+
+        saveWindowObserver.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    }
 
 
     $('.lupa span').on('click', function () {
