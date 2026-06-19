@@ -16,6 +16,8 @@ use App\Models\Feedback;
 use App\Models\Log;
 use App\Models\Settings;
 use App\Models\SportBlock;
+use App\Repositories\SportLevelRepository;
+use App\Repositories\SportTypeRepository;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -330,6 +332,67 @@ class DataTableController extends Controller
             })
             ->editColumn('created_at', function ($row) {
                 return Carbon::parse($row->created_at)->format('d/m/Y H:i');
+            })
+            ->rawColumns(['actions'])
+            ->make(true);
+    }
+
+    /**
+     * Returns JSON data sport types для DataTables table.
+     *
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function sportTypes(): JsonResponse
+    {
+        $row = app(SportTypeRepository::class)
+            ->query()
+            ->with('parent')
+            ->select('sport_types.*');
+
+        return Datatables::of($row)
+            ->addColumn('parent', function ($row) {
+                return e($row->parent?->name ?? '');
+            })
+            ->addColumn('actions', function ($row) {
+                $showBtn = '<a title="' . e(__('admin.actions.view')) . '" class="btn btn-xs btn-info" href="' . route('admin.sport-types.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
+                $editBtn = '<a title="' . e(__('admin.actions.edit')) . '" class="btn btn-xs btn-primary" href="' . route('admin.sport-types.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="' . e(__('admin.actions.delete')) . '" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.sport-types.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
+
+                return '<div class="nobr"> ' . $showBtn . $editBtn . $deleteBtn . '</div>';
+            })
+            ->filterColumn('parent', function ($query, string $keyword): void {
+                $keyword = trim($keyword);
+
+                if ($keyword === '') {
+                    return;
+                }
+
+                $query->whereHas('parent', function ($query) use ($keyword): void {
+                    $query->where('name', 'like', '%' . $keyword . '%');
+                });
+            })
+            ->rawColumns(['actions'])
+            ->make(true);
+    }
+
+    /**
+     * Returns JSON data sport levels для DataTables table.
+     *
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function sportLevels(): JsonResponse
+    {
+        $row = app(SportLevelRepository::class)->query();
+
+        return Datatables::of($row)
+            ->addColumn('actions', function ($row) {
+                $showBtn = '<a title="' . e(__('admin.actions.view')) . '" class="btn btn-xs btn-info" href="' . route('admin.sport-levels.show', ['id' => $row->id]) . '"><span class="fa fa-eye"></span></a> &nbsp;';
+                $editBtn = '<a title="' . e(__('admin.actions.edit')) . '" class="btn btn-xs btn-primary" href="' . route('admin.sport-levels.edit', ['id' => $row->id]) . '"><span class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="' . e(__('admin.actions.delete')) . '" class="btn btn-xs btn-danger deleteRow" href="' . route('admin.sport-levels.destroy', ['id' => $row->id]) . '" data-id="' . $row->id . '"><span class="fa fa-trash"></span></a>';
+
+                return '<div class="nobr"> ' . $showBtn . $editBtn . $deleteBtn . '</div>';
             })
             ->rawColumns(['actions'])
             ->make(true);

@@ -15,11 +15,6 @@ final readonly class AnnouncementData implements DataTransferObject
     ) {
     }
 
-    /**
-     * Creates DTO announcement из валидированных data form.
-     *
-     * @param array<string, mixed> $data
-     */
     public static function fromArray(array $data): self
     {
         return new self(
@@ -33,11 +28,6 @@ final readonly class AnnouncementData implements DataTransferObject
         );
     }
 
-    /**
-     * Returns массив полей announcement для сохранения.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(): array
     {
         return [

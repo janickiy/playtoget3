@@ -198,6 +198,22 @@
                         </li>
 
                         <li class="nav-item">
+                            <a href="{{ route('admin.sport-types.index') }}" class="nav-link{{ Request::is('cp/sport-types*') ? ' active' : '' }}"
+                               title="{{ __('admin.menu.sport_types') }}">
+                                <i class="nav-icon fas fa-list"></i>
+                                <p>{{ __('admin.menu.sport_types') }}</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('admin.sport-levels.index') }}" class="nav-link{{ Request::is('cp/sport-levels*') ? ' active' : '' }}"
+                               title="{{ __('admin.menu.sport_levels') }}">
+                                <i class="nav-icon fas fa-layer-group"></i>
+                                <p>{{ __('admin.menu.sport_levels') }}</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a href="{{ route('admin.logs.index') }}" class="nav-link{{ Request::is('cp/logs*') ? ' active' : '' }}"
                                title="Logs">
                                 <i class="nav-icon fas fa-clipboard-list"></i>

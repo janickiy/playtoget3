@@ -26,27 +26,16 @@ enum FeedbackStatus: int
         };
     }
 
-    /**
-     * Returns signature statusа обращения по numeric value.
-     */
     public static function labelFor(?int $status): string
     {
         return (self::tryFrom((int) $status) ?? self::New)->label();
     }
 
-    /**
-     * Returns CSS-класс statusа обращения по numeric value.
-     */
     public static function cssColorFor(?int $status): string
     {
         return (self::tryFrom((int) $status) ?? self::New)->cssColor();
     }
 
-    /**
-     * Returns options statusов для форм admin panel.
-     *
-     * @return array<int, string>
-     */
     public static function options(): array
     {
         return [

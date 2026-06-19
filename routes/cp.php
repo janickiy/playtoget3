@@ -15,6 +15,8 @@ use App\Http\Controllers\Admin\EventsController;
 use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\LogsController;
 use App\Http\Controllers\Admin\SportBlocksController;
+use App\Http\Controllers\Admin\SportLevelsController;
+use App\Http\Controllers\Admin\SportTypesController;
 use App\Http\Controllers\Admin\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -112,6 +114,26 @@ Route::prefix('cp')->group(function () {
             Route::delete('destroy/{id}', [SportBlocksController::class, 'destroy'])->where('id', '[0-9]+')->name('destroy');
         });
 
+        Route::prefix('sport-types')->name('admin.sport-types.')->middleware('permission:admin')->group(function () {
+            Route::get('', [SportTypesController::class, 'index'])->name('index');
+            Route::get('create', [SportTypesController::class, 'create'])->name('create');
+            Route::post('store', [SportTypesController::class, 'store'])->name('store');
+            Route::get('show/{id}', [SportTypesController::class, 'show'])->where('id', '[0-9]+')->name('show');
+            Route::get('edit/{id}', [SportTypesController::class, 'edit'])->where('id', '[0-9]+')->name('edit');
+            Route::put('update', [SportTypesController::class, 'update'])->name('update');
+            Route::delete('destroy/{id}', [SportTypesController::class, 'destroy'])->where('id', '[0-9]+')->name('destroy');
+        });
+
+        Route::prefix('sport-levels')->name('admin.sport-levels.')->middleware('permission:admin')->group(function () {
+            Route::get('', [SportLevelsController::class, 'index'])->name('index');
+            Route::get('create', [SportLevelsController::class, 'create'])->name('create');
+            Route::post('store', [SportLevelsController::class, 'store'])->name('store');
+            Route::get('show/{id}', [SportLevelsController::class, 'show'])->where('id', '[0-9]+')->name('show');
+            Route::get('edit/{id}', [SportLevelsController::class, 'edit'])->where('id', '[0-9]+')->name('edit');
+            Route::put('update', [SportLevelsController::class, 'update'])->name('update');
+            Route::delete('destroy/{id}', [SportLevelsController::class, 'destroy'])->where('id', '[0-9]+')->name('destroy');
+        });
+
         Route::prefix('logs')->name('admin.logs.')->middleware('permission:admin')->group(function () {
             Route::get('', [LogsController::class, 'index'])->name('index');
         });
@@ -133,6 +155,8 @@ Route::prefix('cp')->group(function () {
             Route::any('announcements', [DataTableController::class, 'announcements'])->middleware('permission:admin')->name('announcements');
             Route::any('feedback', [DataTableController::class, 'feedback'])->middleware('permission:admin')->name('feedback');
             Route::any('sport-blocks', [DataTableController::class, 'sportBlocks'])->middleware('permission:admin')->name('sport-blocks');
+            Route::any('sport-types', [DataTableController::class, 'sportTypes'])->middleware('permission:admin')->name('sport-types');
+            Route::any('sport-levels', [DataTableController::class, 'sportLevels'])->middleware('permission:admin')->name('sport-levels');
             Route::any('logs', [DataTableController::class, 'logs'])->middleware('permission:admin')->name('logs');
             Route::any('content', [DataTableController::class, 'content'])->name('content');
             Route::any('settings', [DataTableController::class, 'settings'])->middleware('permission:admin')->name('settings');

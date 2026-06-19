@@ -34,27 +34,16 @@ enum SportBlockStatus: int
         return in_array($this, [self::New, self::Confirmed], true);
     }
 
-    /**
-     * Returns signature statusа sport block по numeric value.
-     */
     public static function labelFor(?int $status): string
     {
         return (self::tryFrom((int) $status) ?? self::New)->label();
     }
 
-    /**
-     * Returns CSS-класс statusа sport block по numeric value.
-     */
     public static function cssColorFor(?int $status): string
     {
         return (self::tryFrom((int) $status) ?? self::New)->cssColor();
     }
 
-    /**
-     * Returns options statusов для форм admin panel.
-     *
-     * @return array<int, string>
-     */
     public static function options(): array
     {
         return [
@@ -65,11 +54,6 @@ enum SportBlockStatus: int
         ];
     }
 
-    /**
-     * Returns status values available on the frontend.
-     *
-     * @return array<int, int>
-     */
     public static function visibleValues(): array
     {
         return [

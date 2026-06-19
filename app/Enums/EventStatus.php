@@ -34,27 +34,16 @@ enum EventStatus: int
         return in_array($this, [self::New, self::Confirmed], true);
     }
 
-    /**
-     * Returns signature statusа event по numeric value.
-     */
     public static function labelFor(?int $status): string
     {
         return (self::tryFrom((int) $status) ?? self::New)->label();
     }
 
-    /**
-     * Returns CSS-класс statusа event по numeric value.
-     */
     public static function cssColorFor(?int $status): string
     {
         return (self::tryFrom((int) $status) ?? self::New)->cssColor();
     }
 
-    /**
-     * Returns options statusов для форм admin panel.
-     *
-     * @return array<int, string>
-     */
     public static function options(): array
     {
         return [

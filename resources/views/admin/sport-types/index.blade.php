@@ -1,0 +1,115 @@
+@extends('app')
+
+@section('title', $title)
+
+@section('css')
+    {!! Html::style('/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') !!}
+    {!! Html::style('/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') !!}
+    {!! Html::style('/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') !!}
+@endsection
+
+@section('content')
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="pb-3">
+                                <a href="{{ route('admin.sport-types.create') }}" class="btn btn-info btn-sm">
+                                    <span class="fa fa-plus"> &nbsp;</span>{{ __('admin.actions.add') }}
+                                </a>
+                            </div>
+
+                            <table id="itemList" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>{{ __('admin.fields.id') }}</th>
+                                    <th>{{ __('admin.fields.name') }}</th>
+                                    <th>{{ __('admin.fields.parent') }}</th>
+                                    <th style="width: 12%">{{ __('admin.common.actions') }}</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+@endsection
+
+@section('js')
+    {!! Html::script('/plugins/datatables/jquery.dataTables.min.js') !!}
+    {!! Html::script('/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') !!}
+    {!! Html::script('/plugins/datatables-responsive/js/dataTables.responsive.min.js') !!}
+    {!! Html::script('/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') !!}
+    {!! Html::script('/plugins/datatables-buttons/js/dataTables.buttons.min.js') !!}
+    {!! Html::script('/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') !!}
+    {!! Html::script('/plugins/pdfmake/pdfmake.min.js') !!}
+    {!! Html::script('/plugins/pdfmake/vfs_fonts.js') !!}
+    {!! Html::script('/plugins/datatables-buttons/js/buttons.html5.min.js') !!}
+    {!! Html::script('/plugins/datatables-buttons/js/buttons.print.min.js') !!}
+    {!! Html::script('/plugins/datatables-buttons/js/buttons.colVis.min.js') !!}
+
+    <script>
+        $(function () {
+            let table = $("#itemList").DataTable({
+                "oLanguage": @json(__('admin.datatable')),
+                "createdRow": function (row, data) {
+                    $(row).attr('id', 'rowid_' + data['id']);
+                },
+                "processing": true,
+                "responsive": true,
+                "autoWidth": true,
+                "serverSide": true,
+                "ajax": {
+                    url: '{{ route('admin.datatable.sport-types') }}'
+                },
+                "columns": [
+                    {data: 'id', name: 'id'},
+                    {data: 'name', name: 'name'},
+                    {data: 'parent', name: 'parent'},
+                    {data: 'actions', name: 'actions', orderable: false, searchable: false}
+                ]
+            });
+
+            $('#itemList').on('click', 'a.deleteRow', function (event) {
+                event.preventDefault();
+
+                let deleteUrl = $(this).attr('href');
+
+                Swal.fire({
+                    title: @json(__('admin.delete_confirm.title')),
+                    text: @json(__('admin.delete_confirm.text')),
+                    showCancelButton: true,
+                    icon: 'warning',
+                    cancelButtonText: @json(__('admin.delete_confirm.cancel')),
+                    confirmButtonText: @json(__('admin.delete_confirm.confirm')),
+                    reverseButtons: true,
+                    confirmButtonColor: "#DD6B55"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: deleteUrl,
+                            type: "DELETE",
+                            dataType: "json",
+                            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            success: function (response) {
+                                table.ajax.reload(null, false);
+                                Swal.fire(@json(__('admin.delete_confirm.done')), response.message || @json(__('admin.messages.deleted')), 'success');
+                            },
+                            error: function (xhr) {
+                                Swal.fire(
+                                    @json(__('admin.delete_confirm.error_title')),
+                                    (xhr.responseJSON && xhr.responseJSON.message) || @json(__('admin.delete_confirm.error_text')),
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+@endsection

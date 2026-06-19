@@ -39,27 +39,16 @@ enum UserStatus: int
         return in_array($this, [self::Blocked, self::Deleted], true);
     }
 
-    /**
-     * Returns signature statusа user по numeric value.
-     */
     public static function labelFor(?int $status): string
     {
         return (self::tryFrom((int) $status) ?? self::New)->label();
     }
 
-    /**
-     * Returns CSS-класс statusа user по numeric value.
-     */
     public static function cssColorFor(?int $status): string
     {
         return (self::tryFrom((int) $status) ?? self::New)->cssColor();
     }
 
-    /**
-     * Returns options statusов для форм admin panel.
-     *
-     * @return array<int, string>
-     */
     public static function options(): array
     {
         return [

@@ -45,7 +45,7 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('frontend/css/jquery-ui-1.8.16.custom.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/jquery.Jcrop.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/profile-settings.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/profile-settings.css') }}?v=2026061905">
 @endpush
 
 @section('content')
@@ -373,5 +373,5 @@
 @push('scripts')
     <script src="{{ asset('frontend/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('frontend/js/jquery.Jcrop.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/profile-settings.js') }}"></script>
+    <script src="{{ asset('frontend/js/profile-settings.js') }}?v=2026061905"></script>
 @endpush
