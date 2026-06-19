@@ -14,8 +14,12 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             AdminSeeder::class,
-            SportTypeSeeder::class,
             SportLevelSeeder::class,
+            SportTypeSeeder::class,
+            GeoCountrySeeder::class,
+            GeoRegionSeeder::class,
+            GeoCitySeeder::class,
+            GeoTargetSeeder::class,
         ]);
     }
 }

@@ -8,38 +8,16 @@ use Illuminate\Support\Facades\DB;
 class SportLevelSeeder extends Seeder
 {
     /**
-     * Seeds default English sport levels.
+     * Seeds sport levels exported from the current database.
      */
     public function run(): void
     {
-        foreach ($this->sportLevels() as $name) {
-            DB::table('sport_level')->updateOrInsert(
-                ['name' => $name],
-                ['name' => $name],
-            );
-        }
-    }
+        $levels = require database_path('seeders/data/sport_levels.php');
 
-    /**
-     * Returns sport levels used as default catalog values.
-     *
-     * @return string[]
-     */
-    private function sportLevels(): array
-    {
-        return [
-            'Beginner',
-            'Amateur',
-            'Intermediate',
-            'Advanced',
-            'Semi-professional',
-            'Professional',
-            'Coach',
-            'Certified coach',
-            'Expert',
-            'Master',
-            'Candidate Master of Sports',
-            'Master of Sports',
-        ];
+        DB::table('sport_level')->upsert(
+            $levels,
+            ['id'],
+            ['name'],
+        );
     }
 }

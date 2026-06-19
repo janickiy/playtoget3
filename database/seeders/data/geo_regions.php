@@ -5,27 +5,11 @@ return [
   [
     'id' => 1,
     'country_id' => 1,
-    'name_ru' => 'Аб�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Абхазия',
+    'name_en' => 'Абхазия',
+    'sort' => 100,
   ],
   1 => 
-  [
-    'id' => 'азия',
-    'country_id' => 'Аб�',
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  2 => 
-  [
-    'id' => 'азия',
-    'country_id' => 100,
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  3 => 
   [
     'id' => 2,
     'country_id' => 2,
@@ -33,7 +17,7 @@ return [
     'name_en' => 'Australian Capital Territory',
     'sort' => 100,
   ],
-  4 => 
+  2 => 
   [
     'id' => 3,
     'country_id' => 2,
@@ -41,7 +25,7 @@ return [
     'name_en' => 'New South Wales',
     'sort' => 200,
   ],
-  5 => 
+  3 => 
   [
     'id' => 4,
     'country_id' => 2,
@@ -49,7 +33,7 @@ return [
     'name_en' => 'None',
     'sort' => 300,
   ],
-  6 => 
+  4 => 
   [
     'id' => 5,
     'country_id' => 2,
@@ -57,7 +41,7 @@ return [
     'name_en' => 'Northern Territory',
     'sort' => 400,
   ],
-  7 => 
+  5 => 
   [
     'id' => 6,
     'country_id' => 2,
@@ -65,7 +49,7 @@ return [
     'name_en' => 'Queensland',
     'sort' => 500,
   ],
-  8 => 
+  6 => 
   [
     'id' => 7,
     'country_id' => 2,
@@ -73,7 +57,7 @@ return [
     'name_en' => 'South Australia',
     'sort' => 600,
   ],
-  9 => 
+  7 => 
   [
     'id' => 8,
     'country_id' => 2,
@@ -81,7 +65,7 @@ return [
     'name_en' => 'Tasmania',
     'sort' => 700,
   ],
-  10 => 
+  8 => 
   [
     'id' => 9,
     'country_id' => 2,
@@ -89,7 +73,7 @@ return [
     'name_en' => 'Victoria',
     'sort' => 800,
   ],
-  11 => 
+  9 => 
   [
     'id' => 10,
     'country_id' => 2,
@@ -97,7 +81,7 @@ return [
     'name_en' => 'Western Australia',
     'sort' => 900,
   ],
-  12 => 
+  10 => 
   [
     'id' => 11,
     'country_id' => 3,
@@ -105,7 +89,7 @@ return [
     'name_en' => 'Burgenland',
     'sort' => 100,
   ],
-  13 => 
+  11 => 
   [
     'id' => 12,
     'country_id' => 3,
@@ -113,7 +97,7 @@ return [
     'name_en' => 'Krnten',
     'sort' => 200,
   ],
-  14 => 
+  12 => 
   [
     'id' => 13,
     'country_id' => 3,
@@ -121,7 +105,7 @@ return [
     'name_en' => 'Niedersterreich',
     'sort' => 300,
   ],
-  15 => 
+  13 => 
   [
     'id' => 14,
     'country_id' => 3,
@@ -129,7 +113,7 @@ return [
     'name_en' => 'Obersterreich',
     'sort' => 400,
   ],
-  16 => 
+  14 => 
   [
     'id' => 15,
     'country_id' => 3,
@@ -137,7 +121,7 @@ return [
     'name_en' => 'Salzburg',
     'sort' => 500,
   ],
-  17 => 
+  15 => 
   [
     'id' => 16,
     'country_id' => 3,
@@ -145,7 +129,7 @@ return [
     'name_en' => 'Steiermark',
     'sort' => 600,
   ],
-  18 => 
+  16 => 
   [
     'id' => 17,
     'country_id' => 3,
@@ -153,7 +137,7 @@ return [
     'name_en' => 'Tirol',
     'sort' => 700,
   ],
-  19 => 
+  17 => 
   [
     'id' => 18,
     'country_id' => 3,
@@ -161,7 +145,7 @@ return [
     'name_en' => 'Vorarlberg',
     'sort' => 800,
   ],
-  20 => 
+  18 => 
   [
     'id' => 19,
     'country_id' => 3,
@@ -169,7 +153,7 @@ return [
     'name_en' => 'Wien',
     'sort' => 900,
   ],
-  21 => 
+  19 => 
   [
     'id' => 20,
     'country_id' => 4,
@@ -177,55 +161,23 @@ return [
     'name_en' => 'Азербайджан',
     'sort' => 100,
   ],
-  22 => 
+  20 => 
   [
     'id' => 21,
     'country_id' => 4,
-    'name_ru' => 'Нагорный Караба�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Нагорный Карабах',
+    'name_en' => 'Нагорный Карабах',
+    'sort' => 200,
   ],
-  23 => 
-  [
-    'id' => '',
-    'country_id' => 'Нагорный Караба�',
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  24 => 
-  [
-    'id' => '',
-    'country_id' => 200,
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  25 => 
+  21 => 
   [
     'id' => 22,
     'country_id' => 4,
-    'name_ru' => 'На�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Нахичеванская обл.',
+    'name_en' => 'Нахичеванская обл.',
+    'sort' => 300,
   ],
-  26 => 
-  [
-    'id' => 'ичеванская обл.',
-    'country_id' => 'На�',
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  27 => 
-  [
-    'id' => 'ичеванская обл.',
-    'country_id' => 300,
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  28 => 
+  22 => 
   [
     'id' => 23,
     'country_id' => 5,
@@ -233,7 +185,7 @@ return [
     'name_en' => 'Berat',
     'sort' => 100,
   ],
-  29 => 
+  23 => 
   [
     'id' => 24,
     'country_id' => 5,
@@ -241,7 +193,7 @@ return [
     'name_en' => 'Diber',
     'sort' => 200,
   ],
-  30 => 
+  24 => 
   [
     'id' => 25,
     'country_id' => 5,
@@ -249,7 +201,7 @@ return [
     'name_en' => 'Durres',
     'sort' => 300,
   ],
-  31 => 
+  25 => 
   [
     'id' => 26,
     'country_id' => 5,
@@ -257,7 +209,7 @@ return [
     'name_en' => 'Elbasan',
     'sort' => 400,
   ],
-  32 => 
+  26 => 
   [
     'id' => 27,
     'country_id' => 5,
@@ -265,7 +217,7 @@ return [
     'name_en' => 'Fier',
     'sort' => 500,
   ],
-  33 => 
+  27 => 
   [
     'id' => 28,
     'country_id' => 5,
@@ -273,7 +225,7 @@ return [
     'name_en' => 'Gjirokaster',
     'sort' => 600,
   ],
-  34 => 
+  28 => 
   [
     'id' => 29,
     'country_id' => 5,
@@ -281,7 +233,7 @@ return [
     'name_en' => 'Korce',
     'sort' => 700,
   ],
-  35 => 
+  29 => 
   [
     'id' => 30,
     'country_id' => 5,
@@ -289,7 +241,7 @@ return [
     'name_en' => 'Kukes',
     'sort' => 800,
   ],
-  36 => 
+  30 => 
   [
     'id' => 31,
     'country_id' => 5,
@@ -297,7 +249,7 @@ return [
     'name_en' => 'None',
     'sort' => 900,
   ],
-  37 => 
+  31 => 
   [
     'id' => 32,
     'country_id' => 5,
@@ -305,7 +257,7 @@ return [
     'name_en' => 'Shkoder',
     'sort' => 1000,
   ],
-  38 => 
+  32 => 
   [
     'id' => 33,
     'country_id' => 5,
@@ -313,7 +265,7 @@ return [
     'name_en' => 'Tirane',
     'sort' => 1100,
   ],
-  39 => 
+  33 => 
   [
     'id' => 34,
     'country_id' => 5,
@@ -321,7 +273,7 @@ return [
     'name_en' => 'Vlore',
     'sort' => 1200,
   ],
-  40 => 
+  34 => 
   [
     'id' => 35,
     'country_id' => 6,
@@ -329,7 +281,7 @@ return [
     'name_en' => 'Algeria',
     'sort' => 100,
   ],
-  41 => 
+  35 => 
   [
     'id' => 36,
     'country_id' => 7,
@@ -337,7 +289,7 @@ return [
     'name_en' => 'Angola',
     'sort' => 100,
   ],
-  42 => 
+  36 => 
   [
     'id' => 37,
     'country_id' => 8,
@@ -345,7 +297,7 @@ return [
     'name_en' => 'Anguilla',
     'sort' => 100,
   ],
-  43 => 
+  37 => 
   [
     'id' => 38,
     'country_id' => 9,
@@ -353,7 +305,7 @@ return [
     'name_en' => 'Andorra la Vella',
     'sort' => 100,
   ],
-  44 => 
+  38 => 
   [
     'id' => 39,
     'country_id' => 9,
@@ -361,7 +313,7 @@ return [
     'name_en' => 'Canillo',
     'sort' => 200,
   ],
-  45 => 
+  39 => 
   [
     'id' => 40,
     'country_id' => 9,
@@ -369,7 +321,7 @@ return [
     'name_en' => 'Encamp',
     'sort' => 300,
   ],
-  46 => 
+  40 => 
   [
     'id' => 41,
     'country_id' => 9,
@@ -377,7 +329,7 @@ return [
     'name_en' => 'Escaldes-Engordany',
     'sort' => 400,
   ],
-  47 => 
+  41 => 
   [
     'id' => 42,
     'country_id' => 9,
@@ -385,7 +337,7 @@ return [
     'name_en' => 'La Massana',
     'sort' => 500,
   ],
-  48 => 
+  42 => 
   [
     'id' => 43,
     'country_id' => 9,
@@ -393,7 +345,7 @@ return [
     'name_en' => 'None',
     'sort' => 600,
   ],
-  49 => 
+  43 => 
   [
     'id' => 44,
     'country_id' => 9,
@@ -401,7 +353,7 @@ return [
     'name_en' => 'Ordino',
     'sort' => 700,
   ],
-  50 => 
+  44 => 
   [
     'id' => 45,
     'country_id' => 9,
@@ -409,7 +361,7 @@ return [
     'name_en' => 'Sant Julia de Loria',
     'sort' => 800,
   ],
-  51 => 
+  45 => 
   [
     'id' => 46,
     'country_id' => 10,
@@ -417,7 +369,7 @@ return [
     'name_en' => 'Antigua and Barbuda',
     'sort' => 100,
   ],
-  52 => 
+  46 => 
   [
     'id' => 47,
     'country_id' => 11,
@@ -425,7 +377,7 @@ return [
     'name_en' => 'Willemstad',
     'sort' => 100,
   ],
-  53 => 
+  47 => 
   [
     'id' => 48,
     'country_id' => 12,
@@ -433,7 +385,7 @@ return [
     'name_en' => 'Buenos Aires',
     'sort' => 100,
   ],
-  54 => 
+  48 => 
   [
     'id' => 49,
     'country_id' => 12,
@@ -441,7 +393,7 @@ return [
     'name_en' => 'Catamarca',
     'sort' => 200,
   ],
-  55 => 
+  49 => 
   [
     'id' => 50,
     'country_id' => 12,
@@ -449,7 +401,7 @@ return [
     'name_en' => 'Chaco',
     'sort' => 300,
   ],
-  56 => 
+  50 => 
   [
     'id' => 51,
     'country_id' => 12,
@@ -457,7 +409,7 @@ return [
     'name_en' => 'Chubut',
     'sort' => 400,
   ],
-  57 => 
+  51 => 
   [
     'id' => 52,
     'country_id' => 12,
@@ -465,7 +417,7 @@ return [
     'name_en' => 'Corrientes',
     'sort' => 500,
   ],
-  58 => 
+  52 => 
   [
     'id' => 53,
     'country_id' => 12,
@@ -473,7 +425,7 @@ return [
     'name_en' => 'Crdoba',
     'sort' => 600,
   ],
-  59 => 
+  53 => 
   [
     'id' => 54,
     'country_id' => 12,
@@ -481,7 +433,7 @@ return [
     'name_en' => 'Distrito Federal',
     'sort' => 700,
   ],
-  60 => 
+  54 => 
   [
     'id' => 55,
     'country_id' => 12,
@@ -489,7 +441,7 @@ return [
     'name_en' => 'Entre Ros',
     'sort' => 800,
   ],
-  61 => 
+  55 => 
   [
     'id' => 56,
     'country_id' => 12,
@@ -497,7 +449,7 @@ return [
     'name_en' => 'Formosa',
     'sort' => 900,
   ],
-  62 => 
+  56 => 
   [
     'id' => 57,
     'country_id' => 12,
@@ -505,7 +457,7 @@ return [
     'name_en' => 'Jujuy',
     'sort' => 1000,
   ],
-  63 => 
+  57 => 
   [
     'id' => 58,
     'country_id' => 12,
@@ -513,7 +465,7 @@ return [
     'name_en' => 'La Pampa',
     'sort' => 1100,
   ],
-  64 => 
+  58 => 
   [
     'id' => 59,
     'country_id' => 12,
@@ -521,7 +473,7 @@ return [
     'name_en' => 'La Rioja',
     'sort' => 1200,
   ],
-  65 => 
+  59 => 
   [
     'id' => 60,
     'country_id' => 12,
@@ -529,7 +481,7 @@ return [
     'name_en' => 'Mendoza',
     'sort' => 1300,
   ],
-  66 => 
+  60 => 
   [
     'id' => 61,
     'country_id' => 12,
@@ -537,7 +489,7 @@ return [
     'name_en' => 'Misiones',
     'sort' => 1400,
   ],
-  67 => 
+  61 => 
   [
     'id' => 62,
     'country_id' => 12,
@@ -545,7 +497,7 @@ return [
     'name_en' => 'Neuqun',
     'sort' => 1500,
   ],
-  68 => 
+  62 => 
   [
     'id' => 63,
     'country_id' => 12,
@@ -553,7 +505,7 @@ return [
     'name_en' => 'Ro Negro',
     'sort' => 1600,
   ],
-  69 => 
+  63 => 
   [
     'id' => 64,
     'country_id' => 12,
@@ -561,7 +513,7 @@ return [
     'name_en' => 'Salta',
     'sort' => 1700,
   ],
-  70 => 
+  64 => 
   [
     'id' => 65,
     'country_id' => 12,
@@ -569,7 +521,7 @@ return [
     'name_en' => 'San Juan',
     'sort' => 1800,
   ],
-  71 => 
+  65 => 
   [
     'id' => 66,
     'country_id' => 12,
@@ -577,7 +529,7 @@ return [
     'name_en' => 'San Luis',
     'sort' => 1900,
   ],
-  72 => 
+  66 => 
   [
     'id' => 67,
     'country_id' => 12,
@@ -585,7 +537,7 @@ return [
     'name_en' => 'Santa Cruz',
     'sort' => 2000,
   ],
-  73 => 
+  67 => 
   [
     'id' => 68,
     'country_id' => 12,
@@ -593,7 +545,7 @@ return [
     'name_en' => 'Santa Fe',
     'sort' => 2100,
   ],
-  74 => 
+  68 => 
   [
     'id' => 69,
     'country_id' => 12,
@@ -601,7 +553,7 @@ return [
     'name_en' => 'Santiago del Estero',
     'sort' => 2200,
   ],
-  75 => 
+  69 => 
   [
     'id' => 70,
     'country_id' => 12,
@@ -609,7 +561,7 @@ return [
     'name_en' => 'Tierra del Fuego',
     'sort' => 2300,
   ],
-  76 => 
+  70 => 
   [
     'id' => 71,
     'country_id' => 12,
@@ -617,7 +569,7 @@ return [
     'name_en' => 'Tucumn',
     'sort' => 2400,
   ],
-  77 => 
+  71 => 
   [
     'id' => 72,
     'country_id' => 13,
@@ -625,7 +577,7 @@ return [
     'name_en' => 'Aragatsotn',
     'sort' => 100,
   ],
-  78 => 
+  72 => 
   [
     'id' => 73,
     'country_id' => 13,
@@ -633,7 +585,7 @@ return [
     'name_en' => 'Ararat',
     'sort' => 200,
   ],
-  79 => 
+  73 => 
   [
     'id' => 74,
     'country_id' => 13,
@@ -641,7 +593,7 @@ return [
     'name_en' => 'Armavir',
     'sort' => 300,
   ],
-  80 => 
+  74 => 
   [
     'id' => 75,
     'country_id' => 13,
@@ -649,7 +601,7 @@ return [
     'name_en' => 'Geghark\'unik\'',
     'sort' => 400,
   ],
-  81 => 
+  75 => 
   [
     'id' => 76,
     'country_id' => 13,
@@ -657,7 +609,7 @@ return [
     'name_en' => 'Kotayk\'',
     'sort' => 500,
   ],
-  82 => 
+  76 => 
   [
     'id' => 77,
     'country_id' => 13,
@@ -665,7 +617,7 @@ return [
     'name_en' => 'Lorri',
     'sort' => 600,
   ],
-  83 => 
+  77 => 
   [
     'id' => 78,
     'country_id' => 13,
@@ -673,7 +625,7 @@ return [
     'name_en' => 'None',
     'sort' => 700,
   ],
-  84 => 
+  78 => 
   [
     'id' => 79,
     'country_id' => 13,
@@ -681,7 +633,7 @@ return [
     'name_en' => 'Shirak',
     'sort' => 800,
   ],
-  85 => 
+  79 => 
   [
     'id' => 80,
     'country_id' => 13,
@@ -689,7 +641,7 @@ return [
     'name_en' => 'Syunik\'',
     'sort' => 900,
   ],
-  86 => 
+  80 => 
   [
     'id' => 81,
     'country_id' => 13,
@@ -697,7 +649,7 @@ return [
     'name_en' => 'Tavush',
     'sort' => 1000,
   ],
-  87 => 
+  81 => 
   [
     'id' => 82,
     'country_id' => 13,
@@ -705,7 +657,7 @@ return [
     'name_en' => 'Vayots\' Dzor',
     'sort' => 1100,
   ],
-  88 => 
+  82 => 
   [
     'id' => 83,
     'country_id' => 13,
@@ -713,7 +665,7 @@ return [
     'name_en' => 'Yerevan',
     'sort' => 1200,
   ],
-  89 => 
+  83 => 
   [
     'id' => 84,
     'country_id' => 14,
@@ -721,7 +673,7 @@ return [
     'name_en' => 'Арулько',
     'sort' => 100,
   ],
-  90 => 
+  84 => 
   [
     'id' => 85,
     'country_id' => 15,
@@ -729,7 +681,7 @@ return [
     'name_en' => 'Afghanistan',
     'sort' => 100,
   ],
-  91 => 
+  85 => 
   [
     'id' => 86,
     'country_id' => 16,
@@ -737,7 +689,7 @@ return [
     'name_en' => 'Багамы',
     'sort' => 100,
   ],
-  92 => 
+  86 => 
   [
     'id' => 87,
     'country_id' => 17,
@@ -745,7 +697,7 @@ return [
     'name_en' => 'Bangladesh',
     'sort' => 100,
   ],
-  93 => 
+  87 => 
   [
     'id' => 88,
     'country_id' => 18,
@@ -753,23 +705,15 @@ return [
     'name_en' => 'Barbados',
     'sort' => 100,
   ],
-  94 => 
+  88 => 
   [
     'id' => 89,
     'country_id' => 19,
-    'name_ru' => 'Ба�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Бахрейн',
+    'name_en' => 'Bahrain',
+    'sort' => 100,
   ],
-  95 => 
-  [
-    'id' => 'рейн',
-    'country_id' => 'Bahrain',
-    'name_ru' => 100,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  96 => 
+  89 => 
   [
     'id' => 90,
     'country_id' => 20,
@@ -777,7 +721,7 @@ return [
     'name_en' => 'Brestskaya obl.',
     'sort' => 100,
   ],
-  97 => 
+  90 => 
   [
     'id' => 91,
     'country_id' => 20,
@@ -785,7 +729,7 @@ return [
     'name_en' => 'Vitebskaya obl.',
     'sort' => 200,
   ],
-  98 => 
+  91 => 
   [
     'id' => 92,
     'country_id' => 20,
@@ -793,7 +737,7 @@ return [
     'name_en' => 'Gomelskaya obl.',
     'sort' => 300,
   ],
-  99 => 
+  92 => 
   [
     'id' => 93,
     'country_id' => 20,
@@ -801,7 +745,7 @@ return [
     'name_en' => 'Grodnenskaya obl.',
     'sort' => 400,
   ],
-  100 => 
+  93 => 
   [
     'id' => 94,
     'country_id' => 20,
@@ -809,7 +753,7 @@ return [
     'name_en' => 'Minskaya obl.',
     'sort' => 500,
   ],
-  101 => 
+  94 => 
   [
     'id' => 95,
     'country_id' => 20,
@@ -817,7 +761,7 @@ return [
     'name_en' => 'Mogilevskaya obl.',
     'sort' => 600,
   ],
-  102 => 
+  95 => 
   [
     'id' => 96,
     'country_id' => 21,
@@ -825,7 +769,7 @@ return [
     'name_en' => 'Belize',
     'sort' => 100,
   ],
-  103 => 
+  96 => 
   [
     'id' => 97,
     'country_id' => 22,
@@ -833,7 +777,7 @@ return [
     'name_en' => 'Antwerpen',
     'sort' => 100,
   ],
-  104 => 
+  97 => 
   [
     'id' => 98,
     'country_id' => 22,
@@ -841,7 +785,7 @@ return [
     'name_en' => 'Brabant Wallon',
     'sort' => 200,
   ],
-  105 => 
+  98 => 
   [
     'id' => 99,
     'country_id' => 22,
@@ -849,7 +793,7 @@ return [
     'name_en' => 'Bruxelles',
     'sort' => 300,
   ],
-  106 => 
+  99 => 
   [
     'id' => 100,
     'country_id' => 22,
@@ -857,7 +801,7 @@ return [
     'name_en' => 'Hainaut',
     'sort' => 400,
   ],
-  107 => 
+  100 => 
   [
     'id' => 101,
     'country_id' => 22,
@@ -865,7 +809,7 @@ return [
     'name_en' => 'Lige',
     'sort' => 500,
   ],
-  108 => 
+  101 => 
   [
     'id' => 102,
     'country_id' => 22,
@@ -873,7 +817,7 @@ return [
     'name_en' => 'Limburg',
     'sort' => 600,
   ],
-  109 => 
+  102 => 
   [
     'id' => 103,
     'country_id' => 22,
@@ -881,7 +825,7 @@ return [
     'name_en' => 'Luxembourg',
     'sort' => 700,
   ],
-  110 => 
+  103 => 
   [
     'id' => 104,
     'country_id' => 22,
@@ -889,7 +833,7 @@ return [
     'name_en' => 'Namur',
     'sort' => 800,
   ],
-  111 => 
+  104 => 
   [
     'id' => 105,
     'country_id' => 22,
@@ -897,7 +841,7 @@ return [
     'name_en' => 'Oost-Vlaanderen',
     'sort' => 900,
   ],
-  112 => 
+  105 => 
   [
     'id' => 106,
     'country_id' => 22,
@@ -905,7 +849,7 @@ return [
     'name_en' => 'Vlaams Brabant',
     'sort' => 1000,
   ],
-  113 => 
+  106 => 
   [
     'id' => 107,
     'country_id' => 22,
@@ -913,7 +857,7 @@ return [
     'name_en' => 'West-Vlaanderen',
     'sort' => 1100,
   ],
-  114 => 
+  107 => 
   [
     'id' => 108,
     'country_id' => 23,
@@ -921,7 +865,7 @@ return [
     'name_en' => 'Benin',
     'sort' => 100,
   ],
-  115 => 
+  108 => 
   [
     'id' => 109,
     'country_id' => 24,
@@ -929,7 +873,7 @@ return [
     'name_en' => 'Hamilton',
     'sort' => 100,
   ],
-  116 => 
+  109 => 
   [
     'id' => 110,
     'country_id' => 25,
@@ -937,7 +881,7 @@ return [
     'name_en' => 'Blagoevgrad',
     'sort' => 100,
   ],
-  117 => 
+  110 => 
   [
     'id' => 111,
     'country_id' => 25,
@@ -945,7 +889,7 @@ return [
     'name_en' => 'Burgas',
     'sort' => 200,
   ],
-  118 => 
+  111 => 
   [
     'id' => 112,
     'country_id' => 25,
@@ -953,7 +897,7 @@ return [
     'name_en' => 'Dobrich',
     'sort' => 300,
   ],
-  119 => 
+  112 => 
   [
     'id' => 113,
     'country_id' => 25,
@@ -961,7 +905,7 @@ return [
     'name_en' => 'Gabrovo',
     'sort' => 400,
   ],
-  120 => 
+  113 => 
   [
     'id' => 114,
     'country_id' => 25,
@@ -969,7 +913,7 @@ return [
     'name_en' => 'Grad Sofiya',
     'sort' => 500,
   ],
-  121 => 
+  114 => 
   [
     'id' => 115,
     'country_id' => 25,
@@ -977,7 +921,7 @@ return [
     'name_en' => 'Khaskovo',
     'sort' => 600,
   ],
-  122 => 
+  115 => 
   [
     'id' => 116,
     'country_id' => 25,
@@ -985,7 +929,7 @@ return [
     'name_en' => 'Kurdzhali',
     'sort' => 700,
   ],
-  123 => 
+  116 => 
   [
     'id' => 117,
     'country_id' => 25,
@@ -993,7 +937,7 @@ return [
     'name_en' => 'Kyustendil',
     'sort' => 800,
   ],
-  124 => 
+  117 => 
   [
     'id' => 118,
     'country_id' => 25,
@@ -1001,7 +945,7 @@ return [
     'name_en' => 'Lovech',
     'sort' => 900,
   ],
-  125 => 
+  118 => 
   [
     'id' => 119,
     'country_id' => 25,
@@ -1009,7 +953,7 @@ return [
     'name_en' => 'Montana',
     'sort' => 1000,
   ],
-  126 => 
+  119 => 
   [
     'id' => 120,
     'country_id' => 25,
@@ -1017,7 +961,7 @@ return [
     'name_en' => 'None',
     'sort' => 1100,
   ],
-  127 => 
+  120 => 
   [
     'id' => 121,
     'country_id' => 25,
@@ -1025,7 +969,7 @@ return [
     'name_en' => 'Pazardzhik',
     'sort' => 1200,
   ],
-  128 => 
+  121 => 
   [
     'id' => 122,
     'country_id' => 25,
@@ -1033,7 +977,7 @@ return [
     'name_en' => 'Pernik',
     'sort' => 1300,
   ],
-  129 => 
+  122 => 
   [
     'id' => 123,
     'country_id' => 25,
@@ -1041,7 +985,7 @@ return [
     'name_en' => 'Pleven',
     'sort' => 1400,
   ],
-  130 => 
+  123 => 
   [
     'id' => 124,
     'country_id' => 25,
@@ -1049,7 +993,7 @@ return [
     'name_en' => 'Plovdiv',
     'sort' => 1500,
   ],
-  131 => 
+  124 => 
   [
     'id' => 125,
     'country_id' => 25,
@@ -1057,7 +1001,7 @@ return [
     'name_en' => 'Razgrad',
     'sort' => 1600,
   ],
-  132 => 
+  125 => 
   [
     'id' => 126,
     'country_id' => 25,
@@ -1065,7 +1009,7 @@ return [
     'name_en' => 'Ruse',
     'sort' => 1700,
   ],
-  133 => 
+  126 => 
   [
     'id' => 127,
     'country_id' => 25,
@@ -1073,7 +1017,7 @@ return [
     'name_en' => 'Shumen',
     'sort' => 1800,
   ],
-  134 => 
+  127 => 
   [
     'id' => 128,
     'country_id' => 25,
@@ -1081,7 +1025,7 @@ return [
     'name_en' => 'Silistra',
     'sort' => 1900,
   ],
-  135 => 
+  128 => 
   [
     'id' => 129,
     'country_id' => 25,
@@ -1089,7 +1033,7 @@ return [
     'name_en' => 'Sliven',
     'sort' => 2000,
   ],
-  136 => 
+  129 => 
   [
     'id' => 130,
     'country_id' => 25,
@@ -1097,7 +1041,7 @@ return [
     'name_en' => 'Smolyan',
     'sort' => 2100,
   ],
-  137 => 
+  130 => 
   [
     'id' => 131,
     'country_id' => 25,
@@ -1105,7 +1049,7 @@ return [
     'name_en' => 'Sofiya',
     'sort' => 2200,
   ],
-  138 => 
+  131 => 
   [
     'id' => 132,
     'country_id' => 25,
@@ -1113,7 +1057,7 @@ return [
     'name_en' => 'Stara Zagora',
     'sort' => 2300,
   ],
-  139 => 
+  132 => 
   [
     'id' => 133,
     'country_id' => 25,
@@ -1121,7 +1065,7 @@ return [
     'name_en' => 'Turgovishte',
     'sort' => 2400,
   ],
-  140 => 
+  133 => 
   [
     'id' => 134,
     'country_id' => 25,
@@ -1129,7 +1073,7 @@ return [
     'name_en' => 'Varna',
     'sort' => 2500,
   ],
-  141 => 
+  134 => 
   [
     'id' => 135,
     'country_id' => 25,
@@ -1137,7 +1081,7 @@ return [
     'name_en' => 'Veliko Turnovo',
     'sort' => 2600,
   ],
-  142 => 
+  135 => 
   [
     'id' => 136,
     'country_id' => 25,
@@ -1145,7 +1089,7 @@ return [
     'name_en' => 'Vidin',
     'sort' => 2700,
   ],
-  143 => 
+  136 => 
   [
     'id' => 137,
     'country_id' => 25,
@@ -1153,7 +1097,7 @@ return [
     'name_en' => 'Vratsa',
     'sort' => 2800,
   ],
-  144 => 
+  137 => 
   [
     'id' => 138,
     'country_id' => 25,
@@ -1161,7 +1105,7 @@ return [
     'name_en' => 'Yambol',
     'sort' => 2900,
   ],
-  145 => 
+  138 => 
   [
     'id' => 139,
     'country_id' => 26,
@@ -1169,7 +1113,7 @@ return [
     'name_en' => 'Chuquisaca',
     'sort' => 100,
   ],
-  146 => 
+  139 => 
   [
     'id' => 140,
     'country_id' => 26,
@@ -1177,7 +1121,7 @@ return [
     'name_en' => 'Cochabamba',
     'sort' => 200,
   ],
-  147 => 
+  140 => 
   [
     'id' => 141,
     'country_id' => 26,
@@ -1185,7 +1129,7 @@ return [
     'name_en' => 'El Beni',
     'sort' => 300,
   ],
-  148 => 
+  141 => 
   [
     'id' => 142,
     'country_id' => 26,
@@ -1193,7 +1137,7 @@ return [
     'name_en' => 'La Paz',
     'sort' => 400,
   ],
-  149 => 
+  142 => 
   [
     'id' => 143,
     'country_id' => 26,
@@ -1201,7 +1145,7 @@ return [
     'name_en' => 'None',
     'sort' => 500,
   ],
-  150 => 
+  143 => 
   [
     'id' => 144,
     'country_id' => 26,
@@ -1209,7 +1153,7 @@ return [
     'name_en' => 'Oruro',
     'sort' => 600,
   ],
-  151 => 
+  144 => 
   [
     'id' => 145,
     'country_id' => 26,
@@ -1217,7 +1161,7 @@ return [
     'name_en' => 'Potos',
     'sort' => 700,
   ],
-  152 => 
+  145 => 
   [
     'id' => 146,
     'country_id' => 26,
@@ -1225,7 +1169,7 @@ return [
     'name_en' => 'Santa Cruz',
     'sort' => 800,
   ],
-  153 => 
+  146 => 
   [
     'id' => 147,
     'country_id' => 27,
@@ -1233,7 +1177,7 @@ return [
     'name_en' => 'Federation of Bosnia and Herzegovina',
     'sort' => 100,
   ],
-  154 => 
+  147 => 
   [
     'id' => 148,
     'country_id' => 27,
@@ -1241,7 +1185,7 @@ return [
     'name_en' => 'None',
     'sort' => 200,
   ],
-  155 => 
+  148 => 
   [
     'id' => 149,
     'country_id' => 27,
@@ -1249,7 +1193,7 @@ return [
     'name_en' => 'Republika Srpska',
     'sort' => 300,
   ],
-  156 => 
+  149 => 
   [
     'id' => 150,
     'country_id' => 28,
@@ -1257,7 +1201,7 @@ return [
     'name_en' => 'Botswana',
     'sort' => 100,
   ],
-  157 => 
+  150 => 
   [
     'id' => 151,
     'country_id' => 29,
@@ -1265,7 +1209,7 @@ return [
     'name_en' => 'Acre',
     'sort' => 100,
   ],
-  158 => 
+  151 => 
   [
     'id' => 152,
     'country_id' => 29,
@@ -1273,7 +1217,7 @@ return [
     'name_en' => 'Alagoas',
     'sort' => 200,
   ],
-  159 => 
+  152 => 
   [
     'id' => 153,
     'country_id' => 29,
@@ -1281,7 +1225,7 @@ return [
     'name_en' => 'Amapa',
     'sort' => 300,
   ],
-  160 => 
+  153 => 
   [
     'id' => 154,
     'country_id' => 29,
@@ -1289,7 +1233,7 @@ return [
     'name_en' => 'Amazonas',
     'sort' => 400,
   ],
-  161 => 
+  154 => 
   [
     'id' => 155,
     'country_id' => 29,
@@ -1297,7 +1241,7 @@ return [
     'name_en' => 'Bahia',
     'sort' => 500,
   ],
-  162 => 
+  155 => 
   [
     'id' => 156,
     'country_id' => 29,
@@ -1305,7 +1249,7 @@ return [
     'name_en' => 'Ceara',
     'sort' => 600,
   ],
-  163 => 
+  156 => 
   [
     'id' => 157,
     'country_id' => 29,
@@ -1313,7 +1257,7 @@ return [
     'name_en' => 'Distrito Federal',
     'sort' => 700,
   ],
-  164 => 
+  157 => 
   [
     'id' => 158,
     'country_id' => 29,
@@ -1321,7 +1265,7 @@ return [
     'name_en' => 'Espirito Santo',
     'sort' => 800,
   ],
-  165 => 
+  158 => 
   [
     'id' => 159,
     'country_id' => 29,
@@ -1329,7 +1273,7 @@ return [
     'name_en' => 'Goias',
     'sort' => 900,
   ],
-  166 => 
+  159 => 
   [
     'id' => 160,
     'country_id' => 29,
@@ -1337,7 +1281,7 @@ return [
     'name_en' => 'Maranhao',
     'sort' => 1000,
   ],
-  167 => 
+  160 => 
   [
     'id' => 161,
     'country_id' => 29,
@@ -1345,7 +1289,7 @@ return [
     'name_en' => 'Minas Gerais',
     'sort' => 1100,
   ],
-  168 => 
+  161 => 
   [
     'id' => 162,
     'country_id' => 29,
@@ -1353,7 +1297,7 @@ return [
     'name_en' => 'Paraiba',
     'sort' => 1200,
   ],
-  169 => 
+  162 => 
   [
     'id' => 163,
     'country_id' => 29,
@@ -1361,7 +1305,7 @@ return [
     'name_en' => 'Parana',
     'sort' => 1300,
   ],
-  170 => 
+  163 => 
   [
     'id' => 164,
     'country_id' => 29,
@@ -1369,7 +1313,7 @@ return [
     'name_en' => 'Rio de Janeiro',
     'sort' => 1400,
   ],
-  171 => 
+  164 => 
   [
     'id' => 165,
     'country_id' => 29,
@@ -1377,7 +1321,7 @@ return [
     'name_en' => 'Rio Grande do Norte',
     'sort' => 1500,
   ],
-  172 => 
+  165 => 
   [
     'id' => 166,
     'country_id' => 29,
@@ -1385,7 +1329,7 @@ return [
     'name_en' => 'Rio Grande do Sul',
     'sort' => 1600,
   ],
-  173 => 
+  166 => 
   [
     'id' => 167,
     'country_id' => 29,
@@ -1393,7 +1337,7 @@ return [
     'name_en' => 'Rondonia',
     'sort' => 1700,
   ],
-  174 => 
+  167 => 
   [
     'id' => 168,
     'country_id' => 29,
@@ -1401,7 +1345,7 @@ return [
     'name_en' => 'Roraima',
     'sort' => 1800,
   ],
-  175 => 
+  168 => 
   [
     'id' => 169,
     'country_id' => 29,
@@ -1409,7 +1353,7 @@ return [
     'name_en' => 'Santa Catarina',
     'sort' => 1900,
   ],
-  176 => 
+  169 => 
   [
     'id' => 170,
     'country_id' => 29,
@@ -1417,7 +1361,7 @@ return [
     'name_en' => 'Sao Paulo',
     'sort' => 2000,
   ],
-  177 => 
+  170 => 
   [
     'id' => 171,
     'country_id' => 29,
@@ -1425,7 +1369,7 @@ return [
     'name_en' => 'Sergipe',
     'sort' => 2100,
   ],
-  178 => 
+  171 => 
   [
     'id' => 172,
     'country_id' => 30,
@@ -1433,7 +1377,7 @@ return [
     'name_en' => 'Род-Таун',
     'sort' => 100,
   ],
-  179 => 
+  172 => 
   [
     'id' => 173,
     'country_id' => 31,
@@ -1441,7 +1385,7 @@ return [
     'name_en' => 'Brunei',
     'sort' => 100,
   ],
-  180 => 
+  173 => 
   [
     'id' => 174,
     'country_id' => 32,
@@ -1449,7 +1393,7 @@ return [
     'name_en' => 'Burkina Faso',
     'sort' => 100,
   ],
-  181 => 
+  174 => 
   [
     'id' => 175,
     'country_id' => 33,
@@ -1457,7 +1401,7 @@ return [
     'name_en' => 'Burundi',
     'sort' => 100,
   ],
-  182 => 
+  175 => 
   [
     'id' => 176,
     'country_id' => 34,
@@ -1465,7 +1409,7 @@ return [
     'name_en' => 'Bhutan',
     'sort' => 100,
   ],
-  183 => 
+  176 => 
   [
     'id' => 177,
     'country_id' => 35,
@@ -1473,7 +1417,7 @@ return [
     'name_en' => 'Mata-Utu',
     'sort' => 100,
   ],
-  184 => 
+  177 => 
   [
     'id' => 178,
     'country_id' => 36,
@@ -1481,7 +1425,7 @@ return [
     'name_en' => 'Vanuatu',
     'sort' => 100,
   ],
-  185 => 
+  178 => 
   [
     'id' => 179,
     'country_id' => 37,
@@ -1489,7 +1433,7 @@ return [
     'name_en' => 'Channel Islands',
     'sort' => 100,
   ],
-  186 => 
+  179 => 
   [
     'id' => 180,
     'country_id' => 37,
@@ -1497,7 +1441,7 @@ return [
     'name_en' => 'England - East',
     'sort' => 200,
   ],
-  187 => 
+  180 => 
   [
     'id' => 181,
     'country_id' => 37,
@@ -1505,7 +1449,7 @@ return [
     'name_en' => 'England - East Midlands',
     'sort' => 300,
   ],
-  188 => 
+  181 => 
   [
     'id' => 182,
     'country_id' => 37,
@@ -1513,7 +1457,7 @@ return [
     'name_en' => 'England - London',
     'sort' => 400,
   ],
-  189 => 
+  182 => 
   [
     'id' => 183,
     'country_id' => 37,
@@ -1521,7 +1465,7 @@ return [
     'name_en' => 'England - North East',
     'sort' => 500,
   ],
-  190 => 
+  183 => 
   [
     'id' => 184,
     'country_id' => 37,
@@ -1529,7 +1473,7 @@ return [
     'name_en' => 'England - North West',
     'sort' => 600,
   ],
-  191 => 
+  184 => 
   [
     'id' => 185,
     'country_id' => 37,
@@ -1537,7 +1481,7 @@ return [
     'name_en' => 'England - South East',
     'sort' => 700,
   ],
-  192 => 
+  185 => 
   [
     'id' => 186,
     'country_id' => 37,
@@ -1545,7 +1489,7 @@ return [
     'name_en' => 'England - South West',
     'sort' => 800,
   ],
-  193 => 
+  186 => 
   [
     'id' => 187,
     'country_id' => 37,
@@ -1553,7 +1497,7 @@ return [
     'name_en' => 'England - West Midlands',
     'sort' => 900,
   ],
-  194 => 
+  187 => 
   [
     'id' => 188,
     'country_id' => 37,
@@ -1561,7 +1505,7 @@ return [
     'name_en' => 'England - Yorks & Humber',
     'sort' => 1000,
   ],
-  195 => 
+  188 => 
   [
     'id' => 189,
     'country_id' => 37,
@@ -1569,7 +1513,7 @@ return [
     'name_en' => 'Isle of Man',
     'sort' => 1100,
   ],
-  196 => 
+  189 => 
   [
     'id' => 190,
     'country_id' => 37,
@@ -1577,7 +1521,7 @@ return [
     'name_en' => 'Northern Ireland',
     'sort' => 1200,
   ],
-  197 => 
+  190 => 
   [
     'id' => 191,
     'country_id' => 37,
@@ -1585,7 +1529,7 @@ return [
     'name_en' => 'Scotland Central',
     'sort' => 1300,
   ],
-  198 => 
+  191 => 
   [
     'id' => 192,
     'country_id' => 37,
@@ -1593,7 +1537,7 @@ return [
     'name_en' => 'Scotland North',
     'sort' => 1400,
   ],
-  199 => 
+  192 => 
   [
     'id' => 193,
     'country_id' => 37,
@@ -1601,7 +1545,7 @@ return [
     'name_en' => 'Scotland South',
     'sort' => 1500,
   ],
-  200 => 
+  193 => 
   [
     'id' => 194,
     'country_id' => 37,
@@ -1609,7 +1553,7 @@ return [
     'name_en' => 'Wales North',
     'sort' => 1600,
   ],
-  201 => 
+  194 => 
   [
     'id' => 195,
     'country_id' => 37,
@@ -1617,7 +1561,7 @@ return [
     'name_en' => 'Wales South',
     'sort' => 1700,
   ],
-  202 => 
+  195 => 
   [
     'id' => 196,
     'country_id' => 38,
@@ -1625,7 +1569,7 @@ return [
     'name_en' => 'Bacs-Kiskun',
     'sort' => 100,
   ],
-  203 => 
+  196 => 
   [
     'id' => 197,
     'country_id' => 38,
@@ -1633,7 +1577,7 @@ return [
     'name_en' => 'Bekes',
     'sort' => 200,
   ],
-  204 => 
+  197 => 
   [
     'id' => 198,
     'country_id' => 38,
@@ -1641,7 +1585,7 @@ return [
     'name_en' => 'Borsod-Abauj-Zemplen',
     'sort' => 300,
   ],
-  205 => 
+  198 => 
   [
     'id' => 199,
     'country_id' => 38,
@@ -1649,7 +1593,7 @@ return [
     'name_en' => 'Budapest',
     'sort' => 400,
   ],
-  206 => 
+  199 => 
   [
     'id' => 200,
     'country_id' => 38,
@@ -1657,7 +1601,7 @@ return [
     'name_en' => 'Csongrad',
     'sort' => 500,
   ],
-  207 => 
+  200 => 
   [
     'id' => 201,
     'country_id' => 38,
@@ -1665,7 +1609,7 @@ return [
     'name_en' => 'Debrecen',
     'sort' => 600,
   ],
-  208 => 
+  201 => 
   [
     'id' => 202,
     'country_id' => 38,
@@ -1673,7 +1617,7 @@ return [
     'name_en' => 'Fejer',
     'sort' => 700,
   ],
-  209 => 
+  202 => 
   [
     'id' => 203,
     'country_id' => 38,
@@ -1681,7 +1625,7 @@ return [
     'name_en' => 'Gyor',
     'sort' => 800,
   ],
-  210 => 
+  203 => 
   [
     'id' => 204,
     'country_id' => 38,
@@ -1689,7 +1633,7 @@ return [
     'name_en' => 'Gyor-Moson-Sopron',
     'sort' => 900,
   ],
-  211 => 
+  204 => 
   [
     'id' => 205,
     'country_id' => 38,
@@ -1697,7 +1641,7 @@ return [
     'name_en' => 'Heves',
     'sort' => 1000,
   ],
-  212 => 
+  205 => 
   [
     'id' => 206,
     'country_id' => 38,
@@ -1705,7 +1649,7 @@ return [
     'name_en' => 'Jasz-Nagykun-Szolnok',
     'sort' => 1100,
   ],
-  213 => 
+  206 => 
   [
     'id' => 207,
     'country_id' => 38,
@@ -1713,7 +1657,7 @@ return [
     'name_en' => 'Komarom-Esztergom',
     'sort' => 1200,
   ],
-  214 => 
+  207 => 
   [
     'id' => 208,
     'country_id' => 38,
@@ -1721,7 +1665,7 @@ return [
     'name_en' => 'Miskolc',
     'sort' => 1300,
   ],
-  215 => 
+  208 => 
   [
     'id' => 209,
     'country_id' => 38,
@@ -1729,7 +1673,7 @@ return [
     'name_en' => 'Nograd',
     'sort' => 1400,
   ],
-  216 => 
+  209 => 
   [
     'id' => 210,
     'country_id' => 38,
@@ -1737,7 +1681,7 @@ return [
     'name_en' => 'Pecs',
     'sort' => 1500,
   ],
-  217 => 
+  210 => 
   [
     'id' => 211,
     'country_id' => 38,
@@ -1745,7 +1689,7 @@ return [
     'name_en' => 'Pest',
     'sort' => 1600,
   ],
-  218 => 
+  211 => 
   [
     'id' => 212,
     'country_id' => 38,
@@ -1753,7 +1697,7 @@ return [
     'name_en' => 'Somogy',
     'sort' => 1700,
   ],
-  219 => 
+  212 => 
   [
     'id' => 213,
     'country_id' => 38,
@@ -1761,7 +1705,7 @@ return [
     'name_en' => 'Szabolcs-Szatmar-Bereg',
     'sort' => 1800,
   ],
-  220 => 
+  213 => 
   [
     'id' => 214,
     'country_id' => 38,
@@ -1769,7 +1713,7 @@ return [
     'name_en' => 'Szeged',
     'sort' => 1900,
   ],
-  221 => 
+  214 => 
   [
     'id' => 215,
     'country_id' => 38,
@@ -1777,7 +1721,7 @@ return [
     'name_en' => 'Tolna',
     'sort' => 2000,
   ],
-  222 => 
+  215 => 
   [
     'id' => 216,
     'country_id' => 38,
@@ -1785,7 +1729,7 @@ return [
     'name_en' => 'Vas',
     'sort' => 2100,
   ],
-  223 => 
+  216 => 
   [
     'id' => 217,
     'country_id' => 38,
@@ -1793,7 +1737,7 @@ return [
     'name_en' => 'Veszprem',
     'sort' => 2200,
   ],
-  224 => 
+  217 => 
   [
     'id' => 218,
     'country_id' => 38,
@@ -1801,7 +1745,7 @@ return [
     'name_en' => 'Zala',
     'sort' => 2300,
   ],
-  225 => 
+  218 => 
   [
     'id' => 219,
     'country_id' => 39,
@@ -1809,7 +1753,7 @@ return [
     'name_en' => 'Amazonas',
     'sort' => 100,
   ],
-  226 => 
+  219 => 
   [
     'id' => 220,
     'country_id' => 39,
@@ -1817,7 +1761,7 @@ return [
     'name_en' => 'Anzoategui',
     'sort' => 200,
   ],
-  227 => 
+  220 => 
   [
     'id' => 221,
     'country_id' => 39,
@@ -1825,7 +1769,7 @@ return [
     'name_en' => 'Apure',
     'sort' => 300,
   ],
-  228 => 
+  221 => 
   [
     'id' => 222,
     'country_id' => 39,
@@ -1833,7 +1777,7 @@ return [
     'name_en' => 'Aragua',
     'sort' => 400,
   ],
-  229 => 
+  222 => 
   [
     'id' => 223,
     'country_id' => 39,
@@ -1841,7 +1785,7 @@ return [
     'name_en' => 'Barinas',
     'sort' => 500,
   ],
-  230 => 
+  223 => 
   [
     'id' => 224,
     'country_id' => 39,
@@ -1849,7 +1793,7 @@ return [
     'name_en' => 'Bolvar',
     'sort' => 600,
   ],
-  231 => 
+  224 => 
   [
     'id' => 225,
     'country_id' => 39,
@@ -1857,7 +1801,7 @@ return [
     'name_en' => 'Carabobo',
     'sort' => 700,
   ],
-  232 => 
+  225 => 
   [
     'id' => 226,
     'country_id' => 39,
@@ -1865,7 +1809,7 @@ return [
     'name_en' => 'Cojedes',
     'sort' => 800,
   ],
-  233 => 
+  226 => 
   [
     'id' => 227,
     'country_id' => 39,
@@ -1873,7 +1817,7 @@ return [
     'name_en' => 'Delta Amacuro',
     'sort' => 900,
   ],
-  234 => 
+  227 => 
   [
     'id' => 228,
     'country_id' => 39,
@@ -1881,7 +1825,7 @@ return [
     'name_en' => 'Distrito Federal',
     'sort' => 1000,
   ],
-  235 => 
+  228 => 
   [
     'id' => 229,
     'country_id' => 39,
@@ -1889,7 +1833,7 @@ return [
     'name_en' => 'Falcn',
     'sort' => 1100,
   ],
-  236 => 
+  229 => 
   [
     'id' => 230,
     'country_id' => 39,
@@ -1897,7 +1841,7 @@ return [
     'name_en' => 'Gurico',
     'sort' => 1200,
   ],
-  237 => 
+  230 => 
   [
     'id' => 231,
     'country_id' => 39,
@@ -1905,7 +1849,7 @@ return [
     'name_en' => 'Lara',
     'sort' => 1300,
   ],
-  238 => 
+  231 => 
   [
     'id' => 232,
     'country_id' => 39,
@@ -1913,7 +1857,7 @@ return [
     'name_en' => 'Miranda',
     'sort' => 1400,
   ],
-  239 => 
+  232 => 
   [
     'id' => 233,
     'country_id' => 39,
@@ -1921,7 +1865,7 @@ return [
     'name_en' => 'Monagas',
     'sort' => 1500,
   ],
-  240 => 
+  233 => 
   [
     'id' => 234,
     'country_id' => 39,
@@ -1929,7 +1873,7 @@ return [
     'name_en' => 'Mrida',
     'sort' => 1600,
   ],
-  241 => 
+  234 => 
   [
     'id' => 235,
     'country_id' => 39,
@@ -1937,7 +1881,7 @@ return [
     'name_en' => 'None',
     'sort' => 1700,
   ],
-  242 => 
+  235 => 
   [
     'id' => 236,
     'country_id' => 39,
@@ -1945,7 +1889,7 @@ return [
     'name_en' => 'Nueva Esparta',
     'sort' => 1800,
   ],
-  243 => 
+  236 => 
   [
     'id' => 237,
     'country_id' => 39,
@@ -1953,7 +1897,7 @@ return [
     'name_en' => 'Portuguesa',
     'sort' => 1900,
   ],
-  244 => 
+  237 => 
   [
     'id' => 238,
     'country_id' => 39,
@@ -1961,7 +1905,7 @@ return [
     'name_en' => 'Sucre',
     'sort' => 2000,
   ],
-  245 => 
+  238 => 
   [
     'id' => 239,
     'country_id' => 39,
@@ -1969,7 +1913,7 @@ return [
     'name_en' => 'Tchira',
     'sort' => 2100,
   ],
-  246 => 
+  239 => 
   [
     'id' => 240,
     'country_id' => 39,
@@ -1977,7 +1921,7 @@ return [
     'name_en' => 'Yaracuy',
     'sort' => 2200,
   ],
-  247 => 
+  240 => 
   [
     'id' => 241,
     'country_id' => 39,
@@ -1985,7 +1929,7 @@ return [
     'name_en' => 'Zulia',
     'sort' => 2300,
   ],
-  248 => 
+  241 => 
   [
     'id' => 242,
     'country_id' => 40,
@@ -1993,7 +1937,7 @@ return [
     'name_en' => 'East Timor',
     'sort' => 100,
   ],
-  249 => 
+  242 => 
   [
     'id' => 243,
     'country_id' => 41,
@@ -2001,7 +1945,7 @@ return [
     'name_en' => 'Dong Bang Song Hong',
     'sort' => 100,
   ],
-  250 => 
+  243 => 
   [
     'id' => 244,
     'country_id' => 41,
@@ -2009,7 +1953,7 @@ return [
     'name_en' => 'Dong Nam Bo',
     'sort' => 200,
   ],
-  251 => 
+  244 => 
   [
     'id' => 245,
     'country_id' => 41,
@@ -2017,7 +1961,7 @@ return [
     'name_en' => 'Duyen Hai Mien Trung',
     'sort' => 300,
   ],
-  252 => 
+  245 => 
   [
     'id' => 246,
     'country_id' => 41,
@@ -2025,7 +1969,7 @@ return [
     'name_en' => 'Khu Bon Cu',
     'sort' => 400,
   ],
-  253 => 
+  246 => 
   [
     'id' => 247,
     'country_id' => 41,
@@ -2033,7 +1977,7 @@ return [
     'name_en' => 'Mien Nui Va Trung Du',
     'sort' => 500,
   ],
-  254 => 
+  247 => 
   [
     'id' => 248,
     'country_id' => 41,
@@ -2041,7 +1985,7 @@ return [
     'name_en' => 'Thai Nguyen',
     'sort' => 600,
   ],
-  255 => 
+  248 => 
   [
     'id' => 249,
     'country_id' => 42,
@@ -2049,7 +1993,7 @@ return [
     'name_en' => 'Gabon',
     'sort' => 100,
   ],
-  256 => 
+  249 => 
   [
     'id' => 250,
     'country_id' => 43,
@@ -2057,7 +2001,7 @@ return [
     'name_en' => 'Artibonite',
     'sort' => 100,
   ],
-  257 => 
+  250 => 
   [
     'id' => 251,
     'country_id' => 43,
@@ -2065,7 +2009,7 @@ return [
     'name_en' => 'Grand\'Anse',
     'sort' => 200,
   ],
-  258 => 
+  251 => 
   [
     'id' => 252,
     'country_id' => 43,
@@ -2073,7 +2017,7 @@ return [
     'name_en' => 'Nord-Ouest',
     'sort' => 300,
   ],
-  259 => 
+  252 => 
   [
     'id' => 253,
     'country_id' => 43,
@@ -2081,7 +2025,7 @@ return [
     'name_en' => 'Ouest',
     'sort' => 400,
   ],
-  260 => 
+  253 => 
   [
     'id' => 254,
     'country_id' => 43,
@@ -2089,7 +2033,7 @@ return [
     'name_en' => 'Sud',
     'sort' => 500,
   ],
-  261 => 
+  254 => 
   [
     'id' => 255,
     'country_id' => 43,
@@ -2097,7 +2041,7 @@ return [
     'name_en' => 'Sud-Est',
     'sort' => 600,
   ],
-  262 => 
+  255 => 
   [
     'id' => 256,
     'country_id' => 44,
@@ -2105,7 +2049,7 @@ return [
     'name_en' => 'Guyana',
     'sort' => 100,
   ],
-  263 => 
+  256 => 
   [
     'id' => 257,
     'country_id' => 45,
@@ -2113,7 +2057,7 @@ return [
     'name_en' => 'Gambia',
     'sort' => 100,
   ],
-  264 => 
+  257 => 
   [
     'id' => 258,
     'country_id' => 46,
@@ -2121,7 +2065,7 @@ return [
     'name_en' => 'Ghana',
     'sort' => 100,
   ],
-  265 => 
+  258 => 
   [
     'id' => 259,
     'country_id' => 47,
@@ -2129,7 +2073,7 @@ return [
     'name_en' => 'Grande-Terre',
     'sort' => 100,
   ],
-  266 => 
+  259 => 
   [
     'id' => 260,
     'country_id' => 47,
@@ -2137,7 +2081,7 @@ return [
     'name_en' => 'Бас-Тер',
     'sort' => 200,
   ],
-  267 => 
+  260 => 
   [
     'id' => 261,
     'country_id' => 48,
@@ -2145,7 +2089,7 @@ return [
     'name_en' => 'Alta Verapaz',
     'sort' => 100,
   ],
-  268 => 
+  261 => 
   [
     'id' => 262,
     'country_id' => 48,
@@ -2153,7 +2097,7 @@ return [
     'name_en' => 'Baja Verapaz',
     'sort' => 200,
   ],
-  269 => 
+  262 => 
   [
     'id' => 263,
     'country_id' => 48,
@@ -2161,7 +2105,7 @@ return [
     'name_en' => 'Chimaltenango',
     'sort' => 300,
   ],
-  270 => 
+  263 => 
   [
     'id' => 264,
     'country_id' => 48,
@@ -2169,7 +2113,7 @@ return [
     'name_en' => 'Chiquimula',
     'sort' => 400,
   ],
-  271 => 
+  264 => 
   [
     'id' => 265,
     'country_id' => 48,
@@ -2177,7 +2121,7 @@ return [
     'name_en' => 'Escuintla',
     'sort' => 500,
   ],
-  272 => 
+  265 => 
   [
     'id' => 266,
     'country_id' => 48,
@@ -2185,7 +2129,7 @@ return [
     'name_en' => 'Guatemala',
     'sort' => 600,
   ],
-  273 => 
+  266 => 
   [
     'id' => 267,
     'country_id' => 48,
@@ -2193,7 +2137,7 @@ return [
     'name_en' => 'Jutiapa',
     'sort' => 700,
   ],
-  274 => 
+  267 => 
   [
     'id' => 268,
     'country_id' => 48,
@@ -2201,7 +2145,7 @@ return [
     'name_en' => 'Petn',
     'sort' => 800,
   ],
-  275 => 
+  268 => 
   [
     'id' => 269,
     'country_id' => 48,
@@ -2209,7 +2153,7 @@ return [
     'name_en' => 'Quetzaltenango',
     'sort' => 900,
   ],
-  276 => 
+  269 => 
   [
     'id' => 270,
     'country_id' => 48,
@@ -2217,7 +2161,7 @@ return [
     'name_en' => 'Totonicapn',
     'sort' => 1000,
   ],
-  277 => 
+  270 => 
   [
     'id' => 271,
     'country_id' => 48,
@@ -2225,7 +2169,7 @@ return [
     'name_en' => 'Zacapa',
     'sort' => 1100,
   ],
-  278 => 
+  271 => 
   [
     'id' => 272,
     'country_id' => 49,
@@ -2233,7 +2177,7 @@ return [
     'name_en' => 'Guinea',
     'sort' => 100,
   ],
-  279 => 
+  272 => 
   [
     'id' => 273,
     'country_id' => 50,
@@ -2241,7 +2185,7 @@ return [
     'name_en' => 'Бисау',
     'sort' => 100,
   ],
-  280 => 
+  273 => 
   [
     'id' => 274,
     'country_id' => 51,
@@ -2249,7 +2193,7 @@ return [
     'name_en' => 'Baden-Wrttemberg',
     'sort' => 100,
   ],
-  281 => 
+  274 => 
   [
     'id' => 275,
     'country_id' => 51,
@@ -2257,7 +2201,7 @@ return [
     'name_en' => 'Bayern',
     'sort' => 200,
   ],
-  282 => 
+  275 => 
   [
     'id' => 276,
     'country_id' => 51,
@@ -2265,7 +2209,7 @@ return [
     'name_en' => 'Berlin',
     'sort' => 300,
   ],
-  283 => 
+  276 => 
   [
     'id' => 277,
     'country_id' => 51,
@@ -2273,7 +2217,7 @@ return [
     'name_en' => 'Brandenburg',
     'sort' => 400,
   ],
-  284 => 
+  277 => 
   [
     'id' => 278,
     'country_id' => 51,
@@ -2281,7 +2225,7 @@ return [
     'name_en' => 'Bremen',
     'sort' => 500,
   ],
-  285 => 
+  278 => 
   [
     'id' => 279,
     'country_id' => 51,
@@ -2289,7 +2233,7 @@ return [
     'name_en' => 'Hamburg',
     'sort' => 600,
   ],
-  286 => 
+  279 => 
   [
     'id' => 280,
     'country_id' => 51,
@@ -2297,7 +2241,7 @@ return [
     'name_en' => 'Hessen',
     'sort' => 700,
   ],
-  287 => 
+  280 => 
   [
     'id' => 281,
     'country_id' => 51,
@@ -2305,7 +2249,7 @@ return [
     'name_en' => 'Mecklenburg-Vorpommern',
     'sort' => 800,
   ],
-  288 => 
+  281 => 
   [
     'id' => 282,
     'country_id' => 51,
@@ -2313,7 +2257,7 @@ return [
     'name_en' => 'Niedersachsen',
     'sort' => 900,
   ],
-  289 => 
+  282 => 
   [
     'id' => 283,
     'country_id' => 51,
@@ -2321,7 +2265,7 @@ return [
     'name_en' => 'Nordrhein-Westfalen',
     'sort' => 1000,
   ],
-  290 => 
+  283 => 
   [
     'id' => 284,
     'country_id' => 51,
@@ -2329,7 +2273,7 @@ return [
     'name_en' => 'Rheinland-Pfalz',
     'sort' => 1100,
   ],
-  291 => 
+  284 => 
   [
     'id' => 285,
     'country_id' => 51,
@@ -2337,7 +2281,7 @@ return [
     'name_en' => 'Saarland',
     'sort' => 1200,
   ],
-  292 => 
+  285 => 
   [
     'id' => 286,
     'country_id' => 51,
@@ -2345,7 +2289,7 @@ return [
     'name_en' => 'Sachsen',
     'sort' => 1300,
   ],
-  293 => 
+  286 => 
   [
     'id' => 287,
     'country_id' => 51,
@@ -2353,7 +2297,7 @@ return [
     'name_en' => 'Sachsen-Anhalt',
     'sort' => 1400,
   ],
-  294 => 
+  287 => 
   [
     'id' => 288,
     'country_id' => 51,
@@ -2361,7 +2305,7 @@ return [
     'name_en' => 'Schleswig-Holstein',
     'sort' => 1500,
   ],
-  295 => 
+  288 => 
   [
     'id' => 289,
     'country_id' => 51,
@@ -2369,7 +2313,7 @@ return [
     'name_en' => 'Thringen',
     'sort' => 1600,
   ],
-  296 => 
+  289 => 
   [
     'id' => 290,
     'country_id' => 52,
@@ -2377,7 +2321,7 @@ return [
     'name_en' => 'Сент-Питер-Порт',
     'sort' => 100,
   ],
-  297 => 
+  290 => 
   [
     'id' => 291,
     'country_id' => 53,
@@ -2385,7 +2329,7 @@ return [
     'name_en' => 'Gibraltar',
     'sort' => 100,
   ],
-  298 => 
+  291 => 
   [
     'id' => 292,
     'country_id' => 54,
@@ -2393,7 +2337,7 @@ return [
     'name_en' => 'Тегусигальпа',
     'sort' => 100,
   ],
-  299 => 
+  292 => 
   [
     'id' => 293,
     'country_id' => 55,
@@ -2401,7 +2345,7 @@ return [
     'name_en' => 'Гонконг',
     'sort' => 100,
   ],
-  300 => 
+  293 => 
   [
     'id' => 294,
     'country_id' => 56,
@@ -2409,7 +2353,7 @@ return [
     'name_en' => 'Сент-Джорджес',
     'sort' => 100,
   ],
-  301 => 
+  294 => 
   [
     'id' => 295,
     'country_id' => 57,
@@ -2417,7 +2361,7 @@ return [
     'name_en' => 'Гренландия',
     'sort' => 100,
   ],
-  302 => 
+  295 => 
   [
     'id' => 296,
     'country_id' => 58,
@@ -2425,7 +2369,7 @@ return [
     'name_en' => 'Aitolia kai Akarnania',
     'sort' => 100,
   ],
-  303 => 
+  296 => 
   [
     'id' => 297,
     'country_id' => 58,
@@ -2433,7 +2377,7 @@ return [
     'name_en' => 'Akhaia',
     'sort' => 200,
   ],
-  304 => 
+  297 => 
   [
     'id' => 298,
     'country_id' => 58,
@@ -2441,7 +2385,7 @@ return [
     'name_en' => 'Argolis',
     'sort' => 300,
   ],
-  305 => 
+  298 => 
   [
     'id' => 299,
     'country_id' => 58,
@@ -2449,7 +2393,7 @@ return [
     'name_en' => 'Arkadhia',
     'sort' => 400,
   ],
-  306 => 
+  299 => 
   [
     'id' => 300,
     'country_id' => 58,
@@ -2457,7 +2401,7 @@ return [
     'name_en' => 'Arta',
     'sort' => 500,
   ],
-  307 => 
+  300 => 
   [
     'id' => 301,
     'country_id' => 58,
@@ -2465,7 +2409,7 @@ return [
     'name_en' => 'Attiki',
     'sort' => 600,
   ],
-  308 => 
+  301 => 
   [
     'id' => 302,
     'country_id' => 58,
@@ -2473,7 +2417,7 @@ return [
     'name_en' => 'Dhodhekanisos',
     'sort' => 700,
   ],
-  309 => 
+  302 => 
   [
     'id' => 303,
     'country_id' => 58,
@@ -2481,7 +2425,7 @@ return [
     'name_en' => 'Drama',
     'sort' => 800,
   ],
-  310 => 
+  303 => 
   [
     'id' => 304,
     'country_id' => 58,
@@ -2489,7 +2433,7 @@ return [
     'name_en' => 'Evritania',
     'sort' => 900,
   ],
-  311 => 
+  304 => 
   [
     'id' => 305,
     'country_id' => 58,
@@ -2497,7 +2441,7 @@ return [
     'name_en' => 'Evros',
     'sort' => 1000,
   ],
-  312 => 
+  305 => 
   [
     'id' => 306,
     'country_id' => 58,
@@ -2505,7 +2449,7 @@ return [
     'name_en' => 'Evvoia',
     'sort' => 1100,
   ],
-  313 => 
+  306 => 
   [
     'id' => 307,
     'country_id' => 58,
@@ -2513,7 +2457,7 @@ return [
     'name_en' => 'Florina',
     'sort' => 1200,
   ],
-  314 => 
+  307 => 
   [
     'id' => 308,
     'country_id' => 58,
@@ -2521,7 +2465,7 @@ return [
     'name_en' => 'Fthiotis',
     'sort' => 1300,
   ],
-  315 => 
+  308 => 
   [
     'id' => 309,
     'country_id' => 58,
@@ -2529,7 +2473,7 @@ return [
     'name_en' => 'Grevena',
     'sort' => 1400,
   ],
-  316 => 
+  309 => 
   [
     'id' => 310,
     'country_id' => 58,
@@ -2537,7 +2481,7 @@ return [
     'name_en' => 'Ilia',
     'sort' => 1500,
   ],
-  317 => 
+  310 => 
   [
     'id' => 311,
     'country_id' => 58,
@@ -2545,7 +2489,7 @@ return [
     'name_en' => 'Imathia',
     'sort' => 1600,
   ],
-  318 => 
+  311 => 
   [
     'id' => 312,
     'country_id' => 58,
@@ -2553,7 +2497,7 @@ return [
     'name_en' => 'Ioannina',
     'sort' => 1700,
   ],
-  319 => 
+  312 => 
   [
     'id' => 313,
     'country_id' => 58,
@@ -2561,7 +2505,7 @@ return [
     'name_en' => 'Iraklion',
     'sort' => 1800,
   ],
-  320 => 
+  313 => 
   [
     'id' => 314,
     'country_id' => 58,
@@ -2569,7 +2513,7 @@ return [
     'name_en' => 'Kardhitsa',
     'sort' => 1900,
   ],
-  321 => 
+  314 => 
   [
     'id' => 315,
     'country_id' => 58,
@@ -2577,7 +2521,7 @@ return [
     'name_en' => 'Kastoria',
     'sort' => 2000,
   ],
-  322 => 
+  315 => 
   [
     'id' => 316,
     'country_id' => 58,
@@ -2585,7 +2529,7 @@ return [
     'name_en' => 'Kavala',
     'sort' => 2100,
   ],
-  323 => 
+  316 => 
   [
     'id' => 317,
     'country_id' => 58,
@@ -2593,7 +2537,7 @@ return [
     'name_en' => 'Kefallinia',
     'sort' => 2200,
   ],
-  324 => 
+  317 => 
   [
     'id' => 318,
     'country_id' => 58,
@@ -2601,7 +2545,7 @@ return [
     'name_en' => 'Kerkira',
     'sort' => 2300,
   ],
-  325 => 
+  318 => 
   [
     'id' => 319,
     'country_id' => 58,
@@ -2609,7 +2553,7 @@ return [
     'name_en' => 'Khalkidhiki',
     'sort' => 2400,
   ],
-  326 => 
+  319 => 
   [
     'id' => 320,
     'country_id' => 58,
@@ -2617,7 +2561,7 @@ return [
     'name_en' => 'Khania',
     'sort' => 2500,
   ],
-  327 => 
+  320 => 
   [
     'id' => 321,
     'country_id' => 58,
@@ -2625,7 +2569,7 @@ return [
     'name_en' => 'Khios',
     'sort' => 2600,
   ],
-  328 => 
+  321 => 
   [
     'id' => 322,
     'country_id' => 58,
@@ -2633,7 +2577,7 @@ return [
     'name_en' => 'Kikladhes',
     'sort' => 2700,
   ],
-  329 => 
+  322 => 
   [
     'id' => 323,
     'country_id' => 58,
@@ -2641,7 +2585,7 @@ return [
     'name_en' => 'Kilkis',
     'sort' => 2800,
   ],
-  330 => 
+  323 => 
   [
     'id' => 324,
     'country_id' => 58,
@@ -2649,7 +2593,7 @@ return [
     'name_en' => 'Korinthia',
     'sort' => 2900,
   ],
-  331 => 
+  324 => 
   [
     'id' => 325,
     'country_id' => 58,
@@ -2657,7 +2601,7 @@ return [
     'name_en' => 'Kozani',
     'sort' => 3000,
   ],
-  332 => 
+  325 => 
   [
     'id' => 326,
     'country_id' => 58,
@@ -2665,7 +2609,7 @@ return [
     'name_en' => 'Lakonia',
     'sort' => 3100,
   ],
-  333 => 
+  326 => 
   [
     'id' => 327,
     'country_id' => 58,
@@ -2673,7 +2617,7 @@ return [
     'name_en' => 'Larisa',
     'sort' => 3200,
   ],
-  334 => 
+  327 => 
   [
     'id' => 328,
     'country_id' => 58,
@@ -2681,7 +2625,7 @@ return [
     'name_en' => 'Lasithi',
     'sort' => 3300,
   ],
-  335 => 
+  328 => 
   [
     'id' => 329,
     'country_id' => 58,
@@ -2689,7 +2633,7 @@ return [
     'name_en' => 'Lesvos',
     'sort' => 3400,
   ],
-  336 => 
+  329 => 
   [
     'id' => 330,
     'country_id' => 58,
@@ -2697,7 +2641,7 @@ return [
     'name_en' => 'Levkas',
     'sort' => 3500,
   ],
-  337 => 
+  330 => 
   [
     'id' => 331,
     'country_id' => 58,
@@ -2705,7 +2649,7 @@ return [
     'name_en' => 'Magnisia',
     'sort' => 3600,
   ],
-  338 => 
+  331 => 
   [
     'id' => 332,
     'country_id' => 58,
@@ -2713,7 +2657,7 @@ return [
     'name_en' => 'Messinia',
     'sort' => 3700,
   ],
-  339 => 
+  332 => 
   [
     'id' => 333,
     'country_id' => 58,
@@ -2721,7 +2665,7 @@ return [
     'name_en' => 'None',
     'sort' => 3800,
   ],
-  340 => 
+  333 => 
   [
     'id' => 334,
     'country_id' => 58,
@@ -2729,7 +2673,7 @@ return [
     'name_en' => 'Pella',
     'sort' => 3900,
   ],
-  341 => 
+  334 => 
   [
     'id' => 335,
     'country_id' => 58,
@@ -2737,7 +2681,7 @@ return [
     'name_en' => 'Pieria',
     'sort' => 4000,
   ],
-  342 => 
+  335 => 
   [
     'id' => 336,
     'country_id' => 58,
@@ -2745,7 +2689,7 @@ return [
     'name_en' => 'Preveza',
     'sort' => 4100,
   ],
-  343 => 
+  336 => 
   [
     'id' => 337,
     'country_id' => 58,
@@ -2753,7 +2697,7 @@ return [
     'name_en' => 'Rethimni',
     'sort' => 4200,
   ],
-  344 => 
+  337 => 
   [
     'id' => 338,
     'country_id' => 58,
@@ -2761,7 +2705,7 @@ return [
     'name_en' => 'Rodhopi',
     'sort' => 4300,
   ],
-  345 => 
+  338 => 
   [
     'id' => 339,
     'country_id' => 58,
@@ -2769,7 +2713,7 @@ return [
     'name_en' => 'Samos',
     'sort' => 4400,
   ],
-  346 => 
+  339 => 
   [
     'id' => 340,
     'country_id' => 58,
@@ -2777,7 +2721,7 @@ return [
     'name_en' => 'Serrai',
     'sort' => 4500,
   ],
-  347 => 
+  340 => 
   [
     'id' => 341,
     'country_id' => 58,
@@ -2785,7 +2729,7 @@ return [
     'name_en' => 'Thesprotia',
     'sort' => 4600,
   ],
-  348 => 
+  341 => 
   [
     'id' => 342,
     'country_id' => 58,
@@ -2793,7 +2737,7 @@ return [
     'name_en' => 'Thessaloniki',
     'sort' => 4700,
   ],
-  349 => 
+  342 => 
   [
     'id' => 343,
     'country_id' => 58,
@@ -2801,7 +2745,7 @@ return [
     'name_en' => 'Trikala',
     'sort' => 4800,
   ],
-  350 => 
+  343 => 
   [
     'id' => 344,
     'country_id' => 58,
@@ -2809,7 +2753,7 @@ return [
     'name_en' => 'Voiotia',
     'sort' => 4900,
   ],
-  351 => 
+  344 => 
   [
     'id' => 345,
     'country_id' => 58,
@@ -2817,7 +2761,7 @@ return [
     'name_en' => 'Xanthi',
     'sort' => 5000,
   ],
-  352 => 
+  345 => 
   [
     'id' => 346,
     'country_id' => 58,
@@ -2825,7 +2769,7 @@ return [
     'name_en' => 'Zakinthos',
     'sort' => 5100,
   ],
-  353 => 
+  346 => 
   [
     'id' => 347,
     'country_id' => 59,
@@ -2833,7 +2777,7 @@ return [
     'name_en' => 'Аджария',
     'sort' => 100,
   ],
-  354 => 
+  347 => 
   [
     'id' => 348,
     'country_id' => 59,
@@ -2841,7 +2785,7 @@ return [
     'name_en' => 'Грузия',
     'sort' => 200,
   ],
-  355 => 
+  348 => 
   [
     'id' => 349,
     'country_id' => 60,
@@ -2849,7 +2793,7 @@ return [
     'name_en' => 'Arhus',
     'sort' => 100,
   ],
-  356 => 
+  349 => 
   [
     'id' => 350,
     'country_id' => 60,
@@ -2857,7 +2801,7 @@ return [
     'name_en' => 'Bornholm',
     'sort' => 200,
   ],
-  357 => 
+  350 => 
   [
     'id' => 351,
     'country_id' => 60,
@@ -2865,7 +2809,7 @@ return [
     'name_en' => 'Frederiksborg',
     'sort' => 300,
   ],
-  358 => 
+  351 => 
   [
     'id' => 352,
     'country_id' => 60,
@@ -2873,7 +2817,7 @@ return [
     'name_en' => 'Fyn',
     'sort' => 400,
   ],
-  359 => 
+  352 => 
   [
     'id' => 353,
     'country_id' => 60,
@@ -2881,7 +2825,7 @@ return [
     'name_en' => 'Kobenhavn',
     'sort' => 500,
   ],
-  360 => 
+  353 => 
   [
     'id' => 354,
     'country_id' => 60,
@@ -2889,7 +2833,7 @@ return [
     'name_en' => 'None',
     'sort' => 600,
   ],
-  361 => 
+  354 => 
   [
     'id' => 355,
     'country_id' => 60,
@@ -2897,7 +2841,7 @@ return [
     'name_en' => 'Nordjylland',
     'sort' => 700,
   ],
-  362 => 
+  355 => 
   [
     'id' => 356,
     'country_id' => 60,
@@ -2905,7 +2849,7 @@ return [
     'name_en' => 'Ribe',
     'sort' => 800,
   ],
-  363 => 
+  356 => 
   [
     'id' => 357,
     'country_id' => 60,
@@ -2913,7 +2857,7 @@ return [
     'name_en' => 'Ringkobing',
     'sort' => 900,
   ],
-  364 => 
+  357 => 
   [
     'id' => 358,
     'country_id' => 60,
@@ -2921,7 +2865,7 @@ return [
     'name_en' => 'Roskilde',
     'sort' => 1000,
   ],
-  365 => 
+  358 => 
   [
     'id' => 359,
     'country_id' => 60,
@@ -2929,7 +2873,7 @@ return [
     'name_en' => 'Sonderjylland',
     'sort' => 1100,
   ],
-  366 => 
+  359 => 
   [
     'id' => 360,
     'country_id' => 60,
@@ -2937,7 +2881,7 @@ return [
     'name_en' => 'Staden Kobenhavn',
     'sort' => 1200,
   ],
-  367 => 
+  360 => 
   [
     'id' => 361,
     'country_id' => 60,
@@ -2945,7 +2889,7 @@ return [
     'name_en' => 'Storstrom',
     'sort' => 1300,
   ],
-  368 => 
+  361 => 
   [
     'id' => 362,
     'country_id' => 60,
@@ -2953,7 +2897,7 @@ return [
     'name_en' => 'Vejle',
     'sort' => 1400,
   ],
-  369 => 
+  362 => 
   [
     'id' => 363,
     'country_id' => 60,
@@ -2961,7 +2905,7 @@ return [
     'name_en' => 'Vestsjalland',
     'sort' => 1500,
   ],
-  370 => 
+  363 => 
   [
     'id' => 364,
     'country_id' => 60,
@@ -2969,7 +2913,7 @@ return [
     'name_en' => 'Viborg',
     'sort' => 1600,
   ],
-  371 => 
+  364 => 
   [
     'id' => 365,
     'country_id' => 61,
@@ -2977,7 +2921,7 @@ return [
     'name_en' => 'Saint Helier',
     'sort' => 100,
   ],
-  372 => 
+  365 => 
   [
     'id' => 366,
     'country_id' => 62,
@@ -2985,7 +2929,7 @@ return [
     'name_en' => 'Djibouti',
     'sort' => 100,
   ],
-  373 => 
+  366 => 
   [
     'id' => 367,
     'country_id' => 63,
@@ -2993,23 +2937,15 @@ return [
     'name_en' => 'Санто-доминго',
     'sort' => 100,
   ],
-  374 => 
+  367 => 
   [
     'id' => 368,
     'country_id' => 64,
-    'name_ru' => 'Аль-Ка�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Аль-Кахира',
+    'name_en' => 'Al Qhira',
+    'sort' => 100,
   ],
-  375 => 
-  [
-    'id' => 'ира',
-    'country_id' => 'Al Qhira',
-    'name_ru' => 100,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  376 => 
+  368 => 
   [
     'id' => 369,
     'country_id' => 64,
@@ -3017,7 +2953,7 @@ return [
     'name_en' => 'Aswan',
     'sort' => 200,
   ],
-  377 => 
+  369 => 
   [
     'id' => 370,
     'country_id' => 64,
@@ -3025,7 +2961,7 @@ return [
     'name_en' => 'Asyut',
     'sort' => 300,
   ],
-  378 => 
+  370 => 
   [
     'id' => 371,
     'country_id' => 64,
@@ -3033,7 +2969,7 @@ return [
     'name_en' => 'Beni Suef',
     'sort' => 400,
   ],
-  379 => 
+  371 => 
   [
     'id' => 372,
     'country_id' => 64,
@@ -3041,7 +2977,7 @@ return [
     'name_en' => 'Gharbia',
     'sort' => 500,
   ],
-  380 => 
+  372 => 
   [
     'id' => 373,
     'country_id' => 64,
@@ -3049,7 +2985,7 @@ return [
     'name_en' => 'Damietta',
     'sort' => 600,
   ],
-  381 => 
+  373 => 
   [
     'id' => 374,
     'country_id' => 64,
@@ -3057,7 +2993,7 @@ return [
     'name_en' => 'Egypt',
     'sort' => 700,
   ],
-  382 => 
+  374 => 
   [
     'id' => 375,
     'country_id' => 64,
@@ -3065,7 +3001,7 @@ return [
     'name_en' => 'Sinai',
     'sort' => 800,
   ],
-  383 => 
+  375 => 
   [
     'id' => 376,
     'country_id' => 65,
@@ -3073,23 +3009,15 @@ return [
     'name_en' => 'Zambia',
     'sort' => 100,
   ],
-  384 => 
+  376 => 
   [
     'id' => 377,
     'country_id' => 66,
-    'name_ru' => 'Западная Са�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Западная Сахара',
+    'name_en' => 'Western Sahara',
+    'sort' => 100,
   ],
-  385 => 
-  [
-    'id' => 'ара',
-    'country_id' => 'Western Sahara',
-    'name_ru' => 100,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  386 => 
+  377 => 
   [
     'id' => 378,
     'country_id' => 67,
@@ -3097,7 +3025,7 @@ return [
     'name_en' => 'Zimbabwe',
     'sort' => 100,
   ],
-  387 => 
+  378 => 
   [
     'id' => 379,
     'country_id' => 68,
@@ -3105,7 +3033,7 @@ return [
     'name_en' => 'Вади-Ара',
     'sort' => 100,
   ],
-  388 => 
+  379 => 
   [
     'id' => 380,
     'country_id' => 68,
@@ -3113,7 +3041,7 @@ return [
     'name_en' => 'Иерусалим',
     'sort' => 200,
   ],
-  389 => 
+  380 => 
   [
     'id' => 381,
     'country_id' => 68,
@@ -3121,7 +3049,7 @@ return [
     'name_en' => 'Рамат ХаГолан',
     'sort' => 300,
   ],
-  390 => 
+  381 => 
   [
     'id' => 382,
     'country_id' => 68,
@@ -3129,7 +3057,7 @@ return [
     'name_en' => 'Тель-Авив',
     'sort' => 400,
   ],
-  391 => 
+  382 => 
   [
     'id' => 383,
     'country_id' => 68,
@@ -3137,7 +3065,7 @@ return [
     'name_en' => 'Хадаром',
     'sort' => 500,
   ],
-  392 => 
+  383 => 
   [
     'id' => 384,
     'country_id' => 68,
@@ -3145,7 +3073,7 @@ return [
     'name_en' => 'Хайфа',
     'sort' => 600,
   ],
-  393 => 
+  384 => 
   [
     'id' => 385,
     'country_id' => 68,
@@ -3153,7 +3081,7 @@ return [
     'name_en' => 'Хамерказ',
     'sort' => 700,
   ],
-  394 => 
+  385 => 
   [
     'id' => 386,
     'country_id' => 68,
@@ -3161,7 +3089,7 @@ return [
     'name_en' => 'Хацафон',
     'sort' => 800,
   ],
-  395 => 
+  386 => 
   [
     'id' => 387,
     'country_id' => 69,
@@ -3169,7 +3097,7 @@ return [
     'name_en' => 'Bangla',
     'sort' => 100,
   ],
-  396 => 
+  387 => 
   [
     'id' => 388,
     'country_id' => 69,
@@ -3177,7 +3105,7 @@ return [
     'name_en' => 'Chhattisgarh',
     'sort' => 200,
   ],
-  397 => 
+  388 => 
   [
     'id' => 389,
     'country_id' => 69,
@@ -3185,31 +3113,15 @@ return [
     'name_en' => 'Karnataka',
     'sort' => 300,
   ],
-  398 => 
+  389 => 
   [
     'id' => 390,
     'country_id' => 69,
-    'name_ru' => 'Анд�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Андхра-Прадеш',
+    'name_en' => 'Андхра-Прадеш',
+    'sort' => 400,
   ],
-  399 => 
-  [
-    'id' => 'ра-Прадеш',
-    'country_id' => 'Анд�',
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  400 => 
-  [
-    'id' => 'ра-Прадеш',
-    'country_id' => 400,
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  401 => 
+  390 => 
   [
     'id' => 391,
     'country_id' => 69,
@@ -3217,31 +3129,15 @@ return [
     'name_en' => 'Ассам',
     'sort' => 500,
   ],
-  402 => 
+  391 => 
   [
     'id' => 392,
     'country_id' => 69,
-    'name_ru' => 'Би�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Бихар',
+    'name_en' => 'Бихар',
+    'sort' => 600,
   ],
-  403 => 
-  [
-    'id' => 'ар',
-    'country_id' => 'Би�',
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  404 => 
-  [
-    'id' => 'ар',
-    'country_id' => 600,
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  405 => 
+  392 => 
   [
     'id' => 393,
     'country_id' => 69,
@@ -3249,7 +3145,7 @@ return [
     'name_en' => 'Гуджарат',
     'sort' => 700,
   ],
-  406 => 
+  393 => 
   [
     'id' => 394,
     'country_id' => 69,
@@ -3257,7 +3153,7 @@ return [
     'name_en' => 'Джамму и Кашмир',
     'sort' => 800,
   ],
-  407 => 
+  394 => 
   [
     'id' => 395,
     'country_id' => 69,
@@ -3265,7 +3161,7 @@ return [
     'name_en' => 'Индия',
     'sort' => 900,
   ],
-  408 => 
+  395 => 
   [
     'id' => 396,
     'country_id' => 69,
@@ -3273,31 +3169,15 @@ return [
     'name_en' => 'Керала',
     'sort' => 1000,
   ],
-  409 => 
+  396 => 
   [
     'id' => 397,
     'country_id' => 69,
-    'name_ru' => 'Мад�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Мадхья-Прадеш',
+    'name_en' => 'Мадхья-Прадеш',
+    'sort' => 1100,
   ],
-  410 => 
-  [
-    'id' => 'ья-Прадеш',
-    'country_id' => 'Мад�',
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  411 => 
-  [
-    'id' => 'ья-Прадеш',
-    'country_id' => 1100,
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  412 => 
+  397 => 
   [
     'id' => 398,
     'country_id' => 69,
@@ -3305,31 +3185,15 @@ return [
     'name_en' => 'Манипур',
     'sort' => 1200,
   ],
-  413 => 
+  398 => 
   [
     'id' => 399,
     'country_id' => 69,
-    'name_ru' => 'Ма�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Махараштра',
+    'name_en' => 'Махараштра',
+    'sort' => 1300,
   ],
-  414 => 
-  [
-    'id' => 'араштра',
-    'country_id' => 'Ма�',
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  415 => 
-  [
-    'id' => 'араштра',
-    'country_id' => 1300,
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  416 => 
+  399 => 
   [
     'id' => 400,
     'country_id' => 69,
@@ -3337,7 +3201,7 @@ return [
     'name_en' => 'Орисса',
     'sort' => 1400,
   ],
-  417 => 
+  400 => 
   [
     'id' => 401,
     'country_id' => 69,
@@ -3345,7 +3209,7 @@ return [
     'name_en' => 'Пенджаб',
     'sort' => 1500,
   ],
-  418 => 
+  401 => 
   [
     'id' => 402,
     'country_id' => 69,
@@ -3353,31 +3217,15 @@ return [
     'name_en' => 'Пондишери',
     'sort' => 1600,
   ],
-  419 => 
+  402 => 
   [
     'id' => 403,
     'country_id' => 69,
-    'name_ru' => 'Раджаст�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Раджастхан',
+    'name_en' => 'Раджастхан',
+    'sort' => 1700,
   ],
-  420 => 
-  [
-    'id' => 'ан',
-    'country_id' => 'Раджаст�',
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  421 => 
-  [
-    'id' => 'ан',
-    'country_id' => 1700,
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  422 => 
+  403 => 
   [
     'id' => 404,
     'country_id' => 69,
@@ -3385,7 +3233,7 @@ return [
     'name_en' => 'Тамилнад',
     'sort' => 1800,
   ],
-  423 => 
+  404 => 
   [
     'id' => 405,
     'country_id' => 69,
@@ -3393,7 +3241,7 @@ return [
     'name_en' => 'Трипура',
     'sort' => 1900,
   ],
-  424 => 
+  405 => 
   [
     'id' => 406,
     'country_id' => 69,
@@ -3401,7 +3249,7 @@ return [
     'name_en' => 'Уттар-Прадеш',
     'sort' => 2000,
   ],
-  425 => 
+  406 => 
   [
     'id' => 407,
     'country_id' => 69,
@@ -3409,31 +3257,15 @@ return [
     'name_en' => 'Харьяна',
     'sort' => 2100,
   ],
-  426 => 
+  407 => 
   [
     'id' => 408,
     'country_id' => 69,
-    'name_ru' => 'Чандигар�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Чандигарх',
+    'name_en' => 'Чандигарх',
+    'sort' => 2200,
   ],
-  427 => 
-  [
-    'id' => '',
-    'country_id' => 'Чандигар�',
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  428 => 
-  [
-    'id' => '',
-    'country_id' => 2200,
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  429 => 
+  408 => 
   [
     'id' => 409,
     'country_id' => 70,
@@ -3441,7 +3273,7 @@ return [
     'name_en' => 'Индонезия',
     'sort' => 100,
   ],
-  430 => 
+  409 => 
   [
     'id' => 410,
     'country_id' => 71,
@@ -3449,7 +3281,7 @@ return [
     'name_en' => 'Jordan',
     'sort' => 100,
   ],
-  431 => 
+  410 => 
   [
     'id' => 411,
     'country_id' => 72,
@@ -3457,7 +3289,7 @@ return [
     'name_en' => 'Багдад',
     'sort' => 100,
   ],
-  432 => 
+  411 => 
   [
     'id' => 412,
     'country_id' => 72,
@@ -3465,7 +3297,7 @@ return [
     'name_en' => 'Басра',
     'sort' => 200,
   ],
-  433 => 
+  412 => 
   [
     'id' => 413,
     'country_id' => 72,
@@ -3473,7 +3305,7 @@ return [
     'name_en' => 'Мосул',
     'sort' => 300,
   ],
-  434 => 
+  413 => 
   [
     'id' => 414,
     'country_id' => 73,
@@ -3481,7 +3313,7 @@ return [
     'name_en' => 'Azarbayjan-e Khavari',
     'sort' => 100,
   ],
-  435 => 
+  414 => 
   [
     'id' => 415,
     'country_id' => 73,
@@ -3489,7 +3321,7 @@ return [
     'name_en' => 'Esfahan',
     'sort' => 200,
   ],
-  436 => 
+  415 => 
   [
     'id' => 416,
     'country_id' => 73,
@@ -3497,7 +3329,7 @@ return [
     'name_en' => 'Hamadan',
     'sort' => 300,
   ],
-  437 => 
+  416 => 
   [
     'id' => 417,
     'country_id' => 73,
@@ -3505,7 +3337,7 @@ return [
     'name_en' => 'Kordestan',
     'sort' => 400,
   ],
-  438 => 
+  417 => 
   [
     'id' => 418,
     'country_id' => 73,
@@ -3513,7 +3345,7 @@ return [
     'name_en' => 'Yazd',
     'sort' => 500,
   ],
-  439 => 
+  418 => 
   [
     'id' => 419,
     'country_id' => 73,
@@ -3521,31 +3353,15 @@ return [
     'name_en' => 'Керман',
     'sort' => 600,
   ],
-  440 => 
+  419 => 
   [
     'id' => 420,
     'country_id' => 73,
-    'name_ru' => 'Керманша�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Керманшахан',
+    'name_en' => 'Керманшахан',
+    'sort' => 700,
   ],
-  441 => 
-  [
-    'id' => 'ан',
-    'country_id' => 'Керманша�',
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  442 => 
-  [
-    'id' => 'ан',
-    'country_id' => 700,
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  443 => 
+  420 => 
   [
     'id' => 421,
     'country_id' => 73,
@@ -3553,7 +3369,7 @@ return [
     'name_en' => 'Мазендеран',
     'sort' => 800,
   ],
-  444 => 
+  421 => 
   [
     'id' => 422,
     'country_id' => 73,
@@ -3561,7 +3377,7 @@ return [
     'name_en' => 'Тегеран',
     'sort' => 900,
   ],
-  445 => 
+  422 => 
   [
     'id' => 423,
     'country_id' => 73,
@@ -3569,7 +3385,7 @@ return [
     'name_en' => 'Фарс',
     'sort' => 1000,
   ],
-  446 => 
+  423 => 
   [
     'id' => 424,
     'country_id' => 73,
@@ -3577,7 +3393,7 @@ return [
     'name_en' => 'Хорасан',
     'sort' => 1100,
   ],
-  447 => 
+  424 => 
   [
     'id' => 425,
     'country_id' => 73,
@@ -3585,7 +3401,7 @@ return [
     'name_en' => 'Хузистан',
     'sort' => 1200,
   ],
-  448 => 
+  425 => 
   [
     'id' => 426,
     'country_id' => 74,
@@ -3593,7 +3409,7 @@ return [
     'name_en' => 'Carlow',
     'sort' => 100,
   ],
-  449 => 
+  426 => 
   [
     'id' => 427,
     'country_id' => 74,
@@ -3601,7 +3417,7 @@ return [
     'name_en' => 'Cavan',
     'sort' => 200,
   ],
-  450 => 
+  427 => 
   [
     'id' => 428,
     'country_id' => 74,
@@ -3609,7 +3425,7 @@ return [
     'name_en' => 'Clare',
     'sort' => 300,
   ],
-  451 => 
+  428 => 
   [
     'id' => 429,
     'country_id' => 74,
@@ -3617,7 +3433,7 @@ return [
     'name_en' => 'Cork',
     'sort' => 400,
   ],
-  452 => 
+  429 => 
   [
     'id' => 430,
     'country_id' => 74,
@@ -3625,7 +3441,7 @@ return [
     'name_en' => 'Donegal',
     'sort' => 500,
   ],
-  453 => 
+  430 => 
   [
     'id' => 431,
     'country_id' => 74,
@@ -3633,7 +3449,7 @@ return [
     'name_en' => 'Dublin',
     'sort' => 600,
   ],
-  454 => 
+  431 => 
   [
     'id' => 432,
     'country_id' => 74,
@@ -3641,7 +3457,7 @@ return [
     'name_en' => 'Galway',
     'sort' => 700,
   ],
-  455 => 
+  432 => 
   [
     'id' => 433,
     'country_id' => 74,
@@ -3649,7 +3465,7 @@ return [
     'name_en' => 'Kerry',
     'sort' => 800,
   ],
-  456 => 
+  433 => 
   [
     'id' => 434,
     'country_id' => 74,
@@ -3657,7 +3473,7 @@ return [
     'name_en' => 'Kildare',
     'sort' => 900,
   ],
-  457 => 
+  434 => 
   [
     'id' => 435,
     'country_id' => 74,
@@ -3665,7 +3481,7 @@ return [
     'name_en' => 'Kilkenny',
     'sort' => 1000,
   ],
-  458 => 
+  435 => 
   [
     'id' => 436,
     'country_id' => 74,
@@ -3673,7 +3489,7 @@ return [
     'name_en' => 'Laois',
     'sort' => 1100,
   ],
-  459 => 
+  436 => 
   [
     'id' => 437,
     'country_id' => 74,
@@ -3681,7 +3497,7 @@ return [
     'name_en' => 'Leitrim',
     'sort' => 1200,
   ],
-  460 => 
+  437 => 
   [
     'id' => 438,
     'country_id' => 74,
@@ -3689,7 +3505,7 @@ return [
     'name_en' => 'Limerick',
     'sort' => 1300,
   ],
-  461 => 
+  438 => 
   [
     'id' => 439,
     'country_id' => 74,
@@ -3697,7 +3513,7 @@ return [
     'name_en' => 'Longford',
     'sort' => 1400,
   ],
-  462 => 
+  439 => 
   [
     'id' => 440,
     'country_id' => 74,
@@ -3705,7 +3521,7 @@ return [
     'name_en' => 'Louth',
     'sort' => 1500,
   ],
-  463 => 
+  440 => 
   [
     'id' => 441,
     'country_id' => 74,
@@ -3713,7 +3529,7 @@ return [
     'name_en' => 'Mayo',
     'sort' => 1600,
   ],
-  464 => 
+  441 => 
   [
     'id' => 442,
     'country_id' => 74,
@@ -3721,7 +3537,7 @@ return [
     'name_en' => 'Meath',
     'sort' => 1700,
   ],
-  465 => 
+  442 => 
   [
     'id' => 443,
     'country_id' => 74,
@@ -3729,7 +3545,7 @@ return [
     'name_en' => 'Monaghan',
     'sort' => 1800,
   ],
-  466 => 
+  443 => 
   [
     'id' => 444,
     'country_id' => 74,
@@ -3737,7 +3553,7 @@ return [
     'name_en' => 'Offaly',
     'sort' => 1900,
   ],
-  467 => 
+  444 => 
   [
     'id' => 445,
     'country_id' => 74,
@@ -3745,7 +3561,7 @@ return [
     'name_en' => 'Roscommon',
     'sort' => 2000,
   ],
-  468 => 
+  445 => 
   [
     'id' => 446,
     'country_id' => 74,
@@ -3753,7 +3569,7 @@ return [
     'name_en' => 'Sligo',
     'sort' => 2100,
   ],
-  469 => 
+  446 => 
   [
     'id' => 447,
     'country_id' => 74,
@@ -3761,7 +3577,7 @@ return [
     'name_en' => 'Tipperary',
     'sort' => 2200,
   ],
-  470 => 
+  447 => 
   [
     'id' => 448,
     'country_id' => 74,
@@ -3769,7 +3585,7 @@ return [
     'name_en' => 'Waterford',
     'sort' => 2300,
   ],
-  471 => 
+  448 => 
   [
     'id' => 449,
     'country_id' => 74,
@@ -3777,7 +3593,7 @@ return [
     'name_en' => 'Westmeath',
     'sort' => 2400,
   ],
-  472 => 
+  449 => 
   [
     'id' => 450,
     'country_id' => 74,
@@ -3785,7 +3601,7 @@ return [
     'name_en' => 'Wexford',
     'sort' => 2500,
   ],
-  473 => 
+  450 => 
   [
     'id' => 451,
     'country_id' => 74,
@@ -3793,7 +3609,7 @@ return [
     'name_en' => 'Wicklow',
     'sort' => 2600,
   ],
-  474 => 
+  451 => 
   [
     'id' => 452,
     'country_id' => 75,
@@ -3801,7 +3617,7 @@ return [
     'name_en' => 'Arnessysla',
     'sort' => 100,
   ],
-  475 => 
+  452 => 
   [
     'id' => 453,
     'country_id' => 75,
@@ -3809,7 +3625,7 @@ return [
     'name_en' => 'Austur-Hunavatnssysla',
     'sort' => 200,
   ],
-  476 => 
+  453 => 
   [
     'id' => 454,
     'country_id' => 75,
@@ -3817,7 +3633,7 @@ return [
     'name_en' => 'Borgarfjardarsysla',
     'sort' => 300,
   ],
-  477 => 
+  454 => 
   [
     'id' => 455,
     'country_id' => 75,
@@ -3825,7 +3641,7 @@ return [
     'name_en' => 'Eyjafjardarsysla',
     'sort' => 400,
   ],
-  478 => 
+  455 => 
   [
     'id' => 456,
     'country_id' => 75,
@@ -3833,7 +3649,7 @@ return [
     'name_en' => 'Gullbringusysla',
     'sort' => 500,
   ],
-  479 => 
+  456 => 
   [
     'id' => 457,
     'country_id' => 75,
@@ -3841,7 +3657,7 @@ return [
     'name_en' => 'Myrasysla',
     'sort' => 600,
   ],
-  480 => 
+  457 => 
   [
     'id' => 458,
     'country_id' => 75,
@@ -3849,7 +3665,7 @@ return [
     'name_en' => 'None',
     'sort' => 700,
   ],
-  481 => 
+  458 => 
   [
     'id' => 459,
     'country_id' => 75,
@@ -3857,7 +3673,7 @@ return [
     'name_en' => 'Nordur-Tingeyjarsysla',
     'sort' => 800,
   ],
-  482 => 
+  459 => 
   [
     'id' => 460,
     'country_id' => 75,
@@ -3865,7 +3681,7 @@ return [
     'name_en' => 'Strandasysla',
     'sort' => 900,
   ],
-  483 => 
+  460 => 
   [
     'id' => 461,
     'country_id' => 75,
@@ -3873,7 +3689,7 @@ return [
     'name_en' => 'Sudur-Mulasysla',
     'sort' => 1000,
   ],
-  484 => 
+  461 => 
   [
     'id' => 462,
     'country_id' => 75,
@@ -3881,7 +3697,7 @@ return [
     'name_en' => 'Vestur-Bardastrandarsysla',
     'sort' => 1100,
   ],
-  485 => 
+  462 => 
   [
     'id' => 463,
     'country_id' => 76,
@@ -3889,7 +3705,7 @@ return [
     'name_en' => 'A Corua',
     'sort' => 100,
   ],
-  486 => 
+  463 => 
   [
     'id' => 464,
     'country_id' => 76,
@@ -3897,7 +3713,7 @@ return [
     'name_en' => 'Albacete',
     'sort' => 200,
   ],
-  487 => 
+  464 => 
   [
     'id' => 465,
     'country_id' => 76,
@@ -3905,7 +3721,7 @@ return [
     'name_en' => 'Alicante/Alacant',
     'sort' => 300,
   ],
-  488 => 
+  465 => 
   [
     'id' => 466,
     'country_id' => 76,
@@ -3913,7 +3729,7 @@ return [
     'name_en' => 'Almera',
     'sort' => 400,
   ],
-  489 => 
+  466 => 
   [
     'id' => 467,
     'country_id' => 76,
@@ -3921,7 +3737,7 @@ return [
     'name_en' => 'Asturias',
     'sort' => 500,
   ],
-  490 => 
+  467 => 
   [
     'id' => 468,
     'country_id' => 76,
@@ -3929,7 +3745,7 @@ return [
     'name_en' => 'Badajoz',
     'sort' => 600,
   ],
-  491 => 
+  468 => 
   [
     'id' => 469,
     'country_id' => 76,
@@ -3937,7 +3753,7 @@ return [
     'name_en' => 'Barcelona',
     'sort' => 700,
   ],
-  492 => 
+  469 => 
   [
     'id' => 470,
     'country_id' => 76,
@@ -3945,7 +3761,7 @@ return [
     'name_en' => 'Burgos',
     'sort' => 800,
   ],
-  493 => 
+  470 => 
   [
     'id' => 471,
     'country_id' => 76,
@@ -3953,7 +3769,7 @@ return [
     'name_en' => 'Cantabria',
     'sort' => 900,
   ],
-  494 => 
+  471 => 
   [
     'id' => 472,
     'country_id' => 76,
@@ -3961,7 +3777,7 @@ return [
     'name_en' => 'Castelln/Castell',
     'sort' => 1000,
   ],
-  495 => 
+  472 => 
   [
     'id' => 473,
     'country_id' => 76,
@@ -3969,7 +3785,7 @@ return [
     'name_en' => 'Cceres',
     'sort' => 1100,
   ],
-  496 => 
+  473 => 
   [
     'id' => 474,
     'country_id' => 76,
@@ -3977,7 +3793,7 @@ return [
     'name_en' => 'Cdiz',
     'sort' => 1200,
   ],
-  497 => 
+  474 => 
   [
     'id' => 475,
     'country_id' => 76,
@@ -3985,7 +3801,7 @@ return [
     'name_en' => 'Ceuta',
     'sort' => 1300,
   ],
-  498 => 
+  475 => 
   [
     'id' => 476,
     'country_id' => 76,
@@ -3993,7 +3809,7 @@ return [
     'name_en' => 'Ciudad Real',
     'sort' => 1400,
   ],
-  499 => 
+  476 => 
   [
     'id' => 477,
     'country_id' => 76,
@@ -4001,7 +3817,7 @@ return [
     'name_en' => 'Crdoba',
     'sort' => 1500,
   ],
-  500 => 
+  477 => 
   [
     'id' => 478,
     'country_id' => 76,
@@ -4009,7 +3825,7 @@ return [
     'name_en' => 'Cuenca',
     'sort' => 1600,
   ],
-  501 => 
+  478 => 
   [
     'id' => 479,
     'country_id' => 76,
@@ -4017,7 +3833,7 @@ return [
     'name_en' => 'Girona',
     'sort' => 1700,
   ],
-  502 => 
+  479 => 
   [
     'id' => 480,
     'country_id' => 76,
@@ -4025,7 +3841,7 @@ return [
     'name_en' => 'Granada',
     'sort' => 1800,
   ],
-  503 => 
+  480 => 
   [
     'id' => 481,
     'country_id' => 76,
@@ -4033,7 +3849,7 @@ return [
     'name_en' => 'Guadalajara',
     'sort' => 1900,
   ],
-  504 => 
+  481 => 
   [
     'id' => 482,
     'country_id' => 76,
@@ -4041,7 +3857,7 @@ return [
     'name_en' => 'Guipzcoa',
     'sort' => 2000,
   ],
-  505 => 
+  482 => 
   [
     'id' => 483,
     'country_id' => 76,
@@ -4049,7 +3865,7 @@ return [
     'name_en' => 'Huelva',
     'sort' => 2100,
   ],
-  506 => 
+  483 => 
   [
     'id' => 484,
     'country_id' => 76,
@@ -4057,7 +3873,7 @@ return [
     'name_en' => 'Huesca',
     'sort' => 2200,
   ],
-  507 => 
+  484 => 
   [
     'id' => 485,
     'country_id' => 76,
@@ -4065,7 +3881,7 @@ return [
     'name_en' => 'Illes Balears',
     'sort' => 2300,
   ],
-  508 => 
+  485 => 
   [
     'id' => 486,
     'country_id' => 76,
@@ -4073,7 +3889,7 @@ return [
     'name_en' => 'Jan',
     'sort' => 2400,
   ],
-  509 => 
+  486 => 
   [
     'id' => 487,
     'country_id' => 76,
@@ -4081,7 +3897,7 @@ return [
     'name_en' => 'La Rioja',
     'sort' => 2500,
   ],
-  510 => 
+  487 => 
   [
     'id' => 488,
     'country_id' => 76,
@@ -4089,7 +3905,7 @@ return [
     'name_en' => 'Las Palmas',
     'sort' => 2600,
   ],
-  511 => 
+  488 => 
   [
     'id' => 489,
     'country_id' => 76,
@@ -4097,7 +3913,7 @@ return [
     'name_en' => 'lava',
     'sort' => 2700,
   ],
-  512 => 
+  489 => 
   [
     'id' => 490,
     'country_id' => 76,
@@ -4105,7 +3921,7 @@ return [
     'name_en' => 'Len',
     'sort' => 2800,
   ],
-  513 => 
+  490 => 
   [
     'id' => 491,
     'country_id' => 76,
@@ -4113,7 +3929,7 @@ return [
     'name_en' => 'Lleida',
     'sort' => 2900,
   ],
-  514 => 
+  491 => 
   [
     'id' => 492,
     'country_id' => 76,
@@ -4121,7 +3937,7 @@ return [
     'name_en' => 'Lugo',
     'sort' => 3000,
   ],
-  515 => 
+  492 => 
   [
     'id' => 493,
     'country_id' => 76,
@@ -4129,7 +3945,7 @@ return [
     'name_en' => 'Madrid',
     'sort' => 3100,
   ],
-  516 => 
+  493 => 
   [
     'id' => 494,
     'country_id' => 76,
@@ -4137,7 +3953,7 @@ return [
     'name_en' => 'Melilla',
     'sort' => 3200,
   ],
-  517 => 
+  494 => 
   [
     'id' => 495,
     'country_id' => 76,
@@ -4145,7 +3961,7 @@ return [
     'name_en' => 'Mlaga',
     'sort' => 3300,
   ],
-  518 => 
+  495 => 
   [
     'id' => 496,
     'country_id' => 76,
@@ -4153,7 +3969,7 @@ return [
     'name_en' => 'Murcia',
     'sort' => 3400,
   ],
-  519 => 
+  496 => 
   [
     'id' => 497,
     'country_id' => 76,
@@ -4161,7 +3977,7 @@ return [
     'name_en' => 'Navarra',
     'sort' => 3500,
   ],
-  520 => 
+  497 => 
   [
     'id' => 498,
     'country_id' => 76,
@@ -4169,7 +3985,7 @@ return [
     'name_en' => 'Ourense',
     'sort' => 3600,
   ],
-  521 => 
+  498 => 
   [
     'id' => 499,
     'country_id' => 76,
@@ -4177,7 +3993,7 @@ return [
     'name_en' => 'Palencia',
     'sort' => 3700,
   ],
-  522 => 
+  499 => 
   [
     'id' => 500,
     'country_id' => 76,
@@ -4185,7 +4001,7 @@ return [
     'name_en' => 'Pontevedra',
     'sort' => 3800,
   ],
-  523 => 
+  500 => 
   [
     'id' => 501,
     'country_id' => 76,
@@ -4193,7 +4009,7 @@ return [
     'name_en' => 'Salamanca',
     'sort' => 3900,
   ],
-  524 => 
+  501 => 
   [
     'id' => 502,
     'country_id' => 76,
@@ -4201,7 +4017,7 @@ return [
     'name_en' => 'Santa Cruz de Tenerife',
     'sort' => 4000,
   ],
-  525 => 
+  502 => 
   [
     'id' => 503,
     'country_id' => 76,
@@ -4209,7 +4025,7 @@ return [
     'name_en' => 'Segovia',
     'sort' => 4100,
   ],
-  526 => 
+  503 => 
   [
     'id' => 504,
     'country_id' => 76,
@@ -4217,7 +4033,7 @@ return [
     'name_en' => 'Sevilla',
     'sort' => 4200,
   ],
-  527 => 
+  504 => 
   [
     'id' => 505,
     'country_id' => 76,
@@ -4225,7 +4041,7 @@ return [
     'name_en' => 'Soria',
     'sort' => 4300,
   ],
-  528 => 
+  505 => 
   [
     'id' => 506,
     'country_id' => 76,
@@ -4233,7 +4049,7 @@ return [
     'name_en' => 'Tarragona',
     'sort' => 4400,
   ],
-  529 => 
+  506 => 
   [
     'id' => 507,
     'country_id' => 76,
@@ -4241,7 +4057,7 @@ return [
     'name_en' => 'Teruel',
     'sort' => 4500,
   ],
-  530 => 
+  507 => 
   [
     'id' => 508,
     'country_id' => 76,
@@ -4249,7 +4065,7 @@ return [
     'name_en' => 'Toledo',
     'sort' => 4600,
   ],
-  531 => 
+  508 => 
   [
     'id' => 509,
     'country_id' => 76,
@@ -4257,7 +4073,7 @@ return [
     'name_en' => 'Valladolid',
     'sort' => 4700,
   ],
-  532 => 
+  509 => 
   [
     'id' => 510,
     'country_id' => 76,
@@ -4265,7 +4081,7 @@ return [
     'name_en' => 'Valncia',
     'sort' => 4800,
   ],
-  533 => 
+  510 => 
   [
     'id' => 511,
     'country_id' => 76,
@@ -4273,7 +4089,7 @@ return [
     'name_en' => 'vila',
     'sort' => 4900,
   ],
-  534 => 
+  511 => 
   [
     'id' => 512,
     'country_id' => 76,
@@ -4281,7 +4097,7 @@ return [
     'name_en' => 'Vizcaya',
     'sort' => 5000,
   ],
-  535 => 
+  512 => 
   [
     'id' => 513,
     'country_id' => 76,
@@ -4289,7 +4105,7 @@ return [
     'name_en' => 'Zamora',
     'sort' => 5100,
   ],
-  536 => 
+  513 => 
   [
     'id' => 514,
     'country_id' => 76,
@@ -4297,7 +4113,7 @@ return [
     'name_en' => 'Zaragoza',
     'sort' => 5200,
   ],
-  537 => 
+  514 => 
   [
     'id' => 515,
     'country_id' => 77,
@@ -4305,7 +4121,7 @@ return [
     'name_en' => 'Abruzzo - Chieti',
     'sort' => 100,
   ],
-  538 => 
+  515 => 
   [
     'id' => 516,
     'country_id' => 77,
@@ -4313,7 +4129,7 @@ return [
     'name_en' => 'Abruzzo - L\'Aquila',
     'sort' => 200,
   ],
-  539 => 
+  516 => 
   [
     'id' => 517,
     'country_id' => 77,
@@ -4321,7 +4137,7 @@ return [
     'name_en' => 'Abruzzo - Pescara',
     'sort' => 300,
   ],
-  540 => 
+  517 => 
   [
     'id' => 518,
     'country_id' => 77,
@@ -4329,7 +4145,7 @@ return [
     'name_en' => 'Abruzzo - Teramo',
     'sort' => 400,
   ],
-  541 => 
+  518 => 
   [
     'id' => 519,
     'country_id' => 77,
@@ -4337,7 +4153,7 @@ return [
     'name_en' => 'Basilicata - Matera',
     'sort' => 500,
   ],
-  542 => 
+  519 => 
   [
     'id' => 520,
     'country_id' => 77,
@@ -4345,7 +4161,7 @@ return [
     'name_en' => 'Basilicata - Potenza',
     'sort' => 600,
   ],
-  543 => 
+  520 => 
   [
     'id' => 521,
     'country_id' => 77,
@@ -4353,7 +4169,7 @@ return [
     'name_en' => 'Calabria - Catanzaro',
     'sort' => 700,
   ],
-  544 => 
+  521 => 
   [
     'id' => 522,
     'country_id' => 77,
@@ -4361,7 +4177,7 @@ return [
     'name_en' => 'Calabria - Cosenza',
     'sort' => 800,
   ],
-  545 => 
+  522 => 
   [
     'id' => 523,
     'country_id' => 77,
@@ -4369,7 +4185,7 @@ return [
     'name_en' => 'Calabria - Crotone',
     'sort' => 900,
   ],
-  546 => 
+  523 => 
   [
     'id' => 524,
     'country_id' => 77,
@@ -4377,7 +4193,7 @@ return [
     'name_en' => 'Calabria - Reggio Calabria',
     'sort' => 1000,
   ],
-  547 => 
+  524 => 
   [
     'id' => 525,
     'country_id' => 77,
@@ -4385,7 +4201,7 @@ return [
     'name_en' => 'Calabria - Vibo Valentia',
     'sort' => 1100,
   ],
-  548 => 
+  525 => 
   [
     'id' => 526,
     'country_id' => 77,
@@ -4393,7 +4209,7 @@ return [
     'name_en' => 'Campania - Avellino',
     'sort' => 1200,
   ],
-  549 => 
+  526 => 
   [
     'id' => 527,
     'country_id' => 77,
@@ -4401,7 +4217,7 @@ return [
     'name_en' => 'Campania - Benevento',
     'sort' => 1300,
   ],
-  550 => 
+  527 => 
   [
     'id' => 528,
     'country_id' => 77,
@@ -4409,7 +4225,7 @@ return [
     'name_en' => 'Campania - Caserta',
     'sort' => 1400,
   ],
-  551 => 
+  528 => 
   [
     'id' => 529,
     'country_id' => 77,
@@ -4417,7 +4233,7 @@ return [
     'name_en' => 'Campania - Napoli',
     'sort' => 1500,
   ],
-  552 => 
+  529 => 
   [
     'id' => 530,
     'country_id' => 77,
@@ -4425,7 +4241,7 @@ return [
     'name_en' => 'Campania - Salerno',
     'sort' => 1600,
   ],
-  553 => 
+  530 => 
   [
     'id' => 531,
     'country_id' => 77,
@@ -4433,7 +4249,7 @@ return [
     'name_en' => 'Emilia Romagna - Bologna',
     'sort' => 1700,
   ],
-  554 => 
+  531 => 
   [
     'id' => 532,
     'country_id' => 77,
@@ -4441,7 +4257,7 @@ return [
     'name_en' => 'Emilia Romagna - Ferrara',
     'sort' => 1800,
   ],
-  555 => 
+  532 => 
   [
     'id' => 533,
     'country_id' => 77,
@@ -4449,7 +4265,7 @@ return [
     'name_en' => 'Emilia Romagna - Forl-Cesena',
     'sort' => 1900,
   ],
-  556 => 
+  533 => 
   [
     'id' => 534,
     'country_id' => 77,
@@ -4457,7 +4273,7 @@ return [
     'name_en' => 'Emilia Romagna - Modena',
     'sort' => 2000,
   ],
-  557 => 
+  534 => 
   [
     'id' => 535,
     'country_id' => 77,
@@ -4465,7 +4281,7 @@ return [
     'name_en' => 'Emilia Romagna - Parma',
     'sort' => 2100,
   ],
-  558 => 
+  535 => 
   [
     'id' => 536,
     'country_id' => 77,
@@ -4473,7 +4289,7 @@ return [
     'name_en' => 'Emilia Romagna - Piacenza',
     'sort' => 2200,
   ],
-  559 => 
+  536 => 
   [
     'id' => 537,
     'country_id' => 77,
@@ -4481,7 +4297,7 @@ return [
     'name_en' => 'Emilia Romagna - Ravenna',
     'sort' => 2300,
   ],
-  560 => 
+  537 => 
   [
     'id' => 538,
     'country_id' => 77,
@@ -4489,7 +4305,7 @@ return [
     'name_en' => 'Emilia Romagna - Reggio Emilia',
     'sort' => 2400,
   ],
-  561 => 
+  538 => 
   [
     'id' => 539,
     'country_id' => 77,
@@ -4497,7 +4313,7 @@ return [
     'name_en' => 'Emilia Romagna - Rimini',
     'sort' => 2500,
   ],
-  562 => 
+  539 => 
   [
     'id' => 540,
     'country_id' => 77,
@@ -4505,7 +4321,7 @@ return [
     'name_en' => 'Friuli Venezia Giulia - Gorizia',
     'sort' => 2600,
   ],
-  563 => 
+  540 => 
   [
     'id' => 541,
     'country_id' => 77,
@@ -4513,7 +4329,7 @@ return [
     'name_en' => 'Friuli Venezia Giulia - Pordenone',
     'sort' => 2700,
   ],
-  564 => 
+  541 => 
   [
     'id' => 542,
     'country_id' => 77,
@@ -4521,7 +4337,7 @@ return [
     'name_en' => 'Friuli Venezia Giulia - Trieste',
     'sort' => 2800,
   ],
-  565 => 
+  542 => 
   [
     'id' => 543,
     'country_id' => 77,
@@ -4529,7 +4345,7 @@ return [
     'name_en' => 'Friuli Venezia Giulia - Udine',
     'sort' => 2900,
   ],
-  566 => 
+  543 => 
   [
     'id' => 544,
     'country_id' => 77,
@@ -4537,7 +4353,7 @@ return [
     'name_en' => 'Lazio - Frosinone',
     'sort' => 3000,
   ],
-  567 => 
+  544 => 
   [
     'id' => 545,
     'country_id' => 77,
@@ -4545,7 +4361,7 @@ return [
     'name_en' => 'Lazio - Latina',
     'sort' => 3100,
   ],
-  568 => 
+  545 => 
   [
     'id' => 546,
     'country_id' => 77,
@@ -4553,7 +4369,7 @@ return [
     'name_en' => 'Lazio - Rieti',
     'sort' => 3200,
   ],
-  569 => 
+  546 => 
   [
     'id' => 547,
     'country_id' => 77,
@@ -4561,7 +4377,7 @@ return [
     'name_en' => 'Lazio - Roma',
     'sort' => 3300,
   ],
-  570 => 
+  547 => 
   [
     'id' => 548,
     'country_id' => 77,
@@ -4569,7 +4385,7 @@ return [
     'name_en' => 'Lazio - Viterbo',
     'sort' => 3400,
   ],
-  571 => 
+  548 => 
   [
     'id' => 549,
     'country_id' => 77,
@@ -4577,7 +4393,7 @@ return [
     'name_en' => 'Liguria - Genova',
     'sort' => 3500,
   ],
-  572 => 
+  549 => 
   [
     'id' => 550,
     'country_id' => 77,
@@ -4585,7 +4401,7 @@ return [
     'name_en' => 'Liguria - Imperia',
     'sort' => 3600,
   ],
-  573 => 
+  550 => 
   [
     'id' => 551,
     'country_id' => 77,
@@ -4593,7 +4409,7 @@ return [
     'name_en' => 'Liguria - La Spezia',
     'sort' => 3700,
   ],
-  574 => 
+  551 => 
   [
     'id' => 552,
     'country_id' => 77,
@@ -4601,7 +4417,7 @@ return [
     'name_en' => 'Liguria - Savona',
     'sort' => 3800,
   ],
-  575 => 
+  552 => 
   [
     'id' => 553,
     'country_id' => 77,
@@ -4609,7 +4425,7 @@ return [
     'name_en' => 'Lombardia - Bergamo',
     'sort' => 3900,
   ],
-  576 => 
+  553 => 
   [
     'id' => 554,
     'country_id' => 77,
@@ -4617,7 +4433,7 @@ return [
     'name_en' => 'Lombardia - Brescia',
     'sort' => 4000,
   ],
-  577 => 
+  554 => 
   [
     'id' => 555,
     'country_id' => 77,
@@ -4625,7 +4441,7 @@ return [
     'name_en' => 'Lombardia - Como',
     'sort' => 4100,
   ],
-  578 => 
+  555 => 
   [
     'id' => 556,
     'country_id' => 77,
@@ -4633,7 +4449,7 @@ return [
     'name_en' => 'Lombardia - Cremona',
     'sort' => 4200,
   ],
-  579 => 
+  556 => 
   [
     'id' => 557,
     'country_id' => 77,
@@ -4641,7 +4457,7 @@ return [
     'name_en' => 'Lombardia - Lecco',
     'sort' => 4300,
   ],
-  580 => 
+  557 => 
   [
     'id' => 558,
     'country_id' => 77,
@@ -4649,7 +4465,7 @@ return [
     'name_en' => 'Lombardia - Lodi',
     'sort' => 4400,
   ],
-  581 => 
+  558 => 
   [
     'id' => 559,
     'country_id' => 77,
@@ -4657,7 +4473,7 @@ return [
     'name_en' => 'Lombardia - Mantova',
     'sort' => 4500,
   ],
-  582 => 
+  559 => 
   [
     'id' => 560,
     'country_id' => 77,
@@ -4665,7 +4481,7 @@ return [
     'name_en' => 'Lombardia - Milano',
     'sort' => 4600,
   ],
-  583 => 
+  560 => 
   [
     'id' => 561,
     'country_id' => 77,
@@ -4673,7 +4489,7 @@ return [
     'name_en' => 'Lombardia - Pavia',
     'sort' => 4700,
   ],
-  584 => 
+  561 => 
   [
     'id' => 562,
     'country_id' => 77,
@@ -4681,7 +4497,7 @@ return [
     'name_en' => 'Lombardia - Sondrio',
     'sort' => 4800,
   ],
-  585 => 
+  562 => 
   [
     'id' => 563,
     'country_id' => 77,
@@ -4689,7 +4505,7 @@ return [
     'name_en' => 'Lombardia - Varese',
     'sort' => 4900,
   ],
-  586 => 
+  563 => 
   [
     'id' => 564,
     'country_id' => 77,
@@ -4697,7 +4513,7 @@ return [
     'name_en' => 'Marche - Ancona',
     'sort' => 5000,
   ],
-  587 => 
+  564 => 
   [
     'id' => 565,
     'country_id' => 77,
@@ -4705,7 +4521,7 @@ return [
     'name_en' => 'Marche - Ascoli Piceno',
     'sort' => 5100,
   ],
-  588 => 
+  565 => 
   [
     'id' => 566,
     'country_id' => 77,
@@ -4713,7 +4529,7 @@ return [
     'name_en' => 'Marche - Macerata',
     'sort' => 5200,
   ],
-  589 => 
+  566 => 
   [
     'id' => 567,
     'country_id' => 77,
@@ -4721,7 +4537,7 @@ return [
     'name_en' => 'Marche - Pesaro - Urbino',
     'sort' => 5300,
   ],
-  590 => 
+  567 => 
   [
     'id' => 568,
     'country_id' => 77,
@@ -4729,7 +4545,7 @@ return [
     'name_en' => 'Molise - Campobasso',
     'sort' => 5400,
   ],
-  591 => 
+  568 => 
   [
     'id' => 569,
     'country_id' => 77,
@@ -4737,7 +4553,7 @@ return [
     'name_en' => 'Molise - Isernia',
     'sort' => 5500,
   ],
-  592 => 
+  569 => 
   [
     'id' => 570,
     'country_id' => 77,
@@ -4745,7 +4561,7 @@ return [
     'name_en' => 'Piemonte - Alessandria',
     'sort' => 5600,
   ],
-  593 => 
+  570 => 
   [
     'id' => 571,
     'country_id' => 77,
@@ -4753,7 +4569,7 @@ return [
     'name_en' => 'Piemonte - Biella',
     'sort' => 5700,
   ],
-  594 => 
+  571 => 
   [
     'id' => 572,
     'country_id' => 77,
@@ -4761,7 +4577,7 @@ return [
     'name_en' => 'Piemonte - Cuneo',
     'sort' => 5800,
   ],
-  595 => 
+  572 => 
   [
     'id' => 573,
     'country_id' => 77,
@@ -4769,7 +4585,7 @@ return [
     'name_en' => 'Piemonte - Novara',
     'sort' => 5900,
   ],
-  596 => 
+  573 => 
   [
     'id' => 574,
     'country_id' => 77,
@@ -4777,7 +4593,7 @@ return [
     'name_en' => 'Piemonte - Torino',
     'sort' => 6000,
   ],
-  597 => 
+  574 => 
   [
     'id' => 575,
     'country_id' => 77,
@@ -4785,7 +4601,7 @@ return [
     'name_en' => 'Piemonte - Verbania',
     'sort' => 6100,
   ],
-  598 => 
+  575 => 
   [
     'id' => 576,
     'country_id' => 77,
@@ -4793,7 +4609,7 @@ return [
     'name_en' => 'Piemonte - Vercelli',
     'sort' => 6200,
   ],
-  599 => 
+  576 => 
   [
     'id' => 577,
     'country_id' => 77,
@@ -4801,7 +4617,7 @@ return [
     'name_en' => 'Puglia - Bari',
     'sort' => 6300,
   ],
-  600 => 
+  577 => 
   [
     'id' => 578,
     'country_id' => 77,
@@ -4809,7 +4625,7 @@ return [
     'name_en' => 'Puglia - Brindisi',
     'sort' => 6400,
   ],
-  601 => 
+  578 => 
   [
     'id' => 579,
     'country_id' => 77,
@@ -4817,7 +4633,7 @@ return [
     'name_en' => 'Puglia - Foggia',
     'sort' => 6500,
   ],
-  602 => 
+  579 => 
   [
     'id' => 580,
     'country_id' => 77,
@@ -4825,7 +4641,7 @@ return [
     'name_en' => 'Puglia - Lecce',
     'sort' => 6600,
   ],
-  603 => 
+  580 => 
   [
     'id' => 581,
     'country_id' => 77,
@@ -4833,7 +4649,7 @@ return [
     'name_en' => 'Puglia - Taranto',
     'sort' => 6700,
   ],
-  604 => 
+  581 => 
   [
     'id' => 582,
     'country_id' => 77,
@@ -4841,7 +4657,7 @@ return [
     'name_en' => 'Sardegna - Cagliari',
     'sort' => 6800,
   ],
-  605 => 
+  582 => 
   [
     'id' => 583,
     'country_id' => 77,
@@ -4849,7 +4665,7 @@ return [
     'name_en' => 'Sardegna - Nuoro',
     'sort' => 6900,
   ],
-  606 => 
+  583 => 
   [
     'id' => 584,
     'country_id' => 77,
@@ -4857,7 +4673,7 @@ return [
     'name_en' => 'Sardegna - Oristano',
     'sort' => 7000,
   ],
-  607 => 
+  584 => 
   [
     'id' => 585,
     'country_id' => 77,
@@ -4865,7 +4681,7 @@ return [
     'name_en' => 'Sardegna - Sassari',
     'sort' => 7100,
   ],
-  608 => 
+  585 => 
   [
     'id' => 586,
     'country_id' => 77,
@@ -4873,7 +4689,7 @@ return [
     'name_en' => 'Sicilia - Agrigento',
     'sort' => 7200,
   ],
-  609 => 
+  586 => 
   [
     'id' => 587,
     'country_id' => 77,
@@ -4881,7 +4697,7 @@ return [
     'name_en' => 'Sicilia - Catania',
     'sort' => 7300,
   ],
-  610 => 
+  587 => 
   [
     'id' => 588,
     'country_id' => 77,
@@ -4889,7 +4705,7 @@ return [
     'name_en' => 'Sicilia - Messina',
     'sort' => 7400,
   ],
-  611 => 
+  588 => 
   [
     'id' => 589,
     'country_id' => 77,
@@ -4897,7 +4713,7 @@ return [
     'name_en' => 'Sicilia - Palermo',
     'sort' => 7500,
   ],
-  612 => 
+  589 => 
   [
     'id' => 590,
     'country_id' => 77,
@@ -4905,7 +4721,7 @@ return [
     'name_en' => 'Sicilia - Ragusa',
     'sort' => 7600,
   ],
-  613 => 
+  590 => 
   [
     'id' => 591,
     'country_id' => 77,
@@ -4913,7 +4729,7 @@ return [
     'name_en' => 'Sicilia - Siracusa',
     'sort' => 7700,
   ],
-  614 => 
+  591 => 
   [
     'id' => 592,
     'country_id' => 77,
@@ -4921,7 +4737,7 @@ return [
     'name_en' => 'Sicilia - Trapani',
     'sort' => 7800,
   ],
-  615 => 
+  592 => 
   [
     'id' => 593,
     'country_id' => 77,
@@ -4929,7 +4745,7 @@ return [
     'name_en' => 'Toscana - Arezzo',
     'sort' => 7900,
   ],
-  616 => 
+  593 => 
   [
     'id' => 594,
     'country_id' => 77,
@@ -4937,7 +4753,7 @@ return [
     'name_en' => 'Toscana - Firenze',
     'sort' => 8000,
   ],
-  617 => 
+  594 => 
   [
     'id' => 595,
     'country_id' => 77,
@@ -4945,7 +4761,7 @@ return [
     'name_en' => 'Toscana - Grosseto',
     'sort' => 8100,
   ],
-  618 => 
+  595 => 
   [
     'id' => 596,
     'country_id' => 77,
@@ -4953,7 +4769,7 @@ return [
     'name_en' => 'Toscana - Livorno',
     'sort' => 8200,
   ],
-  619 => 
+  596 => 
   [
     'id' => 597,
     'country_id' => 77,
@@ -4961,7 +4777,7 @@ return [
     'name_en' => 'Toscana - Lucca',
     'sort' => 8300,
   ],
-  620 => 
+  597 => 
   [
     'id' => 598,
     'country_id' => 77,
@@ -4969,7 +4785,7 @@ return [
     'name_en' => 'Toscana - Massa Carrara',
     'sort' => 8400,
   ],
-  621 => 
+  598 => 
   [
     'id' => 599,
     'country_id' => 77,
@@ -4977,7 +4793,7 @@ return [
     'name_en' => 'Toscana - Pisa',
     'sort' => 8500,
   ],
-  622 => 
+  599 => 
   [
     'id' => 600,
     'country_id' => 77,
@@ -4985,7 +4801,7 @@ return [
     'name_en' => 'Toscana - Pistoia',
     'sort' => 8600,
   ],
-  623 => 
+  600 => 
   [
     'id' => 601,
     'country_id' => 77,
@@ -4993,7 +4809,7 @@ return [
     'name_en' => 'Toscana - Prato',
     'sort' => 8700,
   ],
-  624 => 
+  601 => 
   [
     'id' => 602,
     'country_id' => 77,
@@ -5001,7 +4817,7 @@ return [
     'name_en' => 'Toscana - Siena',
     'sort' => 8800,
   ],
-  625 => 
+  602 => 
   [
     'id' => 603,
     'country_id' => 77,
@@ -5009,7 +4825,7 @@ return [
     'name_en' => 'Trentino Alto Adige - Bolzano',
     'sort' => 8900,
   ],
-  626 => 
+  603 => 
   [
     'id' => 604,
     'country_id' => 77,
@@ -5017,7 +4833,7 @@ return [
     'name_en' => 'Trentino Alto Adige - Trento',
     'sort' => 9000,
   ],
-  627 => 
+  604 => 
   [
     'id' => 605,
     'country_id' => 77,
@@ -5025,7 +4841,7 @@ return [
     'name_en' => 'Umbria - Perugia',
     'sort' => 9100,
   ],
-  628 => 
+  605 => 
   [
     'id' => 606,
     'country_id' => 77,
@@ -5033,7 +4849,7 @@ return [
     'name_en' => 'Umbria - Terni',
     'sort' => 9200,
   ],
-  629 => 
+  606 => 
   [
     'id' => 607,
     'country_id' => 77,
@@ -5041,7 +4857,7 @@ return [
     'name_en' => 'Valle d\'Aosta - Aosta',
     'sort' => 9300,
   ],
-  630 => 
+  607 => 
   [
     'id' => 608,
     'country_id' => 77,
@@ -5049,7 +4865,7 @@ return [
     'name_en' => 'Veneto - Belluno',
     'sort' => 9400,
   ],
-  631 => 
+  608 => 
   [
     'id' => 609,
     'country_id' => 77,
@@ -5057,7 +4873,7 @@ return [
     'name_en' => 'Veneto - Padova',
     'sort' => 9500,
   ],
-  632 => 
+  609 => 
   [
     'id' => 610,
     'country_id' => 77,
@@ -5065,7 +4881,7 @@ return [
     'name_en' => 'Veneto - Rovigo',
     'sort' => 9600,
   ],
-  633 => 
+  610 => 
   [
     'id' => 611,
     'country_id' => 77,
@@ -5073,7 +4889,7 @@ return [
     'name_en' => 'Veneto - Treviso',
     'sort' => 9700,
   ],
-  634 => 
+  611 => 
   [
     'id' => 612,
     'country_id' => 77,
@@ -5081,7 +4897,7 @@ return [
     'name_en' => 'Veneto - Venezia',
     'sort' => 9800,
   ],
-  635 => 
+  612 => 
   [
     'id' => 613,
     'country_id' => 77,
@@ -5089,7 +4905,7 @@ return [
     'name_en' => 'Veneto - Verona',
     'sort' => 9900,
   ],
-  636 => 
+  613 => 
   [
     'id' => 614,
     'country_id' => 77,
@@ -5097,7 +4913,7 @@ return [
     'name_en' => 'Veneto - Vicenza',
     'sort' => 10000,
   ],
-  637 => 
+  614 => 
   [
     'id' => 615,
     'country_id' => 78,
@@ -5105,7 +4921,7 @@ return [
     'name_en' => 'Yemen',
     'sort' => 100,
   ],
-  638 => 
+  615 => 
   [
     'id' => 616,
     'country_id' => 79,
@@ -5113,7 +4929,7 @@ return [
     'name_en' => 'Cape Verde',
     'sort' => 100,
   ],
-  639 => 
+  616 => 
   [
     'id' => 617,
     'country_id' => 80,
@@ -5121,7 +4937,7 @@ return [
     'name_en' => 'Akmolinskaya obl. (Tselinogradskaya obl.)',
     'sort' => 100,
   ],
-  640 => 
+  617 => 
   [
     'id' => 618,
     'country_id' => 80,
@@ -5129,7 +4945,7 @@ return [
     'name_en' => 'Aktyubinskaya obl.',
     'sort' => 200,
   ],
-  641 => 
+  618 => 
   [
     'id' => 619,
     'country_id' => 80,
@@ -5137,23 +4953,15 @@ return [
     'name_en' => 'Alma-Atinskaya obl.',
     'sort' => 300,
   ],
-  642 => 
+  619 => 
   [
     'id' => 620,
     'country_id' => 80,
-    'name_ru' => 'Восточно-Каза�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Восточно-Казахстанская обл.',
+    'name_en' => 'Vostochno-Kazahstanskaya obl.',
+    'sort' => 400,
   ],
-  643 => 
-  [
-    'id' => 'станская обл.',
-    'country_id' => 'Vostochno-Kazahstanskaya obl.',
-    'name_ru' => 400,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  644 => 
+  620 => 
   [
     'id' => 621,
     'country_id' => 80,
@@ -5161,7 +4969,7 @@ return [
     'name_en' => 'Gurevskaya obl.',
     'sort' => 500,
   ],
-  645 => 
+  621 => 
   [
     'id' => 622,
     'country_id' => 80,
@@ -5169,7 +4977,7 @@ return [
     'name_en' => 'Dzhezkazganskaya obl.',
     'sort' => 600,
   ],
-  646 => 
+  622 => 
   [
     'id' => 623,
     'country_id' => 80,
@@ -5177,39 +4985,23 @@ return [
     'name_en' => 'Zhambylskaya obl. (Dzhambulskaya obl.)',
     'sort' => 700,
   ],
-  647 => 
+  623 => 
   [
     'id' => 624,
     'country_id' => 80,
-    'name_ru' => 'Западно-Каза�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Западно-Казахстанская обл.',
+    'name_en' => 'Zapadno-Kazahstanskaya obl.',
+    'sort' => 800,
   ],
-  648 => 
-  [
-    'id' => 'станская обл.',
-    'country_id' => 'Zapadno-Kazahstanskaya obl.',
-    'name_ru' => 800,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  649 => 
+  624 => 
   [
     'id' => 625,
     'country_id' => 80,
-    'name_ru' => 'Каза�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Казахстан',
+    'name_en' => 'Kazahstan',
+    'sort' => 900,
   ],
-  650 => 
-  [
-    'id' => 'стан',
-    'country_id' => 'Kazahstan',
-    'name_ru' => 900,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  651 => 
+  625 => 
   [
     'id' => 626,
     'country_id' => 80,
@@ -5217,7 +5009,7 @@ return [
     'name_en' => 'Karagandinskaya obl.',
     'sort' => 1000,
   ],
-  652 => 
+  626 => 
   [
     'id' => 627,
     'country_id' => 80,
@@ -5225,7 +5017,7 @@ return [
     'name_en' => 'Kzylordinskaya obl.',
     'sort' => 1100,
   ],
-  653 => 
+  627 => 
   [
     'id' => 628,
     'country_id' => 80,
@@ -5233,7 +5025,7 @@ return [
     'name_en' => 'Kokchetavskaya obl.',
     'sort' => 1200,
   ],
-  654 => 
+  628 => 
   [
     'id' => 629,
     'country_id' => 80,
@@ -5241,7 +5033,7 @@ return [
     'name_en' => 'Kustanaiskaya obl.',
     'sort' => 1300,
   ],
-  655 => 
+  629 => 
   [
     'id' => 630,
     'country_id' => 80,
@@ -5249,7 +5041,7 @@ return [
     'name_en' => 'Mangystauskaya (Mangyshlakskaya obl.)',
     'sort' => 1400,
   ],
-  656 => 
+  630 => 
   [
     'id' => 631,
     'country_id' => 80,
@@ -5257,23 +5049,15 @@ return [
     'name_en' => 'Pavlodarskaya obl.',
     'sort' => 1500,
   ],
-  657 => 
+  631 => 
   [
     'id' => 632,
     'country_id' => 80,
-    'name_ru' => 'Северо-Каза�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Северо-Казахстанская обл.',
+    'name_en' => 'Severo-Kazahstanskaya obl.',
+    'sort' => 1600,
   ],
-  658 => 
-  [
-    'id' => 'станская обл.',
-    'country_id' => 'Severo-Kazahstanskaya obl.',
-    'name_ru' => 1600,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  659 => 
+  632 => 
   [
     'id' => 633,
     'country_id' => 80,
@@ -5281,7 +5065,7 @@ return [
     'name_en' => 'Taldy-Kurganskaya obl.',
     'sort' => 1700,
   ],
-  660 => 
+  633 => 
   [
     'id' => 634,
     'country_id' => 80,
@@ -5289,7 +5073,7 @@ return [
     'name_en' => 'Turgaiskaya obl.',
     'sort' => 1800,
   ],
-  661 => 
+  634 => 
   [
     'id' => 635,
     'country_id' => 80,
@@ -5297,7 +5081,7 @@ return [
     'name_en' => 'Chimkentskaya obl.',
     'sort' => 1900,
   ],
-  662 => 
+  635 => 
   [
     'id' => 636,
     'country_id' => 81,
@@ -5305,7 +5089,7 @@ return [
     'name_en' => 'Cambodia',
     'sort' => 100,
   ],
-  663 => 
+  636 => 
   [
     'id' => 637,
     'country_id' => 82,
@@ -5313,7 +5097,7 @@ return [
     'name_en' => 'Littoral',
     'sort' => 100,
   ],
-  664 => 
+  637 => 
   [
     'id' => 638,
     'country_id' => 82,
@@ -5321,7 +5105,7 @@ return [
     'name_en' => 'Sudouest',
     'sort' => 200,
   ],
-  665 => 
+  638 => 
   [
     'id' => 639,
     'country_id' => 82,
@@ -5329,7 +5113,7 @@ return [
     'name_en' => 'North',
     'sort' => 300,
   ],
-  666 => 
+  639 => 
   [
     'id' => 640,
     'country_id' => 82,
@@ -5337,7 +5121,7 @@ return [
     'name_en' => 'Central',
     'sort' => 400,
   ],
-  667 => 
+  640 => 
   [
     'id' => 641,
     'country_id' => 83,
@@ -5345,7 +5129,7 @@ return [
     'name_en' => 'Alberta',
     'sort' => 100,
   ],
-  668 => 
+  641 => 
   [
     'id' => 642,
     'country_id' => 83,
@@ -5353,7 +5137,7 @@ return [
     'name_en' => 'British Columbia',
     'sort' => 200,
   ],
-  669 => 
+  642 => 
   [
     'id' => 643,
     'country_id' => 83,
@@ -5361,7 +5145,7 @@ return [
     'name_en' => 'Manitoba',
     'sort' => 300,
   ],
-  670 => 
+  643 => 
   [
     'id' => 644,
     'country_id' => 83,
@@ -5369,7 +5153,7 @@ return [
     'name_en' => 'New Brunswick',
     'sort' => 400,
   ],
-  671 => 
+  644 => 
   [
     'id' => 645,
     'country_id' => 83,
@@ -5377,7 +5161,7 @@ return [
     'name_en' => 'Newfoundland',
     'sort' => 500,
   ],
-  672 => 
+  645 => 
   [
     'id' => 646,
     'country_id' => 83,
@@ -5385,7 +5169,7 @@ return [
     'name_en' => 'Northwest Territories',
     'sort' => 600,
   ],
-  673 => 
+  646 => 
   [
     'id' => 647,
     'country_id' => 83,
@@ -5393,7 +5177,7 @@ return [
     'name_en' => 'Nova Scotia',
     'sort' => 700,
   ],
-  674 => 
+  647 => 
   [
     'id' => 648,
     'country_id' => 83,
@@ -5401,7 +5185,7 @@ return [
     'name_en' => 'Nunavut',
     'sort' => 800,
   ],
-  675 => 
+  648 => 
   [
     'id' => 649,
     'country_id' => 83,
@@ -5409,7 +5193,7 @@ return [
     'name_en' => 'Ontario',
     'sort' => 900,
   ],
-  676 => 
+  649 => 
   [
     'id' => 650,
     'country_id' => 83,
@@ -5417,7 +5201,7 @@ return [
     'name_en' => 'Prince Edward Island',
     'sort' => 1000,
   ],
-  677 => 
+  650 => 
   [
     'id' => 651,
     'country_id' => 83,
@@ -5425,7 +5209,7 @@ return [
     'name_en' => 'Quebec',
     'sort' => 1100,
   ],
-  678 => 
+  651 => 
   [
     'id' => 652,
     'country_id' => 83,
@@ -5433,7 +5217,7 @@ return [
     'name_en' => 'Saskatchewan',
     'sort' => 1200,
   ],
-  679 => 
+  652 => 
   [
     'id' => 653,
     'country_id' => 83,
@@ -5441,23 +5225,15 @@ return [
     'name_en' => 'Yukon Territory',
     'sort' => 1300,
   ],
-  680 => 
+  653 => 
   [
     'id' => 654,
     'country_id' => 84,
-    'name_ru' => 'До�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Доха',
+    'name_en' => 'Doha',
+    'sort' => 100,
   ],
-  681 => 
-  [
-    'id' => 'а',
-    'country_id' => 'Doha',
-    'name_ru' => 100,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  682 => 
+  654 => 
   [
     'id' => 655,
     'country_id' => 85,
@@ -5465,7 +5241,7 @@ return [
     'name_en' => 'Central',
     'sort' => 100,
   ],
-  683 => 
+  655 => 
   [
     'id' => 656,
     'country_id' => 85,
@@ -5473,7 +5249,7 @@ return [
     'name_en' => 'Coast',
     'sort' => 200,
   ],
-  684 => 
+  656 => 
   [
     'id' => 657,
     'country_id' => 85,
@@ -5481,7 +5257,7 @@ return [
     'name_en' => 'Nairobi Area',
     'sort' => 300,
   ],
-  685 => 
+  657 => 
   [
     'id' => 658,
     'country_id' => 85,
@@ -5489,7 +5265,7 @@ return [
     'name_en' => 'North-Eastern',
     'sort' => 400,
   ],
-  686 => 
+  658 => 
   [
     'id' => 659,
     'country_id' => 85,
@@ -5497,7 +5273,7 @@ return [
     'name_en' => 'Western',
     'sort' => 500,
   ],
-  687 => 
+  659 => 
   [
     'id' => 660,
     'country_id' => 86,
@@ -5505,7 +5281,7 @@ return [
     'name_en' => 'Government controlled area',
     'sort' => 100,
   ],
-  688 => 
+  660 => 
   [
     'id' => 661,
     'country_id' => 86,
@@ -5513,7 +5289,7 @@ return [
     'name_en' => 'Turkish controlled area',
     'sort' => 200,
   ],
-  689 => 
+  661 => 
   [
     'id' => 662,
     'country_id' => 87,
@@ -5521,7 +5297,7 @@ return [
     'name_en' => 'None',
     'sort' => 100,
   ],
-  690 => 
+  662 => 
   [
     'id' => 663,
     'country_id' => 88,
@@ -5529,7 +5305,7 @@ return [
     'name_en' => 'Anhui',
     'sort' => 100,
   ],
-  691 => 
+  663 => 
   [
     'id' => 664,
     'country_id' => 88,
@@ -5537,7 +5313,7 @@ return [
     'name_en' => 'Beijing',
     'sort' => 200,
   ],
-  692 => 
+  664 => 
   [
     'id' => 665,
     'country_id' => 88,
@@ -5545,7 +5321,7 @@ return [
     'name_en' => 'Chongqing',
     'sort' => 300,
   ],
-  693 => 
+  665 => 
   [
     'id' => 666,
     'country_id' => 88,
@@ -5553,7 +5329,7 @@ return [
     'name_en' => 'Fujian',
     'sort' => 400,
   ],
-  694 => 
+  666 => 
   [
     'id' => 667,
     'country_id' => 88,
@@ -5561,7 +5337,7 @@ return [
     'name_en' => 'Gansu',
     'sort' => 500,
   ],
-  695 => 
+  667 => 
   [
     'id' => 668,
     'country_id' => 88,
@@ -5569,7 +5345,7 @@ return [
     'name_en' => 'Guangdong',
     'sort' => 600,
   ],
-  696 => 
+  668 => 
   [
     'id' => 669,
     'country_id' => 88,
@@ -5577,7 +5353,7 @@ return [
     'name_en' => 'Guangxi',
     'sort' => 700,
   ],
-  697 => 
+  669 => 
   [
     'id' => 670,
     'country_id' => 88,
@@ -5585,7 +5361,7 @@ return [
     'name_en' => 'Guizhou',
     'sort' => 800,
   ],
-  698 => 
+  670 => 
   [
     'id' => 671,
     'country_id' => 88,
@@ -5593,7 +5369,7 @@ return [
     'name_en' => 'Hainan',
     'sort' => 900,
   ],
-  699 => 
+  671 => 
   [
     'id' => 672,
     'country_id' => 88,
@@ -5601,7 +5377,7 @@ return [
     'name_en' => 'Hebei',
     'sort' => 1000,
   ],
-  700 => 
+  672 => 
   [
     'id' => 673,
     'country_id' => 88,
@@ -5609,7 +5385,7 @@ return [
     'name_en' => 'Heilongjiang',
     'sort' => 1100,
   ],
-  701 => 
+  673 => 
   [
     'id' => 674,
     'country_id' => 88,
@@ -5617,7 +5393,7 @@ return [
     'name_en' => 'Henan',
     'sort' => 1200,
   ],
-  702 => 
+  674 => 
   [
     'id' => 675,
     'country_id' => 88,
@@ -5625,7 +5401,7 @@ return [
     'name_en' => 'Hubei',
     'sort' => 1300,
   ],
-  703 => 
+  675 => 
   [
     'id' => 676,
     'country_id' => 88,
@@ -5633,7 +5409,7 @@ return [
     'name_en' => 'Hunan',
     'sort' => 1400,
   ],
-  704 => 
+  676 => 
   [
     'id' => 677,
     'country_id' => 88,
@@ -5641,7 +5417,7 @@ return [
     'name_en' => 'Jiangsu',
     'sort' => 1500,
   ],
-  705 => 
+  677 => 
   [
     'id' => 678,
     'country_id' => 88,
@@ -5649,7 +5425,7 @@ return [
     'name_en' => 'Jiangxi',
     'sort' => 1600,
   ],
-  706 => 
+  678 => 
   [
     'id' => 679,
     'country_id' => 88,
@@ -5657,7 +5433,7 @@ return [
     'name_en' => 'Jilin',
     'sort' => 1700,
   ],
-  707 => 
+  679 => 
   [
     'id' => 680,
     'country_id' => 88,
@@ -5665,7 +5441,7 @@ return [
     'name_en' => 'Liaoning',
     'sort' => 1800,
   ],
-  708 => 
+  680 => 
   [
     'id' => 681,
     'country_id' => 88,
@@ -5673,7 +5449,7 @@ return [
     'name_en' => 'Nei Mongol',
     'sort' => 1900,
   ],
-  709 => 
+  681 => 
   [
     'id' => 682,
     'country_id' => 88,
@@ -5681,7 +5457,7 @@ return [
     'name_en' => 'Ningxia',
     'sort' => 2000,
   ],
-  710 => 
+  682 => 
   [
     'id' => 683,
     'country_id' => 88,
@@ -5689,7 +5465,7 @@ return [
     'name_en' => 'Qinghai',
     'sort' => 2100,
   ],
-  711 => 
+  683 => 
   [
     'id' => 684,
     'country_id' => 88,
@@ -5697,7 +5473,7 @@ return [
     'name_en' => 'Shaanxi',
     'sort' => 2200,
   ],
-  712 => 
+  684 => 
   [
     'id' => 685,
     'country_id' => 88,
@@ -5705,7 +5481,7 @@ return [
     'name_en' => 'Shandong',
     'sort' => 2300,
   ],
-  713 => 
+  685 => 
   [
     'id' => 686,
     'country_id' => 88,
@@ -5713,7 +5489,7 @@ return [
     'name_en' => 'Shanghai',
     'sort' => 2400,
   ],
-  714 => 
+  686 => 
   [
     'id' => 687,
     'country_id' => 88,
@@ -5721,7 +5497,7 @@ return [
     'name_en' => 'Shanxi',
     'sort' => 2500,
   ],
-  715 => 
+  687 => 
   [
     'id' => 688,
     'country_id' => 88,
@@ -5729,7 +5505,7 @@ return [
     'name_en' => 'Sichuan',
     'sort' => 2600,
   ],
-  716 => 
+  688 => 
   [
     'id' => 689,
     'country_id' => 88,
@@ -5737,7 +5513,7 @@ return [
     'name_en' => 'Tianjin',
     'sort' => 2700,
   ],
-  717 => 
+  689 => 
   [
     'id' => 690,
     'country_id' => 88,
@@ -5745,7 +5521,7 @@ return [
     'name_en' => 'Xinjiang',
     'sort' => 2800,
   ],
-  718 => 
+  690 => 
   [
     'id' => 691,
     'country_id' => 88,
@@ -5753,7 +5529,7 @@ return [
     'name_en' => 'Yunnan',
     'sort' => 2900,
   ],
-  719 => 
+  691 => 
   [
     'id' => 692,
     'country_id' => 88,
@@ -5761,7 +5537,7 @@ return [
     'name_en' => 'Zhejiang',
     'sort' => 3000,
   ],
-  720 => 
+  692 => 
   [
     'id' => 693,
     'country_id' => 89,
@@ -5769,7 +5545,7 @@ return [
     'name_en' => 'Amazonas',
     'sort' => 100,
   ],
-  721 => 
+  693 => 
   [
     'id' => 694,
     'country_id' => 89,
@@ -5777,7 +5553,7 @@ return [
     'name_en' => 'Antioquia',
     'sort' => 200,
   ],
-  722 => 
+  694 => 
   [
     'id' => 695,
     'country_id' => 89,
@@ -5785,7 +5561,7 @@ return [
     'name_en' => 'Atlntico',
     'sort' => 300,
   ],
-  723 => 
+  695 => 
   [
     'id' => 696,
     'country_id' => 89,
@@ -5793,7 +5569,7 @@ return [
     'name_en' => 'Casanare',
     'sort' => 400,
   ],
-  724 => 
+  696 => 
   [
     'id' => 697,
     'country_id' => 89,
@@ -5801,7 +5577,7 @@ return [
     'name_en' => 'Cauca',
     'sort' => 500,
   ],
-  725 => 
+  697 => 
   [
     'id' => 698,
     'country_id' => 89,
@@ -5809,7 +5585,7 @@ return [
     'name_en' => 'Choc',
     'sort' => 600,
   ],
-  726 => 
+  698 => 
   [
     'id' => 699,
     'country_id' => 89,
@@ -5817,7 +5593,7 @@ return [
     'name_en' => 'Crdoba',
     'sort' => 700,
   ],
-  727 => 
+  699 => 
   [
     'id' => 700,
     'country_id' => 89,
@@ -5825,7 +5601,7 @@ return [
     'name_en' => 'Csar',
     'sort' => 800,
   ],
-  728 => 
+  700 => 
   [
     'id' => 701,
     'country_id' => 89,
@@ -5833,7 +5609,7 @@ return [
     'name_en' => 'Cundinamarca',
     'sort' => 900,
   ],
-  729 => 
+  701 => 
   [
     'id' => 702,
     'country_id' => 89,
@@ -5841,7 +5617,7 @@ return [
     'name_en' => 'Distrito Especial',
     'sort' => 1000,
   ],
-  730 => 
+  702 => 
   [
     'id' => 703,
     'country_id' => 89,
@@ -5849,7 +5625,7 @@ return [
     'name_en' => 'Huila',
     'sort' => 1100,
   ],
-  731 => 
+  703 => 
   [
     'id' => 704,
     'country_id' => 89,
@@ -5857,7 +5633,7 @@ return [
     'name_en' => 'La Guajira',
     'sort' => 1200,
   ],
-  732 => 
+  704 => 
   [
     'id' => 705,
     'country_id' => 89,
@@ -5865,7 +5641,7 @@ return [
     'name_en' => 'Meta',
     'sort' => 1300,
   ],
-  733 => 
+  705 => 
   [
     'id' => 706,
     'country_id' => 89,
@@ -5873,7 +5649,7 @@ return [
     'name_en' => 'Narino',
     'sort' => 1400,
   ],
-  734 => 
+  706 => 
   [
     'id' => 707,
     'country_id' => 89,
@@ -5881,7 +5657,7 @@ return [
     'name_en' => 'Norte de Santander',
     'sort' => 1500,
   ],
-  735 => 
+  707 => 
   [
     'id' => 708,
     'country_id' => 89,
@@ -5889,7 +5665,7 @@ return [
     'name_en' => 'Quindo',
     'sort' => 1600,
   ],
-  736 => 
+  708 => 
   [
     'id' => 709,
     'country_id' => 89,
@@ -5897,7 +5673,7 @@ return [
     'name_en' => 'Risaralda',
     'sort' => 1700,
   ],
-  737 => 
+  709 => 
   [
     'id' => 710,
     'country_id' => 89,
@@ -5905,7 +5681,7 @@ return [
     'name_en' => 'Santander',
     'sort' => 1800,
   ],
-  738 => 
+  710 => 
   [
     'id' => 711,
     'country_id' => 89,
@@ -5913,7 +5689,7 @@ return [
     'name_en' => 'Tolima',
     'sort' => 1900,
   ],
-  739 => 
+  711 => 
   [
     'id' => 712,
     'country_id' => 90,
@@ -5921,7 +5697,7 @@ return [
     'name_en' => 'Comoros',
     'sort' => 100,
   ],
-  740 => 
+  712 => 
   [
     'id' => 713,
     'country_id' => 91,
@@ -5929,7 +5705,7 @@ return [
     'name_en' => 'Congo (Brazzaville)',
     'sort' => 100,
   ],
-  741 => 
+  713 => 
   [
     'id' => 714,
     'country_id' => 92,
@@ -5937,7 +5713,7 @@ return [
     'name_en' => 'Congo',
     'sort' => 100,
   ],
-  742 => 
+  714 => 
   [
     'id' => 715,
     'country_id' => 93,
@@ -5945,7 +5721,7 @@ return [
     'name_en' => 'Alajuela',
     'sort' => 100,
   ],
-  743 => 
+  715 => 
   [
     'id' => 716,
     'country_id' => 93,
@@ -5953,7 +5729,7 @@ return [
     'name_en' => 'Cartago',
     'sort' => 200,
   ],
-  744 => 
+  716 => 
   [
     'id' => 717,
     'country_id' => 93,
@@ -5961,7 +5737,7 @@ return [
     'name_en' => 'Guanacaste',
     'sort' => 300,
   ],
-  745 => 
+  717 => 
   [
     'id' => 718,
     'country_id' => 93,
@@ -5969,7 +5745,7 @@ return [
     'name_en' => 'Heredia',
     'sort' => 400,
   ],
-  746 => 
+  718 => 
   [
     'id' => 719,
     'country_id' => 93,
@@ -5977,7 +5753,7 @@ return [
     'name_en' => 'Limn',
     'sort' => 500,
   ],
-  747 => 
+  719 => 
   [
     'id' => 720,
     'country_id' => 93,
@@ -5985,7 +5761,7 @@ return [
     'name_en' => 'Puntarenas',
     'sort' => 600,
   ],
-  748 => 
+  720 => 
   [
     'id' => 721,
     'country_id' => 93,
@@ -5993,7 +5769,7 @@ return [
     'name_en' => 'San Jos',
     'sort' => 700,
   ],
-  749 => 
+  721 => 
   [
     'id' => 722,
     'country_id' => 94,
@@ -6001,7 +5777,7 @@ return [
     'name_en' => 'Cote D\'Ivoire',
     'sort' => 100,
   ],
-  750 => 
+  722 => 
   [
     'id' => 723,
     'country_id' => 95,
@@ -6009,7 +5785,7 @@ return [
     'name_en' => 'Camaguey',
     'sort' => 100,
   ],
-  751 => 
+  723 => 
   [
     'id' => 724,
     'country_id' => 95,
@@ -6017,7 +5793,7 @@ return [
     'name_en' => 'Ciego de Avila',
     'sort' => 200,
   ],
-  752 => 
+  724 => 
   [
     'id' => 725,
     'country_id' => 95,
@@ -6025,7 +5801,7 @@ return [
     'name_en' => 'Ciudad de la Habana',
     'sort' => 300,
   ],
-  753 => 
+  725 => 
   [
     'id' => 726,
     'country_id' => 95,
@@ -6033,7 +5809,7 @@ return [
     'name_en' => 'Granma',
     'sort' => 400,
   ],
-  754 => 
+  726 => 
   [
     'id' => 727,
     'country_id' => 95,
@@ -6041,7 +5817,7 @@ return [
     'name_en' => 'Guantanamo',
     'sort' => 500,
   ],
-  755 => 
+  727 => 
   [
     'id' => 728,
     'country_id' => 95,
@@ -6049,7 +5825,7 @@ return [
     'name_en' => 'Holguin',
     'sort' => 600,
   ],
-  756 => 
+  728 => 
   [
     'id' => 729,
     'country_id' => 95,
@@ -6057,7 +5833,7 @@ return [
     'name_en' => 'Isla de la Juventud',
     'sort' => 700,
   ],
-  757 => 
+  729 => 
   [
     'id' => 730,
     'country_id' => 95,
@@ -6065,7 +5841,7 @@ return [
     'name_en' => 'La Habana',
     'sort' => 800,
   ],
-  758 => 
+  730 => 
   [
     'id' => 731,
     'country_id' => 95,
@@ -6073,7 +5849,7 @@ return [
     'name_en' => 'Las Tunas',
     'sort' => 900,
   ],
-  759 => 
+  731 => 
   [
     'id' => 732,
     'country_id' => 95,
@@ -6081,7 +5857,7 @@ return [
     'name_en' => 'Matanzas',
     'sort' => 1000,
   ],
-  760 => 
+  732 => 
   [
     'id' => 733,
     'country_id' => 95,
@@ -6089,7 +5865,7 @@ return [
     'name_en' => 'None',
     'sort' => 1100,
   ],
-  761 => 
+  733 => 
   [
     'id' => 734,
     'country_id' => 95,
@@ -6097,7 +5873,7 @@ return [
     'name_en' => 'Pinar del Rio',
     'sort' => 1200,
   ],
-  762 => 
+  734 => 
   [
     'id' => 735,
     'country_id' => 95,
@@ -6105,7 +5881,7 @@ return [
     'name_en' => 'Sancti Spiritus',
     'sort' => 1300,
   ],
-  763 => 
+  735 => 
   [
     'id' => 736,
     'country_id' => 95,
@@ -6113,7 +5889,7 @@ return [
     'name_en' => 'Santiago de Cuba',
     'sort' => 1400,
   ],
-  764 => 
+  736 => 
   [
     'id' => 737,
     'country_id' => 95,
@@ -6121,7 +5897,7 @@ return [
     'name_en' => 'Villa Clara',
     'sort' => 1500,
   ],
-  765 => 
+  737 => 
   [
     'id' => 738,
     'country_id' => 96,
@@ -6129,7 +5905,7 @@ return [
     'name_en' => 'al-Jahra',
     'sort' => 100,
   ],
-  766 => 
+  738 => 
   [
     'id' => 739,
     'country_id' => 96,
@@ -6137,7 +5913,7 @@ return [
     'name_en' => 'al-Kuwayt',
     'sort' => 200,
   ],
-  767 => 
+  739 => 
   [
     'id' => 740,
     'country_id' => 97,
@@ -6145,7 +5921,7 @@ return [
     'name_en' => 'Аваруа',
     'sort' => 100,
   ],
-  768 => 
+  740 => 
   [
     'id' => 741,
     'country_id' => 98,
@@ -6153,7 +5929,7 @@ return [
     'name_en' => 'Иссык-Кульская обл.',
     'sort' => 100,
   ],
-  769 => 
+  741 => 
   [
     'id' => 742,
     'country_id' => 98,
@@ -6161,7 +5937,7 @@ return [
     'name_en' => 'Кыргызстан',
     'sort' => 200,
   ],
-  770 => 
+  742 => 
   [
     'id' => 743,
     'country_id' => 98,
@@ -6169,7 +5945,7 @@ return [
     'name_en' => 'Нарынская обл.',
     'sort' => 300,
   ],
-  771 => 
+  743 => 
   [
     'id' => 744,
     'country_id' => 98,
@@ -6177,7 +5953,7 @@ return [
     'name_en' => 'Ошская обл.',
     'sort' => 400,
   ],
-  772 => 
+  744 => 
   [
     'id' => 745,
     'country_id' => 98,
@@ -6185,7 +5961,7 @@ return [
     'name_en' => 'Таласская обл.',
     'sort' => 500,
   ],
-  773 => 
+  745 => 
   [
     'id' => 746,
     'country_id' => 99,
@@ -6193,7 +5969,7 @@ return [
     'name_en' => 'Laos',
     'sort' => 100,
   ],
-  774 => 
+  746 => 
   [
     'id' => 747,
     'country_id' => 100,
@@ -6201,7 +5977,7 @@ return [
     'name_en' => 'Latviya',
     'sort' => 100,
   ],
-  775 => 
+  747 => 
   [
     'id' => 748,
     'country_id' => 101,
@@ -6209,7 +5985,7 @@ return [
     'name_en' => 'Lesotho',
     'sort' => 100,
   ],
-  776 => 
+  748 => 
   [
     'id' => 749,
     'country_id' => 102,
@@ -6217,7 +5993,7 @@ return [
     'name_en' => 'Liberia',
     'sort' => 100,
   ],
-  777 => 
+  749 => 
   [
     'id' => 750,
     'country_id' => 103,
@@ -6225,7 +6001,7 @@ return [
     'name_en' => 'Beirut',
     'sort' => 100,
   ],
-  778 => 
+  750 => 
   [
     'id' => 751,
     'country_id' => 104,
@@ -6233,7 +6009,7 @@ return [
     'name_en' => 'Tarabulus',
     'sort' => 100,
   ],
-  779 => 
+  751 => 
   [
     'id' => 752,
     'country_id' => 104,
@@ -6241,7 +6017,7 @@ return [
     'name_en' => 'Bengasi',
     'sort' => 200,
   ],
-  780 => 
+  752 => 
   [
     'id' => 753,
     'country_id' => 105,
@@ -6249,7 +6025,7 @@ return [
     'name_en' => 'Litva',
     'sort' => 100,
   ],
-  781 => 
+  753 => 
   [
     'id' => 754,
     'country_id' => 106,
@@ -6257,7 +6033,7 @@ return [
     'name_en' => 'Balzers',
     'sort' => 100,
   ],
-  782 => 
+  754 => 
   [
     'id' => 755,
     'country_id' => 106,
@@ -6265,7 +6041,7 @@ return [
     'name_en' => 'Eschen',
     'sort' => 200,
   ],
-  783 => 
+  755 => 
   [
     'id' => 756,
     'country_id' => 106,
@@ -6273,7 +6049,7 @@ return [
     'name_en' => 'Ruggell',
     'sort' => 300,
   ],
-  784 => 
+  756 => 
   [
     'id' => 757,
     'country_id' => 106,
@@ -6281,7 +6057,7 @@ return [
     'name_en' => 'Schellenberg',
     'sort' => 400,
   ],
-  785 => 
+  757 => 
   [
     'id' => 758,
     'country_id' => 106,
@@ -6289,7 +6065,7 @@ return [
     'name_en' => 'Triesen',
     'sort' => 500,
   ],
-  786 => 
+  758 => 
   [
     'id' => 759,
     'country_id' => 106,
@@ -6297,7 +6073,7 @@ return [
     'name_en' => 'Vaduz',
     'sort' => 600,
   ],
-  787 => 
+  759 => 
   [
     'id' => 760,
     'country_id' => 107,
@@ -6305,7 +6081,7 @@ return [
     'name_en' => 'Diekirch',
     'sort' => 100,
   ],
-  788 => 
+  760 => 
   [
     'id' => 761,
     'country_id' => 107,
@@ -6313,7 +6089,7 @@ return [
     'name_en' => 'Grevenmacher',
     'sort' => 200,
   ],
-  789 => 
+  761 => 
   [
     'id' => 762,
     'country_id' => 107,
@@ -6321,7 +6097,7 @@ return [
     'name_en' => 'Luxembourg',
     'sort' => 300,
   ],
-  790 => 
+  762 => 
   [
     'id' => 763,
     'country_id' => 107,
@@ -6329,7 +6105,7 @@ return [
     'name_en' => 'None',
     'sort' => 400,
   ],
-  791 => 
+  763 => 
   [
     'id' => 764,
     'country_id' => 108,
@@ -6337,7 +6113,7 @@ return [
     'name_en' => 'Mauritius',
     'sort' => 100,
   ],
-  792 => 
+  764 => 
   [
     'id' => 765,
     'country_id' => 109,
@@ -6345,7 +6121,7 @@ return [
     'name_en' => 'Mauritania',
     'sort' => 100,
   ],
-  793 => 
+  765 => 
   [
     'id' => 766,
     'country_id' => 110,
@@ -6353,7 +6129,7 @@ return [
     'name_en' => 'Madagascar',
     'sort' => 100,
   ],
-  794 => 
+  766 => 
   [
     'id' => 767,
     'country_id' => 111,
@@ -6361,7 +6137,7 @@ return [
     'name_en' => 'Aracinovo',
     'sort' => 100,
   ],
-  795 => 
+  767 => 
   [
     'id' => 768,
     'country_id' => 111,
@@ -6369,7 +6145,7 @@ return [
     'name_en' => 'Berovo',
     'sort' => 200,
   ],
-  796 => 
+  768 => 
   [
     'id' => 769,
     'country_id' => 111,
@@ -6377,7 +6153,7 @@ return [
     'name_en' => 'Bitola',
     'sort' => 300,
   ],
-  797 => 
+  769 => 
   [
     'id' => 770,
     'country_id' => 111,
@@ -6385,7 +6161,7 @@ return [
     'name_en' => 'Bosilovo',
     'sort' => 400,
   ],
-  798 => 
+  770 => 
   [
     'id' => 771,
     'country_id' => 111,
@@ -6393,7 +6169,7 @@ return [
     'name_en' => 'Dolna Banjica',
     'sort' => 500,
   ],
-  799 => 
+  771 => 
   [
     'id' => 772,
     'country_id' => 111,
@@ -6401,7 +6177,7 @@ return [
     'name_en' => 'Drugovo',
     'sort' => 600,
   ],
-  800 => 
+  772 => 
   [
     'id' => 773,
     'country_id' => 111,
@@ -6409,7 +6185,7 @@ return [
     'name_en' => 'Gevgelija',
     'sort' => 700,
   ],
-  801 => 
+  773 => 
   [
     'id' => 774,
     'country_id' => 111,
@@ -6417,7 +6193,7 @@ return [
     'name_en' => 'Gostivar',
     'sort' => 800,
   ],
-  802 => 
+  774 => 
   [
     'id' => 775,
     'country_id' => 111,
@@ -6425,7 +6201,7 @@ return [
     'name_en' => 'Karpos',
     'sort' => 900,
   ],
-  803 => 
+  775 => 
   [
     'id' => 776,
     'country_id' => 111,
@@ -6433,7 +6209,7 @@ return [
     'name_en' => 'Kavadarci',
     'sort' => 1000,
   ],
-  804 => 
+  776 => 
   [
     'id' => 777,
     'country_id' => 111,
@@ -6441,7 +6217,7 @@ return [
     'name_en' => 'Kisela Voda',
     'sort' => 1100,
   ],
-  805 => 
+  777 => 
   [
     'id' => 778,
     'country_id' => 111,
@@ -6449,7 +6225,7 @@ return [
     'name_en' => 'Kumanovo',
     'sort' => 1200,
   ],
-  806 => 
+  778 => 
   [
     'id' => 779,
     'country_id' => 111,
@@ -6457,7 +6233,7 @@ return [
     'name_en' => 'Makedonska Kamenica',
     'sort' => 1300,
   ],
-  807 => 
+  779 => 
   [
     'id' => 780,
     'country_id' => 111,
@@ -6465,7 +6241,7 @@ return [
     'name_en' => 'Negotino',
     'sort' => 1400,
   ],
-  808 => 
+  780 => 
   [
     'id' => 781,
     'country_id' => 111,
@@ -6473,7 +6249,7 @@ return [
     'name_en' => 'Ohrid',
     'sort' => 1500,
   ],
-  809 => 
+  781 => 
   [
     'id' => 782,
     'country_id' => 111,
@@ -6481,7 +6257,7 @@ return [
     'name_en' => 'Prilep',
     'sort' => 1600,
   ],
-  810 => 
+  782 => 
   [
     'id' => 783,
     'country_id' => 111,
@@ -6489,7 +6265,7 @@ return [
     'name_en' => 'Radovis',
     'sort' => 1700,
   ],
-  811 => 
+  783 => 
   [
     'id' => 784,
     'country_id' => 111,
@@ -6497,7 +6273,7 @@ return [
     'name_en' => 'Saraj',
     'sort' => 1800,
   ],
-  812 => 
+  784 => 
   [
     'id' => 785,
     'country_id' => 111,
@@ -6505,7 +6281,7 @@ return [
     'name_en' => 'Star Dojran',
     'sort' => 1900,
   ],
-  813 => 
+  785 => 
   [
     'id' => 786,
     'country_id' => 111,
@@ -6513,7 +6289,7 @@ return [
     'name_en' => 'Struga',
     'sort' => 2000,
   ],
-  814 => 
+  786 => 
   [
     'id' => 787,
     'country_id' => 111,
@@ -6521,7 +6297,7 @@ return [
     'name_en' => 'Strumica',
     'sort' => 2100,
   ],
-  815 => 
+  787 => 
   [
     'id' => 788,
     'country_id' => 111,
@@ -6529,7 +6305,7 @@ return [
     'name_en' => 'Sveti Nikole',
     'sort' => 2200,
   ],
-  816 => 
+  788 => 
   [
     'id' => 789,
     'country_id' => 111,
@@ -6537,7 +6313,7 @@ return [
     'name_en' => 'Tetovo',
     'sort' => 2300,
   ],
-  817 => 
+  789 => 
   [
     'id' => 790,
     'country_id' => 111,
@@ -6545,7 +6321,7 @@ return [
     'name_en' => 'Veles',
     'sort' => 2400,
   ],
-  818 => 
+  790 => 
   [
     'id' => 791,
     'country_id' => 112,
@@ -6553,7 +6329,7 @@ return [
     'name_en' => 'Malawi',
     'sort' => 100,
   ],
-  819 => 
+  791 => 
   [
     'id' => 792,
     'country_id' => 113,
@@ -6561,7 +6337,7 @@ return [
     'name_en' => 'Malaysia',
     'sort' => 100,
   ],
-  820 => 
+  792 => 
   [
     'id' => 793,
     'country_id' => 114,
@@ -6569,7 +6345,7 @@ return [
     'name_en' => 'Mali',
     'sort' => 100,
   ],
-  821 => 
+  793 => 
   [
     'id' => 794,
     'country_id' => 115,
@@ -6577,7 +6353,7 @@ return [
     'name_en' => 'Maldives',
     'sort' => 100,
   ],
-  822 => 
+  794 => 
   [
     'id' => 795,
     'country_id' => 116,
@@ -6585,7 +6361,7 @@ return [
     'name_en' => 'Malta',
     'sort' => 100,
   ],
-  823 => 
+  795 => 
   [
     'id' => 796,
     'country_id' => 117,
@@ -6593,7 +6369,7 @@ return [
     'name_en' => 'Morocco',
     'sort' => 100,
   ],
-  824 => 
+  796 => 
   [
     'id' => 797,
     'country_id' => 117,
@@ -6601,7 +6377,7 @@ return [
     'name_en' => 'Tangier',
     'sort' => 200,
   ],
-  825 => 
+  797 => 
   [
     'id' => 798,
     'country_id' => 118,
@@ -6609,7 +6385,7 @@ return [
     'name_en' => 'Fort-de-France',
     'sort' => 100,
   ],
-  826 => 
+  798 => 
   [
     'id' => 799,
     'country_id' => 119,
@@ -6617,7 +6393,7 @@ return [
     'name_en' => 'Aguascalientes',
     'sort' => 100,
   ],
-  827 => 
+  799 => 
   [
     'id' => 800,
     'country_id' => 119,
@@ -6625,7 +6401,7 @@ return [
     'name_en' => 'Baja California',
     'sort' => 200,
   ],
-  828 => 
+  800 => 
   [
     'id' => 801,
     'country_id' => 119,
@@ -6633,7 +6409,7 @@ return [
     'name_en' => 'Baja California Sur',
     'sort' => 300,
   ],
-  829 => 
+  801 => 
   [
     'id' => 802,
     'country_id' => 119,
@@ -6641,7 +6417,7 @@ return [
     'name_en' => 'Campeche',
     'sort' => 400,
   ],
-  830 => 
+  802 => 
   [
     'id' => 803,
     'country_id' => 119,
@@ -6649,7 +6425,7 @@ return [
     'name_en' => 'Chiapas',
     'sort' => 500,
   ],
-  831 => 
+  803 => 
   [
     'id' => 804,
     'country_id' => 119,
@@ -6657,7 +6433,7 @@ return [
     'name_en' => 'Chihuahua',
     'sort' => 600,
   ],
-  832 => 
+  804 => 
   [
     'id' => 805,
     'country_id' => 119,
@@ -6665,7 +6441,7 @@ return [
     'name_en' => 'Coahuila de Zaragoza',
     'sort' => 700,
   ],
-  833 => 
+  805 => 
   [
     'id' => 806,
     'country_id' => 119,
@@ -6673,7 +6449,7 @@ return [
     'name_en' => 'Colima',
     'sort' => 800,
   ],
-  834 => 
+  806 => 
   [
     'id' => 807,
     'country_id' => 119,
@@ -6681,7 +6457,7 @@ return [
     'name_en' => 'Distrito Federal',
     'sort' => 900,
   ],
-  835 => 
+  807 => 
   [
     'id' => 808,
     'country_id' => 119,
@@ -6689,7 +6465,7 @@ return [
     'name_en' => 'Durango',
     'sort' => 1000,
   ],
-  836 => 
+  808 => 
   [
     'id' => 809,
     'country_id' => 119,
@@ -6697,7 +6473,7 @@ return [
     'name_en' => 'Guanajuato',
     'sort' => 1100,
   ],
-  837 => 
+  809 => 
   [
     'id' => 810,
     'country_id' => 119,
@@ -6705,7 +6481,7 @@ return [
     'name_en' => 'Guerrero',
     'sort' => 1200,
   ],
-  838 => 
+  810 => 
   [
     'id' => 811,
     'country_id' => 119,
@@ -6713,7 +6489,7 @@ return [
     'name_en' => 'Hidalgo',
     'sort' => 1300,
   ],
-  839 => 
+  811 => 
   [
     'id' => 812,
     'country_id' => 119,
@@ -6721,7 +6497,7 @@ return [
     'name_en' => 'Jalisco',
     'sort' => 1400,
   ],
-  840 => 
+  812 => 
   [
     'id' => 813,
     'country_id' => 119,
@@ -6729,7 +6505,7 @@ return [
     'name_en' => 'Michoacn de Ocampo',
     'sort' => 1500,
   ],
-  841 => 
+  813 => 
   [
     'id' => 814,
     'country_id' => 119,
@@ -6737,7 +6513,7 @@ return [
     'name_en' => 'Morelos',
     'sort' => 1600,
   ],
-  842 => 
+  814 => 
   [
     'id' => 815,
     'country_id' => 119,
@@ -6745,7 +6521,7 @@ return [
     'name_en' => 'Mxico',
     'sort' => 1700,
   ],
-  843 => 
+  815 => 
   [
     'id' => 816,
     'country_id' => 119,
@@ -6753,7 +6529,7 @@ return [
     'name_en' => 'Nayarit',
     'sort' => 1800,
   ],
-  844 => 
+  816 => 
   [
     'id' => 817,
     'country_id' => 119,
@@ -6761,7 +6537,7 @@ return [
     'name_en' => 'None',
     'sort' => 1900,
   ],
-  845 => 
+  817 => 
   [
     'id' => 818,
     'country_id' => 119,
@@ -6769,7 +6545,7 @@ return [
     'name_en' => 'Nuevo Len',
     'sort' => 2000,
   ],
-  846 => 
+  818 => 
   [
     'id' => 819,
     'country_id' => 119,
@@ -6777,7 +6553,7 @@ return [
     'name_en' => 'Oaxaca',
     'sort' => 2100,
   ],
-  847 => 
+  819 => 
   [
     'id' => 820,
     'country_id' => 119,
@@ -6785,7 +6561,7 @@ return [
     'name_en' => 'Puebla',
     'sort' => 2200,
   ],
-  848 => 
+  820 => 
   [
     'id' => 821,
     'country_id' => 119,
@@ -6793,7 +6569,7 @@ return [
     'name_en' => 'Quertaro de Arteaga',
     'sort' => 2300,
   ],
-  849 => 
+  821 => 
   [
     'id' => 822,
     'country_id' => 119,
@@ -6801,7 +6577,7 @@ return [
     'name_en' => 'Quintana Roo',
     'sort' => 2400,
   ],
-  850 => 
+  822 => 
   [
     'id' => 823,
     'country_id' => 119,
@@ -6809,7 +6585,7 @@ return [
     'name_en' => 'San Luis Potos',
     'sort' => 2500,
   ],
-  851 => 
+  823 => 
   [
     'id' => 824,
     'country_id' => 119,
@@ -6817,7 +6593,7 @@ return [
     'name_en' => 'Sinaloa',
     'sort' => 2600,
   ],
-  852 => 
+  824 => 
   [
     'id' => 825,
     'country_id' => 119,
@@ -6825,7 +6601,7 @@ return [
     'name_en' => 'Sonora',
     'sort' => 2700,
   ],
-  853 => 
+  825 => 
   [
     'id' => 826,
     'country_id' => 119,
@@ -6833,7 +6609,7 @@ return [
     'name_en' => 'Tabasco',
     'sort' => 2800,
   ],
-  854 => 
+  826 => 
   [
     'id' => 827,
     'country_id' => 119,
@@ -6841,7 +6617,7 @@ return [
     'name_en' => 'Tamaulipas',
     'sort' => 2900,
   ],
-  855 => 
+  827 => 
   [
     'id' => 828,
     'country_id' => 119,
@@ -6849,7 +6625,7 @@ return [
     'name_en' => 'Tlaxcala',
     'sort' => 3000,
   ],
-  856 => 
+  828 => 
   [
     'id' => 829,
     'country_id' => 119,
@@ -6857,7 +6633,7 @@ return [
     'name_en' => 'Veracruz-Llave',
     'sort' => 3100,
   ],
-  857 => 
+  829 => 
   [
     'id' => 830,
     'country_id' => 119,
@@ -6865,7 +6641,7 @@ return [
     'name_en' => 'Yucatn',
     'sort' => 3200,
   ],
-  858 => 
+  830 => 
   [
     'id' => 831,
     'country_id' => 120,
@@ -6873,7 +6649,7 @@ return [
     'name_en' => 'Mozambique',
     'sort' => 100,
   ],
-  859 => 
+  831 => 
   [
     'id' => 832,
     'country_id' => 121,
@@ -6881,7 +6657,7 @@ return [
     'name_en' => 'Moldova',
     'sort' => 100,
   ],
-  860 => 
+  832 => 
   [
     'id' => 833,
     'country_id' => 122,
@@ -6889,7 +6665,7 @@ return [
     'name_en' => 'Monaco',
     'sort' => 100,
   ],
-  861 => 
+  833 => 
   [
     'id' => 834,
     'country_id' => 123,
@@ -6897,7 +6673,7 @@ return [
     'name_en' => 'Ulan Bator',
     'sort' => 100,
   ],
-  862 => 
+  834 => 
   [
     'id' => 835,
     'country_id' => 124,
@@ -6905,7 +6681,7 @@ return [
     'name_en' => 'Myanmar (Burma)',
     'sort' => 100,
   ],
-  863 => 
+  835 => 
   [
     'id' => 836,
     'country_id' => 125,
@@ -6913,7 +6689,7 @@ return [
     'name_en' => 'Остров Мэн',
     'sort' => 100,
   ],
-  864 => 
+  836 => 
   [
     'id' => 837,
     'country_id' => 126,
@@ -6921,7 +6697,7 @@ return [
     'name_en' => 'Namibia',
     'sort' => 100,
   ],
-  865 => 
+  837 => 
   [
     'id' => 838,
     'country_id' => 127,
@@ -6929,7 +6705,7 @@ return [
     'name_en' => 'Nauru',
     'sort' => 100,
   ],
-  866 => 
+  838 => 
   [
     'id' => 839,
     'country_id' => 128,
@@ -6937,7 +6713,7 @@ return [
     'name_en' => 'Nepal',
     'sort' => 100,
   ],
-  867 => 
+  839 => 
   [
     'id' => 840,
     'country_id' => 129,
@@ -6945,7 +6721,7 @@ return [
     'name_en' => 'Niger',
     'sort' => 100,
   ],
-  868 => 
+  840 => 
   [
     'id' => 841,
     'country_id' => 130,
@@ -6953,7 +6729,7 @@ return [
     'name_en' => 'Nigeria',
     'sort' => 100,
   ],
-  869 => 
+  841 => 
   [
     'id' => 842,
     'country_id' => 131,
@@ -6961,7 +6737,7 @@ return [
     'name_en' => 'Drenthe',
     'sort' => 100,
   ],
-  870 => 
+  842 => 
   [
     'id' => 843,
     'country_id' => 131,
@@ -6969,7 +6745,7 @@ return [
     'name_en' => 'Flevoland',
     'sort' => 200,
   ],
-  871 => 
+  843 => 
   [
     'id' => 844,
     'country_id' => 131,
@@ -6977,7 +6753,7 @@ return [
     'name_en' => 'Friesland',
     'sort' => 300,
   ],
-  872 => 
+  844 => 
   [
     'id' => 845,
     'country_id' => 131,
@@ -6985,7 +6761,7 @@ return [
     'name_en' => 'Gelderland',
     'sort' => 400,
   ],
-  873 => 
+  845 => 
   [
     'id' => 846,
     'country_id' => 131,
@@ -6993,7 +6769,7 @@ return [
     'name_en' => 'Groningen',
     'sort' => 500,
   ],
-  874 => 
+  846 => 
   [
     'id' => 847,
     'country_id' => 131,
@@ -7001,7 +6777,7 @@ return [
     'name_en' => 'Limburg',
     'sort' => 600,
   ],
-  875 => 
+  847 => 
   [
     'id' => 848,
     'country_id' => 131,
@@ -7009,7 +6785,7 @@ return [
     'name_en' => 'Noord-Brabant',
     'sort' => 700,
   ],
-  876 => 
+  848 => 
   [
     'id' => 849,
     'country_id' => 131,
@@ -7017,7 +6793,7 @@ return [
     'name_en' => 'Noord-Holland',
     'sort' => 800,
   ],
-  877 => 
+  849 => 
   [
     'id' => 850,
     'country_id' => 131,
@@ -7025,7 +6801,7 @@ return [
     'name_en' => 'Overijssel',
     'sort' => 900,
   ],
-  878 => 
+  850 => 
   [
     'id' => 851,
     'country_id' => 131,
@@ -7033,7 +6809,7 @@ return [
     'name_en' => 'Utrecht',
     'sort' => 1000,
   ],
-  879 => 
+  851 => 
   [
     'id' => 852,
     'country_id' => 131,
@@ -7041,7 +6817,7 @@ return [
     'name_en' => 'Zeeland',
     'sort' => 1100,
   ],
-  880 => 
+  852 => 
   [
     'id' => 853,
     'country_id' => 131,
@@ -7049,7 +6825,7 @@ return [
     'name_en' => 'Zuid-Holland',
     'sort' => 1200,
   ],
-  881 => 
+  853 => 
   [
     'id' => 854,
     'country_id' => 132,
@@ -7057,7 +6833,7 @@ return [
     'name_en' => 'Granada',
     'sort' => 100,
   ],
-  882 => 
+  854 => 
   [
     'id' => 855,
     'country_id' => 132,
@@ -7065,7 +6841,7 @@ return [
     'name_en' => 'Len',
     'sort' => 200,
   ],
-  883 => 
+  855 => 
   [
     'id' => 856,
     'country_id' => 132,
@@ -7073,7 +6849,7 @@ return [
     'name_en' => 'Managua',
     'sort' => 300,
   ],
-  884 => 
+  856 => 
   [
     'id' => 857,
     'country_id' => 132,
@@ -7081,7 +6857,7 @@ return [
     'name_en' => 'Rio San Juan',
     'sort' => 400,
   ],
-  885 => 
+  857 => 
   [
     'id' => 858,
     'country_id' => 133,
@@ -7089,7 +6865,7 @@ return [
     'name_en' => 'Auckland',
     'sort' => 100,
   ],
-  886 => 
+  858 => 
   [
     'id' => 859,
     'country_id' => 133,
@@ -7097,7 +6873,7 @@ return [
     'name_en' => 'Bay of Plenty',
     'sort' => 200,
   ],
-  887 => 
+  859 => 
   [
     'id' => 860,
     'country_id' => 133,
@@ -7105,7 +6881,7 @@ return [
     'name_en' => 'Canterbury',
     'sort' => 300,
   ],
-  888 => 
+  860 => 
   [
     'id' => 861,
     'country_id' => 133,
@@ -7113,7 +6889,7 @@ return [
     'name_en' => 'Gisborne',
     'sort' => 400,
   ],
-  889 => 
+  861 => 
   [
     'id' => 862,
     'country_id' => 133,
@@ -7121,7 +6897,7 @@ return [
     'name_en' => 'Manawatu-Wanganui',
     'sort' => 500,
   ],
-  890 => 
+  862 => 
   [
     'id' => 863,
     'country_id' => 133,
@@ -7129,7 +6905,7 @@ return [
     'name_en' => 'Marlborough',
     'sort' => 600,
   ],
-  891 => 
+  863 => 
   [
     'id' => 864,
     'country_id' => 133,
@@ -7137,7 +6913,7 @@ return [
     'name_en' => 'Nelson',
     'sort' => 700,
   ],
-  892 => 
+  864 => 
   [
     'id' => 865,
     'country_id' => 133,
@@ -7145,7 +6921,7 @@ return [
     'name_en' => 'Northland',
     'sort' => 800,
   ],
-  893 => 
+  865 => 
   [
     'id' => 866,
     'country_id' => 133,
@@ -7153,7 +6929,7 @@ return [
     'name_en' => 'Otago',
     'sort' => 900,
   ],
-  894 => 
+  866 => 
   [
     'id' => 867,
     'country_id' => 133,
@@ -7161,7 +6937,7 @@ return [
     'name_en' => 'Southland',
     'sort' => 1000,
   ],
-  895 => 
+  867 => 
   [
     'id' => 868,
     'country_id' => 133,
@@ -7169,7 +6945,7 @@ return [
     'name_en' => 'Taranaki',
     'sort' => 1100,
   ],
-  896 => 
+  868 => 
   [
     'id' => 869,
     'country_id' => 133,
@@ -7177,7 +6953,7 @@ return [
     'name_en' => 'Tasman',
     'sort' => 1200,
   ],
-  897 => 
+  869 => 
   [
     'id' => 870,
     'country_id' => 133,
@@ -7185,7 +6961,7 @@ return [
     'name_en' => 'Wellington',
     'sort' => 1300,
   ],
-  898 => 
+  870 => 
   [
     'id' => 871,
     'country_id' => 133,
@@ -7193,7 +6969,7 @@ return [
     'name_en' => 'West Coast',
     'sort' => 1400,
   ],
-  899 => 
+  871 => 
   [
     'id' => 872,
     'country_id' => 134,
@@ -7201,7 +6977,7 @@ return [
     'name_en' => 'Noumea',
     'sort' => 100,
   ],
-  900 => 
+  872 => 
   [
     'id' => 873,
     'country_id' => 135,
@@ -7209,7 +6985,7 @@ return [
     'name_en' => 'Akershus',
     'sort' => 100,
   ],
-  901 => 
+  873 => 
   [
     'id' => 874,
     'country_id' => 135,
@@ -7217,7 +6993,7 @@ return [
     'name_en' => 'Aust-Agder',
     'sort' => 200,
   ],
-  902 => 
+  874 => 
   [
     'id' => 875,
     'country_id' => 135,
@@ -7225,7 +7001,7 @@ return [
     'name_en' => 'Buskerud',
     'sort' => 300,
   ],
-  903 => 
+  875 => 
   [
     'id' => 876,
     'country_id' => 135,
@@ -7233,7 +7009,7 @@ return [
     'name_en' => 'Finnmark',
     'sort' => 400,
   ],
-  904 => 
+  876 => 
   [
     'id' => 877,
     'country_id' => 135,
@@ -7241,7 +7017,7 @@ return [
     'name_en' => 'Hedmark',
     'sort' => 500,
   ],
-  905 => 
+  877 => 
   [
     'id' => 878,
     'country_id' => 135,
@@ -7249,7 +7025,7 @@ return [
     'name_en' => 'Hordaland',
     'sort' => 600,
   ],
-  906 => 
+  878 => 
   [
     'id' => 879,
     'country_id' => 135,
@@ -7257,7 +7033,7 @@ return [
     'name_en' => 'More og Romsdal',
     'sort' => 700,
   ],
-  907 => 
+  879 => 
   [
     'id' => 880,
     'country_id' => 135,
@@ -7265,7 +7041,7 @@ return [
     'name_en' => 'None',
     'sort' => 800,
   ],
-  908 => 
+  880 => 
   [
     'id' => 881,
     'country_id' => 135,
@@ -7273,7 +7049,7 @@ return [
     'name_en' => 'Nord-Trondelag',
     'sort' => 900,
   ],
-  909 => 
+  881 => 
   [
     'id' => 882,
     'country_id' => 135,
@@ -7281,7 +7057,7 @@ return [
     'name_en' => 'Nordland',
     'sort' => 1000,
   ],
-  910 => 
+  882 => 
   [
     'id' => 883,
     'country_id' => 135,
@@ -7289,7 +7065,7 @@ return [
     'name_en' => 'Oppland',
     'sort' => 1100,
   ],
-  911 => 
+  883 => 
   [
     'id' => 884,
     'country_id' => 135,
@@ -7297,7 +7073,7 @@ return [
     'name_en' => 'Oslo',
     'sort' => 1200,
   ],
-  912 => 
+  884 => 
   [
     'id' => 885,
     'country_id' => 135,
@@ -7305,7 +7081,7 @@ return [
     'name_en' => 'Ostfold',
     'sort' => 1300,
   ],
-  913 => 
+  885 => 
   [
     'id' => 886,
     'country_id' => 135,
@@ -7313,7 +7089,7 @@ return [
     'name_en' => 'Rogaland',
     'sort' => 1400,
   ],
-  914 => 
+  886 => 
   [
     'id' => 887,
     'country_id' => 135,
@@ -7321,7 +7097,7 @@ return [
     'name_en' => 'Sogn og Fjordane',
     'sort' => 1500,
   ],
-  915 => 
+  887 => 
   [
     'id' => 888,
     'country_id' => 135,
@@ -7329,7 +7105,7 @@ return [
     'name_en' => 'Sor-Trondelag',
     'sort' => 1600,
   ],
-  916 => 
+  888 => 
   [
     'id' => 889,
     'country_id' => 135,
@@ -7337,7 +7113,7 @@ return [
     'name_en' => 'Telemark',
     'sort' => 1700,
   ],
-  917 => 
+  889 => 
   [
     'id' => 890,
     'country_id' => 135,
@@ -7345,7 +7121,7 @@ return [
     'name_en' => 'Troms',
     'sort' => 1800,
   ],
-  918 => 
+  890 => 
   [
     'id' => 891,
     'country_id' => 135,
@@ -7353,7 +7129,7 @@ return [
     'name_en' => 'Vest-Agder',
     'sort' => 1900,
   ],
-  919 => 
+  891 => 
   [
     'id' => 892,
     'country_id' => 135,
@@ -7361,7 +7137,7 @@ return [
     'name_en' => 'Vestfold',
     'sort' => 2000,
   ],
-  920 => 
+  892 => 
   [
     'id' => 893,
     'country_id' => 136,
@@ -7369,7 +7145,7 @@ return [
     'name_en' => 'Kingston',
     'sort' => 100,
   ],
-  921 => 
+  893 => 
   [
     'id' => 894,
     'country_id' => 137,
@@ -7377,7 +7153,7 @@ return [
     'name_en' => 'Abu Dhabi',
     'sort' => 100,
   ],
-  922 => 
+  894 => 
   [
     'id' => 895,
     'country_id' => 137,
@@ -7385,7 +7161,7 @@ return [
     'name_en' => 'Dubai',
     'sort' => 200,
   ],
-  923 => 
+  895 => 
   [
     'id' => 896,
     'country_id' => 138,
@@ -7393,7 +7169,7 @@ return [
     'name_en' => 'Oman',
     'sort' => 100,
   ],
-  924 => 
+  896 => 
   [
     'id' => 897,
     'country_id' => 139,
@@ -7401,7 +7177,7 @@ return [
     'name_en' => 'Pakistan',
     'sort' => 100,
   ],
-  925 => 
+  897 => 
   [
     'id' => 898,
     'country_id' => 140,
@@ -7409,7 +7185,7 @@ return [
     'name_en' => 'Chiriqu',
     'sort' => 100,
   ],
-  926 => 
+  898 => 
   [
     'id' => 899,
     'country_id' => 140,
@@ -7417,7 +7193,7 @@ return [
     'name_en' => 'Cocl',
     'sort' => 200,
   ],
-  927 => 
+  899 => 
   [
     'id' => 900,
     'country_id' => 140,
@@ -7425,7 +7201,7 @@ return [
     'name_en' => 'Herrera',
     'sort' => 300,
   ],
-  928 => 
+  900 => 
   [
     'id' => 901,
     'country_id' => 140,
@@ -7433,7 +7209,7 @@ return [
     'name_en' => 'Los Santos',
     'sort' => 400,
   ],
-  929 => 
+  901 => 
   [
     'id' => 902,
     'country_id' => 140,
@@ -7441,7 +7217,7 @@ return [
     'name_en' => 'Panam',
     'sort' => 500,
   ],
-  930 => 
+  902 => 
   [
     'id' => 903,
     'country_id' => 141,
@@ -7449,7 +7225,7 @@ return [
     'name_en' => 'Papua New Guinea',
     'sort' => 100,
   ],
-  931 => 
+  903 => 
   [
     'id' => 904,
     'country_id' => 142,
@@ -7457,7 +7233,7 @@ return [
     'name_en' => 'Alto Paran',
     'sort' => 100,
   ],
-  932 => 
+  904 => 
   [
     'id' => 905,
     'country_id' => 142,
@@ -7465,7 +7241,7 @@ return [
     'name_en' => 'Central',
     'sort' => 200,
   ],
-  933 => 
+  905 => 
   [
     'id' => 906,
     'country_id' => 142,
@@ -7473,7 +7249,7 @@ return [
     'name_en' => 'Cordillera',
     'sort' => 300,
   ],
-  934 => 
+  906 => 
   [
     'id' => 907,
     'country_id' => 142,
@@ -7481,7 +7257,7 @@ return [
     'name_en' => 'Paraguar',
     'sort' => 400,
   ],
-  935 => 
+  907 => 
   [
     'id' => 908,
     'country_id' => 142,
@@ -7489,7 +7265,7 @@ return [
     'name_en' => 'San Pedro',
     'sort' => 500,
   ],
-  936 => 
+  908 => 
   [
     'id' => 909,
     'country_id' => 143,
@@ -7497,7 +7273,7 @@ return [
     'name_en' => 'Amazonas',
     'sort' => 100,
   ],
-  937 => 
+  909 => 
   [
     'id' => 910,
     'country_id' => 143,
@@ -7505,7 +7281,7 @@ return [
     'name_en' => 'Ancash',
     'sort' => 200,
   ],
-  938 => 
+  910 => 
   [
     'id' => 911,
     'country_id' => 143,
@@ -7513,7 +7289,7 @@ return [
     'name_en' => 'Arequipa',
     'sort' => 300,
   ],
-  939 => 
+  911 => 
   [
     'id' => 912,
     'country_id' => 143,
@@ -7521,7 +7297,7 @@ return [
     'name_en' => 'Ayacucho',
     'sort' => 400,
   ],
-  940 => 
+  912 => 
   [
     'id' => 913,
     'country_id' => 143,
@@ -7529,7 +7305,7 @@ return [
     'name_en' => 'Cajamarca',
     'sort' => 500,
   ],
-  941 => 
+  913 => 
   [
     'id' => 914,
     'country_id' => 143,
@@ -7537,7 +7313,7 @@ return [
     'name_en' => 'Callao',
     'sort' => 600,
   ],
-  942 => 
+  914 => 
   [
     'id' => 915,
     'country_id' => 143,
@@ -7545,7 +7321,7 @@ return [
     'name_en' => 'Cusco',
     'sort' => 700,
   ],
-  943 => 
+  915 => 
   [
     'id' => 916,
     'country_id' => 143,
@@ -7553,7 +7329,7 @@ return [
     'name_en' => 'Hunuco',
     'sort' => 800,
   ],
-  944 => 
+  916 => 
   [
     'id' => 917,
     'country_id' => 143,
@@ -7561,7 +7337,7 @@ return [
     'name_en' => 'Ica',
     'sort' => 900,
   ],
-  945 => 
+  917 => 
   [
     'id' => 918,
     'country_id' => 143,
@@ -7569,7 +7345,7 @@ return [
     'name_en' => 'Junn',
     'sort' => 1000,
   ],
-  946 => 
+  918 => 
   [
     'id' => 919,
     'country_id' => 143,
@@ -7577,7 +7353,7 @@ return [
     'name_en' => 'La Libertad',
     'sort' => 1100,
   ],
-  947 => 
+  919 => 
   [
     'id' => 920,
     'country_id' => 143,
@@ -7585,7 +7361,7 @@ return [
     'name_en' => 'Lambayeque',
     'sort' => 1200,
   ],
-  948 => 
+  920 => 
   [
     'id' => 921,
     'country_id' => 143,
@@ -7593,7 +7369,7 @@ return [
     'name_en' => 'Lima',
     'sort' => 1300,
   ],
-  949 => 
+  921 => 
   [
     'id' => 922,
     'country_id' => 143,
@@ -7601,7 +7377,7 @@ return [
     'name_en' => 'Loreto',
     'sort' => 1400,
   ],
-  950 => 
+  922 => 
   [
     'id' => 923,
     'country_id' => 143,
@@ -7609,7 +7385,7 @@ return [
     'name_en' => 'Madre de Dios',
     'sort' => 1500,
   ],
-  951 => 
+  923 => 
   [
     'id' => 924,
     'country_id' => 143,
@@ -7617,7 +7393,7 @@ return [
     'name_en' => 'None',
     'sort' => 1600,
   ],
-  952 => 
+  924 => 
   [
     'id' => 925,
     'country_id' => 143,
@@ -7625,7 +7401,7 @@ return [
     'name_en' => 'Pasco',
     'sort' => 1700,
   ],
-  953 => 
+  925 => 
   [
     'id' => 926,
     'country_id' => 143,
@@ -7633,7 +7409,7 @@ return [
     'name_en' => 'Piura',
     'sort' => 1800,
   ],
-  954 => 
+  926 => 
   [
     'id' => 927,
     'country_id' => 143,
@@ -7641,7 +7417,7 @@ return [
     'name_en' => 'Puno',
     'sort' => 1900,
   ],
-  955 => 
+  927 => 
   [
     'id' => 928,
     'country_id' => 143,
@@ -7649,7 +7425,7 @@ return [
     'name_en' => 'San Martn',
     'sort' => 2000,
   ],
-  956 => 
+  928 => 
   [
     'id' => 929,
     'country_id' => 143,
@@ -7657,7 +7433,7 @@ return [
     'name_en' => 'Tacna',
     'sort' => 2100,
   ],
-  957 => 
+  929 => 
   [
     'id' => 930,
     'country_id' => 143,
@@ -7665,7 +7441,7 @@ return [
     'name_en' => 'Tumbes',
     'sort' => 2200,
   ],
-  958 => 
+  930 => 
   [
     'id' => 931,
     'country_id' => 143,
@@ -7673,7 +7449,7 @@ return [
     'name_en' => 'Ucayali',
     'sort' => 2300,
   ],
-  959 => 
+  931 => 
   [
     'id' => 932,
     'country_id' => 144,
@@ -7681,7 +7457,7 @@ return [
     'name_en' => 'Adamstown',
     'sort' => 100,
   ],
-  960 => 
+  932 => 
   [
     'id' => 933,
     'country_id' => 145,
@@ -7689,7 +7465,7 @@ return [
     'name_en' => 'Biala Podlaska',
     'sort' => 100,
   ],
-  961 => 
+  933 => 
   [
     'id' => 934,
     'country_id' => 145,
@@ -7697,7 +7473,7 @@ return [
     'name_en' => 'Bialystok',
     'sort' => 200,
   ],
-  962 => 
+  934 => 
   [
     'id' => 935,
     'country_id' => 145,
@@ -7705,7 +7481,7 @@ return [
     'name_en' => 'Bielsko',
     'sort' => 300,
   ],
-  963 => 
+  935 => 
   [
     'id' => 936,
     'country_id' => 145,
@@ -7713,7 +7489,7 @@ return [
     'name_en' => 'Bydgoszcz',
     'sort' => 400,
   ],
-  964 => 
+  936 => 
   [
     'id' => 937,
     'country_id' => 145,
@@ -7721,7 +7497,7 @@ return [
     'name_en' => 'Chelm',
     'sort' => 500,
   ],
-  965 => 
+  937 => 
   [
     'id' => 938,
     'country_id' => 145,
@@ -7729,7 +7505,7 @@ return [
     'name_en' => 'Czestochowa',
     'sort' => 600,
   ],
-  966 => 
+  938 => 
   [
     'id' => 939,
     'country_id' => 145,
@@ -7737,7 +7513,7 @@ return [
     'name_en' => 'Dolnoslaskie',
     'sort' => 700,
   ],
-  967 => 
+  939 => 
   [
     'id' => 940,
     'country_id' => 145,
@@ -7745,7 +7521,7 @@ return [
     'name_en' => 'Elblag',
     'sort' => 800,
   ],
-  968 => 
+  940 => 
   [
     'id' => 941,
     'country_id' => 145,
@@ -7753,7 +7529,7 @@ return [
     'name_en' => 'Gdansk',
     'sort' => 900,
   ],
-  969 => 
+  941 => 
   [
     'id' => 942,
     'country_id' => 145,
@@ -7761,7 +7537,7 @@ return [
     'name_en' => 'Gorzow',
     'sort' => 1000,
   ],
-  970 => 
+  942 => 
   [
     'id' => 943,
     'country_id' => 145,
@@ -7769,7 +7545,7 @@ return [
     'name_en' => 'Jelenia Gora',
     'sort' => 1100,
   ],
-  971 => 
+  943 => 
   [
     'id' => 944,
     'country_id' => 145,
@@ -7777,7 +7553,7 @@ return [
     'name_en' => 'Kalisz',
     'sort' => 1200,
   ],
-  972 => 
+  944 => 
   [
     'id' => 945,
     'country_id' => 145,
@@ -7785,7 +7561,7 @@ return [
     'name_en' => 'Katowice',
     'sort' => 1300,
   ],
-  973 => 
+  945 => 
   [
     'id' => 946,
     'country_id' => 145,
@@ -7793,7 +7569,7 @@ return [
     'name_en' => 'Kielce',
     'sort' => 1400,
   ],
-  974 => 
+  946 => 
   [
     'id' => 947,
     'country_id' => 145,
@@ -7801,7 +7577,7 @@ return [
     'name_en' => 'Konin',
     'sort' => 1500,
   ],
-  975 => 
+  947 => 
   [
     'id' => 948,
     'country_id' => 145,
@@ -7809,7 +7585,7 @@ return [
     'name_en' => 'Koszalin',
     'sort' => 1600,
   ],
-  976 => 
+  948 => 
   [
     'id' => 949,
     'country_id' => 145,
@@ -7817,7 +7593,7 @@ return [
     'name_en' => 'Krakow',
     'sort' => 1700,
   ],
-  977 => 
+  949 => 
   [
     'id' => 950,
     'country_id' => 145,
@@ -7825,7 +7601,7 @@ return [
     'name_en' => 'Kujawsko-Pomorskie',
     'sort' => 1800,
   ],
-  978 => 
+  950 => 
   [
     'id' => 951,
     'country_id' => 145,
@@ -7833,7 +7609,7 @@ return [
     'name_en' => 'Legnica',
     'sort' => 1900,
   ],
-  979 => 
+  951 => 
   [
     'id' => 952,
     'country_id' => 145,
@@ -7841,7 +7617,7 @@ return [
     'name_en' => 'Leszno',
     'sort' => 2000,
   ],
-  980 => 
+  952 => 
   [
     'id' => 953,
     'country_id' => 145,
@@ -7849,7 +7625,7 @@ return [
     'name_en' => 'Lodz',
     'sort' => 2100,
   ],
-  981 => 
+  953 => 
   [
     'id' => 954,
     'country_id' => 145,
@@ -7857,7 +7633,7 @@ return [
     'name_en' => 'Lodzkie',
     'sort' => 2200,
   ],
-  982 => 
+  954 => 
   [
     'id' => 955,
     'country_id' => 145,
@@ -7865,7 +7641,7 @@ return [
     'name_en' => 'Lomza',
     'sort' => 2300,
   ],
-  983 => 
+  955 => 
   [
     'id' => 956,
     'country_id' => 145,
@@ -7873,7 +7649,7 @@ return [
     'name_en' => 'Lublin',
     'sort' => 2400,
   ],
-  984 => 
+  956 => 
   [
     'id' => 957,
     'country_id' => 145,
@@ -7881,7 +7657,7 @@ return [
     'name_en' => 'Lubuskie',
     'sort' => 2500,
   ],
-  985 => 
+  957 => 
   [
     'id' => 958,
     'country_id' => 145,
@@ -7889,7 +7665,7 @@ return [
     'name_en' => 'Malopolskie',
     'sort' => 2600,
   ],
-  986 => 
+  958 => 
   [
     'id' => 959,
     'country_id' => 145,
@@ -7897,7 +7673,7 @@ return [
     'name_en' => 'Mazowieckie',
     'sort' => 2700,
   ],
-  987 => 
+  959 => 
   [
     'id' => 960,
     'country_id' => 145,
@@ -7905,7 +7681,7 @@ return [
     'name_en' => 'None',
     'sort' => 2800,
   ],
-  988 => 
+  960 => 
   [
     'id' => 961,
     'country_id' => 145,
@@ -7913,7 +7689,7 @@ return [
     'name_en' => 'Nowy Sacz',
     'sort' => 2900,
   ],
-  989 => 
+  961 => 
   [
     'id' => 962,
     'country_id' => 145,
@@ -7921,7 +7697,7 @@ return [
     'name_en' => 'Olsztyn',
     'sort' => 3000,
   ],
-  990 => 
+  962 => 
   [
     'id' => 963,
     'country_id' => 145,
@@ -7929,7 +7705,7 @@ return [
     'name_en' => 'Opole',
     'sort' => 3100,
   ],
-  991 => 
+  963 => 
   [
     'id' => 964,
     'country_id' => 145,
@@ -7937,7 +7713,7 @@ return [
     'name_en' => 'Ostroleka',
     'sort' => 3200,
   ],
-  992 => 
+  964 => 
   [
     'id' => 965,
     'country_id' => 145,
@@ -7945,7 +7721,7 @@ return [
     'name_en' => 'Pila',
     'sort' => 3300,
   ],
-  993 => 
+  965 => 
   [
     'id' => 966,
     'country_id' => 145,
@@ -7953,7 +7729,7 @@ return [
     'name_en' => 'Piotrkow',
     'sort' => 3400,
   ],
-  994 => 
+  966 => 
   [
     'id' => 967,
     'country_id' => 145,
@@ -7961,7 +7737,7 @@ return [
     'name_en' => 'Plock',
     'sort' => 3500,
   ],
-  995 => 
+  967 => 
   [
     'id' => 968,
     'country_id' => 145,
@@ -7969,7 +7745,7 @@ return [
     'name_en' => 'Podkarpackie',
     'sort' => 3600,
   ],
-  996 => 
+  968 => 
   [
     'id' => 969,
     'country_id' => 145,
@@ -7977,7 +7753,7 @@ return [
     'name_en' => 'Pomorskie',
     'sort' => 3700,
   ],
-  997 => 
+  969 => 
   [
     'id' => 970,
     'country_id' => 145,
@@ -7985,7 +7761,7 @@ return [
     'name_en' => 'Poznan',
     'sort' => 3800,
   ],
-  998 => 
+  970 => 
   [
     'id' => 971,
     'country_id' => 145,
@@ -7993,7 +7769,7 @@ return [
     'name_en' => 'Przemysl',
     'sort' => 3900,
   ],
-  999 => 
+  971 => 
   [
     'id' => 972,
     'country_id' => 145,
@@ -8001,7 +7777,7 @@ return [
     'name_en' => 'Radom',
     'sort' => 4000,
   ],
-  1000 => 
+  972 => 
   [
     'id' => 973,
     'country_id' => 145,
@@ -8009,7 +7785,7 @@ return [
     'name_en' => 'Rzeszow',
     'sort' => 4100,
   ],
-  1001 => 
+  973 => 
   [
     'id' => 974,
     'country_id' => 145,
@@ -8017,7 +7793,7 @@ return [
     'name_en' => 'Siedlce',
     'sort' => 4200,
   ],
-  1002 => 
+  974 => 
   [
     'id' => 975,
     'country_id' => 145,
@@ -8025,7 +7801,7 @@ return [
     'name_en' => 'Sieradz',
     'sort' => 4300,
   ],
-  1003 => 
+  975 => 
   [
     'id' => 976,
     'country_id' => 145,
@@ -8033,7 +7809,7 @@ return [
     'name_en' => 'Skierniewice',
     'sort' => 4400,
   ],
-  1004 => 
+  976 => 
   [
     'id' => 977,
     'country_id' => 145,
@@ -8041,7 +7817,7 @@ return [
     'name_en' => 'Slaskie',
     'sort' => 4500,
   ],
-  1005 => 
+  977 => 
   [
     'id' => 978,
     'country_id' => 145,
@@ -8049,7 +7825,7 @@ return [
     'name_en' => 'Slupsk',
     'sort' => 4600,
   ],
-  1006 => 
+  978 => 
   [
     'id' => 979,
     'country_id' => 145,
@@ -8057,7 +7833,7 @@ return [
     'name_en' => 'Suwalki',
     'sort' => 4700,
   ],
-  1007 => 
+  979 => 
   [
     'id' => 980,
     'country_id' => 145,
@@ -8065,7 +7841,7 @@ return [
     'name_en' => 'Swietokrzyskie',
     'sort' => 4800,
   ],
-  1008 => 
+  980 => 
   [
     'id' => 981,
     'country_id' => 145,
@@ -8073,7 +7849,7 @@ return [
     'name_en' => 'Tarnobrzeg',
     'sort' => 4900,
   ],
-  1009 => 
+  981 => 
   [
     'id' => 982,
     'country_id' => 145,
@@ -8081,7 +7857,7 @@ return [
     'name_en' => 'Tarnow',
     'sort' => 5000,
   ],
-  1010 => 
+  982 => 
   [
     'id' => 983,
     'country_id' => 145,
@@ -8089,7 +7865,7 @@ return [
     'name_en' => 'Torun',
     'sort' => 5100,
   ],
-  1011 => 
+  983 => 
   [
     'id' => 984,
     'country_id' => 145,
@@ -8097,7 +7873,7 @@ return [
     'name_en' => 'Walbrzych',
     'sort' => 5200,
   ],
-  1012 => 
+  984 => 
   [
     'id' => 985,
     'country_id' => 145,
@@ -8105,7 +7881,7 @@ return [
     'name_en' => 'Warminsko-Mazurskie',
     'sort' => 5300,
   ],
-  1013 => 
+  985 => 
   [
     'id' => 986,
     'country_id' => 145,
@@ -8113,7 +7889,7 @@ return [
     'name_en' => 'Warszawa',
     'sort' => 5400,
   ],
-  1014 => 
+  986 => 
   [
     'id' => 987,
     'country_id' => 145,
@@ -8121,7 +7897,7 @@ return [
     'name_en' => 'Wielkopolskie',
     'sort' => 5500,
   ],
-  1015 => 
+  987 => 
   [
     'id' => 988,
     'country_id' => 145,
@@ -8129,7 +7905,7 @@ return [
     'name_en' => 'Wloclawek',
     'sort' => 5600,
   ],
-  1016 => 
+  988 => 
   [
     'id' => 989,
     'country_id' => 145,
@@ -8137,7 +7913,7 @@ return [
     'name_en' => 'Wroclaw',
     'sort' => 5700,
   ],
-  1017 => 
+  989 => 
   [
     'id' => 990,
     'country_id' => 145,
@@ -8145,7 +7921,7 @@ return [
     'name_en' => 'Zachodniopomorskie',
     'sort' => 5800,
   ],
-  1018 => 
+  990 => 
   [
     'id' => 991,
     'country_id' => 145,
@@ -8153,7 +7929,7 @@ return [
     'name_en' => 'Zamosc',
     'sort' => 5900,
   ],
-  1019 => 
+  991 => 
   [
     'id' => 992,
     'country_id' => 145,
@@ -8161,7 +7937,7 @@ return [
     'name_en' => 'Zielona Gora',
     'sort' => 6000,
   ],
-  1020 => 
+  992 => 
   [
     'id' => 993,
     'country_id' => 146,
@@ -8169,7 +7945,7 @@ return [
     'name_en' => 'Aveiro',
     'sort' => 100,
   ],
-  1021 => 
+  993 => 
   [
     'id' => 994,
     'country_id' => 146,
@@ -8177,7 +7953,7 @@ return [
     'name_en' => 'Azores',
     'sort' => 200,
   ],
-  1022 => 
+  994 => 
   [
     'id' => 995,
     'country_id' => 146,
@@ -8185,7 +7961,7 @@ return [
     'name_en' => 'Beja',
     'sort' => 300,
   ],
-  1023 => 
+  995 => 
   [
     'id' => 996,
     'country_id' => 146,
@@ -8193,7 +7969,7 @@ return [
     'name_en' => 'Braga',
     'sort' => 400,
   ],
-  1024 => 
+  996 => 
   [
     'id' => 997,
     'country_id' => 146,
@@ -8201,7 +7977,7 @@ return [
     'name_en' => 'Braganca',
     'sort' => 500,
   ],
-  1025 => 
+  997 => 
   [
     'id' => 998,
     'country_id' => 146,
@@ -8209,7 +7985,7 @@ return [
     'name_en' => 'Castelo Branco',
     'sort' => 600,
   ],
-  1026 => 
+  998 => 
   [
     'id' => 999,
     'country_id' => 146,
@@ -8217,7 +7993,7 @@ return [
     'name_en' => 'Coimbra',
     'sort' => 700,
   ],
-  1027 => 
+  999 => 
   [
     'id' => 1000,
     'country_id' => 146,
@@ -8225,7 +8001,7 @@ return [
     'name_en' => 'Evora',
     'sort' => 800,
   ],
-  1028 => 
+  1000 => 
   [
     'id' => 1001,
     'country_id' => 146,
@@ -8233,7 +8009,7 @@ return [
     'name_en' => 'Faro',
     'sort' => 900,
   ],
-  1029 => 
+  1001 => 
   [
     'id' => 1002,
     'country_id' => 146,
@@ -8241,7 +8017,7 @@ return [
     'name_en' => 'Guarda',
     'sort' => 1000,
   ],
-  1030 => 
+  1002 => 
   [
     'id' => 1003,
     'country_id' => 146,
@@ -8249,7 +8025,7 @@ return [
     'name_en' => 'Leiria',
     'sort' => 1100,
   ],
-  1031 => 
+  1003 => 
   [
     'id' => 1004,
     'country_id' => 146,
@@ -8257,7 +8033,7 @@ return [
     'name_en' => 'Lisboa',
     'sort' => 1200,
   ],
-  1032 => 
+  1004 => 
   [
     'id' => 1005,
     'country_id' => 146,
@@ -8265,7 +8041,7 @@ return [
     'name_en' => 'Madeira',
     'sort' => 1300,
   ],
-  1033 => 
+  1005 => 
   [
     'id' => 1006,
     'country_id' => 146,
@@ -8273,7 +8049,7 @@ return [
     'name_en' => 'None',
     'sort' => 1400,
   ],
-  1034 => 
+  1006 => 
   [
     'id' => 1007,
     'country_id' => 146,
@@ -8281,7 +8057,7 @@ return [
     'name_en' => 'Portalegre',
     'sort' => 1500,
   ],
-  1035 => 
+  1007 => 
   [
     'id' => 1008,
     'country_id' => 146,
@@ -8289,7 +8065,7 @@ return [
     'name_en' => 'Porto',
     'sort' => 1600,
   ],
-  1036 => 
+  1008 => 
   [
     'id' => 1009,
     'country_id' => 146,
@@ -8297,7 +8073,7 @@ return [
     'name_en' => 'Santarem',
     'sort' => 1700,
   ],
-  1037 => 
+  1009 => 
   [
     'id' => 1010,
     'country_id' => 146,
@@ -8305,7 +8081,7 @@ return [
     'name_en' => 'Setubal',
     'sort' => 1800,
   ],
-  1038 => 
+  1010 => 
   [
     'id' => 1011,
     'country_id' => 146,
@@ -8313,7 +8089,7 @@ return [
     'name_en' => 'Viana do Castelo',
     'sort' => 1900,
   ],
-  1039 => 
+  1011 => 
   [
     'id' => 1012,
     'country_id' => 146,
@@ -8321,7 +8097,7 @@ return [
     'name_en' => 'Vila Real',
     'sort' => 2000,
   ],
-  1040 => 
+  1012 => 
   [
     'id' => 1013,
     'country_id' => 146,
@@ -8329,7 +8105,7 @@ return [
     'name_en' => 'Viseu',
     'sort' => 2100,
   ],
-  1041 => 
+  1013 => 
   [
     'id' => 1014,
     'country_id' => 147,
@@ -8337,7 +8113,7 @@ return [
     'name_en' => 'Puerto Rico',
     'sort' => 100,
   ],
-  1042 => 
+  1014 => 
   [
     'id' => 1015,
     'country_id' => 148,
@@ -8345,7 +8121,7 @@ return [
     'name_en' => 'Saint-Denis',
     'sort' => 100,
   ],
-  1043 => 
+  1015 => 
   [
     'id' => 1016,
     'country_id' => 149,
@@ -8353,7 +8129,7 @@ return [
     'name_en' => 'Adygeya',
     'sort' => 100,
   ],
-  1044 => 
+  1016 => 
   [
     'id' => 1017,
     'country_id' => 149,
@@ -8361,7 +8137,7 @@ return [
     'name_en' => 'Altaiskii krai',
     'sort' => 200,
   ],
-  1045 => 
+  1017 => 
   [
     'id' => 1018,
     'country_id' => 149,
@@ -8369,39 +8145,23 @@ return [
     'name_en' => 'Amurskaya obl.',
     'sort' => 300,
   ],
-  1046 => 
+  1018 => 
   [
     'id' => 1019,
     'country_id' => 149,
-    'name_ru' => 'Ар�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Архангельская обл.',
+    'name_en' => 'Arhangelskaya obl.',
+    'sort' => 400,
   ],
-  1047 => 
-  [
-    'id' => 'ангельская обл.',
-    'country_id' => 'Arhangelskaya obl.',
-    'name_ru' => 400,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1048 => 
+  1019 => 
   [
     'id' => 1020,
     'country_id' => 149,
-    'name_ru' => 'Астра�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Астраханская обл.',
+    'name_en' => 'Astrahanskaya obl.',
+    'sort' => 500,
   ],
-  1049 => 
-  [
-    'id' => 'анская обл.',
-    'country_id' => 'Astrahanskaya obl.',
-    'name_ru' => 500,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1050 => 
+  1020 => 
   [
     'id' => 1021,
     'country_id' => 149,
@@ -8409,7 +8169,7 @@ return [
     'name_en' => 'Bashkortostan(Bashkiriya)',
     'sort' => 600,
   ],
-  1051 => 
+  1021 => 
   [
     'id' => 1022,
     'country_id' => 149,
@@ -8417,7 +8177,7 @@ return [
     'name_en' => 'Belgorodskaya obl.',
     'sort' => 700,
   ],
-  1052 => 
+  1022 => 
   [
     'id' => 1023,
     'country_id' => 149,
@@ -8425,7 +8185,7 @@ return [
     'name_en' => 'Bryanskaya obl.',
     'sort' => 800,
   ],
-  1053 => 
+  1023 => 
   [
     'id' => 1024,
     'country_id' => 149,
@@ -8433,7 +8193,7 @@ return [
     'name_en' => 'Buryatiya',
     'sort' => 900,
   ],
-  1054 => 
+  1024 => 
   [
     'id' => 1025,
     'country_id' => 149,
@@ -8441,7 +8201,7 @@ return [
     'name_en' => 'Vladimirskaya obl.',
     'sort' => 1000,
   ],
-  1055 => 
+  1025 => 
   [
     'id' => 1026,
     'country_id' => 149,
@@ -8449,7 +8209,7 @@ return [
     'name_en' => 'Volgogradskaya obl.',
     'sort' => 1100,
   ],
-  1056 => 
+  1026 => 
   [
     'id' => 1027,
     'country_id' => 149,
@@ -8457,7 +8217,7 @@ return [
     'name_en' => 'Vologodskaya obl.',
     'sort' => 1200,
   ],
-  1057 => 
+  1027 => 
   [
     'id' => 1028,
     'country_id' => 149,
@@ -8465,7 +8225,7 @@ return [
     'name_en' => 'Voronezhskaya obl.',
     'sort' => 1300,
   ],
-  1058 => 
+  1028 => 
   [
     'id' => 1029,
     'country_id' => 149,
@@ -8473,7 +8233,7 @@ return [
     'name_en' => 'Dagestan',
     'sort' => 1400,
   ],
-  1059 => 
+  1029 => 
   [
     'id' => 1030,
     'country_id' => 149,
@@ -8481,7 +8241,7 @@ return [
     'name_en' => 'Evreiskaya obl.',
     'sort' => 1500,
   ],
-  1060 => 
+  1030 => 
   [
     'id' => 1031,
     'country_id' => 149,
@@ -8489,7 +8249,7 @@ return [
     'name_en' => 'Ivanovskaya obl.',
     'sort' => 1600,
   ],
-  1061 => 
+  1031 => 
   [
     'id' => 1032,
     'country_id' => 149,
@@ -8497,7 +8257,7 @@ return [
     'name_en' => 'Irkutskaya obl.',
     'sort' => 1700,
   ],
-  1062 => 
+  1032 => 
   [
     'id' => 1033,
     'country_id' => 149,
@@ -8505,7 +8265,7 @@ return [
     'name_en' => 'Kabardino-Balkariya',
     'sort' => 1800,
   ],
-  1063 => 
+  1033 => 
   [
     'id' => 1034,
     'country_id' => 149,
@@ -8513,7 +8273,7 @@ return [
     'name_en' => 'Kaliningradskaya obl.',
     'sort' => 1900,
   ],
-  1064 => 
+  1034 => 
   [
     'id' => 1035,
     'country_id' => 149,
@@ -8521,7 +8281,7 @@ return [
     'name_en' => 'Kalmykiya',
     'sort' => 2000,
   ],
-  1065 => 
+  1035 => 
   [
     'id' => 1036,
     'country_id' => 149,
@@ -8529,7 +8289,7 @@ return [
     'name_en' => 'Kaluzhskaya obl.',
     'sort' => 2100,
   ],
-  1066 => 
+  1036 => 
   [
     'id' => 1037,
     'country_id' => 149,
@@ -8537,7 +8297,7 @@ return [
     'name_en' => 'Kamchatskaya obl.',
     'sort' => 2200,
   ],
-  1067 => 
+  1037 => 
   [
     'id' => 1038,
     'country_id' => 149,
@@ -8545,7 +8305,7 @@ return [
     'name_en' => 'Karachaeva-Cherkesskaya Respublica',
     'sort' => 2300,
   ],
-  1068 => 
+  1038 => 
   [
     'id' => 1039,
     'country_id' => 149,
@@ -8553,7 +8313,7 @@ return [
     'name_en' => 'Kareliya',
     'sort' => 2400,
   ],
-  1069 => 
+  1039 => 
   [
     'id' => 1040,
     'country_id' => 149,
@@ -8561,7 +8321,7 @@ return [
     'name_en' => 'Kemerovskaya obl.',
     'sort' => 2500,
   ],
-  1070 => 
+  1040 => 
   [
     'id' => 1041,
     'country_id' => 149,
@@ -8569,7 +8329,7 @@ return [
     'name_en' => 'Kirovskaya obl.',
     'sort' => 2600,
   ],
-  1071 => 
+  1041 => 
   [
     'id' => 1042,
     'country_id' => 149,
@@ -8577,7 +8337,7 @@ return [
     'name_en' => 'Komi',
     'sort' => 2700,
   ],
-  1072 => 
+  1042 => 
   [
     'id' => 1043,
     'country_id' => 149,
@@ -8585,7 +8345,7 @@ return [
     'name_en' => 'Kostromskaya obl.',
     'sort' => 2800,
   ],
-  1073 => 
+  1043 => 
   [
     'id' => 1044,
     'country_id' => 149,
@@ -8593,7 +8353,7 @@ return [
     'name_en' => 'Krasnodarskii krai',
     'sort' => 2900,
   ],
-  1074 => 
+  1044 => 
   [
     'id' => 1045,
     'country_id' => 149,
@@ -8601,7 +8361,7 @@ return [
     'name_en' => 'Krasnoyarskii krai',
     'sort' => 3000,
   ],
-  1075 => 
+  1045 => 
   [
     'id' => 1046,
     'country_id' => 149,
@@ -8609,7 +8369,7 @@ return [
     'name_en' => 'Kurganskaya obl.',
     'sort' => 3100,
   ],
-  1076 => 
+  1046 => 
   [
     'id' => 1047,
     'country_id' => 149,
@@ -8617,7 +8377,7 @@ return [
     'name_en' => 'Kurskaya obl.',
     'sort' => 3200,
   ],
-  1077 => 
+  1047 => 
   [
     'id' => 1048,
     'country_id' => 149,
@@ -8625,7 +8385,7 @@ return [
     'name_en' => 'Lipetskaya obl.',
     'sort' => 3300,
   ],
-  1078 => 
+  1048 => 
   [
     'id' => 1049,
     'country_id' => 149,
@@ -8633,7 +8393,7 @@ return [
     'name_en' => 'Magadanskaya obl.',
     'sort' => 3400,
   ],
-  1079 => 
+  1049 => 
   [
     'id' => 1050,
     'country_id' => 149,
@@ -8641,7 +8401,7 @@ return [
     'name_en' => 'Marii El',
     'sort' => 3500,
   ],
-  1080 => 
+  1050 => 
   [
     'id' => 1051,
     'country_id' => 149,
@@ -8649,7 +8409,7 @@ return [
     'name_en' => 'Mordoviya',
     'sort' => 3600,
   ],
-  1081 => 
+  1051 => 
   [
     'id' => 1052,
     'country_id' => 149,
@@ -8657,7 +8417,7 @@ return [
     'name_en' => 'Moscow & Moscow Region',
     'sort' => 3700,
   ],
-  1082 => 
+  1052 => 
   [
     'id' => 1053,
     'country_id' => 149,
@@ -8665,7 +8425,7 @@ return [
     'name_en' => 'Murmanskaya obl.',
     'sort' => 3800,
   ],
-  1083 => 
+  1053 => 
   [
     'id' => 1054,
     'country_id' => 149,
@@ -8673,7 +8433,7 @@ return [
     'name_en' => 'Nizhegorodskaya (Gorkovskaya)',
     'sort' => 3900,
   ],
-  1084 => 
+  1054 => 
   [
     'id' => 1055,
     'country_id' => 149,
@@ -8681,7 +8441,7 @@ return [
     'name_en' => 'Novgorodskaya obl.',
     'sort' => 4000,
   ],
-  1085 => 
+  1055 => 
   [
     'id' => 1056,
     'country_id' => 149,
@@ -8689,7 +8449,7 @@ return [
     'name_en' => 'Novosibirskaya obl.',
     'sort' => 4100,
   ],
-  1086 => 
+  1056 => 
   [
     'id' => 1057,
     'country_id' => 149,
@@ -8697,7 +8457,7 @@ return [
     'name_en' => 'Omskaya obl.',
     'sort' => 4200,
   ],
-  1087 => 
+  1057 => 
   [
     'id' => 1058,
     'country_id' => 149,
@@ -8705,7 +8465,7 @@ return [
     'name_en' => 'Orenburgskaya obl.',
     'sort' => 4300,
   ],
-  1088 => 
+  1058 => 
   [
     'id' => 1059,
     'country_id' => 149,
@@ -8713,7 +8473,7 @@ return [
     'name_en' => 'Orlovskaya obl.',
     'sort' => 4400,
   ],
-  1089 => 
+  1059 => 
   [
     'id' => 1060,
     'country_id' => 149,
@@ -8721,7 +8481,7 @@ return [
     'name_en' => 'Penzenskaya obl.',
     'sort' => 4500,
   ],
-  1090 => 
+  1060 => 
   [
     'id' => 1061,
     'country_id' => 149,
@@ -8729,7 +8489,7 @@ return [
     'name_en' => 'Permskiy krai',
     'sort' => 4600,
   ],
-  1091 => 
+  1061 => 
   [
     'id' => 1062,
     'country_id' => 149,
@@ -8737,7 +8497,7 @@ return [
     'name_en' => 'Primorskii krai',
     'sort' => 4700,
   ],
-  1092 => 
+  1062 => 
   [
     'id' => 1063,
     'country_id' => 149,
@@ -8745,7 +8505,7 @@ return [
     'name_en' => 'Pskovskaya obl.',
     'sort' => 4800,
   ],
-  1093 => 
+  1063 => 
   [
     'id' => 1064,
     'country_id' => 149,
@@ -8753,7 +8513,7 @@ return [
     'name_en' => 'Rostovskaya obl.',
     'sort' => 4900,
   ],
-  1094 => 
+  1064 => 
   [
     'id' => 1065,
     'country_id' => 149,
@@ -8761,7 +8521,7 @@ return [
     'name_en' => 'Ryazanskaya obl.',
     'sort' => 5000,
   ],
-  1095 => 
+  1065 => 
   [
     'id' => 1066,
     'country_id' => 149,
@@ -8769,7 +8529,7 @@ return [
     'name_en' => 'Samarskaya obl.',
     'sort' => 5100,
   ],
-  1096 => 
+  1066 => 
   [
     'id' => 1067,
     'country_id' => 149,
@@ -8777,7 +8537,7 @@ return [
     'name_en' => 'Saint-Petersburg and Region',
     'sort' => 5200,
   ],
-  1097 => 
+  1067 => 
   [
     'id' => 1068,
     'country_id' => 149,
@@ -8785,39 +8545,23 @@ return [
     'name_en' => 'Saratovskaya obl.',
     'sort' => 5300,
   ],
-  1098 => 
+  1068 => 
   [
     'id' => 1069,
     'country_id' => 149,
-    'name_ru' => 'Са�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Саха (Якутия)',
+    'name_en' => 'Saha (Yakutiya)',
+    'sort' => 5400,
   ],
-  1099 => 
-  [
-    'id' => 'а (Якутия)',
-    'country_id' => 'Saha (Yakutiya)',
-    'name_ru' => 5400,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1100 => 
+  1069 => 
   [
     'id' => 1070,
     'country_id' => 149,
-    'name_ru' => 'Са�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Сахалин',
+    'name_en' => 'Sahalin',
+    'sort' => 5500,
   ],
-  1101 => 
-  [
-    'id' => 'алин',
-    'country_id' => 'Sahalin',
-    'name_ru' => 5500,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1102 => 
+  1070 => 
   [
     'id' => 1071,
     'country_id' => 149,
@@ -8825,7 +8569,7 @@ return [
     'name_en' => 'Sverdlovskaya obl.',
     'sort' => 5600,
   ],
-  1103 => 
+  1071 => 
   [
     'id' => 1072,
     'country_id' => 149,
@@ -8833,7 +8577,7 @@ return [
     'name_en' => 'Severnaya Osetiya',
     'sort' => 5700,
   ],
-  1104 => 
+  1072 => 
   [
     'id' => 1073,
     'country_id' => 149,
@@ -8841,7 +8585,7 @@ return [
     'name_en' => 'Smolenskaya obl.',
     'sort' => 5800,
   ],
-  1105 => 
+  1073 => 
   [
     'id' => 1074,
     'country_id' => 149,
@@ -8849,7 +8593,7 @@ return [
     'name_en' => 'Stavropolskii krai',
     'sort' => 5900,
   ],
-  1106 => 
+  1074 => 
   [
     'id' => 1075,
     'country_id' => 149,
@@ -8857,7 +8601,7 @@ return [
     'name_en' => 'Tambovskaya obl.',
     'sort' => 6000,
   ],
-  1107 => 
+  1075 => 
   [
     'id' => 1076,
     'country_id' => 149,
@@ -8865,7 +8609,7 @@ return [
     'name_en' => 'Tatarstan',
     'sort' => 6100,
   ],
-  1108 => 
+  1076 => 
   [
     'id' => 1077,
     'country_id' => 149,
@@ -8873,7 +8617,7 @@ return [
     'name_en' => 'Tverskaya obl.',
     'sort' => 6200,
   ],
-  1109 => 
+  1077 => 
   [
     'id' => 1078,
     'country_id' => 149,
@@ -8881,7 +8625,7 @@ return [
     'name_en' => 'Tomskaya obl.',
     'sort' => 6300,
   ],
-  1110 => 
+  1078 => 
   [
     'id' => 1079,
     'country_id' => 149,
@@ -8889,7 +8633,7 @@ return [
     'name_en' => 'Tuva (Tuvinskaya Resp.)',
     'sort' => 6400,
   ],
-  1111 => 
+  1079 => 
   [
     'id' => 1080,
     'country_id' => 149,
@@ -8897,7 +8641,7 @@ return [
     'name_en' => 'Tulskaya obl.',
     'sort' => 6500,
   ],
-  1112 => 
+  1080 => 
   [
     'id' => 1081,
     'country_id' => 149,
@@ -8905,7 +8649,7 @@ return [
     'name_en' => 'Tyumenskaya obl. i Hanty-Mansiiskii AO',
     'sort' => 6600,
   ],
-  1113 => 
+  1081 => 
   [
     'id' => 1082,
     'country_id' => 149,
@@ -8913,7 +8657,7 @@ return [
     'name_en' => 'Udmurtiya',
     'sort' => 6700,
   ],
-  1114 => 
+  1082 => 
   [
     'id' => 1083,
     'country_id' => 149,
@@ -8921,7 +8665,7 @@ return [
     'name_en' => 'Ulyanovskaya obl.',
     'sort' => 6800,
   ],
-  1115 => 
+  1083 => 
   [
     'id' => 1084,
     'country_id' => 149,
@@ -8929,7 +8673,7 @@ return [
     'name_en' => 'Uralskaya obl.',
     'sort' => 6900,
   ],
-  1116 => 
+  1084 => 
   [
     'id' => 1085,
     'country_id' => 149,
@@ -8937,7 +8681,7 @@ return [
     'name_en' => 'Habarovskii krai',
     'sort' => 7000,
   ],
-  1117 => 
+  1085 => 
   [
     'id' => 1086,
     'country_id' => 149,
@@ -8945,7 +8689,7 @@ return [
     'name_en' => 'Hakasiya',
     'sort' => 7100,
   ],
-  1118 => 
+  1086 => 
   [
     'id' => 1087,
     'country_id' => 149,
@@ -8953,7 +8697,7 @@ return [
     'name_en' => 'Chelyabinskaya obl.',
     'sort' => 7200,
   ],
-  1119 => 
+  1087 => 
   [
     'id' => 1088,
     'country_id' => 149,
@@ -8961,7 +8705,7 @@ return [
     'name_en' => 'Checheno-Ingushetiya',
     'sort' => 7300,
   ],
-  1120 => 
+  1088 => 
   [
     'id' => 1089,
     'country_id' => 149,
@@ -8969,7 +8713,7 @@ return [
     'name_en' => 'Chitinskaya obl.',
     'sort' => 7400,
   ],
-  1121 => 
+  1089 => 
   [
     'id' => 1090,
     'country_id' => 149,
@@ -8977,7 +8721,7 @@ return [
     'name_en' => 'Chuvashiya',
     'sort' => 7500,
   ],
-  1122 => 
+  1090 => 
   [
     'id' => 1091,
     'country_id' => 149,
@@ -8985,7 +8729,7 @@ return [
     'name_en' => 'Chukotskii AO',
     'sort' => 7600,
   ],
-  1123 => 
+  1091 => 
   [
     'id' => 1092,
     'country_id' => 149,
@@ -8993,7 +8737,7 @@ return [
     'name_en' => 'Yamalo-Nenetskii AO',
     'sort' => 7700,
   ],
-  1124 => 
+  1092 => 
   [
     'id' => 1093,
     'country_id' => 149,
@@ -9001,7 +8745,7 @@ return [
     'name_en' => 'Yaroslavskaya obl.',
     'sort' => 7800,
   ],
-  1125 => 
+  1093 => 
   [
     'id' => 1094,
     'country_id' => 150,
@@ -9009,7 +8753,7 @@ return [
     'name_en' => 'Rwanda',
     'sort' => 100,
   ],
-  1126 => 
+  1094 => 
   [
     'id' => 1095,
     'country_id' => 151,
@@ -9017,7 +8761,7 @@ return [
     'name_en' => 'Alba',
     'sort' => 100,
   ],
-  1127 => 
+  1095 => 
   [
     'id' => 1096,
     'country_id' => 151,
@@ -9025,7 +8769,7 @@ return [
     'name_en' => 'Arad',
     'sort' => 200,
   ],
-  1128 => 
+  1096 => 
   [
     'id' => 1097,
     'country_id' => 151,
@@ -9033,7 +8777,7 @@ return [
     'name_en' => 'Arges',
     'sort' => 300,
   ],
-  1129 => 
+  1097 => 
   [
     'id' => 1098,
     'country_id' => 151,
@@ -9041,7 +8785,7 @@ return [
     'name_en' => 'Bacau',
     'sort' => 400,
   ],
-  1130 => 
+  1098 => 
   [
     'id' => 1099,
     'country_id' => 151,
@@ -9049,7 +8793,7 @@ return [
     'name_en' => 'Bihor',
     'sort' => 500,
   ],
-  1131 => 
+  1099 => 
   [
     'id' => 1100,
     'country_id' => 151,
@@ -9057,7 +8801,7 @@ return [
     'name_en' => 'Bistrita-Nasaud',
     'sort' => 600,
   ],
-  1132 => 
+  1100 => 
   [
     'id' => 1101,
     'country_id' => 151,
@@ -9065,7 +8809,7 @@ return [
     'name_en' => 'Botosani',
     'sort' => 700,
   ],
-  1133 => 
+  1101 => 
   [
     'id' => 1102,
     'country_id' => 151,
@@ -9073,7 +8817,7 @@ return [
     'name_en' => 'Braila',
     'sort' => 800,
   ],
-  1134 => 
+  1102 => 
   [
     'id' => 1103,
     'country_id' => 151,
@@ -9081,7 +8825,7 @@ return [
     'name_en' => 'Brasov',
     'sort' => 900,
   ],
-  1135 => 
+  1103 => 
   [
     'id' => 1104,
     'country_id' => 151,
@@ -9089,7 +8833,7 @@ return [
     'name_en' => 'Bucuresti',
     'sort' => 1000,
   ],
-  1136 => 
+  1104 => 
   [
     'id' => 1105,
     'country_id' => 151,
@@ -9097,7 +8841,7 @@ return [
     'name_en' => 'Buzau',
     'sort' => 1100,
   ],
-  1137 => 
+  1105 => 
   [
     'id' => 1106,
     'country_id' => 151,
@@ -9105,7 +8849,7 @@ return [
     'name_en' => 'Calarasi',
     'sort' => 1200,
   ],
-  1138 => 
+  1106 => 
   [
     'id' => 1107,
     'country_id' => 151,
@@ -9113,7 +8857,7 @@ return [
     'name_en' => 'Caras-Severin',
     'sort' => 1300,
   ],
-  1139 => 
+  1107 => 
   [
     'id' => 1108,
     'country_id' => 151,
@@ -9121,7 +8865,7 @@ return [
     'name_en' => 'Cluj',
     'sort' => 1400,
   ],
-  1140 => 
+  1108 => 
   [
     'id' => 1109,
     'country_id' => 151,
@@ -9129,7 +8873,7 @@ return [
     'name_en' => 'Constanta',
     'sort' => 1500,
   ],
-  1141 => 
+  1109 => 
   [
     'id' => 1110,
     'country_id' => 151,
@@ -9137,7 +8881,7 @@ return [
     'name_en' => 'Covasna',
     'sort' => 1600,
   ],
-  1142 => 
+  1110 => 
   [
     'id' => 1111,
     'country_id' => 151,
@@ -9145,7 +8889,7 @@ return [
     'name_en' => 'Dambovita',
     'sort' => 1700,
   ],
-  1143 => 
+  1111 => 
   [
     'id' => 1112,
     'country_id' => 151,
@@ -9153,7 +8897,7 @@ return [
     'name_en' => 'Dolj',
     'sort' => 1800,
   ],
-  1144 => 
+  1112 => 
   [
     'id' => 1113,
     'country_id' => 151,
@@ -9161,7 +8905,7 @@ return [
     'name_en' => 'Galati',
     'sort' => 1900,
   ],
-  1145 => 
+  1113 => 
   [
     'id' => 1114,
     'country_id' => 151,
@@ -9169,7 +8913,7 @@ return [
     'name_en' => 'Giurgiu',
     'sort' => 2000,
   ],
-  1146 => 
+  1114 => 
   [
     'id' => 1115,
     'country_id' => 151,
@@ -9177,7 +8921,7 @@ return [
     'name_en' => 'Gorj',
     'sort' => 2100,
   ],
-  1147 => 
+  1115 => 
   [
     'id' => 1116,
     'country_id' => 151,
@@ -9185,7 +8929,7 @@ return [
     'name_en' => 'Harghita',
     'sort' => 2200,
   ],
-  1148 => 
+  1116 => 
   [
     'id' => 1117,
     'country_id' => 151,
@@ -9193,7 +8937,7 @@ return [
     'name_en' => 'Hunedoara',
     'sort' => 2300,
   ],
-  1149 => 
+  1117 => 
   [
     'id' => 1118,
     'country_id' => 151,
@@ -9201,7 +8945,7 @@ return [
     'name_en' => 'Ialomita',
     'sort' => 2400,
   ],
-  1150 => 
+  1118 => 
   [
     'id' => 1119,
     'country_id' => 151,
@@ -9209,7 +8953,7 @@ return [
     'name_en' => 'Iasi',
     'sort' => 2500,
   ],
-  1151 => 
+  1119 => 
   [
     'id' => 1120,
     'country_id' => 151,
@@ -9217,7 +8961,7 @@ return [
     'name_en' => 'Ilfov',
     'sort' => 2600,
   ],
-  1152 => 
+  1120 => 
   [
     'id' => 1121,
     'country_id' => 151,
@@ -9225,7 +8969,7 @@ return [
     'name_en' => 'Maramures',
     'sort' => 2700,
   ],
-  1153 => 
+  1121 => 
   [
     'id' => 1122,
     'country_id' => 151,
@@ -9233,7 +8977,7 @@ return [
     'name_en' => 'Mehedinti',
     'sort' => 2800,
   ],
-  1154 => 
+  1122 => 
   [
     'id' => 1123,
     'country_id' => 151,
@@ -9241,7 +8985,7 @@ return [
     'name_en' => 'Mures',
     'sort' => 2900,
   ],
-  1155 => 
+  1123 => 
   [
     'id' => 1124,
     'country_id' => 151,
@@ -9249,7 +8993,7 @@ return [
     'name_en' => 'Neamt',
     'sort' => 3000,
   ],
-  1156 => 
+  1124 => 
   [
     'id' => 1125,
     'country_id' => 151,
@@ -9257,7 +9001,7 @@ return [
     'name_en' => 'Olt',
     'sort' => 3100,
   ],
-  1157 => 
+  1125 => 
   [
     'id' => 1126,
     'country_id' => 151,
@@ -9265,7 +9009,7 @@ return [
     'name_en' => 'Prahova',
     'sort' => 3200,
   ],
-  1158 => 
+  1126 => 
   [
     'id' => 1127,
     'country_id' => 151,
@@ -9273,7 +9017,7 @@ return [
     'name_en' => 'Salaj',
     'sort' => 3300,
   ],
-  1159 => 
+  1127 => 
   [
     'id' => 1128,
     'country_id' => 151,
@@ -9281,7 +9025,7 @@ return [
     'name_en' => 'Satu Mare',
     'sort' => 3400,
   ],
-  1160 => 
+  1128 => 
   [
     'id' => 1129,
     'country_id' => 151,
@@ -9289,7 +9033,7 @@ return [
     'name_en' => 'Sibiu',
     'sort' => 3500,
   ],
-  1161 => 
+  1129 => 
   [
     'id' => 1130,
     'country_id' => 151,
@@ -9297,7 +9041,7 @@ return [
     'name_en' => 'Suceava',
     'sort' => 3600,
   ],
-  1162 => 
+  1130 => 
   [
     'id' => 1131,
     'country_id' => 151,
@@ -9305,7 +9049,7 @@ return [
     'name_en' => 'Teleorman',
     'sort' => 3700,
   ],
-  1163 => 
+  1131 => 
   [
     'id' => 1132,
     'country_id' => 151,
@@ -9313,7 +9057,7 @@ return [
     'name_en' => 'Timis',
     'sort' => 3800,
   ],
-  1164 => 
+  1132 => 
   [
     'id' => 1133,
     'country_id' => 151,
@@ -9321,7 +9065,7 @@ return [
     'name_en' => 'Tulcea',
     'sort' => 3900,
   ],
-  1165 => 
+  1133 => 
   [
     'id' => 1134,
     'country_id' => 151,
@@ -9329,7 +9073,7 @@ return [
     'name_en' => 'Valcea',
     'sort' => 4000,
   ],
-  1166 => 
+  1134 => 
   [
     'id' => 1135,
     'country_id' => 151,
@@ -9337,7 +9081,7 @@ return [
     'name_en' => 'Vaslui',
     'sort' => 4100,
   ],
-  1167 => 
+  1135 => 
   [
     'id' => 1136,
     'country_id' => 151,
@@ -9345,7 +9089,7 @@ return [
     'name_en' => 'Vrancea',
     'sort' => 4200,
   ],
-  1168 => 
+  1136 => 
   [
     'id' => 1137,
     'country_id' => 152,
@@ -9353,7 +9097,7 @@ return [
     'name_en' => 'Ahuachapan',
     'sort' => 100,
   ],
-  1169 => 
+  1137 => 
   [
     'id' => 1138,
     'country_id' => 152,
@@ -9361,7 +9105,7 @@ return [
     'name_en' => 'La Libertad',
     'sort' => 200,
   ],
-  1170 => 
+  1138 => 
   [
     'id' => 1139,
     'country_id' => 152,
@@ -9369,7 +9113,7 @@ return [
     'name_en' => 'La Paz',
     'sort' => 300,
   ],
-  1171 => 
+  1139 => 
   [
     'id' => 1140,
     'country_id' => 152,
@@ -9377,7 +9121,7 @@ return [
     'name_en' => 'La Union',
     'sort' => 400,
   ],
-  1172 => 
+  1140 => 
   [
     'id' => 1141,
     'country_id' => 152,
@@ -9385,7 +9129,7 @@ return [
     'name_en' => 'San Miguel',
     'sort' => 500,
   ],
-  1173 => 
+  1141 => 
   [
     'id' => 1142,
     'country_id' => 152,
@@ -9393,7 +9137,7 @@ return [
     'name_en' => 'San Salvador',
     'sort' => 600,
   ],
-  1174 => 
+  1142 => 
   [
     'id' => 1143,
     'country_id' => 153,
@@ -9401,7 +9145,7 @@ return [
     'name_en' => 'Samoa',
     'sort' => 100,
   ],
-  1175 => 
+  1143 => 
   [
     'id' => 1144,
     'country_id' => 154,
@@ -9409,7 +9153,7 @@ return [
     'name_en' => 'Acquaviva',
     'sort' => 100,
   ],
-  1176 => 
+  1144 => 
   [
     'id' => 1145,
     'country_id' => 154,
@@ -9417,7 +9161,7 @@ return [
     'name_en' => 'Chiesanuova',
     'sort' => 200,
   ],
-  1177 => 
+  1145 => 
   [
     'id' => 1146,
     'country_id' => 154,
@@ -9425,7 +9169,7 @@ return [
     'name_en' => 'Serravalle',
     'sort' => 300,
   ],
-  1178 => 
+  1146 => 
   [
     'id' => 1147,
     'country_id' => 155,
@@ -9433,7 +9177,7 @@ return [
     'name_en' => 'San Tome',
     'sort' => 100,
   ],
-  1179 => 
+  1147 => 
   [
     'id' => 1148,
     'country_id' => 156,
@@ -9441,7 +9185,7 @@ return [
     'name_en' => 'Saudi Arabia',
     'sort' => 100,
   ],
-  1180 => 
+  1148 => 
   [
     'id' => 1149,
     'country_id' => 157,
@@ -9449,7 +9193,7 @@ return [
     'name_en' => 'Swaziland',
     'sort' => 100,
   ],
-  1181 => 
+  1149 => 
   [
     'id' => 1150,
     'country_id' => 158,
@@ -9457,7 +9201,7 @@ return [
     'name_en' => 'Castries',
     'sort' => 100,
   ],
-  1182 => 
+  1150 => 
   [
     'id' => 1151,
     'country_id' => 159,
@@ -9465,7 +9209,7 @@ return [
     'name_en' => 'Jamestown',
     'sort' => 100,
   ],
-  1183 => 
+  1151 => 
   [
     'id' => 1152,
     'country_id' => 160,
@@ -9473,7 +9217,7 @@ return [
     'name_en' => 'Korea',
     'sort' => 100,
   ],
-  1184 => 
+  1152 => 
   [
     'id' => 1153,
     'country_id' => 161,
@@ -9481,7 +9225,7 @@ return [
     'name_en' => 'Seychelles',
     'sort' => 100,
   ],
-  1185 => 
+  1153 => 
   [
     'id' => 1154,
     'country_id' => 162,
@@ -9489,7 +9233,7 @@ return [
     'name_en' => 'Saint Pierre',
     'sort' => 100,
   ],
-  1186 => 
+  1154 => 
   [
     'id' => 1155,
     'country_id' => 163,
@@ -9497,7 +9241,7 @@ return [
     'name_en' => 'Senegal',
     'sort' => 100,
   ],
-  1187 => 
+  1155 => 
   [
     'id' => 1156,
     'country_id' => 164,
@@ -9505,7 +9249,7 @@ return [
     'name_en' => 'Basseterre',
     'sort' => 100,
   ],
-  1188 => 
+  1156 => 
   [
     'id' => 1157,
     'country_id' => 165,
@@ -9513,7 +9257,7 @@ return [
     'name_en' => 'Kingstown',
     'sort' => 100,
   ],
-  1189 => 
+  1157 => 
   [
     'id' => 1158,
     'country_id' => 166,
@@ -9521,23 +9265,15 @@ return [
     'name_en' => 'Vojvodina',
     'sort' => 100,
   ],
-  1190 => 
+  1158 => 
   [
     'id' => 1159,
     'country_id' => 166,
-    'name_ru' => 'Косово и Мето�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Косово и Метохия',
+    'name_en' => 'Kosovo and Metohija',
+    'sort' => 200,
   ],
-  1191 => 
-  [
-    'id' => 'ия',
-    'country_id' => 'Kosovo and Metohija',
-    'name_ru' => 200,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1192 => 
+  1159 => 
   [
     'id' => 1160,
     'country_id' => 166,
@@ -9545,7 +9281,7 @@ return [
     'name_en' => 'Central Serbia',
     'sort' => 300,
   ],
-  1193 => 
+  1160 => 
   [
     'id' => 1161,
     'country_id' => 167,
@@ -9553,7 +9289,7 @@ return [
     'name_en' => 'Singapore',
     'sort' => 100,
   ],
-  1194 => 
+  1161 => 
   [
     'id' => 1162,
     'country_id' => 168,
@@ -9561,7 +9297,7 @@ return [
     'name_en' => 'Damascus',
     'sort' => 100,
   ],
-  1195 => 
+  1162 => 
   [
     'id' => 1163,
     'country_id' => 169,
@@ -9569,7 +9305,7 @@ return [
     'name_en' => 'Bratislava',
     'sort' => 100,
   ],
-  1196 => 
+  1163 => 
   [
     'id' => 1164,
     'country_id' => 169,
@@ -9577,7 +9313,7 @@ return [
     'name_en' => 'Kosice',
     'sort' => 200,
   ],
-  1197 => 
+  1164 => 
   [
     'id' => 1165,
     'country_id' => 169,
@@ -9585,7 +9321,7 @@ return [
     'name_en' => 'Nitra',
     'sort' => 300,
   ],
-  1198 => 
+  1165 => 
   [
     'id' => 1166,
     'country_id' => 169,
@@ -9593,7 +9329,7 @@ return [
     'name_en' => 'None',
     'sort' => 400,
   ],
-  1199 => 
+  1166 => 
   [
     'id' => 1167,
     'country_id' => 169,
@@ -9601,7 +9337,7 @@ return [
     'name_en' => 'Presov',
     'sort' => 500,
   ],
-  1200 => 
+  1167 => 
   [
     'id' => 1168,
     'country_id' => 169,
@@ -9609,7 +9345,7 @@ return [
     'name_en' => 'Trencin',
     'sort' => 600,
   ],
-  1201 => 
+  1168 => 
   [
     'id' => 1169,
     'country_id' => 169,
@@ -9617,7 +9353,7 @@ return [
     'name_en' => 'Trnava',
     'sort' => 700,
   ],
-  1202 => 
+  1169 => 
   [
     'id' => 1170,
     'country_id' => 170,
@@ -9625,7 +9361,7 @@ return [
     'name_en' => 'Bohinj',
     'sort' => 100,
   ],
-  1203 => 
+  1170 => 
   [
     'id' => 1171,
     'country_id' => 170,
@@ -9633,7 +9369,7 @@ return [
     'name_en' => 'Brezovica',
     'sort' => 200,
   ],
-  1204 => 
+  1171 => 
   [
     'id' => 1172,
     'country_id' => 170,
@@ -9641,7 +9377,7 @@ return [
     'name_en' => 'None',
     'sort' => 300,
   ],
-  1205 => 
+  1172 => 
   [
     'id' => 1173,
     'country_id' => 171,
@@ -9649,7 +9385,7 @@ return [
     'name_en' => 'Solomon Islands',
     'sort' => 100,
   ],
-  1206 => 
+  1173 => 
   [
     'id' => 1174,
     'country_id' => 172,
@@ -9657,7 +9393,7 @@ return [
     'name_en' => 'Mogadishu',
     'sort' => 100,
   ],
-  1207 => 
+  1174 => 
   [
     'id' => 1175,
     'country_id' => 173,
@@ -9665,7 +9401,7 @@ return [
     'name_en' => 'Sudan',
     'sort' => 100,
   ],
-  1208 => 
+  1175 => 
   [
     'id' => 1176,
     'country_id' => 174,
@@ -9673,7 +9409,7 @@ return [
     'name_en' => 'Paramaribo',
     'sort' => 100,
   ],
-  1209 => 
+  1176 => 
   [
     'id' => 1177,
     'country_id' => 175,
@@ -9681,7 +9417,7 @@ return [
     'name_en' => 'Alabama',
     'sort' => 100,
   ],
-  1210 => 
+  1177 => 
   [
     'id' => 1178,
     'country_id' => 175,
@@ -9689,7 +9425,7 @@ return [
     'name_en' => 'Alaska',
     'sort' => 200,
   ],
-  1211 => 
+  1178 => 
   [
     'id' => 1179,
     'country_id' => 175,
@@ -9697,7 +9433,7 @@ return [
     'name_en' => 'American Samoa',
     'sort' => 300,
   ],
-  1212 => 
+  1179 => 
   [
     'id' => 1180,
     'country_id' => 175,
@@ -9705,7 +9441,7 @@ return [
     'name_en' => 'Arizona',
     'sort' => 400,
   ],
-  1213 => 
+  1180 => 
   [
     'id' => 1181,
     'country_id' => 175,
@@ -9713,7 +9449,7 @@ return [
     'name_en' => 'Arkansas',
     'sort' => 500,
   ],
-  1214 => 
+  1181 => 
   [
     'id' => 1182,
     'country_id' => 175,
@@ -9721,7 +9457,7 @@ return [
     'name_en' => 'California',
     'sort' => 600,
   ],
-  1215 => 
+  1182 => 
   [
     'id' => 1183,
     'country_id' => 175,
@@ -9729,7 +9465,7 @@ return [
     'name_en' => 'Colorado',
     'sort' => 700,
   ],
-  1216 => 
+  1183 => 
   [
     'id' => 1184,
     'country_id' => 175,
@@ -9737,7 +9473,7 @@ return [
     'name_en' => 'Connecticut',
     'sort' => 800,
   ],
-  1217 => 
+  1184 => 
   [
     'id' => 1185,
     'country_id' => 175,
@@ -9745,7 +9481,7 @@ return [
     'name_en' => 'Delaware',
     'sort' => 900,
   ],
-  1218 => 
+  1185 => 
   [
     'id' => 1186,
     'country_id' => 175,
@@ -9753,7 +9489,7 @@ return [
     'name_en' => 'District of Columbia',
     'sort' => 1000,
   ],
-  1219 => 
+  1186 => 
   [
     'id' => 1187,
     'country_id' => 175,
@@ -9761,7 +9497,7 @@ return [
     'name_en' => 'Florida',
     'sort' => 1100,
   ],
-  1220 => 
+  1187 => 
   [
     'id' => 1188,
     'country_id' => 175,
@@ -9769,7 +9505,7 @@ return [
     'name_en' => 'Georgia',
     'sort' => 1200,
   ],
-  1221 => 
+  1188 => 
   [
     'id' => 1189,
     'country_id' => 175,
@@ -9777,7 +9513,7 @@ return [
     'name_en' => 'Hawaii',
     'sort' => 1300,
   ],
-  1222 => 
+  1189 => 
   [
     'id' => 1190,
     'country_id' => 175,
@@ -9785,7 +9521,7 @@ return [
     'name_en' => 'Idaho',
     'sort' => 1400,
   ],
-  1223 => 
+  1190 => 
   [
     'id' => 1191,
     'country_id' => 175,
@@ -9793,7 +9529,7 @@ return [
     'name_en' => 'Illinois',
     'sort' => 1500,
   ],
-  1224 => 
+  1191 => 
   [
     'id' => 1192,
     'country_id' => 175,
@@ -9801,7 +9537,7 @@ return [
     'name_en' => 'Indiana',
     'sort' => 1600,
   ],
-  1225 => 
+  1192 => 
   [
     'id' => 1193,
     'country_id' => 175,
@@ -9809,7 +9545,7 @@ return [
     'name_en' => 'Iowa',
     'sort' => 1700,
   ],
-  1226 => 
+  1193 => 
   [
     'id' => 1194,
     'country_id' => 175,
@@ -9817,7 +9553,7 @@ return [
     'name_en' => 'Kansas',
     'sort' => 1800,
   ],
-  1227 => 
+  1194 => 
   [
     'id' => 1195,
     'country_id' => 175,
@@ -9825,7 +9561,7 @@ return [
     'name_en' => 'Kentucky',
     'sort' => 1900,
   ],
-  1228 => 
+  1195 => 
   [
     'id' => 1196,
     'country_id' => 175,
@@ -9833,7 +9569,7 @@ return [
     'name_en' => 'Louisiana',
     'sort' => 2000,
   ],
-  1229 => 
+  1196 => 
   [
     'id' => 1197,
     'country_id' => 175,
@@ -9841,7 +9577,7 @@ return [
     'name_en' => 'Maine',
     'sort' => 2100,
   ],
-  1230 => 
+  1197 => 
   [
     'id' => 1198,
     'country_id' => 175,
@@ -9849,7 +9585,7 @@ return [
     'name_en' => 'Maryland',
     'sort' => 2200,
   ],
-  1231 => 
+  1198 => 
   [
     'id' => 1199,
     'country_id' => 175,
@@ -9857,7 +9593,7 @@ return [
     'name_en' => 'Massachusetts',
     'sort' => 2300,
   ],
-  1232 => 
+  1199 => 
   [
     'id' => 1200,
     'country_id' => 175,
@@ -9865,7 +9601,7 @@ return [
     'name_en' => 'Michigan',
     'sort' => 2400,
   ],
-  1233 => 
+  1200 => 
   [
     'id' => 1201,
     'country_id' => 175,
@@ -9873,7 +9609,7 @@ return [
     'name_en' => 'Minnesota',
     'sort' => 2500,
   ],
-  1234 => 
+  1201 => 
   [
     'id' => 1202,
     'country_id' => 175,
@@ -9881,7 +9617,7 @@ return [
     'name_en' => 'Mississippi',
     'sort' => 2600,
   ],
-  1235 => 
+  1202 => 
   [
     'id' => 1203,
     'country_id' => 175,
@@ -9889,7 +9625,7 @@ return [
     'name_en' => 'Missouri',
     'sort' => 2700,
   ],
-  1236 => 
+  1203 => 
   [
     'id' => 1204,
     'country_id' => 175,
@@ -9897,7 +9633,7 @@ return [
     'name_en' => 'Montana',
     'sort' => 2800,
   ],
-  1237 => 
+  1204 => 
   [
     'id' => 1205,
     'country_id' => 175,
@@ -9905,7 +9641,7 @@ return [
     'name_en' => 'Nebraska',
     'sort' => 2900,
   ],
-  1238 => 
+  1205 => 
   [
     'id' => 1206,
     'country_id' => 175,
@@ -9913,7 +9649,7 @@ return [
     'name_en' => 'Nevada',
     'sort' => 3000,
   ],
-  1239 => 
+  1206 => 
   [
     'id' => 1207,
     'country_id' => 175,
@@ -9921,7 +9657,7 @@ return [
     'name_en' => 'New Hampshire',
     'sort' => 3100,
   ],
-  1240 => 
+  1207 => 
   [
     'id' => 1208,
     'country_id' => 175,
@@ -9929,7 +9665,7 @@ return [
     'name_en' => 'New Jersey',
     'sort' => 3200,
   ],
-  1241 => 
+  1208 => 
   [
     'id' => 1209,
     'country_id' => 175,
@@ -9937,7 +9673,7 @@ return [
     'name_en' => 'New Mexico',
     'sort' => 3300,
   ],
-  1242 => 
+  1209 => 
   [
     'id' => 1210,
     'country_id' => 175,
@@ -9945,7 +9681,7 @@ return [
     'name_en' => 'New York',
     'sort' => 3400,
   ],
-  1243 => 
+  1210 => 
   [
     'id' => 1211,
     'country_id' => 175,
@@ -9953,7 +9689,7 @@ return [
     'name_en' => 'North Carolina',
     'sort' => 3500,
   ],
-  1244 => 
+  1211 => 
   [
     'id' => 1212,
     'country_id' => 175,
@@ -9961,7 +9697,7 @@ return [
     'name_en' => 'North Dakota',
     'sort' => 3600,
   ],
-  1245 => 
+  1212 => 
   [
     'id' => 1213,
     'country_id' => 175,
@@ -9969,7 +9705,7 @@ return [
     'name_en' => 'Ohio',
     'sort' => 3700,
   ],
-  1246 => 
+  1213 => 
   [
     'id' => 1214,
     'country_id' => 175,
@@ -9977,7 +9713,7 @@ return [
     'name_en' => 'Oklahoma',
     'sort' => 3800,
   ],
-  1247 => 
+  1214 => 
   [
     'id' => 1215,
     'country_id' => 175,
@@ -9985,7 +9721,7 @@ return [
     'name_en' => 'Oregon',
     'sort' => 3900,
   ],
-  1248 => 
+  1215 => 
   [
     'id' => 1216,
     'country_id' => 175,
@@ -9993,7 +9729,7 @@ return [
     'name_en' => 'Pennsylvania',
     'sort' => 4000,
   ],
-  1249 => 
+  1216 => 
   [
     'id' => 1217,
     'country_id' => 175,
@@ -10001,7 +9737,7 @@ return [
     'name_en' => 'Rhode Island',
     'sort' => 4100,
   ],
-  1250 => 
+  1217 => 
   [
     'id' => 1218,
     'country_id' => 175,
@@ -10009,7 +9745,7 @@ return [
     'name_en' => 'South Carolina',
     'sort' => 4200,
   ],
-  1251 => 
+  1218 => 
   [
     'id' => 1219,
     'country_id' => 175,
@@ -10017,7 +9753,7 @@ return [
     'name_en' => 'South Dakota',
     'sort' => 4300,
   ],
-  1252 => 
+  1219 => 
   [
     'id' => 1220,
     'country_id' => 175,
@@ -10025,7 +9761,7 @@ return [
     'name_en' => 'Tennessee',
     'sort' => 4400,
   ],
-  1253 => 
+  1220 => 
   [
     'id' => 1221,
     'country_id' => 175,
@@ -10033,7 +9769,7 @@ return [
     'name_en' => 'Texas',
     'sort' => 4500,
   ],
-  1254 => 
+  1221 => 
   [
     'id' => 1222,
     'country_id' => 175,
@@ -10041,7 +9777,7 @@ return [
     'name_en' => 'Utah',
     'sort' => 4600,
   ],
-  1255 => 
+  1222 => 
   [
     'id' => 1223,
     'country_id' => 175,
@@ -10049,7 +9785,7 @@ return [
     'name_en' => 'Vermont',
     'sort' => 4700,
   ],
-  1256 => 
+  1223 => 
   [
     'id' => 1224,
     'country_id' => 175,
@@ -10057,7 +9793,7 @@ return [
     'name_en' => 'Virgin Islands',
     'sort' => 4800,
   ],
-  1257 => 
+  1224 => 
   [
     'id' => 1225,
     'country_id' => 175,
@@ -10065,7 +9801,7 @@ return [
     'name_en' => 'Virginia',
     'sort' => 4900,
   ],
-  1258 => 
+  1225 => 
   [
     'id' => 1226,
     'country_id' => 175,
@@ -10073,7 +9809,7 @@ return [
     'name_en' => 'Washington',
     'sort' => 5000,
   ],
-  1259 => 
+  1226 => 
   [
     'id' => 1227,
     'country_id' => 175,
@@ -10081,7 +9817,7 @@ return [
     'name_en' => 'West Virginia',
     'sort' => 5100,
   ],
-  1260 => 
+  1227 => 
   [
     'id' => 1228,
     'country_id' => 175,
@@ -10089,7 +9825,7 @@ return [
     'name_en' => 'Wisconsin',
     'sort' => 5200,
   ],
-  1261 => 
+  1228 => 
   [
     'id' => 1229,
     'country_id' => 175,
@@ -10097,7 +9833,7 @@ return [
     'name_en' => 'Wyoming',
     'sort' => 5300,
   ],
-  1262 => 
+  1229 => 
   [
     'id' => 1230,
     'country_id' => 176,
@@ -10105,31 +9841,15 @@ return [
     'name_en' => 'Freetown',
     'sort' => 100,
   ],
-  1263 => 
+  1230 => 
   [
     'id' => 1231,
     'country_id' => 177,
-    'name_ru' => 'Горно-Бада�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Горно-Бадахшанская обл.',
+    'name_en' => 'Горно-Бадахшанская обл.',
+    'sort' => 100,
   ],
-  1264 => 
-  [
-    'id' => 'шанская обл.',
-    'country_id' => 'Горно-Бада�',
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1265 => 
-  [
-    'id' => 'шанская обл.',
-    'country_id' => 100,
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1266 => 
+  1231 => 
   [
     'id' => 1232,
     'country_id' => 177,
@@ -10137,7 +9857,7 @@ return [
     'name_en' => 'Кулябская обл.',
     'sort' => 200,
   ],
-  1267 => 
+  1232 => 
   [
     'id' => 1233,
     'country_id' => 177,
@@ -10145,7 +9865,7 @@ return [
     'name_en' => 'Курган-Тюбинская обл.',
     'sort' => 300,
   ],
-  1268 => 
+  1233 => 
   [
     'id' => 1234,
     'country_id' => 177,
@@ -10153,7 +9873,7 @@ return [
     'name_en' => 'Согдийская обл.',
     'sort' => 400,
   ],
-  1269 => 
+  1234 => 
   [
     'id' => 1235,
     'country_id' => 177,
@@ -10161,7 +9881,7 @@ return [
     'name_en' => 'Таджикистан',
     'sort' => 500,
   ],
-  1270 => 
+  1235 => 
   [
     'id' => 1236,
     'country_id' => 178,
@@ -10169,7 +9889,7 @@ return [
     'name_en' => 'Сураттани',
     'sort' => 100,
   ],
-  1271 => 
+  1236 => 
   [
     'id' => 1237,
     'country_id' => 178,
@@ -10177,7 +9897,7 @@ return [
     'name_en' => 'Thailand',
     'sort' => 200,
   ],
-  1272 => 
+  1237 => 
   [
     'id' => 1238,
     'country_id' => 178,
@@ -10185,7 +9905,7 @@ return [
     'name_en' => 'Чон Бури',
     'sort' => 300,
   ],
-  1273 => 
+  1238 => 
   [
     'id' => 1239,
     'country_id' => 179,
@@ -10193,7 +9913,7 @@ return [
     'name_en' => 'Taiwan',
     'sort' => 100,
   ],
-  1274 => 
+  1239 => 
   [
     'id' => 1240,
     'country_id' => 180,
@@ -10201,7 +9921,7 @@ return [
     'name_en' => 'Tanzania',
     'sort' => 100,
   ],
-  1275 => 
+  1240 => 
   [
     'id' => 1241,
     'country_id' => 181,
@@ -10209,7 +9929,7 @@ return [
     'name_en' => 'Togo',
     'sort' => 100,
   ],
-  1276 => 
+  1241 => 
   [
     'id' => 1242,
     'country_id' => 182,
@@ -10217,7 +9937,7 @@ return [
     'name_en' => 'Fakaofo',
     'sort' => 100,
   ],
-  1277 => 
+  1242 => 
   [
     'id' => 1243,
     'country_id' => 183,
@@ -10225,7 +9945,7 @@ return [
     'name_en' => 'Tonga',
     'sort' => 100,
   ],
-  1278 => 
+  1243 => 
   [
     'id' => 1244,
     'country_id' => 184,
@@ -10233,7 +9953,7 @@ return [
     'name_en' => 'Port of Spain',
     'sort' => 100,
   ],
-  1279 => 
+  1244 => 
   [
     'id' => 1245,
     'country_id' => 185,
@@ -10241,7 +9961,7 @@ return [
     'name_en' => 'Tuvalu',
     'sort' => 100,
   ],
-  1280 => 
+  1245 => 
   [
     'id' => 1246,
     'country_id' => 186,
@@ -10249,31 +9969,15 @@ return [
     'name_en' => 'Tunisia',
     'sort' => 100,
   ],
-  1281 => 
+  1246 => 
   [
     'id' => 1247,
     'country_id' => 187,
-    'name_ru' => 'Аш�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Ашхабадская обл.',
+    'name_en' => 'Ашхабадская обл.',
+    'sort' => 100,
   ],
-  1282 => 
-  [
-    'id' => 'абадская обл.',
-    'country_id' => 'Аш�',
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1283 => 
-  [
-    'id' => 'абадская обл.',
-    'country_id' => 100,
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1284 => 
+  1247 => 
   [
     'id' => 1248,
     'country_id' => 187,
@@ -10281,7 +9985,7 @@ return [
     'name_en' => 'Красноводская обл.',
     'sort' => 200,
   ],
-  1285 => 
+  1248 => 
   [
     'id' => 1249,
     'country_id' => 187,
@@ -10289,7 +9993,7 @@ return [
     'name_en' => 'Марыйская обл.',
     'sort' => 300,
   ],
-  1286 => 
+  1249 => 
   [
     'id' => 1250,
     'country_id' => 187,
@@ -10297,7 +10001,7 @@ return [
     'name_en' => 'Ташаузская обл.',
     'sort' => 400,
   ],
-  1287 => 
+  1250 => 
   [
     'id' => 1251,
     'country_id' => 187,
@@ -10305,7 +10009,7 @@ return [
     'name_en' => 'Чарджоуская обл.',
     'sort' => 500,
   ],
-  1288 => 
+  1251 => 
   [
     'id' => 1252,
     'country_id' => 188,
@@ -10313,7 +10017,7 @@ return [
     'name_en' => 'Grand Turk',
     'sort' => 100,
   ],
-  1289 => 
+  1252 => 
   [
     'id' => 1253,
     'country_id' => 189,
@@ -10321,7 +10025,7 @@ return [
     'name_en' => 'Bartin',
     'sort' => 100,
   ],
-  1290 => 
+  1253 => 
   [
     'id' => 1254,
     'country_id' => 189,
@@ -10329,7 +10033,7 @@ return [
     'name_en' => 'Bayburt',
     'sort' => 200,
   ],
-  1291 => 
+  1254 => 
   [
     'id' => 1255,
     'country_id' => 189,
@@ -10337,7 +10041,7 @@ return [
     'name_en' => 'Karabuk',
     'sort' => 300,
   ],
-  1292 => 
+  1255 => 
   [
     'id' => 1256,
     'country_id' => 189,
@@ -10345,7 +10049,7 @@ return [
     'name_en' => 'Adana',
     'sort' => 400,
   ],
-  1293 => 
+  1256 => 
   [
     'id' => 1257,
     'country_id' => 189,
@@ -10353,7 +10057,7 @@ return [
     'name_en' => 'Aydin',
     'sort' => 500,
   ],
-  1294 => 
+  1257 => 
   [
     'id' => 1258,
     'country_id' => 189,
@@ -10361,7 +10065,7 @@ return [
     'name_en' => 'Amasya',
     'sort' => 600,
   ],
-  1295 => 
+  1258 => 
   [
     'id' => 1259,
     'country_id' => 189,
@@ -10369,7 +10073,7 @@ return [
     'name_en' => 'Ankara',
     'sort' => 700,
   ],
-  1296 => 
+  1259 => 
   [
     'id' => 1260,
     'country_id' => 189,
@@ -10377,7 +10081,7 @@ return [
     'name_en' => 'Antalya',
     'sort' => 800,
   ],
-  1297 => 
+  1260 => 
   [
     'id' => 1261,
     'country_id' => 189,
@@ -10385,7 +10089,7 @@ return [
     'name_en' => 'Artvin',
     'sort' => 900,
   ],
-  1298 => 
+  1261 => 
   [
     'id' => 1262,
     'country_id' => 189,
@@ -10393,7 +10097,7 @@ return [
     'name_en' => 'Afion',
     'sort' => 1000,
   ],
-  1299 => 
+  1262 => 
   [
     'id' => 1263,
     'country_id' => 189,
@@ -10401,7 +10105,7 @@ return [
     'name_en' => 'Balikesir',
     'sort' => 1100,
   ],
-  1300 => 
+  1263 => 
   [
     'id' => 1264,
     'country_id' => 189,
@@ -10409,7 +10113,7 @@ return [
     'name_en' => 'Bilecik',
     'sort' => 1200,
   ],
-  1301 => 
+  1264 => 
   [
     'id' => 1265,
     'country_id' => 189,
@@ -10417,7 +10121,7 @@ return [
     'name_en' => 'Bursa',
     'sort' => 1300,
   ],
-  1302 => 
+  1265 => 
   [
     'id' => 1266,
     'country_id' => 189,
@@ -10425,7 +10129,7 @@ return [
     'name_en' => 'Gaziantep',
     'sort' => 1400,
   ],
-  1303 => 
+  1266 => 
   [
     'id' => 1267,
     'country_id' => 189,
@@ -10433,7 +10137,7 @@ return [
     'name_en' => 'Denizli',
     'sort' => 1500,
   ],
-  1304 => 
+  1267 => 
   [
     'id' => 1268,
     'country_id' => 189,
@@ -10441,7 +10145,7 @@ return [
     'name_en' => 'Izmir',
     'sort' => 1600,
   ],
-  1305 => 
+  1268 => 
   [
     'id' => 1269,
     'country_id' => 189,
@@ -10449,7 +10153,7 @@ return [
     'name_en' => 'Isparta',
     'sort' => 1700,
   ],
-  1306 => 
+  1269 => 
   [
     'id' => 1270,
     'country_id' => 189,
@@ -10457,7 +10161,7 @@ return [
     'name_en' => 'Icel',
     'sort' => 1800,
   ],
-  1307 => 
+  1270 => 
   [
     'id' => 1271,
     'country_id' => 189,
@@ -10465,7 +10169,7 @@ return [
     'name_en' => 'Kayseri',
     'sort' => 1900,
   ],
-  1308 => 
+  1271 => 
   [
     'id' => 1272,
     'country_id' => 189,
@@ -10473,7 +10177,7 @@ return [
     'name_en' => 'Kars',
     'sort' => 2000,
   ],
-  1309 => 
+  1272 => 
   [
     'id' => 1273,
     'country_id' => 189,
@@ -10481,7 +10185,7 @@ return [
     'name_en' => 'Kodjaeli',
     'sort' => 2100,
   ],
-  1310 => 
+  1273 => 
   [
     'id' => 1274,
     'country_id' => 189,
@@ -10489,7 +10193,7 @@ return [
     'name_en' => 'Konya',
     'sort' => 2200,
   ],
-  1311 => 
+  1274 => 
   [
     'id' => 1275,
     'country_id' => 189,
@@ -10497,23 +10201,15 @@ return [
     'name_en' => 'Kirklareli',
     'sort' => 2300,
   ],
-  1312 => 
+  1275 => 
   [
     'id' => 1276,
     'country_id' => 189,
-    'name_ru' => 'Кюта�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Кютахья',
+    'name_en' => 'Kutahya',
+    'sort' => 2400,
   ],
-  1313 => 
-  [
-    'id' => 'ья',
-    'country_id' => 'Kutahya',
-    'name_ru' => 2400,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1314 => 
+  1276 => 
   [
     'id' => 1277,
     'country_id' => 189,
@@ -10521,7 +10217,7 @@ return [
     'name_en' => 'Malatya',
     'sort' => 2500,
   ],
-  1315 => 
+  1277 => 
   [
     'id' => 1278,
     'country_id' => 189,
@@ -10529,7 +10225,7 @@ return [
     'name_en' => 'Manisa',
     'sort' => 2600,
   ],
-  1316 => 
+  1278 => 
   [
     'id' => 1279,
     'country_id' => 189,
@@ -10537,7 +10233,7 @@ return [
     'name_en' => 'Sakarya',
     'sort' => 2700,
   ],
-  1317 => 
+  1279 => 
   [
     'id' => 1280,
     'country_id' => 189,
@@ -10545,7 +10241,7 @@ return [
     'name_en' => 'Samsun',
     'sort' => 2800,
   ],
-  1318 => 
+  1280 => 
   [
     'id' => 1281,
     'country_id' => 189,
@@ -10553,7 +10249,7 @@ return [
     'name_en' => 'Sivas',
     'sort' => 2900,
   ],
-  1319 => 
+  1281 => 
   [
     'id' => 1282,
     'country_id' => 189,
@@ -10561,7 +10257,7 @@ return [
     'name_en' => 'Istanbul',
     'sort' => 3000,
   ],
-  1320 => 
+  1282 => 
   [
     'id' => 1283,
     'country_id' => 189,
@@ -10569,7 +10265,7 @@ return [
     'name_en' => 'Corum',
     'sort' => 3100,
   ],
-  1321 => 
+  1283 => 
   [
     'id' => 1284,
     'country_id' => 189,
@@ -10577,7 +10273,7 @@ return [
     'name_en' => 'Edirne',
     'sort' => 3200,
   ],
-  1322 => 
+  1284 => 
   [
     'id' => 1285,
     'country_id' => 189,
@@ -10585,7 +10281,7 @@ return [
     'name_en' => 'Elazig',
     'sort' => 3300,
   ],
-  1323 => 
+  1285 => 
   [
     'id' => 1286,
     'country_id' => 189,
@@ -10593,7 +10289,7 @@ return [
     'name_en' => 'Erzincan',
     'sort' => 3400,
   ],
-  1324 => 
+  1286 => 
   [
     'id' => 1287,
     'country_id' => 189,
@@ -10601,23 +10297,15 @@ return [
     'name_en' => 'Erzurum',
     'sort' => 3500,
   ],
-  1325 => 
+  1287 => 
   [
     'id' => 1288,
     'country_id' => 189,
-    'name_ru' => 'Эскише�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Эскишехир',
+    'name_en' => 'Eskisehir',
+    'sort' => 3600,
   ],
-  1326 => 
-  [
-    'id' => 'ир',
-    'country_id' => 'Eskisehir',
-    'name_ru' => 3600,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1327 => 
+  1288 => 
   [
     'id' => 1289,
     'country_id' => 190,
@@ -10625,7 +10313,7 @@ return [
     'name_en' => 'Jinja',
     'sort' => 100,
   ],
-  1328 => 
+  1289 => 
   [
     'id' => 1290,
     'country_id' => 190,
@@ -10633,7 +10321,7 @@ return [
     'name_en' => 'Kampala',
     'sort' => 200,
   ],
-  1329 => 
+  1290 => 
   [
     'id' => 1291,
     'country_id' => 191,
@@ -10641,31 +10329,15 @@ return [
     'name_en' => 'Андижанская обл.',
     'sort' => 100,
   ],
-  1330 => 
+  1291 => 
   [
     'id' => 1292,
     'country_id' => 191,
-    'name_ru' => 'Бу�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Бухарская обл.',
+    'name_en' => 'Бухарская обл.',
+    'sort' => 200,
   ],
-  1331 => 
-  [
-    'id' => 'арская обл.',
-    'country_id' => 'Бу�',
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1332 => 
-  [
-    'id' => 'арская обл.',
-    'country_id' => 200,
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1333 => 
+  1292 => 
   [
     'id' => 1293,
     'country_id' => 191,
@@ -10673,7 +10345,7 @@ return [
     'name_en' => 'Джизакская обл.',
     'sort' => 300,
   ],
-  1334 => 
+  1293 => 
   [
     'id' => 1294,
     'country_id' => 191,
@@ -10681,7 +10353,7 @@ return [
     'name_en' => 'Каракалпакия',
     'sort' => 400,
   ],
-  1335 => 
+  1294 => 
   [
     'id' => 1295,
     'country_id' => 191,
@@ -10689,7 +10361,7 @@ return [
     'name_en' => 'Кашкадарьинская обл.',
     'sort' => 500,
   ],
-  1336 => 
+  1295 => 
   [
     'id' => 1296,
     'country_id' => 191,
@@ -10697,7 +10369,7 @@ return [
     'name_en' => 'Навоийская обл.',
     'sort' => 600,
   ],
-  1337 => 
+  1296 => 
   [
     'id' => 1297,
     'country_id' => 191,
@@ -10705,7 +10377,7 @@ return [
     'name_en' => 'Наманганская обл.',
     'sort' => 700,
   ],
-  1338 => 
+  1297 => 
   [
     'id' => 1298,
     'country_id' => 191,
@@ -10713,31 +10385,15 @@ return [
     'name_en' => 'Самаркандская обл.',
     'sort' => 800,
   ],
-  1339 => 
+  1298 => 
   [
     'id' => 1299,
     'country_id' => 191,
-    'name_ru' => 'Сур�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Сурхандарьинская обл.',
+    'name_en' => 'Сурхандарьинская обл.',
+    'sort' => 900,
   ],
-  1340 => 
-  [
-    'id' => 'андарьинская обл.',
-    'country_id' => 'Сур�',
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1341 => 
-  [
-    'id' => 'андарьинская обл.',
-    'country_id' => 900,
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1342 => 
+  1299 => 
   [
     'id' => 1300,
     'country_id' => 191,
@@ -10745,7 +10401,7 @@ return [
     'name_en' => 'Сырдарьинская обл.',
     'sort' => 1000,
   ],
-  1343 => 
+  1300 => 
   [
     'id' => 1301,
     'country_id' => 191,
@@ -10753,7 +10409,7 @@ return [
     'name_en' => 'Ташкентская обл.',
     'sort' => 1100,
   ],
-  1344 => 
+  1301 => 
   [
     'id' => 1302,
     'country_id' => 191,
@@ -10761,7 +10417,7 @@ return [
     'name_en' => 'Ферганская обл.',
     'sort' => 1200,
   ],
-  1345 => 
+  1302 => 
   [
     'id' => 1303,
     'country_id' => 191,
@@ -10769,7 +10425,7 @@ return [
     'name_en' => 'Хорезмская обл.',
     'sort' => 1300,
   ],
-  1346 => 
+  1303 => 
   [
     'id' => 1304,
     'country_id' => 192,
@@ -10777,7 +10433,7 @@ return [
     'name_en' => 'Vinnitskaya obl.',
     'sort' => 100,
   ],
-  1347 => 
+  1304 => 
   [
     'id' => 1305,
     'country_id' => 192,
@@ -10785,7 +10441,7 @@ return [
     'name_en' => 'Volynskaya obl.',
     'sort' => 200,
   ],
-  1348 => 
+  1305 => 
   [
     'id' => 1306,
     'country_id' => 192,
@@ -10793,7 +10449,7 @@ return [
     'name_en' => 'Dnepropetrovskaya obl.',
     'sort' => 300,
   ],
-  1349 => 
+  1306 => 
   [
     'id' => 1307,
     'country_id' => 192,
@@ -10801,7 +10457,7 @@ return [
     'name_en' => 'Donetskaya obl.',
     'sort' => 400,
   ],
-  1350 => 
+  1307 => 
   [
     'id' => 1308,
     'country_id' => 192,
@@ -10809,7 +10465,7 @@ return [
     'name_en' => 'Zhitomirskaya obl.',
     'sort' => 500,
   ],
-  1351 => 
+  1308 => 
   [
     'id' => 1309,
     'country_id' => 192,
@@ -10817,7 +10473,7 @@ return [
     'name_en' => 'Zakarpatskaya obl.',
     'sort' => 600,
   ],
-  1352 => 
+  1309 => 
   [
     'id' => 1310,
     'country_id' => 192,
@@ -10825,7 +10481,7 @@ return [
     'name_en' => 'Zaporozhskaya obl.',
     'sort' => 700,
   ],
-  1353 => 
+  1310 => 
   [
     'id' => 1311,
     'country_id' => 192,
@@ -10833,7 +10489,7 @@ return [
     'name_en' => 'Ivano-Frankovskaya obl.',
     'sort' => 800,
   ],
-  1354 => 
+  1311 => 
   [
     'id' => 1312,
     'country_id' => 192,
@@ -10841,7 +10497,7 @@ return [
     'name_en' => 'Kievskaya obl.',
     'sort' => 900,
   ],
-  1355 => 
+  1312 => 
   [
     'id' => 1313,
     'country_id' => 192,
@@ -10849,7 +10505,7 @@ return [
     'name_en' => 'Kirovogradskaya obl.',
     'sort' => 1000,
   ],
-  1356 => 
+  1313 => 
   [
     'id' => 1314,
     'country_id' => 192,
@@ -10857,7 +10513,7 @@ return [
     'name_en' => 'Krymskaya obl.',
     'sort' => 1100,
   ],
-  1357 => 
+  1314 => 
   [
     'id' => 1315,
     'country_id' => 192,
@@ -10865,7 +10521,7 @@ return [
     'name_en' => 'Luganskaya obl.',
     'sort' => 1200,
   ],
-  1358 => 
+  1315 => 
   [
     'id' => 1316,
     'country_id' => 192,
@@ -10873,7 +10529,7 @@ return [
     'name_en' => 'Lvovskaya obl.',
     'sort' => 1300,
   ],
-  1359 => 
+  1316 => 
   [
     'id' => 1317,
     'country_id' => 192,
@@ -10881,7 +10537,7 @@ return [
     'name_en' => 'Nikolaevskaya obl.',
     'sort' => 1400,
   ],
-  1360 => 
+  1317 => 
   [
     'id' => 1318,
     'country_id' => 192,
@@ -10889,7 +10545,7 @@ return [
     'name_en' => 'Odesskaya obl.',
     'sort' => 1500,
   ],
-  1361 => 
+  1318 => 
   [
     'id' => 1319,
     'country_id' => 192,
@@ -10897,7 +10553,7 @@ return [
     'name_en' => 'Poltavskaya obl.',
     'sort' => 1600,
   ],
-  1362 => 
+  1319 => 
   [
     'id' => 1320,
     'country_id' => 192,
@@ -10905,7 +10561,7 @@ return [
     'name_en' => 'Rovenskaya obl.',
     'sort' => 1700,
   ],
-  1363 => 
+  1320 => 
   [
     'id' => 1321,
     'country_id' => 192,
@@ -10913,7 +10569,7 @@ return [
     'name_en' => 'Sumskaya obl.',
     'sort' => 1800,
   ],
-  1364 => 
+  1321 => 
   [
     'id' => 1322,
     'country_id' => 192,
@@ -10921,7 +10577,7 @@ return [
     'name_en' => 'Ternopolskaya obl.',
     'sort' => 1900,
   ],
-  1365 => 
+  1322 => 
   [
     'id' => 1323,
     'country_id' => 192,
@@ -10929,7 +10585,7 @@ return [
     'name_en' => 'Ukraina',
     'sort' => 2000,
   ],
-  1366 => 
+  1323 => 
   [
     'id' => 1324,
     'country_id' => 192,
@@ -10937,7 +10593,7 @@ return [
     'name_en' => 'Harkovskaya obl.',
     'sort' => 2100,
   ],
-  1367 => 
+  1324 => 
   [
     'id' => 1325,
     'country_id' => 192,
@@ -10945,7 +10601,7 @@ return [
     'name_en' => 'Hersonskaya obl.',
     'sort' => 2200,
   ],
-  1368 => 
+  1325 => 
   [
     'id' => 1326,
     'country_id' => 192,
@@ -10953,7 +10609,7 @@ return [
     'name_en' => 'Hmelnitskaya obl.',
     'sort' => 2300,
   ],
-  1369 => 
+  1326 => 
   [
     'id' => 1327,
     'country_id' => 192,
@@ -10961,7 +10617,7 @@ return [
     'name_en' => 'Cherkasskaya obl.',
     'sort' => 2400,
   ],
-  1370 => 
+  1327 => 
   [
     'id' => 1328,
     'country_id' => 192,
@@ -10969,7 +10625,7 @@ return [
     'name_en' => 'Chernigovskaya obl.',
     'sort' => 2500,
   ],
-  1371 => 
+  1328 => 
   [
     'id' => 1329,
     'country_id' => 192,
@@ -10977,7 +10633,7 @@ return [
     'name_en' => 'Chernovitskaya obl.',
     'sort' => 2600,
   ],
-  1372 => 
+  1329 => 
   [
     'id' => 1330,
     'country_id' => 193,
@@ -10985,7 +10641,7 @@ return [
     'name_en' => 'Canelones',
     'sort' => 100,
   ],
-  1373 => 
+  1330 => 
   [
     'id' => 1331,
     'country_id' => 193,
@@ -10993,7 +10649,7 @@ return [
     'name_en' => 'Colonia',
     'sort' => 200,
   ],
-  1374 => 
+  1331 => 
   [
     'id' => 1332,
     'country_id' => 193,
@@ -11001,7 +10657,7 @@ return [
     'name_en' => 'Lavalleja',
     'sort' => 300,
   ],
-  1375 => 
+  1332 => 
   [
     'id' => 1333,
     'country_id' => 193,
@@ -11009,7 +10665,7 @@ return [
     'name_en' => 'Maldonado',
     'sort' => 400,
   ],
-  1376 => 
+  1333 => 
   [
     'id' => 1334,
     'country_id' => 193,
@@ -11017,7 +10673,7 @@ return [
     'name_en' => 'Montevideo',
     'sort' => 500,
   ],
-  1377 => 
+  1334 => 
   [
     'id' => 1335,
     'country_id' => 193,
@@ -11025,7 +10681,7 @@ return [
     'name_en' => 'Paysand',
     'sort' => 600,
   ],
-  1378 => 
+  1335 => 
   [
     'id' => 1336,
     'country_id' => 193,
@@ -11033,7 +10689,7 @@ return [
     'name_en' => 'Rivera',
     'sort' => 700,
   ],
-  1379 => 
+  1336 => 
   [
     'id' => 1337,
     'country_id' => 193,
@@ -11041,7 +10697,7 @@ return [
     'name_en' => 'Ro Negro',
     'sort' => 800,
   ],
-  1380 => 
+  1337 => 
   [
     'id' => 1338,
     'country_id' => 193,
@@ -11049,7 +10705,7 @@ return [
     'name_en' => 'Salto',
     'sort' => 900,
   ],
-  1381 => 
+  1338 => 
   [
     'id' => 1339,
     'country_id' => 193,
@@ -11057,7 +10713,7 @@ return [
     'name_en' => 'Tacuaremb',
     'sort' => 1000,
   ],
-  1382 => 
+  1339 => 
   [
     'id' => 1340,
     'country_id' => 193,
@@ -11065,31 +10721,15 @@ return [
     'name_en' => 'Treinta y Tres',
     'sort' => 1100,
   ],
-  1383 => 
+  1340 => 
   [
     'id' => 1341,
     'country_id' => 194,
-    'name_ru' => 'Торс�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Торсхавн',
+    'name_en' => 'Торсхавн',
+    'sort' => 100,
   ],
-  1384 => 
-  [
-    'id' => 'авн',
-    'country_id' => 'Торс�',
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1385 => 
-  [
-    'id' => 'авн',
-    'country_id' => 100,
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1386 => 
+  1341 => 
   [
     'id' => 1342,
     'country_id' => 195,
@@ -11097,7 +10737,7 @@ return [
     'name_en' => 'Fiji',
     'sort' => 100,
   ],
-  1387 => 
+  1342 => 
   [
     'id' => 1343,
     'country_id' => 196,
@@ -11105,7 +10745,7 @@ return [
     'name_en' => 'Philippines',
     'sort' => 100,
   ],
-  1388 => 
+  1343 => 
   [
     'id' => 1344,
     'country_id' => 197,
@@ -11113,7 +10753,7 @@ return [
     'name_en' => 'Eastern Finland',
     'sort' => 100,
   ],
-  1389 => 
+  1344 => 
   [
     'id' => 1345,
     'country_id' => 197,
@@ -11121,7 +10761,7 @@ return [
     'name_en' => 'Lapland',
     'sort' => 200,
   ],
-  1390 => 
+  1345 => 
   [
     'id' => 1346,
     'country_id' => 197,
@@ -11129,7 +10769,7 @@ return [
     'name_en' => 'None',
     'sort' => 300,
   ],
-  1391 => 
+  1346 => 
   [
     'id' => 1347,
     'country_id' => 197,
@@ -11137,7 +10777,7 @@ return [
     'name_en' => 'Oulu',
     'sort' => 400,
   ],
-  1392 => 
+  1347 => 
   [
     'id' => 1348,
     'country_id' => 197,
@@ -11145,7 +10785,7 @@ return [
     'name_en' => 'Southern Finland',
     'sort' => 500,
   ],
-  1393 => 
+  1348 => 
   [
     'id' => 1349,
     'country_id' => 197,
@@ -11153,7 +10793,7 @@ return [
     'name_en' => 'Western Finland',
     'sort' => 600,
   ],
-  1394 => 
+  1349 => 
   [
     'id' => 1350,
     'country_id' => 197,
@@ -11161,7 +10801,7 @@ return [
     'name_en' => '•land',
     'sort' => 700,
   ],
-  1395 => 
+  1350 => 
   [
     'id' => 1351,
     'country_id' => 198,
@@ -11169,7 +10809,7 @@ return [
     'name_en' => 'Ain',
     'sort' => 100,
   ],
-  1396 => 
+  1351 => 
   [
     'id' => 1352,
     'country_id' => 198,
@@ -11177,7 +10817,7 @@ return [
     'name_en' => 'Aisne',
     'sort' => 200,
   ],
-  1397 => 
+  1352 => 
   [
     'id' => 1353,
     'country_id' => 198,
@@ -11185,7 +10825,7 @@ return [
     'name_en' => 'Allier',
     'sort' => 300,
   ],
-  1398 => 
+  1353 => 
   [
     'id' => 1354,
     'country_id' => 198,
@@ -11193,7 +10833,7 @@ return [
     'name_en' => 'Alpes-de-Haute-Provence',
     'sort' => 400,
   ],
-  1399 => 
+  1354 => 
   [
     'id' => 1355,
     'country_id' => 198,
@@ -11201,7 +10841,7 @@ return [
     'name_en' => 'Alpes-Maritimes',
     'sort' => 500,
   ],
-  1400 => 
+  1355 => 
   [
     'id' => 1356,
     'country_id' => 198,
@@ -11209,7 +10849,7 @@ return [
     'name_en' => 'Ardche',
     'sort' => 600,
   ],
-  1401 => 
+  1356 => 
   [
     'id' => 1357,
     'country_id' => 198,
@@ -11217,7 +10857,7 @@ return [
     'name_en' => 'Ardennes',
     'sort' => 700,
   ],
-  1402 => 
+  1357 => 
   [
     'id' => 1358,
     'country_id' => 198,
@@ -11225,7 +10865,7 @@ return [
     'name_en' => 'Arige',
     'sort' => 800,
   ],
-  1403 => 
+  1358 => 
   [
     'id' => 1359,
     'country_id' => 198,
@@ -11233,7 +10873,7 @@ return [
     'name_en' => 'Aube',
     'sort' => 900,
   ],
-  1404 => 
+  1359 => 
   [
     'id' => 1360,
     'country_id' => 198,
@@ -11241,7 +10881,7 @@ return [
     'name_en' => 'Aude',
     'sort' => 1000,
   ],
-  1405 => 
+  1360 => 
   [
     'id' => 1361,
     'country_id' => 198,
@@ -11249,7 +10889,7 @@ return [
     'name_en' => 'Aveyron',
     'sort' => 1100,
   ],
-  1406 => 
+  1361 => 
   [
     'id' => 1362,
     'country_id' => 198,
@@ -11257,7 +10897,7 @@ return [
     'name_en' => 'Bas Rhin',
     'sort' => 1200,
   ],
-  1407 => 
+  1362 => 
   [
     'id' => 1363,
     'country_id' => 198,
@@ -11265,7 +10905,7 @@ return [
     'name_en' => 'Bouches-du-Rhne',
     'sort' => 1300,
   ],
-  1408 => 
+  1363 => 
   [
     'id' => 1364,
     'country_id' => 198,
@@ -11273,7 +10913,7 @@ return [
     'name_en' => 'Calvados',
     'sort' => 1400,
   ],
-  1409 => 
+  1364 => 
   [
     'id' => 1365,
     'country_id' => 198,
@@ -11281,7 +10921,7 @@ return [
     'name_en' => 'Cantal',
     'sort' => 1500,
   ],
-  1410 => 
+  1365 => 
   [
     'id' => 1366,
     'country_id' => 198,
@@ -11289,7 +10929,7 @@ return [
     'name_en' => 'Charente',
     'sort' => 1600,
   ],
-  1411 => 
+  1366 => 
   [
     'id' => 1367,
     'country_id' => 198,
@@ -11297,7 +10937,7 @@ return [
     'name_en' => 'Charente Maritime',
     'sort' => 1700,
   ],
-  1412 => 
+  1367 => 
   [
     'id' => 1368,
     'country_id' => 198,
@@ -11305,7 +10945,7 @@ return [
     'name_en' => 'Cher',
     'sort' => 1800,
   ],
-  1413 => 
+  1368 => 
   [
     'id' => 1369,
     'country_id' => 198,
@@ -11313,7 +10953,7 @@ return [
     'name_en' => 'Corrze',
     'sort' => 1900,
   ],
-  1414 => 
+  1369 => 
   [
     'id' => 1370,
     'country_id' => 198,
@@ -11321,7 +10961,7 @@ return [
     'name_en' => 'Corse',
     'sort' => 2000,
   ],
-  1415 => 
+  1370 => 
   [
     'id' => 1371,
     'country_id' => 198,
@@ -11329,7 +10969,7 @@ return [
     'name_en' => 'Creuse',
     'sort' => 2100,
   ],
-  1416 => 
+  1371 => 
   [
     'id' => 1372,
     'country_id' => 198,
@@ -11337,7 +10977,7 @@ return [
     'name_en' => 'Cte d\'Or',
     'sort' => 2200,
   ],
-  1417 => 
+  1372 => 
   [
     'id' => 1373,
     'country_id' => 198,
@@ -11345,7 +10985,7 @@ return [
     'name_en' => 'Ctes d\'Armor',
     'sort' => 2300,
   ],
-  1418 => 
+  1373 => 
   [
     'id' => 1374,
     'country_id' => 198,
@@ -11353,7 +10993,7 @@ return [
     'name_en' => 'Deux-Svres',
     'sort' => 2400,
   ],
-  1419 => 
+  1374 => 
   [
     'id' => 1375,
     'country_id' => 198,
@@ -11361,7 +11001,7 @@ return [
     'name_en' => 'Dordogne',
     'sort' => 2500,
   ],
-  1420 => 
+  1375 => 
   [
     'id' => 1376,
     'country_id' => 198,
@@ -11369,7 +11009,7 @@ return [
     'name_en' => 'Doubs',
     'sort' => 2600,
   ],
-  1421 => 
+  1376 => 
   [
     'id' => 1377,
     'country_id' => 198,
@@ -11377,7 +11017,7 @@ return [
     'name_en' => 'Drme',
     'sort' => 2700,
   ],
-  1422 => 
+  1377 => 
   [
     'id' => 1378,
     'country_id' => 198,
@@ -11385,7 +11025,7 @@ return [
     'name_en' => 'Essone',
     'sort' => 2800,
   ],
-  1423 => 
+  1378 => 
   [
     'id' => 1379,
     'country_id' => 198,
@@ -11393,7 +11033,7 @@ return [
     'name_en' => 'Eure',
     'sort' => 2900,
   ],
-  1424 => 
+  1379 => 
   [
     'id' => 1380,
     'country_id' => 198,
@@ -11401,7 +11041,7 @@ return [
     'name_en' => 'Eure-et-Loire',
     'sort' => 3000,
   ],
-  1425 => 
+  1380 => 
   [
     'id' => 1381,
     'country_id' => 198,
@@ -11409,7 +11049,7 @@ return [
     'name_en' => 'Finistre',
     'sort' => 3100,
   ],
-  1426 => 
+  1381 => 
   [
     'id' => 1382,
     'country_id' => 198,
@@ -11417,7 +11057,7 @@ return [
     'name_en' => 'Gard',
     'sort' => 3200,
   ],
-  1427 => 
+  1382 => 
   [
     'id' => 1383,
     'country_id' => 198,
@@ -11425,7 +11065,7 @@ return [
     'name_en' => 'Gers',
     'sort' => 3300,
   ],
-  1428 => 
+  1383 => 
   [
     'id' => 1384,
     'country_id' => 198,
@@ -11433,7 +11073,7 @@ return [
     'name_en' => 'Gironde',
     'sort' => 3400,
   ],
-  1429 => 
+  1384 => 
   [
     'id' => 1385,
     'country_id' => 198,
@@ -11441,7 +11081,7 @@ return [
     'name_en' => 'Haut Rhin',
     'sort' => 3500,
   ],
-  1430 => 
+  1385 => 
   [
     'id' => 1386,
     'country_id' => 198,
@@ -11449,7 +11089,7 @@ return [
     'name_en' => 'Haute-Garonne',
     'sort' => 3600,
   ],
-  1431 => 
+  1386 => 
   [
     'id' => 1387,
     'country_id' => 198,
@@ -11457,7 +11097,7 @@ return [
     'name_en' => 'Haute-Loire',
     'sort' => 3700,
   ],
-  1432 => 
+  1387 => 
   [
     'id' => 1388,
     'country_id' => 198,
@@ -11465,7 +11105,7 @@ return [
     'name_en' => '',
     'sort' => 3800,
   ],
-  1433 => 
+  1388 => 
   [
     'id' => 1389,
     'country_id' => 198,
@@ -11473,7 +11113,7 @@ return [
     'name_en' => 'Haute-Sane',
     'sort' => 3900,
   ],
-  1434 => 
+  1389 => 
   [
     'id' => 1390,
     'country_id' => 198,
@@ -11481,7 +11121,7 @@ return [
     'name_en' => 'Haute-Savoie',
     'sort' => 4000,
   ],
-  1435 => 
+  1390 => 
   [
     'id' => 1391,
     'country_id' => 198,
@@ -11489,7 +11129,7 @@ return [
     'name_en' => 'Haute-Vienne',
     'sort' => 4100,
   ],
-  1436 => 
+  1391 => 
   [
     'id' => 1392,
     'country_id' => 198,
@@ -11497,7 +11137,7 @@ return [
     'name_en' => 'Hautes-Alpes',
     'sort' => 4200,
   ],
-  1437 => 
+  1392 => 
   [
     'id' => 1393,
     'country_id' => 198,
@@ -11505,7 +11145,7 @@ return [
     'name_en' => 'Hautes-Pyrnes',
     'sort' => 4300,
   ],
-  1438 => 
+  1393 => 
   [
     'id' => 1394,
     'country_id' => 198,
@@ -11513,7 +11153,7 @@ return [
     'name_en' => 'Hauts-de-Seine',
     'sort' => 4400,
   ],
-  1439 => 
+  1394 => 
   [
     'id' => 1395,
     'country_id' => 198,
@@ -11521,7 +11161,7 @@ return [
     'name_en' => 'Hrault',
     'sort' => 4500,
   ],
-  1440 => 
+  1395 => 
   [
     'id' => 1396,
     'country_id' => 198,
@@ -11529,7 +11169,7 @@ return [
     'name_en' => 'Ille et Vilaine',
     'sort' => 4600,
   ],
-  1441 => 
+  1396 => 
   [
     'id' => 1397,
     'country_id' => 198,
@@ -11537,7 +11177,7 @@ return [
     'name_en' => 'Indre',
     'sort' => 4700,
   ],
-  1442 => 
+  1397 => 
   [
     'id' => 1398,
     'country_id' => 198,
@@ -11545,7 +11185,7 @@ return [
     'name_en' => 'Indre-et-Loire',
     'sort' => 4800,
   ],
-  1443 => 
+  1398 => 
   [
     'id' => 1399,
     'country_id' => 198,
@@ -11553,7 +11193,7 @@ return [
     'name_en' => 'Isre',
     'sort' => 4900,
   ],
-  1444 => 
+  1399 => 
   [
     'id' => 1400,
     'country_id' => 198,
@@ -11561,7 +11201,7 @@ return [
     'name_en' => 'Jura',
     'sort' => 5000,
   ],
-  1445 => 
+  1400 => 
   [
     'id' => 1401,
     'country_id' => 198,
@@ -11569,7 +11209,7 @@ return [
     'name_en' => 'Landes',
     'sort' => 5100,
   ],
-  1446 => 
+  1401 => 
   [
     'id' => 1402,
     'country_id' => 198,
@@ -11577,7 +11217,7 @@ return [
     'name_en' => 'Loir-et-Cher',
     'sort' => 5200,
   ],
-  1447 => 
+  1402 => 
   [
     'id' => 1403,
     'country_id' => 198,
@@ -11585,7 +11225,7 @@ return [
     'name_en' => 'Loire',
     'sort' => 5300,
   ],
-  1448 => 
+  1403 => 
   [
     'id' => 1404,
     'country_id' => 198,
@@ -11593,7 +11233,7 @@ return [
     'name_en' => 'Loire Atlantique',
     'sort' => 5400,
   ],
-  1449 => 
+  1404 => 
   [
     'id' => 1405,
     'country_id' => 198,
@@ -11601,7 +11241,7 @@ return [
     'name_en' => 'Loiret',
     'sort' => 5500,
   ],
-  1450 => 
+  1405 => 
   [
     'id' => 1406,
     'country_id' => 198,
@@ -11609,7 +11249,7 @@ return [
     'name_en' => 'Lot',
     'sort' => 5600,
   ],
-  1451 => 
+  1406 => 
   [
     'id' => 1407,
     'country_id' => 198,
@@ -11617,7 +11257,7 @@ return [
     'name_en' => 'Lot-et-Garonne',
     'sort' => 5700,
   ],
-  1452 => 
+  1407 => 
   [
     'id' => 1408,
     'country_id' => 198,
@@ -11625,7 +11265,7 @@ return [
     'name_en' => 'Lozre',
     'sort' => 5800,
   ],
-  1453 => 
+  1408 => 
   [
     'id' => 1409,
     'country_id' => 198,
@@ -11633,7 +11273,7 @@ return [
     'name_en' => 'Maine et Loire',
     'sort' => 5900,
   ],
-  1454 => 
+  1409 => 
   [
     'id' => 1410,
     'country_id' => 198,
@@ -11641,7 +11281,7 @@ return [
     'name_en' => 'Manche',
     'sort' => 6000,
   ],
-  1455 => 
+  1410 => 
   [
     'id' => 1411,
     'country_id' => 198,
@@ -11649,7 +11289,7 @@ return [
     'name_en' => 'Marne',
     'sort' => 6100,
   ],
-  1456 => 
+  1411 => 
   [
     'id' => 1412,
     'country_id' => 198,
@@ -11657,7 +11297,7 @@ return [
     'name_en' => 'Mayenne',
     'sort' => 6200,
   ],
-  1457 => 
+  1412 => 
   [
     'id' => 1413,
     'country_id' => 198,
@@ -11665,7 +11305,7 @@ return [
     'name_en' => 'Meurthe-et-Moselle',
     'sort' => 6300,
   ],
-  1458 => 
+  1413 => 
   [
     'id' => 1414,
     'country_id' => 198,
@@ -11673,7 +11313,7 @@ return [
     'name_en' => 'Meuse',
     'sort' => 6400,
   ],
-  1459 => 
+  1414 => 
   [
     'id' => 1415,
     'country_id' => 198,
@@ -11681,7 +11321,7 @@ return [
     'name_en' => 'Morbihan',
     'sort' => 6500,
   ],
-  1460 => 
+  1415 => 
   [
     'id' => 1416,
     'country_id' => 198,
@@ -11689,7 +11329,7 @@ return [
     'name_en' => 'Moselle',
     'sort' => 6600,
   ],
-  1461 => 
+  1416 => 
   [
     'id' => 1417,
     'country_id' => 198,
@@ -11697,7 +11337,7 @@ return [
     'name_en' => 'Nord',
     'sort' => 6700,
   ],
-  1462 => 
+  1417 => 
   [
     'id' => 1418,
     'country_id' => 198,
@@ -11705,7 +11345,7 @@ return [
     'name_en' => 'Oise',
     'sort' => 6800,
   ],
-  1463 => 
+  1418 => 
   [
     'id' => 1419,
     'country_id' => 198,
@@ -11713,7 +11353,7 @@ return [
     'name_en' => 'Orne',
     'sort' => 6900,
   ],
-  1464 => 
+  1419 => 
   [
     'id' => 1420,
     'country_id' => 198,
@@ -11721,7 +11361,7 @@ return [
     'name_en' => 'Paris',
     'sort' => 7000,
   ],
-  1465 => 
+  1420 => 
   [
     'id' => 1421,
     'country_id' => 198,
@@ -11729,7 +11369,7 @@ return [
     'name_en' => 'Pas-de-Calais',
     'sort' => 7100,
   ],
-  1466 => 
+  1421 => 
   [
     'id' => 1422,
     'country_id' => 198,
@@ -11737,7 +11377,7 @@ return [
     'name_en' => 'Puy-de-Dme',
     'sort' => 7200,
   ],
-  1467 => 
+  1422 => 
   [
     'id' => 1423,
     'country_id' => 198,
@@ -11745,7 +11385,7 @@ return [
     'name_en' => 'Pyrnes-Atlantiques',
     'sort' => 7300,
   ],
-  1468 => 
+  1423 => 
   [
     'id' => 1424,
     'country_id' => 198,
@@ -11753,7 +11393,7 @@ return [
     'name_en' => 'Pyrnes-Orientales',
     'sort' => 7400,
   ],
-  1469 => 
+  1424 => 
   [
     'id' => 1425,
     'country_id' => 198,
@@ -11761,7 +11401,7 @@ return [
     'name_en' => 'Rhne',
     'sort' => 7500,
   ],
-  1470 => 
+  1425 => 
   [
     'id' => 1426,
     'country_id' => 198,
@@ -11769,7 +11409,7 @@ return [
     'name_en' => 'Sane et Loire',
     'sort' => 7600,
   ],
-  1471 => 
+  1426 => 
   [
     'id' => 1427,
     'country_id' => 198,
@@ -11777,7 +11417,7 @@ return [
     'name_en' => 'Savoie',
     'sort' => 7700,
   ],
-  1472 => 
+  1427 => 
   [
     'id' => 1428,
     'country_id' => 198,
@@ -11785,7 +11425,7 @@ return [
     'name_en' => 'Seine-et-Marne',
     'sort' => 7800,
   ],
-  1473 => 
+  1428 => 
   [
     'id' => 1429,
     'country_id' => 198,
@@ -11793,7 +11433,7 @@ return [
     'name_en' => 'Seine-Maritime',
     'sort' => 7900,
   ],
-  1474 => 
+  1429 => 
   [
     'id' => 1430,
     'country_id' => 198,
@@ -11801,7 +11441,7 @@ return [
     'name_en' => 'Seine-Saint-Denis',
     'sort' => 8000,
   ],
-  1475 => 
+  1430 => 
   [
     'id' => 1431,
     'country_id' => 198,
@@ -11809,7 +11449,7 @@ return [
     'name_en' => 'Somme',
     'sort' => 8100,
   ],
-  1476 => 
+  1431 => 
   [
     'id' => 1432,
     'country_id' => 198,
@@ -11817,7 +11457,7 @@ return [
     'name_en' => 'Tarn',
     'sort' => 8200,
   ],
-  1477 => 
+  1432 => 
   [
     'id' => 1433,
     'country_id' => 198,
@@ -11825,7 +11465,7 @@ return [
     'name_en' => 'Tarn-et-Garonne',
     'sort' => 8300,
   ],
-  1478 => 
+  1433 => 
   [
     'id' => 1434,
     'country_id' => 198,
@@ -11833,7 +11473,7 @@ return [
     'name_en' => 'Territoire de Belfort',
     'sort' => 8400,
   ],
-  1479 => 
+  1434 => 
   [
     'id' => 1435,
     'country_id' => 198,
@@ -11841,7 +11481,7 @@ return [
     'name_en' => 'Val-d\'Oise',
     'sort' => 8500,
   ],
-  1480 => 
+  1435 => 
   [
     'id' => 1436,
     'country_id' => 198,
@@ -11849,7 +11489,7 @@ return [
     'name_en' => 'Val-de-Marne',
     'sort' => 8600,
   ],
-  1481 => 
+  1436 => 
   [
     'id' => 1437,
     'country_id' => 198,
@@ -11857,7 +11497,7 @@ return [
     'name_en' => 'Var',
     'sort' => 8700,
   ],
-  1482 => 
+  1437 => 
   [
     'id' => 1438,
     'country_id' => 198,
@@ -11865,7 +11505,7 @@ return [
     'name_en' => 'Vaucluse',
     'sort' => 8800,
   ],
-  1483 => 
+  1438 => 
   [
     'id' => 1439,
     'country_id' => 198,
@@ -11873,7 +11513,7 @@ return [
     'name_en' => 'Vende',
     'sort' => 8900,
   ],
-  1484 => 
+  1439 => 
   [
     'id' => 1440,
     'country_id' => 198,
@@ -11881,7 +11521,7 @@ return [
     'name_en' => 'Vienne',
     'sort' => 9000,
   ],
-  1485 => 
+  1440 => 
   [
     'id' => 1441,
     'country_id' => 198,
@@ -11889,7 +11529,7 @@ return [
     'name_en' => 'Vosges',
     'sort' => 9100,
   ],
-  1486 => 
+  1441 => 
   [
     'id' => 1442,
     'country_id' => 198,
@@ -11897,7 +11537,7 @@ return [
     'name_en' => 'Yonne',
     'sort' => 9200,
   ],
-  1487 => 
+  1442 => 
   [
     'id' => 1443,
     'country_id' => 198,
@@ -11905,7 +11545,7 @@ return [
     'name_en' => 'Yvelines',
     'sort' => 9300,
   ],
-  1488 => 
+  1443 => 
   [
     'id' => 1444,
     'country_id' => 199,
@@ -11913,7 +11553,7 @@ return [
     'name_en' => 'Caennes',
     'sort' => 100,
   ],
-  1489 => 
+  1444 => 
   [
     'id' => 1445,
     'country_id' => 200,
@@ -11921,7 +11561,7 @@ return [
     'name_en' => 'Папеэте',
     'sort' => 100,
   ],
-  1490 => 
+  1445 => 
   [
     'id' => 1446,
     'country_id' => 201,
@@ -11929,7 +11569,7 @@ return [
     'name_en' => 'Dubrovacko-Neretvanska',
     'sort' => 100,
   ],
-  1491 => 
+  1446 => 
   [
     'id' => 1447,
     'country_id' => 201,
@@ -11937,7 +11577,7 @@ return [
     'name_en' => 'Grad Zagreb',
     'sort' => 200,
   ],
-  1492 => 
+  1447 => 
   [
     'id' => 1448,
     'country_id' => 201,
@@ -11945,7 +11585,7 @@ return [
     'name_en' => 'Istarska',
     'sort' => 300,
   ],
-  1493 => 
+  1448 => 
   [
     'id' => 1449,
     'country_id' => 201,
@@ -11953,7 +11593,7 @@ return [
     'name_en' => 'Karlovacka',
     'sort' => 400,
   ],
-  1494 => 
+  1449 => 
   [
     'id' => 1450,
     'country_id' => 201,
@@ -11961,7 +11601,7 @@ return [
     'name_en' => 'Medimurska',
     'sort' => 500,
   ],
-  1495 => 
+  1450 => 
   [
     'id' => 1451,
     'country_id' => 201,
@@ -11969,7 +11609,7 @@ return [
     'name_en' => 'None',
     'sort' => 600,
   ],
-  1496 => 
+  1451 => 
   [
     'id' => 1452,
     'country_id' => 201,
@@ -11977,7 +11617,7 @@ return [
     'name_en' => 'Primorsko-Goranska',
     'sort' => 700,
   ],
-  1497 => 
+  1452 => 
   [
     'id' => 1453,
     'country_id' => 201,
@@ -11985,7 +11625,7 @@ return [
     'name_en' => 'Sibensko-Kninska',
     'sort' => 800,
   ],
-  1498 => 
+  1453 => 
   [
     'id' => 1454,
     'country_id' => 201,
@@ -11993,7 +11633,7 @@ return [
     'name_en' => 'Sisacko-Moslavacka',
     'sort' => 900,
   ],
-  1499 => 
+  1454 => 
   [
     'id' => 1455,
     'country_id' => 201,
@@ -12001,7 +11641,7 @@ return [
     'name_en' => 'Splitsko-Dalmatinska',
     'sort' => 1000,
   ],
-  1500 => 
+  1455 => 
   [
     'id' => 1456,
     'country_id' => 201,
@@ -12009,7 +11649,7 @@ return [
     'name_en' => 'Varazdinska',
     'sort' => 1100,
   ],
-  1501 => 
+  1456 => 
   [
     'id' => 1457,
     'country_id' => 201,
@@ -12017,7 +11657,7 @@ return [
     'name_en' => 'Zagrebacka',
     'sort' => 1200,
   ],
-  1502 => 
+  1457 => 
   [
     'id' => 1458,
     'country_id' => 202,
@@ -12025,7 +11665,7 @@ return [
     'name_en' => 'Chad',
     'sort' => 100,
   ],
-  1503 => 
+  1458 => 
   [
     'id' => 1459,
     'country_id' => 203,
@@ -12033,7 +11673,7 @@ return [
     'name_en' => 'Montenegro',
     'sort' => 100,
   ],
-  1504 => 
+  1459 => 
   [
     'id' => 1460,
     'country_id' => 204,
@@ -12041,7 +11681,7 @@ return [
     'name_en' => 'Hlavni Mesto Praha',
     'sort' => 100,
   ],
-  1505 => 
+  1460 => 
   [
     'id' => 1461,
     'country_id' => 204,
@@ -12049,7 +11689,7 @@ return [
     'name_en' => 'Jihocesky Kraj',
     'sort' => 200,
   ],
-  1506 => 
+  1461 => 
   [
     'id' => 1462,
     'country_id' => 204,
@@ -12057,7 +11697,7 @@ return [
     'name_en' => 'Jihomoravsky Kraj',
     'sort' => 300,
   ],
-  1507 => 
+  1462 => 
   [
     'id' => 1463,
     'country_id' => 204,
@@ -12065,7 +11705,7 @@ return [
     'name_en' => 'Karlovarsky Kraj',
     'sort' => 400,
   ],
-  1508 => 
+  1463 => 
   [
     'id' => 1464,
     'country_id' => 204,
@@ -12073,7 +11713,7 @@ return [
     'name_en' => 'Kralovehradecky Kraj',
     'sort' => 500,
   ],
-  1509 => 
+  1464 => 
   [
     'id' => 1465,
     'country_id' => 204,
@@ -12081,7 +11721,7 @@ return [
     'name_en' => 'Liberecky Kraj',
     'sort' => 600,
   ],
-  1510 => 
+  1465 => 
   [
     'id' => 1466,
     'country_id' => 204,
@@ -12089,7 +11729,7 @@ return [
     'name_en' => 'Moravskoslezsky Kraj',
     'sort' => 700,
   ],
-  1511 => 
+  1466 => 
   [
     'id' => 1467,
     'country_id' => 204,
@@ -12097,7 +11737,7 @@ return [
     'name_en' => 'None',
     'sort' => 800,
   ],
-  1512 => 
+  1467 => 
   [
     'id' => 1468,
     'country_id' => 204,
@@ -12105,7 +11745,7 @@ return [
     'name_en' => 'Olomoucky Kraj',
     'sort' => 900,
   ],
-  1513 => 
+  1468 => 
   [
     'id' => 1469,
     'country_id' => 204,
@@ -12113,7 +11753,7 @@ return [
     'name_en' => 'Pardubicky Kraj',
     'sort' => 1000,
   ],
-  1514 => 
+  1469 => 
   [
     'id' => 1470,
     'country_id' => 204,
@@ -12121,7 +11761,7 @@ return [
     'name_en' => 'Plzensky Kraj',
     'sort' => 1100,
   ],
-  1515 => 
+  1470 => 
   [
     'id' => 1471,
     'country_id' => 204,
@@ -12129,7 +11769,7 @@ return [
     'name_en' => 'Stredocesky Kraj',
     'sort' => 1200,
   ],
-  1516 => 
+  1471 => 
   [
     'id' => 1472,
     'country_id' => 204,
@@ -12137,7 +11777,7 @@ return [
     'name_en' => 'Ustecky Kraj',
     'sort' => 1300,
   ],
-  1517 => 
+  1472 => 
   [
     'id' => 1473,
     'country_id' => 204,
@@ -12145,7 +11785,7 @@ return [
     'name_en' => 'Vysocina',
     'sort' => 1400,
   ],
-  1518 => 
+  1473 => 
   [
     'id' => 1474,
     'country_id' => 204,
@@ -12153,7 +11793,7 @@ return [
     'name_en' => 'Zlinsky Kraj',
     'sort' => 1500,
   ],
-  1519 => 
+  1474 => 
   [
     'id' => 1475,
     'country_id' => 205,
@@ -12161,7 +11801,7 @@ return [
     'name_en' => 'Aisn del General Carlos Ibnez del Campo',
     'sort' => 100,
   ],
-  1520 => 
+  1475 => 
   [
     'id' => 1476,
     'country_id' => 205,
@@ -12169,7 +11809,7 @@ return [
     'name_en' => 'Antofagasta',
     'sort' => 200,
   ],
-  1521 => 
+  1476 => 
   [
     'id' => 1477,
     'country_id' => 205,
@@ -12177,7 +11817,7 @@ return [
     'name_en' => 'Araucana',
     'sort' => 300,
   ],
-  1522 => 
+  1477 => 
   [
     'id' => 1478,
     'country_id' => 205,
@@ -12185,7 +11825,7 @@ return [
     'name_en' => 'Atacama',
     'sort' => 400,
   ],
-  1523 => 
+  1478 => 
   [
     'id' => 1479,
     'country_id' => 205,
@@ -12193,7 +11833,7 @@ return [
     'name_en' => 'Bo-Bo',
     'sort' => 500,
   ],
-  1524 => 
+  1479 => 
   [
     'id' => 1480,
     'country_id' => 205,
@@ -12201,7 +11841,7 @@ return [
     'name_en' => 'Coquimbo',
     'sort' => 600,
   ],
-  1525 => 
+  1480 => 
   [
     'id' => 1481,
     'country_id' => 205,
@@ -12209,7 +11849,7 @@ return [
     'name_en' => 'Libertador General Bernardo O\'Higgins',
     'sort' => 700,
   ],
-  1526 => 
+  1481 => 
   [
     'id' => 1482,
     'country_id' => 205,
@@ -12217,7 +11857,7 @@ return [
     'name_en' => 'Los Lagos',
     'sort' => 800,
   ],
-  1527 => 
+  1482 => 
   [
     'id' => 1483,
     'country_id' => 205,
@@ -12225,7 +11865,7 @@ return [
     'name_en' => 'Magallanes y de la Antrtica Chilena',
     'sort' => 900,
   ],
-  1528 => 
+  1483 => 
   [
     'id' => 1484,
     'country_id' => 205,
@@ -12233,7 +11873,7 @@ return [
     'name_en' => 'Maule',
     'sort' => 1000,
   ],
-  1529 => 
+  1484 => 
   [
     'id' => 1485,
     'country_id' => 205,
@@ -12241,7 +11881,7 @@ return [
     'name_en' => 'Region Metropolitana',
     'sort' => 1100,
   ],
-  1530 => 
+  1485 => 
   [
     'id' => 1486,
     'country_id' => 205,
@@ -12249,7 +11889,7 @@ return [
     'name_en' => 'Tarapac',
     'sort' => 1200,
   ],
-  1531 => 
+  1486 => 
   [
     'id' => 1487,
     'country_id' => 205,
@@ -12257,7 +11897,7 @@ return [
     'name_en' => 'Valparaso',
     'sort' => 1300,
   ],
-  1532 => 
+  1487 => 
   [
     'id' => 1488,
     'country_id' => 206,
@@ -12265,7 +11905,7 @@ return [
     'name_en' => 'Aargau',
     'sort' => 100,
   ],
-  1533 => 
+  1488 => 
   [
     'id' => 1489,
     'country_id' => 206,
@@ -12273,7 +11913,7 @@ return [
     'name_en' => 'Appenzell Ausserrhoden',
     'sort' => 200,
   ],
-  1534 => 
+  1489 => 
   [
     'id' => 1490,
     'country_id' => 206,
@@ -12281,7 +11921,7 @@ return [
     'name_en' => 'Appenzell Innerrhoden',
     'sort' => 300,
   ],
-  1535 => 
+  1490 => 
   [
     'id' => 1491,
     'country_id' => 206,
@@ -12289,7 +11929,7 @@ return [
     'name_en' => 'Basel-Landschaft',
     'sort' => 400,
   ],
-  1536 => 
+  1491 => 
   [
     'id' => 1492,
     'country_id' => 206,
@@ -12297,7 +11937,7 @@ return [
     'name_en' => 'Basel-Stadt',
     'sort' => 500,
   ],
-  1537 => 
+  1492 => 
   [
     'id' => 1493,
     'country_id' => 206,
@@ -12305,7 +11945,7 @@ return [
     'name_en' => 'Bern',
     'sort' => 600,
   ],
-  1538 => 
+  1493 => 
   [
     'id' => 1494,
     'country_id' => 206,
@@ -12313,7 +11953,7 @@ return [
     'name_en' => 'Fribourg',
     'sort' => 700,
   ],
-  1539 => 
+  1494 => 
   [
     'id' => 1495,
     'country_id' => 206,
@@ -12321,7 +11961,7 @@ return [
     'name_en' => 'Genve',
     'sort' => 800,
   ],
-  1540 => 
+  1495 => 
   [
     'id' => 1496,
     'country_id' => 206,
@@ -12329,7 +11969,7 @@ return [
     'name_en' => 'Glarus',
     'sort' => 900,
   ],
-  1541 => 
+  1496 => 
   [
     'id' => 1497,
     'country_id' => 206,
@@ -12337,7 +11977,7 @@ return [
     'name_en' => 'Graubnden',
     'sort' => 1000,
   ],
-  1542 => 
+  1497 => 
   [
     'id' => 1498,
     'country_id' => 206,
@@ -12345,7 +11985,7 @@ return [
     'name_en' => 'Jura',
     'sort' => 1100,
   ],
-  1543 => 
+  1498 => 
   [
     'id' => 1499,
     'country_id' => 206,
@@ -12353,7 +11993,7 @@ return [
     'name_en' => 'Luzern',
     'sort' => 1200,
   ],
-  1544 => 
+  1499 => 
   [
     'id' => 1500,
     'country_id' => 206,
@@ -12361,7 +12001,7 @@ return [
     'name_en' => 'Neuchtel',
     'sort' => 1300,
   ],
-  1545 => 
+  1500 => 
   [
     'id' => 1501,
     'country_id' => 206,
@@ -12369,7 +12009,7 @@ return [
     'name_en' => 'Nidwalden',
     'sort' => 1400,
   ],
-  1546 => 
+  1501 => 
   [
     'id' => 1502,
     'country_id' => 206,
@@ -12377,7 +12017,7 @@ return [
     'name_en' => 'Obwalden',
     'sort' => 1500,
   ],
-  1547 => 
+  1502 => 
   [
     'id' => 1503,
     'country_id' => 206,
@@ -12385,7 +12025,7 @@ return [
     'name_en' => 'Sankt Gallen',
     'sort' => 1600,
   ],
-  1548 => 
+  1503 => 
   [
     'id' => 1504,
     'country_id' => 206,
@@ -12393,7 +12033,7 @@ return [
     'name_en' => 'Schaffhausen',
     'sort' => 1700,
   ],
-  1549 => 
+  1504 => 
   [
     'id' => 1505,
     'country_id' => 206,
@@ -12401,7 +12041,7 @@ return [
     'name_en' => 'Schwyz',
     'sort' => 1800,
   ],
-  1550 => 
+  1505 => 
   [
     'id' => 1506,
     'country_id' => 206,
@@ -12409,7 +12049,7 @@ return [
     'name_en' => 'Solothurn',
     'sort' => 1900,
   ],
-  1551 => 
+  1506 => 
   [
     'id' => 1507,
     'country_id' => 206,
@@ -12417,7 +12057,7 @@ return [
     'name_en' => 'Thurgau',
     'sort' => 2000,
   ],
-  1552 => 
+  1507 => 
   [
     'id' => 1508,
     'country_id' => 206,
@@ -12425,7 +12065,7 @@ return [
     'name_en' => 'Ticino',
     'sort' => 2100,
   ],
-  1553 => 
+  1508 => 
   [
     'id' => 1509,
     'country_id' => 206,
@@ -12433,7 +12073,7 @@ return [
     'name_en' => 'Uri',
     'sort' => 2200,
   ],
-  1554 => 
+  1509 => 
   [
     'id' => 1510,
     'country_id' => 206,
@@ -12441,7 +12081,7 @@ return [
     'name_en' => 'Valais',
     'sort' => 2300,
   ],
-  1555 => 
+  1510 => 
   [
     'id' => 1511,
     'country_id' => 206,
@@ -12449,7 +12089,7 @@ return [
     'name_en' => 'Vaud',
     'sort' => 2400,
   ],
-  1556 => 
+  1511 => 
   [
     'id' => 1512,
     'country_id' => 206,
@@ -12457,7 +12097,7 @@ return [
     'name_en' => 'Zrich',
     'sort' => 2500,
   ],
-  1557 => 
+  1512 => 
   [
     'id' => 1513,
     'country_id' => 206,
@@ -12465,7 +12105,7 @@ return [
     'name_en' => 'Zug',
     'sort' => 2600,
   ],
-  1558 => 
+  1513 => 
   [
     'id' => 1514,
     'country_id' => 207,
@@ -12473,7 +12113,7 @@ return [
     'name_en' => 'Blekinge Lan',
     'sort' => 100,
   ],
-  1559 => 
+  1514 => 
   [
     'id' => 1515,
     'country_id' => 207,
@@ -12481,7 +12121,7 @@ return [
     'name_en' => 'Dalarnas Lan',
     'sort' => 200,
   ],
-  1560 => 
+  1515 => 
   [
     'id' => 1516,
     'country_id' => 207,
@@ -12489,7 +12129,7 @@ return [
     'name_en' => 'Gavleborgs Lan',
     'sort' => 300,
   ],
-  1561 => 
+  1516 => 
   [
     'id' => 1517,
     'country_id' => 207,
@@ -12497,7 +12137,7 @@ return [
     'name_en' => 'Gotlands Lan',
     'sort' => 400,
   ],
-  1562 => 
+  1517 => 
   [
     'id' => 1518,
     'country_id' => 207,
@@ -12505,7 +12145,7 @@ return [
     'name_en' => 'Hallands Lan',
     'sort' => 500,
   ],
-  1563 => 
+  1518 => 
   [
     'id' => 1519,
     'country_id' => 207,
@@ -12513,7 +12153,7 @@ return [
     'name_en' => 'Jamtlands Lan',
     'sort' => 600,
   ],
-  1564 => 
+  1519 => 
   [
     'id' => 1520,
     'country_id' => 207,
@@ -12521,7 +12161,7 @@ return [
     'name_en' => 'Jonkopings Lan',
     'sort' => 700,
   ],
-  1565 => 
+  1520 => 
   [
     'id' => 1521,
     'country_id' => 207,
@@ -12529,7 +12169,7 @@ return [
     'name_en' => 'Kalmar Lan',
     'sort' => 800,
   ],
-  1566 => 
+  1521 => 
   [
     'id' => 1522,
     'country_id' => 207,
@@ -12537,7 +12177,7 @@ return [
     'name_en' => 'Kronobergs Lan',
     'sort' => 900,
   ],
-  1567 => 
+  1522 => 
   [
     'id' => 1523,
     'country_id' => 207,
@@ -12545,7 +12185,7 @@ return [
     'name_en' => 'None',
     'sort' => 1000,
   ],
-  1568 => 
+  1523 => 
   [
     'id' => 1524,
     'country_id' => 207,
@@ -12553,7 +12193,7 @@ return [
     'name_en' => 'Norrbottens Lan',
     'sort' => 1100,
   ],
-  1569 => 
+  1524 => 
   [
     'id' => 1525,
     'country_id' => 207,
@@ -12561,7 +12201,7 @@ return [
     'name_en' => 'Orebro Lan',
     'sort' => 1200,
   ],
-  1570 => 
+  1525 => 
   [
     'id' => 1526,
     'country_id' => 207,
@@ -12569,7 +12209,7 @@ return [
     'name_en' => 'Ostergotlands Lan',
     'sort' => 1300,
   ],
-  1571 => 
+  1526 => 
   [
     'id' => 1527,
     'country_id' => 207,
@@ -12577,7 +12217,7 @@ return [
     'name_en' => 'Skane Lan',
     'sort' => 1400,
   ],
-  1572 => 
+  1527 => 
   [
     'id' => 1528,
     'country_id' => 207,
@@ -12585,7 +12225,7 @@ return [
     'name_en' => 'Sodermanlands Lan',
     'sort' => 1500,
   ],
-  1573 => 
+  1528 => 
   [
     'id' => 1529,
     'country_id' => 207,
@@ -12593,7 +12233,7 @@ return [
     'name_en' => 'Stockholms Lan',
     'sort' => 1600,
   ],
-  1574 => 
+  1529 => 
   [
     'id' => 1530,
     'country_id' => 207,
@@ -12601,7 +12241,7 @@ return [
     'name_en' => 'Uppsala Lan',
     'sort' => 1700,
   ],
-  1575 => 
+  1530 => 
   [
     'id' => 1531,
     'country_id' => 207,
@@ -12609,7 +12249,7 @@ return [
     'name_en' => 'Varmlands Lan',
     'sort' => 1800,
   ],
-  1576 => 
+  1531 => 
   [
     'id' => 1532,
     'country_id' => 207,
@@ -12617,7 +12257,7 @@ return [
     'name_en' => 'Vasterbottens Lan',
     'sort' => 1900,
   ],
-  1577 => 
+  1532 => 
   [
     'id' => 1533,
     'country_id' => 207,
@@ -12625,7 +12265,7 @@ return [
     'name_en' => 'Vasternorrlands Lan',
     'sort' => 2000,
   ],
-  1578 => 
+  1533 => 
   [
     'id' => 1534,
     'country_id' => 207,
@@ -12633,7 +12273,7 @@ return [
     'name_en' => 'Vastmanlands Lan',
     'sort' => 2100,
   ],
-  1579 => 
+  1534 => 
   [
     'id' => 1535,
     'country_id' => 207,
@@ -12641,7 +12281,7 @@ return [
     'name_en' => 'Vastra Gotaland',
     'sort' => 2200,
   ],
-  1580 => 
+  1535 => 
   [
     'id' => 1536,
     'country_id' => 208,
@@ -12649,7 +12289,7 @@ return [
     'name_en' => 'Sri Lanka',
     'sort' => 100,
   ],
-  1581 => 
+  1536 => 
   [
     'id' => 1537,
     'country_id' => 209,
@@ -12657,7 +12297,7 @@ return [
     'name_en' => 'Azuay',
     'sort' => 100,
   ],
-  1582 => 
+  1537 => 
   [
     'id' => 1538,
     'country_id' => 209,
@@ -12665,7 +12305,7 @@ return [
     'name_en' => 'Bolvar',
     'sort' => 200,
   ],
-  1583 => 
+  1538 => 
   [
     'id' => 1539,
     'country_id' => 209,
@@ -12673,7 +12313,7 @@ return [
     'name_en' => 'Chimborazo',
     'sort' => 300,
   ],
-  1584 => 
+  1539 => 
   [
     'id' => 1540,
     'country_id' => 209,
@@ -12681,7 +12321,7 @@ return [
     'name_en' => 'El Oro',
     'sort' => 400,
   ],
-  1585 => 
+  1540 => 
   [
     'id' => 1541,
     'country_id' => 209,
@@ -12689,7 +12329,7 @@ return [
     'name_en' => 'Galpagos',
     'sort' => 500,
   ],
-  1586 => 
+  1541 => 
   [
     'id' => 1542,
     'country_id' => 209,
@@ -12697,7 +12337,7 @@ return [
     'name_en' => 'Guayas',
     'sort' => 600,
   ],
-  1587 => 
+  1542 => 
   [
     'id' => 1543,
     'country_id' => 209,
@@ -12705,7 +12345,7 @@ return [
     'name_en' => 'Imbabura',
     'sort' => 700,
   ],
-  1588 => 
+  1543 => 
   [
     'id' => 1544,
     'country_id' => 209,
@@ -12713,7 +12353,7 @@ return [
     'name_en' => 'Loja',
     'sort' => 800,
   ],
-  1589 => 
+  1544 => 
   [
     'id' => 1545,
     'country_id' => 209,
@@ -12721,7 +12361,7 @@ return [
     'name_en' => 'Manab',
     'sort' => 900,
   ],
-  1590 => 
+  1545 => 
   [
     'id' => 1546,
     'country_id' => 209,
@@ -12729,7 +12369,7 @@ return [
     'name_en' => 'Napo',
     'sort' => 1000,
   ],
-  1591 => 
+  1546 => 
   [
     'id' => 1547,
     'country_id' => 209,
@@ -12737,7 +12377,7 @@ return [
     'name_en' => 'Pastaza',
     'sort' => 1100,
   ],
-  1592 => 
+  1547 => 
   [
     'id' => 1548,
     'country_id' => 209,
@@ -12745,7 +12385,7 @@ return [
     'name_en' => 'Pichincha',
     'sort' => 1200,
   ],
-  1593 => 
+  1548 => 
   [
     'id' => 1549,
     'country_id' => 209,
@@ -12753,7 +12393,7 @@ return [
     'name_en' => 'Tungurahua',
     'sort' => 1300,
   ],
-  1594 => 
+  1549 => 
   [
     'id' => 1550,
     'country_id' => 210,
@@ -12761,7 +12401,7 @@ return [
     'name_en' => 'Малабо',
     'sort' => 100,
   ],
-  1595 => 
+  1550 => 
   [
     'id' => 1551,
     'country_id' => 211,
@@ -12769,7 +12409,7 @@ return [
     'name_en' => 'Eritrea',
     'sort' => 100,
   ],
-  1596 => 
+  1551 => 
   [
     'id' => 1552,
     'country_id' => 212,
@@ -12777,7 +12417,7 @@ return [
     'name_en' => 'Estoniya',
     'sort' => 100,
   ],
-  1597 => 
+  1552 => 
   [
     'id' => 1553,
     'country_id' => 213,
@@ -12785,23 +12425,15 @@ return [
     'name_en' => 'Ethiopia',
     'sort' => 100,
   ],
-  1598 => 
+  1553 => 
   [
     'id' => 1554,
     'country_id' => 214,
-    'name_ru' => 'Йо�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Йоханесбург',
+    'name_en' => 'Johannesburg',
+    'sort' => 100,
   ],
-  1599 => 
-  [
-    'id' => 'анесбург',
-    'country_id' => 'Johannesburg',
-    'name_ru' => 100,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1600 => 
+  1554 => 
   [
     'id' => 1555,
     'country_id' => 215,
@@ -12809,7 +12441,7 @@ return [
     'name_en' => 'Cheju',
     'sort' => 100,
   ],
-  1601 => 
+  1555 => 
   [
     'id' => 1556,
     'country_id' => 215,
@@ -12817,7 +12449,7 @@ return [
     'name_en' => 'Chollabuk',
     'sort' => 200,
   ],
-  1602 => 
+  1556 => 
   [
     'id' => 1557,
     'country_id' => 215,
@@ -12825,7 +12457,7 @@ return [
     'name_en' => 'Chollanam',
     'sort' => 300,
   ],
-  1603 => 
+  1557 => 
   [
     'id' => 1558,
     'country_id' => 215,
@@ -12833,7 +12465,7 @@ return [
     'name_en' => 'Chungcheongbuk',
     'sort' => 400,
   ],
-  1604 => 
+  1558 => 
   [
     'id' => 1559,
     'country_id' => 215,
@@ -12841,7 +12473,7 @@ return [
     'name_en' => 'Chungcheongnam',
     'sort' => 500,
   ],
-  1605 => 
+  1559 => 
   [
     'id' => 1560,
     'country_id' => 215,
@@ -12849,7 +12481,7 @@ return [
     'name_en' => 'Incheon',
     'sort' => 600,
   ],
-  1606 => 
+  1560 => 
   [
     'id' => 1561,
     'country_id' => 215,
@@ -12857,7 +12489,7 @@ return [
     'name_en' => 'Kangweon',
     'sort' => 700,
   ],
-  1607 => 
+  1561 => 
   [
     'id' => 1562,
     'country_id' => 215,
@@ -12865,7 +12497,7 @@ return [
     'name_en' => 'Kwangju',
     'sort' => 800,
   ],
-  1608 => 
+  1562 => 
   [
     'id' => 1563,
     'country_id' => 215,
@@ -12873,7 +12505,7 @@ return [
     'name_en' => 'Kyeonggi',
     'sort' => 900,
   ],
-  1609 => 
+  1563 => 
   [
     'id' => 1564,
     'country_id' => 215,
@@ -12881,7 +12513,7 @@ return [
     'name_en' => 'Kyeongsangbuk',
     'sort' => 1000,
   ],
-  1610 => 
+  1564 => 
   [
     'id' => 1565,
     'country_id' => 215,
@@ -12889,7 +12521,7 @@ return [
     'name_en' => 'Kyeongsangnam',
     'sort' => 1100,
   ],
-  1611 => 
+  1565 => 
   [
     'id' => 1566,
     'country_id' => 215,
@@ -12897,7 +12529,7 @@ return [
     'name_en' => 'Pusan',
     'sort' => 1200,
   ],
-  1612 => 
+  1566 => 
   [
     'id' => 1567,
     'country_id' => 215,
@@ -12905,7 +12537,7 @@ return [
     'name_en' => 'Seoul',
     'sort' => 1300,
   ],
-  1613 => 
+  1567 => 
   [
     'id' => 1568,
     'country_id' => 215,
@@ -12913,7 +12545,7 @@ return [
     'name_en' => 'Taegu',
     'sort' => 1400,
   ],
-  1614 => 
+  1568 => 
   [
     'id' => 1569,
     'country_id' => 215,
@@ -12921,7 +12553,7 @@ return [
     'name_en' => 'Taejeon',
     'sort' => 1500,
   ],
-  1615 => 
+  1569 => 
   [
     'id' => 1570,
     'country_id' => 215,
@@ -12929,7 +12561,7 @@ return [
     'name_en' => 'Ulsan',
     'sort' => 1600,
   ],
-  1616 => 
+  1570 => 
   [
     'id' => 1571,
     'country_id' => 215,
@@ -12937,7 +12569,7 @@ return [
     'name_en' => 'South Korea',
     'sort' => 1700,
   ],
-  1617 => 
+  1571 => 
   [
     'id' => 1572,
     'country_id' => 216,
@@ -12945,7 +12577,7 @@ return [
     'name_en' => 'Южная Осетия',
     'sort' => 100,
   ],
-  1618 => 
+  1572 => 
   [
     'id' => 1573,
     'country_id' => 217,
@@ -12953,7 +12585,7 @@ return [
     'name_en' => 'Ямайка',
     'sort' => 100,
   ],
-  1619 => 
+  1573 => 
   [
     'id' => 1574,
     'country_id' => 218,
@@ -12961,7 +12593,7 @@ return [
     'name_en' => 'Айти',
     'sort' => 100,
   ],
-  1620 => 
+  1574 => 
   [
     'id' => 1575,
     'country_id' => 218,
@@ -12969,7 +12601,7 @@ return [
     'name_en' => 'Аомори',
     'sort' => 200,
   ],
-  1621 => 
+  1575 => 
   [
     'id' => 1576,
     'country_id' => 218,
@@ -12977,7 +12609,7 @@ return [
     'name_en' => 'Вакаяма',
     'sort' => 300,
   ],
-  1622 => 
+  1576 => 
   [
     'id' => 1577,
     'country_id' => 218,
@@ -12985,7 +12617,7 @@ return [
     'name_en' => 'Гумма',
     'sort' => 400,
   ],
-  1623 => 
+  1577 => 
   [
     'id' => 1578,
     'country_id' => 218,
@@ -12993,7 +12625,7 @@ return [
     'name_en' => 'Ибараки',
     'sort' => 500,
   ],
-  1624 => 
+  1578 => 
   [
     'id' => 1579,
     'country_id' => 218,
@@ -13001,7 +12633,7 @@ return [
     'name_en' => 'Ивате',
     'sort' => 600,
   ],
-  1625 => 
+  1579 => 
   [
     'id' => 1580,
     'country_id' => 218,
@@ -13009,7 +12641,7 @@ return [
     'name_en' => 'Исикава',
     'sort' => 700,
   ],
-  1626 => 
+  1580 => 
   [
     'id' => 1581,
     'country_id' => 218,
@@ -13017,7 +12649,7 @@ return [
     'name_en' => 'Кагосима',
     'sort' => 800,
   ],
-  1627 => 
+  1581 => 
   [
     'id' => 1582,
     'country_id' => 218,
@@ -13025,7 +12657,7 @@ return [
     'name_en' => 'Канагава',
     'sort' => 900,
   ],
-  1628 => 
+  1582 => 
   [
     'id' => 1583,
     'country_id' => 218,
@@ -13033,7 +12665,7 @@ return [
     'name_en' => 'Киото',
     'sort' => 1000,
   ],
-  1629 => 
+  1583 => 
   [
     'id' => 1584,
     'country_id' => 218,
@@ -13041,7 +12673,7 @@ return [
     'name_en' => 'Коти',
     'sort' => 1100,
   ],
-  1630 => 
+  1584 => 
   [
     'id' => 1585,
     'country_id' => 218,
@@ -13049,7 +12681,7 @@ return [
     'name_en' => 'Мияги',
     'sort' => 1200,
   ],
-  1631 => 
+  1585 => 
   [
     'id' => 1586,
     'country_id' => 218,
@@ -13057,7 +12689,7 @@ return [
     'name_en' => 'Миядзаки',
     'sort' => 1300,
   ],
-  1632 => 
+  1586 => 
   [
     'id' => 1587,
     'country_id' => 218,
@@ -13065,7 +12697,7 @@ return [
     'name_en' => 'Нагано',
     'sort' => 1400,
   ],
-  1633 => 
+  1587 => 
   [
     'id' => 1588,
     'country_id' => 218,
@@ -13073,7 +12705,7 @@ return [
     'name_en' => 'Нагасаки',
     'sort' => 1500,
   ],
-  1634 => 
+  1588 => 
   [
     'id' => 1589,
     'country_id' => 218,
@@ -13081,7 +12713,7 @@ return [
     'name_en' => 'Нара',
     'sort' => 1600,
   ],
-  1635 => 
+  1589 => 
   [
     'id' => 1590,
     'country_id' => 218,
@@ -13089,7 +12721,7 @@ return [
     'name_en' => 'Ниигата',
     'sort' => 1700,
   ],
-  1636 => 
+  1590 => 
   [
     'id' => 1591,
     'country_id' => 218,
@@ -13097,7 +12729,7 @@ return [
     'name_en' => 'Окаяма',
     'sort' => 1800,
   ],
-  1637 => 
+  1591 => 
   [
     'id' => 1592,
     'country_id' => 218,
@@ -13105,7 +12737,7 @@ return [
     'name_en' => 'Окинава',
     'sort' => 1900,
   ],
-  1638 => 
+  1592 => 
   [
     'id' => 1593,
     'country_id' => 218,
@@ -13113,7 +12745,7 @@ return [
     'name_en' => 'Осака',
     'sort' => 2000,
   ],
-  1639 => 
+  1593 => 
   [
     'id' => 1594,
     'country_id' => 218,
@@ -13121,7 +12753,7 @@ return [
     'name_en' => 'Сага',
     'sort' => 2100,
   ],
-  1640 => 
+  1594 => 
   [
     'id' => 1595,
     'country_id' => 218,
@@ -13129,7 +12761,7 @@ return [
     'name_en' => 'Сайтама',
     'sort' => 2200,
   ],
-  1641 => 
+  1595 => 
   [
     'id' => 1596,
     'country_id' => 218,
@@ -13137,7 +12769,7 @@ return [
     'name_en' => 'Сига',
     'sort' => 2300,
   ],
-  1642 => 
+  1596 => 
   [
     'id' => 1597,
     'country_id' => 218,
@@ -13145,7 +12777,7 @@ return [
     'name_en' => 'Сидзуока',
     'sort' => 2400,
   ],
-  1643 => 
+  1597 => 
   [
     'id' => 1598,
     'country_id' => 218,
@@ -13153,7 +12785,7 @@ return [
     'name_en' => 'Тиба',
     'sort' => 2500,
   ],
-  1644 => 
+  1598 => 
   [
     'id' => 1599,
     'country_id' => 218,
@@ -13161,7 +12793,7 @@ return [
     'name_en' => 'Токио',
     'sort' => 2600,
   ],
-  1645 => 
+  1599 => 
   [
     'id' => 1600,
     'country_id' => 218,
@@ -13169,7 +12801,7 @@ return [
     'name_en' => 'Токусима',
     'sort' => 2700,
   ],
-  1646 => 
+  1600 => 
   [
     'id' => 1601,
     'country_id' => 218,
@@ -13177,7 +12809,7 @@ return [
     'name_en' => 'Тотиги',
     'sort' => 2800,
   ],
-  1647 => 
+  1601 => 
   [
     'id' => 1602,
     'country_id' => 218,
@@ -13185,7 +12817,7 @@ return [
     'name_en' => 'Тояма',
     'sort' => 2900,
   ],
-  1648 => 
+  1602 => 
   [
     'id' => 1603,
     'country_id' => 218,
@@ -13193,7 +12825,7 @@ return [
     'name_en' => 'Фукуи',
     'sort' => 3000,
   ],
-  1649 => 
+  1603 => 
   [
     'id' => 1604,
     'country_id' => 218,
@@ -13201,7 +12833,7 @@ return [
     'name_en' => 'Фукуока',
     'sort' => 3100,
   ],
-  1650 => 
+  1604 => 
   [
     'id' => 1605,
     'country_id' => 218,
@@ -13209,7 +12841,7 @@ return [
     'name_en' => 'Фукусима',
     'sort' => 3200,
   ],
-  1651 => 
+  1605 => 
   [
     'id' => 1606,
     'country_id' => 218,
@@ -13217,7 +12849,7 @@ return [
     'name_en' => 'Хиросима',
     'sort' => 3300,
   ],
-  1652 => 
+  1606 => 
   [
     'id' => 1607,
     'country_id' => 218,
@@ -13225,7 +12857,7 @@ return [
     'name_en' => 'Хоккайдо',
     'sort' => 3400,
   ],
-  1653 => 
+  1607 => 
   [
     'id' => 1608,
     'country_id' => 218,
@@ -13233,31 +12865,15 @@ return [
     'name_en' => 'Хпого',
     'sort' => 3500,
   ],
-  1654 => 
+  1608 => 
   [
     'id' => 1609,
     'country_id' => 218,
-    'name_ru' => 'Э�',
-    'name_en' => NULL,
-    'sort' => NULL,
+    'name_ru' => 'Эхиме',
+    'name_en' => 'Эхиме',
+    'sort' => 3600,
   ],
-  1655 => 
-  [
-    'id' => 'име',
-    'country_id' => 'Э�',
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1656 => 
-  [
-    'id' => 'име',
-    'country_id' => 3600,
-    'name_ru' => NULL,
-    'name_en' => NULL,
-    'sort' => NULL,
-  ],
-  1657 => 
+  1609 => 
   [
     'id' => 1610,
     'country_id' => 218,
@@ -13265,7 +12881,7 @@ return [
     'name_en' => 'Ямагути',
     'sort' => 3700,
   ],
-  1658 => 
+  1610 => 
   [
     'id' => 1611,
     'country_id' => 218,
