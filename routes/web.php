@@ -26,6 +26,14 @@ Route::controller(HomeController::class)->group(function () {
 
 Route::controller(FrontAuthController::class)->name('front.')->group(function () {
     Route::post('/', 'login')->name('login');
+    Route::get('registration', 'showRegistrationForm')->name('registration.form');
+    Route::post('registration', 'register')->name('registration.store');
+    Route::get('registration/confirm/{token}', 'confirmRegistration')
+        ->where('token', '[A-Za-z0-9]+')
+        ->name('registration.confirm');
+    Route::post('password/remind', 'sendPasswordResetLink')->name('password.email');
+    Route::get('restore', 'showRestoreForm')->name('password.restore');
+    Route::post('restore', 'restorePassword')->name('password.update');
     Route::get('auth/{provider}/redirect', 'redirectToProvider')
         ->where('provider', 'google|facebook|x|linkedin')
         ->name('social.redirect');

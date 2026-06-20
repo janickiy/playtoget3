@@ -7,7 +7,7 @@
     <meta name="description" content="We are the first sports online resource that brings together healthy lifestyle followers, sports fans and professional athletes.">
     <title>{{ $title ?? 'PlayToGet' }}</title>
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
-    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026061526">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026062022">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-1440.css') }}" media="(max-width: 1440px)">
@@ -71,9 +71,13 @@
                         <div class="form-container">
                             <p class="sport-inside">Sport inside!</p>
                             <p>Do not limit yourself. Sign up and get full access to all site features.</p>
-                            <form autocomplete="off" name="enter-form" method="POST" id="entrance-form" action="{{ route('front.login') }}">
+                            @php($showResetForm = (bool) session('password_reset_mode'))
+                            <form autocomplete="off" name="enter-form" method="POST" id="entrance-form" action="{{ route('front.login') }}" @style(['display: none' => $showResetForm])>
                                 @csrf
                                 <h3>Sign in to the site</h3>
+                                @if (session('auth_status'))
+                                    <div class="alert_msg" style="background:#dff2e8;color:#287647;"><p>{{ session('auth_status') }}</p></div>
+                                @endif
                                 @if ($errors->any())
                                     <div class="alert_msg"><p><strong>Error! </strong>{{ $errors->first() }}</p></div>
                                 @endif
@@ -84,7 +88,20 @@
                                 <a href="#" class="form-enter-link_pass">Remind password</a>
                                 <input type="submit" name="login" value="Sign in" id="input-submit">
                                 <span>or</span>
-                                <a href="#" class="form-enter-link_reg">Sign up</a>
+                                <a href="{{ route('front.registration.form') }}" class="form-enter-link_reg">Sign up</a>
+                            </form>
+                            <form autocomplete="off" name="password-reset-form" method="POST" id="password-reset-request-form" action="{{ route('front.password.email') }}" @style(['display: none' => ! $showResetForm])>
+                                @csrf
+                                <h3>Password reset</h3>
+                                @if (session('password_reset_status'))
+                                    <div class="alert_msg" style="background:#dff2e8;color:#287647;"><p>{{ session('password_reset_status') }}</p></div>
+                                @endif
+                                <input type="email" name="email" value="{{ old('email') }}" placeholder="email" class="entrance-text-field" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
+                                <div class="entrance-actions">
+                                    <input type="submit" value="Send link" class="entrance-submit">
+                                    <span>or</span>
+                                    <a href="#" class="form-enter-link_login">Sign in</a>
+                                </div>
                             </form>
                             <div class="social">
                                 <h4>Sign in with</h4>
@@ -111,5 +128,23 @@
 <div class="footer">
     @include('front.partials.footer')
 </div>
+<script>
+    $(function () {
+        var $loginForm = $('#entrance-form');
+        var $resetForm = $('#password-reset-request-form');
+
+        $('.form-enter-link_pass').on('click', function (event) {
+            event.preventDefault();
+            $loginForm.hide();
+            $resetForm.show();
+        });
+
+        $('.form-enter-link_login').on('click', function (event) {
+            event.preventDefault();
+            $resetForm.hide();
+            $loginForm.show();
+        });
+    });
+</script>
 </body>
 </html>

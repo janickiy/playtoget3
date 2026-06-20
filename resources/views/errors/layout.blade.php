@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-480.css') }}" media="(max-width: 480px)">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-390.css') }}" media="(max-width: 390px)">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800&subset=latin,cyrillic" rel="stylesheet" type="text/css">
+    @yield('styles')
 </head>
 <body style="background-color: #2A2D44 !important;">
     <section class="section-for-header">
@@ -33,13 +34,18 @@
 
     <div class="photo-caption"></div>
 
-    <div id="background">
-        <h1 style="text-align:center;font-size:70px;">@yield('code')</h1>
-        <p style="text-align:center;font-size:30px;">@yield('message')</p>
-    </div>
+    @hasSection('content')
+        @yield('content')
+    @else
+        <div id="background">
+            <h1 style="text-align:center;font-size:70px;">@yield('code')</h1>
+            <p style="text-align:center;font-size:30px;">@yield('message')</p>
+        </div>
+    @endif
 
     <script src="{{ asset('frontend/js/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('frontend/js/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('frontend/js/bootstrap.min.js') }}"></script>
+    @yield('scripts')
 </body>
 </html>

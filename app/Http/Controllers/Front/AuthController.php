@@ -4,12 +4,19 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Front\Auth\LoginRequest;
+use App\Http\Requests\Front\Auth\PasswordResetEmailRequest;
+use App\Http\Requests\Front\Auth\PasswordResetRequest;
+use App\Http\Requests\Front\Auth\RegisterRequest;
 use App\Repositories\SocialAccountRepository;
 use App\Repositories\UserRepository;
+use App\Service\AccountRegistrationService;
+use App\Service\PasswordResetService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 use Laravel\Socialite\Exceptions\DriverMissingConfigurationException;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\InvalidStateException;
@@ -24,6 +31,86 @@ class AuthController extends Controller
         'x' => 'x',
         'linkedin' => 'linkedin-openid',
     ];
+
+    /**
+     * Shows the registration form.
+     */
+    public function showRegistrationForm(): View
+    {
+        return view('front.auth.registration', [
+            'title' => 'Registration',
+        ]);
+    }
+
+    /**
+     * Creates a new account and sends an email confirmation link.
+     */
+    public function register(RegisterRequest $request, AccountRegistrationService $registration): RedirectResponse
+    {
+        $registration->register($request->validated());
+
+        return redirect()
+            ->route('front.registration.form')
+            ->with('status', 'We sent a confirmation link to your email. Please check your mailbox.');
+    }
+
+    /**
+     * Confirms the account by the email token.
+     */
+    public function confirmRegistration(string $token, AccountRegistrationService $registration): RedirectResponse
+    {
+        $user = $registration->confirm($token);
+
+        abort_if(! $user, 404);
+
+        return redirect()
+            ->route('front.home')
+            ->with('auth_status', 'Your account has been confirmed. You can sign in now.');
+    }
+
+    /**
+     * Sends a password reset link without revealing whether the email exists.
+     */
+    public function sendPasswordResetLink(
+        PasswordResetEmailRequest $request,
+        PasswordResetService $passwords,
+    ): RedirectResponse {
+        $passwords->sendResetLink($request->email());
+
+        return back()
+            ->with('password_reset_mode', true)
+            ->with('password_reset_status', 'If this email exists, we sent a password reset link.');
+    }
+
+    /**
+     * Shows the password reset form from an email link.
+     */
+    public function showRestoreForm(Request $request): View
+    {
+        return view('front.auth.restore', [
+            'title' => 'Password reset',
+            'email' => (string) $request->query('email', ''),
+            'token' => (string) $request->query('token', ''),
+        ]);
+    }
+
+    /**
+     * Updates the password using a valid reset token.
+     */
+    public function restorePassword(
+        PasswordResetRequest $request,
+        PasswordResetService $passwords,
+    ): RedirectResponse {
+        if (! $passwords->reset($request->email(), $request->token(), $request->password())) {
+            return back()
+                ->withInput($request->only(['email', 'token']))
+                ->withErrors(['password' => 'The password reset link is invalid or expired.']);
+        }
+
+        return redirect()
+            ->route('front.home')
+            ->with('auth_status', 'Password changed successfully. You can sign in now.');
+    }
 
     /**
      * Checks user by bcrypt-password and authorized website.

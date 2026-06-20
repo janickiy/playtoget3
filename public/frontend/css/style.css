@@ -2150,7 +2150,8 @@ form .upload .alt
 
 /*end Jenya*/
 /***************************************right-sidebar of main page(index)*****************************************/
-.main-entrance #entrance-form{
+.main-entrance #entrance-form,
+.main-entrance #password-reset-request-form{
 	padding: 20px 12px 0 12px;
 	width: 352px;
 	background: rgba(49, 65, 99, .5);
@@ -2158,6 +2159,10 @@ form .upload .alt
 	-webkit-border-radius: 8px 8px 0 0;
 	-moz-border-radius: 8px 8px 0 0;
 	border-radius: 8px 8px 0 0;
+}
+
+.main-entrance #password-reset-request-form {
+	height: 265px;
 }
 
 .alert_msg, .error_msg
@@ -2180,7 +2185,10 @@ form .upload .alt
 	text-align: center;
 	margin: 0;
 }
-.main-entrance #input-login,.main-entrance #input-password{
+.main-entrance #input-login,
+.main-entrance #input-password,
+.main-entrance #password-reset-request-form input[type="email"],
+.main-entrance .entrance-text-field{
 	display: block;
 	width: 100%;
 	height: 44px;
@@ -2192,7 +2200,8 @@ form .upload .alt
 	margin: 0 auto 7px auto;
 	text-align: center;
 }
-.main-entrance #input-submit{
+.main-entrance #input-submit,
+.main-entrance .entrance-submit{
 	width: 137px;
 	height: 48px;
 	-webkit-border-radius: 24px;
@@ -2200,6 +2209,12 @@ form .upload .alt
 	border-radius: 24px;
 	background: rgba(58, 81, 143, 1);
 	border: none;
+}
+.main-entrance .entrance-actions{
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-top: 20px;
 }
 .main-entrance #input-checkbox+label,.main-entrance a{
 	font-size: 14px;
@@ -2228,14 +2243,19 @@ form .upload .alt
 	margin-left: 58px;
 	vertical-align: baseline;
 }
-.main-entrance #input-submit{
+.main-entrance #input-submit,
+.main-entrance .entrance-submit{
 	font-size: 14px;
 	color:#fff;
 	font-weight: 400;
 	text-transform: uppercase;
 	margin:20px 10px 20px 0;
 }
-.main-entrance #input-submit+span{
+.main-entrance .entrance-submit{
+	margin: 0;
+}
+.main-entrance #input-submit+span,
+.main-entrance .entrance-actions span{
 	font-size: 14px;
 	color:#fff;
 	font-weight: 100;
@@ -2246,7 +2266,12 @@ form .upload .alt
 	vertical-align: baseline;
 	text-decoration: underline;
 }
-a.form-enter-link_reg:hover {
+.main-entrance a.form-enter-link_login {
+	vertical-align: baseline;
+	text-decoration: underline;
+}
+a.form-enter-link_reg:hover,
+a.form-enter-link_login:hover {
 	color: #fff;
 	text-decoration: underline;
 }
