@@ -61,17 +61,32 @@ class AuthController extends Controller
         string $token,
         AccountRegistrationService $registration,
         Request $request,
-    ): RedirectResponse
+    ): View
     {
         $user = $registration->confirm($token);
 
-        abort_if(! $user, 404);
+        if (! $user) {
+            return view('front.auth.confirmation-result', [
+                'title' => 'Account confirmation',
+                'success' => false,
+                'heading' => 'Confirmation failed',
+                'message' => 'The confirmation link is invalid, expired, or has already been used.',
+                'buttonText' => 'Back to registration',
+                'buttonUrl' => route('front.registration.form'),
+            ]);
+        }
 
         Auth::guard('web')->login($user);
         $request->session()->regenerate();
 
-        return redirect()
-            ->route('front.home');
+        return view('front.auth.confirmation-result', [
+            'title' => 'Account confirmed',
+            'success' => true,
+            'heading' => 'Account confirmed successfully',
+            'message' => 'Your account has been confirmed. You are signed in now.',
+            'buttonText' => 'Go to home',
+            'buttonUrl' => route('front.home'),
+        ]);
     }
 
     /**
