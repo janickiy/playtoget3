@@ -119,7 +119,7 @@ class GroupsController extends Controller
             return redirect()->route('front.home');
         }
 
-        $group = $communities->createGroup($viewer, $request->toDto());
+        $group = $communities->createGroup($viewer, $request->toDto(true));
 
         return redirect()->route('front.groups.show', ['community' => $group->id]);
     }

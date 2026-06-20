@@ -1,4 +1,4 @@
-FROM php:8.3-fpm-alpine
+FROM php:8.4-fpm-alpine
 
 RUN apk add --no-cache \
     git unzip libpng-dev libxml2-dev libzip-dev icu-dev oniguruma-dev \

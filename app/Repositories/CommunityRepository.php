@@ -1332,7 +1332,7 @@ class CommunityRepository extends BaseRepository
                 'permission_wall' => 0,
                 'permission_photo' => 0,
                 'permission_video' => 0,
-                'type' => 0,
+                'type' => $data->type,
             ]);
 
             $this->syncGeoTarget($team->type, (int) $team->id, $data->cityId);
@@ -1378,7 +1378,7 @@ class CommunityRepository extends BaseRepository
                 'permission_wall' => 0,
                 'permission_photo' => 0,
                 'permission_video' => 0,
-                'type' => 0,
+                'type' => $data->type,
             ]);
 
             $this->syncGeoTarget($group->type, (int) $group->id, $data->cityId);

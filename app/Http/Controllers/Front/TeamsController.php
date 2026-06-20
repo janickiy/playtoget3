@@ -119,7 +119,7 @@ class TeamsController extends Controller
             return redirect()->route('front.home');
         }
 
-        $team = $communities->createTeam($viewer, $request->toDto());
+        $team = $communities->createTeam($viewer, $request->toDto(true));
 
         return redirect()->route('front.teams.show', ['community' => $team->id]);
     }

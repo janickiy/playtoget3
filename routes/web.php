@@ -42,6 +42,10 @@ Route::prefix('news')->name('front.news.')->controller(NewsController::class)->g
 Route::prefix('profile')->name('front.profile.')->controller(ProfileController::class)->group(function () {
     Route::get('edit', 'edit')->name('edit');
     Route::post('edit', 'update')->name('update');
+    Route::post('delete-account', 'requestAccountDeletion')->name('delete-account.request');
+    Route::get('delete-account/{token}', 'confirmAccountDeletion')
+        ->where('token', '[A-Za-z0-9]+')
+        ->name('delete-account.confirm');
     Route::get('{user}/messages/user/{recipient}', 'messages')
         ->where(['user' => '[0-9]+', 'recipient' => '[0-9]+'])
         ->name('messages.show');

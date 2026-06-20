@@ -1,6 +1,7 @@
 @php
     $isOwnPage = $viewer && (int) $viewer->id === (int) $profileUser->id;
-    $showProfileActions = $viewer && ! $isOwnPage && $friendshipStatus !== 'blocked_by_user';
+    $showProfileActions = $viewer && ! $isOwnPage && ! $profileUser->isDeleted() && $friendshipStatus !== 'blocked_by_user';
+    $showProfileIdentity = ! $profileUser->isDeleted();
 @endphp
 
 <div class="relat">
@@ -52,18 +53,20 @@
                 'userId' => $profileUser->id,
             ])
         </span>
-        <h3 class="name">
-            {{ $profileData['firstname'] }}<br>
-            {{ $profileData['lastname'] }}
-            @if ($profileData['nickname'] !== '')
-                <br>({{ $profileData['nickname'] }})
-            @endif
-        </h3>
-        <p class="citation">{{ $profileData['about'] }}</p>
+        @if ($showProfileIdentity)
+            <h3 class="name">
+                {{ $profileData['firstname'] }}<br>
+                {{ $profileData['lastname'] }}
+                @if ($profileData['nickname'] !== '')
+                    <br>({{ $profileData['nickname'] }})
+                @endif
+            </h3>
+            <p class="citation">{{ $profileData['about'] }}</p>
+        @endif
     </div>
 </div>
 <div class="clearfix"></div>
 
-@if (($permissions['profile'] ?? true) && ! ($permissions['blocked_by_profile'] ?? false))
+@if (! $profileUser->isDeleted() && ($permissions['profile'] ?? true) && ! ($permissions['blocked_by_profile'] ?? false))
     @include('front.profile._information')
 @endif

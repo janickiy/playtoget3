@@ -8,9 +8,11 @@ use App\Repositories\FriendRepository;
 use App\Repositories\MessageRepository;
 use App\Repositories\ProfileRepository;
 use App\Repositories\UserRepository;
+use App\Service\ProfileDeletionService;
 use App\Service\ProfileUpdateService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
@@ -177,5 +179,52 @@ class ProfileController extends Controller
         return redirect()
             ->to(route('front.profile.edit') . '#' . $request->activeTab())
             ->with('status', __('profile.messages.updated'));
+    }
+
+    /**
+     * Sends the current user an account deletion confirmation link.
+     *
+     * @param ProfileDeletionService $profileDeletions
+     * @return RedirectResponse
+     */
+    public function requestAccountDeletion(ProfileDeletionService $profileDeletions): RedirectResponse
+    {
+        $viewer = Auth::guard('web')->user();
+
+        if (! $viewer) {
+            return redirect()->route('front.home');
+        }
+
+        $profileDeletions->sendConfirmation($viewer);
+
+        return redirect()
+            ->to(route('front.profile.edit') . '#security')
+            ->with('status', __('profile.messages.deletion_requested'));
+    }
+
+    /**
+     * Confirms account deletion by token and logs the user out.
+     *
+     * @param string $token
+     * @param Request $request
+     * @param ProfileDeletionService $profileDeletions
+     * @return RedirectResponse
+     */
+    public function confirmAccountDeletion(
+        string $token,
+        Request $request,
+        ProfileDeletionService $profileDeletions,
+    ): RedirectResponse {
+        $deletedUser = $profileDeletions->confirm($token);
+
+        if ((int) Auth::guard('web')->id() === (int) $deletedUser->id) {
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
+
+        return redirect()
+            ->route('front.home')
+            ->with('status', __('profile.messages.account_closed'));
     }
 }

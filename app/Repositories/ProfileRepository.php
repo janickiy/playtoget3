@@ -116,6 +116,33 @@ class ProfileRepository extends BaseRepository
      */
     public function profileData(User $profile): array
     {
+        if ($profile->isDeleted()) {
+            return [
+                'avatar' => FrontAssets::userAvatar($profile),
+                'cover' => asset('frontend/images/content-bg.png'),
+                'firstname' => '',
+                'lastname' => '',
+                'nickname' => '',
+                'about' => '',
+                'last_visit' => '',
+                'birthday' => '',
+                'country' => '',
+                'region' => '',
+                'city' => '',
+                'phone' => '',
+                'contact_email' => '',
+                'telegram' => '',
+                'whatsapp' => '',
+                'viber' => '',
+                'website' => '',
+                'about_sport' => '',
+                'is_online' => false,
+                'sport_types' => collect(),
+                'education' => collect(),
+                'work' => collect(),
+            ];
+        }
+
         return [
             'avatar' => FrontAssets::userAvatar($profile),
             'cover' => FrontAssets::userCover($profile),
@@ -195,6 +222,7 @@ class ProfileRepository extends BaseRepository
             ->orderByDesc('added')
             ->get()
             ->map(fn(Friend $relation): ?array => $relation->friend
+                && $relation->friend->isActive()
                 ? [
                     'id' => (int)$relation->friend->id,
                     'name' => $relation->friend->displayName(),

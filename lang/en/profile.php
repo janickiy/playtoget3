@@ -86,6 +86,12 @@ return [
             'description' => 'Users in the blacklist cannot interact with your profile.',
             'empty' => 'Blacklist is empty.',
         ],
+        'delete_account' => [
+            'title' => 'Delete account',
+            'description' => 'We will send a confirmation link to your email address. After confirmation the account will be closed and login will be disabled.',
+            'button' => 'Delete account',
+            'mail_subject' => 'Confirm account deletion',
+        ],
         'contacts' => [
             'contact_email' => 'Email',
             'phone' => 'Phone',
@@ -105,5 +111,7 @@ return [
     ],
     'messages' => [
         'updated' => 'Changes saved',
+        'deletion_requested' => 'A confirmation link has been sent to your email.',
+        'account_closed' => 'This account has been closed.',
     ],
 ];

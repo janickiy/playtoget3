@@ -45,7 +45,7 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('frontend/css/jquery-ui-1.8.16.custom.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/jquery.Jcrop.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/profile-settings.css') }}?v=2026062001">
+    <link rel="stylesheet" href="{{ asset('frontend/css/profile-settings.css') }}?v=2026062002">
 @endpush
 
 @section('content')
@@ -268,6 +268,18 @@
                                 <p class="settings-empty">{{ __('profile.settings.security.empty') }}</p>
                             @endforelse
                         </div>
+
+                        <div class="settings-danger-zone">
+                            <h4>{{ __('profile.settings.delete_account.title') }}</h4>
+                            <p>{{ __('profile.settings.delete_account.description') }}</p>
+                            <button
+                                type="submit"
+                                form="profile-delete-account-form"
+                                class="settings-delete-account"
+                            >
+                                {{ __('profile.settings.delete_account.button') }}
+                            </button>
+                        </div>
                     </div>
 
                     <div id="blacklist">
@@ -300,6 +312,9 @@
                 <div class="profile-settings button">
                     <button class="save-button" type="submit">{{ __('profile.settings.apply') }}</button>
                 </div>
+            </form>
+            <form id="profile-delete-account-form" method="POST" action="{{ route('front.profile.delete-account.request') }}">
+                @csrf
             </form>
         </div>
     </div>

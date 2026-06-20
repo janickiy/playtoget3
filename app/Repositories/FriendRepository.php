@@ -114,6 +114,7 @@ class FriendRepository extends BaseRepository
             ->where('status', 0)
             ->where('friend_id', $userId)
             ->whereNotNull('user_id')
+            ->whereHas('user', fn (Builder $query): Builder => $query->where('status', UserStatus::Confirmed->value))
             ->distinct('user_id')
             ->count('user_id');
     }

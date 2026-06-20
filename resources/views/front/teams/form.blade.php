@@ -3,6 +3,7 @@
 @section('content')
     @php($showFormTabs = (bool) ($canEditSettings ?? false))
     @php($isCommunityOwner = (int) ($role ?? 0) === 1)
+    @php($type = old('community.type', $settings?->type ?? 0))
 
     <div class="content-groups friends">
         @if ($team)
@@ -64,6 +65,20 @@
                                 <div class="select-place" data-type="search_sport"></div>
                             </div>
                         </div>
+                        @if (! $showFormTabs)
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label" for="team-type">Team type</label>
+                                <div class="col-lg-6">
+                                    <div class="styled-select styled-select-4">
+                                        <select id="team-type" class="form-control form-primary" name="community[type]">
+                                            <option value="0" @selected((int)$type === 0)>Open</option>
+                                            <option value="2" @selected((int)$type === 2)>Closed</option>
+                                            <option value="1" @selected((int)$type === 1)>Private</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                         <div class="form-group team-form-images">
                             <div class="col-sm-6 team-form-image-field">
                                 <img id="preview_ava" src="{{ $team ? $teamData['avatar'] : asset('frontend/images/noimage.png') }}" alt="">
@@ -123,7 +138,6 @@
                             @php($wall = old('community.permission_wall', $settings?->permission_wall ?? 0))
                             @php($photo = old('community.permission_photo', $settings?->permission_photo ?? 0))
                             @php($video = old('community.permission_video', $settings?->permission_video ?? 0))
-                            @php($type = old('community.type', $settings?->type ?? 0))
                             <div class="form-group">
                                 <label class="col-lg-4 control-label">Feed</label>
                                 <div class="col-lg-7">
@@ -162,13 +176,13 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-lg-4 control-label">Type team</label>
+                                <label class="col-lg-4 control-label">Team type</label>
                                 <div class="col-lg-7">
                                     <div class="styled-select styled-select-4">
                                         <select class="form-control form-primary" name="community[type]">
                                             <option value="0" @selected((int)$type === 0)>Open</option>
-                                            <option value="1" @selected((int)$type === 1)>Closed</option>
-                                            <option value="2" @selected((int)$type === 2)>Private</option>
+                                            <option value="2" @selected((int)$type === 2)>Closed</option>
+                                            <option value="1" @selected((int)$type === 1)>Private</option>
                                         </select>
                                     </div>
                                 </div>

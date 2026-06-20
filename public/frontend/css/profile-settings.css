@@ -42,7 +42,7 @@
     flex-wrap: wrap;
     gap: 3px;
     justify-content: center;
-    margin-bottom: 24px;
+    margin-bottom: 18px;
     padding: 0;
     width: 100%;
 }
@@ -70,10 +70,10 @@
     display: flex;
     height: 100%;
     justify-content: center;
-    line-height: 18px;
-    min-height: 48px;
+    line-height: 16px;
+    min-height: 40px;
     overflow-wrap: normal;
-    padding: 8px 10px !important;
+    padding: 5px 8px !important;
     text-align: center;
     white-space: normal;
     word-break: normal;
@@ -175,6 +175,53 @@
 .profile-edit-page .settings-empty {
     color: #a8a9ad;
     margin: 20px 0;
+}
+
+.profile-edit-page .settings-danger-zone {
+    border-top: 1px solid #eaebed;
+    margin-top: 26px;
+    padding-top: 22px;
+    text-align: center;
+}
+
+.profile-edit-page .settings-danger-zone h4 {
+    color: #2c2e45;
+    font: 700 16px/22px Open Sans;
+    margin: 0 0 8px;
+    text-transform: uppercase;
+}
+
+.profile-edit-page .settings-danger-zone p {
+    margin-bottom: 16px;
+}
+
+.profile-edit-page .settings-delete-account {
+    background: #ca6060;
+    border: 0;
+    border-radius: 22px;
+    color: #fff;
+    font: 700 13px/18px Open Sans;
+    min-width: 150px;
+    padding: 10px 24px;
+    text-transform: uppercase;
+    transition: background-color .18s ease, opacity .18s ease;
+}
+
+.profile-edit-page .settings-delete-account:hover,
+.profile-edit-page .settings-delete-account:focus {
+    background: #b34f4f;
+    color: #fff;
+    outline: none;
+}
+
+.profile-edit-page .settings-delete-account:active {
+    background: #9e4444;
+}
+
+.profile-edit-page .settings-delete-account:disabled {
+    background: #c7cbd6;
+    cursor: default;
+    opacity: .65;
 }
 
 .profile-edit-page .possible-friend-cart {
@@ -445,6 +492,8 @@
     }
 
     .profile-edit-page #tabs > ul > li a {
+        min-height: 36px;
+        padding: 4px 6px !important;
         white-space: normal;
     }
 

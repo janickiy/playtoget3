@@ -10,7 +10,7 @@
     @if ($profileUser->isBlocked())
         <p class="no_message">User blocked.</p>
     @elseif ($profileUser->isDeleted())
-        <p class="no_message">User is deleted.</p>
+        <p class="no_message">{{ __('profile.messages.account_closed') }}</p>
     @elseif ($permissions['blocked_by_profile'] ?? false)
         <p class="no_message">The user has restricted access to their page for you.</p>
     @elseif (! $permissions['profile'])
