@@ -12,11 +12,11 @@
                 @endif
 
                 <ul class="soc-menu">
-                    <li><a target="_blank" rel="noopener" href="https://x.com/playtoget_com"><img src="{{ asset('frontend/images/x.svg') }}" alt="X"></a></li>
-                    <li><a target="_blank" rel="noopener" href="https://www.facebook.com/playtoget.ru/"><img src="{{ asset('frontend/images/fb.svg') }}" alt=""></a></li>
-                    <li><a target="_blank" rel="noopener" href="https://www.instagram.com/playtoget_com/"><img src="{{ asset('frontend/images/ins.svg') }}" alt=""></a></li>
-                    <li><a target="_blank" rel="noopener" href="https://www.linkedin.com/groups/8510609"><img src="{{ asset('frontend/images/in.svg') }}" alt=""></a></li>
-                    <li><a target="_blank" rel="noopener" href="https://www.youtube.com/channel/UC44vVK3JlHCIBBpIY16Ok2g"><img src="{{ asset('frontend/images/youtube.svg') }}" alt=""></a></li>
+                    <li><a target="_blank" rel="noopener" href="https://x.com/playtoget"><img src="{{ asset('frontend/images/x.svg') }}" alt="X"></a></li>
+                    <li><a target="_blank" rel="noopener" href="https://www.facebook.com/playtoget"><img src="{{ asset('frontend/images/fb.svg') }}" alt=""></a></li>
+                    <li><a target="_blank" rel="noopener" href="https://www.instagram.com/playtoget/"><img src="{{ asset('frontend/images/ins.svg') }}" alt=""></a></li>
+                    <li><a target="_blank" rel="noopener" href="https://www.linkedin.com/groups/playtoget"><img src="{{ asset('frontend/images/in.svg') }}" alt=""></a></li>
+                    <li><a target="_blank" rel="noopener" href="https://www.youtube.com/channel/playtoget"><img src="{{ asset('frontend/images/youtube.svg') }}" alt=""></a></li>
                 </ul>
                 <p class="copyright">
                     © {{ date('Y') }} PlayToGet: Sport inside. Created by
