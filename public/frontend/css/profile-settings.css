@@ -135,6 +135,10 @@
     resize: vertical;
 }
 
+.profile-edit-page .profile-about-group {
+    margin-bottom: 18px !important;
+}
+
 .profile-edit-page .job_form .form-control:focus,
 .profile-edit-page .job_form input[type="email"]:focus,
 .profile-edit-page .job_form input[type="text"]:focus,
@@ -193,6 +197,11 @@
 
 .profile-edit-page .settings-danger-zone p {
     margin-bottom: 16px;
+}
+
+.profile-edit-page .settings-delete-account-form {
+    margin: 8px 0 44px;
+    text-align: center;
 }
 
 .profile-edit-page .settings-delete-account {

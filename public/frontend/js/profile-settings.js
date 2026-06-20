@@ -103,8 +103,15 @@
         return index;
     }
 
+    function syncDeleteAccountForm(tabName) {
+        $('.settings-delete-account-form').toggle(normalizeTabName(tabName) === 'profile');
+    }
+
     function setActiveTabValue(tabName) {
-        $('#profile-settings-active-tab').val(normalizeTabName(tabName));
+        tabName = normalizeTabName(tabName);
+
+        $('#profile-settings-active-tab').val(tabName);
+        syncDeleteAccountForm(tabName);
     }
 
     function initTabs() {

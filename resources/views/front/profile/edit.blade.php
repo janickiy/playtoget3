@@ -45,7 +45,7 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('frontend/css/jquery-ui-1.8.16.custom.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/jquery.Jcrop.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/profile-settings.css') }}?v=2026062002">
+    <link rel="stylesheet" href="{{ asset('frontend/css/profile-settings.css') }}?v=2026062004">
 @endpush
 
 @section('content')
@@ -172,7 +172,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group profile-about-group">
                             <label for="profile-basic-about" class="col-sm-4 control-label">{{ __('profile.settings.profile.fields.about') }}</label>
                             <div class="col-sm-8">
                                 <textarea id="profile-basic-about" class="form-control" name="profile[about]" rows="5">{{ old('profile.about', $user->about) }}</textarea>
@@ -182,7 +182,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group profile-about-sport-group">
                             <label for="profile-basic-about-sport" class="col-sm-4 control-label">{{ __('profile.settings.profile.fields.about_sport') }}</label>
                             <div class="col-sm-8">
                                 <textarea id="profile-basic-about-sport" class="form-control" name="profile[about_sport]" rows="5">{{ old('profile.about_sport', $user->about_sport) }}</textarea>
@@ -269,17 +269,6 @@
                             @endforelse
                         </div>
 
-                        <div class="settings-danger-zone">
-                            <h4>{{ __('profile.settings.delete_account.title') }}</h4>
-                            <p>{{ __('profile.settings.delete_account.description') }}</p>
-                            <button
-                                type="submit"
-                                form="profile-delete-account-form"
-                                class="settings-delete-account"
-                            >
-                                {{ __('profile.settings.delete_account.button') }}
-                            </button>
-                        </div>
                     </div>
 
                     <div id="blacklist">
@@ -313,8 +302,11 @@
                     <button class="save-button" type="submit">{{ __('profile.settings.apply') }}</button>
                 </div>
             </form>
-            <form id="profile-delete-account-form" method="POST" action="{{ route('front.profile.delete-account.request') }}">
+            <form id="profile-delete-account-form" class="settings-delete-account-form" method="POST" action="{{ route('front.profile.delete-account.request') }}">
                 @csrf
+                <button type="submit" class="settings-delete-account">
+                    {{ __('profile.settings.delete_account.button') }}
+                </button>
             </form>
         </div>
     </div>
@@ -388,5 +380,5 @@
 @push('scripts')
     <script src="{{ asset('frontend/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('frontend/js/jquery.Jcrop.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/profile-settings.js') }}?v=2026062001"></script>
+    <script src="{{ asset('frontend/js/profile-settings.js') }}?v=2026062002"></script>
 @endpush

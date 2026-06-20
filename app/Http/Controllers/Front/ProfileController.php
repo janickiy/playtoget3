@@ -198,7 +198,7 @@ class ProfileController extends Controller
         $profileDeletions->sendConfirmation($viewer);
 
         return redirect()
-            ->to(route('front.profile.edit') . '#security')
+            ->to(route('front.profile.edit') . '#profile')
             ->with('status', __('profile.messages.deletion_requested'));
     }
 
