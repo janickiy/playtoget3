@@ -103,6 +103,16 @@
         return index;
     }
 
+    function currentTabName($tabs) {
+        var $activeLink = $tabs.find('> ul > li.ui-tabs-active > a, > ul > li.active > a').first();
+
+        if ($activeLink.length) {
+            return normalizeTabName($activeLink.attr('href'));
+        }
+
+        return normalizeTabName($('#profile-settings-active-tab').val());
+    }
+
     function syncDeleteAccountForm(tabName) {
         $('.settings-delete-account-form').toggle(normalizeTabName(tabName) === 'profile');
     }
@@ -133,7 +143,7 @@
                     setActiveTabValue(ui.newPanel.attr('id'));
                 }
             });
-            setActiveTabValue($panels.eq($tabs.tabs('option', 'active')).attr('id'));
+            setActiveTabValue(currentTabName($tabs));
             return;
         }
 
@@ -476,7 +486,7 @@
             var activePanelId = '';
 
             if ($.fn.tabs && $tabs.data('ui-tabs')) {
-                activePanelId = $tabs.find('> div').eq($tabs.tabs('option', 'active')).attr('id');
+                activePanelId = currentTabName($tabs);
             } else {
                 activePanelId = $tabs.find('> ul > li.active > a').attr('href');
             }

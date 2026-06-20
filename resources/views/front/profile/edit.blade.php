@@ -100,31 +100,6 @@
                         <li><a href="#blacklist">{{ __('profile.settings.tabs.blacklist') }}</a></li>
                     </ul>
 
-                    <div id="contacts">
-                        <div class="photo-caption marginTopNone">
-                            <h3>{{ __('profile.settings.contact.title') }}</h3>
-                        </div>
-                        <p>{{ __('profile.settings.contact.description') }}</p>
-
-                        @foreach ($contactFields as $field => $meta)
-                            <div class="form-group">
-                                <label for="profile-{{ $field }}" class="col-sm-4 control-label">{{ $meta['label'] }}</label>
-                                <div class="col-sm-8">
-                                    <input
-                                        id="profile-{{ $field }}"
-                                        class="form-control"
-                                        type="{{ $meta['type'] }}"
-                                        name="user[{{ $field }}]"
-                                        value="{{ old("user.{$field}", $user->{$field}) }}"
-                                    >
-                                    @error("user.{$field}")
-                                        <div class="settings-field-error">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-
                     <div id="profile">
                         <div class="photo-caption marginTopNone">
                             <h3>{{ __('profile.settings.profile.title') }}</h3>
@@ -175,7 +150,7 @@
                         <div class="form-group profile-about-group">
                             <label for="profile-basic-about" class="col-sm-4 control-label">{{ __('profile.settings.profile.fields.about') }}</label>
                             <div class="col-sm-8">
-                                <textarea id="profile-basic-about" class="form-control" name="profile[about]" rows="5">{{ old('profile.about', $user->about) }}</textarea>
+                                <textarea id="profile-basic-about" class="form-control" name="profile[about]" rows="5" maxlength="120">{{ old('profile.about', $user->about) }}</textarea>
                                 @error('profile.about')
                                     <div class="settings-field-error">{{ $message }}</div>
                                 @enderror
@@ -191,6 +166,31 @@
                                 @enderror
                             </div>
                         </div>
+                    </div>
+
+                    <div id="contacts">
+                        <div class="photo-caption marginTopNone">
+                            <h3>{{ __('profile.settings.contact.title') }}</h3>
+                        </div>
+                        <p>{{ __('profile.settings.contact.description') }}</p>
+
+                        @foreach ($contactFields as $field => $meta)
+                            <div class="form-group">
+                                <label for="profile-{{ $field }}" class="col-sm-4 control-label">{{ $meta['label'] }}</label>
+                                <div class="col-sm-8">
+                                    <input
+                                        id="profile-{{ $field }}"
+                                        class="form-control"
+                                        type="{{ $meta['type'] }}"
+                                        name="user[{{ $field }}]"
+                                        value="{{ old("user.{$field}", $user->{$field}) }}"
+                                    >
+                                    @error("user.{$field}")
+                                        <div class="settings-field-error">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
 
                     <div id="privacy">
@@ -380,5 +380,5 @@
 @push('scripts')
     <script src="{{ asset('frontend/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('frontend/js/jquery.Jcrop.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/profile-settings.js') }}?v=2026062003"></script>
+    <script src="{{ asset('frontend/js/profile-settings.js') }}?v=2026062004"></script>
 @endpush

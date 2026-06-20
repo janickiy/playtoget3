@@ -30,7 +30,7 @@ class ProfileSettingsRequest extends FormRequest
             'profile.lastname' => ['nullable', 'string', 'max:255'],
             'profile.sex' => ['required', Rule::in(['male', 'female'])],
             'profile.birthday' => ['nullable', 'date', 'before_or_equal:today'],
-            'profile.about' => ['nullable', 'string', 'max:5000'],
+            'profile.about' => ['nullable', 'string', 'max:120'],
             'profile.about_sport' => ['nullable', 'string', 'max:5000'],
             'profile.country' => ['nullable', 'string', 'max:100'],
             'profile.region' => ['nullable', 'string', 'max:100'],
