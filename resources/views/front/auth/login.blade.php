@@ -7,7 +7,7 @@
     <meta name="description" content="We are the first sports online resource that brings together healthy lifestyle followers, sports fans and professional athletes.">
     <title>{{ $title ?? 'PlayToGet' }}</title>
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
-    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026062022">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=2026062101">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/max-width-1440.css') }}" media="(max-width: 1440px)">
@@ -76,7 +76,7 @@
                                 @csrf
                                 <h3>Sign in to the site</h3>
                                 @if (session('auth_status'))
-                                    <div class="alert_msg" style="background:#dff2e8;color:#287647;"><p>{{ session('auth_status') }}</p></div>
+                                    <div class="entrance-status-message">{{ session('auth_status') }}</div>
                                 @endif
                                 @if ($errors->any())
                                     <div class="alert_msg"><p><strong>Error! </strong>{{ $errors->first() }}</p></div>
@@ -94,7 +94,7 @@
                                 @csrf
                                 <h3>Password reset</h3>
                                 @if (session('password_reset_status'))
-                                    <div class="alert_msg" style="background:#dff2e8;color:#287647;"><p>{{ session('password_reset_status') }}</p></div>
+                                    <div class="entrance-status-message">{{ session('password_reset_status') }}</div>
                                 @endif
                                 <input type="email" name="email" value="{{ old('email') }}" placeholder="email" class="entrance-text-field" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
                                 <div class="entrance-actions">

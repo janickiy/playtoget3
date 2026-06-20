@@ -57,15 +57,21 @@ class AuthController extends Controller
     /**
      * Confirms the account by the email token.
      */
-    public function confirmRegistration(string $token, AccountRegistrationService $registration): RedirectResponse
+    public function confirmRegistration(
+        string $token,
+        AccountRegistrationService $registration,
+        Request $request,
+    ): RedirectResponse
     {
         $user = $registration->confirm($token);
 
         abort_if(! $user, 404);
 
+        Auth::guard('web')->login($user);
+        $request->session()->regenerate();
+
         return redirect()
-            ->route('front.home')
-            ->with('auth_status', 'Your account has been confirmed. You can sign in now.');
+            ->route('front.home');
     }
 
     /**

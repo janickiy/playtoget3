@@ -2162,13 +2162,27 @@ form .upload .alt
 }
 
 .main-entrance #password-reset-request-form {
-	height: 265px;
+	height: 295px;
 }
 
 .alert_msg, .error_msg
 {
 	color: #FFF;
 	text-align: center;
+}
+
+.main-entrance .entrance-status-message{
+	width: 100%;
+	margin: 0 auto 16px auto;
+	padding: 10px 16px;
+	border-radius: 20px;
+	background: rgba(70, 177, 171, .22);
+	color: #fff;
+	font-size: 14px;
+	line-height: 1.35;
+	font-weight: 400;
+	text-align: center;
+	box-shadow: inset 0 0 0 1px rgba(70, 177, 171, .38);
 }
 
 .error
