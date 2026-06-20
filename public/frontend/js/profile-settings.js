@@ -484,6 +484,10 @@
             setActiveTabValue(activePanelId);
         });
 
+        $('#profile-delete-account-form').on('submit', function () {
+            $(this).find('.settings-delete-account').prop('disabled', true);
+        });
+
         $('#profile-avatar-input').on('change', function () {
             chooseCropFile('avatar', this);
         });

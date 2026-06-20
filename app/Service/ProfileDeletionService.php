@@ -22,6 +22,10 @@ class ProfileDeletionService
             return;
         }
 
+        if ($this->hasPendingConfirmation($user)) {
+            return;
+        }
+
         AccountDeleteToken::query()
             ->where('user_id', $user->id)
             ->whereNull('used_at')
@@ -39,6 +43,18 @@ class ProfileDeletionService
             $user,
             route('front.profile.delete-account.confirm', ['token' => $token]),
         ));
+    }
+
+    /**
+     * Checks whether the user already has an active account deletion confirmation token.
+     */
+    public function hasPendingConfirmation(User $user): bool
+    {
+        return AccountDeleteToken::query()
+            ->where('user_id', $user->id)
+            ->whereNull('used_at')
+            ->where('expires_at', '>', now())
+            ->exists();
     }
 
     /**

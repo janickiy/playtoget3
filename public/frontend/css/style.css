@@ -1356,8 +1356,8 @@ div.message
 }
 
 .top_thumb_avatar .avatar-status-holder--profile .avatar-online-status {
-    top: 8px;
-    right: 8px;
+    top: 16px;
+    right: 16px;
     bottom: auto;
     width: 15px;
     height: 15px;

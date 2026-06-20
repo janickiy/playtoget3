@@ -304,7 +304,7 @@
             </form>
             <form id="profile-delete-account-form" class="settings-delete-account-form" method="POST" action="{{ route('front.profile.delete-account.request') }}">
                 @csrf
-                <button type="submit" class="settings-delete-account">
+                <button type="submit" class="settings-delete-account" @disabled($deleteAccountPending ?? false)>
                     {{ __('profile.settings.delete_account.button') }}
                 </button>
             </form>
@@ -380,5 +380,5 @@
 @push('scripts')
     <script src="{{ asset('frontend/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('frontend/js/jquery.Jcrop.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/profile-settings.js') }}?v=2026062002"></script>
+    <script src="{{ asset('frontend/js/profile-settings.js') }}?v=2026062003"></script>
 @endpush

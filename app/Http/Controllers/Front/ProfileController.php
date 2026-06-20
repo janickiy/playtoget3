@@ -58,9 +58,13 @@ class ProfileController extends Controller
      * Shows the current user profile edit form.
      *
      * @param ProfileRepository $profiles
+     * @param ProfileDeletionService $profileDeletions
      * @return View|RedirectResponse
      */
-    public function edit(ProfileRepository $profiles): View|RedirectResponse
+    public function edit(
+        ProfileRepository $profiles,
+        ProfileDeletionService $profileDeletions,
+    ): View|RedirectResponse
     {
         $viewer = Auth::guard('web')->user();
 
@@ -78,6 +82,7 @@ class ProfileController extends Controller
             'securityLogs' => $profiles->securityLogs($viewer),
             'permissionFields' => $profiles->permissionFields(),
             'notificationFields' => $profiles->notificationFields(),
+            'deleteAccountPending' => $profileDeletions->hasPendingConfirmation($viewer),
         ]);
     }
 
