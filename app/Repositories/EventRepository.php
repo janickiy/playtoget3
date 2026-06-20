@@ -716,7 +716,7 @@ class EventRepository extends BaseRepository
                 'cover_page' => $this->covers->storeCover($data->coverFile) ?? '',
                 'place' => $data->place ?: $this->cityName($data->cityId),
                 'address' => $data->address,
-                'status' => EventStatus::Confirmed->value,
+                'status' => EventStatus::New->value,
             ]);
 
             AcceptedEventMember::query()->create([

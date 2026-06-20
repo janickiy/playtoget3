@@ -74,10 +74,10 @@ class SettingsHelper
 
     /**
      * @param string $name
-     * @param bool $default
+     * @param mixed $default
      * @return bool|mixed
      */
-    public static function getValueForKey(string $name, bool $default = false): mixed
+    public static function getValueForKey(string $name, mixed $default = false): mixed
     {
         $settings = SettingsHelper::getInstance()->settings;
 
@@ -86,21 +86,29 @@ class SettingsHelper
 
     /**
      * @param string $key
-     * @param bool $default
+     * @param mixed $default
      * @return bool|mixed
      */
-    public static function get(string $key, bool $default = false): mixed
+    public static function get(string $key, mixed $default = false): mixed
     {
         return self::getValueForKey($key, $default);
     }
 
     /**
-     * @param bool $key
+     * @param string $key
      * @return bool
      */
-    public static function has(bool $key): bool
+    public static function has(string $key): bool
     {
         return isset(self::getInstance()->settings[$key]);
+    }
+
+    /**
+     * Returns whether a numeric or boolean setting is enabled.
+     */
+    public static function enabled(string $key): bool
+    {
+        return filter_var(self::get($key, false), FILTER_VALIDATE_BOOLEAN);
     }
 
     /**

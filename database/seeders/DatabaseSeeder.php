@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             GeoRegionSeeder::class,
             GeoCitySeeder::class,
             GeoTargetSeeder::class,
+            SettingsSeeder::class,
         ]);
     }
 }

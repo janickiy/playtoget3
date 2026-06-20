@@ -19,7 +19,7 @@
                     <li><a target="_blank" rel="noopener" href="https://www.youtube.com/channel/playtoget"><img src="{{ asset('frontend/images/youtube.svg') }}" alt=""></a></li>
                 </ul>
                 <p class="copyright">
-                    © {{ date('Y') }} PlayToGet: Sport inside. Created by
+                    © {{ date('Y') }} PlayToGet: {{ \App\Helpers\SettingsHelper::get('SLOGAN', 'Sport inside') }}. Created by
                     <a href="https://janickiy.com" target="_blank" rel="noopener">Alexander Yanitsky</a>
                 </p>
             </div>

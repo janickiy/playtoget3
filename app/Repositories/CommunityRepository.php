@@ -1318,7 +1318,7 @@ class CommunityRepository extends BaseRepository
                 'sport_type' => $data->sportType ?: $this->sportName($data->sportId),
                 'avatar' => $avatar ?? '',
                 'cover_page' => $cover ?? '',
-                'status' => CommunityStatus::Confirmed->value,
+                'status' => CommunityStatus::New->value,
             ]);
 
             CommunityRole::query()->create([
@@ -1364,7 +1364,7 @@ class CommunityRepository extends BaseRepository
                 'sport_type' => $data->sportType ?: $this->sportName($data->sportId),
                 'avatar' => $avatar ?? '',
                 'cover_page' => $cover ?? '',
-                'status' => CommunityStatus::Confirmed->value,
+                'status' => CommunityStatus::New->value,
             ]);
 
             CommunityRole::query()->create([

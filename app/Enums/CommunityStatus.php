@@ -2,6 +2,8 @@
 
 namespace App\Enums;
 
+use App\Helpers\SettingsHelper;
+
 enum CommunityStatus: int
 {
     case New = 0;
@@ -31,7 +33,7 @@ enum CommunityStatus: int
 
     public function isVisible(): bool
     {
-        return in_array($this, [self::New, self::Confirmed], true);
+        return in_array($this->value, self::visibleValues(), true);
     }
 
     public static function labelFor(?int $status): string
@@ -61,6 +63,12 @@ enum CommunityStatus: int
      */
     public static function visibleValues(): array
     {
+        if (SettingsHelper::enabled('MODERATE_COMMUNITIES')) {
+            return [
+                self::Confirmed->value,
+            ];
+        }
+
         return [
             self::New->value,
             self::Confirmed->value,

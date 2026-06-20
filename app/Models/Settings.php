@@ -50,7 +50,7 @@ class Settings extends Model
      */
     public function getValueAttribute()
     {
-        if ($this->attributes['type'] == 'FILE') {
+        if (($this->attributes['type'] ?? null) == 'FILE') {
             return Storage::disk('public')->url($this->table . '/' . $this->attributes['value']);
         }
 
