@@ -89,7 +89,7 @@
 @section('content')
     <div class="auth-card">
         <h1>Registration</h1>
-        <p class="required-note">* - обязательно</p>
+        <p class="required-note">* - required</p>
 
         @if (session('status'))
             <div class="auth-alert auth-success">{{ session('status') }}</div>
