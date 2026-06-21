@@ -159,7 +159,7 @@ class AuthController extends Controller
 
         Auth::guard('web')->login($user, $request->remember());
 
-        return redirect()->intended(route('front.news.index'));
+        return redirect()->route('front.home');
     }
 
     /**
@@ -218,7 +218,7 @@ class AuthController extends Controller
 
             Auth::guard('web')->login($user, true);
 
-            return redirect()->intended(route('front.news.index'));
+            return redirect()->route('front.home');
         } catch (InvalidStateException|DriverMissingConfigurationException|RuntimeException $exception) {
             return redirect()
                 ->route('front.home')
