@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Enums\UserStatus;
 use App\Models\User;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
@@ -15,6 +17,9 @@ class UserStatusLoginTest extends TestCase
     {
         parent::setUp();
 
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
+        Schema::dropIfExists('logs');
         Schema::dropIfExists('users');
 
         Schema::create('users', function (Blueprint $table): void {
@@ -26,13 +31,39 @@ class UserStatusLoginTest extends TestCase
             $table->dateTime('confirmed_at')->nullable();
             $table->timestamps();
         });
+
+        Schema::create('logs', function (Blueprint $table): void {
+            $table->integer('id', true);
+            $table->integer('user_id')->nullable();
+            $table->string('ip', 255)->nullable();
+            $table->string('user_agent', 255);
+            $table->dateTime('last_sign_in_at')->nullable();
+        });
     }
 
     protected function tearDown(): void
     {
+        Schema::dropIfExists('logs');
         Schema::dropIfExists('users');
 
         parent::tearDown();
+    }
+
+    public function test_successful_login_writes_authorization_log(): void
+    {
+        $user = $this->user('confirmed@example.com', UserStatus::Confirmed);
+
+        $this->post(route('front.login'), [
+            'username' => $user->email,
+            'password' => 'password',
+        ])->assertRedirect(route('front.home'));
+
+        $this->assertAuthenticatedAs($user, 'web');
+        $this->assertDatabaseHas('logs', [
+            'user_id' => $user->id,
+            'ip' => '127.0.0.1',
+        ]);
+        $this->assertNotNull(DB::table('logs')->where('user_id', $user->id)->value('last_sign_in_at'));
     }
 
     public function test_blocked_deleted_and_invalid_password_use_same_login_error(): void
@@ -56,7 +87,7 @@ class UserStatusLoginTest extends TestCase
             ])
             ->assertRedirect(route('front.home'))
             ->assertSessionHasErrors([
-                'username' => 'Неверный email или пароль.',
+                'username' => 'Invalid email or password.',
             ]);
     }
 

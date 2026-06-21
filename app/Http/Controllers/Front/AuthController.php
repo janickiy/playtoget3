@@ -10,6 +10,7 @@ use App\Http\Requests\Front\Auth\RegisterRequest;
 use App\Repositories\SocialAccountRepository;
 use App\Repositories\UserRepository;
 use App\Service\AccountRegistrationService;
+use App\Service\AuthLogService;
 use App\Service\PasswordResetService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -60,6 +61,7 @@ class AuthController extends Controller
     public function confirmRegistration(
         string $token,
         AccountRegistrationService $registration,
+        AuthLogService $authLogs,
         Request $request,
     ): View
     {
@@ -78,6 +80,7 @@ class AuthController extends Controller
 
         Auth::guard('web')->login($user);
         $request->session()->regenerate();
+        $authLogs->record($user, $request);
 
         return view('front.auth.confirmation-result', [
             'title' => 'Account confirmed',
@@ -140,7 +143,7 @@ class AuthController extends Controller
      * @param UserRepository $users
      * @return RedirectResponse
      */
-    public function login(LoginRequest $request, UserRepository $users): RedirectResponse
+    public function login(LoginRequest $request, UserRepository $users, AuthLogService $authLogs): RedirectResponse
     {
         $user = $users->findForLogin($request->email());
         $loginError = ['username' => 'Invalid email or password.'];
@@ -158,6 +161,7 @@ class AuthController extends Controller
         }
 
         Auth::guard('web')->login($user, $request->remember());
+        $authLogs->record($user, $request);
 
         return redirect()->route('front.home');
     }
@@ -197,6 +201,8 @@ class AuthController extends Controller
     public function handleProviderCallback(
         string $provider,
         SocialAccountRepository $accounts,
+        AuthLogService $authLogs,
+        Request $request,
     ): RedirectResponse {
         $driver = $this->driverFor($provider);
 
@@ -217,6 +223,7 @@ class AuthController extends Controller
             }
 
             Auth::guard('web')->login($user, true);
+            $authLogs->record($user, $request);
 
             return redirect()->route('front.home');
         } catch (InvalidStateException|DriverMissingConfigurationException|RuntimeException $exception) {
