@@ -59,10 +59,7 @@
                 <li>
                     <div class="sub-content">
                         @forelse ($frontLayout['announcements'] as $announcement)
-                            <div class="block_right">
-                                <div class="wrap_img_right">
-                                    <img src="{{ asset('frontend/images/noimage.png') }}" alt="">
-                                </div>
+                            <div class="block_right announcement-sidebar-item">
                                 <div class="text-right-block">
                                     <a href="{{ route('front.announcements.show', ['slug' => $announcement->slug]) }}"><h5>{{ $announcement->title }}</h5></a>
                                     <p>{{ $announcement->created_at?->format('d.m.Y') }}</p>

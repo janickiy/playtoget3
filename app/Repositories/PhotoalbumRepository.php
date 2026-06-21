@@ -437,7 +437,7 @@ class PhotoalbumRepository extends BaseRepository
             'photoalbum_id' => $album->id,
             'small_photo' => $storedPhoto['small_photo'],
             'photo' => $storedPhoto['photo'],
-            'description' => '',
+            'description' => $data->description,
             'owner_id' => $user->id,
             'banned' => false,
             'moderate' => false,

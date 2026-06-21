@@ -65,6 +65,32 @@
         $item.find('.photo-upload-percent').text(safePercent + '%');
     }
 
+    function albumUrl(albumId) {
+        return redirectBase.replace(/\/$/, '') + '/' + encodeURIComponent(albumId);
+    }
+
+    function showUploadCompleteModal(albumId) {
+        const url = albumUrl(albumId);
+        const link = '<a class="photo-upload-back-link" href="' + url + '">Back to photo album</a>';
+
+        if ($.confirm) {
+            $.confirm({
+                title: 'Photos uploaded',
+                message: 'Photos were uploaded successfully.<br>' + link,
+                buttons: {
+                    Close: {
+                        'class': 'gray',
+                        action: function () {}
+                    }
+                }
+            });
+
+            return;
+        }
+
+        window.location = url;
+    }
+
     function removeFile(id) {
         queue = queue.filter(function (item) {
             return item.id !== id;
@@ -94,7 +120,7 @@
                 '</div>' +
                 '<div class="photo-upload-meta">' +
                     '<div class="photo-upload-name">' + escapeHtml(file.name) + ' <span>' + formatSize(file.size) + '</span></div>' +
-                    '<textarea class="form-control comment_attach input_hastags" placeholder="Photo comment" data-num="' + hashId + '"></textarea>' +
+                    '<textarea class="form-control comment_attach input_hastags" placeholder="Description" data-num="' + hashId + '"></textarea>' +
                     '<div class="hashtags" data-num="' + hashId + '"></div>' +
                     '<div class="photo-upload-progress"><div class="photo-upload-progress-bar"></div></div>' +
                     '<div class="photo-upload-message"></div>' +
@@ -210,7 +236,7 @@
                 }
 
                 setStatus('Photos uploaded.', 'success');
-                window.location = redirectBase + '/' + albumId;
+                showUploadCompleteModal(albumId);
                 return;
             }
 

@@ -2622,6 +2622,32 @@ a.form-enter-link_login:hover {
 	display: inline-block;
 	padding: 0 5px 5px 0;
 }
+.photo-container .photo-delete-button
+{
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	width:32px;
+	height:32px;
+	padding:0;
+	border:0;
+	border-radius:50%;
+	background:#d94b62;
+	color:#fff;
+	cursor:pointer;
+	transition:background .2s ease, transform .2s ease;
+}
+.photo-container .photo-delete-button:hover
+{
+	background:#c93d53;
+	transform:scale(1.05);
+}
+.photo-container .photo-delete-button svg
+{
+	width:17px;
+	height:17px;
+	fill:currentColor;
+}
 .photo-container .hov:hover span{
 	display: block;
 }
@@ -6711,6 +6737,12 @@ color: #afafaf;
   	.block_right{
   		margin-bottom:10px;
   	}
+
+	.left-sitebar .announcement-sidebar-item .text-right-block
+	{
+		padding-left: 0;
+	}
+
   	.menu_groups
   	{
   		display:none!important;

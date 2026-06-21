@@ -57,5 +57,5 @@
         window.photoalbumableType = '{{ $communityKind }}';
         selectAction();
     </script>
-    <script src="{{ asset('frontend/js/photo-upload.js') }}"></script>
+    <script src="{{ asset('frontend/js/photo-upload.js') }}?v=2026062201"></script>
 @endpush
