@@ -174,10 +174,6 @@ $(document).on('click', '.video_prev, .video-card .transparent', function (event
     }
 });
 
-$(document).on('click', '.remove_video', function (event) {
-    event.stopPropagation();
-});
-
 $(document).on('click', '#next_video', function () {
     const $modal = $('#video_big');
     $modal.find('.loading-bar').show();
