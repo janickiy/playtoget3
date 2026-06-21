@@ -2,7 +2,7 @@
     $viewer = $frontLayout['user'] ?? null;
 @endphp
 
-<script src="{{ asset('frontend/js/videoalbum.js') }}?v=2026061501"></script>
+<script src="{{ asset('frontend/js/videoalbum.js') }}?v=2026062101"></script>
 <div class="overlay video-viewer-overlay" id="video_big">
     <div class="overlay-back back_one">Close</div>
     <div class="photo_big_wrap">
@@ -30,6 +30,9 @@
                     <div class="text-block foto_like video-modal-actions">
                         <a class="tell video-modal-share" data-type="video">0</a>
                         <a class="liked video-modal-like" data-type="video">0</a>
+                        <button type="button" class="remove_video video-modal-delete" data-item="" style="display: none;">
+                            Delete
+                        </button>
                     </div>
                 @endif
                 <p class="info"></p>

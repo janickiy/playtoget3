@@ -11,6 +11,7 @@ function resetVideoModalState() {
     $modal.find('#addCommentContainers').html('');
     $modal.find('.info').text('');
     $modal.find('.tell, .liked').removeClass('active').removeAttr('id data-item');
+    $modal.find('.video-modal-delete').hide().removeAttr('data-item');
     $modal.find('.file_name').val('');
     $modal.find('textarea[name="comment"]').val('');
     $modal.find('.files_block').html('');
@@ -29,21 +30,29 @@ window.registerVideoItems = function ($scope) {
 };
 
 $(document).ready(function () {
-    $(document).on('click', '.remove_video', function () {
+    $(document).on('click', '.remove_video', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
         const IdVideo = $(this).attr('data-item');
+
+        if (!IdVideo) {
+            return;
+        }
 
         $.confirm({
             'title': 'Confirmation',
-            'message': 'Do you really want to delete?',
+            'message': 'Do you really want to delete this video?',
             'buttons': {
                 'Yes': {
                     'class': 'blue',
                     'action': function () {
                         $.ajax({
                             type: 'POST',
-                            url: '/ajax/remove_video?id=' + encodeURIComponent(IdVideo),
+                            url: (window.videoAjaxBase || '/ajax') + '/remove_video',
                             data: {
                                 _token: videoCsrfToken(),
+                                id: IdVideo,
                             },
                             cache: false,
                             dataType: 'json',
@@ -52,6 +61,16 @@ $(document).ready(function () {
 
                                 if (Result == 'success') {
                                     $('#video-block-' + IdVideo).remove();
+                                    const index = $.inArray(String(IdVideo), mass_video);
+
+                                    if (index !== -1) {
+                                        mass_video.splice(index, 1);
+                                        count = Math.max(0, count - 1);
+                                    }
+
+                                    if ($('#video_big').is(':visible') && $('#video_big').find('#content_id').val() == IdVideo) {
+                                        $('.back_one').trigger('click');
+                                    }
                                 }
                             }
                         });
@@ -101,6 +120,9 @@ function getVideoInfo(id) {
                     .attr('data-item', id)
                     .attr('data-type', 'video')
                     .toggleClass('active', Boolean(data.liked_by_user));
+                $modal.find('.video-modal-delete')
+                    .attr('data-item', id)
+                    .css('display', data.can_delete ? 'inline-flex' : 'none');
                 $modal.find('.info').text(data.description || '');
                 $modal.find('.video_wrap').html(data.video);
                 $modal.find('.loading-bar').hide();

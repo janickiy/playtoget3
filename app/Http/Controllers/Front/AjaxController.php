@@ -1240,6 +1240,7 @@ class AjaxController extends Controller
             'tell' => (clone $sharesQuery)->count(),
             'liked_by_user' => $viewer ? (clone $likesQuery)->where('user_id', $viewer->id)->exists() : false,
             'shared_by_user' => $viewer ? (clone $sharesQuery)->where('user_id', $viewer->id)->exists() : false,
+            'can_delete' => $this->canDeleteVideo($video, $viewer),
             'views' => VideoView::query()
                 ->where('video_id', $video->id)
                 ->count(),
@@ -1341,24 +1342,32 @@ class AjaxController extends Controller
         /** @var Video|null $video */
         $video = Video::query()->with('album')->whereKey($videoId)->first();
 
-        if ($video && in_array($video->album?->videoalbumable_type, ['team', 'group', 'event'], true)) {
-            $canManage = match ($video->album->videoalbumable_type) {
-                'team' => $this->communities->canManage($this->communities->findTeam((int)$video->album->owner_id), $viewer),
-                'group' => $this->communities->canManage($this->communities->findGroup((int)$video->album->owner_id), $viewer),
-                'event' => $this->events->canManage($this->events->findActive((int)$video->album->owner_id), $viewer),
-                default => false,
-            };
+        return response()->json([
+            'result' => $video && $this->canDeleteVideo($video, $viewer) && $this->videoAlbums->deleteVideo($video)
+                ? 'success'
+                : 'error',
+        ]);
+    }
 
-            return response()->json([
-                'result' => $canManage && $this->videoAlbums->deleteVideo($video)
-                    ? 'success'
-                    : 'error',
-            ]);
+    /**
+     * Checks whether current viewer can delete the selected video.
+     *
+     * @param Video $video
+     * @param User|null $viewer
+     * @return bool
+     */
+    private function canDeleteVideo(Video $video, ?User $viewer): bool
+    {
+        if (!$viewer || !$video->album) {
+            return false;
         }
 
-        return response()->json([
-            'result' => $this->videoAlbums->deleteVideoFor($viewer, $videoId) ? 'success' : 'error',
-        ]);
+        return match ($video->album->videoalbumable_type) {
+            'team' => $this->communities->canManage($this->communities->findTeam((int)$video->album->owner_id), $viewer),
+            'group' => $this->communities->canManage($this->communities->findGroup((int)$video->album->owner_id), $viewer),
+            'event' => $this->events->canManage($this->events->findActive((int)$video->album->owner_id), $viewer),
+            default => (int)$video->owner_id === (int)$viewer->id,
+        };
     }
 
     /**

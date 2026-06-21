@@ -8179,6 +8179,59 @@ color: #afafaf;
 	z-index:3;
 }
 
+.video-albums-page .video-delete-button
+{
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	width:32px;
+	height:32px;
+	padding:0;
+	border:0;
+	border-radius:50%;
+	background:#d94b62;
+	color:#fff;
+	cursor:pointer;
+	transition:background .2s ease, transform .2s ease;
+}
+
+.video-albums-page .video-delete-button:hover
+{
+	background:#c93d53;
+	transform:scale(1.05);
+}
+
+.video-albums-page .video-delete-button svg
+{
+	width:17px;
+	height:17px;
+	fill:currentColor;
+}
+
+#video_big .video-modal-delete
+{
+	display:inline-flex;
+	align-items:center;
+	justify-content:center;
+	min-width:70px;
+	height:28px;
+	margin-left:16px;
+	padding:0 14px;
+	border:0;
+	border-radius:14px;
+	background:#d94b62;
+	color:#fff;
+	font:700 12px/1 Open Sans;
+	text-transform:uppercase;
+	cursor:pointer;
+	transition:background .2s ease;
+}
+
+#video_big .video-modal-delete:hover
+{
+	background:#c93d53;
+}
+
 .video-albums-page .video-container .video-card > .video-capt
 {
 	position:static;
