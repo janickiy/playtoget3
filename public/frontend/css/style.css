@@ -2617,7 +2617,7 @@ a.form-enter-link_login:hover {
 .photo-container .hov {
 	position: relative;
 }
-.photo-container .hov span{position: absolute;bottom: 0;right: 0;display: none;}
+.photo-container .hov span{position: absolute;bottom: 3px;right: 3px;display: none;}
 .photo-container .hov span i{
 	display: inline-block;
 	padding: 0 5px 5px 0;
