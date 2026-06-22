@@ -73,7 +73,7 @@
         const url = albumUrl(albumId);
         const link = '<a class="photo-upload-back-link" href="' + url + '">Back to photo album</a>';
 
-        if ($.confirm) {
+        if (typeof $.confirm === 'function') {
             $.confirm({
                 title: 'Photos uploaded',
                 message: 'Photos were uploaded successfully.<br>' + link,
@@ -100,7 +100,10 @@
 
         if (!queue.length) {
             setStatus('Select one or more photos.');
+            return;
         }
+
+        setStatus('Files in queue: ' + queue.length + '.');
     }
 
     function renderFile(file) {
@@ -114,9 +117,13 @@
                 '<div class="attach big photo-upload-preview">' +
                     '<img alt="">' +
                     '<b><span class="photo-upload-percent">0%</span></b>' +
-                    '<span class="icons-hid"><i class="no_attach" data-tooltip="Do not add" data-num="' + id + '">' +
-                        '<img src="/frontend/images/icon-krest.png" alt="">' +
-                    '</i></span>' +
+                    '<span class="icons-hid">' +
+                        '<button type="button" class="photo-upload-remove no_attach" data-tooltip="Remove photo" data-num="' + id + '" aria-label="Remove photo">' +
+                            '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+                                '<path d="M6 11h12v2H6z"></path>' +
+                            '</svg>' +
+                        '</button>' +
+                    '</span>' +
                 '</div>' +
                 '<div class="photo-upload-meta">' +
                     '<div class="photo-upload-name">' + escapeHtml(file.name) + ' <span>' + formatSize(file.size) + '</span></div>' +
@@ -236,6 +243,9 @@
                 }
 
                 setStatus('Photos uploaded.', 'success');
+                $uploadButton.removeClass('disabled').text('Upload photo');
+                $pickButton.removeClass('disabled');
+                queue = [];
                 showUploadCompleteModal(albumId);
                 return;
             }

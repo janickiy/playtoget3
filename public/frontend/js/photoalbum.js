@@ -11,6 +11,11 @@ function resetPhotoModalState() {
     $modal.removeClass('photo-message-viewer');
     $modal.find('#addCommentContainers').html('');
     $modal.find('.info_photo').text('');
+    $modal.find('.photo-description-edit').hide().text('Edit description');
+    $modal.find('.photo-description-form').hide();
+    $modal.find('.photo-description-form [name="photo_id"]').val('');
+    $modal.find('.photo-description-form [name="description"]').val('');
+    $modal.find('.photo-description-message').text('').removeClass('error success');
     $modal.find('.tell, .liked').removeClass('active').removeAttr('id data-item');
     $modal.find('.file_name').val('');
     $modal.find('textarea[name="comment"]').val('');
@@ -99,9 +104,18 @@ $(document).ready(function () {
                         .append($('<a>', {
                             href: '/profile/' + data.owner_id,
                             text: $.trim((data.firstname || '') + ' ' + (data.lastname || '')),
-                        }));
+                    }));
                     $modal.find('#date_foto .data').text(data.created);
-                    $modal.find('.info_photo').text(data.description || '');
+                    const description = data.description || '';
+                    const canEditDescription = Boolean(data.can_edit_description) && !isMessagePhotoModal();
+                    $modal.find('.info_photo').text(description);
+                    $modal.find('.photo-description-form [name="photo_id"]').val(id);
+                    $modal.find('.photo-description-form [name="description"]').val(description);
+                    $modal.find('.photo-description-message').text('').removeClass('error success');
+                    $modal.find('.photo-description-form').hide();
+                    $modal.find('.photo-description-edit')
+                        .toggle(canEditDescription)
+                        .text(description ? 'Edit description' : 'Add description');
                     if (!isMessagePhotoModal()) {
                         $modal.find('.tell')
                             .text(data.tell)
@@ -214,6 +228,74 @@ $(document).ready(function () {
         event.stopPropagation();
         showPrevPhoto();
     })
+
+    $(document).on('click', '.photo-description-edit', function (event) {
+        event.preventDefault();
+        const $modal = $('#photo_big');
+
+        $modal.find('.photo-description-message').text('').removeClass('error success');
+        $modal.find('.photo-description-form').slideDown(160);
+        $modal.find('.photo-description-form [name="description"]').trigger('focus');
+        $(this).hide();
+    });
+
+    $(document).on('click', '.photo-description-cancel', function (event) {
+        event.preventDefault();
+        const $modal = $('#photo_big');
+
+        $modal.find('.photo-description-message').text('').removeClass('error success');
+        $modal.find('.photo-description-form').slideUp(160);
+        $modal.find('.photo-description-edit').show();
+    });
+
+    $(document).on('submit', '.photo-description-form', function (event) {
+        event.preventDefault();
+
+        const $form = $(this);
+        const $modal = $('#photo_big');
+        const $save = $form.find('.photo-description-save');
+        const description = $.trim($form.find('[name="description"]').val());
+        const photoId = $form.find('[name="photo_id"]').val() || $modal.find('#content_id').val();
+        const ajaxBase = String(window.photoAjaxBase || '/ajax').replace(/\/$/, '');
+
+        $save.prop('disabled', true);
+        $form.find('.photo-description-message').text('').removeClass('error success');
+
+        $.ajax({
+            type: 'POST',
+            url: ajaxBase + '/update_photo_description',
+            dataType: 'json',
+            data: {
+                _token: photoCsrfToken(),
+                photo_id: photoId,
+                description: description,
+            },
+            success: function (data) {
+                if (data.status === 1) {
+                    const updatedDescription = data.description || '';
+
+                    $modal.find('.info_photo').text(updatedDescription);
+                    $form.find('[name="description"]').val(updatedDescription);
+                    $modal.find('.photo-description-edit')
+                        .text(updatedDescription ? 'Edit description' : 'Add description')
+                        .show();
+                    $form.slideUp(160);
+                } else {
+                    $form.find('.photo-description-message').addClass('error').text(data.message || 'Description was not saved.');
+                }
+            },
+            error: function (xhr) {
+                const message = xhr.responseJSON && xhr.responseJSON.message
+                    ? xhr.responseJSON.message
+                    : 'Description was not saved.';
+
+                $form.find('.photo-description-message').addClass('error').text(message);
+            },
+            complete: function () {
+                $save.prop('disabled', false);
+            }
+        });
+    });
 
 });
 

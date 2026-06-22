@@ -107,6 +107,7 @@ class AjaxController extends Controller
             'send_event_invitation' => $this->sendEventInvitation($request),
             'get_comments' => $this->getComments($request),
             'get_photoinfo' => $this->getPhotoInfo($request),
+            'update_photo_description' => $this->updatePhotoDescription($request),
             'add_photo_ajax' => $this->addPhotoAjax($request),
             'add_photo_ajax_attach' => $this->addPhotoAjaxAttach($request),
             'get_photos_list' => $this->getPhotosList($request),
@@ -987,10 +988,57 @@ class AjaxController extends Controller
             'created' => $photo->created_at?->format('d.m.Y H:i') ?? '',
             'description' => (string)$photo->description,
             'photo' => $photoUrl,
+            'can_edit_description' => $viewer ? $this->canManagePhoto($photo, $viewer) : false,
             'liked' => (clone $likesQuery)->count(),
             'tell' => (clone $sharesQuery)->count(),
             'liked_by_user' => $viewer ? (clone $likesQuery)->where('user_id', $viewer->id)->exists() : false,
             'shared_by_user' => $viewer ? (clone $sharesQuery)->where('user_id', $viewer->id)->exists() : false,
+        ]);
+    }
+
+    /**
+     * Updates the editable photo description from the preview modal.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    private function updatePhotoDescription(Request $request): JsonResponse
+    {
+        $viewer = $this->viewer();
+
+        if (!$viewer) {
+            return response()->json(['status' => 0, 'message' => 'Unauthorized'], 401);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'photo_id' => ['required', 'integer', 'min:1'],
+            'description' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 0,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        /** @var Photo|null $photo */
+        $photo = Photo::query()
+            ->with('album')
+            ->whereKey((int) $request->input('photo_id'))
+            ->where('banned', false)
+            ->first();
+
+        if (!$photo || !$this->canManagePhoto($photo, $viewer)) {
+            return response()->json(['status' => 0, 'message' => 'Forbidden'], 403);
+        }
+
+        $description = trim((string) $request->input('description', ''));
+        $this->photoAlbums->updatePhotoDescription($photo, $description);
+
+        return response()->json([
+            'status' => 1,
+            'description' => $description,
         ]);
     }
 
@@ -2122,6 +2170,35 @@ class AjaxController extends Controller
         }
 
         return true;
+    }
+
+    /**
+     * Checks whether the current user can edit the selected photo.
+     */
+    private function canManagePhoto(Photo $photo, User $viewer): bool
+    {
+        $photo->loadMissing('album');
+
+        if ((int) $photo->owner_id === (int) $viewer->id) {
+            return true;
+        }
+
+        $album = $photo->album;
+
+        if (!$album) {
+            return false;
+        }
+
+        return match ((string) $album->photoalbumable_type) {
+            'team' => $this->communities->canManage($this->communities->findTeam((int) $album->owner_id), $viewer),
+            'group' => $this->communities->canManage($this->communities->findGroup((int) $album->owner_id), $viewer),
+            'event' => $this->events->canManage($this->events->findActive((int) $album->owner_id), $viewer),
+            'playground', 'shop', 'fitness' => $this->sportBlocks->isOwner(
+                $this->sportBlocks->findByType((int) $album->owner_id, (string) $album->photoalbumable_type),
+                $viewer,
+            ),
+            default => $this->photoAlbums->isOwner($album, $viewer),
+        };
     }
 
     /**

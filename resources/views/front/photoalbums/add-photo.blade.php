@@ -29,6 +29,10 @@
         </form>
     </div>
 
+    <div class="photo-upload-return">
+        <a class="photo-upload-return-link" href="{{ route('front.photoalbums.index') }}">Back</a>
+    </div>
+
     <div id="photo-upload-status" class="photo-upload-status">Select one or more photos.</div>
     <div id="filelist" class="photo-upload-list"></div>
 
@@ -41,5 +45,5 @@
         window.photoAlbumRedirectBase = '{{ url('/photoalbums') }}';
         selectAction();
     </script>
-    <script src="{{ asset('frontend/js/photo-upload.js') }}?v=2026062201"></script>
+    <script src="{{ asset('frontend/js/photo-upload.js') }}?v=2026062202"></script>
 @endpush

@@ -467,6 +467,20 @@ class PhotoalbumRepository extends BaseRepository
     }
 
     /**
+     * Updates photo description text.
+     *
+     * @param Photo $photo
+     * @param string $description
+     * @return bool
+     */
+    public function updatePhotoDescription(Photo $photo, string $description): bool
+    {
+        $photo->description = $description;
+
+        return (bool) $photo->save();
+    }
+
+    /**
      * Deletes photo along with associated data.
      *
      * @param Photo $photo

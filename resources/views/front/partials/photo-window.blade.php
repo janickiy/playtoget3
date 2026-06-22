@@ -2,7 +2,7 @@
     $viewer = $frontLayout['user'] ?? null;
 @endphp
 
-<script src="{{ asset('frontend/js/photoalbum.js') }}?v=2026061504"></script>
+<script src="{{ asset('frontend/js/photoalbum.js') }}?v=2026062201"></script>
 <div class="overlay photo-viewer-overlay" id="photo_big">
     <div class="overlay-back back_one">Close</div>
     <div class="prev">Previous</div>
@@ -30,7 +30,20 @@
                             <a class="liked photo-modal-like" data-type="photo">0</a>
                         </div>
                     @endif
-                    <p class="info_photo"></p>
+                    <div class="photo-description-box">
+                        <p class="info_photo"></p>
+                        <button type="button" class="photo-description-edit">Edit description</button>
+                        <form class="photo-description-form" autocomplete="off">
+                            @csrf
+                            <input type="hidden" name="photo_id" value="">
+                            <textarea name="description" maxlength="1000" rows="3" placeholder="Description"></textarea>
+                            <div class="photo-description-actions">
+                                <button type="submit" class="photo-description-save">Save</button>
+                                <button type="button" class="photo-description-cancel">Cancel</button>
+                            </div>
+                            <div class="photo-description-message"></div>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div class="text photo-modal-comments" id="mainComments">
