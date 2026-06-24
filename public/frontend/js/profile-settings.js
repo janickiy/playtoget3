@@ -27,8 +27,8 @@
             minOriginalWidth: 100,
             minOriginalHeight: 100,
             minDisplaySize: [80, 80],
-            maxDisplayWidth: 640,
-            reservedHeight: 248,
+            maxDisplayWidth: 520,
+            reservedHeight: 320,
             successText: 'Avatar is ready. Click Apply'
         },
         cover: {
