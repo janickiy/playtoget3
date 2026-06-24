@@ -81,8 +81,8 @@
                                 @if ($errors->any())
                                     <div class="alert_msg"><p><strong>Error! </strong>{{ $errors->first() }}</p></div>
                                 @endif
-                                <input type="email" name="username" value="{{ old('username', $email ?? 'demo.user02@playtoget.local') }}" placeholder="email" id="input-login" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
-                                <input type="password" name="password" value="DemoUser02!2026" placeholder="Password" id="input-password" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
+                                <input type="email" name="username" value="{{ old('username', $email ?? '') }}" placeholder="email" id="input-login" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
+                                <input type="password" name="password" placeholder="Password" id="input-password" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
                                 <input type="checkbox" value="1" name="remember_me" checked id="input-checkbox" hidden>
                                 <label for="input-checkbox">Remember me</label>
                                 <a href="#" class="form-enter-link_pass">Remind password</a>
