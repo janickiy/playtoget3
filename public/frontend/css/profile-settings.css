@@ -355,7 +355,7 @@
     flex: 1 1 auto;
     justify-content: center;
     margin: 0 auto;
-    max-height: calc(100vh - 255px);
+    max-height: min(620px, calc(100vh - 255px));
     overflow: auto;
     text-align: center;
     width: 100%;
@@ -370,7 +370,7 @@
     display: block;
     height: auto;
     margin: 0 auto;
-    max-height: calc(100vh - 280px);
+    max-height: min(620px, calc(100vh - 280px));
     max-width: 100%;
     width: auto;
 }
