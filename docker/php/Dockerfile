@@ -1,11 +1,12 @@
 FROM php:8.4-fpm-alpine
 
 RUN apk add --no-cache \
-    git unzip libpng-dev libxml2-dev libzip-dev icu-dev oniguruma-dev \
+    git unzip freetype-dev libjpeg-turbo-dev libpng-dev libwebp-dev libxml2-dev libzip-dev icu-dev oniguruma-dev \
     libpq-dev libmemcached-dev zlib-dev linux-headers \
     nodejs npm $PHPIZE_DEPS
 
-RUN docker-php-ext-install pdo_mysql pdo_pgsql intl zip bcmath gd mbstring
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install pdo_mysql pdo_pgsql intl zip bcmath gd mbstring
 
 # Установка Redis, Memcached, Xdebug и Swoole
 RUN pecl install redis memcached xdebug \
