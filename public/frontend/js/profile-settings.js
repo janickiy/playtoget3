@@ -55,7 +55,7 @@
             minOriginalHeight: 80,
             minDisplaySize: [140, 40],
             maxDisplayWidth: 760,
-            reservedHeight: 246,
+            reservedHeight: 320,
             successText: 'Cover is ready. Click Apply'
         }
     };
