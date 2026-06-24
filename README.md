@@ -90,17 +90,17 @@ Install backend dependencies:
 docker compose exec app composer install
 ```
 
+Generate the application key:
+
+```bash
+docker compose exec app php artisan key:generate --force
+```
+
 Install frontend dependencies and build assets:
 
 ```bash
 docker compose exec app npm install
 docker compose exec app npm run build
-```
-
-Generate the application key:
-
-```bash
-docker compose exec app php artisan key:generate
 ```
 
 Run database migrations and seed default data:
