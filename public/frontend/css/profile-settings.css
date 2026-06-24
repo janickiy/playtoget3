@@ -289,6 +289,8 @@
 }
 
 .avatar-crop-modal .avatar-crop-inner {
+    display: flex;
+    flex-direction: column;
     max-height: calc(100vh - 90px);
     overflow: hidden;
     position: relative;
@@ -350,13 +352,17 @@
 
 .avatar-crop-stage {
     display: none;
+    flex: 1 1 auto;
+    justify-content: center;
     margin: 0 auto;
-    overflow: hidden;
+    max-height: calc(100vh - 255px);
+    overflow: auto;
     text-align: center;
+    width: 100%;
 }
 
 .avatar-crop-modal.has-image .avatar-crop-stage {
-    display: block;
+    display: flex;
 }
 
 #avatar-crop-target,
@@ -364,14 +370,19 @@
     display: block;
     height: auto;
     margin: 0 auto;
+    max-height: calc(100vh - 280px);
     max-width: 100%;
     width: auto;
 }
 
 .avatar-crop-modal .crop {
     display: none;
-    padding-top: 16px;
+    flex: 0 0 auto;
+    margin-top: 14px;
+    padding-top: 12px;
     text-align: center;
+    width: 100%;
+    z-index: 4;
 }
 
 .avatar-crop-modal.has-image .crop {
@@ -523,6 +534,15 @@
     .avatar-crop-modal .avatar-crop-inner {
         max-height: calc(90vh - 48px);
         overflow: hidden;
+    }
+
+    .avatar-crop-stage {
+        max-height: calc(90vh - 215px);
+    }
+
+    #avatar-crop-target,
+    #cover-crop-target {
+        max-height: calc(90vh - 235px);
     }
 }
 

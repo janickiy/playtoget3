@@ -45,7 +45,7 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('frontend/css/jquery-ui-1.8.16.custom.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/jquery.Jcrop.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/profile-settings.css') }}?v=2026062004">
+    <link rel="stylesheet" href="{{ asset('frontend/css/profile-settings.css') }}?v=2026062401">
 @endpush
 
 @section('content')
